@@ -1,0 +1,16 @@
+{
+	"name": "@cxl/ui",
+	"version": "1.0.0",
+	"files": [
+		"dist/*.js"
+	],
+	"main": "dist/cxl-ui.min.js",
+	"devDependencies": {
+		"@fortawesome/fontawesome-free-solid": "^5.0.13"
+	},
+	"scripts": {
+		"build-all": "node build; node build-icons",
+		"build": "node build",
+		"prepublish": "node build test minify; node build-icons"
+	}
+}

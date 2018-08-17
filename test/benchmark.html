@@ -1,0 +1,19 @@
+<html>
+<head>
+	<title>cxl-template - Benchmark</title>
+	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.0.css" />
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="https://code.jquery.com/qunit/qunit-2.6.0.js"></script>
+		
+	<script>
+		if (location.search.indexOf('?shady')===0)
+			window.$$cxlShady = true;
+	</script>
+	<script src="../dist/cxl-app.js"></script>
+	<!-- TESTS -->
+	<script src="benchmark.js"></script>
+</body>
+</html>

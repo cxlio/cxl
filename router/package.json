@@ -1,0 +1,10 @@
+{
+	"name": "@cxl/router",
+	"version": "1.0.0",
+	"files": [ "dist/*.js" ],
+	"main": "dist/cxl-router.min.js",
+	"scripts": {
+		"build": "node build",
+		"prepublish": "node scripts/build test minify"
+	}
+}

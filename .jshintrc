@@ -1,0 +1,14 @@
+{
+	"esnext": true,
+	"unused":true, 
+	"eqeqeq":true, 
+	"newcap":true, 
+	"undef":true, 
+	"smarttabs":true, 
+	"trailing":true,
+	"maxdepth":3,
+	"freeze": true,
+	"maxparams": 5,
+	"browser": true,
+	"globals": { "cxl": false, "QUnit": false }
+}

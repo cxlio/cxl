@@ -1,0 +1,22 @@
+<html>
+<head>
+	<title>cxl-fb - Test Suite</title>
+	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.0.css" />
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="https://code.jquery.com/qunit/qunit-2.6.0.js"></script>
+		
+	<script>
+		if (location.search.indexOf('?shady')===0)
+			window.$$cxlShady = true;
+	</script>
+	<script src="../dist/cxl-fb.js"></script>
+	<script src="../dist/cxl-app.js"></script>
+	<script src="../src/debug.js"></script>
+	
+	<!-- TESTS -->
+	<script src="fb.js"></script>
+</body>
+</html>
