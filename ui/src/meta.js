@@ -28,6 +28,9 @@
 		'cxl-fab': {
 			icon: 'plus-circle'
 		},
+		'cxl-form-group': {
+			icon: 'edit'
+		},
 		'cxl-hr': {
 			icon: 'minus'
 		},
@@ -64,11 +67,20 @@
 		'cxl-slider': {
 			icon: 'sliders-h'
 		},
+		'cxl-snackbar': {
+			icon: 'comment-alt'
+		},
 		'cxl-switch': {
 			icon: 'toggle-on'
 		},
 		'cxl-t': {
 			icon: 'font'
+		},
+		'cxl-tab': {
+			icon: 'folder'
+		},
+		'cxl-tabs': {
+			icon: 'folder'
 		},
 		'cxl-textarea': {
 			icon: 'align-left'

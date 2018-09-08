@@ -245,6 +245,18 @@ component({
 });
 
 component({
+	name: 'cxl-loading',
+	template: `<div style="display:none" &="timer(delay):|show .indicator"></div>`,
+	styles: {
+		indicator: {
+			backgroundColor: theme.primary, height: 4, transformOrigin: 'left', animation: 'wait'
+		}
+	}
+}, {
+	delay: 300
+});
+
+component({
 	name: 'cxl-meta',
 	initialize()
 	{

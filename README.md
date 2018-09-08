@@ -1,17 +1,14 @@
 
-cxl
-===
+cxl Framework
+=============
 
-Modules
--------
+Collection of Libraries and Tools
 
-build
-template
-ui
-ui-router
-rx
+Libraries
+---------
 
-Documentation
--------------
+### @cxl/ui
 
-docs
+Lightweight UI Web Components.
+
+[Documentation](https://www.coaxialhost.com/cxl/ui-docs)

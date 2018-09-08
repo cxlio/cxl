@@ -124,6 +124,7 @@ cxl.component({
 	`,
 	styles: {
 		$: { marginTop: 16, marginBottom: 16 },
+		$lastChild: { marginBottom: 0 },
 		code: {
 			fontFamily: 'monospace', whiteSpace: 'pre', fontSize: 16
 		}

@@ -152,6 +152,34 @@ Value: <span &="=test:text"></span>
 </docs-component>
 			`
 		},
+		'form-group': {
+			template: `
+<docs-component name="cxl-form-group">
+	<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Input Label</cxl-label>
+	<cxl-input required />
+</cxl-form-group>
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input />
+</cxl-form-group>
+	--></docs-demo>
+	<docs-attribute name="floating">
+	<docs-demo><!--
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input />
+</cxl-form-group>
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input value="Floating Label Value" />
+</cxl-form-group>
+	--></docs-demo>
+	</docs-attribute>
+</docs-component>
+			`
+		},
 		hr: {
 			template: `
 <docs-component name="cxl-hr">
@@ -401,6 +429,31 @@ Value: <span &="=test:text"></span>
 </docs-component>
 			`
 		},
+
+		snackbar: {
+			template: `
+<docs-component name="cxl-snackbar">
+	<docs-demo &="owner:@owner"><!--
+<cxl-button primary &="action:#notify">Notify</cxl-button>
+<p>Index: <x &="=index:text"></x></p>
+<script>
+	function notify() {
+		cxl.ui.notify('Hello World ' + this.index++);
+	}
+</script>
+	--></docs-demo>
+</docs-component>
+			`,
+			controller: {
+				index: 0,
+
+				notify()
+				{
+					return cxl.ui.notify('Hello World ' + this.index++);
+				}
+			}
+		},
+
 		switch: {
 			template: `
 <docs-component name="cxl-switch">
@@ -450,6 +503,30 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-component>
 			`
 		},
+		tab: {
+			template: `
+<docs-component name="cxl-tab">
+</docs-component>
+			`
+		},
+		tabs: {
+			template: `
+<docs-component name="cxl-tabs">
+	<docs-demo><!--
+<cxl-tabs>
+	<cxl-tab &="route.link(cxl-tabs)">Details</cxl-tab>
+	<cxl-tab>Employees</cxl-tab>
+	<cxl-tab>Files</cxl-tab>
+	<cxl-tab>Checks</cxl-tab>
+	<cxl-tab>Extra</cxl-tab>
+</cxl-tabs>
+<cxl-block>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa. Pellentesque cursus vestibulum aliquam. Nam elementum bibendum urna sed pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+			`
+		},
 		textarea: {
 			template: `
 <docs-component name="cxl-textarea">
@@ -476,7 +553,6 @@ cxl.route({
 	path: '*default',
 	title: 'Overview',
 	template: `
-<cxl-t h3>Web Components</cxl-t>
 <cxl-t h4>Features</cxl-t>
 
 <ul>

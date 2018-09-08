@@ -324,7 +324,7 @@ component({
 <span &="content"></span>
 	`,
 	events: [ 'change' ],
-	bindings: 'action:#toggle focusable =checked:#update =false-value:#update =true-value:#update =value:host.trigger(change)',
+	bindings: 'action:#toggle focusable =checked:#update =false-value:#update =true-value:#update =value:host.trigger(change) role(checkbox)',
 	styles: [ {
 		$: { marginLeft: 16, position: 'relative', display: 'inline-block', cursor: 'pointer', marginBottom: 12 },
 		$focus: { outline: 0 },
@@ -406,7 +406,7 @@ component({
 <div &=".content content =invalid:.error on(change):#onChange"></div>
 <cxl-t caption error &="=error:text"></cxl-t>
 	`,
-	bindings: `on(focusable.touched):#update on(invalid):#update`
+	bindings: `on(cxl-form.register):#onChange on(focusable.touched):#update on(invalid):#update`
 }, {
 	isEmpty: true,
 
@@ -524,7 +524,7 @@ component({
 </a>
 	`,
 	events: [ 'action' ],
-	bindings: 'focusable action:host.trigger(action)',
+	bindings: 'focusable action:host.trigger(action) role(menuitem)',
 	attributes: [ 'href', 'icon', 'selected', 'disabled', 'touched' ],
 	styles: [ prefix('link', FocusCSS), {
 		$: { cursor: 'pointer', fontSize: 16 },
@@ -539,18 +539,6 @@ component({
 		link$selected: { backgroundColor: theme.primaryLight }
 	}, prefix('link', DisabledCSS) ]
 
-});
-
-component({
-	name: 'cxl-loading',
-	template: `<div style="display:none" &="timer(delay):|show .indicator"></div>`,
-	styles: {
-		indicator: {
-			backgroundColor: theme.primary, height: 4, transformOrigin: 'left', animation: 'wait'
-		}
-	}
-}, {
-	delay: 300
 });
 
 component({
@@ -639,7 +627,7 @@ component({
 	name: 'cxl-option',
 	attributes: [ 'value', 'selected' ],
 	events: [ 'action', 'change' ],
-	bindings: 'selectable action:host.trigger(action) =value:host.trigger(change)',
+	bindings: 'role(option) selectable action:host.trigger(action) =value:host.trigger(change)',
 	styles: {
 		$: {
 			cursor: 'pointer', color: theme.onSurface, lineHeight: 48, paddingRight: 16,
@@ -649,30 +637,6 @@ component({
 	}
 }, {
 	value: null
-});
-
-component({
-	name: 'cxl-t',
-	styles: {
-		$: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
-		$lastChild: { marginBottom: 0 },
-
-		$inline: { display: 'inline' },
-		$caption: { fontSize: 12 },
-		$h1: { fontWeight: 200, fontSize: 96, marginBottom: 64 },
-		$h2: { fontWeight: 200, fontSize: 60, marginBottom: 48 },
-		$h3: { fontSize: 48, marginBottom: 32 },
-		$h4: { fontSize: 34, marginBottom: 24 },
-		$h5: { fontSize: 24, marginBottom: 16 },
-		$h6: { fontSize: 20, fontWeight: 500, marginBottom: 16 },
-		$subtitle: { fontSize: 16, lineHeight: 22, marginBottom: 0 },
-		$subtitle2: { fontSize: 14, lineHeight: 18, color: 'rgba(0,0,0,0.53)' },
-
-		$primary: { color: theme.primary },
-		$secondary: { color: theme.secondary },
-		$error: { color: theme.danger },
-		$input: { marginBottom: 8, paddingTop: 6, paddingBottom: 6, lineHeight: 20 }
-	}
 });
 
 component({
@@ -686,6 +650,7 @@ component({
 	name: 'cxl-progress',
 	events: [ 'change' ],
 	attributes: [ 'value' ],
+	bindings: 'role(progressbar)',
 	template: `
 <div &=".indicator =value:host.trigger(change):#setValue:.indeterminate"></div>
 	`,
@@ -719,7 +684,7 @@ component({
 <span &=".content content"></span>
 	`,
 	events: [ 'change' ],
-	bindings: 'id(host) action:#toggle focusable =name:#register =checked:host.trigger(change) =value:host.trigger(change)',
+	bindings: 'id(host) action:#toggle focusable =name:#register =checked:host.trigger(change) =value:host.trigger(change) role(radio)',
 	styles: [{
 
 		$: { position: 'relative', cursor: 'pointer', marginBottom: 12 },
@@ -923,7 +888,7 @@ component({
 	name: 'cxl-slider',
 	events: [ 'change' ],
 	attributes: [ 'value', 'disabled', 'step', 'touched' ],
-	bindings: 'focusable keypress(arrowleft):#onLeft keypress(arrowright):#onRight drag.x:#onDrag =value:host.trigger(change)',
+	bindings: 'focusable keypress(arrowleft):#onLeft keypress(arrowright):#onRight drag.x:#onDrag =value:host.trigger(change) role(slider)',
 	template: `
 <div &=".background =disabled:.disabled"><div &=".line =value:#update">
 <x &=".focusCircle .focusCirclePrimary"></x>
@@ -1100,8 +1065,32 @@ component({
 });
 
 component({
+	name: 'cxl-t',
+	styles: {
+		$: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
+		$lastChild: { marginBottom: 0 },
+
+		$inline: { display: 'inline' },
+		$caption: { fontSize: 12 },
+		$h1: { fontWeight: 200, fontSize: 96, marginBottom: 64 },
+		$h2: { fontWeight: 200, fontSize: 60, marginBottom: 48 },
+		$h3: { fontSize: 48, marginBottom: 32 },
+		$h4: { fontSize: 34, marginBottom: 24 },
+		$h5: { fontSize: 24, marginBottom: 16 },
+		$h6: { fontSize: 20, fontWeight: 500, marginBottom: 16 },
+		$subtitle: { fontSize: 16, lineHeight: 22, marginBottom: 0 },
+		$subtitle2: { fontSize: 14, lineHeight: 18, color: 'rgba(0,0,0,0.53)' },
+
+		$primary: { color: theme.primary },
+		$secondary: { color: theme.secondary },
+		$error: { color: theme.danger },
+		$input: { marginBottom: 8, paddingTop: 6, paddingBottom: 6, lineHeight: 20 }
+	}
+});
+
+component({
 	name: 'cxl-tab',
-	template: '<a &=".link =href:@href content"></a>',
+	template: '<a &=".link =href:attribute(href) content"></a>',
 	attributes: ['href', 'selected'],
 	styles: {
 		$: { flexShrink: 0 },
@@ -1113,6 +1102,8 @@ component({
 		},
 		link$selected: { borderColor: theme.secondary }
 	}
+}, {
+	href: null
 });
 
 component({
@@ -1132,6 +1123,7 @@ component({
 <div &="id(span) .input .measure"></div>
 <textarea &="id(textarea) .input .textarea =value::value =value:#calculateHeight:host.trigger(change)
 	=disabled:attribute(disabled) on(focus):bool:=focused on(blur):not:=focused =focused:.focused"></textarea>`,
+	bindings: 'role(textbox)',
 	attributes: [ 'value', 'disabled' ],
 	events: [ 'change' ],
 	styles: {
