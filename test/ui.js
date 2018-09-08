@@ -136,6 +136,14 @@ var
 	a.equal(select.$view.state.selected.value, 'two');
 });
 
+QUnit.test('cxl-checkbox - checked true-value', function(a) {
+var
+	A = $$compile('<cxl-checkbox &="@value:=test" checked true-value="yes">')
+;
+	console.log(A);
+	a.equal(A.state.test, 'yes');
+});
+
 QUnit.test('cxl-switch', function(a) {
 var
 	A = cxl.dom('cxl-switch')

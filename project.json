@@ -21,6 +21,11 @@
 			"fb": {
 				"files": [ "fb/src/*", "fb/build.js" ],
 				"tasks": "cd fb && npm run build"
+			},
+
+			"docs": {
+				"files": [ "docs/src/*" ],
+				"tasks": "cd docs && npm run build"
 			}
 		}
 	}

@@ -143,11 +143,15 @@ class Builder {
 		return this.operation('Minifying', function() {
 			var result = UglifyJS.minify(source, {
 				sourceMap: false,
-				toplevel: true
+				toplevel: true,
+				output: { ascii_only: true }
 			});
 
 			if (result.error)
+			{
+				console.error(`Error minifying "${output}"`);
 				throw new Error(result.error);
+			}
 
 			return write(output, result.code);
 		});
@@ -166,18 +170,18 @@ class Builder {
 		return read(src, 'utf8');
 	}
 
-	async build(config)
+	async build(target)
 	{
 	var
-		oldStat = await this.stat(config),
-		source = typeof(config.src)==='function' ? config.src() : (await this.readSource(config.src)).join("\n")
+		oldStat = await this.stat(target),
+		source = typeof(target.src)==='function' ? target.src() : (await this.readSource(target.src)).join("\n")
 	;
-		await write(this.outputDir + '/' + config.output, source);
+		await write(this.outputDir + '/' + target.output, source);
 
-		if (ARGV.minify)
-			await this.minify(source, this.outputDir + '/' + config.minify);
+		if (ARGV.minify && target.minify)
+			await this.minify(source, this.outputDir + '/' + target.minify);
 
-		this.report(oldStat, config);
+		this.report(oldStat, target);
 	}
 
 }

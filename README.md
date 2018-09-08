@@ -1,6 +1,6 @@
 
-cxl Framework
-=============
+cxl
+===
 
 Modules
 -------
@@ -8,7 +8,8 @@ Modules
 build
 template
 ui
-router
+ui-router
+rx
 
 Documentation
 -------------

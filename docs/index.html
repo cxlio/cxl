@@ -67,12 +67,11 @@
 </template>
 
 <template id="components">
-<cxl-search-input &="@value:#filter"></cxl-search-input>
-<cxl-block &="id(list)">
-	<cxl-fragment &="=components:each:repeat">
-	<cxl-item &="item:text:route.link"></cxl-item>
-	</cxl-fragment>
-</cxl-block>
+<cxl-search-input &="@value:=filter"></cxl-search-input>
+<br>
+<cxl-fragment &="=components:each:repeat">
+<docs-component-card &="item:@name =filter:#match:show"></docs-component-card>
+</cxl-fragment>
 </template>
 
 <template id="cxl-animate">
@@ -407,7 +406,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-usage>
 </docs-component>
 </template>
-
 <template id="cxl-checkbox">
 <docs-component name="cxl-checkbox">
 <docs-demo><!--
@@ -428,7 +426,7 @@ Value: <span &="=test:text"></span>
 </docs-attribute>
 <docs-attribute name="true-value">
 	<docs-demo><!--
-<cxl-checkbox &="value:=test" checked true-value="yes" false-value="no">Yes/No Checkbox Label</cxl-checkbox><br>
+<cxl-checkbox &="@value:=test" checked true-value="yes" false-value="no">Yes/No Checkbox Label</cxl-checkbox><br>
 Value: <span &="=test:text"></span>
 	--></docs-demo>
 </docs-attribute>
@@ -1111,18 +1109,11 @@ cxl.route({
 cxl.route({
 	path: 'components', title: 'Components', templateId: 'components'
 },{
-	filter(val)
+	match(val, el)
 	{
-		var i=0, list=this.list.childNodes, len=list.length, item;
-		
-		for (;i<len;i++)
-		{
-			item = list[i];
-			
-			if (item.keyword)
-				item.style.display = item.keyword.indexOf(val)===-1 ? 'none' : '';
-		}
+		return !val || el.name.indexOf(val)!==-1;
 	},
+
 	components: COMPONENTS
 });
 		

@@ -1,5 +1,4 @@
 
-
 const
 	template = [
 		'../template/src/core.js',
@@ -30,8 +29,17 @@ require('../build').build({
 				'../template/src/debug.js',
 				'../template/src/template-debug.js',
 				...ui,
-				'src/ui-debug.js'
+				'src/beta.js',
+				'src/ui-debug.js',
+				'src/meta.js'
 			]
+		},
+		{
+			output: 'cxl-ui-beta.js',
+			src: [
+				'src/beta.js'
+			],
+			minify: 'cxl-ui-beta.min.js'
 		},
 		{
 			output: 'cxl-ui-angular.js',

@@ -115,7 +115,7 @@ class Route {
 
 		def = new cxl.ComponentDefinition(def, controller);
 
-		this.Route = def.Constructor;
+		this.Route = def.Component;
 	}
 
 	create(args)
@@ -284,7 +284,7 @@ directive('route', {
 	;
 		if (route)
 		{
-			args = route.path.parameters && route.path.parameters.length ?
+			args = route.path && route.path.parameters && route.path.parameters.length ?
 				route.path.getArguments(path) : null;
 			// Abstract routes that redirectTo to a children or other
 			if (route.redirectTo)
@@ -320,7 +320,7 @@ directive('route.go', {
 
 	update(id)
 	{
-		cxl.router.go(id);
+		cxl.router.go(this.parameter || id);
 	}
 
 });
@@ -348,6 +348,9 @@ directive('route.link', {
 			state = param;
 			param = this.parameter;
 		}
+
+		if (!param)
+			return;
 
 		const path = this.href = cxl.router.getPath(param, state);
 

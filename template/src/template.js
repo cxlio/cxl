@@ -1567,6 +1567,8 @@ pipes({
 
 	'event.halt': cxl.event.halt,
 
+	filter(val) { return val || cxl.Skip; },
+
 	focus(val) { if (val) this.element.focus(); },
 
 	gate(val) { return this.owner.state[this.parameter] ? val : Skip; },
@@ -1622,6 +1624,8 @@ pipes({
 	show(value) { this.element.style.display = value ? '' : 'none'; },
 
 	sort(value) { return value && value.sort(); },
+
+	'style.inline'(val) { this.element.style[this.parameter] = val; },
 
 	text(value) { dom.setContent(this.element, value); },
 

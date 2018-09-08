@@ -57,6 +57,7 @@ class FireModel
 	constructor(refPath, schema)
 	{
 		this.reference = refPath instanceof fb.Reference ? refPath : cxl.fb(refPath);
+
 		const props = typeof(schema)==='function' ? schema(this.reference) : schema;
 
 		for (var i in props)
@@ -93,9 +94,14 @@ class FireReference extends cxl.rx.Observable
 		this.$ref = (!path || typeof(path)==='string') ? cxl.fb.database.ref(path) : path;
 	}
 
+	$onValue(snap)
+	{
+		this.next(snap.val());
+	}
+
 	__subscribe(subscriber)
 	{
-		function onValue(snap) { subscriber.next(snap.val()); }
+		const onValue = this.$onValue.bind(subscriber);
 		this.$ref.on('value', onValue);
 		return this.$ref.off.bind(this.$ref, 'value', onValue);
 	}

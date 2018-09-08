@@ -15,7 +15,7 @@ require('../build').build({
 		},
 		{
 			output: 'cxl-fb.dbg.js',
-			src: [ 'src/fb.js' ]
+			src: [ 'src/fb.js', 'src/fb-debug.js' ]
 		},
 		{
 			output: 'cxl-fb.lib.js',

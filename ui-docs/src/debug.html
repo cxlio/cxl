@@ -1,0 +1,517 @@
+<template id="cxl-animate">
+<docs-component name="cxl-animate">
+	<docs-demo><!--
+<cxl-col>
+<cxl-animate spin><cxl-icon icon="sync" style="font-size:48px"></cxl-icon></cxl-animate>
+</cxl-col><cxl-col>
+<cxl-animate pulse><cxl-icon icon="spinner" style="font-size:48px"></cxl-icon></cxl-animate>
+</cxl-col>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-appbar">
+<docs-component name="cxl-appbar">
+	<docs-demo><!--
+<cxl-appbar>
+	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-button flat inverse><cxl-icon icon="heart"></cxl-icon></cxl-button>
+	<cxl-button flat inverse><cxl-icon icon="search"></cxl-icon></cxl-button>
+	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+</cxl-appbar>
+	--></docs-demo>
+	<docs-demo title="Appbar with Navigation"><!--
+<div style="position:relative; height: 200px; overflow:hidden">
+<cxl-appbar>
+	<cxl-navbar modal>
+		<cxl-item>Hello</cxl-item>
+	</cxl-navbar>
+	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-tabs>
+		<cxl-tab selected>Tab 1</cxl-tab>
+		<cxl-tab>Tab 2</cxl-tab>
+	</cxl-tabs>
+</cxl-appbar>
+<cxl-block>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-block>
+</div>
+	--></docs-demo>
+	<docs-demo title="Appbar with Tabs"><!--
+<cxl-appbar>
+	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+	<cxl-tabs>
+		<cxl-tab selected>Tab 1</cxl-tab>
+		<cxl-tab>Tab 2</cxl-tab>
+	</cxl-tabs>
+</cxl-appbar>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-backdrop">
+<docs-component name="cxl-backdrop">
+	<docs-demo><!--
+<cxl-button &="action:bool:=showBackdrop">Show Backdrop</cxl-button>
+<cxl-backdrop &="=showBackdrop:show on(click):not:=showBackdrop"></cxl-backdrop>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-block">
+<docs-component name="cxl-block">
+	<docs-demo><!--
+<cxl-block inverse>
+	<cxl-block surface flex>
+		<cxl-avatar></cxl-avatar>
+		<cxl-col grow>
+			<cxl-t subtitle>Double Line Item with Icon</cxl-t>
+			<cxl-t subtitle2>Secondary Text</cxl-t>
+		</cxl-col>
+		<cxl-icon icon="info"></cxl-icon>
+	</cxl-block>
+</cxl-block>
+	--></docs-demo>
+	<docs-attribute name="compact" demo lorem></docs-attribute>
+	<docs-attribute name="inverse" demo lorem></docs-attribute>
+	<docs-attribute name="surface">
+	<docs-demo><!--
+<cxl-block inverse>
+	<cxl-block surface>
+Surface Block Text
+	</cxl-block>
+</cxl-block>
+	--></docs-demo>
+	</docs-attribute>
+</docs-component>
+</template>
+
+<template id="cxl-c">
+<docs-component name="cxl-c">
+	<docs-demo title="Toolbar Layout"><!--
+<cxl-c primary flex>
+	<cxl-c>Column 1</cxl-c>
+	<cxl-c grow>Column 2</cxl-c>
+	<cxl-c>Column 3</cxl-c>
+</cxl-c>
+	--></docs-demo>
+	<docs-demo title="Cards Layout"><!--
+<cxl-card>
+	<cxl-c>
+		<cxl-c>
+			<cxl-t h6>Material Card Title</cxl-t>
+			<cxl-t>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+			</cxl-t>
+		</cxl-c>
+	</cxl-c>
+	<cxl-c>
+		<cxl-button flat>Share</cxl-button>
+		<cxl-button flat>Explore</cxl-button>
+	</cxl-c>
+</cxl-card>
+	--></docs-demo>
+	<docs-demo title="Lists Layout"><!--
+<div>
+	<cxl-item>
+		<cxl-c flex nopad>
+			<cxl-avatar></cxl-avatar>
+			<cxl-c nopadv>
+				<cxl-t subtitle>Line Item 1</cxl-t>
+				<cxl-t subtitle2>Item Subtitle 1</cxl-t>
+			</cxl-c>
+		</cxl-c>
+	</cxl-item>
+	<cxl-item>
+		<cxl-c flex nopad>
+			<cxl-avatar></cxl-avatar>
+			<cxl-c nopadv>
+				<cxl-t subtitle>Line Item 2</cxl-t>
+				<cxl-t subtitle2>Item Subtitle 2</cxl-t>
+			</cxl-c>
+		</cxl-c>
+	</cxl-item>
+	<cxl-item>
+		<cxl-c flex nopad>
+			<cxl-avatar></cxl-avatar>
+			<cxl-c nopadv>
+				<cxl-t subtitle>Line Item 3</cxl-t>
+				<cxl-t subtitle2>Item Subtitle 3</cxl-t>
+			</cxl-c>
+		</cxl-c>
+	</cxl-item>
+</div>
+	--></docs-demo>
+	<docs-demo title="Grid Layout"><!--
+<cxl-c flex nopad>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+</cxl-c>
+<cxl-c flex nopad>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+</cxl-c>
+<cxl-c flex nopad>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+	<cxl-c grow><docs-placeholder></docs-placeholder></cxl-c>
+</cxl-c>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-card">
+<docs-component name="cxl-card">
+<docs-usage>
+<cxl-card>
+<cxl-block>
+	<cxl-h5>Title goes here</cxl-h5>
+	Secondary line text Lorem ipsum dolor sit amet
+</cxl-block>
+<cxl-block>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</cxl-block>
+</cxl-card>
+<br>
+<cxl-card>
+<cxl-block flex>
+	<cxl-avatar style="background:#ccc"></cxl-avatar>
+	<cxl-col>
+		<cxl-h6>Card Title</cxl-h6>
+		Secondary Text
+	</cxl-col>
+</cxl-block>
+<cxl-block>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</cxl-block>
+</cxl-card>
+<br>
+<cxl-card>
+<cxl-block flex>
+	<cxl-avatar style="background:#ccc"></cxl-avatar>
+	<cxl-col>
+		<cxl-h6>Card Title</cxl-h6>
+		Secondary Text
+	</cxl-col>
+</cxl-block>
+<docs-placeholder style="height:180px"></docs-placeholder>
+<cxl-block>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+</cxl-block>
+<div>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</div>
+</cxl-card>
+<br>
+<cxl-card>
+<docs-placeholder style="height:180px"></docs-placeholder>
+<cxl-block>
+	<cxl-h6>Card Title</cxl-h6>
+	Secondary Text
+</cxl-block>
+<cxl-hr></cxl-hr>
+<cxl-block>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+</cxl-block>
+<cxl-block compact>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</cxl-block>
+</cxl-card>
+
+</docs-usage>
+</docs-component>
+</template>
+<template id="cxl-col">
+<docs-component name="cxl-col">
+	<docs-demo><!--
+<cxl-block primary flex>
+	<cxl-col>Column 1</cxl-col>
+	<cxl-col grow>Column 2</cxl-col>
+	<cxl-col>Column 3</cxl-col>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-dialog">
+<docs-component name="cxl-dialog">
+	<docs-demo><!--
+<cxl-block style="position:relative; min-height:300px">
+	<cxl-dialog>
+		<cxl-block>
+		<cxl-h5>Title</cxl-h5>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa. Pellentesque cursus vestibulum aliquam. Nam elementum bibendum urna sed pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+		<cxl-button flat>Action 1</cxl-button>
+		<cxl-button flat>Action 2</cxl-button>
+		</cxl-block>
+	</cxl-dialog>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+</template>
+	
+<template id="cxl-dialog-alert">
+<docs-component name="cxl-dialog-alert">
+	<docs-demo><!--
+<cxl-block style="position:relative; height:300px">
+	<cxl-dialog-alert title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa. Pellentesque cursus vestibulum aliquam. Nam elementum bibendum urna sed pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.">
+	</cxl-dialog-alert>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-dialog-confirm">
+<docs-component name="cxl-dialog-confirm">
+	<docs-demo><!--
+<cxl-block style="position:relative; height:300px">
+	<cxl-dialog-confirm title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa. Pellentesque cursus vestibulum aliquam. Nam elementum bibendum urna sed pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.">
+	</cxl-dialog-alert>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-drawer">
+<docs-component name="cxl-drawer">
+	<docs-demo><!--
+<cxl-button &="action:bool:=showDrawer" primary>Show Drawer</cxl-button>
+<cxl-checkbox &="value:=permanent:log">Permanent</cxl-checkbox>
+<cxl-drawer right &="=permanent:@permanent on(click):not:=showDrawer =showDrawer:@visible">
+<docs-placeholder></docs-placeholder>
+<cxl-block>
+	<cxl-title>Right Drawer Title</cxl-title>
+	<cxl-hr></cxl-hr>
+	<p>Right Drawer Content</p>
+</cxl-block>
+</cxl-drawer>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-form">
+<docs-component name="cxl-form">
+	<docs-demo &="owner:@owner"><!--
+<cxl-form>
+	<cxl-block>
+		<cxl-t subtitle>Input Validation</cxl-t>
+		<cxl-form-group>
+			<cxl-label>E-mail Address</cxl-label>
+			<cxl-input &="valid(email)"></cxl-input>
+		</cxl-form-group>
+		<cxl-form-group>
+			<cxl-label for="password">Password</cxl-label>
+			<cxl-password &="valid(required)"></cxl-password>
+		</cxl-form-group>
+		<p &="=submitted:show">Form Submitted!</p>
+	</cxl-block>
+	<cxl-block>
+		<cxl-button>Cancel</cxl-button>
+		<cxl-submit>Submit</cxl-submit>
+	</cxl-block>
+</cxl-form>
+	--></docs-demo>
+</docs-component>
+</template>
+		
+<template id="cxl-form-group">
+<docs-component name="cxl-form-group">
+	<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Input Label</cxl-label>
+	<cxl-input required />
+</cxl-form-group>
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input />
+</cxl-form-group>
+<cxl-form-group>
+	<cxl-checkbox>Checkbox Label</cxl-checkbox>
+</cxl-form-group>
+	--></docs-demo>
+	<docs-attribute name="floating">
+	<docs-demo><!--
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input />
+</cxl-form-group>
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input value="Floating Label Value" />
+</cxl-form-group>
+	--></docs-demo>
+	</docs-attribute>
+</docs-component>
+</template>
+
+<template id="cxl-grid">
+<docs-component name="cxl-grid">
+<docs-demo &="owner:@owner"><!--
+<div style="height: 200px">
+<cxl-grid>
+	<cxl-row>
+		<cxl-appbar><cxl-appbar-title>Hello</cxl-appbar-title></cxl-appbar>
+	</cxl-row>
+	<cxl-row>
+		<cxl-grid>
+			<cxl-row>
+				<cxl-tabs>
+					<cxl-tab selected>Tab 1</cxl-tab>
+					<cxl-tab>Tab 2</cxl-tab>
+				</cxl-tabs>
+			</cxl-row>
+			<cxl-row>
+				<cxl-block>
+					<cxl-t h1>Scrollabe Content</cxl-t>
+					<cxl-t>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+					</cxl-t>
+				</cxl-block>
+			</cxl-row>
+		</cxl-grid>
+	</cxl-row>
+</cxl-grid>
+</div>
+--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-loading">
+<docs-component name="cxl-loading">
+<docs-demo><!--
+<cxl-loading></cxl-loading>
+--></docs-demo>
+</docs-component>
+</template>
+		
+<template id="cxl-meta">
+<docs-component name="cxl-meta">
+</docs-component>
+</template>
+
+<template id="cxl-navbar">
+<docs-component name="cxl-navbar">
+</docs-component>
+</template>
+
+<template id="cxl-search-input">
+<docs-component name="cxl-search-input">
+<docs-demo><!--
+<cxl-search-input></cxl-search-input>
+--></docs-demo>
+</docs-component>
+</template>
+		
+<template id="cxl-snackbar">
+<docs-component name="cxl-snackbar">
+	<docs-demo &="owner:@owner"><!--
+<cxl-button primary &="action:#notify">Notify</cxl-button>
+<p>Index: <x &="=index:text"></x></p>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-snackbar-container">
+<docs-component name="cxl-snackbar-container">
+	<docs-demo &="owner:@owner"><!--
+<cxl-button primary &="action:#notify">Notify</cxl-button>
+<p>Index: <x &="=index:text"></x></p>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<template id="cxl-submit">
+<docs-component name="cxl-submit">
+</docs-component>
+</template>
+
+<template id="cxl-tab">
+<docs-component name="cxl-tab">
+</docs-component>
+</template>
+
+<template id="cxl-table">
+<docs-component name="cxl-table">
+</docs-component>
+</template>
+	
+<template id="cxl-tabs">
+<docs-component name="cxl-tabs">
+	<docs-demo><!--
+<cxl-tabs>
+	<cxl-tab &="route.link(cxl-tabs)">Details</cxl-tab>
+	<cxl-tab>Employees</cxl-tab>
+	<cxl-tab>Files</cxl-tab>
+	<cxl-tab>Checks</cxl-tab>
+	<cxl-tab>Extra</cxl-tab>
+</cxl-tabs>
+<cxl-block>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa. Pellentesque cursus vestibulum aliquam. Nam elementum bibendum urna sed pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+</template>
+
+<script>
+	if (location.search==='?shady')
+		window.$$cxlShady = true;
+</script>
+<script src="../../ui/dist/cxl-ui.dbg.js"></script>
+<script src="../../ui/dist/cxl-ui-icons.js"></script>
+<script src="../../router/dist/cxl-router.dbg.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/xml.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<script src="../../docs/src/docs.js"></script>
+<script src="docs.js"></script>
+<script>
+const
+	FILTER = /^cxl-(?!route)/,
+	COMPONENTS = Object.keys(cxl.componentFactory.components)
+		.filter(c => FILTER.test(c)).sort(),
+	  
+	STATES = {
+
+		'cxl-snackbar': {
+			index: 0,
+
+			notify()
+			{
+				return cxl.ui.notify('Hello World ' + this.index++);
+			}
+		},
+
+		'cxl-snackbar-container': {
+			index: 0,
+
+			notify()
+			{
+				return cxl.ui.notify('Hello World ' + this.index++);
+			}
+		}
+	},
+	defined = cxl.router.routes,
+	components = cxl.componentFactory.components['docs-root'].meta.controller.prototype.components
+;
+	COMPONENTS.forEach(name => {
+		if (!defined[name])
+		{
+			cxl.route({ path: name, title: '<' + name + '>', templateId: name }, STATES[name]);
+			components.push(name);
+		}
+	});
+	
+</script>
+	
+<docs-root></docs-root>
+

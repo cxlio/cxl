@@ -33,13 +33,14 @@ function warn()
 function override(obj, fn, pre, post)
 {
 	if (!obj)
-	{
-		warn('[debug] Could not override function: ' + fn);
-		return;
-	}
+		throw new Error(`Could not override method "${fn}"`);
+
+	const old = obj && obj[fn];
+
+	if (!old)
+		warn(`Overriding non existent method "${fn}"`);
 
 	const
-		old = obj[fn],
 		newFn = obj[fn] = function()
 		{
 			if (pre)

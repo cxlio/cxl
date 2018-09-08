@@ -156,13 +156,13 @@ class ComponentDefinition
 	{
 		var extend = COMPONENTS[parent].meta;
 
+		if (def.events && extend.events)
+			def.events = extend.events.concat(def.events);
+
 		def = Object.assign({}, extend, def);
 
 		if (def.controller && extend.controller)
 			def.controller.prototype = Object.assign({}, extend.controller.prototype, def.controller.prototype);
-
-		if (def.events && extend.events)
-			def.events = extend.events.concat(def.events);
 
 		if (def.bindings && def.bindings !== extend.bindings)
 			def.bindings += ' ' + extend.bindings;
