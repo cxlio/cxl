@@ -593,21 +593,24 @@ cxl.route({
 <docs-code type="bash"><!--npm install @cxl/ui--></docs-code>
 
 <cxl-t h5>Available Modules</cxl-t>
-<cxl-t h6>ui</cxl-t>
+<cxl-t h6>dist/cxl-ui</cxl-t>
 <p>The main module.</p>
 
-<cxl-t h6>ui-icons</cxl-t>
+<cxl-t h6>dist/cxl-ui.dbg</cxl-t>
+<p>Debug mode.</p>
+
+<cxl-t h6>dist/cxl-ui-icons</cxl-t>
 <p>FontAwesome Icon support. Use with <a href="#cxl-icon"><code>&lt;cxl-icon></code></a> Component.</p>
 
-<cxl-t h4>Usage</cxl-t>
+<cxl-t h6>dist/cxl-ui-react</cxl-t>
+<p>ReactJS compatibility module. See <a href="react.html">Demo</a>.</p>
 
 <!--
 <cxl-t h4>Frequently Asked Questions</cxl-t>
-<cxl-t h6>ui-react</cxl-t>
-<p>ReactJS compatibility module</p>
 
 <cxl-t h6>ui-angular</cxl-t>
-<p>Angular compatibility module</p>
+<p>Angular compatibility module. See <a href="angular.html">Demo</a>.</p>
+
 <cxl-t h6>ui-icons-material</cxl-t>
 <p>Material Icon Support</p>
 

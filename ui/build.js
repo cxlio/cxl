@@ -48,11 +48,13 @@ require('../build').build({
 				...ui,
 				'dist/cxl-ui-icons.js',
 				'src/ui-angular.js'
-			]
+			],
+			minify: 'cxl-ui-angular.min.js'
 		},
 		{
 			output: 'cxl-ui-react.js',
-			src: [ 'src/react.js' ]
+			src: [ 'src/react.js' ],
+			minify: 'cxl-ui-react.min.js'
 		}
 	]
 
