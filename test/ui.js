@@ -83,7 +83,7 @@ var
 	A = $$compile(`
 <cxl-form &="on(submit):#one">
 	<cxl-form &="on(submit):#two">
-		<cxl-submit &="id(submit)"></cxl-submit>
+		<div &="id(submit)"></div>
 	</cxl-form>
 </cxl-form>
 		`, {
@@ -91,7 +91,7 @@ var
 			two(ev) { a.ok(ev); }
 		})
 ;
-	cxl.dom.trigger.$$old(A.state.submit, 'click');
+	cxl.dom.trigger(A.state.submit, 'submit');
 	$$render(A);
 });
 
