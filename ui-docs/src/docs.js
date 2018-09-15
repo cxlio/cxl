@@ -736,27 +736,25 @@ cxl.route({
 
 <cxl-t h5>Available Modules</cxl-t>
 
-<p>The <code>dist</code> folder includes the following modules.</p>
-
-<cxl-t h6>cxl-ui</cxl-t>
+<cxl-t h6>@cxl/ui <cxl-t inline caption>dist/index.js</cxl-t></cxl-t>
 <p>The main module.</p>
 
-<cxl-t h6>cxl-ui.dbg</cxl-t>
+<cxl-t h6>@cxl/ui/debug <cxl-t inline caption>dist/debug.js</cxl-t></cxl-t>
 <p>Debug mode.</p>
 
-<cxl-t h6>cxl-ui-icons</cxl-t>
+<cxl-t h6>@cxl/ui/icons <cxl-t inline caption>dist/icons.js</cxl-t></cxl-t>
 <p>FontAwesome Icon support. Use with <a href="#cxl-icon"><code>&lt;cxl-icon></code></a> Component.</p>
 
-<cxl-t h6>cxl-ui-react</cxl-t>
+<cxl-t h6>@cxl/ui/react <cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
 <p>ReactJS compatibility module. See <a href="react.html">Demo</a>.</p>
 
+
+
+<!--
 <cxl-t h6>cxl-ui-angular</cxl-t>
 <p>Angular compatibility module.</p>
 
-<!--
 <cxl-t h4>Frequently Asked Questions</cxl-t>
-
-
 
 <cxl-t h6>ui-icons-material</cxl-t>
 <p>Material Icon Support</p>

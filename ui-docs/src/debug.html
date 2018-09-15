@@ -258,7 +258,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 </template>
-	
+
 <template id="cxl-dialog-alert">
 <docs-component name="cxl-dialog-alert">
 	<docs-demo><!--
@@ -322,7 +322,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 </template>
-		
+
 <template id="cxl-grid">
 <docs-component name="cxl-grid">
 <docs-demo &="owner:@owner"><!--
@@ -362,7 +362,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 </docs-component>
 </template>
-		
+
 <template id="cxl-meta">
 <docs-component name="cxl-meta">
 </docs-component>
@@ -380,7 +380,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 </docs-component>
 </template>
-		
+
 <template id="cxl-submit">
 <docs-component name="cxl-submit">
 </docs-component>
@@ -390,12 +390,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-component name="cxl-table">
 </docs-component>
 </template>
-	
+
 <script>
 	if (location.search==='?shady')
 		window.$$cxlShady = true;
 </script>
-<script src="../../ui/dist/cxl-ui.dbg.js"></script>
+<script src="../../ui/dist/debug.js"></script>
 <script src="../../ui/dist/cxl-ui-icons.js"></script>
 <script src="../../router/dist/cxl-router.dbg.js"></script>
 
@@ -409,7 +409,7 @@ const
 	FILTER = /^cxl-(?!route)/,
 	COMPONENTS = Object.keys(cxl.componentFactory.components)
 		.filter(c => FILTER.test(c)).sort(),
-	  
+
 	STATES = {
 
 	},
@@ -423,8 +423,8 @@ const
 			components.push(name);
 		}
 	});
-	
+
 </script>
-	
+
 <docs-root></docs-root>
 

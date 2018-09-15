@@ -529,7 +529,7 @@ component({
 </a>
 	`,
 	events: [ 'action' ],
-	bindings: 'focusable action:host.trigger(action) role(menuitem)',
+	bindings: 'focusable action:host.trigger(action) role(link)',
 	attributes: [ 'href', 'icon', 'selected', 'disabled', 'touched' ],
 	styles: [ prefix('link', FocusCSS), {
 		$: { cursor: 'pointer', fontSize: 16 },

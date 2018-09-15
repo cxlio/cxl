@@ -20,10 +20,10 @@ require('../build').build({
 		{
 			output: 'cxl-ui.js',
 			src: [ ...template, ...ui ],
-			minify: 'cxl-ui.min.js'
+			minify: 'index.js'
 		},
 		{
-			output: 'cxl-ui.dbg.js',
+			output: 'debug.js',
 			src: [
 				...template,
 				'../template/src/debug.js',
@@ -39,7 +39,7 @@ require('../build').build({
 			src: [
 				'src/beta.js'
 			],
-			minify: 'cxl-ui-beta.min.js'
+			minify: 'beta.js'
 		},
 		{
 			output: 'cxl-ui-angular.js',
@@ -49,12 +49,12 @@ require('../build').build({
 				'dist/cxl-ui-icons.js',
 				'src/ui-angular.js'
 			],
-			minify: 'cxl-ui-angular.min.js'
+			minify: 'angular.js'
 		},
 		{
 			output: 'cxl-ui-react.js',
 			src: [ 'src/react.js' ],
-			minify: 'cxl-ui-react.min.js'
+			minify: 'react.js'
 		}
 	]
 

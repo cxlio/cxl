@@ -402,10 +402,10 @@ cxl.component({
 	bindings: 'id(el) route.change:#render',
 	template: `
 <x &=".extended">
-	<a &=".link =href4:attribute(href) =title4:text"></a> <x &=".link =title4:show">&gt;</x>
-	<a &=".link =href3:attribute(href) =title3:text"></a> <x &=".link =title3:show">&gt;</x>
-	<a &=".link =href2:attribute(href) =title2:text"></a> <x &=".link =title2:show">&gt;</x>
-	<a &=".link =href1:attribute(href) =title1:text"></a> <x &=".link =title1:show">&gt;</x>
+	<a &=".link =href4:attribute(href) =title4:show:text"></a> <x &=".link =title4:show">&gt;</x>
+	<a &=".link =href3:attribute(href) =title3:show:text"></a> <x &=".link =title3:show">&gt;</x>
+	<a &=".link =href2:attribute(href) =title2:show:text"></a> <x &=".link =title2:show">&gt;</x>
+	<a &=".link =href1:attribute(href) =title1:show:text"></a> <x &=".link =title1:show">&gt;</x>
 </x>
 <a &=".link =href0:attribute(href) =title0:text"></a>
 	`,

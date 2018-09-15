@@ -4,8 +4,10 @@
 	"files": [
 		"dist/*.js"
 	],
-	"main": "dist/cxl-ui.min.js",
+	"main": "dist",
 	"homepage": "https://coaxialhost.com/ui-docs",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"repository": "https://github.com/cxlio/cxl",
 	"devDependencies": {
 		"@fortawesome/fontawesome-free-solid": "^5.0.13"
 	},
