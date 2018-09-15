@@ -324,7 +324,7 @@ component({
 <span &="content"></span>
 	`,
 	events: [ 'change' ],
-	bindings: 'action:#toggle focusable =checked:#update =false-value:#update =true-value:#update =value:host.trigger(change) role(checkbox)',
+	bindings: 'action:#toggle focusable =checked:#update =false-value:#update =true-value:#update =value:#onValue:host.trigger(change) role(checkbox)',
 	styles: [ {
 		$: { marginLeft: 16, position: 'relative', display: 'inline-block', cursor: 'pointer', marginBottom: 12 },
 		$focus: { outline: 0 },
@@ -343,6 +343,11 @@ component({
 	checked: false,
 	'true-value': true,
 	'false-value': false,
+
+	onValue(val)
+	{
+		this.checked = val===this['true-value'];
+	},
 
 	update()
 	{
@@ -909,9 +914,9 @@ component({
 	value: 0,
 	step: 0.05,
 
-	onLeft() { this.value -= this.step; },
+	onLeft() { this.value -= +this.step; },
 
-	onRight() { this.value += this.step; },
+	onRight() { this.value += +this.step; },
 
 	update(value, el)
 	{
@@ -1021,7 +1026,7 @@ component({
 	`,
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ],
 	events: [ 'change' ],
-	bindings: 'focusable =value:host.trigger(change) action:#onClick:host.trigger(change)',
+	bindings: 'focusable =value:host.trigger(change) action:#onClick',
 	styles: [{
 		$: {
 			position: 'relative', display: 'inline-block', width: 46, height: 20,
@@ -1060,6 +1065,9 @@ component({
 
 	onClick()
 	{
+		if (this.disabled)
+			return;
+
 		this.checked = !this.checked;
 	}
 });

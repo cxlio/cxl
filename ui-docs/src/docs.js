@@ -127,6 +127,13 @@ Value: <span &="=test:text"></span>
 Value: <span &="=test:text"></span>
 	--></docs-demo>
 </docs-attribute>
+</docs-attribute>
+<docs-attribute name="value">
+	<docs-demo><!--
+<cxl-checkbox &="@checked:=test" value="yes" true-value="yes" false-value="no">Yes/No Checkbox Label</cxl-checkbox><br>
+Checked: <span &="=test:text"></span>
+	--></docs-demo>
+</docs-attribute>
 </docs-component>
 			`
 
@@ -210,47 +217,80 @@ Value: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-input">
 <docs-demo &="owner:@owner"><!--
-<cxl-form-group &="on(change):=event on(input):=event">
-	<cxl-label>Email Address</cxl-label>
-	<cxl-input required type="email" &="=email:|value value:=email"></cxl-input>
-</cxl-form-group>
-<p>Values: <span &="=email:insert" /></p>
-<p>Events: <x &="=event:insert"></x></p>
---></docs-demo>
-
-<docs-attribute name="inverse">
-<docs-demo><!--
-<cxl-block inverse>
 <cxl-form-group>
-	<cxl-label>Inverse Label</cxl-label>
-	<cxl-input type="email" inverse></cxl-input>
+	<cxl-label>Email Address</cxl-label>
+	<cxl-input value="email@address.com"></cxl-input>
 </cxl-form-group>
-</cxl-block-inverse>
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input></cxl-input>
+</cxl-form-group>
 --></docs-demo>
-</docs-attribute>
 
 <docs-attribute name="disabled">
 <docs-demo &="owner:@owner"><!--
 <cxl-form-group>
 	<cxl-label>Disabled</cxl-label>
-	<cxl-input disabled &="valid(email) =email:value"></cxl-input>
+	<cxl-input disabled></cxl-input>
 </cxl-form-group>
 --></docs-demo>
 </docs-attribute>
 </docs-component>
+<docs-attribute name="invalid">
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Inverse Label</cxl-label>
+	<cxl-input invalid></cxl-input>
+</cxl-form-group>
+--></docs-demo>
+</docs-attribute>
+<docs-attribute name="inverse">
+<docs-demo><!--
+<cxl-block inverse>
+<cxl-form-group>
+	<cxl-label>Inverse Label</cxl-label>
+	<cxl-input inverse></cxl-input>
+</cxl-form-group>
+</cxl-block>
+--></docs-demo>
+</docs-attribute>
+<docs-attribute name="maxlength">
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Max Length Attribute</cxl-label>
+	<cxl-input maxlength="10"></cxl-input>
+</cxl-form-group>
+--></docs-demo>
+</docs-attribute>
+<docs-attribute name="name">
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Name Input</cxl-label>
+	<cxl-input name="test"></cxl-input>
+</cxl-form-group>
+--></docs-demo>
+</docs-attribute>
+<docs-attribute name="touched">
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Name Input</cxl-label>
+	<cxl-input touched invalid></cxl-input>
+</cxl-form-group>
+--></docs-demo>
+</docs-attribute>
+<docs-attribute name="value">
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Name Input</cxl-label>
+	<cxl-input value="Input Value"></cxl-input>
+</cxl-form-group>
+--></docs-demo>
+</docs-attribute>
 			`
 		},
 		item: {
 			template: `
 <docs-component name="cxl-item">
-	<docs-demo &="owner:@owner"><!--
-<cxl-fragment &="=list:item.each:repeat">
-	<cxl-item icon="info">
-		List Item Key <span &="$key:text"></span>:
-		<x &="$value:text"></x>
-	</cxl-item>
-</cxl-fragment>
-	--></docs-demo>
 	<docs-demo><!--
 <cxl-item>
 	<cxl-t subtitle>Primary Text</cxl-t>
@@ -261,16 +301,46 @@ Value: <span &="=test:text"></span>
 	<cxl-t subtitle2>Secondary Text</cxl-t>
 </cxl-item>
 	--></docs-demo>
-	<docs-demo &="owner:@owner"><!--
-<template &="=list:item.each:repeat">
-	<cxl-item icon="info">
-		<cxl-col>
-			<cxl-t subtitle>Primary Text <x &="$key:text"></x></cxl-t>
-			<cxl-t subtitle2 &="$value:text"></cxl-t>
-		</cxl-col>
-	</cxl-item>
-</template>
+<docs-attribute name="disabled">
+	<docs-demo><!--
+<cxl-item disabled>
+	<cxl-t subtitle>Primary Text</cxl-t>
+	<cxl-t subtitle2>Secondary Text</cxl-t>
+</cxl-item>
 	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="href">
+	<docs-demo><!--
+<cxl-item href="#cxl-item">
+	<cxl-t subtitle>Primary Text</cxl-t>
+	<cxl-t subtitle2>Secondary Text</cxl-t>
+</cxl-item>
+	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="icon">
+	<docs-demo><!--
+<cxl-item icon="book">
+	<cxl-t subtitle>Primary Text</cxl-t>
+	<cxl-t subtitle2>Secondary Text</cxl-t>
+</cxl-item>
+	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="selected">
+	<docs-demo><!--
+<cxl-item selected>
+	<cxl-t subtitle>Primary Text</cxl-t>
+	<cxl-t subtitle2>Secondary Text</cxl-t>
+</cxl-item>
+	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="touched">
+	<docs-demo><!--
+<cxl-item touched>
+	<cxl-t subtitle>Primary Text</cxl-t>
+	<cxl-t subtitle2>Secondary Text</cxl-t>
+</cxl-item>
+	--></docs-demo>
+</docs-attribute>
 </docs-component>
 			`
 
@@ -288,6 +358,15 @@ Value: <span &="=test:text"></span>
 	<cxl-item>Option 3</cxl-item>
 </cxl-menu>
 --></docs-demo>
+<docs-attribute name="touched"><docs-demo &="owner:@owner"><!--
+<cxl-menu &="=closed:@closed">
+	<cxl-item icon="check">Option 1</cxl-item>
+	<cxl-item icon="">Option 2</cxl-item>
+	<cxl-item icon="">Option 3</cxl-item>
+</cxl-menu>
+<br><br>
+<cxl-button &="action:toggle(closed) =closed:not:@primary" primary>Open/Close</cxl-button>
+--></docs-demo></docs-attribute>
 </docs-component>
 			`
 
@@ -359,6 +438,26 @@ Value: <span &="=test:text"></span>
 <cxl-radio name="test" value="3">Radio Button 3</cxl-radio><br>
 --></docs-demo>
 </docs-component>
+<docs-attribute name="checked">
+	<docs-demo><!--
+<cxl-radio &="@checked:=checked" name="test" value="1">Radio Button 1</cxl-radio><br>
+<p>Checked: <x &="=checked:text"></x></p>
+	--></docs-demo>
+<docs-attribute name="disabled">
+	<docs-demo><!--
+<cxl-radio name="test" value="1">Radio Button 1</cxl-radio><br>
+<cxl-radio disabled name="test" value="2">Radio Button 2</cxl-radio><br>
+<cxl-radio name="test" value="3">Radio Button 3</cxl-radio><br>
+	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="name">
+	<docs-demo><!--
+<cxl-radio name="test3" value="1">Radio Button 1</cxl-radio><br>
+<cxl-radio name="test3" value="2">Radio Button 2</cxl-radio><br>
+<cxl-radio name="test2" value="3">Radio Button 3</cxl-radio><br>
+<cxl-radio name="test2" value="3">Radio Button 3</cxl-radio><br>
+	--></docs-demo>
+</docs-attribute>
 			`
 		},
 		select: {
@@ -426,6 +525,12 @@ Value: <span &="=test:text"></span>
 <cxl-slider disabled value="0.4"></cxl-slider>
 		--></docs-demo>
 	</docs-attribute>
+	<docs-attribute name="step">
+		<docs-demo><!--
+<cxl-slider &="@value:=value" step="0.2" value="0.4"></cxl-slider>
+<p>Value: <x &="=value:text"></x></p>
+		--></docs-demo>
+	</docs-attribute>
 </docs-component>
 			`
 		},
@@ -474,6 +579,28 @@ Value: <span &="=test:text"></span>
 	<p &="=switchValue3:text"></p>
 </div>
 --></docs-demo>
+<docs-attribute name="checked">
+	<docs-demo><!--
+<p><cxl-switch checked></cxl-switch></p>
+	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="disabled">
+	<docs-demo><!--
+<p><cxl-switch disabled></cxl-switch></p>
+	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="false-value">
+	<docs-demo><!--
+<p><cxl-switch false-value="falsy" &="@value:=value"></cxl-switch></p>
+<p>Value: <x &="=value:text"></x></p>
+	--></docs-demo>
+</docs-attribute>
+<docs-attribute name="true-value">
+	<docs-demo><!--
+<p><cxl-switch true-value="not false" &="@value:=value"></cxl-switch></p>
+<p>Value: <x &="=value:text"></x></p>
+	--></docs-demo>
+</docs-attribute>
 </docs-component>
 			`
 		},
@@ -506,6 +633,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		tab: {
 			template: `
 <docs-component name="cxl-tab">
+	<docs-demo><!--
+<cxl-tabs>
+	<cxl-tab selected>Tab 1</cxl-tab>
+	<cxl-tab href="#cxl-tabs">Tab 2</cxl-tab>
+	<cxl-tab>Tab 3</cxl-tab>
+</cxl-tabs>
+--></docs-demo>
 </docs-component>
 			`
 		},
@@ -514,7 +648,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-component name="cxl-tabs">
 	<docs-demo><!--
 <cxl-tabs>
-	<cxl-tab &="route.link(cxl-tabs)">Details</cxl-tab>
+	<cxl-tab selected>Details</cxl-tab>
 	<cxl-tab>Employees</cxl-tab>
 	<cxl-tab>Files</cxl-tab>
 	<cxl-tab>Checks</cxl-tab>
@@ -540,6 +674,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	<cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></cxl-textarea>
 </cxl-form-group>
 --></docs-demo>
+<docs-attribute name="disabled">
+	<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Disabled Text Area</cxl-label>
+	<cxl-textarea disabled value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></cxl-textarea>
+</cxl-form-group>
+	--></docs-demo>
+</docs-attribute>
 </docs-component>
 			`
 		}
@@ -571,12 +713,12 @@ cxl.route({
 	<li>Edge: 17</li>
 </ul>
 <br>
-<cxl-t h4>License</cxl-t>
+<!--<cxl-t h4>License</cxl-t>
 <p>Library and Source Code released under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL</a> open source license.</p>
-<br>
+<br>-->
 <cxl-t h4>Source Code</cxl-t>
 <ul>
-	<li><a href="https://github.com/cxlio/cxl">Github</a></li>
+	<li>Feature requests and bug reports: <a href="https://github.com/cxlio/cxl">Github</a></li>
 </ul>
 	`
 });
@@ -687,7 +829,7 @@ cxl.component({
 	</cxl-block>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
-	<cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item>
+	<!--cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item-->
 	<cxl-hr></cxl-hr>
 	<cxl-block><cxl-t subtitle2>Components</cxl-t></cxl-block>
 	<cxl-item icon="" &="route.link(components)">Overview</cxl-item>

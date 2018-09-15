@@ -76,6 +76,27 @@ function stat(file)
 	return $stat(file).catch(() => ({size:0}));
 }
 
+class Operation
+{
+	constructor()
+	{
+
+	}
+}
+
+class Source
+{
+
+}
+
+class Target
+{
+	constructor(config)
+	{
+
+	}
+}
+
 class Builder {
 
 	static build(config)
@@ -118,22 +139,29 @@ class Builder {
 		this.prefix = config.name || 'build';
 		this.outputDir = config.outputDir || 'dist';
 		this.config = config;
+		this.reportOutput = { targets: {} };
+
 		try { fs.mkdirSync(this.outputDir); } catch(e) {}
 
-		config.targets.forEach(
+		Promise.all(config.targets.map(
 			target => this.operation(`Building ${target.output}`, this.build(target))
-		);
+		)).then(() => {
+		});
 	}
 
 	report(old, config)
 	{
+		const output = this.reportOutput.targets;
+
 		return this.stat(config).then(stats => {
 			console.log(config.output + `: ${kb(old[0].size)}Kb -> ${kb(stats[0].size)}Kb`);
+			output[config.output] = stats[0].size;
 
 			if (ARGV.minify && config.minify)
 			{
 				console.log(config.minify + ': ' + kb(stats[1].size) + 'Kb (' +
 					(stats[1].size/stats[0].size*100).toFixed(2) + '%)');
+				output[config.minify] = stats[1].size;
 			}
 		});
 	}

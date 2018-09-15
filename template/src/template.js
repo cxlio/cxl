@@ -1629,6 +1629,8 @@ pipes({
 
 	text(value) { dom.setContent(this.element, value); },
 
+	toggle(val, state) { return (state[this.parameter] = !state[this.parameter]); }
+
 });
 
 /**

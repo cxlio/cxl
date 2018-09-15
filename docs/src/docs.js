@@ -235,7 +235,7 @@ cxl.component({
 	<cxl-t h6>Events</cxl-t>
 	<ul>
 	<template &="=events:sort:each:repeat">
-	<li><a &="item:anchor.focus:text"></a></li>
+	<li><a &="item:text"></a></li>
 	</template>
 	</ul>
 </div>
