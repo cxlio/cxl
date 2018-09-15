@@ -693,7 +693,7 @@ cxl.route({
 	id: 'home',
 	defaultRoute: true,
 	path: '*default',
-	title: 'Overview',
+	title: '@cxl/ui',
 	template: `
 <cxl-t h4>Features</cxl-t>
 

@@ -5,11 +5,13 @@ QUnit.module('ui');
 
 function testValue(c, a)
 {
+	c.addEventListener('change', handler);
 	c.value = "Hello World";
 
-	c.addEventListener('change', ev => {
+	function handler() {
 		a.equal(c.value, 'Hello World', '"change" event fired');
-	});
+		c.removeEventListener('change', handler);
+	}
 
 	$$render(c.$view);
 }
@@ -31,19 +33,22 @@ function testAttributes(c, def, a)
 function testFocus(c, a)
 {
 	const unfocus = document.createElement('select');
-	$$fixture().appendChild(unfocus);
+	$$fixture(unfocus);
 
-	a.equal(c.tabIndex, 0);
+	a.equal(c.tabIndex, 0, 'tabIndex is initially 0');
 	c.focus();
-	a.ok(c.matches(':focus'), 'Element can be focused');
+	a.equal(document.activeElement, c, 'Element is focused');
+	//a.ok(c.matches(':focus'), 'Element is focused');
+
 	unfocus.focus();
-	a.ok(!c.matches(':focus'), 'Element can be unfocused');
+	a.equal(document.activeElement, unfocus, 'Element was unfocused');
+	//a.ok(!c.matches(':focus'), 'Element was unfocused');
 
 	a.equal(c.tabIndex, 0);
 	a.ok('disabled' in c, 'Element can be disabled');
 	c.disabled = true;
 	$$render(c.$view);
-	a.equal(c.tabIndex, -1);
+	a.ok(!c.getAttribute('tabindex'), 'Disabled Element is not focusable');
 	a.ok(!c.matches(':focus'), 'Element remains unfocused');
 	c.focus();
 	a.ok(!c.matches(':focus'), 'Disabled element does not receive focus');
@@ -57,10 +62,10 @@ var
 	def = cxl.componentFactory.components[name].meta
 ;
 	a.ok(c, 'Component successfully created');
-	$$fixture().appendChild(c);
-	a.ok(c.isConnected, 'Component connected');
+	$$fixture(c);
+	a.ok(c.$view.isConnected, 'Component connected');
 
-	if (c.tabIndex!==-1)
+	if (c.hasAttribute('tabindex'))
 		testFocus(c, a);
 
 	if (def.attributes)
