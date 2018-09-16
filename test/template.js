@@ -19,8 +19,8 @@ function $$fixture(A)
 	{
 		result.appendChild(A);
 
-		if (cxl.shady)
-			cxl.shady.upgrade(A, true);
+		if (cxl.$$shadyUpgrade)
+			cxl.$$shadyUpgrade(A, true);
 	}
 
 	return result;

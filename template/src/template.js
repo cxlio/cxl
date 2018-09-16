@@ -256,6 +256,11 @@ class View extends Store
 		this.connected = new rx.Subject();
 	}
 
+	setAttribute(name, newVal)
+	{
+		this.set(name, newVal==='' ? true : (newVal || false));
+	}
+
 	registerSlot(slot)
 	{
 		if (!slot.parameter)

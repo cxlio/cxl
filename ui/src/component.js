@@ -184,23 +184,16 @@ class ComponentDefinition
 
 			attributeChangedCallback(name, oldVal, newVal)
 			{
-				// TODO optimize
-				this.$view.set(name, newVal==='' ? true : (newVal || false));
+				this.$view.setAttribute(name, newVal);
 			}
 
 			connectedCallback()
 			{
-				if (meta.connect)
-					meta.connect.call(this, this.$view.state);
-
 				this.$view.connect();
 			}
 
 			disconnectedCallback()
 			{
-				if (meta.disconnect)
-					meta.disconnect.call(this, this.$view.state);
-
 				this.$view.disconnect();
 			}
 		}

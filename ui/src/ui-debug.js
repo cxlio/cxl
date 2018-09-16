@@ -9,7 +9,7 @@ const
 	MAX_TEMPLATE_LENGTH = 2000,
 	VALID_COMPONENT_META = [
 		'template', 'name', 'extend', 'attributes', 'methods', 'styles', 'events', 'bindings',
-		'initialize', 'connect', 'disconnect', 'templateId'
+		'initialize', 'templateId'
 	]
 ;
 
@@ -41,6 +41,9 @@ override(cxl, 'component', function(meta) {
 
 });
 
-
+if (cxl.$$shadyCustomElements)
+	warn('[cxl] customElements emulation enabled.');
+if (cxl.$$shadyShadowDOM)
+	warn('[cxl] shadow DOM emulation enabled.');
 
 })(this.cxl);

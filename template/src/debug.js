@@ -1,8 +1,14 @@
 (cxl => {
 
 const
+	start = performance.now(),
 	console = window.console
 ;
+
+window.addEventListener('DOMContentLoaded', ev => {
+	const now = performance.now();
+	console.log(`[cxl] Page loaded in ${now-start}ms`);
+});
 
 function Notify(msg)
 {

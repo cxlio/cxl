@@ -472,19 +472,26 @@ var
 	nameB = $$tagName(),
 	nameC = $$tagName(),
 	A = cxl.component({
-		name: nameA,
-		template: '<div></div>',
-		connect() { a.equal(i++, 2); done(); }}),
+			name: nameA,
+			template: '<div></div>',
+			bindings: 'connect:#connect'
+		}, {
+			connect() { a.equal(i++, 2); done(); }
+		}),
 	B = cxl.component({
-		name: nameB,
-		template: `<${nameA}>`,
-		connect() { a.equal(i++, 1); }
-	}),
+			name: nameB,
+			bindings: 'connect:#connect',
+			template: `<${nameA}>`
+		}, {
+			connect() { a.equal(i++, 1); }
+		}),
 	C = cxl.component({
-		name: nameC,
-		template: `<${nameB}>`,
-		connect() { a.equal(i++, 0); }
-	}),
+			name: nameC,
+			bindings: 'connect:#connect',
+			template: `<${nameB}>`
+		}, {
+			connect() { a.equal(i++, 0); }
+		}),
 	view = $$compile(`<${nameC}>`)
 ;
 });
@@ -497,19 +504,26 @@ var
 	nameB = $$tagName(),
 	nameC = $$tagName(),
 	A = cxl.component({
-		name: nameA,
-		template: '<div></div>',
-		disconnect() { a.equal(i++, 2); done(); }}),
+			name: nameA,
+			template: '<div></div>',
+			bindings: 'disconnect:#disconnect'
+		}, {
+			disconnect() { a.equal(i++, 2); done(); }
+		}),
 	B = cxl.component({
-		name: nameB,
-		template: `<${nameA}>`,
-		disconnect() { a.equal(i++, 1); }
-	}),
+			name: nameB,
+			template: `<${nameA}>`,
+			bindings: 'disconnect:#disconnect'
+		}, {
+			disconnect() { a.equal(i++, 1); }
+		}),
 	C = cxl.component({
-		name: nameC,
-		template: `<${nameB}>`,
-		disconnect() { a.equal(i++, 0); }
-	}),
+			name: nameC,
+			template: `<${nameB}>`,
+			bindings: 'disconnect:#disconnect'
+		}, {
+			disconnect() { a.equal(i++, 0); }
+		}),
 	view = $$compile(`<${nameC}>`)
 ;
 	dom.remove(view.host);
@@ -522,14 +536,22 @@ var
 	name = $$tagName(),
 	A = cxl.component({
 		name: name,
+		attributes: [ 'test' ],
+		bindings: 'connect:#connect disconnect:#disconnect',
 		template: '<div &="=test:#digest"></div>',
-		initialize() { a.equal(i++, 0); },
-		connect() { a.equal(i++, 2); },
-		disconnect() { a.equal(i, 3); done(); }
+		initialize() { a.equal(i++, 0, 'Initialize'); }
 	}, {
-		digest() { a.equal(i++, 1); }
+		test: false,
+		connect() {
+			a.equal(i++, 2, 'Connect');
+		},
+		disconnect() { a.equal(i, 3, 'Disconnect'); done(); },
+		digest() {
+			a.equal(this.test, 'value', 'Attributes set before digest');
+			a.equal(i++, 1, 'Digest');
+		}
 	}),
-	view = $$compile(`<${name}>`)
+	view = $$compile(`<${name} test="value">`)
 ;
 	dom.remove(view.host);
 });

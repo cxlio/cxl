@@ -86,6 +86,20 @@ var
 	a.ok(!SB.nextSibling);
 });
 
+QUnit.test('Component attribute initialization', function(a) {
+	const nameA = $$tagName(), nameB = $$tagName();
+
+	cxl.component({
+		name: nameA,
+		attributes: [ 'testing' ],
+		bindings: '=hello:=testing'
+	}, { hello: false });
+	cxl.component({ name: nameB, template: `<${nameA} &="id(A)" testing="value">`});
+
+	const el = cxl.dom(nameB), A=el.$view.state.A;
+	a.equal(A.testing, 'value');
+});
+
 QUnit.test('parent - multiple level component', function(a) {
 
 	const
@@ -125,7 +139,10 @@ const
 	name = 'cxl-test' + a.test.testId,
 	done = a.async(),
 	C = cxl.component({
-		name: name, connect() { this.test = 10; done(); }
+		bindings: 'connect:#connect',
+		name: name
+	}, {
+		connect(val, el) { el.test = 10; done(); }
 	}),
 	fragment = cxl.Template.getFragmentFromString('<' + name + '>'),
 	cloned = fragment.cloneNode(true),

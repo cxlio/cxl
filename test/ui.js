@@ -26,6 +26,9 @@ function testAttributes(c, def, a)
 			c[attr] = true;
 			$$render(view);
 			a.equal(c[attr], true, `Attribute ${attr}`);
+
+			const A = $$compile(`<${c.tagName} &="id(c)" ${attr}>`);
+			a.ok(A.state.c[attr], `Attribute ${attr} initial value`);
 		}
 	});
 }
@@ -145,8 +148,15 @@ QUnit.test('cxl-checkbox - checked true-value', function(a) {
 var
 	A = $$compile('<cxl-checkbox &="@value:=test" checked true-value="yes">')
 ;
-	console.log(A);
 	a.equal(A.state.test, 'yes');
+});
+
+QUnit.test('cxl-checkbox - value sets checked', function(a) {
+var
+	A = $$compile('<cxl-checkbox &="id(c) @checked:=test:log @value:log" value="yes" true-value="yes">')
+;
+	console.log(A, A.state.c.$view);
+	a.equal(A.state.test, true);
 });
 
 QUnit.test('cxl-switch', function(a) {

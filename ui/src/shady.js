@@ -1,42 +1,82 @@
-
 (cxl => {
 "use strict";
 
 if (window.customElements && !window.$$cxlShady)
 	return;
 
-function upgrade(Component, node)
+const
+	registry = {},
+	observer = new MutationObserver(onMutation)
+;
+
+cxl.$$shadyUpgrade = node => doWalk(node, upgradeConnect);
+cxl.$$shadyCustomElements = true;
+
+function upgrade(node)
 {
-	if (!node.$$upgraded)
+	if (node.tagName && !node.$view)
 	{
-		node.$$upgraded = true;
-		new Component(node);
+		const Component = registry[node.tagName];
+
+		if (Component)
+			new Component(node);
 	}
 }
 
-function doWalk(node, connect)
+function connect(node)
 {
-	node = node || document.body;
+	node.$$connect=undefined;
 
-	var Component = node.tagName && registry[node.tagName];
-
-	if (Component && !node.$$upgraded)
-		upgrade(Component, node);
-
-	if (connect && node.$$cxlConnected===false)
+	if (node.$$cxlConnected===false)
 	{
-		Component.connect(node);
+		const view = node.$view;
 
-		if (node.shadowRoot && node.shadowRoot.firstChild)
-			doWalk(node.shadowRoot.firstChild, true);
+		view.connect();
+		node.$$cxlConnected = true;
 	}
+}
 
-	if (node.firstChild)
-		doWalk(node.firstChild, connect);
+function disconnect(node)
+{
+	node.$$connect = undefined;
 
-	if (node.nextSibling)
-		doWalk(node.nextSibling, connect);
+	if (node.$$cxlConnected===true)
+	{
+		const view = node.$view;
 
+		node.$$cxlConnected = false;
+
+		view.disconnect();
+	}
+}
+
+function upgradeConnect(node)
+{
+	upgrade(node);
+	connect(node);
+}
+
+function walk(node, method)
+{
+	if (node)
+	{
+		if (node.tagName)
+		{
+			method(node);
+			walk(node.firstChild, method);
+
+			if (node.shadowRoot && node.shadowRoot.firstChild)
+				walk(node.shadowRoot.firstChild, method);
+		}
+
+		walk(node.nextSibling, method);
+	}
+}
+
+function doWalk(node, method)
+{
+	method(node);
+	walk(node.firstChild, method);
 	return node;
 }
 
@@ -45,51 +85,55 @@ function override(obj, fn)
 	const original = obj[fn];
 	obj[fn] = function() {
 		var node = original.apply(this, arguments);
-		doWalk(node);
+		doWalk(node, upgrade);
 		return node;
 	};
 }
 
-function disconnectWalk(node)
-{
-	if (node.$$cxlDisconnect)
-		node.$$cxlDisconnect();
-
-	if (node.shadowRoot && node.shadowRoot.firstChild)
-		disconnectWalk(node.shadowRoot.firstChild);
-
-	if (node.firstChild)
-		disconnectWalk(node.firstChild);
-
-	if (node.nextSibling)
-		disconnectWalk(node.nextSibling);
-}
-
 function onMutation(event)
 {
-	event.forEach(function(record) {
-		for (var i of record.addedNodes)
-			doWalk(i, true);
+	const nodes = [];
 
-		for (i of record.removedNodes)
-			disconnectWalk(i);
+	event.forEach(function(record) {
+		for (var node of record.addedNodes)
+		{
+			if (node.$$connect===undefined)
+				nodes.push(node);
+
+			node.$$connect = upgradeConnect;
+		}
+
+		for (node of record.removedNodes)
+		{
+			if (node.$$connect===undefined)
+				nodes.push(node);
+
+			node.$$connect = disconnect;
+		}
 	});
+
+	nodes.forEach(n => n.$$connect && doWalk(n, n.$$connect));
 }
 
 function observe()
 {
 	observer.observe(document.body, { subtree: true, childList: true });
-	doWalk(document.body, true);
+	doWalk(document.body, upgradeConnect);
 }
 
-const
-	registry = {},
-	observer = new MutationObserver(onMutation)
-;
+var scheduled;
 
-cxl.shady = {
-	upgrade: doWalk
-};
+function debouncedWalk(node, method)
+{
+	if (scheduled)
+		return;
+
+	scheduled = true;
+	setTimeout(() => {
+		scheduled = false;
+		doWalk(node, method);
+	});
+}
 
 Object.assign(cxl.ComponentDefinition.prototype, {
 
@@ -97,7 +141,7 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 		registry[name.toUpperCase()] = Constructor;
 
 		if (document.body)
-			doWalk(document.body, true);
+			debouncedWalk(document.body, upgradeConnect);
 	},
 
 	componentConstructor(meta)
@@ -106,9 +150,9 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 
 		function onMutation(node, events)
 		{
-			for (var mutation of events) {
+			for (const mutation of events) {
 				const newVal = node.getAttribute(mutation.attributeName);
-				node.$view.set(mutation.attributeName, newVal==='' ? true : newVal);
+				node.$view.setAttribute(mutation.attributeName, newVal);
 			}
 		}
 
@@ -134,32 +178,7 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 
 				cxl.componentFactory.createComponent(meta, node);
 			}
-
-			static connect(node)
-			{
-				if (meta.connect)
-					meta.connect.call(node, node.$view.state);
-
-				node.$view.connect();
-
-				node.$$cxlConnected = true;
-				node.$$cxlDisconnect = function disconnect()
-				{
-					if (meta.disconnect)
-						meta.disconnect.call(this, this.$view.state);
-
-					this.$$cxlDisconnect = this.$$cxlConnected = false;
-					this.$view.disconnect();
-				};
-			}
-
 		}
-
-		if (meta.connect)
-			Component.prototype.connectedCallback = meta.connect;
-
-		if (meta.disconnect)
-			Component.prototype.disconnectedCallback = meta.disconnect;
 
 		return Component;
 	}
@@ -167,7 +186,7 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 });
 
 override(document, 'createElement');
-override(Range.prototype, 'createContextualFragment');
+//override(Range.prototype, 'createContextualFragment');
 override(cxl.Template.prototype, 'clone');
 
 const cloneNode = window.DocumentFragment.prototype.cloneNode;
@@ -188,19 +207,26 @@ var
 
 window.DocumentFragment.prototype.cloneNode = function(deep)
 {
-	return deep ? doWalk(cloneDeep(this)) : cloneNode.call(this);
+	return deep ? doWalk(cloneDeep(this), upgrade) : cloneNode.call(this);
 };
 
 // TODO do this properly
 document.importNode = function(node, deep)
 {
-	return deep ? doWalk(cloneDeep(node)) : importNode.call(this);
+	return deep ? doWalk(cloneDeep(node), upgrade) : importNode.call(this);
 };
 
 window.addEventListener('DOMContentLoaded', observe);
 
+})(this.cxl);
+
+(cxl => {
+"use strict";
+
 if (!window.$$cxlShady && window.Element.prototype.attachShadow)
 	return;
+
+cxl.$$shadyShadowDOM = true;
 
 Object.assign(cxl.css.StyleSheet.prototype, {
 

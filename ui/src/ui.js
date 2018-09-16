@@ -340,6 +340,7 @@ component({
 	}, DisabledCSS, FocusCircleCSS ],
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ]
 }, {
+	value: false,
 	checked: false,
 	'true-value': true,
 	'false-value': false,
@@ -689,7 +690,12 @@ component({
 <span &=".content content"></span>
 	`,
 	events: [ 'change' ],
-	bindings: 'id(host) action:#toggle focusable =name:#register =checked:host.trigger(change) =value:host.trigger(change) role(radio)',
+	bindings: `
+role(radio) focusable id(host)
+action:#toggle
+=name:#register =checked:host.trigger(change) =value:host.trigger(change)
+disconnect:#unregister
+	`,
 	styles: [{
 
 		$: { position: 'relative', cursor: 'pointer', marginBottom: 12 },
@@ -703,23 +709,8 @@ component({
 		box$checked: { borderColor: theme.primary, color: theme.primary }
 
 	}, DisabledCSS, FocusCircleCSS ],
-	attributes: [ 'checked', 'value', 'disabled', 'name', 'touched' ],
 
-	connect(state)
-	{
-		if (this.name)
-			state.register(this.name);
-	},
-
-	disconnect(state)
-	{
-		var i = radioValues.indexOf(this);
-
-		if (i!==-1)
-			radioValues.splice(i, 1);
-
-		state.registered = false;
-	}
+	attributes: [ 'checked', 'value', 'disabled', 'name', 'touched' ]
 }, {
 	checked: false,
 
@@ -730,6 +721,16 @@ component({
 			radioValues.push(this.host);
 			this.registered = true;
 		}
+	},
+
+	unregister()
+	{
+		var i = radioValues.indexOf(this);
+
+		if (i!==-1)
+			radioValues.splice(i, 1);
+
+		this.registered = false;
 	},
 
 	update()
@@ -951,31 +952,28 @@ component({
 
 		$small: { display: 'inline-block' }
 	},
-
-	connect()
+	bindings: 'connect:#connect'
+}, {
+	connect(val, host)
 	{
 		// TODO better way to animate?
 		setTimeout(() => {
-			this.style.opacity = 1;
-			this.style.transform = 'scale(1,1)';
+			host.style.opacity = 1;
+			host.style.transform = 'scale(1,1)';
 		}, 50);
-	}
-}, {
+	},
+
 	delay: 4000
 });
 
 component({
 	name: 'cxl-snackbar-container',
+	bindings: 'connect:#connect',
 
 	styles: {
 		$: { position: 'fixed', left: 16, bottom: 16, right: 16, textAlign: 'center' },
 		$left: { textAlign: 'left' },
 		$right: { textAlign: 'right' }
-	},
-
-	connect()
-	{
-		ui.snackbarContainer = this;
 	},
 
 	initialize(state)
@@ -989,6 +987,11 @@ component({
 }, {
 
 	queue: null,
+
+	connect(val, host)
+	{
+		ui.snackbarContainer = host;
+	},
 
 	notifyNext()
 	{
