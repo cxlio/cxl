@@ -10,6 +10,7 @@ hljs.configure({ tabReplace: '    '});
 cxl.component({
 	name: 'docs-directive-update',
 	attributes: [ 'directive' ],
+	bindings: 'connect:#connect',
 	template: `
 <cxl-card>
 	<cxl-block>
@@ -27,16 +28,16 @@ cxl.component({
 	</cxl-form-group>
 	</cxl-block>
 </cxl-card>
-	`,
-
-	connect()
-	{
-		this.$view.state.$view = this.$view;
-		this.$view.state.doUpdate();
-	}
-
+	`
 }, {
 	oldParameter: null,
+
+	connect(val, host)
+	{
+		this.$view = host.$view;
+		this.doUpdate();
+	},
+
 	doUpdate()
 	{
 		if (this.parameter !== this.oldParameter)
@@ -82,36 +83,37 @@ cxl.component({
 cxl.component({
 	name: 'docs-demo',
 	attributes: ['title', 'owner'],
+	bindings: 'connect:#connect',
 	template: `
 <cxl-card><cxl-block>
 	<cxl-t h6><span &="=title:show:text"></span></cxl-t>
 	<div &=".content content"></div>
 	<docs-code &="=source:@source"></docs-code>
 </cxl-block></cxl-card>`,
+
 	styles: {
 		content: { marginBottom: 16 }
-	},
+	}
 
-	connect()
+}, {
+	connect(val, host)
 	{
 	var
-		state = this.$view.state,
-		owner = state.owner || this.$view,
+		state = this,
+		owner = state.owner || host.$view,
 		src, template
 	;
-		if (this.firstChild && this.firstChild.nodeType===document.COMMENT_NODE)
+		if (host.firstChild && host.firstChild.nodeType===document.COMMENT_NODE)
 		{
-			src = this.firstChild.data;
+			src = host.firstChild.data;
 			template = new cxl.Template(src);
 
-			this.appendChild(template.compile(owner));
+			host.appendChild(template.compile(owner));
 		} else
-			src = this.innerHTML;
+			src = host.innerHTML;
 
 		state.source = src.trim();
 	}
-}, {
-
 });
 
 cxl.component({
@@ -150,17 +152,19 @@ cxl.component({
 <div &="content"></div>
 <br>
 	`,
-	connect()
+	bindings: 'connect:#connect'
+}, {
+	connect(val, host)
 	{
 		if (this.demo)
 		{
 		const
 			lorem = this.lorem ? `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at elementum orci. Vestibulum facilisis vel risus a commodo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris velit sapien, dignissim quis fermentum a, porta at urna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.` : '',
-			component = this.parentNode.$view.state.component,
+			component = host.parentNode.$view.state.component,
 			source = `<docs-demo><!--<${component} ${this.name}>${lorem}</${component}>--></docs-demo>`,
 			frag = cxl.Template.getFragmentFromString(source)
 		;
-			this.insertBefore(frag, this.firstChild);
+			host.insertBefore(frag, host.firstChild);
 		}
 	}
 });
@@ -253,16 +257,20 @@ cxl.component({
 	<div &="content(docs-event)"></div>
 	<div &="content(docs-method)"></div>
 	`,
-	initialize(state)
-	{
-		const component = cxl.componentFactory.components[state.name];
-		state.attributes = component.meta.attributes;
-		state.events = component.meta.events;
-		state.methods = component.meta.methods;
-		state.component = state.name;
-	}
-
+	bindings: '=name:#initialize'
 }, {
+	initialize(name)
+	{
+	const
+		state = this,
+		component = cxl.componentFactory.components[name],
+		meta = component && component.meta || {}
+	;
+		state.attributes = meta.attributes;
+		state.events = meta.events;
+		state.methods = meta.methods;
+	},
+
 	onAttributeClick()
 	{
 		cxl.dom.scrollTo(this.name);

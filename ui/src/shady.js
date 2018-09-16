@@ -4,6 +4,8 @@
 if (window.customElements && !window.$$cxlShady)
 	return;
 
+var	started, scheduled;
+
 const
 	registry = {},
 	observer = new MutationObserver(onMutation)
@@ -29,9 +31,7 @@ function connect(node)
 
 	if (node.$$cxlConnected===false)
 	{
-		const view = node.$view;
-
-		view.connect();
+		node.$view.connect();
 		node.$$cxlConnected = true;
 	}
 }
@@ -42,11 +42,8 @@ function disconnect(node)
 
 	if (node.$$cxlConnected===true)
 	{
-		const view = node.$view;
-
+		node.$view.disconnect();
 		node.$$cxlConnected = false;
-
-		view.disconnect();
 	}
 }
 
@@ -56,35 +53,34 @@ function upgradeConnect(node)
 	connect(node);
 }
 
+function doWalk(node, method)
+{
+	if (node.childNodes)
+	{
+		method(node);
+		walk(node.firstChild, method);
+
+		if (node.shadowRoot)
+			walk(node.shadowRoot.firstChild, method);
+	}
+
+	return node;
+}
+
 function walk(node, method)
 {
 	if (node)
 	{
-		if (node.tagName)
-		{
-			method(node);
-			walk(node.firstChild, method);
-
-			if (node.shadowRoot && node.shadowRoot.firstChild)
-				walk(node.shadowRoot.firstChild, method);
-		}
-
+		doWalk(node, method);
 		walk(node.nextSibling, method);
 	}
-}
-
-function doWalk(node, method)
-{
-	method(node);
-	walk(node.firstChild, method);
-	return node;
 }
 
 function override(obj, fn)
 {
 	const original = obj[fn];
 	obj[fn] = function() {
-		var node = original.apply(this, arguments);
+		const node = original.apply(this, arguments);
 		doWalk(node, upgrade);
 		return node;
 	};
@@ -92,23 +88,26 @@ function override(obj, fn)
 
 function onMutation(event)
 {
+	if (!started)
+		return;
+
 	const nodes = [];
 
 	event.forEach(function(record) {
-		for (var node of record.addedNodes)
-		{
-			if (node.$$connect===undefined)
-				nodes.push(node);
-
-			node.$$connect = upgradeConnect;
-		}
-
-		for (node of record.removedNodes)
+		for (var node of record.removedNodes)
 		{
 			if (node.$$connect===undefined)
 				nodes.push(node);
 
 			node.$$connect = disconnect;
+		}
+
+		for (node of record.addedNodes)
+		{
+			if (node.$$connect===undefined)
+				nodes.push(node);
+
+			node.$$connect = upgradeConnect;
 		}
 	});
 
@@ -119,11 +118,10 @@ function observe()
 {
 	observer.observe(document.body, { subtree: true, childList: true });
 	doWalk(document.body, upgradeConnect);
+	started = true;
 }
 
-var scheduled;
-
-function debouncedWalk(node, method)
+function debouncedWalk()
 {
 	if (scheduled)
 		return;
@@ -131,7 +129,7 @@ function debouncedWalk(node, method)
 	scheduled = true;
 	setTimeout(() => {
 		scheduled = false;
-		doWalk(node, method);
+		doWalk(document.body, upgradeConnect);
 	});
 }
 
@@ -140,15 +138,15 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 	$registerElement(name, Constructor) {
 		registry[name.toUpperCase()] = Constructor;
 
-		if (document.body)
-			debouncedWalk(document.body, upgradeConnect);
+		if (started)
+			debouncedWalk();
 	},
 
 	componentConstructor(meta)
 	{
-		var me = this, observer;
+		var me = this;
 
-		function onMutation(node, events)
+		/*function onMutation(node, events)
 		{
 			for (const mutation of events) {
 				const newVal = node.getAttribute(mutation.attributeName);
@@ -160,7 +158,7 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 		{
 			observer = new MutationObserver(onMutation.bind(null, node));
 			observer.observe(node, { attributes: true, attributesFilter: meta.attributes });
-		}
+		}*/
 
 		class Component {
 			constructor(node)
@@ -168,10 +166,7 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 				node.$$cxlConnected = false;
 
 				if (meta.attributes)
-				{
 					me.$attributes(node, meta.attributes);
-					observeAttributes(node);
-				}
 
 				if (meta.methods)
 					me.$methods(node, meta.methods);

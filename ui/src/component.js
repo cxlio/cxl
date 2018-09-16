@@ -23,6 +23,16 @@ class AttributeMonitor extends cxl.Directive {
 		return newVal;
 	}
 
+	digest(state)
+	{
+		const node = this.element, attr = this.parameter;
+
+		if (node.hasAttribute(attr))
+			this.value = state[attr] = node.getAttribute(attr) || true;
+
+		return this.value;
+	}
+
 	connect()
 	{
 		this.digest = this.$digest;
@@ -31,20 +41,25 @@ class AttributeMonitor extends cxl.Directive {
 
 }
 
-
 class ComponentFactory
 {
 	$attributes(node, attributes)
 	{
+		function onMutation(events)
+		{
+			for (const mutation of events) {
+				const newVal = node.getAttribute(mutation.attributeName);
+				node.$view.setAttribute(mutation.attributeName, newVal);
+			}
+		}
+
 		attributes.forEach(function(a) {
-
 			const monitor = new AttributeMonitor(node, a, node.$view);
-
-			if (node.hasAttribute(a))
-				monitor.value = node.$view.state[a] = node.getAttribute(a) || true;
-
 			node.$view.bindings.push(monitor);
 		});
+
+		const observer = node.$view.attributeObserver = new MutationObserver(onMutation);
+		observer.observe(node, { attributes: true, attributesFilter: attributes });
 	}
 
 	$bindings(component, value)
@@ -174,7 +189,7 @@ class ComponentDefinition
 	{
 		class Component extends cxl.HTMLElement {
 
-			static get observedAttributes() { return meta.attributes; }
+			// static get observedAttributes() { return meta.attributes; }
 
 			constructor()
 			{
@@ -182,10 +197,10 @@ class ComponentDefinition
 				factory.createComponent(meta, this);
 			}
 
-			attributeChangedCallback(name, oldVal, newVal)
+			/*attributeChangedCallback(name, oldVal, newVal)
 			{
 				this.$view.setAttribute(name, newVal);
-			}
+			}*/
 
 			connectedCallback()
 			{

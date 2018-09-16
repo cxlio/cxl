@@ -153,9 +153,8 @@ var
 
 QUnit.test('cxl-checkbox - value sets checked', function(a) {
 var
-	A = $$compile('<cxl-checkbox &="id(c) @checked:=test:log @value:log" value="yes" true-value="yes">')
+	A = $$compile('<cxl-checkbox &="id(c) @checked:=test" value="yes" true-value="yes">')
 ;
-	console.log(A, A.state.c.$view);
 	a.equal(A.state.test, true);
 });
 

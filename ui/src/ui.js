@@ -324,7 +324,12 @@ component({
 <span &="content"></span>
 	`,
 	events: [ 'change' ],
-	bindings: 'action:#toggle focusable =checked:#update =false-value:#update =true-value:#update =value:#onValue:host.trigger(change) role(checkbox)',
+	bindings: `
+focusable role(checkbox)
+action:#toggle
+=checked:#update =false-value:#update =true-value:#update
+=value:#onValue:host.trigger(change)
+	`,
 	styles: [ {
 		$: { marginLeft: 16, position: 'relative', display: 'inline-block', cursor: 'pointer', marginBottom: 12 },
 		$focus: { outline: 0 },
