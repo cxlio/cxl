@@ -19,9 +19,6 @@ const
 			primaryDark: '#00796b',
 
 			secondary: '#ff5722',
-			//secondaryLight: '#ffc947',
-			//secondaryDark: '#c66900',
-
 			surface: '#fff',
 
 			onPrimary: '#fff',

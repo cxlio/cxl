@@ -230,7 +230,7 @@ cxl.component({
 	<cxl-t h6>Attributes</cxl-t>
 	<ul>
 	<template &="=attributes:sort:each:repeat">
-	<li><a &="item:anchor.focus:text"></a></li>
+	<li><a &="item:text action:anchor.focus"></a></li>
 	</template>
 	</ul>
 </div>
@@ -248,7 +248,7 @@ cxl.component({
 	<cxl-t h6>Methods</cxl-t>
 	<ul>
 	<template &="=methods:sort:each:repeat">
-	<li><a &="item:anchor.focus:text"></a></li>
+	<li><a &="item:text action:anchor.focus"></a></li>
 	</template>
 	</ul>
 </div>

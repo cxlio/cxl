@@ -2,7 +2,7 @@
 const
 	SRC = [
 		'src/core.js',
-		'src/rx.js',
+		'../rx/index.js',
 		'src/template.js'
 	]
 ;

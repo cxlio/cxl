@@ -53,7 +53,7 @@ function upgradeConnect(node)
 	connect(node);
 }
 
-function doWalk(node, method)
+function walkChildren(node, method)
 {
 	if (node.childNodes)
 	{
@@ -71,9 +71,14 @@ function walk(node, method)
 {
 	if (node)
 	{
-		doWalk(node, method);
+		walkChildren(node, method);
 		walk(node.nextSibling, method);
 	}
+}
+
+function doWalk(node, method)
+{
+	return walkChildren(node, method);
 }
 
 function override(obj, fn)
@@ -81,7 +86,10 @@ function override(obj, fn)
 	const original = obj[fn];
 	obj[fn] = function() {
 		const node = original.apply(this, arguments);
-		doWalk(node, upgrade);
+
+		if (node && node.childNodes)
+			doWalk(node, upgrade);
+
 		return node;
 	};
 }
@@ -96,7 +104,7 @@ function onMutation(event)
 	event.forEach(function(record) {
 		for (var node of record.removedNodes)
 		{
-			if (node.$$connect===undefined)
+			if (node.tagName && node.$$connect===undefined)
 				nodes.push(node);
 
 			node.$$connect = disconnect;
@@ -104,7 +112,7 @@ function onMutation(event)
 
 		for (node of record.addedNodes)
 		{
-			if (node.$$connect===undefined)
+			if (node.tagName && node.$$connect===undefined)
 				nodes.push(node);
 
 			node.$$connect = upgradeConnect;
@@ -146,20 +154,6 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 	{
 		var me = this;
 
-		/*function onMutation(node, events)
-		{
-			for (const mutation of events) {
-				const newVal = node.getAttribute(mutation.attributeName);
-				node.$view.setAttribute(mutation.attributeName, newVal);
-			}
-		}
-
-		function observeAttributes(node)
-		{
-			observer = new MutationObserver(onMutation.bind(null, node));
-			observer.observe(node, { attributes: true, attributesFilter: meta.attributes });
-		}*/
-
 		class Component {
 			constructor(node)
 			{
@@ -180,11 +174,16 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 
 });
 
-override(document, 'createElement');
-//override(Range.prototype, 'createContextualFragment');
 override(cxl.Template.prototype, 'clone');
 
-const cloneNode = window.DocumentFragment.prototype.cloneNode;
+const createElement = cxl.dom.createElement;
+
+cxl.dom.createElement = function() {
+	const result = createElement.apply(cxl, arguments);
+	return doWalk(result, upgrade);
+};
+
+/*const cloneNode = window.DocumentFragment.prototype.cloneNode;
 const importNode = document.importNode.bind(document);
 
 function cloneDeep(node)
@@ -206,10 +205,10 @@ window.DocumentFragment.prototype.cloneNode = function(deep)
 };
 
 // TODO do this properly
-document.importNode = function(node, deep)
+/*document.importNode = function(node, deep)
 {
 	return deep ? doWalk(cloneDeep(node), upgrade) : importNode.call(this);
-};
+};*/
 
 window.addEventListener('DOMContentLoaded', observe);
 

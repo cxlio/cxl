@@ -65,6 +65,8 @@ class Renderer {
 					changed = true;
 			}
 		}
+
+		view.$dirty = false;
 	}
 
 	$commit()
@@ -72,10 +74,7 @@ class Renderer {
 		var view;
 
 		while ((view=this.pipeline.shift()))
-		{
 			this.commitDigest(view);
-			view.$dirty = false;
-		}
 
 		this.raf = null;
 	}
@@ -1167,7 +1166,7 @@ directive('anchor.marker', {
 });
 
 function dom(el, attributes) {
-	var result = document.createElement(el);
+	var result = dom.createElement(el);
 
 	if (attributes)
 		for (var i in attributes)
@@ -1206,6 +1205,11 @@ function $$findSelector(selector)
 }
 
 Object.assign(dom, {
+
+	createElement(name)
+	{
+		return document.createElement(name);
+	},
 
 	empty(el)
 	{

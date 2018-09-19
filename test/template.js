@@ -35,7 +35,7 @@ function $$render(view)
 
 function $$compile(html, view)
 {
-	const host = document.createElement('DIV');
+	const host = cxl.dom('DIV');
 
 	html = new cxl.Template(html);
 
@@ -663,7 +663,7 @@ QUnit.module('directives');
 function testDirective(name, a)
 {
 var
-	el = document.createElement('cxl-input'),
+	el = cxl.dom('cxl-input'),
 	param = 'value',
 	view = new cxl.View({}, el),
 	//value = 'test',

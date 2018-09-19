@@ -1,8 +1,7 @@
 (cxl => {
+"use strict";
 
-const
-	COMPONENTS = {}
-;
+const COMPONENTS = {};
 
 class AttributeMonitor extends cxl.Directive {
 
@@ -21,16 +20,6 @@ class AttributeMonitor extends cxl.Directive {
 		}
 
 		return newVal;
-	}
-
-	digest(state)
-	{
-		const node = this.element, attr = this.parameter;
-
-		if (node.hasAttribute(attr))
-			this.value = state[attr] = node.getAttribute(attr) || true;
-
-		return this.value;
 	}
 
 	connect()
@@ -55,6 +44,10 @@ class ComponentFactory
 
 		attributes.forEach(function(a) {
 			const monitor = new AttributeMonitor(node, a, node.$view);
+
+			if (node.hasAttribute(a))
+				node.$view.state[a] = node.getAttribute(a) || true;
+
 			node.$view.bindings.push(monitor);
 		});
 

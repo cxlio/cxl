@@ -1,4 +1,4 @@
-(cxl => {
+(rx => {
 
 class Subscriber {
 
@@ -193,7 +193,7 @@ function operator(fn)
 	});
 }
 
-cxl.rx = {
+Object.assign(rx, {
 	BehaviorSubject: BehaviorSubject,
 	CollectionEvent: CollectionEvent,
 	Event: Event,
@@ -215,6 +215,6 @@ cxl.rx = {
 		filter(fn) { return operator(subscriber => val => fn(val) && subscriber.next(val)); }
 	}
 
-};
+});
 
-})(this.cxl);
+})(this.cxl ? (this.cxl.rx={}) : module.exports);
