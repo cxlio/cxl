@@ -30,6 +30,7 @@ component({
 component({
 	name: 'cxl-appbar-title',
 	attributes: [ 'extended' ],
+	bindings: '=extended:@extended',
 	styles: {
 		$: { flexGrow: 1 },
 		$extended: { paddingTop: 92 }
@@ -173,6 +174,9 @@ component({
 <div &="on(click):event.stop .drawer content"></div>
 	`,
 	attributes: [ 'visible', 'right', 'permanent' ],
+	bindings: `
+=visible:attribute(visible) =right:attribute(right) =permanent:attribute(permanent)
+	`,
 	styles: {
 		drawer: {
 			backgroundColor: theme.surface, position: 'absolute', top: 0, left: 0,
@@ -284,6 +288,7 @@ component({
 <cxl-drawer &="action:#onRoute =permanent:@permanent =visible:@visible content location:#onRoute"></cxl-drawer>
 <cxl-icon &="action:#toggle .toggler" icon="bars"></cxl-icon>
 	`,
+	bindings: '=permanent:attribute(permanent)',
 	styles: {
 		$: { display: 'inline-block', color: theme.onSurface, fontSize: 16, marginTop: 8, marginBottom: 8 },
 		toggler: {

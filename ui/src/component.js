@@ -3,33 +3,6 @@
 
 const COMPONENTS = {};
 
-class AttributeMonitor extends cxl.Directive {
-
-	$digest(state)
-	{
-		const newVal = state[this.parameter];
-
-		if (newVal !== this.value)
-		{
-			// TODO Optimize
-			if (newVal===true || newVal===false)
-				cxl.dom.setAttribute(this.element, this.parameter, newVal);
-
-			if (this.element.$$attributeObserver)
-				this.element.$$attributeObserver.trigger(this.parameter);
-		}
-
-		return newVal;
-	}
-
-	connect()
-	{
-		this.digest = this.$digest;
-		this.connect = null;
-	}
-
-}
-
 class ComponentFactory
 {
 	$attributes(node, attributes)
@@ -43,12 +16,8 @@ class ComponentFactory
 		}
 
 		attributes.forEach(function(a) {
-			const monitor = new AttributeMonitor(node, a, node.$view);
-
 			if (node.hasAttribute(a))
 				node.$view.state[a] = node.getAttribute(a) || true;
-
-			node.$view.bindings.push(monitor);
 		});
 
 		const observer = node.$view.attributeObserver = new MutationObserver(onMutation);
@@ -102,8 +71,6 @@ class ComponentFactory
 
 		if (meta.$template)
 			this.$renderTemplate(node, meta.$template);
-
-		cxl.renderer.commitDigest(node.$view);
 
 		return node;
 	}

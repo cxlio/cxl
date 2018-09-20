@@ -452,13 +452,13 @@ var
 	nameB = $$tagName(),
 	nameC = $$tagName(),
 	A = cxl.component({ name: nameA, template: '<div &="=test:#third"></div>'}, {
-		third() { a.equal(i++, 0); }
+		third() { a.equal(i++, 2, 'Digest First'); }
 	}),
 	B = cxl.component({ name: nameB, template: `<${nameA} &="=test:#second">` }, {
-		second() { a.equal(i++, 1); }
+		second() { a.equal(i++, 1, 'Digest Second'); }
 	}),
 	C = cxl.component({ name: nameC, template: `<${nameB} &="=test:#first">` }, {
-		first() { a.equal(i++, 2); done(); }
+		first() { a.equal(i++, 0, 'Digest Third'); done(); }
 	}),
 	view = $$compile(`<${nameC}>`)
 ;
@@ -543,12 +543,12 @@ var
 	}, {
 		test: false,
 		connect() {
-			a.equal(i++, 2, 'Connect');
+			a.equal(i++, 1, 'Connect');
 		},
 		disconnect() { a.equal(i, 3, 'Disconnect'); done(); },
 		digest() {
 			a.equal(this.test, 'value', 'Attributes set before digest');
-			a.equal(i++, 1, 'Digest');
+			a.equal(i++, 2, 'Digest');
 		}
 	}),
 	view = $$compile(`<${name} test="value">`)
