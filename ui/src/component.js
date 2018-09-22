@@ -3,24 +3,42 @@
 
 const COMPONENTS = {};
 
+class AttributeMonitor extends cxl.Directive {
+
+	digest(state)
+	{
+		const newVal = state[this.parameter];
+
+		if (newVal !== this.value && this.element.$$attributeObserver)
+			this.element.$$attributeObserver.trigger(this.parameter);
+
+		return newVal;
+	}
+
+}
+
 class ComponentFactory
 {
 	$attributes(node, attributes)
 	{
+		const view = node.$view;
+
 		function onMutation(events)
 		{
 			for (const mutation of events) {
 				const newVal = node.getAttribute(mutation.attributeName);
-				node.$view.setAttribute(mutation.attributeName, newVal);
+				view.setAttribute(mutation.attributeName, newVal);
 			}
 		}
 
 		attributes.forEach(function(a) {
 			if (node.hasAttribute(a))
-				node.$view.state[a] = node.getAttribute(a) || true;
+				view.state[a] = node.getAttribute(a) || true;
+
+			view.bindings.push(new AttributeMonitor(node, a, view));
 		});
 
-		const observer = node.$view.attributeObserver = new MutationObserver(onMutation);
+		const observer = view.attributeObserver = new MutationObserver(onMutation);
 		observer.observe(node, { attributes: true, attributesFilter: attributes });
 	}
 

@@ -98,7 +98,7 @@ function prefix(prefix, css)
 }
 
 behavior('focusable', `
-	@disabled:attribute(disabled):not:focus.enable touchable
+	@disabled:attribute(disabled) @disabled:not:focus.enable touchable
 `);
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
