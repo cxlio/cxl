@@ -7,6 +7,18 @@ const
 
 hljs.configure({ tabReplace: '    '});
 
+
+cxl.component({
+	name: 'docs-link',
+	attributes: [ 'anchor' ],
+	template: '<a href="#" &="action:#onAction:event.prevent content"></a>'
+}, {
+	onAction()
+	{
+		cxl.anchor(this.anchor).focus();
+	}
+});
+
 cxl.component({
 	name: 'docs-directive-update',
 	attributes: [ 'directive' ],
@@ -230,7 +242,7 @@ cxl.component({
 	<cxl-t h6>Attributes</cxl-t>
 	<ul>
 	<template &="=attributes:sort:each:repeat">
-	<li><a &="item:text action:anchor.focus"></a></li>
+	<li><docs-link &="item:text:@anchor"></docs-link></li>
 	</template>
 	</ul>
 </div>
@@ -239,7 +251,7 @@ cxl.component({
 	<cxl-t h6>Events</cxl-t>
 	<ul>
 	<template &="=events:sort:each:repeat">
-	<li><a &="item:text"></a></li>
+	<li><docs-link &="item:text:@anchor"></docs-link></li>
 	</template>
 	</ul>
 </div>
@@ -248,7 +260,7 @@ cxl.component({
 	<cxl-t h6>Methods</cxl-t>
 	<ul>
 	<template &="=methods:sort:each:repeat">
-	<li><a &="item:text action:anchor.focus"></a></li>
+	<li><docs-link &="item:text:@anchor"></docs-link></li>
 	</template>
 	</ul>
 </div>

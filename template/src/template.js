@@ -1104,8 +1104,7 @@ directive('action', {
 	{
 		ev.stopPropagation();
 		ev.stopImmediatePropagation();
-		this.event = ev;
-		this.owner.digest();
+		this.set(ev);
 	},
 
 	onKeyPress(ev)
@@ -1127,11 +1126,38 @@ directive('action', {
 			new EventListener(this.element, 'keypress', this.onKeyPress.bind(this)),
 			new EventListener(this.element, 'action', this.onAction.bind(this))
 		];
-	},
-
-	digest() { return this.event; }
+	}
 
 });
+
+class Anchor
+{
+	constructor(name, el)
+	{
+		if (ANCHORS[name])
+			throw "Anchor already exists";
+
+		this.name = name;
+		this.element = el;
+		ANCHORS[name] = this;
+	}
+
+	focus()
+	{
+		this.element.scrollIntoView();
+		this.element.focus();
+	}
+
+	insert(element)
+	{
+		this.element.appendChild(element);
+	}
+
+	destroy()
+	{
+		delete ANCHORS[this.name];
+	}
+}
 
 /**
  * Anchors are used to interact with elements outside the component.
@@ -1139,18 +1165,20 @@ directive('action', {
  */
 directive('anchor', {
 	connect() { if (this.parameter) this.update(this.parameter); },
-	disconnect() { delete ANCHORS[this.name]; },
-	insert(element) { this.element.appendChild(element); },
+	disconnect() { if (this.anchor) this.anchor.destroy(); },
 	update(val) {
-		if (this.name)
-			delete ANCHORS[this.name];
+		if (this.anchor)
+			this.anchor.destroy();
 
-		this.name = val;
-		ANCHORS[val] = this;
+		if (val)
+		{
+			this.parameter = val;
+			this.anchor = new Anchor(val, this.element);
+		}
 	}
 });
 
-directive('anchor.marker', {
+/*directive('anchor.marker', {
 	connect() {
 		this.marker = new Marker('anchor', this.element);
 		if (this.parameter) this.update(this.parameter); },
@@ -1163,7 +1191,7 @@ directive('anchor.marker', {
 		this.name = val;
 		ANCHORS[val] = this;
 	}
-});
+});*/
 
 function dom(el, attributes) {
 	var result = dom.createElement(el);
@@ -1347,6 +1375,11 @@ Object.assign(cxl, {
 	NodeSnapshot: NodeSnapshot,
 	Template: Template,
 	View: View,
+
+	anchor(name)
+	{
+		return ANCHORS[name];
+	},
 
 	behavior: behavior,
 	compiler: compiler,
@@ -1550,21 +1583,6 @@ function pipes(defs) {
  * Pipes are update only directives
  */
 pipes({
-
-	'anchor.focus'(name)
-	{
-		if (this.bindings)
-			this.bindings[0].destroy();
-
-		this.element.href = '#';
-		this.bindings = [ new cxl.EventListener(this.element, 'click', function(ev) {
-			var anchor = ANCHORS[name];
-			anchor.element.focus();
-			ev.preventDefault();
-		}) ];
-
-		this.update = null;
-	},
 
 	attribute(val) { return cxl.dom.setAttribute(this.element, this.parameter, val); },
 
