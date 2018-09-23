@@ -24,7 +24,7 @@ cxl.directive('log', {
 	}
 });
 
-override(cxl.Anchor, '$create', function(name) {
+override(cxl.Anchor.prototype, '$create', function(name) {
 	if (cxl.anchor.anchors[name])
 		warn(`Anchor "${name}" already exists`);
 });
