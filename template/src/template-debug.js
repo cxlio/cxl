@@ -24,6 +24,11 @@ cxl.directive('log', {
 	}
 });
 
+override(cxl.Anchor, '$create', function(name) {
+	if (cxl.anchor.anchors[name])
+		warn(`Anchor "${name}" already exists`);
+});
+
 override(cxl.renderer, 'commit', function() {
 	pipeline = cxl.renderer.pipeline.concat();
 	time = Date.now();
@@ -104,13 +109,6 @@ override(cxl.dom, 'query', function(el) {
 		throw new Error("First parameter must be a DOM element");
 });
 
-/*override(cxl.dom, 'on', function(el, event) {
-	if (('on' + event in el) ||
-		(el.$$meta && el.$$meta.events && el.$$meta.events.indexOf(event)!==-1) ||
-		(event.indexOf('.')!==-1))
-		return;
 
-	throw new Error('Trying to listen to invalid event "' + event + '"');
-});*/
 
 })(this.cxl);

@@ -1132,14 +1132,16 @@ directive('action', {
 
 class Anchor
 {
-	constructor(name, el)
+	$create(name, el)
 	{
-		if (ANCHORS[name])
-			throw "Anchor already exists";
-
 		this.name = name;
 		this.element = el;
 		ANCHORS[name] = this;
+	}
+
+	constructor(name, el)
+	{
+		this.$create(name, el);
 	}
 
 	focus()
@@ -1362,6 +1364,7 @@ Object.assign(cxl, {
 	/// Return this in a directive update function to stop the observable.
 	Skip: Skip,
 
+	Anchor: Anchor,
 	AttributeObserver: AttributeObserver,
 	ChildrenObserver: ChildrenObserver,
 	Compiler: Compiler,
@@ -1659,6 +1662,8 @@ pipes({
 	toggle(val, state) { return (state[this.parameter] = !state[this.parameter]); }
 
 });
+
+cxl.anchor.anchors = ANCHORS;
 
 /**
  * Behaviors are directives with independent state
