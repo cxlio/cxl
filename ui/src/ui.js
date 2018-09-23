@@ -111,8 +111,8 @@ behavior('selectable', `
 behavior('selectable.host', {
 	bindings: `
 id(host)
-on(selectable.register):#register:=event
-on(selectable.unregister):#unregister:=event
+on.message(selectable.register):#register:=event
+on.message(selectable.unregister):#unregister:=event
 =event:#onChange
 
 on(change):#onChangeEvent
@@ -129,7 +129,7 @@ keypress:#onKey:event.prevent
 	{
 		if (ev.target!==this.host)
 		{
-			this.onChange();
+			this.event =ev;
 			ev.stopImmediatePropagation();
 			ev.stopPropagation();
 		}

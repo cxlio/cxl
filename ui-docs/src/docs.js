@@ -509,6 +509,18 @@ Checked: <span &="=test:text"></span>
 </cxl-form-group>
 	--></docs-demo>
 </docs-attribute>
+<docs-attribute name="value">
+	<docs-demo><!--
+<cxl-form-group>
+	<cxl-select value="two">
+		<cxl-option value="one">Option 1</cxl-option>
+		<cxl-option value="two">Option 2</cxl-option>
+		<cxl-option value="three">Option 3</cxl-option>
+	</cxl-select>
+</cxl-form-group>
+	--></docs-demo>
+</docs-attribute>
+
 </docs-component>
 			`
 

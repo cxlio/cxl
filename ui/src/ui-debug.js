@@ -9,7 +9,10 @@ const
 	MAX_TEMPLATE_LENGTH = 2000,
 	VALID_COMPONENT_META = [
 		'template', 'name', 'extend', 'attributes', 'methods', 'styles', 'events', 'bindings',
-		'initialize', 'templateId'
+		'initialize', 'templateId', 'controller'
+	],
+	VALID_ROUTE_META = [
+		'path', 'id', 'title', 'resolve', 'defaultRoute', 'redirectTo', 'parent'
 	]
 ;
 
@@ -23,10 +26,10 @@ override(cxl.componentFactory, 'createComponent', function(meta, node) {
 	node.$$meta = meta;
 });
 
-override(cxl, 'component', function(meta) {
+override(cxl.ComponentDefinition.prototype, 'componentConstructor', function(meta) {
 
 	for (var i in meta)
-		if (VALID_COMPONENT_META.indexOf(i)===-1)
+		if (VALID_COMPONENT_META.indexOf(i)===-1 && VALID_ROUTE_META.indexOf(i)===-1)
 			throw new Error(`Invalid property "${i}" for ${meta.name}`);
 
 	if (meta.name && meta.name.indexOf('-')===-1)

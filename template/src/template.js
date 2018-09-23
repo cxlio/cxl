@@ -754,7 +754,7 @@ directive('ref.val', {
 
 	onValue(val)
 	{
-		this.value = val;
+		this.set(val);
 	},
 
 	update(val, state)
@@ -763,13 +763,6 @@ directive('ref.val', {
 		// TODO reference should always be set?
 		if (ref && this.value !== val)
 			ref.set(val);
-	},
-
-	digest()
-	{
-		this.onValue = val => this.set(val); //setTimeout(this.set.bind(this,val));
-		this.digest = null;
-		return this.value;
 	}
 
 }, '&');
@@ -1485,6 +1478,12 @@ function connectedSources(defs)
 		source(i, defs[i]);
 }
 
+directive('on.message', {
+	initialize(el, param) {
+		new EventListener(el, param, this.set.bind(this));
+	}
+});
+
 connectedSources({
 
 	'anchor.send'(el, param)
@@ -1570,7 +1569,7 @@ operators({
 		return item => {
 			view.state.$item = item;
 			const html = tpl.compile(view);
-			cxl.renderer.commitDigest(view);
+			//cxl.renderer.commitDigest(view);
 			marker.insert(html);
 		};
 	}
