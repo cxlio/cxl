@@ -460,7 +460,10 @@ cxl.component({
 	styles: {
 		$: { display: 'flex', flexDirection: 'column', height: '100%' },
 		$large: { paddingLeft: 288 },
-		content: { position: 'relative', flexGrow: 1, overflowY: 'auto', padding: 16 },
+		content: {
+			position: 'relative', flexGrow: 1, overflowY: 'auto', padding: 16,
+			overflowX: 'hidden'
+		},
 		content$medium: { padding: 32 }
 	}
 });
