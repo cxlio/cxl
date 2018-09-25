@@ -88,31 +88,22 @@ class Observable {
 
 class Subject extends Observable {
 
-	__subscribe(subscriber)
+	constructor()
 	{
-		const subscribers = this.__subscribers || (this.__subscribers=new Set());
+		const subscribers = new Set();
 
-		subscribers.add(subscriber);
+		super(subscriber => {
+			subscribers.add(subscriber);
 
-		if (this.onSubscribe)
-			this.onSubscribe(subscriber);
+			if (this.onSubscribe)
+				this.onSubscribe(subscriber);
 
-		return subscribers.delete.bind(subscribers, subscriber);
-	}
+			return subscribers.delete.bind(subscribers, subscriber);
+		});
 
-	next(a) {
-		if (this.__subscribers)
-			this.__subscribers.forEach(s => s.next(a));
-	}
-
-	error(e) {
-		if (this.__subscribers)
-			this.__subscribers.forEach(s => s.error(e));
-	}
-
-	complete() {
-		if (this.__subscribers)
-			this.__subscribers.forEach(s => s.complete());
+		this.next = a => subscribers.forEach(s => s.next(a));
+		this.error = e => subscribers.forEach(s => s.error(e));
+		this.complete = () => subscribers.forEach(s => s.complete());
 	}
 
 }

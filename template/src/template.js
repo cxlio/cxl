@@ -1488,7 +1488,7 @@ connectedSources({
 
 	'anchor.send'(el, param)
 	{
-		ANCHORS[param].insert(el);
+		cxl.anchor(param).insert(el);
 		return cxl.dom.remove.bind(null, el);
 	},
 

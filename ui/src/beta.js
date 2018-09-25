@@ -98,7 +98,7 @@ component({
 		$: { display: 'block', flexShrink: 0 },
 		$small: { marginLeft: 16, display: 'inline-block' },
 		$large: { marginLeft: 24 },
-		$grow: { flexGrow: 1 },
+		$grow: { flexGrow: 1, flexShrink: 1 },
 		$firstChild: { marginLeft: 0 }
 	}
 });
