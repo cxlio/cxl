@@ -11,7 +11,7 @@ Libraries
 
 Lightweight UI Web Components.
 
-[Documentation](https://www.coaxialhost.com/ui-docs)
+[Documentation](https://coaxialhost.com/ui-docs)
 
 ### @cxl/template
 
