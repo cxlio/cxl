@@ -2,7 +2,7 @@
 const
 	template = [
 		'../template/src/core.js',
-		'../template/src/rx.js',
+		'../rx/index.js',
 		'../template/src/template.js'
 	],
 	ui = [
@@ -35,6 +35,12 @@ require('../build').build({
 			]
 		},
 		{
+			output: 'cxl-ui-legacy.js',
+			src: [
+				'src/legacy.js'
+			]
+		},
+		{
 			output: 'cxl-ui-beta.js',
 			src: [
 				'src/beta.js'
@@ -55,7 +61,12 @@ require('../build').build({
 			output: 'cxl-ui-react.js',
 			src: [ 'src/react.js' ],
 			minify: 'react.js'
+		},
+		{
+			output: 'cxl-ui-ajax.js',
+			src: [ 'src/ajax.js' ]
 		}
 	]
+
 
 });

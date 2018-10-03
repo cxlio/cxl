@@ -184,10 +184,42 @@ function operator(fn)
 	});
 }
 
+const EventEmitter =
+{
+	on(type, callback, scope)
+	{
+		if (!this.__handlers)
+			this.__handlers = {};
+		if (!this.__handlers[type])
+			this.__handlers[type] = [];
+
+		this.__handlers[type].push({ fn: callback, scope: scope });
+		return { unsubscribe: this.off.bind(this, type, callback, scope) };
+	},
+
+	off(type, callback, scope)
+	{
+	const
+		handlers = (this.__handlers && this.__handlers[type]),
+		h = handlers && handlers.find(h => h.callback === callback && h.scope===scope),
+		i = h && handlers.indexOf(h)
+	;
+		if (i!==-1)
+			handlers.splice(i, 1);
+	},
+
+	trigger(type, a, b, c)
+	{
+		if (this.__handlers && this.__handlers[type])
+			this.__handlers[type].forEach(h => h.fn.call(h.scope, a, b, c));
+	}
+};
+
 Object.assign(rx, {
 	BehaviorSubject: BehaviorSubject,
 	CollectionEvent: CollectionEvent,
 	Event: Event,
+	EventEmitter: EventEmitter,
 	Item: Item,
 	Observable: Observable,
 	Subject: Subject,
