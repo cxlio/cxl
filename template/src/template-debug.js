@@ -81,7 +81,7 @@ override(cxl.dom, 'trigger', function(el, event) {
 		throw new Error('Event "' + event + '" not defined');
 });
 
-override(directives.getset.prototype, 'initialize', function(el, param) {
+directives.getset.prototype.initialize = function(el, param) {
 	if (!(param in el))
 	{
 		const msg = `Attribute "${param}" does not exist.`;
@@ -93,7 +93,7 @@ override(directives.getset.prototype, 'initialize', function(el, param) {
 
 		dbg(el);
 	}
-});
+};
 
 //
 // View

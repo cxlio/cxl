@@ -15,7 +15,7 @@ function ajax(def)
 	}
 
 	return cxl.ajax.xhr(def).then(parse, function(xhr) {
-		return cxl.Promise.reject(parse(xhr));
+		return Promise.reject(parse(xhr));
 	});
 }
 
@@ -23,7 +23,7 @@ cxl.ajax = Object.assign(ajax, {
 
 	xhr(def)
 	{
-		return new cxl.Promise(function(resolve, reject) {
+		return new Promise(function(resolve, reject) {
 		var
 			xhr = new XMLHttpRequest(),
 			options = Object.assign({}, cxl.ajax.defaults, def),

@@ -220,7 +220,7 @@ Object.assign(cxl, {
 	component(meta, controller)
 	{
 		var def = new ComponentDefinition(meta, controller);
-		return def.Constructor;
+		return cxl.dom.bind(cxl, def.name);
 	}
 });
 

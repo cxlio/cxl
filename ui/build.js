@@ -65,6 +65,10 @@ require('../build').build({
 		{
 			output: 'cxl-ui-ajax.js',
 			src: [ 'src/ajax.js' ]
+		},
+		{
+			output: 'cxl-ui-debug.js',
+			src: [ 'src/ui-debug.js' ]
 		}
 	]
 

@@ -184,7 +184,7 @@ function operator(fn)
 	});
 }
 
-const EventEmitter =
+class EventEmitter
 {
 	on(type, callback, scope)
 	{
@@ -195,7 +195,7 @@ const EventEmitter =
 
 		this.__handlers[type].push({ fn: callback, scope: scope });
 		return { unsubscribe: this.off.bind(this, type, callback, scope) };
-	},
+	}
 
 	off(type, callback, scope)
 	{
@@ -206,14 +206,22 @@ const EventEmitter =
 	;
 		if (i!==-1)
 			handlers.splice(i, 1);
-	},
+	}
 
 	trigger(type, a, b, c)
 	{
 		if (this.__handlers && this.__handlers[type])
 			this.__handlers[type].forEach(h => h.fn.call(h.scope, a, b, c));
 	}
-};
+
+	once(type, callback, scope)
+	{
+		const subscriber = this.on(type, (a,b,c)=> {
+			subscriber.unsubscribe();
+			return callback.call(scope, a, b, c);
+		});
+	}
+}
 
 Object.assign(rx, {
 	BehaviorSubject: BehaviorSubject,
