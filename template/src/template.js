@@ -1304,6 +1304,11 @@ Object.assign(dom, {
 		return val;
 	},
 
+	text(content)
+	{
+		return document.createTextNode(content);
+	},
+
 	insert(el, content)
 	{
 		if (content===undefined || content===null)

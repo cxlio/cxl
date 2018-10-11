@@ -188,6 +188,16 @@ class EventEmitter
 {
 	on(type, callback, scope)
 	{
+		return this.addEventListener(type, callback, scope);
+	}
+
+	off(type, callback, scope)
+	{
+		return this.removeEventListener(type, callback, scope);
+	}
+
+	addEventListener(type, callback, scope)
+	{
 		if (!this.__handlers)
 			this.__handlers = {};
 		if (!this.__handlers[type])
@@ -197,7 +207,7 @@ class EventEmitter
 		return { unsubscribe: this.off.bind(this, type, callback, scope) };
 	}
 
-	off(type, callback, scope)
+	removeEventListener(type, callback, scope)
 	{
 	const
 		handlers = (this.__handlers && this.__handlers[type]),

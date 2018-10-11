@@ -202,7 +202,9 @@ class Builder {
 	{
 	var
 		oldStat = await this.stat(target),
-		source = typeof(target.src)==='function' ? target.src() : (await this.readSource(target.src)).join("\n")
+		source = typeof(target.src)==='function' ?
+			target.src() :
+			(await this.readSource(target.src)).join("\n")
 	;
 		await write(this.outputDir + '/' + target.output, source);
 
