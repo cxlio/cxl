@@ -17,6 +17,23 @@ class AttributeMonitor extends cxl.Directive {
 
 }
 
+class ResourceManager
+{
+	push(resource)
+	{
+		if (!this.$resources)
+			this.$resources = [];
+
+		this.$resources.push(resource);
+	}
+
+	destroy()
+	{
+		if (this.$resources)
+			this.$resources.forEach(b => (b.destroy || b.unsubscribe)());
+	}
+}
+
 class ComponentFactory
 {
 	$attributes(node, attributes)
@@ -213,6 +230,7 @@ class ComponentDefinition
 }
 
 Object.assign(cxl, {
+	ResourceManager: ResourceManager,
 	ComponentDefinition: ComponentDefinition,
 	ComponentFactory: ComponentFactory,
 	componentFactory: factory,

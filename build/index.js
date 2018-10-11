@@ -12,6 +12,7 @@ const
 		(acc, cur) => { acc[cur]=true; return acc; }, {})
 ;
 
+console.log(`Running in ${BASEDIR}`);
 process.chdir(BASEDIR);
 
 function hrtime()

@@ -10,17 +10,17 @@
 				"files": [
 					"template/src/*", "ui/src/*", "template/build.js", "ui/build.js"
 				],
-				"tasks": "cd ui && npm run build"
+				"tasks": "node ui/build"
 			},
 
 			"router": {
 				"files": [ "router/src/*", "router/build.js" ],
-				"tasks": "cd router && npm run build"
+				"tasks": "node router/build"
 			},
 
 			"fb": {
 				"files": [ "fb/src/*", "fb/build.js" ],
-				"tasks": "cd fb && npm run build"
+				"tasks": "node fb/build"
 			},
 
 			"docs": {
