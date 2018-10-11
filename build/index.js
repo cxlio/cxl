@@ -1,12 +1,18 @@
 /*jshint node:true */
 const
 	fs = require('fs'),
+	cp = require('child_process'),
+	path = require('path'),
 	colors = require('colors'),
 	UglifyJS = require('uglify-es'),
 
+	SCRIPTDIR = path.dirname(process.argv[1]),
+	BASEDIR = cp.execSync(`npm prefix`, { cwd: SCRIPTDIR }).toString().trim(),
 	ARGV = process.argv.slice(2).reduce(
 		(acc, cur) => { acc[cur]=true; return acc; }, {})
 ;
+
+process.chdir(BASEDIR);
 
 function hrtime()
 {
@@ -18,8 +24,7 @@ function formatTime(time, time2)
 {
 	if (time2===undefined)
 		time2 = hrtime();
-
-var
+const
 	s = time2-time,
 	str = s.toFixed(4) + 's'
 ;
