@@ -1,16 +1,22 @@
 const
 	fw = require('./index'),
-	sh = require('child_process').execSync,
+	execSync = require('child_process').execSync,
 	basePath = __dirname
 ;
 
 process.chdir(basePath);
 
-// Setup
-sh(`rm -r test; mkdir test`);
+function sh(cmd)
+{
+	console.log(cmd);
+	execSync(cmd);
+}
 
-watcher = new fw.FileWatcher();
-watcher.watchDirectory('test')
+// Setup
+sh(`rm -fr test && mkdir test`);
+
+console.log('Test DirectoryWatch');
+watcher = new fw.DirectoryWatch('test');
 
 const unsubscribe = watcher.subscribe(ev => {
 	console.log(`${ev.type}:${ev.path}`);

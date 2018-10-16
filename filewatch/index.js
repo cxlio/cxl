@@ -1,9 +1,10 @@
 
 const
-	path = require('path'),
+	path = require('path').posix,
 	fs = require('fs'),
 
-	rx = require('../rx')
+	rx = require('../rx'),
+	WATCHERS = {}
 ;
 
 class FileEvent
@@ -58,16 +59,41 @@ class FileWatch extends rx.Observable {
 		}, this.delay);
 	}
 
+	doSubscribe(subscriber)
+	{
+	const
+		id = this.path,
+		w = this.$watcher || (this.$watcher=fs.watch(id)),
+		onChange = this.$onChange.bind(this, subscriber),
+		onError = subscriber.error
+	;
+		w.on('change', onChange);
+		w.on('error', onError);
+
+		return () => {
+			w.off('change', onChange);
+			w.off('error', onError);
+
+			if (w.listenerCount('change')===0)
+			{
+				delete WATCHERS[id];
+				w.close();
+			}
+		};
+	}
+
 	constructor(filename)
 	{
-		super((subscriber) => {
-			const w = fs.watch(filename);
-			w.on('change', this.$onChange.bind(this, subscriber));
-			w.on('error', subscriber.error);
-			return w.close.bind(w);
-		});
+		const id = path.normalize(filename);
 
-		this.path = path.normalize(filename);
+		if (WATCHERS[id])
+			return WATCHERS[id];
+
+		super(subscriber => this.doSubscribe(subscriber));
+
+		WATCHERS[id] = this;
+		this.path = id;
+		this.delay = 250;
 		this.$events = {};
 	}
 
@@ -82,52 +108,7 @@ class DirectoryWatch extends FileWatch {
 
 }
 
-class FileWatcher extends rx.Subject
-{
-	constructor()
-	{
-		super();
-		this.delay = 250;
-		this.watchers = {};
-	}
-
-	$getId(filename)
-	{
-		return path.dirname(filename);
-	}
-
-	$createWatcher(id)
-	{
-		if (this.watchers[id])
-			return;
-
-		this.watchers[id] = (new DirectoryWatch(id)).subscribe(this);
-	}
-
-	watchDirectory(filename)
-	{
-		const id = path.normalize(filename);
-		this.$createWatcher(id);
-		return id;
-	}
-
-	destroy()
-	{
-		this.watchers.forEach(w => w.unsubscribe());
-	}
-
-	observe(filename, next, error, complete)
-	{
-		filename = this.watch(filename);
-
-		return this.pipe(
-			rx.operators.filter(ev => ev.filename===filename)
-		).subscribe(next, error, complete);
-	}
-}
-
 Object.assign(exports, {
 	DirectoryWatch: DirectoryWatch,
-	FileWatch: FileWatch,
-	FileWatcher: FileWatcher
+	FileWatch: FileWatch
 });

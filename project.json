@@ -8,7 +8,11 @@
 
 			"ui": {
 				"files": [
-					"template/src/*", "ui/src/*", "template/build.js", "ui/build.js"
+					"template/src/*",
+					"ui/src/*",
+					"template/build.js",
+					"ui/build.js",
+					"rx/index.js"
 				],
 				"tasks": "node ui/build"
 			},

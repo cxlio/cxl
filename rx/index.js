@@ -53,6 +53,11 @@ class Subscriber {
 
 class Observable {
 
+	static create(A, B, C)
+	{
+		return new this(A, B, C);
+	}
+
 	constructor(subscribe)
 	{
 		if (subscribe)
