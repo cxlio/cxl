@@ -29,7 +29,7 @@
 
 			"docs": {
 				"files": [ "docs/src/*" ],
-				"tasks": "cd docs && npm run build"
+				"tasks": "cd docs && node build"
 			}
 		}
 	}

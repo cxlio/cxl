@@ -1,11 +1,12 @@
 "use strict";
 const
-	express = require('express'),
-	colors = require('colors/safe'),
-	pathToRegexp = require('path-to-regexp'),
 	path = require('path'),
 	fs = require('fs'),
 	os = require('os'),
+
+	express = require('express'),
+	colors = require('colors/safe'),
+	pathToRegexp = require('path-to-regexp'),
 
 	protocols = {
 		http: require('http'),

@@ -1,6 +1,6 @@
 /*jshint esnext:true */
 ((cxl, hljs) => {
-
+"use strict";
 const
 	META = cxl.ui.meta
 ;
