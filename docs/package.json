@@ -5,6 +5,9 @@
 		"dist/*.js"
 	],
 	"main": "dist/cxl-docs.min.js",
+	"devDependencies": {
+		"highlight.js": "*"
+	},
 	"scripts": {
 		"build": "node build",
 		"prepublish": "node build test minify"

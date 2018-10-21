@@ -9,7 +9,7 @@ require('../build').build({
 				'../ui/dist/cxl-ui.js',
 				'../ui/dist/cxl-ui-icons.js',
 				'../ui/dist/cxl-ui-beta.js',
-				'../router/dist/cxl-router.js',
+				'../ui/dist/cxl-router.js',
 				'../ui/src/meta.js',
 				'../docs/src/docs.js',
 				'src/docs.js',
@@ -22,7 +22,7 @@ require('../build').build({
 				'../ui/dist/cxl-ui.js',
 				'../ui/dist/cxl-ui-icons.js',
 				'../ui/dist/cxl-ui-beta.js',
-				'../router/dist/cxl-router.js',
+				'../ui/dist/cxl-router.js',
 				'../ui/dist/cxl-ui-react.js'
 			],
 			minify: 'ui-docs-react.min.js'

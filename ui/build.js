@@ -9,7 +9,8 @@ const
 		'src/component.js',
 		'src/css.js',
 		'src/shady.js',
-		'src/ui.js'
+		'src/ui.js',
+		c => `cxl.version="${c.package.version}";`
 	]
 ;
 
@@ -19,7 +20,10 @@ require('../build').build({
 	targets: [
 		{
 			output: 'cxl-ui.js',
-			src: [ ...template, ...ui ],
+			src: [
+				...template,
+				...ui
+			],
 			minify: 'index.js'
 		},
 		{

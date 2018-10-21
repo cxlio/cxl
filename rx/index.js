@@ -95,8 +95,6 @@ class Subject extends Observable {
 
 	constructor()
 	{
-		const subscribers = new Set();
-
 		super(subscriber => {
 			subscribers.add(subscriber);
 
@@ -106,10 +104,12 @@ class Subject extends Observable {
 			return subscribers.delete.bind(subscribers, subscriber);
 		});
 
-		this.next = a => subscribers.forEach(s => s.next(a));
-		this.error = e => subscribers.forEach(s => s.error(e));
-		this.complete = () => subscribers.forEach(s => s.complete());
+		const subscribers = this.observers = new Set();
 	}
+
+	next(a)	{ this.observers.forEach(s => s.next(a)); }
+	error(e) { this.observers.forEach(s => s.error(e)); }
+	complete() { this.observers.forEach(s => s.complete()); }
 
 }
 

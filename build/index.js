@@ -9,7 +9,11 @@ const
 	SCRIPTDIR = path.dirname(process.argv[1]),
 	BASEDIR = cp.execSync(`npm prefix`, { cwd: SCRIPTDIR }).toString().trim(),
 	ARGV = process.argv.slice(2).reduce(
-		(acc, cur) => { acc[cur]=true; return acc; }, {})
+		(acc, cur) => { acc[cur]=true; return acc; }, {}),
+	PACKAGE = require(BASEDIR + '/package.json'),
+	CONFIG = {
+		package: PACKAGE
+	}
 ;
 
 console.log(`Running in ${BASEDIR}`);
@@ -80,27 +84,6 @@ function kb(bytes)
 function stat(file)
 {
 	return $stat(file).catch(() => ({size:0}));
-}
-
-class Operation
-{
-	constructor()
-	{
-
-	}
-}
-
-class Source
-{
-
-}
-
-class Target
-{
-	constructor(config)
-	{
-
-	}
 }
 
 class Builder {
@@ -199,18 +182,29 @@ class Builder {
 		]);
 	}
 
-	readSource(src)
+	processSource(source)
 	{
-		return read(src, 'utf8');
+		const type = typeof(source);
+
+		if (type==='function')
+			return source(CONFIG);
+
+		return read(source, 'utf8');
+	}
+
+	async readSource(src)
+	{
+		if (!Array.isArray(src))
+			src = [ src ];
+
+		return Promise.all(src.map(this.processSource));
 	}
 
 	async build(target)
 	{
-	var
+	const
 		oldStat = await this.stat(target),
-		source = typeof(target.src)==='function' ?
-			target.src() :
-			(await this.readSource(target.src)).join("\n")
+		source = (await this.readSource(target.src)).join("\n")
 	;
 		await write(this.outputDir + '/' + target.output, source);
 
