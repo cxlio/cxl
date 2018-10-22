@@ -70,9 +70,9 @@ class FileWatch extends rx.Observable {
 		w.on('change', onChange);
 		w.on('error', onError);
 
-		return () => {
-			w.off('change', onChange);
-			w.off('error', onError);
+		return function() {
+			w.removeListener('change', onChange);
+			w.removeListener('error', onError);
 
 			if (w.listenerCount('change')===0)
 			{
