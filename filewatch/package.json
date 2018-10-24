@@ -1,6 +1,7 @@
 {
 	"name": "@cxl/filewatch",
 	"version": "0.0.1",
+	"files": [ "index.js" ],
 	"peerDependencies": {
 		"@cxl/rx": "*"
 	}

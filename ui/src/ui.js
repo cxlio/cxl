@@ -98,11 +98,11 @@ function prefix(prefix, css)
 }
 
 behavior('focusable', `
-	@disabled:attribute(disabled) @disabled:not:focus.enable touchable
+	@disabled:not:focus.enable touchable
 `);
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
-	@touched:attribute(touched):host.trigger(focusable.touched)
+	@touched:host.trigger(focusable.touched)
 `);
 behavior('selectable', `
 	connect:host.trigger(selectable.register)
@@ -260,9 +260,6 @@ component({
 	name: 'cxl-avatar',
 	attributes: [ 'big', 'src', 'text', 'little' ],
 	template: `<img &=".image =src:show:attribute(src)" /><div &="=text:show:text =src:hide"></div><cxl-icon icon="user" &=".image"></cxl-icon>`,
-	bindings: `
-=big:attribute(big) =little:attribute(little)
-	`,
 	styles: {
 		$: {
 			borderRadius: 32, backgroundColor: theme.surface,
@@ -328,7 +325,7 @@ component({
 focusable role(checkbox)
 action:#toggle
 =value:#onValue:host.trigger(change)
-=checked:attribute(checked):#update =false-value:#update =true-value:#update
+=checked:#update =false-value:#update =true-value:#update
 	`,
 	styles: [ {
 		$: { marginLeft: 16, position: 'relative', display: 'inline-block', cursor: 'pointer', marginBottom: 12 },
@@ -418,7 +415,6 @@ component({
 <cxl-t caption error &="=error:text"></cxl-t>
 	`,
 	bindings: `
-=floating:attribute(floating)
 on(cxl-form.register):#onChange on(focusable.touched):#update on(invalid):#update
 	`
 }, {
@@ -491,8 +487,7 @@ component({
 id(component)
 registable(cxl-form)
 touchable
-=invalid:attribute(invalid):host.trigger(invalid)
-=inverse:attribute(inverse)
+=invalid:host.trigger(invalid)
 	`,
 	styles: [ FocusLineCSS, {
 		$: { marginBottom: 8 },
@@ -542,7 +537,6 @@ component({
 	events: [ 'action' ],
 	bindings: `
 focusable action:host.trigger(action) role(link)
-=selected:attribute(selected)
 	`,
 	attributes: [ 'href', 'icon', 'selected', 'disabled', 'touched' ],
 	styles: [ prefix('link', FocusCSS), {
@@ -572,7 +566,7 @@ component({
 	},
 	attributes: [ 'closed' ],
 	methods: [ 'focus' ],
-	bindings: 'id(self) keypress:#onKey:event.prevent =closed:attribute(closed)'
+	bindings: 'id(self) keypress:#onKey:event.prevent'
 }, {
 	itemSelector: 'cxl-item:not([disabled])',
 
@@ -614,7 +608,6 @@ component({
 	`,
 	bindings: `
 id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show
-=inverse:attribute(inverse)
 	`,
 	styles: {
 		//$: { position: 'relative' },
@@ -653,7 +646,6 @@ component({
 role(option) selectable
 action:host.trigger(action)
 =value:host.trigger(change)
-=selected:attribute(selected)
 	`,
 	styles: {
 		$: {
@@ -715,7 +707,7 @@ component({
 role(radio) focusable id(host)
 action:#toggle
 =name:#register
-=checked:attribute(checked):host.trigger(change)
+=checked:host.trigger(change)
 =value:host.trigger(change)
 disconnect:#unregister
 	`,
@@ -1052,7 +1044,7 @@ component({
 	`,
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ],
 	events: [ 'change' ],
-	bindings: 'focusable =value:host.trigger(change) action:#onClick =checked:attribute(checked)',
+	bindings: 'focusable =value:host.trigger(change) action:#onClick',
 	styles: [{
 		$: {
 			position: 'relative', display: 'inline-block', width: 46, height: 20,
@@ -1126,7 +1118,6 @@ component({
 	name: 'cxl-tab',
 	template: '<a &=".link =href:attribute(href) content"></a>',
 	attributes: ['href', 'selected'],
-	bindings: '=selected:attribute(selected)',
 	styles: {
 		$: { flexShrink: 0 },
 		$small: { display: 'inline-block' },

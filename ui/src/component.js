@@ -7,10 +7,19 @@ class AttributeMonitor extends cxl.Directive {
 
 	digest(state)
 	{
-		const newVal = state[this.parameter];
+	const
+		el = this.element,
+		newVal = state[this.parameter]
+	;
+		if (newVal !== this.value)
+		{
+			// Automatically reflect the attribute if it is a boolean
+			if (newVal===true || newVal===false || newVal===null)
+				cxl.dom.setAttribute(el, this.parameter, newVal);
 
-		if (newVal !== this.value && this.element.$$attributeObserver)
-			this.element.$$attributeObserver.trigger(this.parameter);
+			if (el.$$attributeObserver)
+				el.$$attributeObserver.trigger(this.parameter);
+		}
 
 		return newVal;
 	}
@@ -184,18 +193,11 @@ class ComponentDefinition
 	{
 		class Component extends cxl.HTMLElement {
 
-			// static get observedAttributes() { return meta.attributes; }
-
 			constructor()
 			{
 				super();
 				factory.createComponent(meta, this);
 			}
-
-			/*attributeChangedCallback(name, oldVal, newVal)
-			{
-				this.$view.setAttribute(name, newVal);
-			}*/
 
 			connectedCallback()
 			{
