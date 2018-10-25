@@ -11,7 +11,7 @@ require('../build').build({
 				'../ui/dist/cxl-ui-beta.js',
 				'../ui/dist/cxl-router.js',
 				'../ui/src/meta.js',
-				'../docs/src/docs.js',
+				'../docs/dist/docs.js',
 				'src/docs.js',
 			],
 			minify: 'ui-docs.min.js'

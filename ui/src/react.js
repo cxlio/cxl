@@ -49,4 +49,4 @@
 
 	cxl.each(cxl.componentFactory.components, createComponent);
 
-})(this.cxl, this.React);
+})(this.cxl, this.React, this.ReactDOM);

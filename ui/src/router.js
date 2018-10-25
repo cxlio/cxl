@@ -442,6 +442,17 @@ cxl.component({
 	}
 });
 
+Object.assign(cxl, {
+
+	router: new Router(),
+
+	route(def, controller)
+	{
+		return cxl.router.registerRoute(new Route(def, controller));
+	}
+
+});
+
 cxl.component({
 	name: 'cxl-router',
 	bindings: 'location:route'
@@ -466,17 +477,6 @@ cxl.component({
 		},
 		content$medium: { padding: 32 }
 	}
-});
-
-Object.assign(cxl, {
-
-	router: new Router(),
-
-	route(def, controller)
-	{
-		return cxl.router.registerRoute(new Route(def, controller));
-	}
-
 });
 
 })(this.cxl);

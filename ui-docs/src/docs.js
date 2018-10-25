@@ -834,7 +834,7 @@ cxl.component({
 <cxl-router-app>
 	<cxl-block>
 		<cxl-t h6>@cxl/ui
-		<cxl-t inline subtitle2>v1.0.0</cxl-t>
+		<cxl-t inline subtitle2>${cxl.version}</cxl-t>
 		</cxl-t>
 	</cxl-block>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>

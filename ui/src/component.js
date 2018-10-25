@@ -190,7 +190,7 @@ class ComponentDefinition
 				[].concat(parentDef.styles) : [ parentDef.styles ];
 
 			if (Array.isArray(def.styles))
-				css = css.concat(def.styles);
+				result.styles = css.concat(def.styles);
 			else
 				css.push(def.styles);
 		}

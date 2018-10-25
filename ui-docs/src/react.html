@@ -91,15 +91,19 @@
 	}
 	
 	cxl.route({
-		path: '*home',
+		defaultRoute: true,
 		title: 'React Demo',
-		connect() { ReactDOM.render(<HomeRoute />, this); }
+		bindings: 'connect:#init'
+	}, {
+		init(val, el) { ReactDOM.render(<HomeRoute />, el); }
 	});
 	
 	cxl.route({
 		path: 'forms',
 		title: 'Using Forms',
-		connect() { ReactDOM.render(<HomeRoute />, this); }
+		bindings: 'connect:#init'
+	},{
+		init(val, el) { ReactDOM.render(<HomeRoute />, el); }
 	});
 	
 	ReactDOM.render(<Main />, document.getElementById('root'));

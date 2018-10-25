@@ -147,6 +147,8 @@ cxl.component({
 	{
 		if (this.firstChild && this.firstChild.nodeType===document.COMMENT_NODE)
 			state.source = this.firstChild.data.trim();
+		else if (this.innerHTML)
+			state.source = this.innerHTML.trim();
 	}
 }, {
 	type: 'html',
