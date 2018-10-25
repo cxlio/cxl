@@ -340,7 +340,7 @@ component({
 		icon: { animation: 'spin', marginRight: 8 }
 	},
 	events: [ 'cxl-form.submit' ],
-	bindings: 'action:host.trigger(cxl-form.submit)'
+	bindings: 'on(action):host.trigger(cxl-form.submit)'
 }, {
 	primary: true,
 	icon: 'spinner'

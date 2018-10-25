@@ -33,8 +33,8 @@ require('../build').build({
 				'../template/src/debug.js',
 				'../template/src/template-debug.js',
 				...ui,
-				'src/beta.js',
 				'src/ui-debug.js',
+				'src/beta.js',
 				'src/meta.js'
 			]
 		},
