@@ -173,20 +173,36 @@ class ComponentDefinition
 
 	extendComponent(def, parent)
 	{
-		var extend = COMPONENTS[parent].meta;
+	const
+		parentDef = COMPONENTS[parent].meta,
+		result = Object.assign({}, parentDef, def)
+	;
+		if (def.events && parentDef.events)
+			result.events = parentDef.events.concat(def.events);
+		if (def.methods && parentDef.methods)
+			result.methods = parentDef.methods.concat(def.methods);
+		if (def.attributes && parentDef.attributes)
+			result.attributes = parentDef.attributes.concat(def.attributes);
 
-		if (def.events && extend.events)
-			def.events = extend.events.concat(def.events);
+		if (def.styles && parentDef.styles)
+		{
+			let css = result.styles = Array.isArray(parentDef.styles) ?
+				[].concat(parentDef.styles) : [ parentDef.styles ];
 
-		def = Object.assign({}, extend, def);
+			if (Array.isArray(def.styles))
+				css = css.concat(def.styles);
+			else
+				css.push(def.styles);
+		}
 
-		if (def.controller && extend.controller)
-			def.controller.prototype = Object.assign({}, extend.controller.prototype, def.controller.prototype);
+		if (def.controller && parentDef.controller)
+			result.controller.prototype = Object.assign(
+				{}, parentDef.controller.prototype, def.controller.prototype);
 
-		if (def.bindings && def.bindings !== extend.bindings)
-			def.bindings += ' ' + extend.bindings;
+		if (def.bindings && parentDef.bindings)
+			result.bindings = parentDef.bindings + ' ' + def.bindings;
 
-		return def;
+		return result;
 	}
 
 	componentConstructor(meta)

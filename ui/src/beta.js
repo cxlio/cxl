@@ -333,9 +333,12 @@ component({
 	name: 'cxl-submit',
 	extend: 'cxl-button',
 	template: `
-<cxl-icon &="=disabled:show =icon:@icon"></cxl-icon>
+<cxl-icon &="=disabled:show =icon:@icon .icon"></cxl-icon>
 <span &="content"></span>
 	`,
+	styles: {
+		icon: { animation: 'spin', marginRight: 8 }
+	},
 	events: [ 'cxl-form.submit' ],
 	bindings: 'action:host.trigger(cxl-form.submit)'
 }, {

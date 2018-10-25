@@ -4,7 +4,7 @@
 	"files": [
 		"dist/*.js"
 	],
-	"main": "dist/cxl-docs.min.js",
+	"main": "dist",
 	"devDependencies": {
 		"highlight.js": "*"
 	},
