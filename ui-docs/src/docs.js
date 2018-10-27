@@ -2,7 +2,48 @@
 "use strict";
 
 const
+	META = cxl.ui.meta,
 	DEFS = {
+		appbar: {
+			template: `
+<docs-component name="cxl-appbar">
+	<docs-demo><!--
+<cxl-appbar>
+	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-button flat inverse><cxl-icon icon="heart"></cxl-icon></cxl-button>
+	<cxl-button flat inverse><cxl-icon icon="search"></cxl-icon></cxl-button>
+	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+</cxl-appbar>
+	--></docs-demo>
+	<docs-demo title="Appbar with Navigation"><!--
+<div style="position:relative; height: 200px; overflow:hidden">
+<cxl-appbar>
+	<cxl-navbar modal>
+		<cxl-item>Hello</cxl-item>
+	</cxl-navbar>
+	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-tabs>
+		<cxl-tab selected>Tab 1</cxl-tab>
+		<cxl-tab>Tab 2</cxl-tab>
+	</cxl-tabs>
+</cxl-appbar>
+<cxl-block>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-block>
+</div>
+	--></docs-demo>
+	<docs-demo title="Appbar with Tabs"><!--
+<cxl-appbar>
+	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+	<cxl-tabs>
+		<cxl-tab selected>Tab 1</cxl-tab>
+		<cxl-tab>Tab 2</cxl-tab>
+	</cxl-tabs>
+</cxl-appbar>
+	--></docs-demo>
+</docs-component>
+			`
+		},
 		avatar: {
 			template: `
 <docs-component name="cxl-avatar">
@@ -806,6 +847,20 @@ cxl.route({
 	}
 });
 
+cxl.component({
+	name: 'ui-docs-component-card',
+	attributes: [ 'name' ],
+	template: `
+<docs-component-card &="=name:@name =meta.icon:@icon =meta.tags:@tags"></docs-component-card>
+	`,
+	bindings: '=name:#getMeta'
+}, {
+	getMeta(name)
+	{
+		this.meta = META[name];
+	}
+});
+
 cxl.route({
 	path: 'components',
 	title: 'Overview',
@@ -815,7 +870,7 @@ cxl.route({
 <br>
 <cxl-grid columns="auto auto auto" gap="16px 16px">
 <template &="=components:each:repeat">
-	<docs-component-card &="item:@name =filter:#match:show"></docs-component-card>
+	<ui-docs-component-card &="item:@name =filter:#match:show"></ui-docs-component-card>
 </template>
 </cxl-grid>
 	`

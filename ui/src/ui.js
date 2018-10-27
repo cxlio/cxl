@@ -257,6 +257,27 @@ directive('registable.host', {
 });
 
 component({
+	name: 'cxl-appbar',
+	attributes: [ 'extended' ],
+	template: `
+<div &=".flex content anchor(cxl-appbar-actions)"></div>
+<div &="content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
+	`,
+	styles: {
+		flex: {
+			display: 'flex', alignItems: 'center', height: 56,
+			paddingLeft: 16, paddingRight: 16, paddingTop: 4, paddingBottom: 4
+		},
+		$: {
+			backgroundColor: theme.primary, flexShrink: 0,
+			fontSize: 18, color: theme.onPrimary, elevation: 2
+		},
+		$extended: { height: 128 },
+		flex$medium: { paddingTop: 8, paddingBottom: 8 }
+	}
+});
+
+component({
 	name: 'cxl-avatar',
 	attributes: [ 'big', 'src', 'text', 'little' ],
 	template: `<img &=".image =src:show:attribute(src)" /><div &="=text:show:text =src:hide"></div><cxl-icon icon="user" &=".image"></cxl-icon>`,

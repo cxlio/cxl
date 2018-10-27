@@ -1,12 +1,8 @@
 /*jshint esnext:true */
 ((cxl, hljs) => {
 "use strict";
-const
-	META = cxl.ui.meta
-;
 
 hljs.configure({ tabReplace: '    '});
-
 
 cxl.component({
 	name: 'docs-link',
@@ -194,15 +190,15 @@ cxl.component({
 
 cxl.component({
 	name: 'docs-component-card',
-	attributes: [ 'name' ],
+	attributes: [ 'name', 'icon', 'tags' ],
 	template: `
 <cxl-card>
 	<cxl-c flex>
-		<a &="=name:route.link"><cxl-icon &=".icon =meta.icon:@icon"></cxl-icon></a>
+		<a &="=name:route.link"><cxl-icon &=".icon =icon:@icon"></cxl-icon></a>
 		<cxl-block>
 			<a &="=name:route.link"><cxl-t subtitle>&lt;<x &="=name:text"></x>&gt;</cxl-t></a>
 			<!--<cxl-t caption><cxl-icon &=".tags" icon="tags"></cxl-icon>
-			<template &="=meta.tags:each:repeat">
+			<template &="=tags:each:repeat">
 				<span&="item:text"></span>
 			</template>
 			</cxl-t>-->
@@ -216,12 +212,6 @@ cxl.component({
 			width: 80, height: 80, lineHeight: 80, fontSize: 48, textAlign: 'center',
 			backgroundColor: '#ccc', color: '#fff'
 		}
-	},
-	bindings: `=name:#getMeta`
-}, {
-	getMeta(name)
-	{
-		this.meta = META[name];
 	}
 });
 

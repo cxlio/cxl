@@ -8,26 +8,6 @@ const
 ;
 
 component({
-	name: 'cxl-appbar',
-	template: `
-<div &=".flex content anchor(cxl-appbar-actions)"></div>
-<div &="content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
-	`,
-	styles: {
-		flex: {
-			display: 'flex', alignItems: 'center', height: 56,
-			paddingLeft: 16, paddingRight: 16, paddingTop: 4, paddingBottom: 4
-		},
-		$: {
-			backgroundColor: theme.primary, flexShrink: 0,
-			fontSize: 18, color: theme.onPrimary, elevation: 2
-		},
-		$extended: { height: 128 },
-		flex$medium: { paddingTop: 8, paddingBottom: 8 }
-	}
-});
-
-component({
 	name: 'cxl-appbar-title',
 	attributes: [ 'extended' ],
 	styles: {
