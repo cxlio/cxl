@@ -216,11 +216,13 @@ class EventEmitter
 	{
 	const
 		handlers = (this.__handlers && this.__handlers[type]),
-		h = handlers && handlers.find(h => h.callback === callback && h.scope===scope),
-		i = h && handlers.indexOf(h)
+		h = handlers && handlers.find(h => h.fn === callback && h.scope===scope),
+		i = handlers.indexOf(h)
 	;
-		if (i!==-1)
-			handlers.splice(i, 1);
+		if (i===-1)
+			throw new Error('Invalid listener');
+
+		handlers.splice(i, 1);
 	}
 
 	trigger(type, a, b, c)
