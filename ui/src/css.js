@@ -30,6 +30,7 @@ const
 	},
 	CSS = {
 		alignItems: 'align-items',
+		alignSelf: 'align-self',
 		boxSizing: 'box-sizing',
 		zIndex: 'z-index',
 		marginTop: 'margin-top',
@@ -279,7 +280,7 @@ class Style
   	'textDecoration', 'borderStyle', 'transition', 'textTransform', 'textAlign', 'flexGrow',
   	'flexShrink',
   	'alignContent', 'flexDirection', 'justifyContent', 'whiteSpace', 'scrollBehavior',
-  	'transformOrigin'
+  	'transformOrigin', 'alignSelf'
  ]).forEach(function(name) {
 
 	Object.defineProperty(Style.prototype, name, {

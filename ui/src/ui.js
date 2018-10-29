@@ -272,8 +272,7 @@ component({
 			backgroundColor: theme.primary, flexShrink: 0,
 			fontSize: 18, color: theme.onPrimary, elevation: 2
 		},
-		$extended: { height: 128 },
-		flex$extended: { alignItems: 'start' },
+		flex$extended: { alignItems: 'start', height: 128, paddingBottom: 24 },
 		flex$medium: { paddingTop: 8, paddingBottom: 8 }
 	}
 });
@@ -283,7 +282,7 @@ component({
 	attributes: [ 'extended' ],
 	styles: {
 		$: { flexGrow: 1 },
-		$extended: { paddingTop: 66, fontSize: 24 }
+		$extended: { fontSize: 24, alignSelf: 'flex-end' }
 	}
 });
 
