@@ -7,21 +7,21 @@ const
 		appbar: {
 			template: `
 <docs-component name="cxl-appbar">
-	<docs-demo><!--
+	<docs-demo label="Appbar with actions"><!--
 <cxl-appbar>
-	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-appbar-title>Appbar Title</cxl-appbar-title>
 	<cxl-button flat inverse><cxl-icon icon="heart"></cxl-icon></cxl-button>
 	<cxl-button flat inverse><cxl-icon icon="search"></cxl-icon></cxl-button>
 	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
 </cxl-appbar>
 	--></docs-demo>
-	<docs-demo title="Appbar with Navigation"><!--
+	<docs-demo label="Appbar with Navigation"><!--
 <div style="position:relative; height: 200px; overflow:hidden">
 <cxl-appbar>
 	<cxl-navbar modal>
 		<cxl-item>Hello</cxl-item>
 	</cxl-navbar>
-	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-appbar-title>Appbar Title</cxl-appbar-title>
 	<cxl-tabs>
 		<cxl-tab selected>Tab 1</cxl-tab>
 		<cxl-tab>Tab 2</cxl-tab>
@@ -31,9 +31,9 @@ const
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-block>
 </div>
 	--></docs-demo>
-	<docs-demo title="Appbar with Tabs"><!--
+	<docs-demo label="Appbar with Tabs"><!--
 <cxl-appbar>
-	<cxl-col grow>Appbar Title</cxl-col>
+	<cxl-appbar-title>Appbar Title</cxl-appbar-title>
 	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
 	<cxl-tabs>
 		<cxl-tab selected>Tab 1</cxl-tab>
@@ -41,6 +41,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	</cxl-tabs>
 </cxl-appbar>
 	--></docs-demo>
+<docs-attribute name="extended">
+<docs-demo><!--
+<div style="position:relative; height: 200px; overflow:hidden">
+<cxl-appbar extended>
+	<cxl-navbar modal>
+		<cxl-item>Hello</cxl-item>
+	</cxl-navbar>
+	<cxl-appbar-title extended>Appbar Title</cxl-appbar-title>
+</cxl-appbar>
+</div>
+	--></docs-demo>
+</docs-attribute>
 </docs-component>
 			`
 		},
@@ -54,10 +66,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <cxl-avatar little></cxl-avatar>
 --></docs-demo>
 <docs-usage>
-	<docs-demo title="Avatar with text"><!--
+	<docs-demo label="Avatar with text"><!--
 <cxl-avatar text="HG"></cxl-avatar>
 	--></docs-demo>
-	<docs-demo title="Changing Background"><!--
+	<docs-demo label="Changing Background"><!--
 <cxl-avatar style="background-color: #FFCDD2" text="RD"></cxl-avatar>
 <cxl-avatar style="background-color: #E0F2F1"></cxl-avatar>
 <cxl-avatar big style="background-color: #FFCDD2" text="RD"></cxl-avatar>
@@ -399,7 +411,7 @@ Checked: <span &="=test:text"></span>
 	<cxl-item>Option 3</cxl-item>
 </cxl-menu>
 --></docs-demo>
-<docs-attribute name="touched"><docs-demo &="owner:@owner"><!--
+<docs-attribute name="closed"><docs-demo &="owner:@owner"><!--
 <cxl-menu &="=closed:@closed">
 	<cxl-item icon="check">Option 1</cxl-item>
 	<cxl-item icon="">Option 2</cxl-item>
@@ -438,9 +450,43 @@ Checked: <span &="=test:text"></span>
 			`
 		},
 
+		navbar: {
+			template: `
+<docs-component name="cxl-navbar">
+	<docs-demo label="Appbar with Navigation"><!--
+<div style="position:relative; height: 200px; overflow:hidden">
+<cxl-appbar>
+	<cxl-navbar modal>
+		<cxl-item>Hello</cxl-item>
+	</cxl-navbar>
+	<cxl-appbar-title>Appbar Title</cxl-appbar-title>
+	<cxl-tabs>
+		<cxl-tab selected>Tab 1</cxl-tab>
+		<cxl-tab>Tab 2</cxl-tab>
+	</cxl-tabs>
+</cxl-appbar>
+<cxl-block>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-block>
+</div>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+
 		option: {
 			template: `
 <docs-component name="cxl-option">
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Select</cxl-label>
+	<cxl-select>
+		<cxl-option>(Select an option)</cxl-option>
+		<cxl-option value="one">Option 1</cxl-option>
+		<cxl-option value="two">Option 2</cxl-option>
+		<cxl-option value="three">Option 3</cxl-option>
+	</cxl-select>
+</cxl-form-group>
+--></docs-demo>
 </docs-component>
 			`
 		},
@@ -484,6 +530,7 @@ Checked: <span &="=test:text"></span>
 <cxl-radio &="@checked:=checked" name="test" value="1">Radio Button 1</cxl-radio><br>
 <p>Checked: <x &="=checked:text"></x></p>
 	--></docs-demo>
+</docs-attribute>
 <docs-attribute name="disabled">
 	<docs-demo><!--
 <cxl-radio name="test" value="1">Radio Button 1</cxl-radio><br>

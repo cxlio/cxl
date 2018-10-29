@@ -1156,7 +1156,6 @@ class Anchor
 
 /**
  * Anchors are used to interact with elements outside the component.
- * TODO See if we need this...
  */
 directive('anchor', {
 	connect() { if (this.parameter) this.update(this.parameter); },

@@ -8,15 +8,6 @@ const
 ;
 
 component({
-	name: 'cxl-appbar-title',
-	attributes: [ 'extended' ],
-	styles: {
-		$: { flexGrow: 1 },
-		$extended: { paddingTop: 92 }
-	}
-});
-
-component({
 	name: 'cxl-animate',
 	attributes: [ 'pulse', 'spin' ],
 	styles: {
@@ -255,33 +246,6 @@ component({
 		style.innerHTML = 'body{padding:0;margin:0;}';
 		document.head.appendChild(style);
 	}
-});
-
-component({
-	name: 'cxl-navbar',
-	attributes: [ 'permanent' ],
-	template: `
-<cxl-drawer &="action:#onRoute =permanent:@permanent =visible:@visible content location:#onRoute"></cxl-drawer>
-<cxl-icon &="action:#toggle .toggler" icon="bars"></cxl-icon>
-	`,
-	styles: {
-		$: { display: 'inline-block', color: theme.onSurface, fontSize: 16, marginTop: 8, marginBottom: 8 },
-		toggler: {
-			fontSize: 18, width: 16, marginRight: 32,
-			color: theme.onPrimary, cursor: 'pointer', display: 'inline-block'
-		},
-		toggler$permanent$large: { display: 'none' }
-	}
-}, {
-
-	visible: false,
-	toggle() { this.visible = !this.visible; },
-
-	onRoute()
-	{
-		this.visible=false;
-	}
-
 });
 
 component({

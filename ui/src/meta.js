@@ -49,8 +49,11 @@
 		'cxl-menu-toggle': {
 			icon: 'ellipsis-v'
 		},
-		'cxl-option': {
+		'cxl-navbar': {
 			icon: 'bars'
+		},
+		'cxl-option': {
+			icon: 'ellipsis-v'
 		},
 		'cxl-password': {
 			icon: 'key'

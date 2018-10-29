@@ -273,7 +273,17 @@ component({
 			fontSize: 18, color: theme.onPrimary, elevation: 2
 		},
 		$extended: { height: 128 },
+		flex$extended: { alignItems: 'start' },
 		flex$medium: { paddingTop: 8, paddingBottom: 8 }
+	}
+});
+
+component({
+	name: 'cxl-appbar-title',
+	attributes: [ 'extended' ],
+	styles: {
+		$: { flexGrow: 1 },
+		$extended: { paddingTop: 66, fontSize: 24 }
 	}
 });
 
@@ -657,6 +667,33 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 		if (item)
 			item.focus();
 	}
+});
+
+component({
+	name: 'cxl-navbar',
+	attributes: [ 'permanent' ],
+	template: `
+<cxl-drawer &="action:#onRoute =permanent:@permanent =visible:@visible content location:#onRoute"></cxl-drawer>
+<cxl-icon &="action:#toggle .toggler" icon="bars"></cxl-icon>
+	`,
+	styles: {
+		$: { display: 'inline-block', color: theme.onSurface, fontSize: 16, marginTop: 8, marginBottom: 8 },
+		toggler: {
+			fontSize: 18, width: 16, marginRight: 32,
+			color: theme.onPrimary, cursor: 'pointer', display: 'inline-block'
+		},
+		toggler$permanent$large: { display: 'none' }
+	}
+}, {
+
+	visible: false,
+	toggle() { this.visible = !this.visible; },
+
+	onRoute()
+	{
+		this.visible=false;
+	}
+
 });
 
 component({

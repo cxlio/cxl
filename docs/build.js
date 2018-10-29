@@ -7,13 +7,23 @@ require('../build').build({
 			output: 'docs.js',
 			src: [
 				'node_modules/highlight.js/lib/highlight.js',
-				() => `(function() { const module = { set export(fn) { fn(hljs); } };`,
+				() => `(()=>{const module={ set exports(fn) { hljs.registerLanguage('xml', fn); } };`,
 				'node_modules/highlight.js/lib/languages/xml.js',
-				'node_modules/highlight.js/lib/languages/javascript.js',
 				() => `})();`,
+				() => `(()=>{const module={ set exports(fn) { hljs.registerLanguage('javascript', fn); } };`,
+				'node_modules/highlight.js/lib/languages/javascript.js',
+				() => '})(); hljs.$STYLE=`',
+				'node_modules/highlight.js/styles/atom-one-light.css',
+				() => '`;',
 				'src/docs.js'
 			],
 			minify: 'index.js'
+		},
+		{
+			output: 'docs.css',
+			src: [
+				'node_modules/highlight.js/styles/github.css'
+			]
 		}
 	]
 

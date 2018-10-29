@@ -90,11 +90,11 @@ cxl.component({
 
 cxl.component({
 	name: 'docs-demo',
-	attributes: ['title', 'owner'],
+	attributes: ['label', 'owner'],
 	bindings: 'connect:#connect',
 	template: `
 <cxl-card><cxl-block>
-	<cxl-t h6><span &="=title:show:text"></span></cxl-t>
+	<cxl-t h6><span &="=label:show:text"></span></cxl-t>
 	<div &=".content content"></div>
 	<docs-code &="=source:@source"></docs-code>
 </cxl-block></cxl-card>`,
@@ -128,8 +128,7 @@ cxl.component({
 	name: 'docs-code',
 	attributes: [ 'source', 'type' ],
 	template: `
-<link rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+<style>${hljs.$STYLE}</style>
 <div &="=type:style =source:text:#highlight .code"></div>
 	`,
 	styles: {
@@ -158,7 +157,7 @@ cxl.component({
 	name: 'docs-attribute',
 	attributes: [ 'name', 'demo', 'lorem' ],
 	template: `
-<cxl-t h6><span &="=name:anchor:text"></span> Attribute</cxl-t>
+<cxl-t h6>Attribute: <code &="=name:anchor:text"></code></cxl-t>
 <div &="content"></div>
 <br>
 	`,
@@ -183,7 +182,7 @@ cxl.component({
 	name: 'docs-method',
 	attributes: [ 'name' ],
 	template: `
-<h3 &="=name:anchor:text"></h3>
+<cxl-t h6>Method: <code &="=name:anchor:text"></code></cxl-t>
 <div &="content"></div>
 	`
 });
@@ -224,10 +223,12 @@ cxl.component({
 <br>
 <cxl-t h5>API</cxl-t>
 <div &="=anchors:show">
-	<cxl-t h5>Anchors</cxl-t>
+	<cxl-t h6>Anchors</cxl-t>
+	<ul>
 	<template &="=anchors:each:repeat">
-	<span &="item:text"></span>
+	<li &="$parameter:text"></li>
 	</template>
+	</ul>
 </div>
 <div &="=attributes:show">
 	<br>
@@ -268,11 +269,24 @@ cxl.component({
 	const
 		state = this,
 		component = cxl.componentFactory.components[name],
-		meta = component && component.meta || {}
+		meta = component && component.meta || {},
+		view = cxl.dom(name).$view
 	;
+		state.instance = cxl.dom(name);
 		state.attributes = meta.attributes;
 		state.events = meta.events;
 		state.methods = meta.methods;
+
+		view.connect();
+		this.processBindings(view.bindings);
+	},
+
+	processBindings(bindings)
+	{
+		const anchors = bindings.filter(b => b.anchor);
+
+		if (anchors.length)
+			this.anchors = anchors;
 	},
 
 	onAttributeClick()

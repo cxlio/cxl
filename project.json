@@ -17,18 +17,13 @@
 				"tasks": "node ui/build"
 			},
 
-			"router": {
-				"files": [ "router/src/*", "router/build.js" ],
-				"tasks": "node router/build"
-			},
-
 			"fb": {
 				"files": [ "fb/src/*", "fb/build.js" ],
 				"tasks": "node fb/build"
 			},
 
 			"docs": {
-				"files": [ "docs/src/*" ],
+				"files": [ "docs/src/*", "docs/build.js" ],
 				"tasks": "cd docs && node build"
 			}
 		}
