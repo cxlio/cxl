@@ -439,7 +439,7 @@ component({
 
 component({
 	name: 'cxl-dialog-alert',
-	attributes: [ 'title-text', 'message', 'promise' ],
+	attributes: [ 'title-text', 'message', 'promise', 'action' ],
 	template: `
 <cxl-dialog>
 	<div &=".content">
@@ -472,6 +472,7 @@ component({
 
 component({
 	name: 'cxl-dialog-confirm',
+	attributes: [ 'cancel-text' ],
 	template: `
 <cxl-dialog>
 	<div &=".content">
@@ -479,14 +480,14 @@ component({
 		<div &="=message:text"></div>
 	</div>
 	<div &=".footer">
-		<cxl-button flat &="=cancelText:text action:#remove:#reject"></cxl-button>
+		<cxl-button flat &="=cancel-text:text action:#remove:#reject"></cxl-button>
 		<cxl-button flat &="=action:text action:#remove:#resolve"></cxl-button>
 	</div>
 </cxl-dialog>
 	`,
 	extend: 'cxl-dialog-alert'
 }, {
-	cancelText: 'Cancel',
+	'cancel-text': 'Cancel',
 	action: 'Confirm'
 });
 
