@@ -18,16 +18,6 @@ component({
 });
 
 component({
-	name: 'cxl-backdrop',
-	styles: {
-		$: {
-			position: 'absolute', top: 0, left: 0, bottom: 0, width: '100%',
-			backgroundColor: 'rgba(0,0,0,0.32)', elevation: 5
-		}
-	}
-});
-
-component({
 	name: 'cxl-block',
 	attributes: [
 		'inverse', 'compact', 'surface', 'primary', 'secondary', 'flex', 'vflex', 'scroll'
@@ -71,70 +61,6 @@ component({
 		$grow: { flexGrow: 1, flexShrink: 1 },
 		$firstChild: { marginLeft: 0 }
 	}
-});
-
-component({
-	name: 'cxl-dialog',
-	template: '<cxl-backdrop><div &=".content content"></div></cxl-backdrop>',
-	styles: {
-		content: {
-			backgroundColor: theme.surface, position: 'absolute',
-			top: 0, left: 0, right: 0, bottom: 0
-		},
-		content$small: {
-			elevation: 12, translateY: '-50%', top: '50%', bottom: 'auto',
-			width: '80%', marginLeft: 'auto', marginRight: 'auto'
-		}
-	}
-});
-
-component({
-	name: 'cxl-dialog-alert',
-	attributes: [ 'title-text', 'message', 'promise' ],
-	template: `
-<cxl-dialog>
-	<cxl-block>
-		<cxl-h5 &="=title-text:show:text"></cxl-h5>
-		<div &="=message:text"></div>
-	</cxl-block>
-	<cxl-block compact &=".footer">
-		<cxl-button flat &="=action:text action:#remove:#resolve"></cxl-button>
-	</cxl-block>
-</cxl-dialog>
-	`,
-	initialize(state) {
-		state.$component = this;
-		state.promise = new Promise(function(resolve, reject) {
-			state.resolve = resolve;
-			state.reject = reject;
-		});
-	}
-}, {
-	action: 'Ok',
-	remove()
-	{
-		this.$component.remove();
-	}
-});
-
-component({
-	name: 'cxl-dialog-confirm',
-	template: `
-<cxl-dialog>
-	<cxl-block>
-		<cxl-h5 &="=title-text:show:text"></cxl-h5>
-		<div &="=message:text"></div>
-	</cxl-block>
-	<cxl-block compact &=".footer">
-		<cxl-button flat &="=cancelText:text action:#remove:#reject"></cxl-button>
-		<cxl-button flat &="=action:text action:#remove:#resolve"></cxl-button>
-	</cxl-block>
-</cxl-dialog>
-	`,
-	extend: 'cxl-dialog-alert'
-}, {
-	cancelText: 'Cancel',
-	action: 'Confirm'
 });
 
 component({

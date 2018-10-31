@@ -203,6 +203,48 @@ Checked: <span &="=test:text"></span>
 			`
 
 		},
+		dialog: {
+			template: `
+<docs-component name="cxl-dialog">
+	<docs-demo><!--
+<cxl-block style="position:relative; min-height:300px; z-index: 0;">
+	<cxl-dialog>
+		<cxl-block>
+		<cxl-t h5>Title</cxl-t>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.</p>
+		</cxl-block>
+	</cxl-dialog>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+		'dialog-alert': {
+			template: `
+<docs-component name="cxl-dialog-alert">
+	<docs-demo><!--
+<cxl-block style="position:relative; height:300px; z-index: 0">
+	<cxl-dialog-alert title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
+	</cxl-dialog-alert>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+
+		'dialog-confirm': {
+			template: `
+<docs-component name="cxl-dialog-confirm">
+	<docs-demo><!--
+<cxl-block style="position:relative; height:300px; z-index: 0">
+	<cxl-dialog-confirm title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
+	</cxl-dialog-alert>
+</cxl-block>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+
 		fab: {
 			template: `
 <docs-component name="cxl-fab">
