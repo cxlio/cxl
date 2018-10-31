@@ -1044,10 +1044,9 @@ directive('content', {
 
 	initialize()
 	{
-	var
+	const
 		component = this.owner.host,
-		slot = this.slot = this.element.tagName === 'SLOT' ?
-			this.element : document.createElement('SLOT')
+		slot = this.slot = this.createSlot()
 	;
 		if (this.parameter)
 		{
@@ -1059,6 +1058,12 @@ directive('content', {
 
 		if (this.element !== slot)
 			this.element.appendChild(slot);
+	},
+
+	createSlot()
+	{
+		return this.element.tagName === 'SLOT' ?
+			this.element : document.createElement('SLOT');
 	},
 
 	connect()
@@ -1158,8 +1163,7 @@ class Anchor
  * Anchors are used to interact with elements outside the component.
  */
 directive('anchor', {
-	connect() { if (this.parameter) this.update(this.parameter); },
-	disconnect() { if (this.anchor) this.anchor.destroy(); },
+	initialize() { if (this.parameter) this.update(this.parameter); },
 	update(val) {
 		if (this.anchor)
 			this.anchor.destroy();

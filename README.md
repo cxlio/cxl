@@ -16,3 +16,15 @@ Lightweight UI Web Components.
 ### @cxl/template
 
 Reactive Template System.
+
+### @cxl/filewatch
+
+File Watch tool
+
+### @cxl/rx
+
+Lightweight ReactiveX Implementation
+
+### @cxl/build
+
+JS Build Tool

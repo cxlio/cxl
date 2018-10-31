@@ -455,7 +455,10 @@ Object.assign(cxl, {
 
 cxl.component({
 	name: 'cxl-router',
-	bindings: 'location:route'
+	bindings: 'location:#start:route:#end'
+}, {
+	start(val, el) { el.style.overflowY = 'hidden'; },
+	end(val, el) { el.style.overflowY = 'auto'; }
 });
 
 cxl.component({
@@ -473,7 +476,7 @@ cxl.component({
 		$large: { paddingLeft: 288 },
 		content: {
 			position: 'relative', flexGrow: 1, overflowY: 'auto', padding: 16,
-			overflowX: 'hidden'
+			overflowX: 'hidden', display: 'block'
 		},
 		content$medium: { padding: 32 }
 	}

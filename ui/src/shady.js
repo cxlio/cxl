@@ -11,7 +11,7 @@ const
 	observer = new MutationObserver(onMutation)
 ;
 
-cxl.$$shadyUpgrade = node => doWalk(node, upgradeConnect);
+cxl.$$shadyUpgrade = node => walkChildren(node, upgradeConnect);
 cxl.$$shadyCustomElements = true;
 
 function upgrade(node)
@@ -76,11 +76,6 @@ function walk(node, method)
 	}
 }
 
-function doWalk(node, method)
-{
-	return walkChildren(node, method);
-}
-
 function override(obj, fn)
 {
 	const original = obj[fn];
@@ -88,7 +83,7 @@ function override(obj, fn)
 		const node = original.apply(this, arguments);
 
 		if (node && node.childNodes)
-			doWalk(node, upgrade);
+			walkChildren(node, upgrade);
 
 		return node;
 	};
@@ -119,13 +114,13 @@ function onMutation(event)
 		}
 	});
 
-	nodes.forEach(n => n.$$connect && doWalk(n, n.$$connect));
+	nodes.forEach(n => n.$$connect && walkChildren(n, n.$$connect));
 }
 
 function observe()
 {
+	walkChildren(document.body, upgradeConnect);
 	observer.observe(document.body, { subtree: true, childList: true });
-	doWalk(document.body, upgradeConnect);
 	started = true;
 }
 
@@ -137,7 +132,7 @@ function debouncedWalk()
 	scheduled = true;
 	setTimeout(() => {
 		scheduled = false;
-		doWalk(document.body, upgradeConnect);
+		walkChildren(document.body, upgradeConnect);
 	});
 }
 
@@ -180,7 +175,7 @@ const createElement = cxl.dom.createElement;
 
 cxl.dom.createElement = function() {
 	const result = createElement.apply(cxl, arguments);
-	return doWalk(result, upgrade);
+	return walkChildren(result, upgrade);
 };
 
 /*const cloneNode = window.DocumentFragment.prototype.cloneNode;
@@ -363,8 +358,9 @@ function $extendComponent(component, shadow)
 				this.childNodes.push(child);
 
 			$extendChild(child);
+			$assignSlot(this, child);
 
-			this.shadowRoot.$updateSlots();
+			//this.shadowRoot.$updateSlots();
 		},
 
 		removeChild(child)
@@ -436,42 +432,47 @@ function $extendComponent(component, shadow)
 				allowCross.indexOf(prop)===-1 ? eventHandlerStop : eventHandler, { passive: true });
 }
 
+/*cxl.compiler.directives.content.prototype.createSlot = function()
+{
+	return this.element;
+};*/
+
+function $findSlot(host, child)
+{
+	const slot = (child.matches && (host.$view.slots && host.$view.slots.find(function(slot) {
+		return child.matches && child.matches(slot.parameter);
+	}))) || host.$view.defaultSlot;
+
+	return slot && slot.slot;
+}
+
+function $assignSlot(host, child)
+{
+	// Assign Slots
+	const slot = $findSlot(host, child);
+
+	if (slot)
+		slot.appendChild(child);
+	else
+	{
+		if (child.$parentNode)
+		{
+			if (child.$parentNode===host)
+				host.$removeChild(child);
+			else
+				child.$parentNode.removeChild(child);
+		}
+
+		child.$component = host;
+	}
+}
+
 function $extendShadow(host)
 {
 const
 	fragment = {},
  	slots = []
 ;
-	function $findSlot(child)
-	{
-		const slot = (host.$view.slots && host.$view.slots.find(function(slot) {
-			return child.matches && child.matches(slot.parameter);
-		})) || host.$view.defaultSlot;
-
-		return slot && slot.slot;
-	}
-
-	function $assignSlot(child)
-	{
-		// Assign Slots
-		const slot = $findSlot(child);
-
-		if (slot)
-			slot.appendChild(child);
-		else
-		{
-			if (child.$parentNode)
-			{
-				if (child.$parentNode===host)
-					host.$removeChild(child);
-				else
-					child.$parentNode.removeChild(child);
-			}
-
-			child.$component = host;
-		}
-	}
-
 	cxl.extend(fragment, {
 		childNodes: host.childNodes,
 		parentNode: null,
@@ -485,12 +486,12 @@ const
 			return this.childNodes[0];
 		},
 
-		appendChild: function(child)
+		appendChild(child)
 		{
 			return this.insertBefore(child);
 		},
 
-		insertBefore: function(child, next)
+		insertBefore(child, next)
 		{
 			if (child instanceof DocumentFragment)
 			{
@@ -503,22 +504,33 @@ const
 			this.$insertBefore($extendChild(child), next);
 		},
 
-		removeChild: function(el)
+		removeChild(el)
 		{
 			return this.$removeChild(el);
 		},
 
-		$updateSlots: function()
+		$updateSlots()
 		{
-			host.childNodes.forEach($assignSlot);
+			host.childNodes.forEach(c => $assignSlot(host, c));
 		}
 	});
 
 	return fragment;
 }
 
+const
+	SLOT_INHERIT = [ 'display', 'align-items' ],
+	isEdge = navigator.userAgent.indexOf('Edge')!==-1
+;
+
 function $extendSlot(slot, component)
 {
+	if (isEdge)
+	{
+		SLOT_INHERIT.forEach(style => slot.style[style]='inherit');
+		slot.style.flexGrow = 1;
+	}
+
 	cxl.extend(slot, {
 		$component: component,
 		get firstChild()
