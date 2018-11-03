@@ -215,8 +215,8 @@ class Style
 	{
 		this.$value.overflowY = this.$style.overflowY = val;
 
-		if (val==='auto' || val==='scroll')
-			this.$style.webkitOverflowScrolling = 'touch';
+		//if (val==='auto' || val==='scroll')
+		//	this.$style.webkitOverflowScrolling = 'touch';
 	}
 
 	get overflowY()

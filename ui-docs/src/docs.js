@@ -207,7 +207,7 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-dialog">
 	<docs-demo><!--
-<cxl-block style="position:relative; min-height:300px; z-index: 0;">
+<cxl-block style="position:relative; min-height:300px; z-index: 0; overflow:hidden">
 	<cxl-dialog>
 		<cxl-block>
 		<cxl-t h5>Title</cxl-t>
@@ -223,7 +223,7 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-dialog-alert">
 	<docs-demo><!--
-<cxl-block style="position:relative; height:300px; z-index: 0">
+<cxl-block style="position:relative; height:300px; z-index: 0; overflow: hidden">
 	<cxl-dialog-alert title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
 	</cxl-dialog-alert>
 </cxl-block>
@@ -236,10 +236,29 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-dialog-confirm">
 	<docs-demo><!--
-<cxl-block style="position:relative; height:300px; z-index: 0">
+<cxl-block style="position:relative; height:300px; z-index: 0; overflow: hidden">
 	<cxl-dialog-confirm title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
 	</cxl-dialog-alert>
 </cxl-block>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+
+		drawer: {
+			template: `
+<docs-component name="cxl-drawer">
+	<docs-demo><!--
+<cxl-button &="action:bool:=showDrawer" primary>Show Drawer</cxl-button>
+<cxl-checkbox &="value:=permanent">Permanent</cxl-checkbox>
+<cxl-drawer right &="on(backdrop.click):not:=showDrawer =permanent:@permanent =showDrawer:@visible">
+	<docs-placeholder></docs-placeholder>
+	<cxl-block>
+		<cxl-title>Right Drawer Title</cxl-title>
+		<cxl-hr></cxl-hr>
+		<p>Right Drawer Content</p>
+	</cxl-block>
+</cxl-drawer>
 	--></docs-demo>
 </docs-component>
 			`

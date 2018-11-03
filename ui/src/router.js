@@ -455,10 +455,7 @@ Object.assign(cxl, {
 
 cxl.component({
 	name: 'cxl-router',
-	bindings: 'location:#start:route:#end'
-}, {
-	start(val, el) { el.style.overflowY = 'hidden'; },
-	end(val, el) { el.style.overflowY = 'auto'; }
+	bindings: 'location:route'
 });
 
 cxl.component({
@@ -469,7 +466,7 @@ cxl.component({
 	<cxl-navbar permanent &="content"></cxl-navbar>
 	<cxl-router-title></cxl-router-title>
 </cxl-appbar>
-<cxl-router &=".content"></cxl-router>
+<div &=".content location:route"></div>
 	`,
 	styles: {
 		$: { display: 'flex', flexDirection: 'column', height: '100%' },

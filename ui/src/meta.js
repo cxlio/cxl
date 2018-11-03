@@ -25,6 +25,15 @@
 		'cxl-chip': {
 			icon: 'capsules'
 		},
+		'cxl-dialog': {
+			icon: 'window-maximize'
+		},
+		'cxl-dialog-alert': {
+			icon: 'window-maximize'
+		},
+		'cxl-dialog-confirm': {
+			icon: 'window-maximize'
+		},
 		'cxl-fab': {
 			icon: 'plus-circle'
 		},

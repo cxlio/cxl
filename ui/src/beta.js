@@ -64,35 +64,6 @@ component({
 });
 
 component({
-	name: 'cxl-drawer',
-	template: `
-<cxl-backdrop &=".backdrop"></cxl-backdrop>
-<div &="on(click):event.stop .drawer content"></div>
-	`,
-	attributes: [ 'visible', 'right', 'permanent' ],
-	styles: {
-		drawer: {
-			backgroundColor: theme.surface, position: 'absolute', top: 0, left: 0,
-			width: '85%', bottom: 0, opacity: 0,
-			overflowY: 'auto', elevation: 5, translateX: '-105%'
-		},
-		drawer$right$permanent$xlarge: { translateX: '-100%', width: 320 },
-		drawer$right: { left: '100%', width: 0, translateX: 0 },
-		drawer$right$visible: { translateX: '-100%', width: 320 },
-
-		drawer$small: { width: 288 },
-		drawer$large$permanent: { translateX: 0, opacity: 1 },
-		drawer$visible: { translateX: 0, opacity: 1 },
-
-		backdrop: { width: 0, opacity: 0 },
-		backdrop$visible: { width: '100%', opacity: 1 },
-		backdrop$visible$permanent$large: { width: 0 },
-		backdrop$visible$right$large: { width: '100%' },
-		backdrop$visible$permanent$right$xlarge: { width: 0 }
-	}
-});
-
-component({
 	name: 'cxl-form',
 
 	events: [ 'submit' ],

@@ -1164,6 +1164,11 @@ class Anchor
  */
 directive('anchor', {
 	initialize() { if (this.parameter) this.update(this.parameter); },
+	connect() { if (!this.anchor) this.update(this.parameter); },
+	disconnect() {
+		this.anchor.destroy();
+		this.anchor = null;
+	},
 	update(val) {
 		if (this.anchor)
 			this.anchor.destroy();
@@ -1451,20 +1456,15 @@ Object.assign(cxl, {
 function source(name, subscribe)
 {
 	directive(name, {
-		initialize(el, param, view) {
-			view.connected.subscribe(val => {
-				if (val)
-				{
-					// TODO last parameter should be subscriber, using "this" so
-					// "once" logic works properly
-					var teardown = subscribe(el, param, view, this);
+		connect() {
+			// TODO last parameter should be subscriber, using "this" so
+			// "once" logic works properly
+			var teardown = subscribe(this.element, this.parameter, this.owner, this);
 
-					if (typeof(teardown)==='function')
-						teardown = { unsubscribe: teardown };
+			if (typeof(teardown)==='function')
+				teardown = { unsubscribe: teardown };
 
-					this.bindings = [ teardown ];
-				}
-			});
+			this.bindings = [ teardown ];
 		}
 	});
 }
