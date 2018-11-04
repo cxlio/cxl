@@ -15,10 +15,10 @@ const
 			speed: '0.2s',
 
 			primary: '#009688',
-			primaryLight: '#b2dfdb',
+			primaryLight: '#52c7b8',
 			primaryDark: '#00796b',
 
-			secondary: '#ff5722',
+			secondary: 'd32f2f', // '#ff5722',
 			surface: '#fff',
 
 			onPrimary: '#fff',
@@ -688,7 +688,8 @@ focusable action:host.trigger(action) role(link)
 		},
 		content: { flexGrow: 1 },
 		icon: { marginRight: 16, width: 28, color: theme.onSurface, opacity: 0.7 },
-		link$selected: { backgroundColor: theme.primaryLight }
+		icon$selected: { color: theme.onPrimary },
+		link$selected: { backgroundColor: theme.primaryLight, color: theme.onPrimary }
 	}, prefix('link', DisabledCSS) ]
 
 });

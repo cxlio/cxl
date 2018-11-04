@@ -103,6 +103,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-component>
 			`
 		},
+		backdrop: {
+			template: `
+<docs-component name="cxl-backdrop">
+	<docs-demo><!--
+<cxl-button &="action:bool:=showBackdrop">Show Backdrop</cxl-button>
+<cxl-backdrop &="=showBackdrop:show on(click):not:=showBackdrop"></cxl-backdrop>
+	--></docs-demo>
+</docs-component>
+			`
+		},
 		button: {
 			template: `
 <docs-component name="cxl-button">
@@ -856,8 +866,10 @@ cxl.route({
 	path: '*default',
 	title: '@cxl/ui',
 	template: `
+<div>
+	<ui-docs-logo></ui-docs-logo>
+</div>
 <cxl-t h4>Features</cxl-t>
-
 <ul>
 <li>Lightweight and Simple API. ~30kb</li>
 <li>Focus on Performance</li>
@@ -947,12 +959,52 @@ cxl.route({
 	<cxl-input &="$value:@value"></cxl-input>
 </cxl-form-group>
 </template>
+
+<cxl-t h5>Color Tool</cxl-t>
+<ui-docs-color-tool &="=variables:@theme"></ui-docs-color-tool>
 </table>
 	`,
 	initialize(state)
 	{
 		state.variables = cxl.ui.theme.variables;
 	}
+});
+
+cxl.route({
+	path: 'layout',
+	title: 'Layout',
+	template: `
+
+	`
+});
+
+cxl.component({
+	name: 'ui-docs-logo',
+	template: `<svg xmlns="http://www.w3.org/2000/svg" width="398.66666" height="180.93466"><defs><linearGradient id="a" x2="1" gradientTransform="matrix(405.94919 0 0 -405.94919 -261.92822 217.5498)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#231f20"/><stop offset=".29776" stop-color="#231f20"/><stop offset=".65586592" stop-color="#231f20"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="b" x2="1" gradientTransform="matrix(221.0459 0 0 -221.0459 157.95117 144.88867)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".00561523" stop-color="#fff"/><stop offset=".26231876" stop-color="#231f20"/><stop offset="1" stop-color="#231f20"/></linearGradient></defs><path fill="#e32522" d="M243.78252724 37.10226401L88.46653112 146.24092795h59.53866518L300.96385914 37.10226401z"/><path fill="url(#a)" d="M1 248.271v-20.186h60.16l12.446-7.546h45.08s-21.217 15.386-28.097 19.892c0 0-9.756 6.38-28.673 7.84zm72.606-27.732l47.96-33.71 22.455 15.944-25.335 17.766z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/><path fill="url(#b)" d="M157.951 161.146l31.789-22.555h.157c2.74-1.989 21.372-15.468 27.746-19.638 0 0 9.43-6.211 28.67-6.383H300v18.159h-52.937l-12.442 8.119h-.043l-54.355 38.358z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/></svg>`
+});
+
+cxl.component({
+	name: 'ui-docs-color',
+	attributes: [ 'label', 'color', 'text-color'],
+	bindings: '=color:style.inline(background-color) =text-color:style.inline(color)',
+	template: `
+<cxl-t &="=label:text"></cxl-t>
+<cxl-t &="=color:text"></cxl-t>
+	`,
+	styles: {
+		$: { padding: 16 }
+	}
+});
+
+cxl.component({
+	name: 'ui-docs-color-tool',
+	attributes: [ 'theme' ],
+	template: `
+<ui-docs-color label="primary" &="=theme.primary:@color =theme.onPrimary:@text-color"></ui-docs-color>
+<ui-docs-color label="primaryLight" &="=theme.primaryLight:@color =theme.onPrimary:@text-color"></ui-docs-color>
+<ui-docs-color label="primaryDark" &="=theme.primaryDark:@color =theme.onPrimary:@text-color"></ui-docs-color>
+<ui-docs-color label="secondary" &="=theme.secondary:@color =theme.onSecondary:@text-color"></ui-docs-color>
+	`
 });
 
 cxl.component({
@@ -992,6 +1044,21 @@ cxl.route({
 });
 
 cxl.component({
+	name: 'docs-footer',
+	template: `
+<div></div>
+<cxl-t subtitle>@cxl/ui v${cxl.version}</cxl-t>
+<cxl-hr></cxl-hr>
+<br>
+<cxl-t subtitle2>&copy; 2018</cxl-t>
+	`,
+	styles: {
+		$: { marginTop: 64, padding: 16, paddingTop: 32, paddingBottom: 32, backgroundColor: '#f1f3f4' },
+		$medium: { paddingLeft: 24, paddingRight: 24 }
+	}
+});
+
+cxl.component({
 	name: 'docs-root',
 	template: `
 <cxl-router-app>
@@ -1002,7 +1069,8 @@ cxl.component({
 	</cxl-block>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
-	<!--cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item-->
+	<cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item>
+	<cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item>
 	<cxl-hr></cxl-hr>
 	<cxl-block><cxl-t subtitle2>Components</cxl-t></cxl-block>
 	<cxl-item icon="" &="route.link(components)">Overview</cxl-item>

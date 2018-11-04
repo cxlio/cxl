@@ -9,7 +9,7 @@
 	"bugs": "https://github.com/cxlio/cxl/issues",
 	"repository": "https://github.com/cxlio/cxl",
 	"devDependencies": {
-		"@fortawesome/fontawesome-free-solid": "^5.0.13"
+		"@fortawesome/free-solid-svg-icons": "5"
 	},
 	"scripts": {
 		"build-all": "node build; node build-icons",

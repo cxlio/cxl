@@ -4,6 +4,7 @@
 	cxl.ui.meta = {
 
 		'cxl-appbar': {
+			summary: 'The top app bar displays information and actions relating to the current screen.',
 			icon: 'window-maximize'
 		},
 		'cxl-appbar-title': {

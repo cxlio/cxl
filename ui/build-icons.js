@@ -1,5 +1,5 @@
 
-const fa = require('@fortawesome/fontawesome-free-solid');
+const fa = require('@fortawesome/free-solid-svg-icons');
 
 require('../build').build({
 
@@ -22,7 +22,7 @@ require('../build').build({
 					src.push(`${name}:"${code}"`);
 				}
 
-				return `cxl.css.registerFont('Font Awesome\\ 5 Free',{weight:900,url:'https://use.fontawesome.com/releases/v5.0.13/webfonts/fa-solid-900.woff2'});cxl.ui.icons={${src.join(',')}};`;
+				return `cxl.css.registerFont('Font Awesome\\ 5 Free',{weight:900,url:'https://use.fontawesome.com/releases/v5.1.0/webfonts/fa-solid-900.woff2'});cxl.ui.icons={${src.join(',')}};`;
 			}
 		}
 	]

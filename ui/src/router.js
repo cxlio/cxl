@@ -459,6 +459,17 @@ cxl.component({
 });
 
 cxl.component({
+	name: 'cxl-router-appbar',
+	template: `
+<cxl-meta></cxl-meta>
+<cxl-appbar>
+	<cxl-navbar permanent &="content"></cxl-navbar>
+	<cxl-router-title></cxl-router-title>
+</cxl-appbar>
+	`
+});
+
+cxl.component({
 	name: 'cxl-router-app',
 	template: `
 <cxl-meta></cxl-meta>
@@ -466,16 +477,21 @@ cxl.component({
 	<cxl-navbar permanent &="content"></cxl-navbar>
 	<cxl-router-title></cxl-router-title>
 </cxl-appbar>
-<div &=".content location:route"></div>
+<div &=".content">
+	<div &=".router location:route"></div>
+	<div &=".footer content(cxl-router-footer)"></div>
+</div>
 	`,
 	styles: {
 		$: { display: 'flex', flexDirection: 'column', height: '100%' },
 		$large: { paddingLeft: 288 },
 		content: {
-			position: 'relative', flexGrow: 1, overflowY: 'auto', padding: 16,
-			overflowX: 'hidden', display: 'block'
+			position: 'relative', flexGrow: 1, overflowY: 'auto',
+			overflowX: 'hidden'
 		},
-		content$medium: { padding: 32 }
+		footer: { },
+		router: { padding: 16 },
+		router$medium: { padding: 32 }
 	}
 });
 
