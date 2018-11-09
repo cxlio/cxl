@@ -20,19 +20,22 @@ const
 
 			secondary: 'd32f2f', // '#ff5722',
 			surface: '#fff',
+			error: '#b00020',
 
 			onPrimary: '#fff',
 			onSecondary: '#fff',
 			onSurface: '#212121',
+			onError: '#fff',
 
-			danger: '#ff1744'
+			divider: 'rgba(0,0,0,0.12)',
+			font: 'Roboto,-apple-system, BlinkMacSystemFont,"Segoe UI", "Helvetica Neue", Arial, sans-serif'
 		},
 
 		global: {
 			$: {
 				display: 'block',
 				reset: '-webkit-tap-highlight-color:transparent;',
-				fontFamily: '-apple-system, BlinkMacSystemFont,"Segoe UI",Roboto, "Helvetica Neue", Arial, sans-serif'
+				fontFamily: 'var(--font)'
 			},
 			'*': {
 				boxSizing: 'border-box',
@@ -638,7 +641,7 @@ touchable
 		},
 		input$focus: { outline: 0, borderColor: theme.primary },
 		input$inverse: { borderColor: theme.onPrimary, color: theme.onPrimary },
-		input$invalid$touched: { borderColor: theme.danger },
+		input$invalid$touched: { borderColor: theme.error },
 		expand: { scaleX: 1 }
 	}, DisabledCSS ]
 
@@ -1260,24 +1263,21 @@ component({
 component({
 	name: 'cxl-t',
 	styles: {
-		$: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
+		$: { fontWeight: 400, fontSize: 16, marginBottom: 8, letterSpacing: 'normal' },
 		$lastChild: { marginBottom: 0 },
-
 		$inline: { display: 'inline' },
-		$caption: { fontSize: 12 },
-		$h1: { fontWeight: 200, fontSize: 96, marginBottom: 64 },
-		$h2: { fontWeight: 200, fontSize: 60, marginBottom: 48 },
-		$h3: { fontSize: 48, marginBottom: 32 },
-		$h4: { fontSize: 34, marginBottom: 24 },
-		$h5: { fontSize: 24, marginBottom: 16 },
-		$h6: { fontSize: 20, fontWeight: 500, marginBottom: 16 },
-		$subtitle: { fontSize: 16, lineHeight: 22, marginBottom: 0 },
-		$subtitle2: { fontSize: 14, lineHeight: 18, color: 'rgba(0,0,0,0.53)' },
 
-		$primary: { color: theme.primary },
-		$secondary: { color: theme.secondary },
-		$error: { color: theme.danger },
-		$input: { marginBottom: 8, paddingTop: 6, paddingBottom: 6, lineHeight: 20 }
+		$caption: { fontSize: 12, letterSpacing: 0.4 },
+		$h1: { fontWeight: 300, fontSize: 96, marginBottom: 64, letterSpacing: -1.5 },
+		$h2: { fontWeight: 300, fontSize: 60, marginBottom: 48, letterSpacing: -0.5 },
+		$h3: { fontSize: 48, marginBottom: 32 },
+		$h4: { fontSize: 34, marginBottom: 24, letterSpacing: 0.25 },
+		$h5: { fontSize: 24, marginBottom: 16 },
+		$h6: { fontSize: 20, fontWeight: 500, marginBottom: 16, letterSpacing: 0.15 },
+		$subtitle: { fontSize: 16, lineHeight: 22, marginBottom: 0, letterSpacing: 0.15 },
+		$subtitle2: { fontSize: 14, lineHeight: 18, color: 'rgba(0,0,0,0.53)', letterSpacing: 0.1 }
+
+		//$input: { marginBottom: 8, paddingTop: 6, paddingBottom: 6, lineHeight: 20 }
 	}
 });
 
@@ -1337,8 +1337,8 @@ component({
 		inverse: { borderColor: theme.white, color: theme.white },
 		inverse$focus: { borderColor: theme.primary },
 		readonly: { borderStyle: 'dashed' },
-		invalid: { borderColor: theme.danger },
-		invalid$focus: { borderColor: theme.danger },
+		invalid: { borderColor: theme.error },
+		invalid$focus: { borderColor: theme.error },
 		// TODO move to textarea when inheritance works
 		measure: { opacity: 0, whiteSpace: 'pre-wrap' }
 	},

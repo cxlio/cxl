@@ -16,6 +16,13 @@ cxl.component({
 });
 
 cxl.component({
+	name: 'docs-bg',
+	styles: {
+		$: { background: '#eee', elevation: 1 }
+	}
+});
+
+cxl.component({
 	name: 'docs-directive-update',
 	attributes: [ 'directive' ],
 	bindings: 'connect:#connect',

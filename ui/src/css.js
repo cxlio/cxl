@@ -32,6 +32,13 @@ const
 		alignItems: 'align-items',
 		alignSelf: 'align-self',
 		boxSizing: 'box-sizing',
+
+		gridGap: 'grid-gap',
+		gridTemplateRows: 'grid-template-rows',
+		gridTemplateColumns: 'grid-template-columns',
+		gridColumnEnd: 'grid-column-end',
+		gridColumnStart: 'grid-column-start',
+
 		zIndex: 'z-index',
 		marginTop: 'margin-top',
 		marginLeft: 'margin-left',
@@ -262,7 +269,8 @@ class Style
 	'marginLeft', 'marginRight', 'marginBottom', 'margin', 'height', 'width', 'flexBasis',
 	'paddingTop', 'paddingLeft', 'paddingRight', 'paddingBottom', 'fontSize',
 	'padding', 'outline', 'borderBottom', 'borderTop', 'borderLeft', 'borderRight',
-	'border', 'borderRadius', 'borderWidth'
+	'border', 'borderRadius', 'borderWidth',
+	'gridGap'
 ]).forEach(function(name) {
 
 	Object.defineProperty(Style.prototype, name, {
@@ -280,7 +288,9 @@ class Style
   	'textDecoration', 'borderStyle', 'transition', 'textTransform', 'textAlign', 'flexGrow',
   	'flexShrink',
   	'alignContent', 'flexDirection', 'justifyContent', 'whiteSpace', 'scrollBehavior',
-  	'transformOrigin', 'alignSelf'
+  	'transformOrigin', 'alignSelf',
+
+ 	'gridTemplateRows', 'gridTemplateColumns', 'gridColumnEnd', 'gridColumnStart'
  ]).forEach(function(name) {
 
 	Object.defineProperty(Style.prototype, name, {

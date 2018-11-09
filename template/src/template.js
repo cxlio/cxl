@@ -1594,7 +1594,7 @@ function pipes(defs) {
  */
 pipes({
 
-	attribute(val) { return cxl.dom.setAttribute(this.element, this.parameter, val); },
+	attribute(val) { return cxl.dom.setAttribute(this.element, this.parameter || val, val); },
 
 	bool(val) { return val!==undefined && val!==null && val!==false; },
 

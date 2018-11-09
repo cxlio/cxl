@@ -38,9 +38,19 @@ component({
 
 component({
 	name: 'cxl-c',
-	styles: {
-		$flex: { display: 'flex' }
-	}
+	styles: (r => {
+		for (let i=12; i>0; i--)
+			r[4]['$x'+i+'$xlarge'] = r[3]['$l'+i + '$large'] = r[2]['$m'+i+'$medium'] =
+			r[1]['$s'+i+'$small'] ={ gridColumnEnd: 'span ' + i };
+		return r;
+	})([{
+		$: { gridColumnEnd: 'span 12' },
+		$small: { gridColumnEnd: 'auto' },
+ 		$x0: { display: 'none' },
+		$s0: { display: 'none' },
+		$m0: { display: 'none' },
+		$l0: { display: 'none' }
+	}, {}, {}, {}, {} ])
 });
 
 component({
@@ -104,11 +114,27 @@ component({
 	attributes: [ 'rows', 'columns', 'gap' ],
 	bindings: `
 =rows:style.inline(gridTemplateRows)
-=columns:style.inline(gridTemplateColumns)
+=columns:#setColumns
 =gap:style.inline(gridGap)
 	`,
 	styles: {
 		$: { display: 'grid' }
+	}
+}, {
+	setColumns(val, el)
+	{
+		el.style.gridTemplateColumns = val;
+	}
+});
+
+component({
+	name: 'cxl-layout',
+	styles: {
+		$: {
+			display: 'grid', gridTemplateColumns: 'repeat(12, auto)', gridGap: 16,
+			marginLeft: 16, marginRight: 16
+		},
+		$medium: { gridGap: 24, marginLeft: 24, marginRight: 24 }
 	}
 });
 
@@ -142,6 +168,11 @@ component({
 		const style = document.createElement('STYLE');
 		style.innerHTML = 'body{padding:0;margin:0;}';
 		document.head.appendChild(style);
+		const font = cxl.dom('link', {
+			rel: 'stylesheet',
+			href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500'
+		});
+		document.head.appendChild(font);
 	}
 });
 
@@ -188,9 +219,37 @@ component({
 });
 
 component({
-	name: 'cxl-table'
+	name: 'cxl-table',
+	styles: {
+		$: { display: 'grid' }
+	}
 });
 
+component({
+	name: 'cxl-tr',
+	styles: {
+		$: { display: 'flex' }
+	}
+});
+
+component({
+	name: 'cxl-th',
+	styles: {
+		$: {
+			flexGrow: 1, fontSize: 12, color: 'rgba(0,0,0,0.53)',
+			padding: 12, borderBottom: '1px solid ' + theme.divider, lineHeight: 24
+		}
+	}
+});
+
+component({
+	name: 'cxl-td',
+	styles: {
+		$: {
+			flexGrow: 1, padding: 12, borderBottom: '1px solid ' + theme.divider
+		}
+	}
+});
 
 // TODO Optimize this
 class ElementValidation

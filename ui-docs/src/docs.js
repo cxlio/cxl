@@ -866,9 +866,6 @@ cxl.route({
 	path: '*default',
 	title: '@cxl/ui',
 	template: `
-<div>
-	<ui-docs-logo></ui-docs-logo>
-</div>
 <cxl-t h4>Features</cxl-t>
 <ul>
 <li>Lightweight and Simple API. ~30kb</li>
@@ -949,24 +946,63 @@ cxl.each(DEFS, (def, name) => {
 
 cxl.route({
 	path: 'theming',
-	title: 'Theming',
+	title: 'Styles',
 	template: `
+<cxl-t h5>Typography</cxl-t>
+
+<cxl-t>The following font family string is applied to all elements:
+<docs-code>Roboto,-apple-system, BlinkMacSystemFont,"Segoe UI", "Helvetica Neue", Arial, sans-serif</docs-code>
+<p>The <code>Roboto</code> font will not be automatically included. Use the.
+</cxl-t>
+<br>
+<cxl-card>
+<cxl-table style="grid-template-columns:auto auto auto auto">
+
+	<cxl-th>Scale</cxl-th>
+	<cxl-th>Weight</cxl-th>
+	<cxl-th>Size</cxl-th>
+	<cxl-th>Spacing</cxl-th>
+
+	<template &="=styles:each:repeat">
+	<cxl-td><cxl-t &="$key:text:attribute" style="margin-bottom: 0"></cxl-t></cxl-td>
+	<cxl-td &="$weight:text"></cxl-td>
+	<cxl-td &="$size:text"></cxl-td>
+	<cxl-td &="$spacing:text"></cxl-td>
+	</template>
+
+</cxl-table>
+</cxl-card>
+<br>
+<cxl-t h5>Iconography</cxl-t>
+
+<cxl-t h5>Motion</cxl-t>
 <cxl-t h5>Theme Variables</cxl-t>
 <br>
-<template &="=variables:item.each:repeat">
 <cxl-form-group>
-	<cxl-label &="$key:text"></cxl-label>
-	<cxl-input &="$value:@value"></cxl-input>
+	<cxl-label>speed</cxl-label>
+	<cxl-input &="=variables.speed:@value"></cxl-input>
 </cxl-form-group>
-</template>
-
-<cxl-t h5>Color Tool</cxl-t>
 <ui-docs-color-tool &="=variables:@theme"></ui-docs-color-tool>
-</table>
 	`,
+	styles: {
+		iconbox: { display: 'inline-block', width: 80, height: 80, textAlign: 'center' },
+		icon: { fontSize: 24, marginBottom: 8, lineHeight: 40 }
+	},
 	initialize(state)
 	{
+	const
+		meta = cxl.componentFactory.components['cxl-t'].meta.styles,
+		styles = state.styles = [],
+		def = meta.$
+	;
 		state.variables = cxl.ui.theme.variables;
+
+		cxl.each(meta, (s, key) => s.fontSize && styles.push({
+			key: key.slice(1) || 'default',
+			weight: s.fontWeight || def.fontWeight,
+			size: s.fontSize || def.fontSize,
+			spacing: s.letterSpacing || def.letterSpacing
+		}));
 	}
 });
 
@@ -974,8 +1010,33 @@ cxl.route({
 	path: 'layout',
 	title: 'Layout',
 	template: `
+<cxl-t h5>Layout Grid</cxl-t>
 
-	`
+<docs-bg>
+	<cxl-layout>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+		<cxl-c &=".col"></cxl-c>
+	</cxl-layout>
+</docs-bg>
+
+<cxl-t h6>Columns</cxl-t>
+<cxl-t h6>Breakpoints</cxl-t>
+<cxl-t h6>Elevation</cxl-t>
+<cxl-t h6>UI Regions</cxl-t>
+	`,
+	styles: {
+		col: { backgroundColor: 'rgba(255,0,0,0.25)', height: 100 }
+	}
 });
 
 cxl.component({
@@ -1004,6 +1065,8 @@ cxl.component({
 <ui-docs-color label="primaryLight" &="=theme.primaryLight:@color =theme.onPrimary:@text-color"></ui-docs-color>
 <ui-docs-color label="primaryDark" &="=theme.primaryDark:@color =theme.onPrimary:@text-color"></ui-docs-color>
 <ui-docs-color label="secondary" &="=theme.secondary:@color =theme.onSecondary:@text-color"></ui-docs-color>
+<ui-docs-color label="surface" &="=theme.surface:@color =theme.onSurface:@text-color"></ui-docs-color>
+<ui-docs-color label="error" &="=theme.error:@color =theme.onError:@text-color"></ui-docs-color>
 	`
 });
 
@@ -1028,9 +1091,11 @@ cxl.route({
 <cxl-t h5>Available Components</cxl-t>
 <cxl-search-input &="@value:=filter"></cxl-search-input>
 <br>
-<cxl-grid columns="auto auto auto" gap="16px 16px">
+<cxl-grid columns="repeat(12, 1fr)" gap="16px 16px">
 <template &="=components:each:repeat">
+<cxl-c x3 m4 s6>
 	<ui-docs-component-card &="item:@name =filter:#match:show"></ui-docs-component-card>
+</cxl-c>
 </template>
 </cxl-grid>
 	`
@@ -1069,7 +1134,7 @@ cxl.component({
 	</cxl-block>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
-	<cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item>
+	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
 	<cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item>
 	<cxl-hr></cxl-hr>
 	<cxl-block><cxl-t subtitle2>Components</cxl-t></cxl-block>
