@@ -1,0 +1,9 @@
+{
+	"name": "@cxl/ui-angular",
+	"version": "0.0.1",
+	"peerDependencies": {
+		"@cxl/ui": "*",
+		"@angular/core": "*",
+		"@angular/forms": "*"
+	}
+}

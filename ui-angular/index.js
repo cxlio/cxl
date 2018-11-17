@@ -1,14 +1,6 @@
-
-/*const
-	cxl = require('@cxl/ui'),
-	core = require('@angular/core'),
-	forms = require('@angular/forms')
-;*/
-
-import './index';
-
-//import * as core from '@angular/core';
-//import * as forms from '@angular/forms';
+import '@cxl/ui';
+import * as core from '@angular/core';
+import * as forms from '@angular/forms';
 
 class cxlControl {
 

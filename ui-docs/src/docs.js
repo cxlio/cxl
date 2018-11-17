@@ -1050,7 +1050,7 @@ cxl.route({
 <cxl-t h6>Using &lt;script&gt; tag</cxl-t>
 
 <docs-code type="html"><!--
-<script src="node_modules/@cxl/ui/dist"></script>
+<script src="node_modules/@cxl/ui/dist/index.js"></script>
 --></docs-code>
 
 <cxl-t h6>Using Typescript</cxl-t>

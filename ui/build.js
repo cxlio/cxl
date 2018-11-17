@@ -55,18 +55,6 @@ require('../build').build({
 			minify: 'beta.js'
 		},
 		{
-			output: 'cxl-ui-angular.js',
-			src: [
-				'src/ui-angular.js'
-			],
-			minify: 'angular.js'
-		},
-		{
-			output: 'cxl-ui-react.js',
-			src: [ 'src/react.js' ],
-			minify: 'react.js'
-		},
-		{
 			output: 'cxl-ui-debug.js',
 			src: [ 'src/ui-debug.js' ]
 		},
