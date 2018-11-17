@@ -1,5 +1,3 @@
-(cxl => {
-"use strict";
 
 const
 	META = cxl.ui.meta,
@@ -165,6 +163,87 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 				toggle() { this.primary = !this.primary; }
 			}
 		},
+		c: {
+			template: `
+<docs-component name="cxl-c">
+	<docs-demo title="Toolbar Layout"><!--
+<cxl-c primary flex>
+	<cxl-c>Column 1</cxl-c>
+	<cxl-c grow>Column 2</cxl-c>
+	<cxl-c>Column 3</cxl-c>
+</cxl-c>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+
+		card: {
+			template: `
+<docs-component name="cxl-card">
+<docs-usage>
+<cxl-card>
+<cxl-block>
+	<cxl-h5>Title goes here</cxl-h5>
+	Secondary line text Lorem ipsum dolor sit amet
+</cxl-block>
+<cxl-block>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</cxl-block>
+</cxl-card>
+<br>
+<cxl-card>
+<cxl-block flex>
+	<cxl-avatar style="background:#ccc"></cxl-avatar>
+	<cxl-col>
+		<cxl-h6>Card Title</cxl-h6>
+		Secondary Text
+	</cxl-col>
+</cxl-block>
+<cxl-block>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</cxl-block>
+</cxl-card>
+<br>
+<cxl-card>
+<cxl-block flex>
+	<cxl-avatar style="background:#ccc"></cxl-avatar>
+	<cxl-col>
+		<cxl-h6>Card Title</cxl-h6>
+		Secondary Text
+	</cxl-col>
+</cxl-block>
+<docs-placeholder style="height:180px"></docs-placeholder>
+<cxl-block>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+</cxl-block>
+<div>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</div>
+</cxl-card>
+<br>
+<cxl-card>
+<docs-placeholder style="height:180px"></docs-placeholder>
+<cxl-block>
+	<cxl-h6>Card Title</cxl-h6>
+	Secondary Text
+</cxl-block>
+<cxl-hr></cxl-hr>
+<cxl-block>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+</cxl-block>
+<cxl-block compact>
+	<cxl-button flat>Action 1</cxl-button>
+	<cxl-button flat>Action 2</cxl-button>
+</cxl-block>
+</cxl-card>
+
+</docs-usage>
+</docs-component>
+			`
+		},
 		checkbox: {
 			template: `
 <docs-component name="cxl-checkbox">
@@ -308,6 +387,39 @@ Checked: <span &="=test:text"></span>
 </cxl-form-group>
 	--></docs-demo>
 	</docs-attribute>
+</docs-component>
+			`
+		},
+		grid: {
+			template: `
+<docs-component name="cxl-grid">
+<docs-demo &="owner:@owner"><!--
+<div style="height: 200px">
+<cxl-grid>
+	<cxl-row>
+		<cxl-appbar><cxl-appbar-title>Hello</cxl-appbar-title></cxl-appbar>
+	</cxl-row>
+	<cxl-row>
+		<cxl-grid>
+			<cxl-row>
+				<cxl-tabs>
+					<cxl-tab selected>Tab 1</cxl-tab>
+					<cxl-tab>Tab 2</cxl-tab>
+				</cxl-tabs>
+			</cxl-row>
+			<cxl-row>
+				<cxl-block>
+					<cxl-t h1>Scrollabe Content</cxl-t>
+					<cxl-t>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+					</cxl-t>
+				</cxl-block>
+			</cxl-row>
+		</cxl-grid>
+	</cxl-row>
+</cxl-grid>
+</div>
+--></docs-demo>
 </docs-component>
 			`
 		},
@@ -619,6 +731,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-attribute>
 			`
 		},
+		'search-input': {
+			template: `
+<docs-component name="cxl-search-input">
+<docs-demo><!--
+<cxl-search-input></cxl-search-input>
+--></docs-demo>
+</docs-component>
+			`
+		},
 		select: {
 			template: `
 <docs-component name="cxl-select">
@@ -778,26 +899,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		t: {
 			template: `
 <docs-component name="cxl-t">
-	<docs-demo><!--
-<cxl-t>
-Regular Text: <br>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</cxl-t>
-<cxl-t h1>H1 Text</cxl-t>
-<cxl-t h2>H2 Text</cxl-t>
-<cxl-t h3>H3 Text</cxl-t>
-<cxl-t h4>H4 Text</cxl-t>
-<cxl-t h5>H5 Text</cxl-t>
-<cxl-t h6>H6 Text</cxl-t>
-<cxl-t caption>Caption</cxl-pt>
-<cxl-t subtitle>Subtitle</cxl-t>
-<cxl-t subtitle2>Subtitle 2</cxl-t>
-<cxl-t input>Subtitle</cxl-t>
-
-<cxl-t primary>Primary Color Text</cxl-t>
-<cxl-t secondary>Secondary Color Text</cxl-t>
-<cxl-t error>Error Text</cxl-t>
-	--></docs-demo>
+	<uid-typography></uid-typography>
 </docs-component>
 			`
 		},
@@ -864,31 +966,67 @@ cxl.route({
 	id: 'home',
 	defaultRoute: true,
 	path: '*default',
-	title: '@cxl/ui',
+	title: 'Home',
 	template: `
-<cxl-t h4>Features</cxl-t>
-<ul>
-<li>Lightweight and Simple API. ~30kb</li>
-<li>Focus on Performance</li>
-<li>Portable and Framework Agnostic</li>
-<li>Follows Accessibility Standards</li>
-</ul>
+<cxl-grid columns="1fr 1fr" style="margin-top: 48px">
+	<cxl-c sm2 md1>
+		<cxl-t h2>@cxl/ui</cxl-t>
+		<cxl-t subtitle>
+			@cxl/ui is an open source collection of lightweight, production ready Web Components.
+		</cxl-t>
+		<br>
+		<p>
+		<a href="#getting-started"><cxl-button secondary>Get Started!</cxl-button></a>
+		</p>
+		<br>
+	</cxl-c>
+	<cxl-c sm2 md1>
+<img src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; "></img>
+	</cxl-c>
 
+	<cxl-c xs2><cxl-t h4>Features</cxl-t></cxl-c>
+
+	<cxl-c>
+		<cxl-t h5><cxl-icon icon="fighter-jet"></cxl-icon> &nbsp;Lightweight and Fast</cxl-t>
+		<p>The entire library is less than 50Kb. Intuitive, consistent and easy to use API. Components are fine-tuned for performance to provide a native-like experience.
+		</p>
+	</cxl-c>
+	<cxl-c>
+		<cxl-t h5><cxl-icon icon="mobile-alt"></cxl-icon> &nbsp;Responsive</cxl-t>
+		<p>All components are responsive out of the box for any device size and shape. No special settings needed.</p>
+	</cxl-c>
+	<cxl-c>
+		<cxl-t h5><cxl-icon icon="code-branch"></cxl-icon> &nbsp;Open Source</cxl-t>
+		<p>
+Library and Source Code released under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL</a> open source license. The complete library source code is hosted on <a href="https://github.com/cxlio/cxl">Github</a>
+		</p>
+	</cxl-c>
+	<cxl-c>
+		<cxl-t h5><cxl-icon icon="eye"></cxl-icon> &nbsp;Accessibility Focused</cxl-t>
+		<p>Accessibility support for visually impaired users, and users with keyboard navigation only. Section 508 and WCAG 2 compliant.</p>
+	</cxl-c>
+
+	<cxl-c>
+		<cxl-t h5><cxl-icon icon="globe"></cxl-icon> &nbsp;Framework Agnostic</cxl-t>
+		<p>No dependencies, No polyfills. Works out of the box on all major browsers. Optional <a href="#getting-started">plugins</a> for popular frameworks are included.
+		</p>
+	</cxl-c>
+	<cxl-c>
+		<cxl-t h5><cxl-icon icon="palette"></cxl-icon> &nbsp;Flexible Theming</cxl-t>
+		<p>Styles follow the <a href="https://material.io">Material Design</a> guidelines.
+Components are easily styled via attributes and CSS variables. See <a href="#theming">Theming</a> for more information.
+		</p>
+	</cxl-c>
+</cxl-grid>
+<br>
 <cxl-t h4>Browser Support</cxl-t>
+
 <ul>
 	<li>Chrome: 49</li>
 	<li>Firefox: 61</li>
 	<li>Safari: 11.1</li>
 	<li>iOS Safari: 10.3</li>
 	<li>Edge: 17</li>
-</ul>
-<br>
-<!--<cxl-t h4>License</cxl-t>
-<p>Library and Source Code released under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL</a> open source license.</p>
-<br>-->
-<cxl-t h4>Source Code</cxl-t>
-<ul>
-	<li>Feature requests and bug reports: <a href="https://github.com/cxlio/cxl">Github</a></li>
 </ul>
 	`
 });
@@ -900,17 +1038,34 @@ cxl.route({
 	template: `
 <cxl-t h4>Installation</cxl-t>
 
-<cxl-t h5>npm</cxl-t>
+<cxl-t h5>Using NPM</cxl-t>
 
 <docs-code type="bash"><!--npm install @cxl/ui--></docs-code>
+<br>
 
+<cxl-t h4>Usage</cxl-t>
+
+<cxl-t h5>Include it in your application</cxl-t>
+<br>
+<cxl-t h6>Using &lt;script&gt; tag</cxl-t>
+
+<docs-code type="html"><!--
+<script src="node_modules/@cxl/ui/dist"></script>
+--></docs-code>
+
+<cxl-t h6>Using Typescript</cxl-t>
+
+<docs-code type="javascript"><!--
+import "@cxl/ui";
+--></docs-code>
+<br>
 <cxl-t h5>Available Modules</cxl-t>
-
+<br>
 <cxl-t h6>@cxl/ui <cxl-t inline caption>dist/index.js</cxl-t></cxl-t>
 <p>The main module.</p>
 
 <cxl-t h6>@cxl/ui/debug <cxl-t inline caption>dist/debug.js</cxl-t></cxl-t>
-<p>Debug mode.</p>
+<p>Include this module to enable debug mode.</p>
 
 <cxl-t h6>@cxl/ui/icons <cxl-t inline caption>dist/icons.js</cxl-t></cxl-t>
 <p>FontAwesome Icon support. Use with <a href="#cxl-icon"><code>&lt;cxl-icon></code></a> Component.</p>
@@ -918,18 +1073,8 @@ cxl.route({
 <cxl-t h6>@cxl/ui/react <cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
 <p>ReactJS compatibility module. See <a href="react.html">Demo</a>.</p>
 
-
-
-<!--
-<cxl-t h6>cxl-ui-angular</cxl-t>
-<p>Angular compatibility module.</p>
-
-<cxl-t h4>Frequently Asked Questions</cxl-t>
-
-<cxl-t h6>ui-icons-material</cxl-t>
-<p>Material Icon Support</p>
-
--->
+<cxl-t h5>@cxl/ui/angular </cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
+<p>Angular compatibility module. See <a href="angular.html">Demo</a>.</p>
 	`
 });
 
@@ -948,35 +1093,18 @@ cxl.route({
 	path: 'theming',
 	title: 'Styles',
 	template: `
-<cxl-t h5>Typography</cxl-t>
-
+<cxl-t h4>Typography</cxl-t>
+<br>
 <cxl-t>The following font family string is applied to all elements:
 <docs-code>Roboto,-apple-system, BlinkMacSystemFont,"Segoe UI", "Helvetica Neue", Arial, sans-serif</docs-code>
-<p>The <code>Roboto</code> font will not be automatically included. Use the.
-</cxl-t>
+<p>Note: The <code>Roboto</code> font will not be automatically included.</p>
+<p>The <uid-link tag="cxl-t"></uid-link> component can be used to apply styles to text.</p>
 <br>
-<cxl-card>
-<cxl-table style="grid-template-columns:auto auto auto auto">
-
-	<cxl-th>Scale</cxl-th>
-	<cxl-th>Weight</cxl-th>
-	<cxl-th>Size</cxl-th>
-	<cxl-th>Spacing</cxl-th>
-
-	<template &="=styles:each:repeat">
-	<cxl-td><cxl-t &="$key:text:attribute" style="margin-bottom: 0"></cxl-t></cxl-td>
-	<cxl-td &="$weight:text"></cxl-td>
-	<cxl-td &="$size:text"></cxl-td>
-	<cxl-td &="$spacing:text"></cxl-td>
-	</template>
-
-</cxl-table>
-</cxl-card>
-<br>
-<cxl-t h5>Iconography</cxl-t>
-
-<cxl-t h5>Motion</cxl-t>
-<cxl-t h5>Theme Variables</cxl-t>
+<uid-typography></uid-typography>
+<br><br>
+<cxl-t h4>Iconography</cxl-t>
+<p>Icons are provided by the <uid-link tag="cxl-icon"></uid-link> component.</p>
+<cxl-t h4>Theme Variables</cxl-t>
 <br>
 <cxl-form-group>
 	<cxl-label>speed</cxl-label>
@@ -988,21 +1116,10 @@ cxl.route({
 		iconbox: { display: 'inline-block', width: 80, height: 80, textAlign: 'center' },
 		icon: { fontSize: 24, marginBottom: 8, lineHeight: 40 }
 	},
+
 	initialize(state)
 	{
-	const
-		meta = cxl.componentFactory.components['cxl-t'].meta.styles,
-		styles = state.styles = [],
-		def = meta.$
-	;
 		state.variables = cxl.ui.theme.variables;
-
-		cxl.each(meta, (s, key) => s.fontSize && styles.push({
-			key: key.slice(1) || 'default',
-			weight: s.fontWeight || def.fontWeight,
-			size: s.fontSize || def.fontSize,
-			spacing: s.letterSpacing || def.letterSpacing
-		}));
 	}
 });
 
@@ -1014,18 +1131,20 @@ cxl.route({
 
 <docs-bg>
 	<cxl-layout>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
-		<cxl-c &=".col"></cxl-c>
+		<cxl-c xs3 sm2 lg1 &=".col"></cxl-c>
+		<cxl-c xs3 sm2 lg1 &=".col"></cxl-c>
+		<cxl-c xs3 sm2 lg1 &=".col"></cxl-c>
+		<cxl-c xs3 sm2 lg1 &=".col"></cxl-c>
+
+		<cxl-c xs0 sm2 lg1 &=".col"></cxl-c>
+		<cxl-c xs0 sm2 lg1 &=".col"></cxl-c>
+
+		<cxl-c xs0 lg1 &=".col"></cxl-c>
+		<cxl-c xs0 lg1 &=".col"></cxl-c>
+		<cxl-c xs0 lg1 &=".col"></cxl-c>
+		<cxl-c xs0 lg1 &=".col"></cxl-c>
+		<cxl-c xs0 lg1 &=".col"></cxl-c>
+		<cxl-c xs0 lg1 &=".col"></cxl-c>
 	</cxl-layout>
 </docs-bg>
 
@@ -1054,6 +1173,52 @@ cxl.component({
 	`,
 	styles: {
 		$: { padding: 16 }
+	}
+});
+
+cxl.component({
+	name: 'uid-link',
+	attributes: ['tag'],
+	template: '<a &="=tag:#setHref"><code>&lt;<x &="=tag:text"></x>&gt;</code></a>'
+}, {
+	setHref(val, el) { el.href='#'+val; }
+});
+
+cxl.component({
+	name: 'uid-typography',
+	template: `
+<cxl-card>
+<cxl-table style="grid-template-columns:auto auto auto auto">
+
+	<cxl-th>Scale</cxl-th>
+	<cxl-th>Weight</cxl-th>
+	<cxl-th>Size</cxl-th>
+	<cxl-th>Spacing</cxl-th>
+
+	<template &="=styles:each:repeat">
+	<cxl-td><cxl-t &="$key:text:attribute" style="margin-bottom: 0"></cxl-t></cxl-td>
+	<cxl-td &="$weight:text"></cxl-td>
+	<cxl-td &="$size:text"></cxl-td>
+	<cxl-td &="$spacing:text"></cxl-td>
+	</template>
+
+</cxl-table>
+</cxl-card>
+	`,
+
+	initialize(state)
+	{
+	const
+		meta = cxl.componentFactory.components['cxl-t'].meta.styles,
+		styles = state.styles = [],
+		def = meta.$
+	;
+		cxl.each(meta, (s, key) => s.fontSize && styles.push({
+			key: key.slice(1) || 'default',
+			weight: s.fontWeight || def.fontWeight,
+			size: s.fontSize || def.fontSize,
+			spacing: s.letterSpacing || def.letterSpacing
+		}));
 	}
 });
 
@@ -1093,16 +1258,20 @@ cxl.route({
 <br>
 <cxl-grid columns="repeat(12, 1fr)" gap="16px 16px">
 <template &="=components:each:repeat">
-<cxl-c x3 m4 s6>
-	<ui-docs-component-card &="item:@name =filter:#match:show"></ui-docs-component-card>
+<cxl-c xl3 md4 sm6 &="item:#setKey =filter:#match:show">
+	<ui-docs-component-card &="item:@name"></ui-docs-component-card>
 </cxl-c>
 </template>
 </cxl-grid>
 	`
 },{
+	setKey(name, el)
+	{
+		el.dataset.key = name;
+	},
 	match(val, el)
 	{
-		return !val || el.name.indexOf(val)!==-1;
+		return !val || el.dataset.key.indexOf(val)!==-1;
 	},
 
 	components: COMPONENTS
@@ -1134,18 +1303,23 @@ cxl.component({
 	</cxl-block>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
-	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
+	<cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item>
 	<cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item>
 	<cxl-hr></cxl-hr>
 	<cxl-block><cxl-t subtitle2>Components</cxl-t></cxl-block>
 	<cxl-item icon="" &="route.link(components)">Overview</cxl-item>
 	<template &="=components:each:repeat">
-	<cxl-item icon="" &="item:route.link">&lt;<span &="item:text"></span>&gt;</cxl-item>
+	<cxl-item icon="" &="item:route.link">
+		&lt;<span &="item:text"></span>&gt;
+		<cxl-t &="item:#isBeta:show" caption inline>beta</cxl-t>
+	</cxl-item>
 	</template>
 </cxl-router-app>
 	`
 }, {
-	components: COMPONENTS
+	components: COMPONENTS,
+	isBeta(tag)
+	{
+		return !!(META[tag] && META[tag].beta);
+	}
 });
-
-})(this.cxl);

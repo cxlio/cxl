@@ -1,5 +1,8 @@
 
 const
+	header = () => `(cxl=>{"use strict";`,
+	footer = () => `})(exports?exports.cxl||(exports.cxl={}):window.cxl||(window.cxl={}))`,
+
 	template = [
 		'../template/src/core.js',
 		'../rx/index.js',
@@ -54,9 +57,6 @@ require('../build').build({
 		{
 			output: 'cxl-ui-angular.js',
 			src: [
-				...template,
-				...ui,
-				'dist/cxl-ui-icons.js',
 				'src/ui-angular.js'
 			],
 			minify: 'angular.js'
@@ -65,10 +65,6 @@ require('../build').build({
 			output: 'cxl-ui-react.js',
 			src: [ 'src/react.js' ],
 			minify: 'react.js'
-		},
-		{
-			output: 'cxl-ui-ajax.js',
-			src: [ 'src/ajax.js' ]
 		},
 		{
 			output: 'cxl-ui-debug.js',

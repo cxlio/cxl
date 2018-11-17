@@ -198,25 +198,24 @@ cxl.component({
 	name: 'docs-component-card',
 	attributes: [ 'name', 'icon', 'tags' ],
 	template: `
-<cxl-card>
-	<cxl-c flex>
-		<a &="=name:route.link"><cxl-icon &=".icon =icon:@icon"></cxl-icon></a>
-		<cxl-block>
-			<a &="=name:route.link"><cxl-t subtitle>&lt;<x &="=name:text"></x>&gt;</cxl-t></a>
-			<!--<cxl-t caption><cxl-icon &=".tags" icon="tags"></cxl-icon>
-			<template &="=tags:each:repeat">
-				<span&="item:text"></span>
-			</template>
-			</cxl-t>-->
-		</cxl-block>
-	</cxl-c>
+<cxl-card &=".card">
+	<a &="=name:route.link"><cxl-icon &=".icon =icon:@icon"></cxl-icon></a>
+	<cxl-c grow>
+		<a &="=name:route.link"><cxl-t subtitle>&lt;<x &="=name:text"></x>&gt;</cxl-t></a>
+		<cxl-t caption><cxl-icon &=".tags" icon="tags"></cxl-icon>
+		<template &="=tags:each:repeat">
+			<span &="item:text"></span>
+		</template>
+		</cxl-t>
+	</cxl>
 </cxl-card>
 	`,
 	styles: {
-		tags: { color: '#ccc' },
+		card: { padding: 16, display: 'flex' },
+		tags: { color: '#ccc', marginTop: 8 },
 		icon: {
 			width: 80, height: 80, lineHeight: 80, fontSize: 48, textAlign: 'center',
-			backgroundColor: '#ccc', color: '#fff'
+			backgroundColor: '#ccc', color: '#fff', marginRight: 16
 		}
 	}
 });
@@ -226,7 +225,7 @@ cxl.component({
 	attributes: [ 'name' ],
 	template: `
 <cxl-t h5>Basic Usage</cxl-t>
-<div &="content(docs-usage, docs-demo)"></div>
+<div &="content"></div>
 <br>
 <cxl-t h5>API</cxl-t>
 <div &="=anchors:show">

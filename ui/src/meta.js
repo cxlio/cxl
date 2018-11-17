@@ -17,8 +17,13 @@
 		'cxl-button': {
 			icon: 'hand-pointer'
 		},
+		'cxl-c': {
+			beta: true,
+			icon: 'columns'
+		},
 		'cxl-card': {
-			icon: 'address-card'
+			icon: 'address-card',
+			beta: true
 		},
 		'cxl-checkbox': {
 			icon: 'check-square'
@@ -40,6 +45,10 @@
 		},
 		'cxl-form-group': {
 			icon: 'edit'
+		},
+		'cxl-grid': {
+			beta: true,
+			icon: 'th'
 		},
 		'cxl-hr': {
 			icon: 'minus'
@@ -73,6 +82,10 @@
 		},
 		'cxl-radio': {
 			icon: 'dot-circle'
+		},
+		'cxl-search-input': {
+			beta: true,
+			icon: 'search'
 		},
 		'cxl-select': {
 			icon: 'caret-square-down'

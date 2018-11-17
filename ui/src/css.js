@@ -18,6 +18,10 @@ const
 			keyframes: '0% { transform: rotate(0); } to { transform: rotate(360deg); }',
 			value: 'cxl-pulse 1s infinite steps(8)'
 		},
+		fadeIn: {
+			keyframes: '0% { display: block; opacity: 0; } to { opacity: 1 }',
+			value: 'cxl-fadeIn var(--speed) linear'
+		},
 		wait: {
 			keyframes: `
 0% { transform: translateX(0) scaleX(0) }

@@ -37,43 +37,6 @@ component({
 });
 
 component({
-	name: 'cxl-c',
-	styles: (r => {
-		for (let i=12; i>0; i--)
-			r[4]['$x'+i+'$xlarge'] = r[3]['$l'+i + '$large'] = r[2]['$m'+i+'$medium'] =
-			r[1]['$s'+i+'$small'] ={ gridColumnEnd: 'span ' + i };
-		return r;
-	})([{
-		$: { gridColumnEnd: 'span 12' },
-		$small: { gridColumnEnd: 'auto' },
- 		$x0: { display: 'none' },
-		$s0: { display: 'none' },
-		$m0: { display: 'none' },
-		$l0: { display: 'none' }
-	}, {}, {}, {}, {} ])
-});
-
-component({
-	name: 'cxl-card',
-	styles: { $: {
-		elevation: 1, borderRadius: 2, backgroundColor: theme.surface,
-		color: theme.onSurface
-	} }
-});
-
-component({
-	name: 'cxl-col',
-	attributes: [ 'grow' ],
-	styles: {
-		$: { display: 'block', flexShrink: 0 },
-		$small: { marginLeft: 16, display: 'inline-block' },
-		$large: { marginLeft: 24 },
-		$grow: { flexGrow: 1, flexShrink: 1 },
-		$firstChild: { marginLeft: 0 }
-	}
-});
-
-component({
 	name: 'cxl-form',
 
 	events: [ 'submit' ],
@@ -106,24 +69,6 @@ keypress(enter):#onSubmit:host.trigger(submit)
 		}
 
 		ev.stopPropagation();
-	}
-});
-
-component({
-	name: 'cxl-grid',
-	attributes: [ 'rows', 'columns', 'gap' ],
-	bindings: `
-=rows:style.inline(gridTemplateRows)
-=columns:#setColumns
-=gap:style.inline(gridGap)
-	`,
-	styles: {
-		$: { display: 'grid' }
-	}
-}, {
-	setColumns(val, el)
-	{
-		el.style.gridTemplateColumns = val;
 	}
 });
 
@@ -177,31 +122,6 @@ component({
 });
 
 component({
-	name: 'cxl-row',
-	styles: {
-		$: { display: 'flex' }
-	}
-});
-
-component({
-	name: 'cxl-search-input',
-	events: [ 'change' ],
-	attributes: [ 'value' ],
-	template: `
-<cxl-icon icon="search" &=".icon"></cxl-icon>
-<input &="value:=value =value:host.trigger(change) .input" placeholder="Search"></input>
-	`,
-	styles: {
-		$: { elevation: 1, position: 'relative', padding: 16, paddingBottom: 14, fontSize: 18 },
-		icon: { position: 'absolute', top: 18, color: theme.grayLighter },
-		input: {
-			outline: 0, border: 0, width: '100%',
-			lineHeight: 24, padding: 0, paddingLeft: 48, fontSize: 18
-		}
-	}
-});
-
-component({
 	name: 'cxl-submit',
 	extend: 'cxl-button',
 	template: `
@@ -222,13 +142,6 @@ component({
 	name: 'cxl-table',
 	styles: {
 		$: { display: 'grid' }
-	}
-});
-
-component({
-	name: 'cxl-tr',
-	styles: {
-		$: { display: 'flex' }
 	}
 });
 

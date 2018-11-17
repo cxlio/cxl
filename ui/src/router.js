@@ -490,8 +490,10 @@ cxl.component({
 			overflowX: 'hidden'
 		},
 		footer: { },
-		router: { padding: 16 },
-		router$medium: { padding: 32 }
+		router: { margin: 16 },
+		router$medium: { margin: 32 },
+		router$large: { margin: 64 },
+		router$xlarge: { width: 1200, marginLeft: 'auto', marginRight: 'auto' }
 	}
 });
 

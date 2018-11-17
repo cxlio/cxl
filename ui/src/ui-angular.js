@@ -1,8 +1,14 @@
 
-const
+/*const
+	cxl = require('@cxl/ui'),
 	core = require('@angular/core'),
 	forms = require('@angular/forms')
-;
+;*/
+
+import './index';
+
+//import * as core from '@angular/core';
+//import * as forms from '@angular/forms';
 
 class cxlControl {
 
@@ -57,10 +63,11 @@ core.Directive({
 	host: {'(change)': 'onChange($event.target.value)', '(blur)': 'onTouched()'}
 })(cxlControl);
 
-exports.cxlModule = function cxlModule() { };
+export function cxlModule() { }
 
 core.NgModule({
 	declarations: [ cxlControl ],
+	schemas: [ core.CUSTOM_ELEMENTS_SCHEMA ],
 	exports: [ cxlControl ]
-})(exports.cxlModule);
+})(cxlModule);
 

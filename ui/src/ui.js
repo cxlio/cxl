@@ -14,16 +14,16 @@ const
 
 			speed: '0.2s',
 
-			primary: '#009688',
-			primaryLight: '#52c7b8',
-			primaryDark: '#00796b',
+			primary: '#344955',
+			primaryLight: '#232f34',
+			primaryDark: '#4a6572',
 
-			secondary: 'd32f2f', // '#ff5722',
+			secondary: '#f9aa33', // '#ff5722',
 			surface: '#fff',
 			error: '#b00020',
 
 			onPrimary: '#fff',
-			onSecondary: '#fff',
+			onSecondary: '#000',
 			onSurface: '#212121',
 			onError: '#fff',
 
@@ -357,6 +357,33 @@ component({
 });
 
 component({
+	name: 'cxl-c',
+	styles: (r => {
+		for (let i=12; i>0; i--)
+			r[5]['$xl'+i+'$xlarge'] = r[4]['$lg'+i + '$large'] = r[3]['$md'+i+'$medium'] =
+			r[2]['$sm'+i+'$small'] = r[1]['$xs'+i] = { display: 'block', gridColumnEnd: 'span ' + i };
+		return r;
+	})([{
+		$: { gridColumnEnd: 'span 12', flexShrink: 0 },
+		$grow: { flexGrow: 1, flexShrink: 1 },
+		$small: { gridColumnEnd: 'auto' },
+ 		$xl0$xlarge: { display: 'none' },
+		$lg0$large: { display: 'none' },
+		$md0$medium: { display: 'none' },
+		$sm0$small: { display: 'none' },
+		$xs0: { display: 'none' }
+	}, {}, {}, {}, {}, {} ])
+});
+
+component({
+	name: 'cxl-card',
+	styles: { $: {
+		elevation: 1, borderRadius: 2, backgroundColor: theme.surface,
+		color: theme.onSurface
+	} }
+});
+
+component({
 	name: 'cxl-checkbox',
 	template: `
 <span &=".focusCircle .focusCirclePrimary"></span>
@@ -578,6 +605,26 @@ on(cxl-form.register):#onChange on(focusable.touched):#update on(invalid):#updat
 		}
 	}
 
+});
+
+component({
+	name: 'cxl-grid',
+	attributes: [ 'rows', 'columns', 'gap' ],
+	bindings: `
+=rows:style.inline(gridTemplateRows)
+=columns:#setColumns
+=gap:style.inline(gridGap)
+	`,
+	styles: {
+		$: { display: 'grid' }
+	}
+}, {
+	// TODO
+	gap: '16px 16px',
+	setColumns(val, el)
+	{
+		el.style.gridTemplateColumns = val;
+	}
 });
 
 component({
@@ -822,7 +869,7 @@ action:host.trigger(action)
 			cursor: 'pointer', color: theme.onSurface, lineHeight: 48, paddingRight: 16,
 			paddingLeft: 16, backgroundColor: theme.surface
 		},
-		$selected: { backgroundColor: theme.primaryLight }
+		$selected: { backgroundColor: theme.primaryLight, color: theme.onPrimary }
 	}
 }, {
 	value: null
@@ -938,6 +985,24 @@ disconnect:#unregister
 		{
 			this.checked = true;
 			this.update();
+		}
+	}
+});
+
+component({
+	name: 'cxl-search-input',
+	events: [ 'change' ],
+	attributes: [ 'value' ],
+	template: `
+<cxl-icon icon="search" &=".icon"></cxl-icon>
+<input &="value:=value =value:host.trigger(change) .input" placeholder="Search"></input>
+	`,
+	styles: {
+		$: { elevation: 1, position: 'relative', padding: 16, paddingBottom: 14, fontSize: 18 },
+		icon: { position: 'absolute', top: 18, color: theme.grayLighter },
+		input: {
+			outline: 0, border: 0, width: '100%',
+			lineHeight: 24, padding: 0, paddingLeft: 48, fontSize: 18
 		}
 	}
 });
@@ -1301,12 +1366,14 @@ component({
 
 component({
 	name: 'cxl-tabs',
+	template: `<div &=".content content"></div><div &=".selected"></div>`,
 	styles: {
 		$: {
 			backgroundColor: theme.primary, color: theme.onPrimary,
-			border: 0, display: 'flex', overflowX: 'auto', flexShrink: 0
+			display: 'block', flexShrink: 0
 		},
-		$small: { display: 'block' }
+		content: { display: 'flex', overflowX: 'auto' },
+		content$small: { display: 'block' }
 	}
 });
 
