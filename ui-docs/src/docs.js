@@ -1,3 +1,4 @@
+(cxl => { "use strict";
 
 const
 	META = cxl.ui.meta,
@@ -1055,26 +1056,21 @@ cxl.route({
 
 <cxl-t h6>Using Typescript</cxl-t>
 
-<docs-code type="javascript"><!--
-import "@cxl/ui";
---></docs-code>
+<docs-code type="javascript"><!--import "@cxl/ui";--></docs-code>
 <br>
-<cxl-t h5>Available Modules</cxl-t>
+<cxl-t h5>Optional Modules</cxl-t>
 <br>
-<cxl-t h6>@cxl/ui <cxl-t inline caption>dist/index.js</cxl-t></cxl-t>
-<p>The main module.</p>
-
-<cxl-t h6>@cxl/ui/debug <cxl-t inline caption>dist/debug.js</cxl-t></cxl-t>
+<cxl-t h6>@cxl/ui/dist/debug.js</cxl-t>
 <p>Include this module to enable debug mode.</p>
 
-<cxl-t h6>@cxl/ui/icons <cxl-t inline caption>dist/icons.js</cxl-t></cxl-t>
+<cxl-t h6>@cxl/ui/dist/icons.js</cxl-t>
 <p>FontAwesome Icon support. Use with <a href="#cxl-icon"><code>&lt;cxl-icon></code></a> Component.</p>
 
-<cxl-t h6>@cxl/ui/react <cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
+<!--cxl-t h6>@cxl/ui/react <cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
 <p>ReactJS compatibility module. See <a href="react.html">Demo</a>.</p>
 
 <cxl-t h5>@cxl/ui/angular </cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
-<p>Angular compatibility module. See <a href="angular.html">Demo</a>.</p>
+<p>Angular compatibility module. See <a href="angular.html">Demo</a>.</p-->
 	`
 });
 
@@ -1104,11 +1100,16 @@ cxl.route({
 <br><br>
 <cxl-t h4>Iconography</cxl-t>
 <p>Icons are provided by the <uid-link tag="cxl-icon"></uid-link> component.</p>
+<br>
 <cxl-t h4>Theme Variables</cxl-t>
 <br>
 <cxl-form-group>
-	<cxl-label>speed</cxl-label>
+	<cxl-label>Animation Speed (--cxl-speed)</cxl-label>
 	<cxl-input &="=variables.speed:@value"></cxl-input>
+</cxl-form-group>
+<cxl-form-group>
+	<cxl-label>Default Font (--cxl-font)</cxl-label>
+	<cxl-input &="=variables.font:@value"></cxl-input>
 </cxl-form-group>
 <ui-docs-color-tool &="=variables:@theme"></ui-docs-color-tool>
 	`,
@@ -1304,7 +1305,7 @@ cxl.component({
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
 	<cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item>
-	<cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item>
+	<!--cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item-->
 	<cxl-hr></cxl-hr>
 	<cxl-block><cxl-t subtitle2>Components</cxl-t></cxl-block>
 	<cxl-item icon="" &="route.link(components)">Overview</cxl-item>
@@ -1323,3 +1324,5 @@ cxl.component({
 		return !!(META[tag] && META[tag].beta);
 	}
 });
+
+})(this.cxl);

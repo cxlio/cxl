@@ -3,6 +3,11 @@
 
 	cxl.ui.meta = {
 
+		'theme-variables': {
+			speed: { label: 'Animation Speed', type: 'time' },
+			font: { label: 'Default Font', type: 'string' }
+		},
+
 		'cxl-appbar': {
 			summary: 'The top app bar displays information and actions relating to the current screen.',
 			icon: 'window-maximize'

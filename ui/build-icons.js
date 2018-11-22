@@ -6,8 +6,8 @@ require('../build').build({
 	outputDir: 'dist',
 	targets: [
 		{
-			output: 'cxl-ui-icons.js',
-			src: function() {
+			output: 'icons.js',
+			src() {
 				var src = [], icon, name;
 
 				for (var i in fa)

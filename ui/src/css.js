@@ -106,7 +106,7 @@ class Theme {
 				cxl.css.registerFont(i, theme.fonts[i]);
 
 		for (i in theme.variables)
-			this[i] = 'var(--' + i + ')';
+			this[i] = 'var(--cxl-' + i + ')';
 
 		for (i in theme.global)
 			cxl.css.globalStyles.insertRule(i, theme.global[i]);
@@ -117,7 +117,7 @@ class Theme {
 		Object.assign(this.variables, variables);
 
 		for (var i in this.variables)
-			this[i] = 'var(--' + i + ')';
+			this[i] = 'var(--cxl-' + i + ')';
 
 		this.root.applyStyles();
 	}
@@ -254,7 +254,7 @@ class Style
 
 		if (vars)
 			for (i in vars)
-				result += '--' + i + ': ' + vars[i] + ';';
+				result += '--cxl-' + i + ': ' + vars[i] + ';';
 
 		for (i in this.$style)
 		{

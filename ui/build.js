@@ -8,6 +8,7 @@ const
 		'../rx/index.js',
 		'../template/src/template.js'
 	],
+
 	ui = [
 		'src/component.js',
 		'src/css.js',

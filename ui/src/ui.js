@@ -35,11 +35,11 @@ const
 			$: {
 				display: 'block',
 				reset: '-webkit-tap-highlight-color:transparent;',
-				fontFamily: 'var(--font)'
+				fontFamily: 'var(--cxl-font)'
 			},
 			'*': {
 				boxSizing: 'border-box',
-				transition: 'opacity var(--speed), transform var(--speed), box-shadow var(--speed), filter var(--speed)',
+				transition: 'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)',
 			}
 		}
 
@@ -575,7 +575,7 @@ component({
 		error: { color: theme.danger, borderColor: theme.danger },
 		content: { position: 'relative' },
 		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75 },
-		label: { fontSize: 12, lineHeight: 16, transition: 'transform var(--speed), font-size var(--speed)' }
+		label: { fontSize: 12, lineHeight: 16, transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)' }
 	},
 	attributes: [ 'floating' ],
 	template: `

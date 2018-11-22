@@ -225,10 +225,24 @@ class EventEmitter
 		handlers.splice(i, 1);
 	}
 
+	emit(type, a, b, c)
+	{
+		this.trigger(type, a, b, c);
+	}
+
 	trigger(type, a, b, c)
 	{
 		if (this.__handlers && this.__handlers[type])
-			this.__handlers[type].forEach(h => h.fn.call(h.scope, a, b, c));
+			this.__handlers[type].forEach(h => {
+				try {
+					h.fn.call(h.scope, a, b, c);
+				} catch(e) {
+					if (type!=='error')
+						this.trigger('error', e);
+					else
+						throw e;
+				}
+			});
 	}
 
 	once(type, callback, scope)
