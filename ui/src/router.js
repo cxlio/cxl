@@ -477,8 +477,8 @@ cxl.component({
 	<cxl-navbar permanent &="content"></cxl-navbar>
 	<cxl-router-title></cxl-router-title>
 </cxl-appbar>
-<div &=".content role(main)">
-	<div &=".router location:route"></div>
+<div &=".content role(main) id(content)">
+	<div &=".router location:route:#scrollTop"></div>
 	<div &=".footer content(cxl-router-footer)"></div>
 </div>
 	`,
@@ -495,6 +495,10 @@ cxl.component({
 		router$large: { margin: 64 },
 		router$xlarge: { width: 1200, marginLeft: 'auto', marginRight: 'auto' }
 	}
+}, {
+
+	scrollTop() { this.content.scrollTop = 0; }
+
 });
 
 })(this.cxl);

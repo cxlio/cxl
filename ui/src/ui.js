@@ -230,10 +230,10 @@ directive('aria.prop', {
 
 	update(val)
 	{
-		if (val===true)
-			val = "true";
+		if (val===undefined || val===null)
+			val = false;
 
-		cxl.dom.setAttribute(this.element, 'aria-' + this.parameter, val);
+		this.element.setAttribute('aria-' + this.parameter, val);
 	}
 
 });
@@ -458,7 +458,7 @@ component({
 focusable role(checkbox)
 action:#toggle
 =value:#onValue:host.trigger(change)
-=checked:#update =false-value:#update =true-value:#update
+=checked:#update:aria.prop(checked) =false-value:#update =true-value:#update
 	`,
 	styles: [ {
 		$: { marginLeft: 16, position: 'relative', display: 'inline-block', cursor: 'pointer', marginBottom: 12 },
@@ -1008,7 +1008,7 @@ component({
 role(radio) focusable id(host)
 action:#toggle
 =name:#register
-=checked:host.trigger(change)
+=checked:host.trigger(change):aria.prop(checked)
 =value:host.trigger(change)
 disconnect:#unregister
 	`,
@@ -1364,7 +1364,7 @@ component({
 	`,
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ],
 	events: [ 'change' ],
-	bindings: 'focusable =value:host.trigger(change) action:#onClick role(switch)',
+	bindings: `focusable =value:host.trigger(change) action:#onClick role(switch) =checked:aria.prop(checked)`,
 	styles: [{
 		$: {
 			position: 'relative', display: 'inline-block', width: 46, height: 20,
