@@ -1083,7 +1083,12 @@ directive('content', {
 		var sel = this.parameter;
 
 		if (node.matches && node.matches(sel))
+		{
 			node.slot = sel;
+			// Fire directive only if subscriber found
+			if (this.subscriber)
+				this.set(node);
+		}
 	},
 
 	onMutation(ev)

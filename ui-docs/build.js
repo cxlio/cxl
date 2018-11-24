@@ -8,7 +8,7 @@ require('../build').build({
 			src: [
 				'../ui/dist/cxl-ui.js',
 				'../ui/dist/cxl-ui-icons.js',
-				'../ui/dist/cxl-ui-beta.js',
+				'../ui/dist/cxl-ui-alpha.js',
 				'../ui/dist/cxl-router.js',
 				'../ui/src/meta.js',
 				'../docs/dist/docs.js',
@@ -21,7 +21,7 @@ require('../build').build({
 			src: [
 				'../ui/dist/cxl-ui.js',
 				'../ui/dist/cxl-ui-icons.js',
-				'../ui/dist/cxl-ui-beta.js',
+				'../ui/dist/cxl-ui-alpha.js',
 				'../ui/dist/cxl-router.js',
 				'../ui/dist/cxl-ui-react.js'
 			],

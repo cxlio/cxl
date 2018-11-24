@@ -135,7 +135,7 @@ cxl.component({
 	name: 'docs-code',
 	attributes: [ 'source', 'type' ],
 	template: `
-<style>${hljs.$STYLE}</style>
+<style>${hljs.$STYLE} .hljs { overflow: visible !important; } .code { white-space: pre-wrap !important; } </style>
 <div &="=type:style =source:text:#highlight .code"></div>
 	`,
 	styles: {
@@ -207,6 +207,7 @@ cxl.component({
 			<span &="item:text"></span>
 		</template>
 		</cxl-t>
+		<cxl-t subtitle2 &="content"></cxl-t>
 	</cxl>
 </cxl-card>
 	`,
@@ -226,8 +227,20 @@ cxl.component({
 	template: `
 <cxl-t h5>Basic Usage</cxl-t>
 <div &="content"></div>
-<br>
+<br><br>
 <cxl-t h5>API</cxl-t>
+<br>
+<div &="=role:show">
+	<cxl-t h6>Accessibility</cxl-t>
+	<ul>
+		<li>ARIA Role: <a &="=role:text:#getAriaLink:attribute(href)"></a></li>
+		<li &="=ariaStates:show">Properties:
+	<template &="=ariaStates:each:repeat">
+		<a &="item:text:#getAriaLink:attribute(href)"></a>
+	</template>
+		</li>
+	</ul>
+</div>
 <div &="=anchors:show">
 	<cxl-t h6>Anchors</cxl-t>
 	<ul>
@@ -284,15 +297,27 @@ cxl.component({
 		state.methods = meta.methods;
 
 		view.connect();
-		this.processBindings(view.bindings);
+
+		state.role = view.host.getAttribute('role');
+		this.processBindings(view);
 	},
 
-	processBindings(bindings)
+	getAriaLink(val)
 	{
-		const anchors = bindings.filter(b => b.anchor);
+		return 'https://www.w3.org/TR/wai-aria-1.1/#' + val;
+	},
 
-		if (anchors.length)
-			this.anchors = anchors;
+	processBindings(view)
+	{
+		const anchors = [];
+
+		view.bindings.forEach(b => {
+			if (b.anchor)
+				anchors.push(b);
+		});
+
+		if (anchors.length) this.anchors = anchors;
+		if (view.$ariaStates) this.ariaStates = view.$ariaStates;
 	},
 
 	onAttributeClick()

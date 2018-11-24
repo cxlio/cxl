@@ -1,16 +1,35 @@
 (cxl => {
-"use strict";
-
 	cxl.ui.meta = {
 
 		'theme-variables': {
 			speed: { label: 'Animation Speed', type: 'time' },
-			font: { label: 'Default Font', type: 'string' }
+			font: { label: 'Default Font', type: 'string' },
+			primary: { label: 'Primary Color', type: 'color' },
+			secondary: { label: 'Secondary/Accent Color', type: 'color' }
+		},
+
+		attributes: {
+
+			alt: { summary: '' },
+			disabled: { summary: '' },
+			invalid: { summary: '' },
+			name: { summary: '' },
+			touched: { summary: '' },
+			value: { summary: '' }
+
+		},
+
+		events: {
+			blur: { summary: '' },
+			change: { summary: '' },
+			input: { summary: '' },
+			invalid: { summary: '' }
 		},
 
 		'cxl-appbar': {
 			summary: 'The top app bar displays information and actions relating to the current screen.',
-			icon: 'window-maximize'
+			icon: 'window-maximize',
+			tags: [ 'navigation' ]
 		},
 		'cxl-appbar-title': {
 			icon: 'window-maximize'
@@ -34,6 +53,7 @@
 			icon: 'check-square'
 		},
 		'cxl-chip': {
+			beta: true,
 			icon: 'capsules'
 		},
 		'cxl-dialog': {
@@ -46,6 +66,7 @@
 			icon: 'window-maximize'
 		},
 		'cxl-fab': {
+			beta: true,
 			icon: 'plus-circle'
 		},
 		'cxl-form-group': {
@@ -116,8 +137,6 @@
 		'cxl-textarea': {
 			icon: 'align-left'
 		}
-
-
 	};
 
 })(this.cxl);

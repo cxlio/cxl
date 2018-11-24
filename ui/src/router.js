@@ -477,7 +477,7 @@ cxl.component({
 	<cxl-navbar permanent &="content"></cxl-navbar>
 	<cxl-router-title></cxl-router-title>
 </cxl-appbar>
-<div &=".content">
+<div &=".content role(main)">
 	<div &=".router location:route"></div>
 	<div &=".footer content(cxl-router-footer)"></div>
 </div>

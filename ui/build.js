@@ -38,7 +38,7 @@ require('../build').build({
 				'../template/src/template-debug.js',
 				...ui,
 				'src/ui-debug.js',
-				'src/beta.js',
+				'src/alpha.js',
 				'src/meta.js'
 			]
 		},
@@ -49,11 +49,11 @@ require('../build').build({
 			]
 		},
 		{
-			output: 'cxl-ui-beta.js',
+			output: 'cxl-ui-alpha.js',
 			src: [
-				'src/beta.js'
+				'src/alpha.js'
 			],
-			minify: 'beta.js'
+			minify: 'alpha.js'
 		},
 		{
 			output: 'cxl-ui-debug.js',

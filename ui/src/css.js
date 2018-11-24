@@ -225,14 +225,21 @@ class Style
 	set overflowY(val)
 	{
 		this.$value.overflowY = this.$style.overflowY = val;
-
-		//if (val==='auto' || val==='scroll')
-		//	this.$style.webkitOverflowScrolling = 'touch';
 	}
 
 	get overflowY()
 	{
 		return this.$value.overflowY;
+	}
+
+	set overflowScrolling(val)
+	{
+		this.$style.webkitOverflowScrolling = val;
+	}
+
+	get overflowScrolling()
+	{
+		return this.$style.webkitOverflowScrolling;
 	}
 
 	$transform()

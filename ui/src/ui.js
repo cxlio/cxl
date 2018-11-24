@@ -14,15 +14,16 @@ const
 
 			speed: '0.2s',
 
-			primary: '#344955',
-			primaryLight: '#232f34',
-			primaryDark: '#4a6572',
+			primary: '#1976d2', //'#01579b',
+			primaryDark: '#004ba0',
+			primaryLight: '#63a4ff',
 
 			secondary: '#f9aa33', // '#ff5722',
 			surface: '#fff',
 			error: '#b00020',
 
 			onPrimary: '#fff',
+			onPrimaryLight: '#000',
 			onSecondary: '#000',
 			onSurface: '#212121',
 			onError: '#fff',
@@ -101,7 +102,7 @@ function prefix(prefix, css)
 }
 
 behavior('focusable', `
-	@disabled:not:focus.enable touchable
+	@disabled:aria.prop(disabled):not:focus.enable touchable
 `);
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
@@ -110,6 +111,7 @@ behavior('touchable', `
 behavior('selectable', `
 	connect:host.trigger(selectable.register)
 	disconnect:host.trigger(selectable.unregister)
+	@selected:aria.prop(selected)
 `);
 behavior('selectable.host', {
 	bindings: `
@@ -211,6 +213,53 @@ keypress:#onKey:event.prevent
 	}
 });
 
+directive('aria.prop', {
+
+	initialize()
+	{
+		// TODO keep here?
+		const states = this.element.$view.$ariaStates || (this.element.$view.$ariaStates = []);
+		states.push('aria-' + this.parameter);
+	},
+
+	digest()
+	{
+		this.digest = null;
+		return this.update(true);
+	},
+
+	update(val)
+	{
+		if (val===true)
+			val = "true";
+
+		cxl.dom.setAttribute(this.element, 'aria-' + this.parameter, val);
+	}
+
+});
+
+var ARIA_ID = 0;
+
+function ariaID(element)
+{
+	let id = element.getAttribute('id');
+
+	if (!id) {
+		id = 'cxl-aria-' + (ARIA_ID++);
+		element.setAttribute('id', id);
+	}
+
+	return id;
+}
+/*
+directive('aria.labelledBy', {
+	connect()
+	{
+		const id = ariaID(this.element);
+		this.owner.host.setAttribute('aria-labelledby', id);
+	}
+});*/
+
 directive('role', {
 	connect()
 	{
@@ -262,6 +311,7 @@ directive('registable.host', {
 component({
 	name: 'cxl-appbar',
 	attributes: [ 'extended' ],
+	bindings: 'role(heading)',
 	template: `
 <div &=".flex content anchor(cxl-appbar-actions)"></div>
 <div &="content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
@@ -282,6 +332,7 @@ component({
 
 component({
 	name: 'cxl-appbar-title',
+	bindings: 'role(heading)',
 	attributes: [ 'extended' ],
 	styles: {
 		$: { flexGrow: 1 },
@@ -291,8 +342,9 @@ component({
 
 component({
 	name: 'cxl-avatar',
-	attributes: [ 'big', 'src', 'text', 'little' ],
-	template: `<img &=".image =src:show:attribute(src)" /><div &="=text:show:text =src:hide"></div><cxl-icon icon="user" &=".image"></cxl-icon>`,
+	attributes: [ 'big', 'src', 'text', 'little', 'alt' ],
+	bindings: 'role(img) =alt:aria.prop(label)"',
+	template: `<img &=".image =src:show:attribute(src) =alt:attribute(alt)" /><div &="=text:show:text =src:hide"></div><cxl-icon icon="user" &=".image"></cxl-icon>`,
 	styles: {
 		$: {
 			borderRadius: 32, backgroundColor: theme.surface,
@@ -304,6 +356,8 @@ component({
 		image: { width: '100%', height: '100%', borderRadius: 32 }
 	}
 
+}, {
+	alt: 'Avatar'
 });
 
 component({
@@ -371,7 +425,16 @@ component({
 		$lg0$large: { display: 'none' },
 		$md0$medium: { display: 'none' },
 		$sm0$small: { display: 'none' },
-		$xs0: { display: 'none' }
+		$xs0: { display: 'none' },
+		// Padding
+		$pad16: { padding: 16 },
+		$pad8: { padding: 8 },
+		$pad24: { padding: 24 },
+		// Colors
+		$surface: { backgroundColor: theme.surface, color: theme.onSurface },
+		$error: { backgroundColor: theme.error, color: theme.onError },
+		$primary: { backgroundColor: theme.primary, color: theme.onPrimary },
+		$secondary: { backgroundColor: theme.secondary, color: theme.onSecondary },
 	}, {}, {}, {}, {}, {} ])
 });
 
@@ -455,6 +518,7 @@ component({
 component({
 	name: 'cxl-dialog',
 	template: '<cxl-backdrop><div &=".content content"></div></cxl-backdrop>',
+	bindings: 'role(dialog)',
 	styles: {
 		content: {
 			backgroundColor: theme.surface, position: 'absolute',
@@ -470,6 +534,7 @@ component({
 component({
 	name: 'cxl-dialog-alert',
 	attributes: [ 'title-text', 'message', 'promise', 'action' ],
+	bindings: 'role(alertdialog) =modal:aria.prop(modal) =title-text:aria.prop(label)',
 	template: `
 <cxl-dialog>
 	<div &=".content">
@@ -494,6 +559,7 @@ component({
 	}
 }, {
 	action: 'Ok',
+	modal: true,
 	remove()
 	{
 		this.$component.remove();
@@ -506,7 +572,7 @@ component({
 	template: `
 <cxl-dialog>
 	<div &=".content">
-		<cxl-t h5 &="=title-text:show:text"></cxl-t>
+		<cxl-t h5 &="=title-text:show:text =title-text:aria.prop(label)"></cxl-t>
 		<div &="=message:text"></div>
 	</div>
 	<div &=".footer">
@@ -579,7 +645,7 @@ component({
 	},
 	attributes: [ 'floating' ],
 	template: `
-<div &=".label =invalid:.error =isEmpty:.labelEmpty content(cxl-label)"></div>
+<div &=".label =invalid:.error =isEmpty:.labelEmpty content(cxl-label):#onLabel"></div>
 <div &=".content content =invalid:.error on(change):#onChange"></div>
 <cxl-t caption error &="=error:text"></cxl-t>
 	`,
@@ -589,8 +655,18 @@ on(cxl-form.register):#onChange on(focusable.touched):#update on(invalid):#updat
 }, {
 	isEmpty: true,
 
+	onLabel(label)
+	{
+		this.labelEl = label;
+	},
+
 	onChange(ev)
 	{
+		this.inputEl = ev.target;
+
+		if (this.labelEl)
+			this.inputEl['aria-label'] = this.labelEl.innerText;
+
 		this.isEmpty = !ev.target.value;
 	},
 
@@ -629,6 +705,7 @@ component({
 
 component({
 	name: 'cxl-hr',
+	bindings: 'role(separator)',
 	styles: { $: {
 		border: 0, borderBottom: 1,
 		borderColor: '#ccc', borderStyle: 'solid' }
@@ -661,12 +738,14 @@ component({
 component({
 	name: 'cxl-input',
 	attributes: [
-		'value', 'disabled', 'inverse', 'invalid', 'name', 'touched', 'maxlength'
+		'value', 'disabled', 'inverse', 'invalid', 'name', 'touched', 'maxlength', 'aria-label'
 	],
 	methods: [ 'focus' ],
 	events: [ 'change', 'input', 'blur', 'invalid' ],
 	template: `
-<input &="id(input) =type:|attribute(type) .input =value:value:host.trigger(change):host.trigger(input)
+<input &="id(input) =type:|attribute(type) .input
+	=aria-label:attribute(aria-label)
+	=value:value:host.trigger(change):host.trigger(input)
 	=maxlength:filter:@maxLength value:=value
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
@@ -674,9 +753,10 @@ component({
 	`,
 	bindings: `
 id(component)
+role(textbox)
 registable(cxl-form)
 touchable
-=invalid:host.trigger(invalid)
+=invalid:aria.prop(invalid):host.trigger(invalid)
 	`,
 	styles: [ FocusLineCSS, {
 		$: { marginBottom: 8 },
@@ -725,7 +805,7 @@ component({
 	`,
 	events: [ 'action' ],
 	bindings: `
-focusable action:host.trigger(action) role(link)
+focusable action:host.trigger(action) role(listitem)
 	`,
 	attributes: [ 'href', 'icon', 'selected', 'disabled', 'touched' ],
 	styles: [ prefix('link', FocusCSS), {
@@ -756,7 +836,7 @@ component({
 	},
 	attributes: [ 'closed' ],
 	methods: [ 'focus' ],
-	bindings: 'id(self) keypress:#onKey:event.prevent'
+	bindings: 'id(self) role(list) keypress:#onKey:event.prevent'
 }, {
 	itemSelector: 'cxl-item:not([disabled])',
 
@@ -797,7 +877,7 @@ component({
 <cxl-icon &=".icon" icon="ellipsis-v"></cxl-icon>
 	`,
 	bindings: `
-id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show
+id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show role(button)
 	`,
 	styles: {
 		//$: { position: 'relative' },
@@ -831,12 +911,16 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 component({
 	name: 'cxl-navbar',
 	attributes: [ 'permanent' ],
+	bindings: 'role(navigation)',
 	template: `
-<cxl-drawer &="action:#onRoute =permanent:@permanent =visible:@visible content location:#onRoute"></cxl-drawer>
+<cxl-drawer &="role(list) action:#onRoute =permanent:@permanent =visible:@visible content location:#onRoute"></cxl-drawer>
 <cxl-icon &="action:#toggle .toggler" icon="bars"></cxl-icon>
 	`,
 	styles: {
-		$: { display: 'inline-block', color: theme.onSurface, fontSize: 16, marginTop: 8, marginBottom: 8 },
+		$: {
+			display: 'inline-block', color: theme.onSurface, fontSize: 16,
+			marginTop: 8, marginBottom: 8, overflowScrolling: 'touch'
+		},
 		toggler: {
 			fontSize: 18, width: 16, marginRight: 32,
 			color: theme.onPrimary, cursor: 'pointer', display: 'inline-block'
@@ -993,6 +1077,7 @@ component({
 	name: 'cxl-search-input',
 	events: [ 'change' ],
 	attributes: [ 'value' ],
+	bindings: 'role(searchbox)',
 	template: `
 <cxl-icon icon="search" &=".icon"></cxl-icon>
 <input &="value:=value =value:host.trigger(change) .input" placeholder="Search"></input>
@@ -1148,8 +1233,8 @@ component({
 	template: `
 <div &=".background =disabled:.disabled"><div &=".line =value:#update">
 <x &=".focusCircle .focusCirclePrimary"></x>
-<div &=".knob"></div>
-</div></div>
+<div &=".knob"></div></div>
+</div>
 	`,
 	styles: [{
 		$: { paddingTop: 15, paddingBottom: 15, userSelect: 'none' },
@@ -1158,8 +1243,8 @@ component({
 			borderRadius: 6, translateY: -5
 		},
 		focusCircle: { marginLeft: -4, marginTop: -8 },
-		background: { backgroundColor: theme.primary },
-		line: { backgroundColor: theme.primaryLight, height: 2 }
+		background: { backgroundColor: theme.primaryLight, height: 2 },
+		line: { backgroundColor: theme.primary, height: 2, textAlign: 'right' }
 	}, DisabledCSS, FocusCircleCSS ]
 }, {
 	value: 0,
@@ -1176,7 +1261,7 @@ component({
 		else if (value > 1)
 			value = 1;
 
-		el.style.marginLeft = value*100 + '%';
+		el.style.marginRight = (100-value*100) + '%';
 
 		return (this.value = value);
 	},
@@ -1279,7 +1364,7 @@ component({
 	`,
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ],
 	events: [ 'change' ],
-	bindings: 'focusable =value:host.trigger(change) action:#onClick',
+	bindings: 'focusable =value:host.trigger(change) action:#onClick role(switch)',
 	styles: [{
 		$: {
 			position: 'relative', display: 'inline-block', width: 46, height: 20,
@@ -1340,7 +1425,7 @@ component({
 		$h5: { fontSize: 24, marginBottom: 16 },
 		$h6: { fontSize: 20, fontWeight: 500, marginBottom: 16, letterSpacing: 0.15 },
 		$subtitle: { fontSize: 16, lineHeight: 22, marginBottom: 0, letterSpacing: 0.15 },
-		$subtitle2: { fontSize: 14, lineHeight: 18, color: 'rgba(0,0,0,0.53)', letterSpacing: 0.1 }
+		$subtitle2: { fontSize: 14, lineHeight: 18, opacity: 0.73, letterSpacing: 0.1 }
 
 		//$input: { marginBottom: 8, paddingTop: 6, paddingBottom: 6, lineHeight: 20 }
 	}
@@ -1349,6 +1434,7 @@ component({
 component({
 	name: 'cxl-tab',
 	template: '<a &=".link =href:attribute(href) content"></a>',
+	bindings: 'role(tab)',
 	attributes: ['href', 'selected'],
 	styles: {
 		$: { flexShrink: 0 },
@@ -1367,6 +1453,7 @@ component({
 component({
 	name: 'cxl-tabs',
 	template: `<div &=".content content"></div><div &=".selected"></div>`,
+	bindings: 'role(tablist)',
 	styles: {
 		$: {
 			backgroundColor: theme.primary, color: theme.onPrimary,
@@ -1381,10 +1468,11 @@ component({
 	name: 'cxl-textarea',
 	template: `
 <div &="id(span) .input .measure"></div>
-<textarea &="id(textarea) .input .textarea =value::value =value:#calculateHeight:host.trigger(change)
+<textarea &="id(textarea) .input .textarea =value::value
+	=value:#calculateHeight:host.trigger(change) =aria-label:attribute(aria-label)
 	=disabled:attribute(disabled) on(focus):bool:=focused on(blur):not:=focused =focused:.focused"></textarea>`,
-	bindings: 'role(textbox)',
-	attributes: [ 'value', 'disabled' ],
+	bindings: 'role(textbox) =disabled:aria.prop(disabled) aria.prop(multiline)',
+	attributes: [ 'value', 'disabled', 'aria-label' ],
 	events: [ 'change' ],
 	styles: {
 		$: {
@@ -1403,7 +1491,6 @@ component({
 		//input$hover: { borderBottom: 2, borderStyle: 'solid' },
 		inverse: { borderColor: theme.white, color: theme.white },
 		inverse$focus: { borderColor: theme.primary },
-		readonly: { borderStyle: 'dashed' },
 		invalid: { borderColor: theme.error },
 		invalid$focus: { borderColor: theme.error },
 		// TODO move to textarea when inheritance works

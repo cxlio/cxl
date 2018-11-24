@@ -167,12 +167,44 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		c: {
 			template: `
 <docs-component name="cxl-c">
-	<docs-demo title="Toolbar Layout"><!--
-<cxl-c primary flex>
-	<cxl-c>Column 1</cxl-c>
-	<cxl-c grow>Column 2</cxl-c>
-	<cxl-c>Column 3</cxl-c>
-</cxl-c>
+	<docs-demo label="Flex Layout"><!--
+<div style="display: flex; font-size:20px; color:#fff; text-align:center">
+	<cxl-c style="background:#a00; padding: 24px">1</cxl-c>
+	<cxl-c grow style="background:#0a0; padding:24px">2</cxl-c>
+	<cxl-c style="background:#00a; padding:24px">3</cxl-c>
+</div>
+	--></docs-demo>
+	<docs-demo label="Grid Layout"><!--
+<cxl-grid columns="auto auto auto" style="color:#fff">
+	<cxl-c style="background:#a00; padding: 24px">1</cxl-c>
+	<cxl-c style="background:#0a0; padding:24px">2</cxl-c>
+	<cxl-c style="background:#0a0; padding:24px">3</cxl-c>
+	<cxl-c xs2 style="background:#00a; padding:24px">4</cxl-c>
+	<cxl-c style="background:#00a; padding:24px">5</cxl-c>
+</cxl-grid>
+	--></docs-demo>
+	<docs-demo label="Responsive Layout"><!--
+<docs-bg>
+	<cxl-layout>
+		<style>
+			cxl-c { background: rgba(255,0,0,0.25); height: 100px; }
+		</style>
+		<cxl-c xs3 sm2 lg1></cxl-c>
+		<cxl-c xs3 sm2 lg1 ></cxl-c>
+		<cxl-c xs3 sm2 lg1 ></cxl-c>
+		<cxl-c xs3 sm2 lg1 ></cxl-c>
+
+		<cxl-c xs0 sm2 lg1 ></cxl-c>
+		<cxl-c xs0 sm2 lg1 ></cxl-c>
+
+		<cxl-c xs0 lg1 ></cxl-c>
+		<cxl-c xs0 lg1 ></cxl-c>
+		<cxl-c xs0 lg1 ></cxl-c>
+		<cxl-c xs0 lg1 ></cxl-c>
+		<cxl-c xs0 lg1 ></cxl-c>
+		<cxl-c xs0 lg1 ></cxl-c>
+	</cxl-layout>
+</docs-bg>
 	--></docs-demo>
 </docs-component>
 			`
@@ -181,57 +213,28 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		card: {
 			template: `
 <docs-component name="cxl-card">
-<docs-usage>
+<docs-demo label="Card Layout"><!--
 <cxl-card>
 <cxl-block>
 	<cxl-h5>Title goes here</cxl-h5>
 	Secondary line text Lorem ipsum dolor sit amet
 </cxl-block>
-<cxl-block>
+<cxl-block compact>
 	<cxl-button flat>Action 1</cxl-button>
 	<cxl-button flat>Action 2</cxl-button>
 </cxl-block>
 </cxl-card>
-<br>
+--></docs-demo>
+<docs-demo label="Card with Images"><!--
 <cxl-card>
 <cxl-block flex>
 	<cxl-avatar style="background:#ccc"></cxl-avatar>
-	<cxl-col>
-		<cxl-h6>Card Title</cxl-h6>
-		Secondary Text
-	</cxl-col>
-</cxl-block>
-<cxl-block>
-	<cxl-button flat>Action 1</cxl-button>
-	<cxl-button flat>Action 2</cxl-button>
-</cxl-block>
-</cxl-card>
-<br>
-<cxl-card>
-<cxl-block flex>
-	<cxl-avatar style="background:#ccc"></cxl-avatar>
-	<cxl-col>
+	<cxl-col style="margin-left: 24px">
 		<cxl-h6>Card Title</cxl-h6>
 		Secondary Text
 	</cxl-col>
 </cxl-block>
 <docs-placeholder style="height:180px"></docs-placeholder>
-<cxl-block>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</cxl-block>
-<div>
-	<cxl-button flat>Action 1</cxl-button>
-	<cxl-button flat>Action 2</cxl-button>
-</div>
-</cxl-card>
-<br>
-<cxl-card>
-<docs-placeholder style="height:180px"></docs-placeholder>
-<cxl-block>
-	<cxl-h6>Card Title</cxl-h6>
-	Secondary Text
-</cxl-block>
-<cxl-hr></cxl-hr>
 <cxl-block>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 </cxl-block>
@@ -240,8 +243,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	<cxl-button flat>Action 2</cxl-button>
 </cxl-block>
 </cxl-card>
-
-</docs-usage>
+--></docs-demo>
 </docs-component>
 			`
 		},
@@ -394,33 +396,15 @@ Checked: <span &="=test:text"></span>
 		grid: {
 			template: `
 <docs-component name="cxl-grid">
-<docs-demo &="owner:@owner"><!--
-<div style="height: 200px">
-<cxl-grid>
-	<cxl-row>
-		<cxl-appbar><cxl-appbar-title>Hello</cxl-appbar-title></cxl-appbar>
-	</cxl-row>
-	<cxl-row>
-		<cxl-grid>
-			<cxl-row>
-				<cxl-tabs>
-					<cxl-tab selected>Tab 1</cxl-tab>
-					<cxl-tab>Tab 2</cxl-tab>
-				</cxl-tabs>
-			</cxl-row>
-			<cxl-row>
-				<cxl-block>
-					<cxl-t h1>Scrollabe Content</cxl-t>
-					<cxl-t>
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-					</cxl-t>
-				</cxl-block>
-			</cxl-row>
-		</cxl-grid>
-	</cxl-row>
+	<docs-demo label="Grid Layout"><!--
+<cxl-grid columns="auto auto auto" style="color:#fff">
+	<cxl-c style="background:#a00; padding: 24px">1</cxl-c>
+	<cxl-c style="background:#0a0; padding:24px">2</cxl-c>
+	<cxl-c style="background:#0a0; padding:24px">3</cxl-c>
+	<cxl-c xs2 style="background:#00a; padding:24px">4</cxl-c>
+	<cxl-c style="background:#00a; padding:24px">5</cxl-c>
 </cxl-grid>
-</div>
---></docs-demo>
+	--></docs-demo>
 </docs-component>
 			`
 		},
@@ -615,9 +599,9 @@ Checked: <span &="=test:text"></span>
 <cxl-block inverse>
 	<cxl-card>
 		<cxl-block flex>
-	<cxl-col grow>
+	<cxl-c grow>
 		<cxl-t subtitle>Card Title</cxl-t>
-	</cxl-col>
+	</cxl-c>
 	<cxl-menu-toggle>
 		<cxl-item icon="check">Option with icon</cxl-item>
 		<cxl-item disabled>Option disabled</cxl-item>
@@ -801,10 +785,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </cxl-form-group>
 	--></docs-demo>
 </docs-attribute>
-
 </docs-component>
-			`
-
+			`,
+			controller: {
+				onChange(ev, el) {
+					this.selectChange = el.value;
+				}
+			}
 		},
 		slider: {
 			template: `
@@ -982,7 +969,7 @@ cxl.route({
 		<br>
 	</cxl-c>
 	<cxl-c sm2 md1>
-<img src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; "></img>
+<img alt="Image of @cxl/ui Applications" src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; "></img>
 	</cxl-c>
 
 	<cxl-c xs2><cxl-t h4>Features</cxl-t></cxl-c>
@@ -1091,36 +1078,26 @@ cxl.route({
 	template: `
 <cxl-t h4>Typography</cxl-t>
 <br>
-<cxl-t>The following font family string is applied to all elements:
+<cxl-t>The following <code>font-family</code> string is applied to all elements:
 <docs-code>Roboto,-apple-system, BlinkMacSystemFont,"Segoe UI", "Helvetica Neue", Arial, sans-serif</docs-code>
-<p>Note: The <code>Roboto</code> font will not be automatically included.</p>
-<p>The <uid-link tag="cxl-t"></uid-link> component can be used to apply styles to text.</p>
+<p>The <uid-link tag="cxl-t"></uid-link> component can be used to apply styles to text. The <code>Roboto</code> font will not be automatically included.</p>
 <br>
 <uid-typography></uid-typography>
 <br><br>
 <cxl-t h4>Iconography</cxl-t>
-<p>Icons are provided by the <uid-link tag="cxl-icon"></uid-link> component.</p>
+<p>The <code>@cxl/ui/dist/icons</code> module provides support for <a href="https://fontawesome.com/icons?d=gallery">fontawesome</a> icons. The <uid-link tag="cxl-icon"></uid-link> component can be used to include icons in your application.</p>
+<docs-code><!--
+<cxl-icon icon="home"></cxl-icon>
+--></docs-code>
 <br>
 <cxl-t h4>Theme Variables</cxl-t>
+<p>The following CSS Variables can be modified to costumize the look and feel of the components in your application.</p>
 <br>
-<cxl-form-group>
-	<cxl-label>Animation Speed (--cxl-speed)</cxl-label>
-	<cxl-input &="=variables.speed:@value"></cxl-input>
-</cxl-form-group>
-<cxl-form-group>
-	<cxl-label>Default Font (--cxl-font)</cxl-label>
-	<cxl-input &="=variables.font:@value"></cxl-input>
-</cxl-form-group>
-<ui-docs-color-tool &="=variables:@theme"></ui-docs-color-tool>
+<uid-theme></uid-theme>
 	`,
 	styles: {
 		iconbox: { display: 'inline-block', width: 80, height: 80, textAlign: 'center' },
 		icon: { fontSize: 24, marginBottom: 8, lineHeight: 40 }
-	},
-
-	initialize(state)
-	{
-		state.variables = cxl.ui.theme.variables;
 	}
 });
 
@@ -1186,10 +1163,36 @@ cxl.component({
 });
 
 cxl.component({
+	name: 'uid-theme',
+	template: `
+<cxl-card><cxl-table>
+	<cxl-th>Name</cxl-th>
+	<cxl-th>Default Value</cxl-th>
+	<cxl-th>Description</cxl-th>
+	<template &="=variables:item.each:repeat">
+		<cxl-td>--cxl-<span &="$key:text"></span></cxl-td>
+		<cxl-td &="$value:text"></cxl-td>
+		<cxl-td &="$key:#getDescription:text"></cxl-td>
+	</template>
+</cxl-table></cxl-card>
+	`,
+	initialize(state)
+	{
+		state.variables = cxl.ui.theme.variables;
+		state.meta = META['theme-variables'];
+	}
+}, {
+	getDescription(key)
+	{
+		return this.meta[key] ? this.meta[key].label : '';
+	}
+});
+
+cxl.component({
 	name: 'uid-typography',
 	template: `
 <cxl-card>
-<cxl-table style="grid-template-columns:auto auto auto auto">
+<cxl-table>
 
 	<cxl-th>Scale</cxl-th>
 	<cxl-th>Weight</cxl-th>
@@ -1237,7 +1240,7 @@ cxl.component({
 });
 
 cxl.component({
-	name: 'ui-docs-component-card',
+	name: 'uid-component-card',
 	attributes: [ 'name' ],
 	template: `
 <docs-component-card &="=name:@name =meta.icon:@icon =meta.tags:@tags"></docs-component-card>
@@ -1260,7 +1263,7 @@ cxl.route({
 <cxl-grid columns="repeat(12, 1fr)" gap="16px 16px">
 <template &="=components:each:repeat">
 <cxl-c xl3 md4 sm6 &="item:#setKey =filter:#match:show">
-	<ui-docs-component-card &="item:@name"></ui-docs-component-card>
+	<uid-component-card &="item:@name"></uid-component-card>
 </cxl-c>
 </template>
 </cxl-grid>

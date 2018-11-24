@@ -41,6 +41,7 @@ component({
 
 	events: [ 'submit' ],
 	bindings: `
+role(form)
 registable.host(cxl-form):=elements
 
 on(cxl-form.submit):#onSubmit:host.trigger(submit)
@@ -140,13 +141,55 @@ component({
 
 component({
 	name: 'cxl-table',
+	bindings: 'registable.host(table):=event =event:#updateColumns',
 	styles: {
 		$: { display: 'grid' }
+	}
+}, {
+	updateColumns(set, table)
+	{
+		if (set)
+		{
+			let columns = '';
+
+			for (let th of set)
+				columns += th.width || 'auto' + ' ';
+
+			table.style.gridTemplateColumns = columns;
+		}
+	}
+});
+
+component({
+	name: 'cxl-textarea-editable',
+	template: `
+<div &=".input =disabled:not:@contentEditable content on(input):#onInput =value:text"></div>
+	`,
+
+	bindings: 'role(textbox) =disabled:aria.prop(disabled) aria.prop(multiline)',
+	attributes: [ 'value', 'disabled' ],
+	events: [ 'change' ],
+	styles: {
+		$: {
+			marginBottom: 8, marginTop: 8, position: 'relative'
+		},
+		input: {
+			fontSize: 16, border: 1, backgroundColor: 'transparent', padding: 16,
+			lineHeight: 20, fontFamily: 'inherit', borderColor: theme.grayDark,
+			borderStyle: 'solid'
+		}
+	}
+}, {
+	value: '',
+	onInput()
+	{
 	}
 });
 
 component({
 	name: 'cxl-th',
+	attributes: ['width'],
+	bindings: 'registable(table) role(columnheader)',
 	styles: {
 		$: {
 			flexGrow: 1, fontSize: 12, color: 'rgba(0,0,0,0.53)',
