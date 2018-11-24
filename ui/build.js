@@ -43,12 +43,6 @@ require('../build').build({
 			]
 		},
 		{
-			output: 'cxl-ui-legacy.js',
-			src: [
-				'src/legacy.js'
-			]
-		},
-		{
 			output: 'cxl-ui-alpha.js',
 			src: [
 				'src/alpha.js'

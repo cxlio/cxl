@@ -1375,6 +1375,12 @@ Object.assign(cxl, {
 	/// Return this in a directive update function to stop the observable.
 	Skip: Skip,
 
+	ENTITIES_REGEX: /[&<]/g,
+	ENTITIES_MAP: {
+		'&': '&amp;',
+		'<': '&lt;'
+	},
+
 	Anchor: Anchor,
 	AttributeObserver: AttributeObserver,
 	ChildrenObserver: ChildrenObserver,
@@ -1413,6 +1419,27 @@ Object.assign(cxl, {
 		});
 	},
 
+	debounce(fn, delay)
+	{
+		var to;
+
+		function Result() {
+			var args = arguments, thisVal = this;
+
+			if (to)
+				clearTimeout(to);
+			to = setTimeout(function() {
+				Result.fn.apply(thisVal, args);
+			}, delay);
+		}
+		Result.fn = fn;
+		Result.cancel = function() {
+			clearTimeout(to);
+		};
+
+		return Result;
+	},
+
 	each(coll, fn, scope)
 	{
 		if (Array.isArray(coll))
@@ -1434,6 +1461,11 @@ Object.assign(cxl, {
 
 	},
 
+	escape(str)
+	{
+		return str && str.replace(cxl.ENTITIES_REGEX, e => cxl.ENTITIES_MAP[e]);
+	},
+
 	/** Returns a getter function with a state parameter */
 	getter(expr)
 	{
@@ -1444,6 +1476,16 @@ Object.assign(cxl, {
 		);
 	},
 
+	pull(ary, item)
+	{
+		const i = ary.indexOf(item);
+
+		if (i===-1)
+			throw "Invalid Item";
+
+		ary.splice(i, 1);
+	},
+
 	/** Returns a setter function with value and state parameters */
 	setter(expr)
 	{
@@ -1452,6 +1494,11 @@ Object.assign(cxl, {
 			function(val, state) { state[expr]=val; } :
 			new Function('val', 'state', `state.${expr}=val;`)
 		);
+	},
+
+	sortBy(A, key)
+	{
+		return A.sort((a,b) => a[key]>b[key] ? 1 : (a[key]<b[key] ? -1 : 0));
 	},
 
 	renderer: renderer
