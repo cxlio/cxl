@@ -77,10 +77,10 @@ component({
 	name: 'cxl-layout',
 	styles: {
 		$: {
-			display: 'grid', gridTemplateColumns: 'repeat(12, auto)', gridGap: 16,
-			marginLeft: 16, marginRight: 16
+			display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridGap: 16,
+			margin: 16
 		},
-		$medium: { gridGap: 24, marginLeft: 24, marginRight: 24 }
+		$medium: { gridGap: 24, margin: 24 }
 	}
 });
 

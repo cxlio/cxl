@@ -9,7 +9,7 @@ const
 
 class FileEvent
 {
-	constructor(type, path, subscriber)
+	constructor(type, path)
 	{
 		this.type = type;
 		this.path = path;
@@ -37,6 +37,11 @@ class FileEvent
 
 class FileWatch extends rx.Observable {
 
+	static getCount()
+	{
+		return Object.keys(WATCHERS).length;
+	}
+
 	$getPath()
 	{
 		return this.path;
@@ -59,13 +64,12 @@ class FileWatch extends rx.Observable {
 		}, this.delay);
 	}
 
-	doSubscribe(subscriber)
+	$createFSWatcher(subscriber, path)
 	{
 	const
-		id = this.path,
-		w = this.$watcher || (this.$watcher=fs.watch(id)),
 		onChange = this.$onChange.bind(this, subscriber),
-		onError = subscriber.error
+		onError = subscriber.error,
+		w = this.$watcher = fs.watch(path)
 	;
 		w.on('change', onChange);
 		w.on('error', onError);
@@ -76,10 +80,40 @@ class FileWatch extends rx.Observable {
 
 			if (w.listenerCount('change')===0)
 			{
-				delete WATCHERS[id];
+				delete WATCHERS[path];
 				w.close();
 			}
 		};
+	}
+
+	$createWatchFile(subscriber, path)
+	{
+		const onChange = () => {
+			this.$onChange(subscriber, 'change', path);
+		};
+		// Try watchFile instead?
+		fs.watchFile(path, { interval: 1000 }, onChange);
+
+		return function() { fs.unwatchFile(path, onChange); };
+	}
+
+	$createWatcher(subscriber)
+	{
+		const path = this.path;
+
+		try {
+			return this.$createFSWatcher(subscriber, path);
+		} catch (e) {
+			return this.$createWatchFile(subscriber, path);
+		}
+	}
+
+	doSubscribe(subscriber)
+	{
+		if (!this.$watcher)
+			this.$unsubscribe = this.$createWatcher(subscriber);
+
+		return this.$unsubscribe;
 	}
 
 	constructor(filename)

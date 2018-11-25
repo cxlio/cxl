@@ -1105,8 +1105,8 @@ directive('action', {
 
 	onEvent(ev)
 	{
-		ev.stopPropagation();
-		ev.stopImmediatePropagation();
+		//ev.stopPropagation();
+		//ev.stopImmediatePropagation();
 		this.set(ev);
 	},
 
@@ -1116,18 +1116,18 @@ directive('action', {
 			this.onEvent(ev);
 	},
 
-	onAction(ev)
+	/*onAction(ev)
 	{
 		if (ev.target !== this.owner.host)
 			this.onEvent(ev);
-	},
+	},*/
 
 	connect()
 	{
 		this.bindings = [
 			new EventListener(this.element, 'click', this.onEvent.bind(this)),
-			new EventListener(this.element, 'keypress', this.onKeyPress.bind(this)),
-			new EventListener(this.element, 'action', this.onAction.bind(this))
+			new EventListener(this.element, 'keypress', this.onKeyPress.bind(this))
+			//new EventListener(this.element, 'action', this.onAction.bind(this))
 		];
 	}
 
@@ -1414,9 +1414,7 @@ Object.assign(cxl, {
 		if (typeof(params)!=='object')
 			params = { $: params };
 
-		return path.replace(PARAM_REGEX, function(match, key) {
-			return params[key];
-		});
+		return path.replace(PARAM_REGEX, (match, key) => params[key]);
 	},
 
 	debounce(fn, delay)
@@ -1450,6 +1448,11 @@ Object.assign(cxl, {
 				fn.call(scope, coll[i], i);
 	},
 
+	escape(str)
+	{
+		return str && str.replace(cxl.ENTITIES_REGEX, e => cxl.ENTITIES_MAP[e]);
+	},
+
 	event: {
 
 		halt(ev)
@@ -1459,11 +1462,6 @@ Object.assign(cxl, {
 			ev.stopImmediatePropagation();
 		}
 
-	},
-
-	escape(str)
-	{
-		return str && str.replace(cxl.ENTITIES_REGEX, e => cxl.ENTITIES_MAP[e]);
 	},
 
 	/** Returns a getter function with a state parameter */

@@ -102,7 +102,7 @@ function prefix(prefix, css)
 }
 
 behavior('focusable', `
-	@disabled:aria.prop(disabled):not:focus.enable touchable
+	@disabled:aria.prop(disabled):not:focus.enable touchable action:host.trigger(action)
 `);
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
@@ -111,6 +111,7 @@ behavior('touchable', `
 behavior('selectable', `
 	connect:host.trigger(selectable.register)
 	disconnect:host.trigger(selectable.unregister)
+	action:host.trigger(selectable.action)
 	@selected:aria.prop(selected)
 `);
 behavior('selectable.host', {
@@ -121,7 +122,7 @@ on.message(selectable.unregister):#unregister:=event
 =event:#onChange
 
 on(change):#onChangeEvent
-on(action):#onAction
+on(selectable.action):#onAction
 keypress:#onKey:event.prevent
 @value:=value:#onChange
 =selected:#onSelected
@@ -238,6 +239,8 @@ directive('aria.prop', {
 
 });
 
+
+/*
 var ARIA_ID = 0;
 
 function ariaID(element)
@@ -251,7 +254,6 @@ function ariaID(element)
 
 	return id;
 }
-/*
 directive('aria.labelledBy', {
 	connect()
 	{
@@ -453,7 +455,7 @@ component({
 <cxl-icon icon="check" &=".box"></cxl-icon>
 <span &="content"></span>
 	`,
-	events: [ 'change' ],
+	events: [ 'change', 'action' ],
 	bindings: `
 focusable role(checkbox)
 action:#toggle
@@ -805,7 +807,7 @@ component({
 	`,
 	events: [ 'action' ],
 	bindings: `
-focusable action:host.trigger(action) role(listitem)
+focusable role(listitem)
 	`,
 	attributes: [ 'href', 'icon', 'selected', 'disabled', 'touched' ],
 	styles: [ prefix('link', FocusCSS), {
@@ -876,6 +878,7 @@ component({
 </div>
 <cxl-icon &=".icon" icon="ellipsis-v"></cxl-icon>
 	`,
+	events: [ 'action' ],
 	bindings: `
 id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show role(button)
 	`,
@@ -945,15 +948,16 @@ component({
 	events: [ 'action', 'change' ],
 	bindings: `
 role(option) selectable
-action:host.trigger(action)
 =value:host.trigger(change)
 	`,
 	styles: {
 		$: {
 			cursor: 'pointer', color: theme.onSurface, lineHeight: 48, paddingRight: 16,
-			paddingLeft: 16, backgroundColor: theme.surface
+			paddingLeft: 16
 		},
-		$selected: { backgroundColor: theme.primaryLight, color: theme.onPrimary }
+		$selected: {
+			backgroundColor: theme.primaryLight, color: theme.onPrimary
+		}
 	}
 }, {
 	value: null
@@ -1003,7 +1007,7 @@ component({
 <cxl-icon icon="circle" &=".box"></cxl-icon>
 <span &=".content content"></span>
 	`,
-	events: [ 'change' ],
+	events: [ 'change', 'action' ],
 	bindings: `
 role(radio) focusable id(host)
 action:#toggle
@@ -1096,14 +1100,16 @@ component({
 	name: 'cxl-select',
 	template: `
 <div &=".container =opened:.opened">
-	<div &="id(menu) on(action):#close .menu =opened:.menuOpened content"></div>
-	<div &="action:#open .selected id(selectedContainer)"></div>
+	<div &="id(menu) .menu =opened:.menuOpened content"></div>
+	<div &="=value:hide .placeholder">
+		<cxl-option &="=placeholder:text"></cxl-option>
+	</div>
 	<cxl-icon &=".icon" icon="caret-down"></cxl-icon>
 </div>
 <div &=".focusLine"></div>
 	`,
-	events: [ 'change' ],
-	attributes: [ 'disabled', 'value', 'touched' ],
+	events: [ 'change', 'action' ],
+	attributes: [ 'disabled', 'value', 'touched', 'placeholder' ],
 	bindings: `
 		focusable
 		selectable.host:#onSelected
@@ -1112,14 +1118,17 @@ component({
 		=value:host.trigger(change)
 		keypress(escape):#close
 		on(blur):#close
-		action:#open
+		action:#onAction
 	`,
 	styles: [ FocusLineCSS, {
 		$: { cursor: 'pointer' },
 		icon: { position: 'absolute', right: 8, top: 8, lineHeight: 16 },
 		menu: { position: 'absolute', elevation: 0, right: 0, left: -16, overflowY: 'hidden' },
-		menuOpened: { elevation: 3, overflowY: 'auto' },
-		selected: { position: 'absolute', left: -16, top: -8, right: 0 },
+		menuOpened: { elevation: 3, overflowY: 'auto', backgroundColor: theme.surface },
+
+		placeholder: {
+			position: 'absolute', left: -16, top: -8, right: 0, height: 48
+		},
 		container: {
 			 overflowY: 'hidden', height: 33, position: 'relative', border: 0,
 			 borderBottom: 1, borderStyle: 'solid'
@@ -1128,8 +1137,9 @@ component({
 	}, DisabledCSS ]
 
 }, {
-	selected: null,
 	opened: false,
+	placeholder: '',
+	selected: null,
 	value: null,
 
 	/**
@@ -1150,6 +1160,15 @@ component({
 		scrollTop = 0, height,
 		menuStyle = this.menu.style
 	;
+		if (this.opened)
+		{
+			if (selectedRect)
+				selectedRect.selected = true;
+		} else if (!selectedRect)
+			return (menuStyle.height = 0);
+		else
+			selectedRect.selected = false;
+
 		if (marginTop > maxTop)
 		{
 			scrollTop = marginTop-maxTop;
@@ -1182,19 +1201,7 @@ component({
 	close()
 	{
 		this.opened = false;
-	},
-
-	placeholder: '(Select an option)',
-
-	getPlaceholder()
-	{
-		if (!this.placeholderEl)
-		{
-			const el = this.placeholderEl = cxl.dom('cxl-option');
-			cxl.dom.setContent(el, this.placeholder);
-		}
-
-		return this.placeholderEl;
+		this.calculateDimensions();
 	},
 
 	onSelected(selected)
@@ -1203,13 +1210,7 @@ component({
 		{
 			if (this.value !== selected.value)
 				this.value = selected.value;
-
-			// TODO Find a better way
-			const clone = selected.cloneNode(true);
-			clone.selected = false;
-			cxl.dom.setContent(this.selectedContainer, clone);
-		} else if (this.value===null || this.value===undefined)
-			cxl.dom.setContent(this.selectedContainer, this.getPlaceholder());
+		}
 
 		this.selected = selected;
 		this.calculateDimensions();
@@ -1220,14 +1221,17 @@ component({
 		if (this.disabled)
 			return;
 
-		this.close();
+		if (this.opened)
+			this.close();
+		else
+			this.open();
 	}
 
 });
 
 component({
 	name: 'cxl-slider',
-	events: [ 'change' ],
+	events: [ 'change', 'action' ],
 	attributes: [ 'value', 'disabled', 'step', 'touched' ],
 	bindings: 'focusable keypress(arrowleft):#onLeft keypress(arrowright):#onRight drag.x:#onDrag =value:host.trigger(change) role(slider)',
 	template: `
@@ -1363,7 +1367,7 @@ component({
 </div>
 	`,
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ],
-	events: [ 'change' ],
+	events: [ 'change', 'action' ],
 	bindings: `focusable =value:host.trigger(change) action:#onClick role(switch) =checked:aria.prop(checked)`,
 	styles: [{
 		$: {
@@ -1426,41 +1430,65 @@ component({
 		$h6: { fontSize: 20, fontWeight: 500, marginBottom: 16, letterSpacing: 0.15 },
 		$subtitle: { fontSize: 16, lineHeight: 22, marginBottom: 0, letterSpacing: 0.15 },
 		$subtitle2: { fontSize: 14, lineHeight: 18, opacity: 0.73, letterSpacing: 0.1 }
-
-		//$input: { marginBottom: 8, paddingTop: 6, paddingBottom: 6, lineHeight: 20 }
 	}
 });
 
 component({
 	name: 'cxl-tab',
 	template: '<a &=".link =href:attribute(href) content"></a>',
-	bindings: 'role(tab)',
-	attributes: ['href', 'selected'],
-	styles: {
+	bindings: 'role(tab) focusable =selected:filter:host.trigger(cxl-tab.selected)',
+	events: [ 'action' ],
+	attributes: ['href', 'selected', 'disabled', 'touched'],
+	styles: [{
 		$: { flexShrink: 0 },
 		$small: { display: 'inline-block' },
 		link: {
-			padding: 16, paddingBottom: 12, border: 0, borderBottom: 4, borderColor: 'transparent',
+			padding: 16, paddingBottom: 12, border: 0, backgroundColor: theme.primary,
 			textTransform: 'uppercase', fontSize: 14, color: theme.onPrimary, lineHeight: 20,
-			textDecoration: 'none', borderStyle: 'solid', textAlign: 'center', display: 'block'
-		},
-		link$selected: { borderColor: theme.secondary }
-	}
+			textDecoration: 'none', textAlign: 'center', display: 'block'
+		}
+	}, FocusCSS]
 }, {
-	href: null
+	href: null,
+	selected: false
 });
 
 component({
 	name: 'cxl-tabs',
-	template: `<div &=".content content"></div><div &=".selected"></div>`,
-	bindings: 'role(tablist)',
+	template: `<div &=".content content"></div><div &="id(indicator) .selected"></div>`,
+	bindings: 'role(tablist) on(cxl-tab.selected):#onSelected =selected:#update',
+	attributes: [ 'selected' ],
 	styles: {
 		$: {
-			backgroundColor: theme.primary, color: theme.onPrimary,
-			display: 'block', flexShrink: 0
+			backgroundColor: theme.primary, color: theme.onPrimary, fontSize: 0,
+			display: 'block', flexShrink: 0, position: 'relative', cursor: 'pointer'
 		},
+		selected: { backgroundColor: theme.secondary, height: 4 },
 		content: { display: 'flex', overflowX: 'auto' },
 		content$small: { display: 'block' }
+	}
+}, {
+	update(tab)
+	{
+		const bar = this.indicator;
+
+		if (!tab)
+			return (bar.style.width = 0);
+
+		// Add delay so styles finish rendering...
+		// TODO find better way
+		setTimeout(() => {
+			bar.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+			bar.style.width = tab.clientWidth + 'px';
+		}, 50);
+	},
+
+	onSelected(ev)
+	{
+		if (this.selected)
+			this.selected.selected = false;
+
+		this.selected = ev.target;
 	}
 });
 

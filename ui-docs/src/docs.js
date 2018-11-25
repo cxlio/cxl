@@ -731,37 +731,35 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-demo &="owner:@owner"><!--
 <cxl-form-group>
 	<cxl-label>Select Change Event</cxl-label>
-	<cxl-select &="on(change):#onChange">
-		<cxl-option>(Select an option)</cxl-option>
+	<cxl-select placeholder="(Select an option)" &="on(change):#onChange">
 		<cxl-option value="one">Option 1</cxl-option>
 		<cxl-option value="two">Option 2</cxl-option>
 		<cxl-option value="three">Option 3</cxl-option>
 	</cxl-select>
 </cxl-form-group>
-<p>Select Value: <span &="=selectChange:text"></span></p>
+<p>Value: <span &="=selectChange:text"></span></p>
 
-<cxl-form-group>
-	<cxl-label>Select 1</cxl-label>
+<cxl-form-group floating>
+	<cxl-label>Select with Floating Label</cxl-label>
 	<cxl-select &="@value:=select">
-		<cxl-option>(Select an option)</cxl-option>
 		<cxl-option value="one">Option 1</cxl-option>
 		<cxl-option value="two">Option 2</cxl-option>
 		<cxl-option value="three">Option 3</cxl-option>
 	</cxl-select>
 </cxl-form-group>
 
-<p>Select 1 Value: <span &="=select:text"></span></p>
+<p>Value: <span &="=select:text"></span></p>
 
 <cxl-form-group>
 	<cxl-label>Select 2</cxl-label>
-	<cxl-select &="@value:=select2">
+	<cxl-select value="two" &="@value:=select2">
 		<cxl-option value="one">Option 1</cxl-option>
 		<cxl-option value="two">Option 2</cxl-option>
 		<cxl-option value="three">Option 3</cxl-option>
 	</cxl-select>
 </cxl-form-group>
 
-<p>Select 2 Value: <span &="=select2:text"></span></p>
+<p>Value: <span &="=select2:text"></span></p>
 --></docs-demo>
 <docs-attribute name="disabled">
 	<docs-demo><!--
@@ -775,9 +773,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-attribute>
 <docs-attribute name="value">
-	<docs-demo><!--
+	<docs-demo &="owner:@owner"><!--
 <cxl-form-group>
 	<cxl-select value="two">
+		<cxl-option value="one">Option 1</cxl-option>
+		<cxl-option value="two">Option 2</cxl-option>
+		<cxl-option value="three">Option 3</cxl-option>
+	</cxl-select>
+</cxl-form-group>
+<cxl-form-group>
+	<cxl-select &="=testValue:@value">
 		<cxl-option value="one">Option 1</cxl-option>
 		<cxl-option value="two">Option 2</cxl-option>
 		<cxl-option value="three">Option 3</cxl-option>
@@ -788,6 +793,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-component>
 			`,
 			controller: {
+				testValue: 'two',
 				onChange(ev, el) {
 					this.selectChange = el.value;
 				}
@@ -907,10 +913,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		tabs: {
 			template: `
 <docs-component name="cxl-tabs">
-	<docs-demo><!--
-<cxl-tabs>
-	<cxl-tab selected>Details</cxl-tab>
-	<cxl-tab>Employees</cxl-tab>
+	<docs-demo &="owner:@owner"><!--
+<cxl-tabs &="on(action):#select">
+	<cxl-tab>Details</cxl-tab>
+	<cxl-tab selected>Employees</cxl-tab>
 	<cxl-tab>Files</cxl-tab>
 	<cxl-tab>Checks</cxl-tab>
 	<cxl-tab>Extra</cxl-tab>
@@ -920,7 +926,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </cxl-block>
 	--></docs-demo>
 </docs-component>
-			`
+			`,
+			controller: {
+				select(ev) { if (ev.target.tagName==='CXL-TAB') ev.target.selected = true; }
+			}
 		},
 		textarea: {
 			template: `
@@ -991,7 +1000,7 @@ Library and Source Code released under the <a href="https://www.gnu.org/licenses
 	</cxl-c>
 	<cxl-c>
 		<cxl-t h5><cxl-icon icon="eye"></cxl-icon> &nbsp;Accessibility Focused</cxl-t>
-		<p>Accessibility support for visually impaired users, and users with keyboard navigation only. Section 508 and WCAG 2 compliant.</p>
+		<p>Accessibility support for visually impaired users, and users with keyboard navigation only. <!--Section 508 and WCAG 2 compliant.--></p>
 	</cxl-c>
 
 	<cxl-c>
