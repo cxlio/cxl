@@ -65,6 +65,9 @@
 		'cxl-dialog-confirm': {
 			icon: 'window-maximize'
 		},
+		'cxl-drawer': {
+			beta: true
+		},
 		'cxl-fab': {
 			beta: true,
 			icon: 'plus-circle'

@@ -116,7 +116,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			template: `
 <docs-component name="cxl-button">
 <docs-demo &="owner:@owner"><!--
-<cxl-button &="on(click):=event:#toggle =primary:@primary">Default</cxl-button>
+<cxl-button &="on(click):=event:#toggle =primary:@primary">Toggle</cxl-button>
 <cxl-button primary><cxl-icon icon="upload"></cxl-icon> Upload</cxl-button>
 <cxl-button disabled>Disabled</cxl-button>
 --></docs-demo>
@@ -647,8 +647,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-demo><!--
 <cxl-form-group>
 	<cxl-label>Select</cxl-label>
-	<cxl-select>
-		<cxl-option>(Select an option)</cxl-option>
+	<cxl-select placeholder="(Select an Option)">
 		<cxl-option value="one">Option 1</cxl-option>
 		<cxl-option value="two">Option 2</cxl-option>
 		<cxl-option value="three">Option 3</cxl-option>

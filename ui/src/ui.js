@@ -625,7 +625,7 @@ component({
 	bindings: 'focusable',
 	styles: {
 		$: {
-			elevation: 2, backgroundColor: theme.secondary, color: theme.onSecondary,
+			elevation: 1, backgroundColor: theme.secondary, color: theme.onSecondary,
 			position: 'fixed', width: 56, height: 56, bottom: 16, right: 24,
 			borderRadius: 56, textAlign: 'center', paddingTop: 20, cursor: 'pointer',
 			fontSize: 20, paddingBottom: 20, lineHeight: 16
@@ -952,8 +952,8 @@ role(option) selectable
 	`,
 	styles: {
 		$: {
-			cursor: 'pointer', color: theme.onSurface, lineHeight: 48, paddingRight: 16,
-			paddingLeft: 16
+			cursor: 'pointer', color: theme.onSurface, lineHeight: 20, paddingRight: 16,
+			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14
 		},
 		$selected: {
 			backgroundColor: theme.primaryLight, color: theme.onPrimary
@@ -1101,9 +1101,7 @@ component({
 	template: `
 <div &=".container =opened:.opened">
 	<div &="id(menu) .menu =opened:.menuOpened content"></div>
-	<div &="=value:hide .placeholder">
-		<cxl-option &="=placeholder:text"></cxl-option>
-	</div>
+	<div &="=value:hide .placeholder =placeholder:text"></div>
 	<cxl-icon &=".icon" icon="caret-down"></cxl-icon>
 </div>
 <div &=".focusLine"></div>
@@ -1127,6 +1125,8 @@ component({
 		menuOpened: { elevation: 3, overflowY: 'auto', backgroundColor: theme.surface },
 
 		placeholder: {
+			color: theme.onSurface, lineHeight: 20, paddingRight: 16,
+			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14,
 			position: 'absolute', left: -16, top: -8, right: 0, height: 48
 		},
 		container: {
@@ -1461,10 +1461,11 @@ component({
 	styles: {
 		$: {
 			backgroundColor: theme.primary, color: theme.onPrimary, fontSize: 0,
-			display: 'block', flexShrink: 0, position: 'relative', cursor: 'pointer'
+			display: 'block', flexShrink: 0, position: 'relative', cursor: 'pointer',
+			overflowX: 'auto'
 		},
 		selected: { backgroundColor: theme.secondary, height: 4 },
-		content: { display: 'flex', overflowX: 'auto' },
+		content: { display: 'flex' },
 		content$small: { display: 'block' }
 	}
 }, {
@@ -1478,7 +1479,7 @@ component({
 		// Add delay so styles finish rendering...
 		// TODO find better way
 		setTimeout(() => {
-			bar.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+			bar.style.transform = 'translate(' + tab.offsetLeft + 'px, 0)';
 			bar.style.width = tab.clientWidth + 'px';
 		}, 50);
 	},

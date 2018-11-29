@@ -954,6 +954,27 @@ directive('list', {
 
 });
 
+directive('list.sort', {
+	initialize()
+	{
+		this.order = [];
+		this.getter = this.parameter && cxl.getter(this.parameter);
+	},
+	findNext(val)
+	{
+		const i = this.order.findIndex(c => c > val);
+		this.order.splice(i, 0, val, i);
+	},
+	update(event)
+	{
+		if (event.type==='added')
+		{
+			const val = this.getter ? this.getter(event.value) : event.value;
+			event.next = this.findNext(val);
+		}
+	}
+});
+
 directive('list.count', {
 	value: 0,
 	update(event)

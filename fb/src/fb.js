@@ -5,6 +5,7 @@ const
 	fb = cxl.fb = function(path) {
 		return new fb.Reference(path);
 	},
+	map = cxl.rx.operators.map,
 	directive = cxl.directive
 ;
 
@@ -225,6 +226,17 @@ Object.assign(fb, {
 
 	database: null,
 	started: false,
+
+	operators: {
+		constructEvent(Constructor, field, extraArg)
+		{
+			return map(ev => {
+				if (ev.type==='added' || ev.type==='removed')
+					ev.value = new Constructor(field ? ev.value[field] : ev.value, extraArg);
+				return ev;
+			});
+		}
+	},
 
 	start(config)
 	{

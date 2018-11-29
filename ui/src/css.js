@@ -478,6 +478,7 @@ class StyleSheet
 
 cxl.css = Object.assign(css, {
 
+	ANIMATION: ANIMATION,
 	BREAKPOINTS: BREAKPOINTS,
 
 	Rule: Rule,

@@ -265,14 +265,6 @@ Object.assign(rx, {
 	Subscriber: Subscriber,
 
 	operators: {
-		constructEvent(Constructor, field, extraArg)
-		{
-			return map(ev => {
-				if (ev.type==='added' || ev.type==='removed')
-					ev.value = new Constructor(field ? ev.value[field] : ev.value, extraArg);
-				return ev;
-			});
-		},
 		map: map,
 		filter(fn) { return operator(subscriber => val => fn(val) && subscriber.next(val)); }
 	}

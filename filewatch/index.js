@@ -35,6 +35,80 @@ class FileEvent
 	}
 }
 
+class FilePoller {
+
+	constructor(path, callback)
+	{
+		this.path = path;
+		this.callback = callback;
+		this.interval = 1000;
+		this.$history = {};
+		this.$isDirectory = false;
+		this.$statSync();
+		this.$schedule();
+	}
+
+	$schedule()
+	{
+		this.$timeout = setTimeout(() => this.$poll(), this.interval);
+	}
+
+	$statSync(file)
+	{
+		const stat = this.$history[file || '.'] = fs.statSync(this.path + (file ? '/' + file : ''));
+
+		if (!file && stat.isDirectory())
+			fs.readdirSync(this.path).forEach(d => this.$statSync(d));
+	}
+
+	$stat(file)
+	{
+		const filepath = this.path + (file ? '/' + file : '');
+
+		file = file || '.';
+
+		fs.stat(filepath, (err, stat) => {
+			const current = this.$history[file];
+
+			if (this.$checkChanged(current, stat))
+				this.callback(file==='.' ? '' : file);
+
+			if (file==='.' && stat.isDirectory())
+				this.$pollDir();
+
+			this.$history[file] = stat;
+		});
+	}
+
+	$checkChanged(oldStat, stat)
+	{
+		// TODO
+		return !oldStat || !stat || (oldStat.ino !== stat.ino) ||
+			(oldStat.mtime.getTime() !== stat.mtime.getTime());
+	}
+
+	$pollDir()
+	{
+		fs.readdir(this.path, (err, list) => {
+			if (list)
+				list.forEach(l => this.$stat(l));
+		});
+	}
+
+	$poll()
+	{
+		this.$stat();
+		this.$schedule();
+	}
+
+	destroy()
+	{
+		if (this.$timeout)
+			clearTimeout(this.$timeout);
+	}
+
+}
+
 class FileWatch extends rx.Observable {
 
 	static getCount()
@@ -86,15 +160,15 @@ class FileWatch extends rx.Observable {
 		};
 	}
 
-	$createWatchFile(subscriber, path)
+	$createPoller(subscriber, path)
 	{
-		const onChange = () => {
-			this.$onChange(subscriber, 'change', path);
-		};
-		// Try watchFile instead?
-		fs.watchFile(path, { interval: 1000 }, onChange);
-
-		return function() { fs.unwatchFile(path, onChange); };
+	const
+		onChange = (file) => {
+			this.$onChange(subscriber, 'change', file);
+		},
+		poller = new FilePoller(path, onChange)
+	;
+		return function() { poller.destroy(); };
 	}
 
 	$createWatcher(subscriber)
@@ -104,7 +178,7 @@ class FileWatch extends rx.Observable {
 		try {
 			return this.$createFSWatcher(subscriber, path);
 		} catch (e) {
-			return this.$createWatchFile(subscriber, path);
+			return this.$createPoller(subscriber, path);
 		}
 	}
 
