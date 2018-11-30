@@ -32,113 +32,149 @@
 			tags: [ 'navigation' ]
 		},
 		'cxl-appbar-title': {
-			icon: 'window-maximize'
+			icon: 'window-maximize',
+			tags: [ 'navigation' ]
 		},
 		'cxl-avatar': {
 			icon: 'user-circle',
 			tags: [ 'indicator' ]
 		},
 		'cxl-button': {
-			icon: 'hand-pointer'
+			icon: 'hand-pointer',
+			tags: [ 'button' ]
+		},
+		'cxl-backdrop': {
+			tags: [ 'popup' ]
 		},
 		'cxl-c': {
 			beta: true,
-			icon: 'columns'
+			icon: 'columns',
+			tags: [ 'layout' ]
 		},
 		'cxl-card': {
 			icon: 'address-card',
-			beta: true
+			beta: true,
+			tags: [ 'layout' ]
 		},
 		'cxl-checkbox': {
-			icon: 'check-square'
+			icon: 'check-square',
+			tags: ['button']
 		},
 		'cxl-chip': {
 			beta: true,
-			icon: 'capsules'
+			icon: 'capsules',
+			tags: ['indicator']
 		},
 		'cxl-dialog': {
-			icon: 'window-maximize'
+			icon: 'window-maximize',
+			tags: [ 'popup' ]
 		},
 		'cxl-dialog-alert': {
-			icon: 'window-maximize'
+			icon: 'window-maximize',
+			tags: [ 'popup' ]
 		},
 		'cxl-dialog-confirm': {
-			icon: 'window-maximize'
+			icon: 'window-maximize',
+			tags: [ 'popup' ]
 		},
 		'cxl-drawer': {
-			beta: true
+			beta: true,
+			tags: [ 'layout' ]
 		},
 		'cxl-fab': {
 			beta: true,
-			icon: 'plus-circle'
+			icon: 'plus-circle',
+			tags: [ 'button' ]
 		},
 		'cxl-form-group': {
-			icon: 'edit'
+			icon: 'edit',
+			tags: [ 'forms' ]
 		},
 		'cxl-grid': {
 			beta: true,
-			icon: 'th'
+			icon: 'th',
+			tags: [ 'layout' ]
 		},
 		'cxl-hr': {
-			icon: 'minus'
+			icon: 'minus',
+			tags: [ 'layout' ]
 		},
 		'cxl-icon': {
-			icon: 'image'
+			icon: 'image',
+			tags: [ 'indicator' ]
 		},
 		'cxl-input': {
-			icon: 'edit'
+			icon: 'edit',
+			tags: [ 'forms' ]
 		},
 		'cxl-item': {
-			icon: 'list'
+			icon: 'list',
+			tags: [ 'layout' ]
 		},
 		'cxl-menu': {
-			icon: 'list-alt'
+			icon: 'list-alt',
+			tags: [ 'navigation' ]
 		},
 		'cxl-menu-toggle': {
-			icon: 'ellipsis-v'
+			icon: 'ellipsis-v',
+			tags: [ 'button' ]
 		},
 		'cxl-navbar': {
-			icon: 'bars'
+			icon: 'bars',
+			tags: [ 'navigation' ]
 		},
 		'cxl-option': {
-			icon: 'ellipsis-v'
+			icon: 'ellipsis-v',
+			tags: [ 'forms' ]
 		},
 		'cxl-password': {
-			icon: 'key'
+			icon: 'key',
+			tags: ['forms']
 		},
 		'cxl-progress': {
-			icon: 'spinner'
+			icon: 'spinner',
+			tags: ['indicator']
 		},
 		'cxl-radio': {
-			icon: 'dot-circle'
+			icon: 'dot-circle',
+			tags: [ 'forms' ]
 		},
 		'cxl-search-input': {
 			beta: true,
-			icon: 'search'
+			icon: 'search',
+			tags: [ 'forms' ]
 		},
 		'cxl-select': {
-			icon: 'caret-square-down'
+			icon: 'caret-square-down',
+			tags: [ 'forms' ]
 		},
 		'cxl-slider': {
-			icon: 'sliders-h'
+			icon: 'sliders-h',
+			tags: [ 'forms' ]
 		},
 		'cxl-snackbar': {
-			icon: 'comment-alt'
+			icon: 'comment-alt',
+			tags: [ 'popup' ]
 		},
 		'cxl-switch': {
-			icon: 'toggle-on'
+			icon: 'toggle-on',
+			tags: [ 'forms' ]
 		},
 		'cxl-t': {
-			icon: 'font'
+			icon: 'font',
+			tags: [ 'style' ]
 		},
 		'cxl-tab': {
-			icon: 'folder'
+			icon: 'folder',
+			tags: [ 'navigation' ]
 		},
 		'cxl-tabs': {
-			icon: 'folder'
+			icon: 'folder',
+			tags: [ 'navigation' ]
 		},
 		'cxl-textarea': {
-			icon: 'align-left'
+			icon: 'align-left',
+			tags: [ 'forms' ]
 		}
 	};
 

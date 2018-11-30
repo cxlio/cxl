@@ -977,7 +977,7 @@ cxl.route({
 		<br>
 	</cxl-c>
 	<cxl-c sm2 md1>
-<img alt="Image of @cxl/ui Applications" src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; "></img>
+<!--img alt="Image of @cxl/ui Applications" src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; "></img-->
 	</cxl-c>
 
 	<cxl-c xs2><cxl-t h4>Features</cxl-t></cxl-c>
@@ -1315,7 +1315,7 @@ cxl.component({
 	</cxl-block>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
-	<cxl-item icon="palette" &="route.link(theming)">Theming</cxl-item>
+	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
 	<!--cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item-->
 	<cxl-hr></cxl-hr>
 	<cxl-block><cxl-t subtitle2>Components</cxl-t></cxl-block>
