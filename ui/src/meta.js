@@ -91,6 +91,11 @@
 			icon: 'plus-circle',
 			tags: [ 'button' ]
 		},
+		'cxl-form': {
+			icon: 'edit',
+			beta: true,
+			tags: [ 'forms']
+		},
 		'cxl-form-group': {
 			icon: 'edit',
 			tags: [ 'forms' ]
@@ -165,6 +170,11 @@
 			icon: 'spinner',
 			beta: true,
 			tags: [ 'indicator' ]
+		},
+		'cxl-submit': {
+			icon: '',
+			beta: true,
+			tags: [ 'forms' ]
 		},
 		'cxl-switch': {
 			icon: 'toggle-on',

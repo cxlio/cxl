@@ -37,43 +37,6 @@ component({
 });
 
 component({
-	name: 'cxl-form',
-
-	events: [ 'submit' ],
-	bindings: `
-role(form)
-registable.host(cxl-form):=elements
-
-on(cxl-form.submit):#onSubmit:host.trigger(submit)
-keypress(enter):#onSubmit:host.trigger(submit)
-	`
-}, {
-	// TODO better focusing
-	onSubmit(ev)
-	{
-		var focus;
-
-		if (this.elements)
-		{
-			this.elements.forEach(el => {
-				if (el.invalid)
-					focus = focus || el;
-
-				el.touched = true;
-			});
-
-			if (focus)
-			{
-				focus.focus();
-				return cxl.Skip;
-			}
-		}
-
-		ev.stopPropagation();
-	}
-});
-
-component({
 	name: 'cxl-layout',
 	styles: {
 		$: {
@@ -121,23 +84,6 @@ component({
 		});
 		document.head.appendChild(font);
 	}
-});
-
-component({
-	name: 'cxl-submit',
-	extend: 'cxl-button',
-	template: `
-<cxl-icon &="=disabled:show =icon:@icon .icon"></cxl-icon>
-<span &="content"></span>
-	`,
-	styles: {
-		icon: { animation: 'spin', marginRight: 8 }
-	},
-	events: [ 'cxl-form.submit' ],
-	bindings: 'on(action):host.trigger(cxl-form.submit)'
-}, {
-	primary: true,
-	icon: 'spinner'
 });
 
 component({

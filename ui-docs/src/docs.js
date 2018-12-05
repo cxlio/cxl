@@ -366,6 +366,32 @@ Checked: <span &="=test:text"></span>
 </docs-component>
 			`
 		},
+		form: {
+			template: `
+<docs-component name="cxl-form">
+	<docs-demo &="owner:@owner"><!--
+<cxl-form>
+	<cxl-block>
+		<cxl-t subtitle>Input Validation</cxl-t>
+		<cxl-form-group>
+			<cxl-label>E-mail Address</cxl-label>
+			<cxl-input &="valid(email)"></cxl-input>
+		</cxl-form-group>
+		<cxl-form-group>
+			<cxl-label for="password">Password</cxl-label>
+			<cxl-password &="valid(required)"></cxl-password>
+		</cxl-form-group>
+		<p &="=submitted:show">Form Submitted!</p>
+	</cxl-block>
+	<cxl-block>
+		<cxl-button>Cancel</cxl-button>
+		<cxl-submit>Submit</cxl-submit>
+	</cxl-block>
+</cxl-form>
+	--></docs-demo>
+</docs-component>
+			`
+		},
 		'form-group': {
 			template: `
 <docs-component name="cxl-form-group">
@@ -854,6 +880,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-component>
 			`
 		},
+
+		submit: {
+			template: `
+<docs-component name="cxl-submit">
+	<docs-demo><!--
+<cxl-submit>Submit</cxl-submit>
+	--></docs-demo>
+	<docs-attribute name="disabled">
+		<docs-demo><!--
+<cxl-submit disabled>Submit Disabled</cxl-submit>
+		--></docs-demo>
+	</docs-attribute>
+</docs-component>
+			`
+		},
+
 		switch: {
 			template: `
 <docs-component name="cxl-switch">
