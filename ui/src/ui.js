@@ -79,7 +79,7 @@ const
 			position: 'relative', border: 0, borderTop: 2, borderStyle: 'solid',
 			borderColor: theme.primary, scaleX: 0, top: -1
 		},
-		focusLine$invalid$touched: { borderColor: theme.danger },
+		focusLine$invalid$touched: { borderColor: theme.error },
 		focusLine$inverse: { borderColor: theme.secondary },
 		focusLine$focus: { scaleX: 1 }
 	},
@@ -312,7 +312,7 @@ directive('registable.host', {
 
 component({
 	name: 'cxl-appbar',
-	attributes: [ 'extended' ],
+	attributes: [ 'extended', 'fixed' ],
 	bindings: 'role(heading)',
 	template: `
 <div &=".flex content anchor(cxl-appbar-actions)"></div>
@@ -327,6 +327,7 @@ component({
 			backgroundColor: theme.primary, flexShrink: 0,
 			fontSize: 18, color: theme.onPrimary, elevation: 2
 		},
+		$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 		flex$extended: { alignItems: 'start', height: 128, paddingBottom: 24 },
 		flex$medium: { paddingTop: 8, paddingBottom: 8 }
 	}
@@ -374,7 +375,7 @@ component({
 
 component({
 	name: 'cxl-button',
-	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'inverse', 'touched' ],
+	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'inverse', 'touched', 'big' ],
 	events: [ 'action' ],
 	bindings: 'focusable role(button) action:#onAction:host.trigger(action)',
 	styles: [FocusCSS, {
@@ -388,6 +389,7 @@ component({
 		$primary: { backgroundColor: theme.primary, color: theme.onPrimary },
 		$secondary: { backgroundColor: theme.secondary, color: theme.onSecondary },
 
+		$big: { padding: 16, fontSize: 22 },
 		$flat: {
 			backgroundColor: 'inherit',
 			elevation: 0, fontWeight: 500, paddingRight: 8, paddingLeft: 8, color: theme.primary
@@ -504,16 +506,23 @@ action:#toggle
 
 component({
 	name: 'cxl-chip',
-	attributes: [ 'removable' ],
-	events: [ 'cxl-chip.remove' ],
+	attributes: [ 'removable', 'disabled', 'touched' ],
+	events: [ 'cxl-chip.remove', 'action' ],
+	bindings: 'focusable keypress:#onKey',
 	template: `
 <span &=".avatar content(cxl-avatar)"></span><span &=".content content"></span><cxl-icon &=".remove =removable:show on(click):host.trigger(cxl-chip.remove)" icon="times"></cxl-icon>
 	`,
-	styles: {
-		$: { borderRadius: 16, backgroundColor: 'rgba(0,0,0,0.16)', display: 'inline-flex' },
+	styles: [{
+		$: { borderRadius: 16, fontSize: 14, backgroundColor: 'rgb(216,216,216)', display: 'inline-flex' },
 		content: { display: 'inline-block', marginLeft: 12, paddingRight: 12, lineHeight: 32 },
 		avatar: { display: 'inline-block', height: 32 },
 		remove: { display: 'inline-block', marginRight: 12, cursor: 'pointer', lineHeight: 32 }
+	}, FocusCSS ]
+}, {
+	onKey(ev, el)
+	{
+		if (this.removable && (ev.key==='Delete' || ev.key==='Backspace'))
+			cxl.dom.trigger(el, 'cxl-chip.remove');
 	}
 });
 
@@ -640,16 +649,19 @@ component({
 	name: 'cxl-form-group',
 	styles: {
 		$: { marginBottom: 16 },
-		error: { color: theme.danger, borderColor: theme.danger },
+		error: { color: theme.error, borderColor: theme.error },
 		content: { position: 'relative' },
 		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75 },
-		label: { fontSize: 12, lineHeight: 16, transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)' }
+		label: {
+			fontSize: 12, lineHeight: 16,
+			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
+		}
 	},
 	attributes: [ 'floating' ],
 	template: `
 <div &=".label =invalid:.error =isEmpty:.labelEmpty content(cxl-label):#onLabel"></div>
 <div &=".content content =invalid:.error on(change):#onChange"></div>
-<cxl-t caption error &="=error:text"></cxl-t>
+<cxl-t caption &=".error =error:text"></cxl-t>
 	`,
 	bindings: `
 on(cxl-form.register):#onChange on(focusable.touched):#update on(invalid):#update
@@ -717,11 +729,18 @@ component({
 component({
 	name: 'cxl-icon',
 	template: `<span &="=icon:#setIcon"></span>`,
-	attributes: [ 'icon' ],
+	bindings: 'role(img) #getAlt:attribute(alt)',
+	attributes: [ 'icon', 'alt' ],
 	styles: {
 		$: { display: 'inline-block', fontFamily: 'Font Awesome\\ 5 Free' }
 	}
 }, {
+	alt: '',
+	getAlt()
+	{
+		return this.alt || this.icon || '';
+	},
+
 	setIcon(val, el)
 	{
 		const icon = ui.icons[this.icon];
@@ -776,6 +795,7 @@ touchable
 
 }, {
 	value: '',
+	focused: false,
 	name: null,
 	type: 'text',
 	invalid: false,
@@ -873,22 +893,27 @@ component({
 	name: 'cxl-menu-toggle',
 	attributes: [ 'inverse', 'disabled', 'touched' ],
 	template: `
-<div &="id(menu) .menu">
-<cxl-menu dense closed &=".menuControl action:event.stop:not:=showMenu =showMenu:not:@closed content"></cxl-menu>
+<div &=".menu action:event.stop:log:not:=showMenu">
+<cxl-menu dense closed &="id(menu) .menuControl =showMenu:log:not:@closed content"></cxl-menu>
 </div>
 <cxl-icon &=".icon" icon="ellipsis-v"></cxl-icon>
 	`,
 	events: [ 'action' ],
 	bindings: `
-id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show role(button)
+id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show:event.stop:log role(button)
 	`,
 	styles: {
-		//$: { position: 'relative' },
-		icon: { color: theme.onSurface, cursor: 'pointer', width: 8 },
+		icon: {
+			color: theme.onSurface, cursor: 'pointer',
+			width: 8
+		},
 		icon$inverse: { color: theme.onPrimary },
-		menuControl: { transformOrigin: 'right top', textAlign: 'left' },
+		menuControl: {
+			position: 'absolute', transformOrigin: 'right top', textAlign: 'left',
+			right: 0
+		},
 		menu: {
-			position: 'absolute', left: 0, right: 0, height: 0, textAlign: 'right', elevation: 5
+			height: 0, textAlign: 'right', elevation: 5
 		}
 	}
 }, {
@@ -902,9 +927,10 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 	{
 		this.showMenu = true;
 		this.menu.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
+		// console.log(this.menu.style.right);
 		//this.menu.style.top = el.offsetTop+'px';
 
-		const item = cxl.dom.find(this.self, this.itemSelector);
+		const item = cxl.dom.find(el, this.itemSelector);
 
 		if (item)
 			item.focus();
@@ -917,7 +943,7 @@ component({
 	bindings: 'role(navigation)',
 	template: `
 <cxl-drawer &="role(list) action:#onRoute =permanent:@permanent =visible:@visible content location:#onRoute"></cxl-drawer>
-<cxl-icon &="action:#toggle .toggler" icon="bars"></cxl-icon>
+<cxl-icon alt="Open Navigation Bar" &="action:#toggle .toggler" icon="bars"></cxl-icon>
 	`,
 	styles: {
 		$: {
@@ -1358,6 +1384,39 @@ component({
 
 });
 
+cxl.css.ANIMATION.spinnerstroke = {
+	keyframes: `
+0%      { stroke-dashoffset: $start;  transform: rotate(0); }
+12.5%   { stroke-dashoffset: $end;    transform: rotate(0); }
+12.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(72.5deg); }
+25%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(72.5deg); }
+25.0001%   { stroke-dashoffset: $start;  transform: rotate(270deg); }
+37.5%   { stroke-dashoffset: $end;    transform: rotate(270deg); }
+37.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(161.5deg); }
+50%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(161.5deg); }
+50.0001%  { stroke-dashoffset: $start;  transform: rotate(180deg); }
+62.5%   { stroke-dashoffset: $end;    transform: rotate(180deg); }
+62.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(251.5deg); }
+75%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(251.5deg); }
+75.0001%  { stroke-dashoffset: $start;  transform: rotate(90deg); }
+87.5%   { stroke-dashoffset: $end;    transform: rotate(90deg); }
+87.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(341.5deg); }
+100%    { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(341.5deg); }
+		`.replace(/\$start/g, 282.743 * (1-0.05))
+		.replace(/\$end/g, 282.743 * (1-0.8)),
+	value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)'
+};
+
+component({
+	name: 'cxl-spinner',
+	template: `<svg viewBox="0 0 100 100" style="width:100px;height:100px">
+<circle cx="50%" cy="50%" r="45" style="stroke:var(--cxl-primary);fill:transparent;transition:stroke-dashoffset var(--cxl-speed);stroke-width:10%;transform-origin:center;stroke-dasharray:282.743px" &=".circle" /></svg>`,
+	styles: {
+		$: { animation: 'spin', display: 'inline-block' },
+		circle: { animation: 'spinnerstroke' }
+	}
+});
+
 component({
 	name: 'cxl-switch',
 	template: `
@@ -1451,6 +1510,51 @@ component({
 }, {
 	href: null,
 	selected: false
+});
+
+component({
+	name: 'cxl-table',
+	bindings: 'registable.host(table):=event =event:#updateColumns',
+	styles: {
+		$: { display: 'grid' }
+	}
+}, {
+	columnCount: 0,
+	updateColumns(set, table)
+	{
+		if (set)
+		{
+			let columns = '';
+
+			for (let th of set)
+				columns += (th.width || 'auto') + ' ';
+
+			this.columnCount = set.size;
+
+			table.style.gridTemplateColumns = columns;
+		}
+	}
+});
+
+component({
+	name: 'cxl-th',
+	attributes: ['width'],
+	bindings: 'registable(table) role(columnheader)',
+	styles: {
+		$: {
+			flexGrow: 1, fontSize: 12, color: 'rgba(0,0,0,0.53)',
+			padding: 12, borderBottom: '1px solid ' + theme.divider, lineHeight: 24
+		}
+	}
+});
+
+component({
+	name: 'cxl-td',
+	styles: {
+		$: {
+			flexGrow: 1, padding: 12, borderBottom: '1px solid ' + theme.divider
+		}
+	}
 });
 
 component({

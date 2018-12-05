@@ -19,8 +19,8 @@ const
 			value: 'cxl-pulse 1s infinite steps(8)'
 		},
 		fadeIn: {
-			keyframes: '0% { display: block; opacity: 0; } to { opacity: 1 }',
-			value: 'cxl-fadeIn var(--speed) linear'
+			keyframes: '0% { display: block; opacity: 0; } to { opacity: 1; }',
+			value: 'cxl-fadeIn var(--cxl-speed) linear'
 		},
 		wait: {
 			keyframes: `
@@ -295,7 +295,7 @@ class Style
 });
 
 ([ 'alignItems', 'display', 'position', 'boxSizing', 'boxShadow', 'opacity', 'fontFamily', 'fontWeight', 'borderColor',
-  	'backgroundColor', 'backgroundImage', 'color', 'cursor', 'overflowX', 'filter',
+  	'backgroundColor', 'background', 'color', 'cursor', 'overflowX', 'filter',
   	'textDecoration', 'borderStyle', 'transition', 'textTransform', 'textAlign', 'flexGrow',
   	'flexShrink',
   	'alignContent', 'flexDirection', 'justifyContent', 'whiteSpace', 'scrollBehavior',

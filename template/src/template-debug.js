@@ -62,6 +62,10 @@ override(cxl.compiler, 'getDirective', null, function(res, parsed) {
 	res.$$name = shortcut ? this.shortcuts[shortcut] : parsed[3];
 });
 
+override(cxl.compiler, 'directiveNotFound', function(directive, element, owner) {
+	console.log(element, owner);
+});
+
 override(directives.style.prototype, 'update', function() {
 	if (this.element===this.owner.host)
 		throw new Error('Applying style to host element');

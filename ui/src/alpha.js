@@ -78,9 +78,10 @@ component({
 	styles: {
 		$: {
 			display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gridGap: 16,
-			margin: 16
+			padding: 16
 		},
-		$medium: { gridGap: 24, margin: 24 }
+		$medium: { gridGap: 24, padding: 24 },
+		$large: { width: 1280, margin: 'auto' }
 	}
 });
 
@@ -94,42 +95,6 @@ component({
 	}
 }, {
 	delay: 300
-});
-
-cxl.css.ANIMATION.spinnerstroke = {
-	keyframes: `
-0%      { stroke-dashoffset: $start;  transform: rotate(0); }
-12.5%   { stroke-dashoffset: $end;    transform: rotate(0); }
-12.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(72.5deg); }
-25%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(72.5deg); }
-
-25.0001%   { stroke-dashoffset: $start;  transform: rotate(270deg); }
-37.5%   { stroke-dashoffset: $end;    transform: rotate(270deg); }
-37.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(161.5deg); }
-50%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(161.5deg); }
-
-50.0001%  { stroke-dashoffset: $start;  transform: rotate(180deg); }
-62.5%   { stroke-dashoffset: $end;    transform: rotate(180deg); }
-62.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(251.5deg); }
-75%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(251.5deg); }
-
-75.0001%  { stroke-dashoffset: $start;  transform: rotate(90deg); }
-87.5%   { stroke-dashoffset: $end;    transform: rotate(90deg); }
-87.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(341.5deg); }
-100%    { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(341.5deg); }
-		`.replace(/\$start/g, 282.743 * (1-0.05))
-		.replace(/\$end/g, 282.743 * (1-0.8)),
-	value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)'
-};
-
-component({
-	name: 'cxl-spinner',
-	template: `<svg viewBox="0 0 100 100" style="width:100px;height:100px">
-<circle cx="50%" cy="50%" r="45" style="stroke:var(--cxl-primary);fill:transparent;transition:stroke-dashoffset var(--cxl-speed);stroke-width:10%;transform-origin:center;stroke-dasharray:282.743px" &=".circle" /></svg>`,
-	styles: {
-		$: { animation: 'spin', display: 'inline-block' },
-		circle: { animation: 'spinnerstroke' }
-	}
 });
 
 component({
@@ -176,27 +141,6 @@ component({
 });
 
 component({
-	name: 'cxl-table',
-	bindings: 'registable.host(table):=event =event:#updateColumns',
-	styles: {
-		$: { display: 'grid' }
-	}
-}, {
-	updateColumns(set, table)
-	{
-		if (set)
-		{
-			let columns = '';
-
-			for (let th of set)
-				columns += th.width || 'auto' + ' ';
-
-			table.style.gridTemplateColumns = columns;
-		}
-	}
-});
-
-component({
 	name: 'cxl-textarea-editable',
 	template: `
 <div &=".input =disabled:not:@contentEditable content on(input):#onInput =value:text"></div>
@@ -219,27 +163,6 @@ component({
 	value: '',
 	onInput()
 	{
-	}
-});
-
-component({
-	name: 'cxl-th',
-	attributes: ['width'],
-	bindings: 'registable(table) role(columnheader)',
-	styles: {
-		$: {
-			flexGrow: 1, fontSize: 12, color: 'rgba(0,0,0,0.53)',
-			padding: 12, borderBottom: '1px solid ' + theme.divider, lineHeight: 24
-		}
-	}
-});
-
-component({
-	name: 'cxl-td',
-	styles: {
-		$: {
-			flexGrow: 1, padding: 12, borderBottom: '1px solid ' + theme.divider
-		}
 	}
 });
 

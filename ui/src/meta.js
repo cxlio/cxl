@@ -10,20 +10,24 @@
 
 		attributes: {
 
-			alt: { summary: '' },
-			disabled: { summary: '' },
-			invalid: { summary: '' },
-			name: { summary: '' },
-			touched: { summary: '' },
-			value: { summary: '' }
+			alt: { summary: 'Alternative text description for the component' },
+			disabled: { summary: 'Indicates whether or not the element can receive focus and respond to user actions.' },
+			invalid: { summary: 'Indicated whether or not the component has a valid value' },
+			name: { summary: 'Specifies the name of the compopent inside a form' },
+			touched: { summary: 'Indicates whether or not the component has been blurred' },
+			value: { summary: 'Specifies the current value of the component' }
 
 		},
 
 		events: {
-			blur: { summary: '' },
-			change: { summary: '' },
-			input: { summary: '' },
+			blur: { summary: 'Fired when the component has lost focus' },
+			change: { summary: 'Fired when the component\'s value has changed' },
+			input: { summary: 'Fired when the component\'s value has changed' },
 			invalid: { summary: '' }
+		},
+
+		methods: {
+			focus: { summary: 'Sets focus on the component'}
 		},
 
 		'cxl-appbar': {
@@ -79,6 +83,7 @@
 		},
 		'cxl-drawer': {
 			beta: true,
+			icon: 'columns',
 			tags: [ 'layout' ]
 		},
 		'cxl-fab': {
@@ -156,6 +161,11 @@
 			icon: 'comment-alt',
 			tags: [ 'popup' ]
 		},
+		'cxl-spinner': {
+			icon: 'spinner',
+			beta: true,
+			tags: [ 'indicator' ]
+		},
 		'cxl-switch': {
 			icon: 'toggle-on',
 			tags: [ 'forms' ]
@@ -167,6 +177,11 @@
 		'cxl-tab': {
 			icon: 'folder',
 			tags: [ 'navigation' ]
+		},
+		'cxl-table': {
+			icon: 'table',
+			beta: true,
+			tags: [ 'table' ]
 		},
 		'cxl-tabs': {
 			icon: 'folder',

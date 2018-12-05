@@ -306,6 +306,11 @@ class Compiler
 		};
 	}
 
+	directiveNotFound(directive)
+	{
+		throw new Error('Directive "' + directive + '" not found.');
+	}
+
 	getDirective(parsed, element, owner)
 	{
 	var
@@ -323,7 +328,7 @@ class Compiler
 		Ref = this.directives[directive];
 
 		if (!Ref)
-			throw new Error('Directive "' + directive + '" not found.');
+			this.directiveNotFound(directive, element, owner);
 
 		result = new Ref(element, param, owner);
 

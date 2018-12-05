@@ -215,14 +215,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-component name="cxl-card">
 <docs-demo label="Card Layout"><!--
 <cxl-card>
-<cxl-block>
-	<cxl-h5>Title goes here</cxl-h5>
+<cxl-c pad16>
+	<cxl-t h5>Title goes here</cxl-t>
 	Secondary line text Lorem ipsum dolor sit amet
-</cxl-block>
-<cxl-block compact>
+</cxl-c>
+<cxl-c pad8>
 	<cxl-button flat>Action 1</cxl-button>
 	<cxl-button flat>Action 2</cxl-button>
-</cxl-block>
+</cxl-c>
 </cxl-card>
 --></docs-demo>
 <docs-demo label="Card with Images"><!--
@@ -289,6 +289,7 @@ Checked: <span &="=test:text"></span>
 <docs-demo><!--
 <cxl-chip>Single Chip</cxl-chip>
 <cxl-chip removable>Removable Chip</cxl-chip>
+<cxl-chip><cxl-icon icon="home"></cxl-icon> Chip with Icon</cxl-chip>
 <cxl-chip><cxl-avatar little></cxl-avatar> Chip with Avatar</cxl-chip>
 --></docs-demo>
 </docs-component>
@@ -844,6 +845,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			}
 		},
 
+		spinner: {
+			template: `
+<docs-component name="cxl-spinner">
+<docs-demo><!--
+<cxl-spinner></cxl-spinner>
+--></docs-demo>
+</docs-component>
+			`
+		},
 		switch: {
 			template: `
 <docs-component name="cxl-switch">
@@ -906,6 +916,36 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	<cxl-tab>Tab 3</cxl-tab>
 </cxl-tabs>
 --></docs-demo>
+</docs-component>
+			`
+		},
+
+		table: {
+			template: `
+<docs-component name="cxl-table">
+	<docs-demo label="Basic Table"><!--
+<cxl-table>
+	<cxl-th width="100px">Header 1</cxl-th>
+	<cxl-th>Header 2</cxl-th>
+	<cxl-th>Header 3</cxl-th>
+	<cxl-th>Header 4</cxl-th>
+
+	<cxl-td>Cell 1</cxl-td>
+	<cxl-td>Cell 2</cxl-td>
+	<cxl-td>Cell 3</cxl-td>
+	<cxl-td>Cell 4</cxl-td>
+
+	<cxl-td>Cell 5</cxl-td>
+	<cxl-td>Cell 6</cxl-td>
+	<cxl-td>Cell 7</cxl-td>
+	<cxl-td>Cell 8</cxl-td>
+
+	<cxl-td>Cell 9</cxl-td>
+	<cxl-td>Cell 10</cxl-td>
+	<cxl-td>Cell 11</cxl-td>
+	<cxl-td>Cell 12</cxl-td>
+</cxl-table>
+	--></docs-demo>
 </docs-component>
 			`
 		},
@@ -989,7 +1029,7 @@ cxl.route({
 	</cxl-c>
 	<cxl-c>
 		<cxl-t h5><cxl-icon icon="mobile-alt"></cxl-icon> &nbsp;Responsive</cxl-t>
-		<p>All components are responsive out of the box for any device size and shape. No special settings needed.</p>
+		<p>All components are responsive for any device size and shape. No special settings needed.</p>
 	</cxl-c>
 	<cxl-c>
 		<cxl-t h5><cxl-icon icon="code-branch"></cxl-icon> &nbsp;Open Source</cxl-t>
@@ -1279,7 +1319,9 @@ cxl.route({
 },{
 	setKey(name, el)
 	{
-		el.dataset.key = name;
+		const meta = META[name];
+
+		el.dataset.key = name + (meta && meta.tags ? meta.tags.join(' ') : '');
 	},
 	match(val, el)
 	{
@@ -1287,6 +1329,145 @@ cxl.route({
 	},
 
 	components: COMPONENTS
+});
+
+cxl.component({
+	name: 'uid-attributes',
+	template: `
+	`
+});
+
+cxl.component({
+	name: 'docs-component',
+	attributes: [ 'name' ],
+	template: `
+<cxl-t h5>Basic Usage</cxl-t>
+<div &="content"></div>
+<br><br>
+<cxl-t h5>API</cxl-t>
+<br>
+<div &="=role:show">
+	<cxl-t h6>Accessibility</cxl-t>
+	<ul>
+		<li>ARIA Role: <a &="=role:text:#getAriaLink:attribute(href)"></a></li>
+		<li &="=ariaStates:show">Properties:
+	<template &="=ariaStates:each:repeat">
+		<a &="item:text:#getAriaLink:attribute(href)"></a>
+	</template>
+		</li>
+	</ul>
+</div>
+<div &="=anchors:show">
+	<cxl-t h6>Anchors</cxl-t>
+	<ul>
+	<template &="=anchors:each:repeat">
+	<li &="$parameter:text"></li>
+	</template>
+	</ul>
+</div>
+<div &="=attributes:show">
+	<br>
+	<cxl-t h6>Attributes</cxl-t>
+	<cxl-table>
+		<cxl-th>Name</cxl-th>
+		<cxl-th width="1fr">Description</cxl-th>
+		<template &="=attributes:sort:each:repeat">
+		<cxl-td><docs-link &="item:text:@anchor"></docs-link></cxl-td>
+		<cxl-td &="item:#getAttributeSummary:text"></cxl-td>
+		</template>
+	</cxl-table>
+	<br>
+</div>
+<div &="=events:show">
+	<br>
+	<cxl-t h6>Events</cxl-t>
+	<cxl-table>
+		<cxl-th>Name</cxl-th>
+		<cxl-th width="1fr">Description</cxl-th>
+		<template &="=events:sort:each:repeat">
+		<cxl-td><docs-link &="item:text:@anchor"></docs-link></cxl-td>
+		<cxl-td &="item:#getEventSummary:text"></cxl-td>
+		</template>
+	</cxl-table>
+</div>
+<div &="=methods:show">
+	<br>
+	<cxl-t h6>Methods</cxl-t>
+	<cxl-table>
+		<cxl-th>Name</cxl-th>
+		<cxl-th width="1fr">Description</cxl-th>
+		<template &="=methods:sort:each:repeat">
+		<cxl-td><docs-link &="item:text:@anchor"></docs-link></cxl-td>
+		<cxl-td &="item:#getMethodSummary:text"></cxl-td>
+		</template>
+	</cxl-table>
+</div>
+<br>
+	<div &="content(docs-attribute)"></div>
+	<div &="content(docs-event)"></div>
+	<div &="content(docs-method)"></div>
+	`,
+	bindings: '=name:#initialize'
+}, {
+	initialize(name)
+	{
+	const
+		state = this,
+		component = cxl.componentFactory.components[name],
+		meta = component && component.meta || {},
+		view = cxl.dom(name).$view
+	;
+		state.instance = cxl.dom(name);
+		state.attributes = meta.attributes;
+		state.events = meta.events;
+		state.methods = meta.methods;
+
+		view.connect();
+
+		state.role = view.host.getAttribute('role');
+		this.processBindings(view);
+	},
+
+	getAttributeSummary(name)
+	{
+		const meta = META.attributes[name];
+		return meta && meta.summary || '';
+	},
+
+	getEventSummary(name)
+	{
+		const meta = META.events[name];
+		return meta && meta.summary || '';
+	},
+
+	getMethodSummary(name)
+	{
+		const meta = META.methods[name];
+		return meta && meta.summary || '';
+	},
+
+	getAriaLink(val)
+	{
+		return 'https://www.w3.org/TR/wai-aria-1.1/#' + val;
+	},
+
+	processBindings(view)
+	{
+		const anchors = [];
+
+		view.bindings.forEach(b => {
+			if (b.anchor)
+				anchors.push(b);
+		});
+
+		if (anchors.length) this.anchors = anchors;
+		if (view.$ariaStates) this.ariaStates = view.$ariaStates;
+	},
+
+	onAttributeClick()
+	{
+		cxl.dom.scrollTo(this.name);
+	}
 });
 
 cxl.component({

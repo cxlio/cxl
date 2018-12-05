@@ -487,7 +487,7 @@ cxl.component({
 		$large: { paddingLeft: 288 },
 		content: {
 			position: 'relative', flexGrow: 1, overflowY: 'auto',
-			overflowX: 'hidden'
+			overflowScrolling: 'touch'
 		},
 		footer: { },
 		router: { margin: 16 },
