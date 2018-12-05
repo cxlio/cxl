@@ -185,7 +185,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 	<docs-demo label="Responsive Layout"><!--
 <docs-bg>
-	<cxl-layout>
+	<cxl-grid columns="repeat(12, 1fr)">
 		<style>
 			cxl-c { background: rgba(255,0,0,0.25); height: 100px; }
 		</style>
@@ -203,7 +203,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		<cxl-c xs0 lg1 ></cxl-c>
 		<cxl-c xs0 lg1 ></cxl-c>
 		<cxl-c xs0 lg1 ></cxl-c>
-	</cxl-layout>
+	</cxl-grid>
 </docs-bg>
 	--></docs-demo>
 </docs-component>
