@@ -8,43 +8,6 @@ const
 	ui = cxl.ui = {
 		icons: {}
 	},
-	theme = ui.theme = cxl.css({
-
-		variables: {
-
-			speed: '0.2s',
-
-			primary: '#1976d2', //'#01579b',
-			primaryDark: '#004ba0',
-			primaryLight: '#63a4ff',
-
-			secondary: '#f9aa33', // '#ff5722',
-			surface: '#fff',
-			error: '#b00020',
-
-			onPrimary: '#fff',
-			onPrimaryLight: '#000',
-			onSecondary: '#000',
-			onSurface: '#212121',
-			onError: '#fff',
-
-			divider: 'rgba(0,0,0,0.12)',
-			font: 'Roboto,-apple-system, BlinkMacSystemFont,"Segoe UI", "Helvetica Neue", Arial, sans-serif'
-		},
-
-		global: {
-			$: {
-				display: 'block',
-				reset: '-webkit-tap-highlight-color:transparent;',
-				fontFamily: 'var(--cxl-font)'
-			},
-			'*': {
-				boxSizing: 'border-box',
-				transition: 'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)',
-			}
-		}
-
-	}),
 
 	FocusCSS = {
 		$active: { filter: 'brightness(0.75)' },
@@ -67,7 +30,7 @@ const
 			opacity: 0, scaleX: 0, scaleY: 0, display: 'inline-block',
 			translateX: -14, translateY: -14
 		},
-		focusCirclePrimary: { backgroundColor: theme.primary },
+		focusCirclePrimary: { backgroundColor: 'primary' },
 		focusCircle$hover: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.14 },
 		focusCircle$focus: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.25 },
 		focusCircle$disabled: { scaleX: 0, scaleY: 0 }
@@ -77,10 +40,10 @@ const
 		$focus: { outline: 0 },
 		focusLine: {
 			position: 'relative', border: 0, borderTop: 2, borderStyle: 'solid',
-			borderColor: theme.primary, scaleX: 0, top: -1
+			borderColor: 'primary', scaleX: 0, top: -1
 		},
-		focusLine$invalid$touched: { borderColor: theme.error },
-		focusLine$inverse: { borderColor: theme.secondary },
+		focusLine$invalid$touched: { borderColor: 'error' },
+		focusLine$inverse: { borderColor: 'secondary' },
 		focusLine$focus: { scaleX: 1 }
 	},
 
@@ -324,8 +287,8 @@ component({
 			paddingLeft: 16, paddingRight: 16, paddingTop: 4, paddingBottom: 4
 		},
 		$: {
-			backgroundColor: theme.primary, flexShrink: 0,
-			fontSize: 18, color: theme.onPrimary, elevation: 2
+			backgroundColor: 'primary', flexShrink: 0,
+			fontSize: 18, color: 'onPrimary', elevation: 2
 		},
 		$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 		flex$extended: { alignItems: 'start', height: 128, paddingBottom: 24 },
@@ -350,7 +313,7 @@ component({
 	template: `<img &=".image =src:show:attribute(src) =alt:attribute(alt)" /><div &="=text:show:text =src:hide"></div><cxl-icon icon="user" &=".image"></cxl-icon>`,
 	styles: {
 		$: {
-			borderRadius: 32, backgroundColor: theme.surface,
+			borderRadius: 32, backgroundColor: 'surface',
 			width: 40, height: 40, display: 'inline-block', fontSize: 18, lineHeight: 38,
 			textAlign: 'center', overflowY: 'hidden'
 		},
@@ -382,20 +345,20 @@ component({
 		$: {
 			elevation: 1, paddingTop: 8, paddingBottom: 8, lineHeight: 20, paddingRight: 16,
 			paddingLeft: 16, cursor: 'pointer', display: 'inline-block', textTransform: 'uppercase',
-			borderRadius: 2, userSelect: 'none', backgroundColor: theme.surface,
-			color: theme.onSurface, textAlign: 'center'
+			borderRadius: 2, userSelect: 'none', backgroundColor: 'surface',
+			color: 'onSurface', textAlign: 'center'
 		},
 
-		$primary: { backgroundColor: theme.primary, color: theme.onPrimary },
-		$secondary: { backgroundColor: theme.secondary, color: theme.onSecondary },
+		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
+		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
 
 		$big: { padding: 16, fontSize: 22 },
 		$flat: {
 			backgroundColor: 'inherit',
-			elevation: 0, fontWeight: 500, paddingRight: 8, paddingLeft: 8, color: theme.primary
+			elevation: 0, fontWeight: 500, paddingRight: 8, paddingLeft: 8, color: 'primary'
 		},
 		$flat$large: { paddingLeft: 12, paddingRight: 12 },
-		$flat$inverse: { color: theme.onPrimary },
+		$flat$inverse: { color: 'onPrimary' },
 
 		$active: { elevation: 3 },
 		$active$disabled: { elevation: 1 },
@@ -435,18 +398,18 @@ component({
 		$pad8: { padding: 8 },
 		$pad24: { padding: 24 },
 		// Colors
-		$surface: { backgroundColor: theme.surface, color: theme.onSurface },
-		$error: { backgroundColor: theme.error, color: theme.onError },
-		$primary: { backgroundColor: theme.primary, color: theme.onPrimary },
-		$secondary: { backgroundColor: theme.secondary, color: theme.onSecondary },
+		$surface: { backgroundColor: 'surface', color: 'onSurface' },
+		$error: { backgroundColor: 'error', color: 'onError' },
+		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
+		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
 	}, {}, {}, {}, {}, {} ])
 });
 
 component({
 	name: 'cxl-card',
 	styles: { $: {
-		elevation: 1, borderRadius: 2, backgroundColor: theme.surface,
-		color: theme.onSurface
+		elevation: 1, borderRadius: 2, backgroundColor: 'surface',
+		color: 'onSurface'
 	} }
 });
 
@@ -469,12 +432,12 @@ action:#toggle
 		$focus: { outline: 0 },
 		box: {
 			display: 'inline-block', width: 20, height: 20, border: 2,
-			borderColor: theme.onSurface, marginRight: 8,
+			borderColor: 'onSurface', marginRight: 8,
 			borderStyle: 'solid', color: 'rgba(0,0,0,0)', fontSize: 16
 		},
 		box$checked: {
-			borderColor: theme.primary, backgroundColor: theme.primary,
-			color: theme.onPrimary
+			borderColor: 'primary', backgroundColor: 'primary',
+			color: 'onPrimary'
 		}
 	}, DisabledCSS, FocusCircleCSS ],
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ]
@@ -532,7 +495,7 @@ component({
 	bindings: 'role(dialog)',
 	styles: {
 		content: {
-			backgroundColor: theme.surface, position: 'absolute',
+			backgroundColor: 'surface', position: 'absolute',
 			top: 0, left: 0, right: 0, bottom: 0
 		},
 		content$small: {
@@ -608,7 +571,7 @@ component({
 	attributes: [ 'visible', 'right', 'permanent' ],
 	styles: {
 		drawer: {
-			backgroundColor: theme.surface, position: 'absolute', top: 0, left: 0,
+			backgroundColor: 'surface', position: 'absolute', top: 0, left: 0,
 			width: '85%', bottom: 0, opacity: 0,
 			overflowY: 'auto', elevation: 5, translateX: '-105%'
 		},
@@ -634,7 +597,7 @@ component({
 	bindings: 'focusable',
 	styles: {
 		$: {
-			elevation: 1, backgroundColor: theme.secondary, color: theme.onSecondary,
+			elevation: 1, backgroundColor: 'secondary', color: 'onSecondary',
 			position: 'fixed', width: 56, height: 56, bottom: 16, right: 24,
 			borderRadius: 56, textAlign: 'center', paddingTop: 20, cursor: 'pointer',
 			fontSize: 20, paddingBottom: 20, lineHeight: 16
@@ -685,7 +648,7 @@ component({
 	name: 'cxl-form-group',
 	styles: {
 		$: { marginBottom: 16 },
-		error: { color: theme.error, borderColor: theme.error },
+		error: { color: 'error', borderColor: 'error' },
 		content: { position: 'relative' },
 		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75 },
 		label: {
@@ -819,13 +782,13 @@ touchable
 		$: { marginBottom: 8 },
 		input: {
 			fontSize: 16, border: 0, height: 32, backgroundColor: 'transparent',
-			width: '100%', paddingTop: 6, paddingBottom: 6, lineHeight: 20,
-			borderBottom: 1, borderColor: theme.grayDark, borderStyle: 'solid',
+			color: 'onSurface', width: '100%', paddingTop: 6, paddingBottom: 6, lineHeight: 20,
+			borderBottom: 1, borderColor: 'onSurface', borderStyle: 'solid',
 			borderRadius: 0, outline: 0, fontFamily: 'inherit', paddingLeft: 0, paddingRight: 0
 		},
-		input$focus: { outline: 0, borderColor: theme.primary },
-		input$inverse: { borderColor: theme.onPrimary, color: theme.onPrimary },
-		input$invalid$touched: { borderColor: theme.error },
+		input$focus: { outline: 0, borderColor: 'primary' },
+		input$inverse: { borderColor: 'onPrimary', color: 'onPrimary' },
+		input$invalid$touched: { borderColor: 'error' },
 		expand: { scaleX: 1 }
 	}, DisabledCSS ]
 
@@ -870,14 +833,14 @@ focusable role(listitem)
 		$: { cursor: 'pointer', fontSize: 16 },
 		'link:focus': { outline: 0 },
 		link: {
-			color: theme.onSurface, lineHeight: 24, paddingRight: 16, paddingLeft: 16,
+			color: 'onSurface', lineHeight: 24, paddingRight: 16, paddingLeft: 16,
 			paddingTop: 12, paddingBottom: 12, alignItems: 'center',
-			backgroundColor: theme.surface, textDecoration: 'none', display: 'flex'
+			backgroundColor: 'surface', textDecoration: 'none', display: 'flex'
 		},
 		content: { flexGrow: 1 },
-		icon: { marginRight: 16, width: 28, color: theme.onSurface, opacity: 0.7 },
-		icon$selected: { color: theme.onPrimary },
-		link$selected: { backgroundColor: theme.primaryLight, color: theme.onPrimary }
+		icon: { marginRight: 16, width: 28, color: 'onSurface', opacity: 0.7 },
+		icon$selected: { color: 'onPrimary' },
+		link$selected: { backgroundColor: 'primaryLight', color: 'onPrimary' }
 	}, prefix('link', DisabledCSS) ]
 
 });
@@ -887,7 +850,7 @@ component({
 	styles: {
 		$: {
 			elevation: 1, display: 'inline-block', paddingTop: 8, paddingBottom: 8,
-			backgroundColor: theme.surface, overflowY: 'auto', color: theme.onSurface
+			backgroundColor: 'surface', overflowY: 'auto', color: 'onSurface'
 		},
 		$dense: { paddingTop: 0, paddingBottom: 0 },
 		$closed: { /*scaleX: 0,*/ scaleY: 0 }
@@ -940,10 +903,10 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 	`,
 	styles: {
 		icon: {
-			color: theme.onSurface, cursor: 'pointer',
+			color: 'onSurface', cursor: 'pointer',
 			width: 8
 		},
-		icon$inverse: { color: theme.onPrimary },
+		icon$inverse: { color: 'onPrimary' },
 		menuControl: {
 			position: 'absolute', transformOrigin: 'right top', textAlign: 'left',
 			right: 0
@@ -983,12 +946,12 @@ component({
 	`,
 	styles: {
 		$: {
-			display: 'inline-block', color: theme.onSurface, fontSize: 16,
+			display: 'inline-block', color: 'onSurface', fontSize: 16,
 			marginTop: 8, marginBottom: 8, overflowScrolling: 'touch'
 		},
 		toggler: {
 			fontSize: 18, width: 16, marginRight: 32,
-			color: theme.onPrimary, cursor: 'pointer', display: 'inline-block'
+			color: 'onPrimary', cursor: 'pointer', display: 'inline-block'
 		},
 		toggler$permanent$large: { display: 'none' }
 	}
@@ -1007,18 +970,18 @@ component({
 component({
 	name: 'cxl-option',
 	attributes: [ 'value', 'selected' ],
-	events: [ 'action', 'change' ],
+	events: [ 'selectable.action', 'change' ],
 	bindings: `
 role(option) selectable
 =value:host.trigger(change)
 	`,
 	styles: {
 		$: {
-			cursor: 'pointer', color: theme.onSurface, lineHeight: 20, paddingRight: 16,
+			cursor: 'pointer', color: 'onSurface', lineHeight: 20, paddingRight: 16,
 			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14
 		},
 		$selected: {
-			backgroundColor: theme.primaryLight, color: theme.onPrimary
+			backgroundColor: 'primaryLight', color: 'onPrimary'
 		}
 	}
 }, {
@@ -1041,8 +1004,8 @@ component({
 <div &=".indicator =value:host.trigger(change):#setValue:.indeterminate"></div>
 	`,
 	styles: {
-		$: { backgroundColor: theme.primaryLight, height: 4 },
-		indicator: { backgroundColor: theme.primary, height: 4, transformOrigin: 'left' },
+		$: { backgroundColor: 'primaryLight', height: 4 },
+		indicator: { backgroundColor: 'primary', height: 4, transformOrigin: 'left' },
 		indeterminate: { animation: 'wait' }
 	}
 }, {
@@ -1084,11 +1047,11 @@ disconnect:#unregister
 		content: { marginLeft: 36 },
 		box: {
 			position: 'absolute', border: 2, width: 20, display: 'inline-block',
-			borderColor: theme.onSurface, marginRight: 8, borderRadius: 10,
+			borderColor: 'onSurface', marginRight: 8, borderRadius: 10,
 			borderStyle: 'solid', color: 'rgba(0,0,0,0)', fontSize: 12,
 			lineHeight: 16, textAlign: 'center'
 		},
-		box$checked: { borderColor: theme.primary, color: theme.primary }
+		box$checked: { borderColor: 'primary', color: 'primary' }
 
 	}, DisabledCSS, FocusCircleCSS ],
 
@@ -1150,7 +1113,7 @@ component({
 	`,
 	styles: {
 		$: { elevation: 1, position: 'relative', padding: 16, paddingBottom: 14, fontSize: 18 },
-		icon: { position: 'absolute', top: 18, color: theme.grayLighter },
+		icon: { position: 'absolute', top: 18 },
 		input: {
 			outline: 0, border: 0, width: '100%',
 			lineHeight: 24, padding: 0, paddingLeft: 48, fontSize: 18
@@ -1184,10 +1147,10 @@ component({
 		$: { cursor: 'pointer' },
 		icon: { position: 'absolute', right: 8, top: 8, lineHeight: 16 },
 		menu: { position: 'absolute', elevation: 0, right: 0, left: -16, overflowY: 'hidden' },
-		menuOpened: { elevation: 3, overflowY: 'auto', backgroundColor: theme.surface },
+		menuOpened: { elevation: 3, overflowY: 'auto', backgroundColor: 'surface' },
 
 		placeholder: {
-			color: theme.onSurface, lineHeight: 20, paddingRight: 16,
+			color: 'onSurface', lineHeight: 20, paddingRight: 16,
 			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14,
 			position: 'absolute', left: -16, top: -8, right: 0, height: 48
 		},
@@ -1305,12 +1268,12 @@ component({
 	styles: [{
 		$: { paddingTop: 15, paddingBottom: 15, userSelect: 'none' },
 		knob: {
-			backgroundColor: theme.primary, width: 12, height: 12, display: 'inline-block',
+			backgroundColor: 'primary', width: 12, height: 12, display: 'inline-block',
 			borderRadius: 6, translateY: -5
 		},
 		focusCircle: { marginLeft: -4, marginTop: -8 },
-		background: { backgroundColor: theme.primaryLight, height: 2 },
-		line: { backgroundColor: theme.primary, height: 2, textAlign: 'right' }
+		background: { backgroundColor: 'primaryLight', height: 2 },
+		line: { backgroundColor: 'primary', height: 2, textAlign: 'right' }
 	}, DisabledCSS, FocusCircleCSS ]
 }, {
 	value: 0,
@@ -1420,7 +1383,7 @@ component({
 
 });
 
-cxl.css.ANIMATION.spinnerstroke = {
+cxl.css.animation.spinnerstroke = {
 	keyframes: `
 0%      { stroke-dashoffset: $start;  transform: rotate(0); }
 12.5%   { stroke-dashoffset: $end;    transform: rotate(0); }
@@ -1503,9 +1466,9 @@ component({
 			elevation: 1
 		},
 
-		background$checked: { backgroundColor: theme.primaryLight },
-		knob$checked: { translateX: 24, backgroundColor: theme.primary },
-		focusCircle$checked: { backgroundColor: theme.primary }
+		background$checked: { backgroundColor: 'primaryLight' },
+		knob$checked: { translateX: 24, backgroundColor: 'primary' },
+		focusCircle$checked: { backgroundColor: 'primary' }
 	}, FocusCircleCSS, DisabledCSS ]
 }, {
 	'true-value': true,
@@ -1529,19 +1492,19 @@ component({
 component({
 	name: 'cxl-t',
 	styles: {
-		$: { fontWeight: 400, fontSize: 16, marginBottom: 8, letterSpacing: 'normal' },
+		$: { font: 'default', marginBottom: 8 },
 		$lastChild: { marginBottom: 0 },
 		$inline: { display: 'inline' },
 
-		$caption: { fontSize: 12, letterSpacing: 0.4 },
-		$h1: { fontWeight: 300, fontSize: 96, marginBottom: 64, letterSpacing: -1.5 },
-		$h2: { fontWeight: 300, fontSize: 60, marginBottom: 48, letterSpacing: -0.5 },
-		$h3: { fontSize: 48, marginBottom: 32 },
-		$h4: { fontSize: 34, marginBottom: 24, letterSpacing: 0.25 },
-		$h5: { fontSize: 24, marginBottom: 16 },
-		$h6: { fontSize: 20, fontWeight: 500, marginBottom: 16, letterSpacing: 0.15 },
-		$subtitle: { fontSize: 16, lineHeight: 22, marginBottom: 0, letterSpacing: 0.15 },
-		$subtitle2: { fontSize: 14, lineHeight: 18, opacity: 0.73, letterSpacing: 0.1 }
+		$caption: { font: 'caption' },
+		$h1: { font: 'h1', marginBottom: 64 },
+		$h2: { font: 'h2', marginBottom: 48 },
+		$h3: { font: 'h3', marginBottom: 32 },
+		$h4: { font: 'h4', marginBottom: 24 },
+		$h5: { font: 'h5', marginBottom: 16 },
+		$h6: { font: 'h6', marginBottom: 16 },
+		$subtitle: { font: 'subtitle', marginBottom: 0 },
+		$subtitle2: { font: 'subtitle2', opacity: 0.73 }
 	}
 });
 
@@ -1555,8 +1518,8 @@ component({
 		$: { flexShrink: 0 },
 		$small: { display: 'inline-block' },
 		link: {
-			padding: 16, paddingBottom: 12, border: 0, backgroundColor: theme.primary,
-			textTransform: 'uppercase', fontSize: 14, color: theme.onPrimary, lineHeight: 20,
+			padding: 16, paddingBottom: 12, border: 0, backgroundColor: 'primary',
+			textTransform: 'uppercase', fontSize: 14, color: 'onPrimary', lineHeight: 20,
 			textDecoration: 'none', textAlign: 'center', display: 'block'
 		}
 	}, FocusCSS]
@@ -1595,8 +1558,8 @@ component({
 	bindings: 'registable(table) role(columnheader)',
 	styles: {
 		$: {
-			flexGrow: 1, fontSize: 12, color: 'rgba(0,0,0,0.53)',
-			padding: 12, borderBottom: '1px solid ' + theme.divider, lineHeight: 24
+			flexGrow: 1, fontSize: 12, color: 'headerText',
+			padding: 12, borderBottom: '1px solid', borderColor: 'divider', lineHeight: 24
 		}
 	}
 });
@@ -1605,7 +1568,7 @@ component({
 	name: 'cxl-td',
 	styles: {
 		$: {
-			flexGrow: 1, padding: 12, borderBottom: '1px solid ' + theme.divider
+			flexGrow: 1, padding: 12, borderBottom: '1px solid', borderColor: 'divider'
 		}
 	}
 });
@@ -1617,11 +1580,11 @@ component({
 	attributes: [ 'selected' ],
 	styles: {
 		$: {
-			backgroundColor: theme.primary, color: theme.onPrimary, fontSize: 0,
+			backgroundColor: 'primary', color: 'onPrimary', fontSize: 0,
 			display: 'block', flexShrink: 0, position: 'relative', cursor: 'pointer',
 			overflowX: 'auto'
 		},
-		selected: { backgroundColor: theme.secondary, height: 4 },
+		selected: { backgroundColor: 'secondary', height: 4 },
 		content: { display: 'flex' },
 		content$small: { display: 'block' }
 	}
@@ -1666,19 +1629,18 @@ component({
 		},
 		input: {
 			fontSize: 16, border: 1, backgroundColor: 'transparent', padding: 16,
-			lineHeight: 20, fontFamily: 'inherit', borderColor: theme.grayDark,
-			borderStyle: 'solid'
+			lineHeight: 20, fontFamily: 'inherit', borderStyle: 'solid'
 		},
 		textarea: {
 			width: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
 			height: '100%', outline: 0, borderRadius: 0
 		},
-		focused: { borderColor: theme.primary },
+		focused: { borderColor: 'primary' },
 		//input$hover: { borderBottom: 2, borderStyle: 'solid' },
-		inverse: { borderColor: theme.white, color: theme.white },
-		inverse$focus: { borderColor: theme.primary },
-		invalid: { borderColor: theme.error },
-		invalid$focus: { borderColor: theme.error },
+		inverse: { borderColor: 'onPrimary', color: 'onPrimary' },
+		inverse$focus: { borderColor: 'onPrimary' },
+		invalid: { borderColor: 'error' },
+		invalid$focus: { borderColor: 'error' },
 		// TODO move to textarea when inheritance works
 		measure: { opacity: 0, whiteSpace: 'pre-wrap' }
 	},

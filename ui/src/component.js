@@ -165,16 +165,16 @@ class ComponentDefinition
 
 		this.name = meta.name;
 		this.meta = meta;
-		this.Component = this.componentConstructor(meta);
+		this.Component = this.componentConstructor();
 
 		COMPONENTS[this.name] = this;
 		this.$registerElement(this.name, this.Component);
 	}
 
-	extendComponent(def, parent)
+	extend(def)
 	{
 	const
-		parentDef = COMPONENTS[parent].meta,
+		parentDef = this.meta,
 		result = Object.assign({}, parentDef, def)
 	;
 		if (def.events && parentDef.events)
@@ -205,14 +205,21 @@ class ComponentDefinition
 		return result;
 	}
 
-	componentConstructor(meta)
+	extendComponent(def, parent)
 	{
+		return COMPONENTS[parent].extend(def);
+	}
+
+	componentConstructor()
+	{
+		const def = this, meta = def.meta;
+
 		class Component extends cxl.HTMLElement {
 
 			constructor()
 			{
 				super();
-				factory.createComponent(meta, this);
+				factory.createComponent(def.meta, this);
 			}
 
 			connectedCallback()
@@ -257,6 +264,12 @@ Object.assign(cxl, {
 	{
 		var def = new ComponentDefinition(meta, controller);
 		return cxl.dom.bind(cxl, def.name);
+	},
+
+	extendComponent(name, meta)
+	{
+		const parentDef = COMPONENTS[name];
+		parentDef.meta = parentDef.extend(meta);
 	}
 });
 

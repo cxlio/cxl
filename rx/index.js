@@ -232,10 +232,21 @@ class EventEmitter
 
 	trigger(type, a, b, c)
 	{
+		var combinedResult;
+
 		if (this.__handlers && this.__handlers[type])
 			this.__handlers[type].forEach(h => {
 				try {
-					h.fn.call(h.scope, a, b, c);
+					let result = h.fn.call(h.scope, a, b, c);
+
+					if (result !== undefined)
+					{
+						if (!combinedResult)
+							combinedResult = [];
+
+						combinedResult.push(result);
+					}
+
 				} catch(e) {
 					if (type!=='error')
 						this.trigger('error', e);
@@ -243,6 +254,8 @@ class EventEmitter
 						throw e;
 				}
 			});
+
+		return combinedResult;
 	}
 
 	once(type, callback, scope)

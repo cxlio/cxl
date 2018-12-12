@@ -411,7 +411,7 @@ cxl.component({
 	`,
 	styles: {
 		$: { lineHeight: 22, flexGrow: 1 },
-		link: { textDecoration: 'none', color: cxl.ui.theme.onPrimary },
+		link: { textDecoration: 'none', color: 'onPrimary' },
 		extended: { display: 'none' },
 		extended$medium: { display: 'inline-block' }
 	}
@@ -487,7 +487,8 @@ cxl.component({
 		$large: { paddingLeft: 288 },
 		content: {
 			position: 'relative', flexGrow: 1, overflowY: 'auto',
-			overflowScrolling: 'touch'
+			overflowScrolling: 'touch', backgroundColor: 'surface',
+			color: 'onSurface'
 		},
 		footer: { },
 		router: { margin: 16 },

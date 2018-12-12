@@ -3,7 +3,6 @@
 
 const
 	component = cxl.component,
-	theme = cxl.ui.theme,
 	directive = cxl.directive
 ;
 
@@ -18,6 +17,14 @@ component({
 });
 
 component({
+	name: 'cxl-banner',
+	template: `
+<div></div>
+<div></div>
+	`
+});
+
+component({
 	name: 'cxl-block',
 	attributes: [
 		'inverse', 'compact', 'surface', 'primary', 'secondary', 'flex', 'vflex', 'scroll'
@@ -25,11 +32,11 @@ component({
 	styles: {
 		$: { padding: 16 },
 		$compact: { padding: 8 },
-		$surface: { backgroundColor: theme.surface, color: theme.onSurface },
-		$primary: { backgroundColor: theme.primary, color: theme.onPrimary },
-		$secondary: { backgroundColor: theme.secondary, color: theme.onSecondary },
+		$surface: { backgroundColor: 'surface', color: 'onSurface' },
+		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
+		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
 
-		$inverse: { color: theme.onPrimary, backgroundColor: theme.primaryDark },
+		$inverse: { color: 'onPrimary', backgroundColor: 'primaryDark' },
 		$flex: { display: 'flex' },
 		$vflex: { display: 'flex', flexDirection: 'vertical' },
 		$scroll: { overflowY: 'auto' }
@@ -53,11 +60,48 @@ component({
 	template: `<div style="display:none" &="timer(delay):|show .indicator"></div>`,
 	styles: {
 		indicator: {
-			backgroundColor: theme.primary, height: 4, transformOrigin: 'left', animation: 'wait'
+			backgroundColor: 'primary', height: 4, transformOrigin: 'left', animation: 'wait'
 		}
 	}
 }, {
 	delay: 300
+});
+
+component({
+	name: 'cxl-font',
+	attributes: [ 'src' ],
+	bindings: '=src:#load'
+}, {
+	load(src)
+	{
+		if (this.el)
+			cxl.dom.remove(this.el);
+
+		if (!src)
+			return;
+
+		const font = this.el = cxl.dom('link', {
+			rel: 'stylesheet',
+			href: src
+		});
+
+		document.head.appendChild(font);
+	}
+});
+
+component({
+	name: 'cxl-google-font',
+	attributes: [ 'name', 'weights' ],
+	template: `
+<cxl-font &="#getUrl:@src"></cxl-font>
+	`
+}, {
+	name: 'Roboto',
+	weights: '300,400,500',
+	getUrl()
+	{
+		return '//fonts.googleapis.com/css?family=' + this.name + ':' + this.weights;
+	}
 });
 
 component({
@@ -101,7 +145,7 @@ component({
 		},
 		input: {
 			fontSize: 16, border: 1, backgroundColor: 'transparent', padding: 16,
-			lineHeight: 20, fontFamily: 'inherit', borderColor: theme.grayDark,
+			lineHeight: 20, fontFamily: 'inherit', borderColor: 'grayDark',
 			borderStyle: 'solid'
 		}
 	}

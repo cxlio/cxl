@@ -2,136 +2,173 @@
 "use strict";
 
 const
-	BREAKPOINTS = { small: 480, medium: 960, large: 1280, xlarge: 1600 },
 	PSEUDO = {
 		focus: ':focus', hover: ':hover', empty: ':empty', active: ':active',
 		firstChild: ':first-child', lastChild: ':last-child'
 	},
-
 	PREFIX_REGEX = /\./g,
-	ANIMATION = {
-		spin: {
-			keyframes: '0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-spin 2s infinite linear'
-		},
-		pulse: {
-			keyframes: '0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-pulse 1s infinite steps(8)'
-		},
-		fadeIn: {
-			keyframes: '0% { display: block; opacity: 0; } to { opacity: 1; }',
-			value: 'cxl-fadeIn var(--cxl-speed) linear'
-		},
-		wait: {
-			keyframes: `
-0% { transform: translateX(0) scaleX(0) }
-33% { transform: translateX(0) scaleX(0.75)}
-66% { transform: translateX(75%) scaleX(0.25)}
-100%{ transform:translateX(100%) scaleX(0) }
-			`,
-			value: 'cxl-wait 1s infinite linear'
-		}
+	SNAKE_REGEX = /[A-Z]/g,
+	SNAKE_CSS = {
+		webkitOverflowScrolling: '-webkit-overflow-scrolling'
 	},
-	CSS = {
-		alignItems: 'align-items',
-		alignSelf: 'align-self',
-		boxSizing: 'box-sizing',
+	UNIT = 'px',
 
-		gridGap: 'grid-gap',
-		gridTemplateRows: 'grid-template-rows',
-		gridTemplateColumns: 'grid-template-columns',
-		gridColumnEnd: 'grid-column-end',
-		gridColumnStart: 'grid-column-start',
-
-		zIndex: 'z-index',
-		marginTop: 'margin-top',
-		marginLeft: 'margin-left',
-		marginRight: 'margin-right',
-		marginBottom: 'margin-bottom',
-		flexBasis: 'flex-basis',
-		flexDirection: 'flex-direction',
-		flexGrow: 'flex-grow',
-		flexShrink: 'flex-shrink',
-		paddingTop: 'padding-top',
-		paddingLeft: 'padding-left',
-		paddingRight: 'padding-right',
-		paddingBottom: 'padding-bottom',
-		fontSize: 'font-size',
-		lineHeight: 'line-height',
-		letterSpacing: 'letter-spacing',
-		borderBottom: 'border-bottom',
-		borderTop: 'border-top',
-		borderLeft: 'border-left',
-		borderRight: 'border-right',
-		borderRadius: 'border-radius',
-		borderColor: 'border-color',
-		borderWidth: 'border-width',
-		boxShadow: 'box-shadow',
-		fontFamily: 'font-family',
-		fontWeight: 'font-weight',
-		backgroundColor: 'background-color',
-		overflowX: 'overflow-x',
-		overflowY: 'overflow-y',
-		textDecoration: 'text-decoration',
-		borderStyle: 'border-style',
-		textTransform: 'text-transform',
-		textAlign: 'text-align',
-		justifyContent: 'justify-content',
-		whiteSpace: 'white-space',
-		userSelect: 'user-select',
-		webkitOverflowScrolling: '-webkit-overflow-scrolling',
-		scrollBehavior: 'scroll-behavior',
-		transformOrigin: 'transform-origin'
-	}
+	css = {}
 ;
 
-class Theme {
+function toSnake(name) {
+	return (SNAKE_CSS[name] = name.replace(SNAKE_REGEX, m => '-' + m.toLowerCase()));
+}
 
-	constructor(theme)
+class RGBA
+{
+	constructor(r, g, b, a)
 	{
-		const rootCSS = document.createElement('STYLE');
-
-		document.head.appendChild(rootCSS);
-
-		this.variables = theme.variables;
-
-		var i;
-
-		this.root = new cxl.css.StyleSheet({
-			name: ':root', styles: { $: { variables: theme.variables }}, global: true
-		}, rootCSS);
-
-		if (theme.fonts)
-			for (i in theme.fonts)
-				cxl.css.registerFont(i, theme.fonts[i]);
-
-		for (i in theme.variables)
-			this[i] = 'var(--cxl-' + i + ')';
-
-		for (i in theme.global)
-			cxl.css.globalStyles.insertRule(i, theme.global[i]);
+		this.r = r<0 ? 0 : (r>255 ? 255 : r);
+		this.g = g<0 ? 0 : (g>255 ? 255 : g);
+		this.b = b<0 ? 0 : (b>255 ? 255 : b);
+		this.a = a===undefined ? 1 : (a<0 ? 0 : (a>1 ? 1 : a));
 	}
 
-	set(variables)
+	multiply(p)
 	{
-		Object.assign(this.variables, variables);
+		return new RGBA(this.r+this.r*p, this.g+this.g*p, this.b+this.b*p, this.a);
+	}
 
-		for (var i in this.variables)
-			this[i] = 'var(--cxl-' + i + ')';
+	alpha(a)
+	{
+		return new RGBA(this.r, this.g, this.b, a);
+	}
 
-		this.root.applyStyles();
+	toString()
+	{
+		return 'rgba(' + (this.r|0) + ',' + (this.g|0) + ',' + (this.b|0) + ',' + this.a+')';
 	}
 
 }
 
-function css(theme)
+function rgba(r, g, b, a)
 {
-	return new Theme(theme);
+	return new RGBA(r, g, b, a);
+}
+
+class FontStyle {
+
+	constructor(css)
+	{
+		this.css = css;
+	}
+
+	applyStyle(style)
+	{
+	const
+		css = this.css,
+		size = css.fontSize ? css.fontSize + UNIT : '',
+		weight = css.fontWeight || '',
+		lineHeight = css.lineHeight || '',
+		family = css.fontFamily || 'var(--cxl-font)',
+		spacing = css.letterSpacing
+	;
+		style.font = `${weight} ${size} ${lineHeight} ${family}`;
+
+		if (spacing)
+			style.letterSpacing = spacing;
+	}
+
+}
+
+class StyleSheet
+{
+	constructor(meta, native)
+	{
+		this.tagName = meta.name;
+		this.$selector = meta.global ? this.tagName : ':host';
+
+		if (native)
+			this.$native = native;
+		else
+			this.$attachStyle(meta);
+
+		this.reset(meta.styles);
+	}
+
+	insertStyles(styles)
+	{
+		if (Array.isArray(styles))
+			return styles.forEach(this.insertStyles, this);
+
+		for (var i in styles)
+			this.insertRule(i, styles[i]);
+	}
+
+	$attachStyle(meta)
+	{
+		if (meta.$template)
+		{
+			this.$native = document.createElement('STYLE');
+			meta.$template.$content.appendChild(this.$native);
+		}
+		else
+			this.$createTemplate(meta);
+	}
+
+	$createTemplate(meta)
+	{
+		var src = '<style></style><slot></slot>';
+		meta.$template = new cxl.Template(src);
+		this.$native = meta.$template.$content.childNodes[0];
+	}
+
+	$renderGlobal()
+	{
+		var glob = css.globalStyles;
+		return glob && this.$toCSS(glob.$classes) || '';
+	}
+
+	$render(css)
+	{
+		this.$native.innerHTML = this.$renderGlobal() + css;
+	}
+
+	$toCSS(classes)
+	{
+		var css='';
+
+		classes.forEach(c => css += c.toCSS(this.$selector, this.$prefix));
+
+		return css;
+	}
+
+	reset(styles)
+	{
+		if (this.$classes)
+			this.$native.innerHTML = '';
+
+		this.$classes = [];
+
+		if (styles)
+			this.insertStyles(styles);
+
+		this.$render(this.$toCSS(this.$classes));
+	}
+
+	// Render styles needs to be called after insert styles.
+	applyStyles()
+	{
+		this.$render(this.$toCSS(this.$classes));
+	}
+
+	insertRule(rule, styles)
+	{
+		var result = new Rule(rule, new Style(styles));
+		this.$classes.push(result);
+		return result;
+	}
 }
 
 function getUnit(n)
 {
-	return typeof(n)==='string' ? n : (n ? n + 'px' : '0');
+	return typeof(n)==='string' ? n : (n ? n + UNIT : '0');
 }
 
 class Style
@@ -157,7 +194,7 @@ class Style
 		if (!this.$keyframes)
 			this.$keyframes = {};
 
-		const keyframe = ANIMATION[val];
+		const keyframe = css.animation[val];
 
 		this.$keyframes[val] = keyframe.keyframes;
 		this.$style.animation = keyframe.value;
@@ -172,8 +209,17 @@ class Style
 	{
 		this.$value.elevation = x;
 		this.$style.zIndex = x;
-		this.$style.boxShadow = x + 'px ' + x + 'px ' + (3*x)+'px rgba(0,0,0,0.26)';
+		this.$style.boxShadow = x + UNIT + ' ' + x + UNIT + ' ' + (3*x)+ UNIT + ' rgba(0,0,0,0.26)';
 	}
+
+	set font(name)
+	{
+		const fontStyle = css.typography[name];
+		this.$value.font = name;
+		fontStyle.applyStyle(this.$style);
+	}
+
+	get font() { return this.$value.font; }
 
 	set userSelect(val)
 	{
@@ -209,18 +255,8 @@ class Style
 
 	get translateX() { return this.$value.translateX; }
 	get translateY() { return this.$value.translateY; }
-
-	set translateX(x)
-	{
-		this.$value.translateX = x;
-		this.$transform();
-	}
-
-	set translateY(y)
-	{
-		this.$value.translateY = y;
-		this.$transform();
-	}
+	set translateX(x) { this.$value.translateX = x; this.$transform(); }
+	set translateY(y) { this.$value.translateY = y; this.$transform(); }
 
 	set overflowY(val)
 	{
@@ -268,12 +304,28 @@ class Style
 			val = this.$style[i];
 
 			if (val!==null && val!==undefined && val!=='')
-				result += (CSS[i] || i) + ':' + this.$style[i] + ';';
+				result += (SNAKE_CSS[i] || toSnake(i)) + ':' + this.$style[i] + ';';
 		}
 
 		return result;
 	}
 }
+
+function property(setter)
+{
+	return name => Object.defineProperty(Style.prototype, name, {
+		get() { return this.$value[name]; },
+		set(val) {
+			this.$value[name] = val;
+			this.$style[name] = setter(val);
+		}
+	});
+}
+
+[
+	'backgroundColor', 'color', 'borderColor'
+].forEach(property(val => css.colors[val] ? 'var(--cxl-' + val + ')' : val));
+
 
 ([
 	'top', 'left', 'right', 'bottom', 'marginTop','lineHeight',
@@ -282,36 +334,19 @@ class Style
 	'padding', 'outline', 'borderBottom', 'borderTop', 'borderLeft', 'borderRight',
 	'border', 'borderRadius', 'borderWidth',
 	'gridGap'
-]).forEach(function(name) {
+]).forEach(property(val => typeof(val)==='string' ? val : (val||0)+UNIT));
 
-	Object.defineProperty(Style.prototype, name, {
-		get: function() { return this.$value[name]; },
-		set: function(val) {
-			this.$value[name] = val;
-			this.$style[name] = typeof(val)==='string' ? val : (val||0)+'px';
-		}
-	});
 
-});
-
-([ 'alignItems', 'display', 'position', 'boxSizing', 'boxShadow', 'opacity', 'fontFamily', 'fontWeight', 'borderColor',
-  	'backgroundColor', 'background', 'color', 'cursor', 'overflowX', 'filter',
+([
+	'alignItems', 'display', 'position', 'boxSizing', 'boxShadow', 'opacity', 'fontFamily',
+	'fontWeight', 'background', 'cursor', 'overflowX', 'filter',
   	'textDecoration', 'borderStyle', 'transition', 'textTransform', 'textAlign', 'flexGrow',
   	'flexShrink',
   	'alignContent', 'flexDirection', 'justifyContent', 'whiteSpace', 'scrollBehavior',
   	'transformOrigin', 'alignSelf',
 
  	'gridTemplateRows', 'gridTemplateColumns', 'gridColumnEnd', 'gridColumnStart'
- ]).forEach(function(name) {
-
-	Object.defineProperty(Style.prototype, name, {
-		get: function() { return this.$value[name]; },
-		set: function(val) {
-			this.$value[name] = this.$style[name] = val;
-		}
-	});
-
-});
+ ]).forEach(property(val => val));
 
 class Rule
 {
@@ -321,11 +356,11 @@ class Rule
 		this.style = style;
 	}
 
-	$getMediaQuery(selector, minWidth, css)
+	$getMediaQuery(selector, minWidth, cssStr)
 	{
-		const bp = BREAKPOINTS[minWidth] + 'px';
+		const bp = css.breakpoints[minWidth] + UNIT;
 
-		return '@media(min-width:' + bp + '){' + selector + css + '}';
+		return '@media(min-width:' + bp + '){' + selector + cssStr + '}';
 	}
 
 	$getSelector(tag, rule, state)
@@ -395,95 +430,136 @@ class Rule
 
 }
 
-class StyleSheet
+function applyStyles()
 {
-	constructor(meta, native)
+	// Get Variables
+const
+	typo = css.typography,
+	variables = css.variables = {
+		speed: css.speed,
+		font: typo.default.fontFamily
+	}
+;
+	for (var i in css.colors)
+		variables[i] = css.colors[i];
+
+	for (i in typo)
+		if (!(typo[i] instanceof FontStyle))
+			typo[i] = new FontStyle(typo[i]);
+
+	css.rootStyles.reset({ $: { variables: variables } });
+}
+
+class RootStyles extends StyleSheet {
+
+	constructor()
 	{
-		this.tagName = meta.name;
-		this.$classes = [];
-		this.$selector = meta.global ? this.tagName : ':host';
+		const rootCSS = document.createElement('STYLE');
+		document.head.appendChild(rootCSS);
 
-		if (native)
-			this.$native = native;
-		else
-			this.$attachStyle(meta);
-
-		if (meta.styles)
-			this.$insertStyles(meta.styles);
-
-		this.$render(this.$toCSS(this.$classes));
+		super({ name: ':root', global: true }, rootCSS);
 	}
 
-	$insertStyles(styles)
-	{
-		if (Array.isArray(styles))
-			return styles.forEach(this.$insertStyles, this);
-
-		for (var i in styles)
-			this.insertRule(i, styles[i]);
-	}
-
-	$attachStyle(meta)
-	{
-		if (meta.$template)
-		{
-			this.$native = document.createElement('STYLE');
-			meta.$template.$content.appendChild(this.$native);
-		}
-		else
-			this.$createTemplate(meta);
-	}
-
-	$createTemplate(meta)
-	{
-		var src = '<style></style><slot></slot>';
-		meta.$template = new cxl.Template(src);
-		this.$native = meta.$template.$content.childNodes[0];
-	}
-
-	$renderGlobal()
-	{
-		var glob = css.globalStyles;
-
-		return glob && this.$toCSS(glob.$classes) || '';
-	}
-
-	$render(css)
-	{
-		this.$native.innerHTML = this.$renderGlobal() + css;
-	}
-
-	$toCSS(classes)
-	{
-		var css='';
-
-		classes.forEach(c => css += c.toCSS(this.$selector, this.$prefix));
-
-		return css;
-	}
-
-	// Render styles needs to be called after insert styles.
-	applyStyles()
-	{
-		this.$render(this.$toCSS(this.$classes));
-	}
-
-	insertRule(rule, styles)
-	{
-		var result = new Rule(rule, new Style(styles));
-		this.$classes.push(result);
-		return result;
-	}
 }
 
 cxl.css = Object.assign(css, {
 
-	ANIMATION: ANIMATION,
-	BREAKPOINTS: BREAKPOINTS,
-
 	Rule: Rule,
 	Style: Style,
 	StyleSheet: StyleSheet,
+
+	animation: {
+		spin: {
+			keyframes: '0% { transform: rotate(0); } to { transform: rotate(360deg); }',
+			value: 'cxl-spin 2s infinite linear'
+		},
+		pulse: {
+			keyframes: '0% { transform: rotate(0); } to { transform: rotate(360deg); }',
+			value: 'cxl-pulse 1s infinite steps(8)'
+		},
+		fadeIn: {
+			keyframes: '0% { display: block; opacity: 0; } to { opacity: 1; }',
+			value: 'cxl-fadeIn var(--cxl-speed) linear'
+		},
+		wait: {
+			keyframes: `
+0% { transform: translateX(0) scaleX(0) }
+33% { transform: translateX(0) scaleX(0.75)}
+66% { transform: translateX(75%) scaleX(0.25)}
+100%{ transform:translateX(100%) scaleX(0) }
+			`,
+			value: 'cxl-wait 1s infinite linear'
+		}
+	},
+
+	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
+
+	colors: {
+		primary: rgba(0x34, 0x49, 0x55),
+		primaryDark: rgba(0x23, 0x2f, 0x34),
+		primaryLight: rgba(0x4a, 0x65, 0x72),
+
+		secondary: rgba(0xf9, 0xaa, 0x33),
+		surface: rgba(0xff, 0xff, 0xff),
+		error: rgba(0xb0, 0x00, 0x20),
+
+		onPrimary: rgba(0xff,0xff,0xff),
+		onPrimaryLight: rgba(0xff, 0xff, 0xff),
+		onSecondary: rgba(0,0,0),
+		onSurface: rgba(0, 0, 0),
+		onError: rgba(0xff, 0xff, 0xff),
+
+		get headerText() { return this.onSurface.alpha(0.6); },
+		get divider() { return this.onSurface.alpha(0.12); },
+	},
+
+	fonts: {},
+
+	globalStyles: new StyleSheet({ name: 'cxl-root', global: true, styles: {
+		$: {
+			display: 'block',
+			reset: '-webkit-tap-highlight-color:transparent;',
+			fontFamily: 'var(--cxl-font)'
+		},
+		'*': {
+			boxSizing: 'border-box',
+			transition: 'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)',
+		}
+	}}),
+
+	rgba: rgba,
+
+	// Stylesheet used for variables and other :root properties
+	rootStyles: new RootStyles(),
+
+	// Animation speed
+	speed: '0.2s',
+
+	typography: {
+		default: {
+			fontWeight: 400, fontSize: 16, letterSpacing: 'normal', fontFamily: 'Roboto, sans-serif'
+		},
+		caption: { fontSize: 12, letterSpacing: 0.4 },
+		h1: { fontWeight: 300, fontSize: 96, letterSpacing: -1.5 },
+		h2: { fontWeight: 300, fontSize: 60, letterSpacing: -0.5 },
+		h3: { fontSize: 48 },
+		h4: { fontSize: 34, letterSpacing: 0.25 },
+		h5: { fontSize: 24 },
+		h6: { fontSize: 20, fontWeight: 500, letterSpacing: 0.15 },
+		subtitle: { fontSize: 16, lineHeight: 22, letterSpacing: 0.15 },
+		subtitle2: { fontSize: 14, lineHeight: 18, letterSpacing: 0.1 }
+	},
+
+	extend(def)
+	{
+		if (def.colors)
+			cxl.extend(this.colors, def.colors);
+
+		if (def.typography)
+			cxl.extend(this.typography, def.typography);
+
+		applyStyles();
+	},
 
 	registerFont(fontFamily, src)
 	{
@@ -491,6 +567,8 @@ cxl.css = Object.assign(css, {
 		style = document.createElement('STYLE'),
 		url = typeof(src)==='string' ? src : src.url
 	;
+		this.fonts[fontFamily] = src;
+
 		style.innerHTML = '@font-face{font-family:"' + fontFamily + '"' +
 			(src.weight ? ';font-weight:'+src.weight : '') +
 			';src:url("' + url + '");}';
@@ -498,10 +576,10 @@ cxl.css = Object.assign(css, {
 		document.head.appendChild(style);
 
 		return style;
-	},
-
-	globalStyles: new StyleSheet({ name: 'cxl-root', global: true })
+	}
 
 });
+
+applyStyles();
 
 })(this.cxl);

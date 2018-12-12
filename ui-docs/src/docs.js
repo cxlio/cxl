@@ -169,18 +169,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-component name="cxl-c">
 	<docs-demo label="Flex Layout"><!--
 <div style="display: flex; font-size:20px; color:#fff; text-align:center">
-	<cxl-c style="background:#a00; padding: 24px">1</cxl-c>
-	<cxl-c grow style="background:#0a0; padding:24px">2</cxl-c>
-	<cxl-c style="background:#00a; padding:24px">3</cxl-c>
+	<cxl-c pad24 style="background:#a00;">1</cxl-c>
+	<cxl-c pad24 grow style="background:#0a0;">2</cxl-c>
+	<cxl-c pad24 style="background:#00a;">3</cxl-c>
 </div>
 	--></docs-demo>
 	<docs-demo label="Grid Layout"><!--
 <cxl-grid columns="auto auto auto" style="color:#fff">
-	<cxl-c style="background:#a00; padding: 24px">1</cxl-c>
-	<cxl-c style="background:#0a0; padding:24px">2</cxl-c>
-	<cxl-c style="background:#0a0; padding:24px">3</cxl-c>
-	<cxl-c xs2 style="background:#00a; padding:24px">4</cxl-c>
-	<cxl-c style="background:#00a; padding:24px">5</cxl-c>
+	<cxl-c pad24 style="background:#a00;">1</cxl-c>
+	<cxl-c pad24 style="background:#0a0;">2</cxl-c>
+	<cxl-c pad24 style="background:#0a0;">3</cxl-c>
+	<cxl-c pad24 xs2 style="background:#00a;">4</cxl-c>
+	<cxl-c pad24 style="background:#00a;">5</cxl-c>
 </cxl-grid>
 	--></docs-demo>
 	<docs-demo label="Responsive Layout"><!--
@@ -1166,10 +1166,13 @@ cxl.route({
 	path: 'theming',
 	title: 'Styles',
 	template: `
+<cxl-t h4>Color</cxl-t>
+<uid-palette></uid-palette>
+<br>
 <cxl-t h4>Typography</cxl-t>
 <br>
 <cxl-t>The following <code>font-family</code> string is applied to all elements:
-<docs-code>Roboto,-apple-system, BlinkMacSystemFont,"Segoe UI", "Helvetica Neue", Arial, sans-serif</docs-code>
+<docs-code &="=font:@source"></docs-code>
 <p>The <uid-link tag="cxl-t"></uid-link> component can be used to apply styles to text. The <code>Roboto</code> font will not be automatically included.</p>
 <br>
 <uid-typography></uid-typography>
@@ -1188,7 +1191,13 @@ cxl.route({
 	styles: {
 		iconbox: { display: 'inline-block', width: 80, height: 80, textAlign: 'center' },
 		icon: { fontSize: 24, marginBottom: 8, lineHeight: 40 }
+	},
+
+	initialize(state)
+	{
+		state.font = cxl.css.variables.font;
 	}
+
 });
 
 cxl.route({
@@ -1227,12 +1236,67 @@ cxl.route({
 });
 
 cxl.component({
-	name: 'ui-docs-logo',
+	name: 'uid-palette',
+	template: `
+<cxl-grid columns="1fr 1fr 1fr 1fr 1fr 1fr">
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="Primary" &="=vars.primary:@color =vars.onPrimary:@text-color"></uid-color>
+	</cxl-c>
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="Primary Dark" &="=vars.primaryDark:@color =vars.onPrimary:@text-color"></uid-color>
+	</cxl-c>
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="Primary Light" &="=vars.primaryLight:@color =vars.onPrimaryLight:@text-color"></uid-color>
+	</cxl-c>
+
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="Secondary" &="=vars.secondary:@color =vars.onSecondary:@text-color"></uid-color>
+	</cxl-c>
+
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="Surface" &="=vars.surface:@color =vars.onSurface:@text-color"></uid-color>
+	</cxl-c>
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="Error" &="=vars.error:@color =vars.onError:@text-color"></uid-color>
+	</cxl-c>
+
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="On Primary" &="=vars.onPrimary:@color =vars.primary:@text-color"></uid-color>
+	</cxl-c>
+
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="On Secondary" &="=vars.onSecondary:@color =vars.secondary:@text-color"></uid-color>
+	</cxl-c>
+
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="On Surface" &="=vars.onSurface:@color =vars.surface:@text-color"></uid-color>
+	</cxl-c>
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="On Error" &="=vars.onError:@color =vars.error:@text-color"></uid-color>
+	</cxl-c>
+	<cxl-c xs6 sm3 md2>
+	<uid-color label="Divider" &="=vars.divider:@color =vars.onSurface:@text-color"></uid-color>
+	</cxl-c>
+</cxl-grid>
+	`,
+	initialize(state)
+	{
+		const vars = cxl.css.variables;
+
+		state.vars = {};
+
+		for (var i in cxl.css.variables)
+			state.vars[i] = vars[i].toString();// && vars[i].toHex();
+	}
+});
+
+cxl.component({
+	name: 'uid-logo',
 	template: `<svg xmlns="http://www.w3.org/2000/svg" width="398.66666" height="180.93466"><defs><linearGradient id="a" x2="1" gradientTransform="matrix(405.94919 0 0 -405.94919 -261.92822 217.5498)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#231f20"/><stop offset=".29776" stop-color="#231f20"/><stop offset=".65586592" stop-color="#231f20"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="b" x2="1" gradientTransform="matrix(221.0459 0 0 -221.0459 157.95117 144.88867)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".00561523" stop-color="#fff"/><stop offset=".26231876" stop-color="#231f20"/><stop offset="1" stop-color="#231f20"/></linearGradient></defs><path fill="#e32522" d="M243.78252724 37.10226401L88.46653112 146.24092795h59.53866518L300.96385914 37.10226401z"/><path fill="url(#a)" d="M1 248.271v-20.186h60.16l12.446-7.546h45.08s-21.217 15.386-28.097 19.892c0 0-9.756 6.38-28.673 7.84zm72.606-27.732l47.96-33.71 22.455 15.944-25.335 17.766z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/><path fill="url(#b)" d="M157.951 161.146l31.789-22.555h.157c2.74-1.989 21.372-15.468 27.746-19.638 0 0 9.43-6.211 28.67-6.383H300v18.159h-52.937l-12.442 8.119h-.043l-54.355 38.358z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/></svg>`
 });
 
 cxl.component({
-	name: 'ui-docs-color',
+	name: 'uid-color',
 	attributes: [ 'label', 'color', 'text-color'],
 	bindings: '=color:style.inline(background-color) =text-color:style.inline(color)',
 	template: `
@@ -1268,7 +1332,7 @@ cxl.component({
 	`,
 	initialize(state)
 	{
-		state.variables = cxl.ui.theme.variables;
+		state.variables = cxl.css.variables;
 		state.meta = META['theme-variables'];
 	}
 }, {
@@ -1303,15 +1367,15 @@ cxl.component({
 	initialize(state)
 	{
 	const
-		meta = cxl.componentFactory.components['cxl-t'].meta.styles,
+		meta = cxl.css.typography,
 		styles = state.styles = [],
-		def = meta.$
+		def = meta.default
 	;
-		cxl.each(meta, (s, key) => s.fontSize && styles.push({
-			key: key.slice(1) || 'default',
-			weight: s.fontWeight || def.fontWeight,
-			size: s.fontSize || def.fontSize,
-			spacing: s.letterSpacing || def.letterSpacing
+		cxl.each(meta, (s, key) => styles.push({
+			key: key || 'default',
+			weight: s.css.fontWeight || def.css.fontWeight,
+			size: s.css.fontSize || def.css.fontSize,
+			spacing: s.css.letterSpacing || def.css.letterSpacing
 		}));
 	}
 });

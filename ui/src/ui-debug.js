@@ -26,7 +26,9 @@ override(cxl.componentFactory, 'createComponent', function(meta, node) {
 	node.$$meta = meta;
 });
 
-override(cxl.ComponentDefinition.prototype, 'componentConstructor', function(meta) {
+override(cxl.ComponentDefinition.prototype, 'componentConstructor', function() {
+
+	const meta = this.meta;
 
 	for (var i in meta)
 		if (VALID_COMPONENT_META.indexOf(i)===-1 && VALID_ROUTE_META.indexOf(i)===-1)

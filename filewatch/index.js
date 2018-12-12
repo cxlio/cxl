@@ -42,10 +42,24 @@ class FilePoller {
 		this.path = path;
 		this.callback = callback;
 		this.interval = 1000;
+		// Number of times we polled and there was no change. Use by decelerate function
+		this.nochange = 0;
 		this.$history = {};
 		this.$isDirectory = false;
 		this.$statSync();
 		this.$schedule();
+	}
+
+	$decelerate(nochange)
+	{
+		if (nochange > 100)
+			this.interval = 10000;
+		else if (nochange > 30)
+			this.interval = 5000;
+		else if (nochange > 5)
+			this.interval = 2000;
+		else
+			this.interval = 1000;
 	}
 
 	$schedule()
@@ -61,7 +75,7 @@ class FilePoller {
 			fs.readdirSync(this.path).forEach(d => this.$statSync(d));
 	}
 
-	$stat(file)
+	$stat(file, onDone)
 	{
 		const filepath = this.path + (file ? '/' + file : '');
 
@@ -71,10 +85,15 @@ class FilePoller {
 			const current = this.$history[file];
 
 			if (this.$checkChanged(current, stat))
+			{
+				this.changes++;
 				this.callback(file==='.' ? '' : file);
+			}
 
 			if (file==='.' && stat.isDirectory())
-				this.$pollDir();
+				this.$pollDir(onDone);
+			else if (onDone)
+				onDone();
 
 			this.$history[file] = stat;
 		});
@@ -87,18 +106,25 @@ class FilePoller {
 			(oldStat.mtime.getTime() !== stat.mtime.getTime());
 	}
 
-	$pollDir()
+	$pollDir(onDone)
 	{
 		fs.readdir(this.path, (err, list) => {
 			if (list)
 				list.forEach(l => this.$stat(l));
+			// TODO Wait for child stats
+			if (onDone)
+				onDone();
 		});
 	}
 
 	$poll()
 	{
-		this.$stat();
-		this.$schedule();
+		this.changes = 0;
+		this.$stat('', () => {
+			this.nochange = this.changes ? 0 : this.nochange+1;
+			this.$decelerate(this.nochange);
+			this.$schedule();
+		});
 	}
 
 	destroy()

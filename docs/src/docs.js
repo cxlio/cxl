@@ -7,7 +7,10 @@ hljs.configure({ tabReplace: '    '});
 cxl.component({
 	name: 'docs-link',
 	attributes: [ 'anchor' ],
-	template: '<a href="#" &="action:#onAction:event.prevent content"></a>'
+	template: '<a href="#" &=".link action:#onAction:event.prevent content"></a>',
+	styles: {
+		link: { color: 'primary' }
+	}
 }, {
 	onAction()
 	{
@@ -135,14 +138,14 @@ cxl.component({
 	name: 'docs-code',
 	attributes: [ 'source', 'type' ],
 	template: `
-<style>${hljs.$STYLE} .hljs { overflow: visible !important; } .code { white-space: pre-wrap !important; } </style>
+<style>${hljs.$STYLE} .hljs { overflow: visible !important; }</style>
 <div &="=type:style =source:text:#highlight .code"></div>
 	`,
 	styles: {
 		$: { marginTop: 16, marginBottom: 16 },
 		$lastChild: { marginBottom: 0 },
 		code: {
-			fontFamily: 'monospace', whiteSpace: 'pre', fontSize: 16
+			fontFamily: 'monospace', whiteSpace: 'pre-wrap', fontSize: 16
 		}
 	},
 	initialize(state)

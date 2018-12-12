@@ -6,6 +6,11 @@
 				"tasks": "cd template && npm run build"
 			},
 
+			"icons": {
+				"files": [ "ui/build-icons.js" ],
+				"tasks": "node ui/build-icons"
+			},
+
 			"ui": {
 				"files": [
 					"template/src/*",

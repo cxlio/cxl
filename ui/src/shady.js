@@ -145,22 +145,22 @@ Object.assign(cxl.ComponentDefinition.prototype, {
 			debouncedWalk();
 	},
 
-	componentConstructor(meta)
+	componentConstructor()
 	{
-		var me = this;
+		const me = this;
 
 		class Component {
 			constructor(node)
 			{
 				node.$$cxlConnected = false;
 
-				if (meta.attributes)
-					me.$attributes(node, meta.attributes);
+				if (me.meta.attributes)
+					me.$attributes(node, me.meta.attributes);
 
-				if (meta.methods)
-					me.$methods(node, meta.methods);
+				if (me.meta.methods)
+					me.$methods(node, me.meta.methods);
 
-				cxl.componentFactory.createComponent(meta, node);
+				cxl.componentFactory.createComponent(me.meta, node);
 			}
 		}
 
