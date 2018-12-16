@@ -65,7 +65,7 @@ function prefix(prefix, css)
 }
 
 behavior('focusable', `
-	@disabled:aria.prop(disabled):not:focus.enable touchable action:host.trigger(action)
+	@disabled:aria.prop(disabled):not:focus.enable touchable
 `);
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
@@ -316,8 +316,7 @@ component({
 component({
 	name: 'cxl-button',
 	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'inverse', 'touched', 'big' ],
-	events: [ 'action' ],
-	bindings: 'focusable role(button) action:#onAction:host.trigger(action)',
+	bindings: 'focusable role(button) action:#onAction',
 	styles: [FocusCSS, {
 		$: {
 			elevation: 1, paddingTop: 8, paddingBottom: 8, paddingRight: 16,
@@ -397,7 +396,7 @@ component({
 <cxl-icon icon="check" &=".box"></cxl-icon>
 <span &="content"></span>
 	`,
-	events: [ 'change', 'action' ],
+	events: [ 'change' ],
 	bindings: `
 focusable role(checkbox)
 action:#toggle
@@ -447,7 +446,7 @@ action:#toggle
 component({
 	name: 'cxl-chip',
 	attributes: [ 'removable', 'disabled', 'touched' ],
-	events: [ 'cxl-chip.remove', 'action' ],
+	events: [ 'cxl-chip.remove' ],
 	bindings: 'focusable keypress:#onKey',
 	template: `
 <span &=".avatar content(cxl-avatar)"></span><span &=".content content"></span><cxl-icon &=".remove =removable:show on(click):host.trigger(cxl-chip.remove)" icon="times"></cxl-icon>
@@ -487,7 +486,7 @@ component({
 
 component({
 	name: 'cxl-dialog-alert',
-	attributes: [ 'title-text', 'message', 'promise', 'action' ],
+	attributes: [ 'title-text', 'message', 'promise' ],
 	bindings: 'role(alertdialog) =modal:aria.prop(modal) =title-text:aria.prop(label)',
 	template: `
 <cxl-dialog>
@@ -805,7 +804,6 @@ component({
 	<div &=".content content"></div>
 </a>
 	`,
-	events: [ 'action' ],
 	bindings: `
 focusable role(listitem)
 	`,
@@ -878,7 +876,6 @@ component({
 </div>
 <cxl-icon &=".icon" icon="ellipsis-v"></cxl-icon>
 	`,
-	events: [ 'action' ],
 	bindings: `
 id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show:event.stop role(button)
 	`,
@@ -1011,7 +1008,7 @@ component({
 <cxl-icon icon="circle" &=".box"></cxl-icon>
 <span &=".content content"></span>
 	`,
-	events: [ 'change', 'action' ],
+	events: [ 'change' ],
 	bindings: `
 role(radio) focusable id(host)
 action:#toggle
@@ -1110,7 +1107,7 @@ component({
 </div>
 <div &=".focusLine"></div>
 	`,
-	events: [ 'change', 'action' ],
+	events: [ 'change' ],
 	attributes: [ 'disabled', 'value', 'touched', 'placeholder' ],
 	bindings: `
 		focusable
@@ -1235,7 +1232,7 @@ component({
 
 component({
 	name: 'cxl-slider',
-	events: [ 'change', 'action' ],
+	events: [ 'change' ],
 	attributes: [ 'value', 'disabled', 'step', 'touched' ],
 	bindings: 'focusable keypress(arrowleft):#onLeft keypress(arrowright):#onRight drag.x:#onDrag =value:host.trigger(change) role(slider)',
 	template: `
@@ -1406,7 +1403,7 @@ component({
 		icon: { animation: 'spin', marginRight: 8 }
 	},
 	events: [ 'cxl-form.submit' ],
-	bindings: 'on(action):host.trigger(cxl-form.submit)'
+	bindings: 'action:host.trigger(cxl-form.submit)'
 }, {
 	primary: true,
 	icon: 'spinner'
@@ -1421,7 +1418,7 @@ component({
 </div>
 	`,
 	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ],
-	events: [ 'change', 'action' ],
+	events: [ 'change' ],
 	bindings: `focusable =value:host.trigger(change) action:#onClick role(switch) =checked:aria.prop(checked)`,
 	styles: [{
 		$: {
@@ -1491,7 +1488,6 @@ component({
 	name: 'cxl-tab',
 	template: '<a &=".link =href:attribute(href) content"></a>',
 	bindings: 'role(tab) focusable =selected:filter:host.trigger(cxl-tab.selected)',
-	events: [ 'action' ],
 	attributes: ['href', 'selected', 'disabled', 'touched'],
 	styles: [{
 		$: { flexShrink: 0 },
