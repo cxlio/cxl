@@ -361,7 +361,7 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-fab">
 <docs-demo><!--
-<cxl-fab title="Floating Action Button"><cxl-icon icon="plus"></cxl-icon></cxl-fab>
+<cxl-fab static title="Floating Action Button"><cxl-icon icon="plus"></cxl-icon></cxl-fab>
 --></docs-demo>
 </docs-component>
 			`
@@ -369,10 +369,9 @@ Checked: <span &="=test:text"></span>
 		form: {
 			template: `
 <docs-component name="cxl-form">
-	<docs-demo &="owner:@owner"><!--
+	<docs-demo &="owner:@owner" label="Input Validation"><!--
 <cxl-form>
 	<cxl-block>
-		<cxl-t subtitle>Input Validation</cxl-t>
 		<cxl-form-group>
 			<cxl-label>E-mail Address</cxl-label>
 			<cxl-input &="valid(email)"></cxl-input>
@@ -1046,6 +1045,7 @@ cxl.route({
 	path: '*default',
 	title: 'Home',
 	template: `
+<style>a { color: var(--cxl-link) }</style>
 <cxl-grid columns="1fr 1fr" style="margin-top: 48px">
 	<cxl-c sm2 md1>
 		<cxl-t h2>@cxl/ui</cxl-t>
@@ -1054,7 +1054,7 @@ cxl.route({
 		</cxl-t>
 		<br>
 		<p>
-		<a href="#getting-started"><cxl-button secondary>Get Started!</cxl-button></a>
+		<a href="#getting-started"><cxl-button secondary big>Get Started!</cxl-button></a>
 		</p>
 		<br>
 	</cxl-c>
@@ -1114,6 +1114,7 @@ cxl.route({
 	path: 'getting-started',
 	title: 'Getting Started',
 	template: `
+<style>a { color: var(--cxl-link) }</style>
 <cxl-t h4>Installation</cxl-t>
 
 <cxl-t h5>Using NPM</cxl-t>
@@ -1168,7 +1169,7 @@ cxl.route({
 	template: `
 <cxl-t h4>Color</cxl-t>
 <uid-palette></uid-palette>
-<br>
+<br><br>
 <cxl-t h4>Typography</cxl-t>
 <br>
 <cxl-t>The following <code>font-family</code> string is applied to all elements:
@@ -1177,12 +1178,6 @@ cxl.route({
 <br>
 <uid-typography></uid-typography>
 <br><br>
-<cxl-t h4>Iconography</cxl-t>
-<p>The <code>@cxl/ui/dist/icons</code> module provides support for <a href="https://fontawesome.com/icons?d=gallery">fontawesome</a> icons. The <uid-link tag="cxl-icon"></uid-link> component can be used to include icons in your application.</p>
-<docs-code><!--
-<cxl-icon icon="home"></cxl-icon>
---></docs-code>
-<br>
 <cxl-t h4>Theme Variables</cxl-t>
 <p>The following CSS Variables can be modified to costumize the look and feel of the components in your application.</p>
 <br>
@@ -1239,54 +1234,29 @@ cxl.component({
 	name: 'uid-palette',
 	template: `
 <cxl-grid columns="1fr 1fr 1fr 1fr 1fr 1fr">
+<template &="=vars:each:repeat">
 	<cxl-c xs6 sm3 md2>
-	<uid-color label="Primary" &="=vars.primary:@color =vars.onPrimary:@text-color"></uid-color>
+	<uid-color &="$name:@label $color:@color $onColor:@text-color"></uid-color>
 	</cxl-c>
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="Primary Dark" &="=vars.primaryDark:@color =vars.onPrimary:@text-color"></uid-color>
-	</cxl-c>
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="Primary Light" &="=vars.primaryLight:@color =vars.onPrimaryLight:@text-color"></uid-color>
-	</cxl-c>
-
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="Secondary" &="=vars.secondary:@color =vars.onSecondary:@text-color"></uid-color>
-	</cxl-c>
-
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="Surface" &="=vars.surface:@color =vars.onSurface:@text-color"></uid-color>
-	</cxl-c>
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="Error" &="=vars.error:@color =vars.onError:@text-color"></uid-color>
-	</cxl-c>
-
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="On Primary" &="=vars.onPrimary:@color =vars.primary:@text-color"></uid-color>
-	</cxl-c>
-
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="On Secondary" &="=vars.onSecondary:@color =vars.secondary:@text-color"></uid-color>
-	</cxl-c>
-
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="On Surface" &="=vars.onSurface:@color =vars.surface:@text-color"></uid-color>
-	</cxl-c>
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="On Error" &="=vars.onError:@color =vars.error:@text-color"></uid-color>
-	</cxl-c>
-	<cxl-c xs6 sm3 md2>
-	<uid-color label="Divider" &="=vars.divider:@color =vars.onSurface:@text-color"></uid-color>
-	</cxl-c>
+</template>
 </cxl-grid>
 	`,
 	initialize(state)
 	{
-		const vars = cxl.css.variables;
+		const vars = cxl.css.colors;
 
-		state.vars = {};
+		state.vars = [];
 
-		for (var i in cxl.css.variables)
-			state.vars[i] = vars[i].toString();// && vars[i].toHex();
+		for (const i in vars)
+		{
+			state.vars.push({
+				name: i,
+				color: vars[i].toString(),
+				onColor: vars['on' + i[0].toUpperCase() + i.slice(1)] ||
+					(vars.surface.blend(vars[i]).luminance() > 0.5 ? '#000' : '#fff')
+			});
+		}
+
 	}
 });
 
@@ -1311,7 +1281,7 @@ cxl.component({
 cxl.component({
 	name: 'uid-link',
 	attributes: ['tag'],
-	template: '<a &="=tag:#setHref"><code>&lt;<x &="=tag:text"></x>&gt;</code></a>'
+	template: '<a style="color:var(--cxl-link)" &="=tag:#setHref"><code>&lt;<x &="=tag:text"></x>&gt;</code></a>'
 }, {
 	setHref(val, el) { el.href='#'+val; }
 });
@@ -1332,7 +1302,7 @@ cxl.component({
 	`,
 	initialize(state)
 	{
-		state.variables = cxl.css.variables;
+		state.variables = cxl.css.appliedVariables;
 		state.meta = META['theme-variables'];
 	}
 }, {
@@ -1447,6 +1417,7 @@ cxl.component({
 	name: 'docs-component',
 	attributes: [ 'name' ],
 	template: `
+<style>a { color: var(--cxl-primary) }</style>
 <cxl-t h5>Basic Usage</cxl-t>
 <div &="content"></div>
 <br><br>

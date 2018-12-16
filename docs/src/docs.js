@@ -9,7 +9,7 @@ cxl.component({
 	attributes: [ 'anchor' ],
 	template: '<a href="#" &=".link action:#onAction:event.prevent content"></a>',
 	styles: {
-		link: { color: 'primary' }
+		link: { color: 'link' }
 	}
 }, {
 	onAction()
@@ -103,14 +103,13 @@ cxl.component({
 	attributes: ['label', 'owner'],
 	bindings: 'connect:#connect',
 	template: `
-<cxl-card><cxl-block>
-	<cxl-t h6><span &="=label:show:text"></span></cxl-t>
-	<div &=".content content"></div>
-	<docs-code &="=source:@source"></docs-code>
-</cxl-block></cxl-card>`,
+<cxl-t h6><span &="=label:show:text"></span></cxl-t>
+<div &="content"></div>
+<docs-code &="=source:@source"></docs-code>
+`,
 
 	styles: {
-		content: { marginBottom: 16 }
+		$: { marginTop: 24, marginBottom: 24 }
 	}
 
 }, {
@@ -204,7 +203,7 @@ cxl.component({
 <cxl-card &=".card">
 	<a &="=name:route.link"><cxl-icon &=".icon =icon:@icon"></cxl-icon></a>
 	<cxl-c grow>
-		<a &="=name:route.link"><cxl-t subtitle>&lt;<x &="=name:text"></x>&gt;</cxl-t></a>
+		<a &="=name:route.link .link"><cxl-t subtitle>&lt;<x &="=name:text"></x>&gt;</cxl-t></a>
 		<cxl-t caption><cxl-icon &=".tags" icon="tags"></cxl-icon>
 		<template &="=tags:each:repeat">
 			<span &="item:text"></span>
@@ -217,6 +216,7 @@ cxl.component({
 	styles: {
 		card: { padding: 16, display: 'flex' },
 		tags: { color: '#ccc', marginTop: 8 },
+		link: { color: 'link' },
 		icon: {
 			width: 80, height: 80, lineHeight: 80, fontSize: 48, textAlign: 'center',
 			backgroundColor: '#ccc', color: '#fff', marginRight: 16

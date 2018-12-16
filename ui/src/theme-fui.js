@@ -2,16 +2,26 @@
 "use strict";
 
 const
-	rgba = cxl.css.rgba
+	rgba = cxl.css.rgba,
+	SURFACE = rgba(0,0,0),
+	PRIMARY = SURFACE,
+	SECONDARY = rgba(0xc6, 0xff, 0)
 ;
 
 cxl.css.extend({
 
 	colors: {
-		surface: rgba(0x21, 0x21, 0x21),
+		surface: SURFACE,
+		background: rgba(0x22, 0x22, 0x22),
 		onSurface: rgba(0xff, 0xff, 0xff),
-		//primary: rgba(0x90, 0xca, 0xf9),
+		link: rgba(0xff, 0xff, 0xff),
+		primary: PRIMARY,
+		primaryLight: SECONDARY.alpha(0.25),
 		error: rgba(0xff, 0x17, 0x44),
+		elevation: SECONDARY.alpha(0.5)
+	},
+
+	variables: {
 		font: '"Exo 2", Roboto, sans-serif'
 	}
 
@@ -24,7 +34,8 @@ document.head.appendChild(cxl.dom('cxl-google-font', {
 cxl.extendComponent('cxl-card', {
 	styles: {
 		$: {
-			borderColor: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 8
+			borderColor: 'primaryLight', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
+			outline: 'var(--cxl-secondary)'
 		}
 	}
 });

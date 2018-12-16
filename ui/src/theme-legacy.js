@@ -18,10 +18,13 @@ cxl.css.extend({
 		//font: 'VT323, monospace'
 	},
 
+	variables: {
+		font: '"Press Start 2P", monospace'
+	},
+
 	typography: {
 		default: {
 			fontWeight: 400, fontSize: 12, letterSpacing: 'normal',
-			fontFamily: '"Press Start 2P", monospace'
 		},
 		caption: { fontSize: 12, letterSpacing: 0.4 },
 		h1: { fontWeight: 300, fontSize: 96, letterSpacing: -1.5 },

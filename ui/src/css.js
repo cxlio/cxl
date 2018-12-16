@@ -30,9 +30,26 @@ class RGBA
 		this.a = a===undefined ? 1 : (a<0 ? 0 : (a>1 ? 1 : a));
 	}
 
+	luminance()
+	{
+		//return 0.2126*((this.r/255)^2.2) + 0.7151*((this.g/255)^2.2) + 0.0721*((this.b/255)^2.2);
+		return (0.2126*this.r + 0.7152*this.g + 0.0722*this.b)/255;
+	}
+
+	blend(rgba)
+	{
+	const
+		a = 1 - (1 - rgba.a) * (1 - this.a),
+		r = a===0 ? 0 : (rgba.r * rgba.a / a) + (this.r * this.a * (1 - rgba.a) / a),
+		g = a===0 ? 0 : (rgba.g * rgba.a / a) + (this.g * this.a * (1 - rgba.a) / a),
+		b = a===0 ? 0 : (rgba.b * rgba.a / a) + (this.b * this.a * (1 - rgba.a) / a)
+	;
+		return new RGBA(r, g, b, a);
+	}
+
 	multiply(p)
 	{
-		return new RGBA(this.r+this.r*p, this.g+this.g*p, this.b+this.b*p, this.a);
+		return new RGBA(this.r*p, this.g*p, this.b*p, this.a);
 	}
 
 	alpha(a)
@@ -65,11 +82,14 @@ class FontStyle {
 		css = this.css,
 		size = css.fontSize ? css.fontSize + UNIT : '',
 		weight = css.fontWeight || '',
-		lineHeight = css.lineHeight || '',
+		lineHeight = css.lineHeight ? '/' + css.lineHeight + UNIT : '',
 		family = css.fontFamily || 'var(--cxl-font)',
 		spacing = css.letterSpacing
 	;
-		style.font = `${weight} ${size} ${lineHeight} ${family}`;
+		style.font = `${weight} ${size}${lineHeight} ${family}`;
+
+		if (css.textTransform)
+			style.textTransform = css.textTransform;
 
 		if (spacing)
 			style.letterSpacing = spacing;
@@ -209,7 +229,7 @@ class Style
 	{
 		this.$value.elevation = x;
 		this.$style.zIndex = x;
-		this.$style.boxShadow = x + UNIT + ' ' + x + UNIT + ' ' + (3*x)+ UNIT + ' rgba(0,0,0,0.26)';
+		this.$style.boxShadow = x + UNIT + ' ' + x + UNIT + ' ' + (3*x)+ UNIT + ' var(--cxl-elevation)';
 	}
 
 	set font(name)
@@ -435,10 +455,7 @@ function applyStyles()
 	// Get Variables
 const
 	typo = css.typography,
-	variables = css.variables = {
-		speed: css.speed,
-		font: typo.default.fontFamily
-	}
+	variables = css.appliedVariables = Object.assign({}, css.variables)
 ;
 	for (var i in css.colors)
 		variables[i] = css.colors[i];
@@ -447,7 +464,9 @@ const
 		if (!(typo[i] instanceof FontStyle))
 			typo[i] = new FontStyle(typo[i]);
 
-	css.rootStyles.reset({ $: { variables: variables } });
+	css.rootStyles.reset({
+		$: { backgroundColor: 'background', variables: variables }
+	});
 }
 
 class RootStyles extends StyleSheet {
@@ -495,20 +514,23 @@ cxl.css = Object.assign(css, {
 	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
 
 	colors: {
+		elevation: rgba(0,0,0,0.26),
 		primary: rgba(0x34, 0x49, 0x55),
 		primaryDark: rgba(0x23, 0x2f, 0x34),
-		primaryLight: rgba(0x4a, 0x65, 0x72),
+		primaryLight: rgba(0x4a, 0x65, 0x72, 0.75),
 
 		secondary: rgba(0xf9, 0xaa, 0x33),
 		surface: rgba(0xff, 0xff, 0xff),
 		error: rgba(0xb0, 0x00, 0x20),
 
 		onPrimary: rgba(0xff,0xff,0xff),
-		onPrimaryLight: rgba(0xff, 0xff, 0xff),
+		onPrimaryLight: rgba(0x0, 0x0, 0x0),
 		onSecondary: rgba(0,0,0),
 		onSurface: rgba(0, 0, 0),
 		onError: rgba(0xff, 0xff, 0xff),
 
+		get background() { return this.surface; },
+		get link() { return this.primary; },
 		get headerText() { return this.onSurface.alpha(0.6); },
 		get divider() { return this.onSurface.alpha(0.12); },
 	},
@@ -532,12 +554,15 @@ cxl.css = Object.assign(css, {
 	// Stylesheet used for variables and other :root properties
 	rootStyles: new RootStyles(),
 
-	// Animation speed
-	speed: '0.2s',
+	variables: {
+		// Animation speed
+		speed: '0.2s',
+		font: 'Roboto, sans-serif'
+	},
 
 	typography: {
 		default: {
-			fontWeight: 400, fontSize: 16, letterSpacing: 'normal', fontFamily: 'Roboto, sans-serif'
+			fontWeight: 400, fontSize: 16, letterSpacing: 'normal'
 		},
 		caption: { fontSize: 12, letterSpacing: 0.4 },
 		h1: { fontWeight: 300, fontSize: 96, letterSpacing: -1.5 },
@@ -547,11 +572,15 @@ cxl.css = Object.assign(css, {
 		h5: { fontSize: 24 },
 		h6: { fontSize: 20, fontWeight: 500, letterSpacing: 0.15 },
 		subtitle: { fontSize: 16, lineHeight: 22, letterSpacing: 0.15 },
-		subtitle2: { fontSize: 14, lineHeight: 18, letterSpacing: 0.1 }
+		subtitle2: { fontSize: 14, lineHeight: 18, letterSpacing: 0.1 },
+		button: { fontSize: 14, lineHeight: 20, letterSpacing: 1.25, textTransform: 'uppercase' }
 	},
 
 	extend(def)
 	{
+		if (def.variables)
+			cxl.extend(this.variables, def.variables);
+
 		if (def.colors)
 			cxl.extend(this.colors, def.colors);
 

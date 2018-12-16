@@ -202,29 +202,6 @@ directive('aria.prop', {
 
 });
 
-
-/*
-var ARIA_ID = 0;
-
-function ariaID(element)
-{
-	let id = element.getAttribute('id');
-
-	if (!id) {
-		id = 'cxl-aria-' + (ARIA_ID++);
-		element.setAttribute('id', id);
-	}
-
-	return id;
-}
-directive('aria.labelledBy', {
-	connect()
-	{
-		const id = ariaID(this.element);
-		this.owner.host.setAttribute('aria-labelledby', id);
-	}
-});*/
-
 directive('role', {
 	connect()
 	{
@@ -343,10 +320,10 @@ component({
 	bindings: 'focusable role(button) action:#onAction:host.trigger(action)',
 	styles: [FocusCSS, {
 		$: {
-			elevation: 1, paddingTop: 8, paddingBottom: 8, lineHeight: 20, paddingRight: 16,
-			paddingLeft: 16, cursor: 'pointer', display: 'inline-block', textTransform: 'uppercase',
-			borderRadius: 2, userSelect: 'none', backgroundColor: 'surface',
-			color: 'onSurface', textAlign: 'center'
+			elevation: 1, paddingTop: 8, paddingBottom: 8, paddingRight: 16,
+			paddingLeft: 16, cursor: 'pointer', display: 'inline-block',
+			font: 'button', borderRadius: 2, userSelect: 'none',
+			backgroundColor: 'surface', color: 'onSurface', textAlign: 'center'
 		},
 
 		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
@@ -355,7 +332,7 @@ component({
 		$big: { padding: 16, fontSize: 22 },
 		$flat: {
 			backgroundColor: 'inherit',
-			elevation: 0, fontWeight: 500, paddingRight: 8, paddingLeft: 8, color: 'primary'
+			elevation: 0, fontWeight: 500, paddingRight: 8, paddingLeft: 8, color: 'link'
 		},
 		$flat$large: { paddingLeft: 12, paddingRight: 12 },
 		$flat$inverse: { color: 'onPrimary' },
@@ -476,7 +453,10 @@ component({
 <span &=".avatar content(cxl-avatar)"></span><span &=".content content"></span><cxl-icon &=".remove =removable:show on(click):host.trigger(cxl-chip.remove)" icon="times"></cxl-icon>
 	`,
 	styles: [{
-		$: { borderRadius: 16, fontSize: 14, backgroundColor: 'rgb(216,216,216)', display: 'inline-flex' },
+		$: {
+			borderRadius: 16, fontSize: 14, backgroundColor: 'divider',
+			display: 'inline-flex', color: 'onSurface'
+		},
 		content: { display: 'inline-block', marginLeft: 12, paddingRight: 12, lineHeight: 32 },
 		avatar: { display: 'inline-block', height: 32 },
 		remove: { display: 'inline-block', marginRight: 12, cursor: 'pointer', lineHeight: 32 }
@@ -593,15 +573,16 @@ component({
 
 component({
 	name: 'cxl-fab',
-	attributes: [ 'disabled', 'touched' ],
+	attributes: [ 'disabled', 'touched', 'static' ],
 	bindings: 'focusable',
 	styles: {
 		$: {
-			elevation: 1, backgroundColor: 'secondary', color: 'onSecondary',
+			elevation: 2, backgroundColor: 'secondary', color: 'onSecondary',
 			position: 'fixed', width: 56, height: 56, bottom: 16, right: 24,
 			borderRadius: 56, textAlign: 'center', paddingTop: 20, cursor: 'pointer',
 			fontSize: 20, paddingBottom: 20, lineHeight: 16
 		},
+		$static: { position: 'static' },
 		$focus: { elevation: 4 },
 		$small: { top: 28, bottom: '' },
 		$hover: { elevation: 3 }
@@ -892,14 +873,14 @@ component({
 	name: 'cxl-menu-toggle',
 	attributes: [ 'inverse', 'disabled', 'touched' ],
 	template: `
-<div &=".menu action:event.stop:log:not:=showMenu">
-<cxl-menu dense closed &="id(menu) .menuControl =showMenu:log:not:@closed content"></cxl-menu>
+<div &=".menu action:event.stop:not:=showMenu">
+<cxl-menu dense closed &="id(menu) .menuControl =showMenu:not:@closed content"></cxl-menu>
 </div>
 <cxl-icon &=".icon" icon="ellipsis-v"></cxl-icon>
 	`,
 	events: [ 'action' ],
 	bindings: `
-id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show:event.stop:log role(button)
+id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show:event.stop role(button)
 	`,
 	styles: {
 		icon: {
@@ -926,8 +907,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 	{
 		this.showMenu = true;
 		this.menu.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
-		// console.log(this.menu.style.right);
-		//this.menu.style.top = el.offsetTop+'px';
 
 		const item = cxl.dom.find(el, this.itemSelector);
 
@@ -1115,7 +1094,7 @@ component({
 		$: { elevation: 1, position: 'relative', padding: 16, paddingBottom: 14, fontSize: 18 },
 		icon: { position: 'absolute', top: 18 },
 		input: {
-			outline: 0, border: 0, width: '100%',
+			outline: 0, border: 0, width: '100%', backgroundColor: 'surface', color: 'onSurface',
 			lineHeight: 24, padding: 0, paddingLeft: 48, fontSize: 18
 		}
 	}
@@ -1532,7 +1511,7 @@ component({
 	name: 'cxl-table',
 	bindings: 'registable.host(table):=event =event:#updateColumns',
 	styles: {
-		$: { display: 'grid' }
+		$: { display: 'grid', overflowX: 'auto' }
 	}
 }, {
 	columnCount: 0,
