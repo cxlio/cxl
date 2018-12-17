@@ -7,7 +7,7 @@ require('../build').build({
 			output: 'ui-docs.js',
 			src: [
 				'../ui/dist/cxl-ui.js',
-				'../ui/dist/cxl-ui-icons.js',
+				'../ui/dist/icons.js',
 				'../ui/dist/cxl-ui-alpha.js',
 				'../ui/dist/cxl-router.js',
 				'../ui/src/meta.js',
@@ -20,10 +20,10 @@ require('../build').build({
 			output: 'ui-docs-react.js',
 			src: [
 				'../ui/dist/cxl-ui.js',
-				'../ui/dist/cxl-ui-icons.js',
+				'../ui/dist/icons.js',
 				'../ui/dist/cxl-ui-alpha.js',
 				'../ui/dist/cxl-router.js',
-				'../ui/dist/cxl-ui-react.js'
+				'../ui-react/index.js'
 			],
 			minify: 'ui-docs-react.min.js'
 		},

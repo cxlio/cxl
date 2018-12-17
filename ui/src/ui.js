@@ -797,6 +797,24 @@ touchable
 });
 
 component({
+	name: 'cxl-input-icon',
+	styles: {
+		$: { position: 'absolute', top: 8, right: 0 }
+	}
+});
+
+component({
+	name: 'cxl-datepicker',
+	extend: 'cxl-input',
+	template: `
+${cxl.componentFactory.components['cxl-input'].meta.template}
+<cxl-input-icon>
+	<cxl-icon icon="calendar"></cxl-icon>
+</cxl-input-icon>
+	`
+});
+
+component({
 	name: 'cxl-item',
 	template: `
 <a &=".link =href:attribute(href)" tabindex="-1">
@@ -864,6 +882,23 @@ component({
 		default:
 			return cxl.Skip;
 		}
+	}
+});
+
+component({
+	name: 'cxl-icon-toggle',
+	attributes: [ 'disabled', 'touched', 'icon' ],
+	template: `
+<cxl-icon &=".icon =icon:@icon"></cxl-icon>
+	`,
+	bindings: `
+focusable
+root.on(touchend):#close root.on(click):#close keypress(escape):#close
+action:#show:event.stop
+role(button)
+	`,
+	styles: {
+		icon: { color: 'onSurface', cursor: 'pointer', width: 8 }
 	}
 });
 

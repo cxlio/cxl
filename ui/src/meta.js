@@ -70,6 +70,11 @@
 			icon: 'capsules',
 			tags: ['indicator']
 		},
+		'cxl-datepicker': {
+			icon: 'calendar',
+			beta: true,
+			tags: [ 'date', 'picker', 'input' ]
+		},
 		'cxl-dialog': {
 			icon: 'window-maximize',
 			tags: [ 'popup' ]

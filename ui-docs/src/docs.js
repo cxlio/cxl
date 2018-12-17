@@ -296,6 +296,18 @@ Checked: <span &="=test:text"></span>
 			`
 
 		},
+		datepicker: {
+			template: `
+<docs-component name="cxl-datepicker">
+	<docs-demo><!--
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-datepicker></cxl-datepicker>
+</cxl-form-group>
+	--></docs-demo>
+</docs-component>
+			`
+		},
 		dialog: {
 			template: `
 <docs-component name="cxl-dialog">
@@ -471,6 +483,11 @@ Checked: <span &="=test:text"></span>
 <cxl-form-group floating>
 	<cxl-label>Floating Label</cxl-label>
 	<cxl-input></cxl-input>
+</cxl-form-group>
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input invalid touched></cxl-input>
+	<cxl-input-icon><cxl-icon icon="exclamation-circle"></cxl-icon></cxl-input-icon>
 </cxl-form-group>
 --></docs-demo>
 
