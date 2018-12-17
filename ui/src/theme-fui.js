@@ -17,6 +17,7 @@ cxl.css.extend({
 		link: rgba(0xff, 0xff, 0xff),
 		primary: PRIMARY,
 		primaryLight: SECONDARY.alpha(0.25),
+		onPrimaryLight: rgba(0xff, 0xff, 0xff),
 		error: rgba(0xff, 0x17, 0x44),
 		elevation: SECONDARY.alpha(0.5)
 	},
@@ -35,7 +36,7 @@ cxl.extendComponent('cxl-card', {
 	styles: {
 		$: {
 			borderColor: 'primaryLight', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
-			outline: 'var(--cxl-secondary)'
+			outline: '3px solid rgba(c6, ff, )'
 		}
 	}
 });

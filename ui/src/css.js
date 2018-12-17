@@ -517,14 +517,14 @@ cxl.css = Object.assign(css, {
 		elevation: rgba(0,0,0,0.26),
 		primary: rgba(0x34, 0x49, 0x55),
 		primaryDark: rgba(0x23, 0x2f, 0x34),
-		primaryLight: rgba(0x4a, 0x65, 0x72, 0.75),
+		primaryLight: rgba(0x4a, 0x65, 0x72, 0.24),
 
 		secondary: rgba(0xf9, 0xaa, 0x33),
 		surface: rgba(0xff, 0xff, 0xff),
 		error: rgba(0xb0, 0x00, 0x20),
 
 		onPrimary: rgba(0xff,0xff,0xff),
-		onPrimaryLight: rgba(0x0, 0x0, 0x0),
+		get onPrimaryLight() { return this.primary; },
 		onSecondary: rgba(0,0,0),
 		onSurface: rgba(0, 0, 0),
 		onError: rgba(0xff, 0xff, 0xff),
@@ -532,7 +532,7 @@ cxl.css = Object.assign(css, {
 		get background() { return this.surface; },
 		get link() { return this.primary; },
 		get headerText() { return this.onSurface.alpha(0.6); },
-		get divider() { return this.onSurface.alpha(0.12); },
+		get divider() { return this.onSurface.alpha(0.16); },
 	},
 
 	fonts: {},

@@ -994,7 +994,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			template: `
 <docs-component name="cxl-tabs">
 	<docs-demo &="owner:@owner"><!--
-<cxl-tabs &="on(action):#select">
+<cxl-tabs &="action:#select">
 	<cxl-tab>Details</cxl-tab>
 	<cxl-tab selected>Employees</cxl-tab>
 	<cxl-tab>Files</cxl-tab>

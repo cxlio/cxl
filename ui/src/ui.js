@@ -818,8 +818,8 @@ focusable role(listitem)
 		},
 		content: { flexGrow: 1 },
 		icon: { marginRight: 16, width: 28, color: 'onSurface', opacity: 0.7 },
-		icon$selected: { color: 'onPrimary' },
-		link$selected: { backgroundColor: 'primaryLight', color: 'onPrimary' }
+		icon$selected: { color: 'onPrimaryLight' },
+		link$selected: { backgroundColor: 'primaryLight', color: 'onPrimaryLight' }
 	}, prefix('link', DisabledCSS) ]
 
 });
@@ -957,7 +957,7 @@ role(option) selectable
 			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14
 		},
 		$selected: {
-			backgroundColor: 'primaryLight', color: 'onPrimary'
+			backgroundColor: 'primaryLight', color: 'onPrimaryLight'
 		}
 	}
 }, {
@@ -1431,7 +1431,7 @@ component({
 			height: 16,
 			borderRadius: 8,
 			width: 26,
-			backgroundColor: 'rgba(0,0,0,0.26)'
+			backgroundColor: 'divider'
 		},
 
 		knob: {
