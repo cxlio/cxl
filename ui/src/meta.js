@@ -5,7 +5,8 @@
 			speed: { label: 'Animation Speed', type: 'time' },
 			font: { label: 'Default Font', type: 'string' },
 			primary: { label: 'Primary Color', type: 'color' },
-			secondary: { label: 'Secondary/Accent Color', type: 'color' }
+			secondary: { label: 'Secondary/Accent Color', type: 'color' },
+			surface: { label: 'Surface Color', type: 'color' }
 		},
 
 		attributes: {

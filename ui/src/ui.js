@@ -1467,6 +1467,8 @@ component({
 
 component({
 	name: 'cxl-t',
+	attributes: [ 'font' ],
+	bindings: '=font:gate:attribute',
 	styles: {
 		$: { font: 'default', marginBottom: 8 },
 		$lastChild: { marginBottom: 0 },

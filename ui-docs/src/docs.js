@@ -1417,7 +1417,7 @@ cxl.component({
 	name: 'docs-component',
 	attributes: [ 'name' ],
 	template: `
-<style>a { color: var(--cxl-primary) }</style>
+<style>a,a:visited { color: var(--cxl-link) }</style>
 <cxl-t h5>Basic Usage</cxl-t>
 <div &="content"></div>
 <br><br>
