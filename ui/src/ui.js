@@ -325,16 +325,16 @@ component({
 			backgroundColor: 'surface', color: 'onSurface', textAlign: 'center'
 		},
 
-		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
-		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
-
 		$big: { padding: 16, fontSize: 22 },
 		$flat: {
-			backgroundColor: 'inherit',
+			backgroundColor: 'surface',
 			elevation: 0, fontWeight: 500, paddingRight: 8, paddingLeft: 8, color: 'link'
 		},
 		$flat$large: { paddingLeft: 12, paddingRight: 12 },
-		$flat$inverse: { color: 'onPrimary' },
+		$flat$inverse: { backgroundColor: 'primary', color: 'onPrimary' },
+
+		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
+		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
 
 		$active: { elevation: 3 },
 		$active$disabled: { elevation: 1 },
@@ -804,14 +804,157 @@ component({
 });
 
 component({
-	name: 'cxl-datepicker',
-	extend: 'cxl-input',
+	name: 'cxl-calendar-date',
+	attributes: [ 'touched', 'value', 'selected', 'disabled' ],
+	bindings: 'focusable',
 	template: `
-${cxl.componentFactory.components['cxl-input'].meta.template}
+<span &="=value:#getDate:text"></span>
+	`,
+	styles: [ FocusCSS, DisabledCSS, {
+		$: {
+			borderRadius: 40, width: 40, height: 40, lineHeight: 40,
+			textAlign: 'center', padding: 0, backgroundColor: 'surface', color: 'onSurface'
+		},
+		$selected: {
+			backgroundColor: 'primary', color: 'onPrimary'
+		}
+	}]
+}, {
+	getDate(val) {
+		return val && val.getDate();
+	}
+});
+
+component({
+	name: 'cxl-calendar-month',
+	attributes: [ 'value' ],
+	template: `
+<cxl-table &="action:#onAction">
+	<cxl-th>S</cxl-th>
+	<cxl-th>M</cxl-th>
+	<cxl-th>T</cxl-th>
+	<cxl-th>W</cxl-th>
+	<cxl-th>T</cxl-th>
+	<cxl-th>F</cxl-th>
+	<cxl-th>S</cxl-th>
+
+	<template &="=dates:each:repeat">
+	<cxl-td><cxl-calendar-date &="$date:@value $disabled:@disabled $today:.today"></cxl-calendar-date></cxl-td>
+	</template>
+</cxl-table>
+	`,
+	bindings: `=startDate:#render =value:#parse`,
+	styles: {
+		$: { textAlign: 'center' },
+		today: { border: 1, borderStyle: 'solid', borderColor: 'primary' }
+	},
+	initialize(state)
+	{
+		const now = new Date();
+		state.today = (new Date(now.getFullYear(), now.getMonth(), now.getDate())).getTime();
+		state.startDate = state.startDate || now;
+	}
+
+}, {
+	selected: null,
+	value: null,
+
+	parse(val)
+	{
+		if (val && !(val instanceof Date))
+			this.value = new Date(val);
+	},
+
+	setSelected(el)
+	{
+		if (this.selected)
+			this.selected.selected = false;
+
+		el.selected = true;
+		this.selected = el;
+		this.value = el.value;
+	},
+
+	onAction(ev)
+	{
+		const el = ev.target;
+
+		if (el.tagName==='CXL-CALENDAR-DATE' && !el.disabled)
+			this.setSelected(el);
+
+		ev.stopPropagation();
+	},
+
+	getFirstDate(date)
+	{
+		const result = new Date(date.getFullYear(), date.getMonth(), 1);
+		result.setDate(1-result.getDay());
+		return result;
+	},
+
+	getLastDate(date)
+	{
+		const result = new Date(date.getFullYear(), date.getMonth()+1, 1);
+		result.setDate(7 - result.getDay());
+		return result;
+	},
+
+	createItem(current)
+	{
+		return {
+			date: new Date(current),
+			disabled: current.getMonth() !== this.month,
+			today: this.today === current.getTime()
+		};
+	},
+
+	render(startDate)
+	{
+	const
+		dates = this.dates = [],
+		lastDate = this.getLastDate(startDate)
+	;
+		this.month = startDate.getMonth();
+
+		var current = this.getFirstDate(startDate);
+
+		do {
+			dates.push(this.createItem(current));
+			current.setDate(current.getDate() + 1);
+		} while (current <= lastDate || dates.length > 50);
+	}
+});
+
+component({
+	name: 'cxl-datepicker',
+	events: [ 'change' ],
+	attributes: [ 'value' ],
+	bindings: '=inputValue:#setCalendarValue =calendarValue:#setInputValue',
+	template: `
+<cxl-input &="=inputValue:@value on(change):host.trigger(change)"></cxl-input>
 <cxl-input-icon>
-	<cxl-icon icon="calendar"></cxl-icon>
+	<cxl-toggle>
+		<cxl-icon icon="calendar"></cxl-icon>
+		<cxl-toggle-popup>
+	<cxl-card>
+<cxl-calendar &="@value:=calendarValue:log"></cxl-calendar>
+	</cxl-card>
+		</cxl-toggle-popup>
+	</cxl-toggle>
 </cxl-input-icon>
 	`
+}, {
+	inputValue: '',
+
+	setCalendarValue(val)
+	{
+	},
+
+	setInputValue(val)
+	{
+		this.inputValue = val ? val.toLocaleDateString() : '';
+		this.value = val;
+	}
 });
 
 component({
@@ -886,10 +1029,11 @@ component({
 });
 
 component({
-	name: 'cxl-icon-toggle',
-	attributes: [ 'disabled', 'touched', 'icon' ],
+	name: 'cxl-toggle',
+	attributes: [ 'disabled', 'touched' ],
 	template: `
-<cxl-icon &=".icon =icon:@icon"></cxl-icon>
+<div &="content"></div>
+<div &="id(popup) =showMenu:show .popup content(cxl-toggle-popup)"></div>
 	`,
 	bindings: `
 focusable
@@ -898,7 +1042,19 @@ action:#show:event.stop
 role(button)
 	`,
 	styles: {
-		icon: { color: 'onSurface', cursor: 'pointer', width: 8 }
+		icon: { color: 'onSurface', cursor: 'pointer', width: 8 },
+		popup: { height: 0, elevation: 5, position: 'absolute' }
+	}
+}, {
+	showMenu: false,
+	close()
+	{
+		this.showMenu = false;
+	},
+	show(ev, el)
+	{
+		this.showMenu = true;
+		this.popup.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
 	}
 });
 
@@ -1571,7 +1727,8 @@ component({
 	styles: {
 		$: {
 			flexGrow: 1, fontSize: 12, color: 'headerText',
-			padding: 12, borderBottom: '1px solid', borderColor: 'divider', lineHeight: 24
+			paddingTop: 12, paddingBottom: 12, paddingLeft: 8, paddingRight: 8,
+			borderBottom: '1px solid', borderColor: 'divider', lineHeight: 24
 		}
 	}
 });
@@ -1580,7 +1737,8 @@ component({
 	name: 'cxl-td',
 	styles: {
 		$: {
-			flexGrow: 1, padding: 12, borderBottom: '1px solid', borderColor: 'divider'
+			paddingTop: 12, paddingBottom: 12, paddingLeft: 6, paddingRight: 6,
+			flexGrow: 1, borderBottom: '1px solid', borderColor: 'divider'
 		}
 	}
 });

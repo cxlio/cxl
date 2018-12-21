@@ -98,6 +98,7 @@ class Builder {
 	error(msg)
 	{
 		console.error(colors.red(`${this.prefix} ${msg}`));
+		process.exit(1);
 	}
 
 	log(msg)
@@ -135,7 +136,7 @@ class Builder {
 		Promise.all(config.targets.map(
 			target => this.operation(`Building ${target.output}`, this.build(target))
 		)).then(() => {
-		});
+		}, err => this.error(err));
 	}
 
 	report(old, config)
@@ -157,18 +158,15 @@ class Builder {
 
 	minify(source, output)
 	{
-		return this.operation('Minifying', function() {
-			var result = UglifyJS.minify(source, {
+		return this.operation('Minifying', () => {
+			const result = UglifyJS.minify(source, {
 				sourceMap: false,
 				toplevel: true,
 				output: { ascii_only: true }
 			});
 
 			if (result.error)
-			{
-				console.error(`Error minifying "${output}"`);
 				throw new Error(result.error);
-			}
 
 			return write(output, result.code);
 		});

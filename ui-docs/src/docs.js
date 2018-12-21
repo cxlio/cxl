@@ -210,6 +210,17 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			`
 		},
 
+		'calendar-month': {
+			template: `
+<docs-component name="cxl-calendar-month">
+	<docs-demo><!--
+<cxl-calendar-month &="@value:=value"></cxl-calendar-month>
+<p>Date Selected: <x &="=value:text"></x></p>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+
 		card: {
 			template: `
 <docs-component name="cxl-card">

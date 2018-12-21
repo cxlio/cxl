@@ -103,6 +103,7 @@ class StyleSheet
 	{
 		this.tagName = meta.name;
 		this.$selector = meta.global ? this.tagName : ':host';
+		this.global = meta.global;
 
 		if (native)
 			this.$native = native;
@@ -141,7 +142,7 @@ class StyleSheet
 
 	$renderGlobal()
 	{
-		var glob = css.globalStyles;
+		var glob = !this.global && css.globalStyles;
 		return glob && this.$toCSS(glob.$classes) || '';
 	}
 
