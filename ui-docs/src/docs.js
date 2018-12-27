@@ -1371,9 +1371,9 @@ cxl.component({
 	;
 		cxl.each(meta, (s, key) => styles.push({
 			key: key || 'default',
-			weight: s.css.fontWeight || def.css.fontWeight,
-			size: s.css.fontSize || def.css.fontSize,
-			spacing: s.css.letterSpacing || def.css.letterSpacing
+			weight: s.fontWeight || def.fontWeight,
+			size: s.fontSize || def.fontSize,
+			spacing: s.letterSpacing || def.letterSpacing
 		}));
 	}
 });

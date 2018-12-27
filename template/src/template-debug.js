@@ -15,11 +15,25 @@ var
 	time
 ;
 
+/*const ua = window.navigator.userAgent;
+const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+const webkit = !!ua.match(/WebKit/i);
+const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);*/
+
+function error(e)
+{
+	console.error(e);
+}
+
+window.addEventListener('error', function(ev) {
+	error(ev.error);
+});
+
 cxl.Undefined.toString = () => '?';
 cxl.Skip.toString = () => 'Skip';
 
 cxl.directive('log', {
-	update: function(val) {
+	update(val) {
 		window.console.info('log: ' + this.value + ' ->', val);
 	}
 });
@@ -45,7 +59,7 @@ override(cxl.renderer, 'commit', function() {
 // rx
 //
 override(cxl.rx.Subscriber.prototype, 'error', function(e) {
-	console.error(e);
+	error(e);
 });
 
 //
@@ -113,6 +127,6 @@ override(cxl.dom, 'query', function(el) {
 		throw new Error("First parameter must be a DOM element");
 });
 
-
+debug.error = error;
 
 })(this.cxl);

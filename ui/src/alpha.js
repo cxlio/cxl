@@ -44,6 +44,16 @@ component({
 });
 
 component({
+	name: 'cxl-content',
+	styles: {
+		$: { margin: 16, backgroundColor: 'surface', color: 'onSurface' },
+		$medium: { margin: 32 },
+		$large: { margin: 64 },
+		$xlarge: { width: 1200, marginLeft: 'auto', marginRight: 'auto' }
+	}
+});
+
+component({
 	name: 'cxl-layout',
 	styles: {
 		$: {

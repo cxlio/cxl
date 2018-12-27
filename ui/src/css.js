@@ -69,34 +69,6 @@ function rgba(r, g, b, a)
 	return new RGBA(r, g, b, a);
 }
 
-class FontStyle {
-
-	constructor(css)
-	{
-		this.css = css;
-	}
-
-	applyStyle(style)
-	{
-	const
-		css = this.css,
-		size = css.fontSize ? css.fontSize + UNIT : '',
-		weight = css.fontWeight || '',
-		lineHeight = css.lineHeight ? '/' + css.lineHeight + UNIT : '',
-		family = css.fontFamily || 'var(--cxl-font)',
-		spacing = css.letterSpacing
-	;
-		style.font = `${weight} ${size}${lineHeight} ${family}`;
-
-		if (css.textTransform)
-			style.textTransform = css.textTransform;
-
-		if (spacing)
-			style.letterSpacing = spacing;
-	}
-
-}
-
 class StyleSheet
 {
 	constructor(meta, native)
@@ -237,7 +209,7 @@ class Style
 	{
 		const fontStyle = css.typography[name];
 		this.$value.font = name;
-		fontStyle.applyStyle(this.$style);
+		fontStyle.applyTo(this.$style);
 	}
 
 	get font() { return this.$value.font; }
@@ -297,6 +269,12 @@ class Style
 	get overflowScrolling()
 	{
 		return this.$style.webkitOverflowScrolling;
+	}
+
+	applyTo(style)
+	{
+		for (let i in this.$style)
+			style[i] = this.$style[i];
 	}
 
 	$transform()
@@ -360,11 +338,11 @@ function property(setter)
 
 ([
 	'alignItems', 'display', 'position', 'boxSizing', 'boxShadow', 'opacity', 'fontFamily',
-	'fontWeight', 'background', 'cursor', 'overflowX', 'filter',
+	'fontWeight', 'fontStyle', 'background', 'cursor', 'overflowX', 'filter',
   	'textDecoration', 'borderStyle', 'transition', 'textTransform', 'textAlign', 'flexGrow',
   	'flexShrink',
   	'alignContent', 'flexDirection', 'justifyContent', 'whiteSpace', 'scrollBehavior',
-  	'transformOrigin', 'alignSelf',
+  	'transformOrigin', 'alignSelf', 'wordBreak',
 
  	'gridTemplateRows', 'gridTemplateColumns', 'gridColumnEnd', 'gridColumnStart'
  ]).forEach(property(val => val));
@@ -462,8 +440,16 @@ const
 		variables[i] = css.colors[i];
 
 	for (i in typo)
-		if (!(typo[i] instanceof FontStyle))
-			typo[i] = new FontStyle(typo[i]);
+	{
+		let css = typo[i];
+
+		if (!(css instanceof Style))
+		{
+			typo[i] = new Style(Object.assign({
+				fontFamily: 'var(--cxl-font)'
+			}, css));
+		}
+	}
 
 	css.rootStyles.reset({
 		$: { backgroundColor: 'background', variables: variables }

@@ -39,9 +39,9 @@ const
 
 function readFile(filename, encoding)
 {
-	return new Promise(function(resolve, reject)
+	return new Promise((resolve, reject) =>
 	{
-		fs.readFile(filename, encoding, function(err, content)
+		fs.readFile(filename, encoding, (err, content) =>
 		{
 			if (err) return reject(err);
 			resolve(content);
@@ -213,5 +213,16 @@ class Builder {
 	}
 
 }
+
+Object.assign(Builder, {
+	read: read,
+	stat: $stat,
+	write: write,
+	list(path) {
+		return new Promise((resolve, reject) => {
+			fs.readdir(path, (err, files) => err ? reject(err) : resolve(files));
+		});
+	}
+});
 
 module.exports = Builder;

@@ -1734,6 +1734,10 @@ pipes({
 		return cxl.replaceParameters(state[this.parameter], val);
 	},
 
+	resolve(promise) {
+		return promise;
+	},
+
 	show(value) { this.element.style.display = value ? '' : 'none'; },
 
 	sort(value) { return value && value.sort(); },

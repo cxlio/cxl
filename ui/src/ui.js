@@ -445,7 +445,7 @@ action:#toggle
 
 component({
 	name: 'cxl-chip',
-	attributes: [ 'removable', 'disabled', 'touched' ],
+	attributes: [ 'removable', 'disabled', 'touched', 'primary', 'secondary' ],
 	events: [ 'cxl-chip.remove' ],
 	bindings: 'focusable keypress:#onKey',
 	template: `
@@ -456,6 +456,8 @@ component({
 			borderRadius: 16, fontSize: 14, backgroundColor: 'divider',
 			display: 'inline-flex', color: 'onSurface'
 		},
+		$primary: { color: 'onPrimary', backgroundColor: 'primary' },
+		$secondary: { color: 'onSecondary', backgroundColor: 'secondary' },
 		content: { display: 'inline-block', marginLeft: 12, paddingRight: 12, lineHeight: 32 },
 		avatar: { display: 'inline-block', height: 32 },
 		remove: { display: 'inline-block', marginRight: 12, cursor: 'pointer', lineHeight: 32 }
@@ -812,8 +814,9 @@ component({
 	`,
 	styles: [ FocusCSS, DisabledCSS, {
 		$: {
-			borderRadius: 40, width: 40, height: 40, lineHeight: 40,
-			textAlign: 'center', padding: 0, backgroundColor: 'surface', color: 'onSurface'
+			borderRadius: 40, width: 40, height: 40, lineHeight: 40, display: 'inline-block',
+			textAlign: 'center', padding: 0, backgroundColor: 'surface', color: 'onSurface',
+			cursor: 'pointer'
 		},
 		$selected: {
 			backgroundColor: 'primary', color: 'onPrimary'
@@ -827,7 +830,7 @@ component({
 
 component({
 	name: 'cxl-calendar-month',
-	attributes: [ 'value' ],
+	attributes: [ 'value', 'month' ],
 	template: `
 <cxl-table &="action:#onAction">
 	<cxl-th>S</cxl-th>
@@ -843,7 +846,7 @@ component({
 	</template>
 </cxl-table>
 	`,
-	bindings: `=startDate:#render =value:#parse`,
+	bindings: `=month:#render =value:#parse`,
 	styles: {
 		$: { textAlign: 'center' },
 		today: { border: 1, borderStyle: 'solid', borderColor: 'primary' }
@@ -852,7 +855,7 @@ component({
 	{
 		const now = new Date();
 		state.today = (new Date(now.getFullYear(), now.getMonth(), now.getDate())).getTime();
-		state.startDate = state.startDate || now;
+		state.month = state.month || now;
 	}
 
 }, {
@@ -937,7 +940,7 @@ component({
 		<cxl-icon icon="calendar"></cxl-icon>
 		<cxl-toggle-popup>
 	<cxl-card>
-<cxl-calendar &="@value:=calendarValue:log"></cxl-calendar>
+<cxl-calendar &="@value:=calendarValue"></cxl-calendar>
 	</cxl-card>
 		</cxl-toggle-popup>
 	</cxl-toggle>
@@ -1787,12 +1790,18 @@ component({
 	name: 'cxl-textarea',
 	template: `
 <div &="id(span) .input .measure"></div>
-<textarea &="id(textarea) .input .textarea =value::value
-	=value:#calculateHeight:host.trigger(change) =aria-label:attribute(aria-label)
-	=disabled:attribute(disabled) on(focus):bool:=focused on(blur):not:=focused =focused:.focused"></textarea>`,
+<textarea &="id(textarea) .input .textarea
+	value:=value on(input):event.stop
+	=value:value:#calculateHeight:host.trigger(change):host.trigger(input)
+	=aria-label:attribute(aria-label)
+	=disabled:attribute(disabled)
+	on(focus):bool:=focused
+	on(change):event.stop
+	on(blur):not:=focused =focused:.focused">
+</textarea>`,
 	bindings: 'role(textbox) =disabled:aria.prop(disabled) aria.prop(multiline)',
 	attributes: [ 'value', 'disabled', 'aria-label' ],
-	events: [ 'change' ],
+	events: [ 'change', 'input' ],
 	styles: {
 		$: {
 			marginBottom: 8, marginTop: 8, position: 'relative'

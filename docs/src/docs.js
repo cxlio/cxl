@@ -135,25 +135,30 @@ cxl.component({
 
 cxl.component({
 	name: 'docs-code',
-	attributes: [ 'source', 'type' ],
+	attributes: [ 'source', 'type', 'source-id' ],
 	template: `
 <style>${hljs.$STYLE} .hljs { overflow: visible !important; }</style>
 <div &="=type:style =source:text:#highlight .code"></div>
 	`,
+
 	styles: {
 		$: { marginTop: 16, marginBottom: 16 },
 		$lastChild: { marginBottom: 0 },
 		code: {
-			fontFamily: 'monospace', whiteSpace: 'pre-wrap', fontSize: 16
+			fontFamily: 'monospace', whiteSpace: 'pre-wrap', fontSize: 16, wordBreak: 'break-all'
 		}
 	},
+
 	initialize(state)
 	{
-		if (this.firstChild && this.firstChild.nodeType===document.COMMENT_NODE)
+		if (this['source-id'])
+			state.source = document.getElementById(this['source-id']).innerHTML;
+		else if (this.firstChild && this.firstChild.nodeType===document.COMMENT_NODE)
 			state.source = this.firstChild.data.trim();
 		else if (this.innerHTML)
 			state.source = this.innerHTML.trim();
 	}
+
 }, {
 	type: 'html',
 	highlight(text, el)
