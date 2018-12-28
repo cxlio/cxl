@@ -630,6 +630,7 @@ component({
 	name: 'cxl-form-group',
 	styles: {
 		$: { marginBottom: 16 },
+		$inline: { display: 'inline-block' },
 		error: { color: 'error', borderColor: 'error' },
 		content: { position: 'relative' },
 		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75 },
@@ -806,6 +807,14 @@ component({
 });
 
 component({
+	name: 'cxl-calendar',
+	attributes: [ 'value' ],
+	template: `
+<cxl-calendar-month></cxl-calendar-month>
+	`
+});
+
+component({
 	name: 'cxl-calendar-date',
 	attributes: [ 'touched', 'value', 'selected', 'disabled' ],
 	bindings: 'focusable',
@@ -915,8 +924,11 @@ component({
 	{
 	const
 		dates = this.dates = [],
-		lastDate = this.getLastDate(startDate)
+		lastDate = startDate && this.getLastDate(startDate)
 	;
+		if (!startDate)
+			return;
+
 		this.month = startDate.getMonth();
 
 		var current = this.getFirstDate(startDate);
