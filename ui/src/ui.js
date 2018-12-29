@@ -67,6 +67,32 @@ function prefix(prefix, css)
 behavior('focusable', `
 	@disabled:aria.prop(disabled):not:focus.enable touchable
 `);
+
+behavior('grid.navigation', {
+	bindings: 'keypress:#onKey',
+
+	onKey(ev, el)
+	{
+		const focused = el.querySelector(':focus');
+
+		if (!focused)
+			return;
+
+		var cols = el.columns, next = focused;
+
+		switch (ev.key) {
+		case 'ArrowUp':
+			while (cols--) next = next.previousElementSibling;
+			return next.focus();
+		case 'ArrowDown':
+			while (cols--) next = next.nextElementSibling;
+			return next.focus();
+		case 'ArrowLeft': return focused.previousElementSibling.focus();
+		case 'ArrowRight': return focused.nextElementSibling.focus();
+		}
+	}
+});
+
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
 	@touched:host.trigger(focusable.touched)
@@ -928,7 +954,7 @@ component({
 	name: 'cxl-calendar-month',
 	attributes: [ 'value', 'month' ],
 	template: `
-<cxl-table>
+<cxl-table &="grid.navigation">
 	<cxl-th>S</cxl-th>
 	<cxl-th>M</cxl-th>
 	<cxl-th>T</cxl-th>
@@ -965,11 +991,16 @@ component({
 
 	isSelected(val, el)
 	{
-		const date = el.value;
-		return (val && date.getMonth()===val.getMonth() &&
+	const
+		date = el.value,
+		result = (val && date.getMonth()===val.getMonth() &&
 			date.getFullYear()===val.getFullYear() &&
-			date.getDate() === val.getDate());
+			date.getDate() === val.getDate())
+	;
+		if (result)
+			this.selected = el;
 
+		return result;
 	},
 
 	setSelected(el)
@@ -1843,12 +1874,13 @@ component({
 
 component({
 	name: 'cxl-table',
+	attributes: [ 'columns' ],
 	bindings: 'registable.host(table):=event =event:#updateColumns',
 	styles: {
 		$: { display: 'grid', overflowX: 'auto' }
 	}
 }, {
-	columnCount: 0,
+	columns: 0,
 	updateColumns(set, table)
 	{
 		if (set)
@@ -1858,7 +1890,7 @@ component({
 			for (let th of set)
 				columns += (th.width || 'auto') + ' ';
 
-			this.columnCount = set.size;
+			this.columns = set.size;
 
 			table.style.gridTemplateColumns = columns;
 		}
