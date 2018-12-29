@@ -778,6 +778,19 @@ directive('ref.val', {
 
 }, '&');
 
+directive('get', {
+	update(val, state)
+	{
+		return this.digest(state);
+	},
+
+	digest(state)
+	{
+		this.digest = cxl.getter(this.parameter);
+		return this.digest(state);
+	}
+});
+
 directive('state', {
 
 	update(val, state) {
@@ -1650,7 +1663,6 @@ operators({
 		return item => {
 			view.state.$item = item;
 			const html = tpl.compile(view);
-			//cxl.renderer.commitDigest(view);
 			marker.insert(html);
 		};
 	}

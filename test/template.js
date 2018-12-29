@@ -663,7 +663,7 @@ QUnit.module('directives');
 function testDirective(name, a)
 {
 var
-	el = cxl.dom('cxl-input'),
+	el = cxl.dom('div'),
 	param = 'value',
 	view = new cxl.View({}, el),
 	//value = 'test',

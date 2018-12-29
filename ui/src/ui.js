@@ -181,9 +181,14 @@ directive('aria.prop', {
 
 	initialize()
 	{
-		// TODO keep here?
-		const states = this.element.$view.$ariaStates || (this.element.$view.$ariaStates = []);
-		states.push('aria-' + this.parameter);
+		const view = this.element.$view;
+
+		if (view)
+		{
+			// TODO keep here?
+			const states = view.$ariaStates || (view.$ariaStates = []);
+			states.push('aria-' + this.parameter);
+		}
 	},
 
 	digest()
@@ -881,9 +886,12 @@ component({
 
 	getMonthText()
 	{
-		const options = { year: 'numeric', month: 'long' };
-		this.monthText = this.yearOpen ? this.startYear + '-' + (this.startYear+16) :
-			this.selectedMonth.toLocaleDateString(navigator.language, options);
+		if (this.selectedMonth)
+		{
+			const options = { year: 'numeric', month: 'long' };
+			this.monthText = this.yearOpen ? this.startYear + '-' + (this.startYear+16) :
+				this.selectedMonth.toLocaleDateString(navigator.language, options);
+		}
 	},
 
 	render(val)
@@ -912,7 +920,7 @@ component({
 	}]
 }, {
 	getDate(val) {
-		return val && val.getDate();
+		return val && (typeof(val)==='string' ? new Date(val) : val.getDate());
 	}
 });
 
@@ -1000,6 +1008,9 @@ component({
 
 	render(startDate)
 	{
+		if (!(startDate instanceof Date))
+			startDate = new Date(startDate);
+
 	const
 		dates = this.dates = [],
 		lastDate = startDate && this.getLastDate(startDate)

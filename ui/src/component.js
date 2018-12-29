@@ -58,9 +58,6 @@ class ComponentFactory
 		}
 
 		attributes.forEach(function(a) {
-			if (node.hasAttribute(a))
-				view.state[a] = node.getAttribute(a) || true;
-
 			view.bindings.push(new AttributeMonitor(node, a, view));
 		});
 
@@ -103,18 +100,31 @@ class ComponentFactory
 		const view = node.$view = new cxl.View(meta.controller, node);
 
 		if (meta.attributes)
-			this.$attributes(node, meta.attributes);
+		{
+			meta.attributes.forEach(function(a) {
+				if (node.hasAttribute(a))
+					view.state[a] = node.getAttribute(a) || true;
+			});
+		}
 
 		if (meta.initialize)
 			meta.initialize.call(node, view.state);
 
 		this.$initializeTemplate(node, meta);
 
+		if (meta.$template)
+		{
+			this.$renderTemplate(node, meta.$template);
+			// Commit all the template bindings.
+			cxl.renderer.commitDigest(view);
+		}
+
+		// Initialize Attributes and bindings after the first commit
+		if (meta.attributes)
+			this.$attributes(node, meta.attributes);
+
 		if (meta.bindings)
 			this.$bindings(node, meta.bindings);
-
-		if (meta.$template)
-			this.$renderTemplate(node, meta.$template);
 
 		return node;
 	}
