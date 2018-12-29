@@ -315,7 +315,7 @@ component({
 
 component({
 	name: 'cxl-button',
-	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'inverse', 'touched', 'big' ],
+	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'inverse', 'touched', 'big', 'value' ],
 	bindings: 'focusable role(button) action:#onAction',
 	styles: [FocusCSS, {
 		$: {
@@ -802,16 +802,95 @@ touchable
 component({
 	name: 'cxl-input-icon',
 	styles: {
-		$: { position: 'absolute', top: 8, right: 0 }
+		$: { position: 'absolute', top: 8, right: 0, cursor: 'pointer' }
 	}
+});
+
+component({
+	name: 'cxl-calendar-header',
+	template: ``
 });
 
 component({
 	name: 'cxl-calendar',
 	attributes: [ 'value' ],
 	template: `
-<cxl-calendar-month></cxl-calendar-month>
-	`
+<div &=".header action:event.stop">
+	<cxl-button &="action:#toggleYear:#getMonthText" flat><x &="=monthText:text"></x>
+	<cxl-icon icon="caret-down"></cxl-icon></cxl-button>
+	<span &=".divider"></span>
+	<cxl-button &="action:#previousMonth" flat>&nbsp;<cxl-icon icon="arrow-left"></cxl-icon>&nbsp;</cxl-button>
+	<cxl-button &="action:#nextMonth" flat>&nbsp;<cxl-icon icon="arrow-right"></cxl-icon>&nbsp;</cxl-button>
+</div>
+<div &=".rel">
+	<cxl-calendar-month &="=selectedMonth:@month @value:=value"></cxl-calendar-month>
+	<cxl-calendar-year &="action:event.stop:not:=yearOpen =selectedYear::@value =startYear:@start-year @start-year:=startYear:#getMonthText .closed =yearOpen:.opened"></cxl-calendar-year>
+</div>
+	`,
+	styles: {
+		header: { display: 'flex', padding: 8 },
+		divider: { flexGrow: 1 },
+		closed: { scaleY: 0, transformOrigin: 'top' },
+		opened: { scaleY: 1 },
+		rel: { position: 'relative' }
+	},
+	bindings: '=value:#render =selectedMonth:#getMonthText =selectedYear:#updateMonth'
+
+}, {
+	value: null,
+
+	toggleYear()
+	{
+		this.yearOpen = !this.yearOpen;
+		const year = this.selectedMonth.getFullYear();
+		this.startYear = year - year % 16;
+		this.selectedYear = year;
+	},
+
+	updateMonth(year)
+	{
+		if (year)
+		{
+			const month = this.selectedMonth;
+			month.setYear(year);
+			this.selectedMonth = new Date(month);
+		}
+	},
+
+	nextMonth()
+	{
+		if (this.yearOpen)
+			this.startYear += 16;
+		else
+		{
+			const c = this.selectedMonth;
+			this.selectedMonth = new Date(c.getFullYear(), c.getMonth()+1, 1);
+		}
+	},
+
+	previousMonth()
+	{
+		if (this.yearOpen)
+			this.startYear -= 16;
+		else
+		{
+			const c = this.selectedMonth;
+			this.selectedMonth = new Date(c.getFullYear(), c.getMonth()-1, 1);
+		}
+	},
+
+	getMonthText()
+	{
+		const options = { year: 'numeric', month: 'long' };
+		this.monthText = this.yearOpen ? this.startYear + '-' + (this.startYear+16) :
+			this.selectedMonth.toLocaleDateString(navigator.language, options);
+	},
+
+	render(val)
+	{
+		if (!this.selectedMonth)
+			this.selectedMonth = val ? new Date(val) : new Date();
+	}
 });
 
 component({
@@ -825,7 +904,7 @@ component({
 		$: {
 			borderRadius: 40, width: 40, height: 40, lineHeight: 40, display: 'inline-block',
 			textAlign: 'center', padding: 0, backgroundColor: 'surface', color: 'onSurface',
-			cursor: 'pointer'
+			cursor: 'pointer', margin: 4
 		},
 		$selected: {
 			backgroundColor: 'primary', color: 'onPrimary'
@@ -841,7 +920,7 @@ component({
 	name: 'cxl-calendar-month',
 	attributes: [ 'value', 'month' ],
 	template: `
-<cxl-table &="action:#onAction">
+<cxl-table>
 	<cxl-th>S</cxl-th>
 	<cxl-th>M</cxl-th>
 	<cxl-th>T</cxl-th>
@@ -849,9 +928,8 @@ component({
 	<cxl-th>T</cxl-th>
 	<cxl-th>F</cxl-th>
 	<cxl-th>S</cxl-th>
-
-	<template &="=dates:each:repeat">
-	<cxl-td><cxl-calendar-date &="$date:@value $disabled:@disabled $today:.today"></cxl-calendar-date></cxl-td>
+	<template &="=dates:marker.empty:each:repeat">
+	<cxl-calendar-date &="action:#onAction $date:@value $disabled:@disabled $today:.today =value:#isSelected:@selected"></cxl-calendar-date>
 	</template>
 </cxl-table>
 	`,
@@ -877,24 +955,24 @@ component({
 			this.value = new Date(val);
 	},
 
+	isSelected(val, el)
+	{
+		const date = el.value;
+		return (val && date.getMonth()===val.getMonth() &&
+			date.getFullYear()===val.getFullYear() &&
+			date.getDate() === val.getDate());
+
+	},
+
 	setSelected(el)
 	{
-		if (this.selected)
-			this.selected.selected = false;
-
-		el.selected = true;
-		this.selected = el;
 		this.value = el.value;
 	},
 
-	onAction(ev)
+	onAction(ev, el)
 	{
-		const el = ev.target;
-
-		if (el.tagName==='CXL-CALENDAR-DATE' && !el.disabled)
+		if (!el.disabled)
 			this.setSelected(el);
-
-		ev.stopPropagation();
 	},
 
 	getFirstDate(date)
@@ -915,7 +993,7 @@ component({
 	{
 		return {
 			date: new Date(current),
-			disabled: current.getMonth() !== this.month,
+			disabled: current.getMonth() !== this.monthNumber,
 			today: this.today === current.getTime()
 		};
 	},
@@ -929,7 +1007,7 @@ component({
 		if (!startDate)
 			return;
 
-		this.month = startDate.getMonth();
+		this.monthNumber = startDate.getMonth();
 
 		var current = this.getFirstDate(startDate);
 
@@ -941,34 +1019,71 @@ component({
 });
 
 component({
-	name: 'cxl-datepicker',
-	events: [ 'change' ],
-	attributes: [ 'value' ],
-	bindings: '=inputValue:#setCalendarValue =calendarValue:#setInputValue',
+	name: 'cxl-calendar-year',
+	attributes: [ 'value', 'start-year' ],
 	template: `
-<cxl-input &="=inputValue:@value on(change):host.trigger(change)"></cxl-input>
+<template &="=years:marker.empty:each:repeat">
+	<cxl-button flat &="item:text:@value action:#select =value:#isSelected:@primary"></cxl-button>
+</template>
+	`,
+	styles: {
+		$: {
+			position: 'absolute', top: 0, left: 0, bottom: 0, right: 0,
+			backgroundColor: 'surface', color: 'onSurface', display: 'grid',
+			gridTemplateColumns: '1fr 1fr 1fr 1fr'
+		}
+	},
+	bindings: '=start-year:#render action:#select'
+}, {
+	isSelected(val, el)
+	{
+		return el.value === val;
+	},
+	select(ev, target)
+	{
+		this.value = target.value;
+	},
+
+	render(startYear)
+	{
+		const years = this.years = [];
+
+		for (var i=startYear;i<startYear+16; i++)
+			years.push(i);
+	}
+});
+
+component({
+	name: 'cxl-datepicker',
+	events: [ 'change', 'input' ],
+	attributes: [ 'value' ],
+	bindings: '=value:host.trigger(change):host.trigger(input)',
+	template: `
+<cxl-input &="@value:#onInput =inputValue:@value"></cxl-input>
 <cxl-input-icon>
 	<cxl-toggle>
-		<cxl-icon icon="calendar"></cxl-icon>
-		<cxl-toggle-popup>
-	<cxl-card>
-<cxl-calendar &="@value:=calendarValue"></cxl-calendar>
-	</cxl-card>
-		</cxl-toggle-popup>
+	<cxl-icon icon="calendar"></cxl-icon>
+	<cxl-toggle-popup>
+		<cxl-card>
+			<cxl-calendar &="@value:#update:=value =value:@value"></cxl-calendar>
+		</cxl-card>
+	</cxl-toggle-popup>
 	</cxl-toggle>
 </cxl-input-icon>
 	`
 }, {
+	value: null,
 	inputValue: '',
 
-	setCalendarValue(val)
+	onInput(val)
 	{
+		this.value = val && new Date(val);
 	},
 
-	setInputValue(val)
+	update(date)
 	{
-		this.inputValue = val ? val.toLocaleDateString() : '';
-		this.value = val;
+		if (date && date !== this.value && !isNaN(date.getTime()))
+			this.inputValue = date.toLocaleDateString();
 	}
 });
 
@@ -1068,8 +1183,12 @@ role(button)
 	},
 	show(ev, el)
 	{
-		this.showMenu = true;
-		this.popup.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
+		if (!this.showMenu)
+		{
+			this.showMenu = true;
+			this.popup.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
+		} else
+			this.close();
 	}
 });
 

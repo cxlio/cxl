@@ -1,6 +1,5 @@
 /* jshint maxdepth: 5 */
 /* jshint node:true */
-(root => {
 "use strict";
 
 function doDiff(a, b)
@@ -438,24 +437,22 @@ var
 	return diff2(a, b);
 }
 
-Object.assign(root, {
-	diff: doDiff,
-	patch(A, diff)
+function patch(A, diff)
+{
+var
+	i, cursor=0, result=''
+;
+	for (i=0; i<diff.length; i+=3)
 	{
-	var
-		i, cursor=0, result=''
-	;
-		for (i=0; i<diff.length; i+=3)
-		{
-			result += A.substr(cursor, diff[i+1]) + diff[i];
-			cursor += diff[i+1] + diff[i+2];
-		}
-
-		if (cursor < A.length)
-			result += A.substr(cursor);
-
-		return result;
+		result += A.substr(cursor, diff[i+1]) + diff[i];
+		cursor += diff[i+1] + diff[i+2];
 	}
-});
 
-})(typeof(module)!=='undefined' ? module.exports : (this.cxl || (this.cxl={})));
+	if (cursor < A.length)
+		result += A.substr(cursor);
+
+	return result;
+}
+
+
+

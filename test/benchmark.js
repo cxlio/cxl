@@ -79,7 +79,21 @@ QUnit.test('Deep Setter', function(a) {
 	});
 });
 
-QUnit.module('diff');
+QUnit.module('diff', {
+	before()
+	{
+		this.workerMinified = new Worker('../diff/dist/diff.worker.min.js');
+		this.worker = new Worker('../diff/dist/diff.worker.js');
+		return Promise.all([
+			cxl.ajax.get('diff.test3'),
+			cxl.ajax.get('diff.test4')
+		]).then(data => {
+			this.A = data[0];
+			this.B = data[1];
+		});
+	}
+});
+
 QUnit.test('diff()', a => {
 
 	const A = "Lorem ipsum dolor sit amet\n" +
@@ -100,19 +114,15 @@ QUnit.test('diff()', a => {
 		"fugit option quo id\n" +
 		"vix volumus abhorreant accommodare cu.";
 
-
 	perf(a, 2000, 250, function() {
 		const diff = cxl.diff(A, B, 5);
 		const C = cxl.patch(A, diff);
 		a.equal(C, B);
 	});
-
-
 });
 
-QUnit.test('diff.worker', a => {
+QUnit.test('diff.worker', function(a) {
 
-	const worker = new Worker('../diff/dist/diff.worker.js');
 	const A = "Lorem ipsum dolor sit amet\n" +
 		"ex meis noluisse quaestio pro\n" +
 		"possit aeterno no duo\n" +
@@ -131,6 +141,7 @@ QUnit.test('diff.worker', a => {
 		"fugit option quo id\n" +
 		"vix volumus abhorreant accommodare cu.";
 	const done = a.async();
+	const worker = this.worker;
 	var i = 0;
 
 	worker.onmessage = function(e) {
@@ -153,4 +164,52 @@ QUnit.test('diff.worker', a => {
 		i++;
 	});
 
+});
+
+QUnit.test('diff - long text', function(a) {
+	const diff = cxl.diff(this.A, this.B, 5);
+	const C = cxl.patch(this.A, diff);
+	a.equal(C, this.B);
+});
+
+QUnit.test('diff.worker - long text', function(a) {
+	const done = a.async();
+	const worker = this.worker;
+
+	const A = this.A, B = this.B;
+
+	worker.onmessage = function(e) {
+		const result = e.data;
+
+		if (result[0]==='diff')
+			worker.postMessage(['patch', A, result[1] ]);
+		else if (result[0]==='patch')
+		{
+			a.equal(result[1], B);
+			done();
+		}
+	};
+
+	worker.postMessage(['diff', A, B]);
+
+});
+
+QUnit.test('diff.worker minified - long text', function(a) {
+	const done = a.async();
+	const worker = this.workerMinified;
+	const A = this.A, B = this.B;
+
+	worker.onmessage = function(e) {
+		const result = e.data;
+
+		if (result[0]==='diff')
+			worker.postMessage(['patch', A, result[1] ]);
+		else if (result[0]==='patch')
+		{
+			a.equal(result[1], B);
+			done();
+		}
+	};
+
+	worker.postMessage(['diff', A, B]);
 });

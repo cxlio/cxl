@@ -210,6 +210,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			`
 		},
 
+		calendar: {
+
+			template: `
+<docs-component name="cxl-calendar">
+	<docs-demo><!--
+<cxl-calendar &="@value:=value"></cxl-calendar>
+<p>Date Selected: <x &="=value:text"></x></p>
+	--></docs-demo>
+</docs-component>
+			`
+		},
+
 		'calendar-month': {
 			template: `
 <docs-component name="cxl-calendar-month">
@@ -313,8 +325,9 @@ Checked: <span &="=test:text"></span>
 	<docs-demo><!--
 <cxl-form-group floating>
 	<cxl-label>Floating Label</cxl-label>
-	<cxl-datepicker></cxl-datepicker>
+	<cxl-datepicker &="@value:=dateValue"></cxl-datepicker>
 </cxl-form-group>
+	<div>Value: <x &="=dateValue:text"></x></div>
 	--></docs-demo>
 </docs-component>
 			`

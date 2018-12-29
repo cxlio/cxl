@@ -574,18 +574,24 @@ class Marker {
 		const parent = element.parentNode;
 
 		this.node = document.createComment(text);
+		this.children = [];
 		parent.insertBefore(this.node, element);
 		parent.removeChild(element);
+		// TODO
+		element.$marker = this;
 	}
 
 	insert(content, nextNode)
 	{
+		// TODO performance.
+		this.children.push(new NodeSnapshot(content.childNodes));
 		this.node.parentNode.insertBefore(content, nextNode || this.node);
 	}
 
 	empty()
 	{
-		cxl.dom.empty(this.node.parentNode);
+		this.children.forEach(snap => snap.remove());
+		this.children = [];
 	}
 }
 
@@ -1674,6 +1680,8 @@ pipes({
 
 	bool(val) { return val!==undefined && val!==null && val!==false; },
 
+	empty() { cxl.dom.empty(this.element); },
+
 	'event.prevent'(ev) { ev.preventDefault(); },
 
 	'event.stop'(ev) { ev.stopPropagation(); },
@@ -1724,6 +1732,9 @@ pipes({
 
 		return cxl.Skip;
 	},
+
+	// TODO
+	'marker.empty'() { if (this.element.$marker) this.element.$marker.empty(); },
 
 	not(value) { return !value; },
 
