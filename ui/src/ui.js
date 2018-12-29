@@ -898,15 +898,15 @@ component({
 	attributes: [ 'touched', 'value', 'selected', 'disabled' ],
 	bindings: 'focusable',
 	template: `
-<span &="=value:#getDate:text"></span>
+<span &=".btn =value:#getDate:text"></span>
 	`,
 	styles: [ FocusCSS, DisabledCSS, {
-		$: {
+		$: { textAlign: 'center', cursor: 'pointer' },
+		btn: {
 			borderRadius: 40, width: 40, height: 40, lineHeight: 40, display: 'inline-block',
-			textAlign: 'center', padding: 0, backgroundColor: 'surface', color: 'onSurface',
-			cursor: 'pointer', margin: 4
+			padding: 0, backgroundColor: 'surface', color: 'onSurface', margin: 4
 		},
-		$selected: {
+		btn$selected: {
 			backgroundColor: 'primary', color: 'onPrimary'
 		}
 	}]
@@ -1167,7 +1167,7 @@ component({
 	`,
 	bindings: `
 focusable
-root.on(touchend):#close root.on(click):#close keypress(escape):#close
+root.on(click):#close keypress(escape):#close
 action:#show:event.stop
 role(button)
 	`,

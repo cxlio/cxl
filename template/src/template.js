@@ -1137,8 +1137,6 @@ directive('action', {
 
 	onEvent(ev)
 	{
-		//ev.stopPropagation();
-		//ev.stopImmediatePropagation();
 		this.set(ev);
 	},
 
@@ -1148,18 +1146,11 @@ directive('action', {
 			this.onEvent(ev);
 	},
 
-	/*onAction(ev)
-	{
-		if (ev.target !== this.owner.host)
-			this.onEvent(ev);
-	},*/
-
 	connect()
 	{
 		this.bindings = [
 			new EventListener(this.element, 'click', this.onEvent.bind(this)),
 			new EventListener(this.element, 'keypress', this.onKeyPress.bind(this))
-			//new EventListener(this.element, 'action', this.onAction.bind(this))
 		];
 	}
 
