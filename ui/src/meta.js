@@ -56,6 +56,11 @@
 			icon: 'columns',
 			tags: [ 'layout' ]
 		},
+		'cxl-calendar': {
+			icon: 'calendar',
+			beta: true,
+			tags: [ 'input', 'date' ]
+		},
 		'cxl-calendar-month': {
 			icon: 'calendar',
 			beta: true,
