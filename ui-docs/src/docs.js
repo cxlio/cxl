@@ -673,6 +673,20 @@ Checked: <span &="=test:text"></span>
 			`
 		},
 
+		multiselect: {
+			template: `
+<docs-component name="cxl-multiselect">
+<docs-demo><!--
+<cxl-multiselect>
+	<cxl-option>Option 1</cxl-option>
+	<cxl-option>Option 2</cxl-option>
+	<cxl-option>Option 3</cxl-option>
+</cxl-multiselect>
+--></docs-demo>
+</docs-component>
+			`
+		},
+
 		navbar: {
 			template: `
 <docs-component name="cxl-navbar">

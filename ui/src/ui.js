@@ -181,9 +181,10 @@ keypress:#onKey:event.prevent
 	{
 	var
 		selector = this.itemSelector.bind(this),
-		el = this.selected || cxl.dom.find(this.host, selector)
+		el = this.selected || cxl.dom.find(this.host, selector),
+		key = ev.key
 	;
-		switch (ev.key) {
+		switch (key) {
 		case 'ArrowDown':
 			if ((el = el && cxl.dom.findNext(el, selector)))
 				this.setSelected(el);
@@ -193,6 +194,20 @@ keypress:#onKey:event.prevent
 				this.setSelected(el);
 			break;
 		default:
+			key = key.toLowerCase();
+
+			function findByFirst(item)
+			{
+				return item.innerText && item.innerText.charAt(0).toLowerCase()===key;
+			}
+			// TODO ?
+			if (/[a-z]/.test(key))
+			{
+				el = cxl.dom.findNext(el, findByFirst) || cxl.dom.find(this.host, findByFirst);
+
+				if (el)
+					this.setSelected(el);
+			}
 			return cxl.Skip;
 		}
 	},
@@ -1465,6 +1480,25 @@ component({
 			outline: 0, border: 0, width: '100%', backgroundColor: 'surface', color: 'onSurface',
 			lineHeight: 24, padding: 0, paddingLeft: 48, fontSize: 18
 		}
+	}
+});
+
+component({
+	name: 'cxl-multiselect',
+	template: `
+	`,
+	events: [ 'change' ],
+	attributes: [ 'disabled', 'value', 'touched', 'placeholder' ],
+	bindings: `
+		focusable
+		selectable.host:#onSelected
+		=value:host.trigger(change)
+		keypress:#onKey
+	`
+}, {
+	onSelected(el)
+	{
+		console.log(el);
 	}
 });
 
