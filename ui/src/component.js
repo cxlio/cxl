@@ -234,6 +234,15 @@ class ComponentDefinition
 
 			connectedCallback()
 			{
+				// FIX for safari, component not always have attributes initialized
+				if (meta.attributes)
+				{
+					meta.attributes.forEach(a => {
+						if (this.hasAttribute(a))
+							this.$view.state[a] = this.getAttribute(a) || true;
+					});
+				}
+
 				this.$view.connect();
 			}
 

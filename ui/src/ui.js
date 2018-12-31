@@ -607,7 +607,7 @@ component({
 	name: 'cxl-fab',
 	attributes: [ 'disabled', 'touched', 'static' ],
 	bindings: 'focusable',
-	styles: {
+	styles: [{
 		$: {
 			elevation: 2, backgroundColor: 'secondary', color: 'onSecondary',
 			position: 'fixed', width: 56, height: 56, bottom: 16, right: 24,
@@ -616,9 +616,8 @@ component({
 		},
 		$static: { position: 'static' },
 		$focus: { elevation: 4 },
-		$small: { top: 28, bottom: '' },
-		$hover: { elevation: 3 }
-	}
+		$small: { top: 28, bottom: '' }
+	}, FocusCSS ]
 });
 
 component({
@@ -930,7 +929,7 @@ component({
 component({
 	name: 'cxl-calendar-date',
 	attributes: [ 'touched', 'value', 'selected', 'disabled' ],
-	bindings: 'focusable',
+	bindings: 'focusable =label:aria.prop(label)',
 	template: `
 <span &=".btn =value:#getDate:text"></span>
 	`,
@@ -946,7 +945,12 @@ component({
 	}]
 }, {
 	getDate(val) {
-		return val && (typeof(val)==='string' ? new Date(val) : val.getDate());
+		if (!val || typeof(val)==='string')
+			val = new Date(val);
+
+		this.label = val.toDateString();
+
+		return val.getDate();
 	}
 });
 
@@ -1105,7 +1109,7 @@ component({
 <cxl-input-icon>
 	<cxl-toggle>
 	<cxl-icon icon="calendar"></cxl-icon>
-	<cxl-toggle-popup>
+	<cxl-toggle-popup &="role(dialog)">
 		<cxl-card>
 			<cxl-calendar &="@value:#update:=value =value:@value"></cxl-calendar>
 		</cxl-card>

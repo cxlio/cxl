@@ -68,7 +68,6 @@
 		},
 		'cxl-card': {
 			icon: 'address-card',
-			beta: true,
 			tags: [ 'layout' ]
 		},
 		'cxl-checkbox': {
@@ -103,7 +102,6 @@
 			tags: [ 'layout' ]
 		},
 		'cxl-fab': {
-			beta: true,
 			icon: 'plus-circle',
 			tags: [ 'button' ]
 		},
@@ -184,7 +182,6 @@
 		},
 		'cxl-spinner': {
 			icon: 'spinner',
-			beta: true,
 			tags: [ 'indicator' ]
 		},
 		'cxl-submit': {
