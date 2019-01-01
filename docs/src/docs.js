@@ -2,6 +2,11 @@
 ((cxl, hljs) => {
 "use strict";
 
+const
+	LOREM_SHORT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+	LOREM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at elementum orci. Vestibulum facilisis vel risus a commodo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris velit sapien, dignissim quis fermentum a, porta at urna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.`
+;
+
 hljs.configure({ tabReplace: '    '});
 
 cxl.component({
@@ -182,9 +187,10 @@ cxl.component({
 		if (this.demo)
 		{
 		const
-			lorem = this.lorem ? `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at elementum orci. Vestibulum facilisis vel risus a commodo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris velit sapien, dignissim quis fermentum a, porta at urna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.` : '',
-			component = host.parentNode.$view.state.component,
-			source = `<docs-demo><!--<${component} ${this.name}>${lorem}</${component}>--></docs-demo>`,
+			lorem = this.lorem ? LOREM : this.name,
+			value = this.demo === 'string' && LOREM_SHORT,
+			component = host.parentNode.name,
+			source = `<docs-demo><!--<${component} ${this.name}${value ? '="' + value + '"' : ''}>${lorem}</${component}>--></docs-demo>`,
 			frag = cxl.Template.getFragmentFromString(source)
 		;
 			host.insertBefore(frag, host.firstChild);

@@ -51,6 +51,10 @@ const
 		$disabled: { cursor: 'default', filter: 'saturate(0)', opacity: 0.38 },
 		$active$disabled: { filter: 'saturate(0)', opacity: 0.38 },
 		$hover$disabled: { filter: 'saturate(0)', opacity: 0.38 }
+	},
+
+	InvalidCSS = {
+		$invalid$touched: { borderColor: 'error', color: 'error' }
 	}
 ;
 
@@ -93,23 +97,27 @@ behavior('grid.navigation', {
 	}
 });
 
+behavior('form.input', `
+	registable(form)
+	@invalid:aria.prop(invalid):host.trigger(invalid)
+	@value:host.trigger(change):host.trigger(input)
+`);
+
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
 	@touched:host.trigger(focusable.touched)
 `);
 behavior('selectable', `
-	connect:host.trigger(selectable.register)
-	disconnect:host.trigger(selectable.unregister)
+	registable(selectable)
 	action:host.trigger(selectable.action)
 	@selected:aria.prop(selected)
 `);
 behavior('selectable.host', {
 	bindings: `
 id(host)
-on.message(selectable.register):#register:=event
-on.message(selectable.unregister):#unregister:=event
+registable.host(selectable):=options
 =event:#onChange
-
+=options:#onChange
 on(change):#onChangeEvent
 on(selectable.action):#onAction
 keypress:#onKey:event.prevent
@@ -118,8 +126,11 @@ keypress:#onKey:event.prevent
 	`,
 
 	selected: null,
-	event: null,
 
+	/**
+	 * Event to handle change event for cxl-option.
+	 * TODO Needs to be removed.
+	 */
 	onChangeEvent(ev)
 	{
 		if (ev.target!==this.host)
@@ -128,18 +139,6 @@ keypress:#onKey:event.prevent
 			ev.stopImmediatePropagation();
 			ev.stopPropagation();
 		}
-	},
-
-	register(ev)
-	{
-		const options = this.options || (this.options=[]);
-		options.push(ev.target);
-	},
-
-	unregister(ev)
-	{
-		const options = this.options;
-		options.splice(options.indexOf(ev.target), 1);
 	},
 
 	onChange()
@@ -271,7 +270,7 @@ directive('registable.host', {
 
 	initialize()
 	{
-		this.value = new Set();
+		this.value = [];
 	},
 
 	connect()
@@ -285,15 +284,30 @@ directive('registable.host', {
 
 	register(ev)
 	{
-		this.value.add(ev.target);
+		const el = ev.target;
+		if (this.value.indexOf(el)===-1)
+			this.value.push(el);
+
 		this.set(this.value);
 	},
 
 	unregister(ev)
 	{
-		this.value.delete(ev.target);
+		const i = this.value.indexOf(ev.target);
+
+		if (i!==-1)
+			this.value.splice(i, 1);
+
 		this.set(this.value);
 	}
+});
+
+component({
+	name: 'cxl-form-input',
+	events: [ 'change', 'input', 'invalid', 'blur', 'focus' ],
+	attributes: [ 'value', 'invalid', 'disabled', 'touched' ],
+	bindings: 'form.input',
+	styles: [ DisabledCSS ]
 });
 
 component({
@@ -437,20 +451,20 @@ component({
 
 component({
 	name: 'cxl-checkbox',
+	extend: 'cxl-form-input',
 	template: `
 <span &=".focusCircle .focusCirclePrimary"></span>
 <cxl-icon icon="check" &=".box"></cxl-icon>
 <span &="content"></span>
 	`,
-	events: [ 'change' ],
 	bindings: `
-focusable role(checkbox)
+role(checkbox)
 action:#toggle
-=value:#onValue:host.trigger(change)
+=value:#onValue
 =checked:#update:aria.prop(checked) =false-value:#update =true-value:#update
 	`,
 	styles: [ {
-		$: { marginLeft: 16, position: 'relative', display: 'inline-block', cursor: 'pointer', marginBottom: 12 },
+		$: { margin: 16, position: 'relative', cursor: 'pointer' },
 		$focus: { outline: 0 },
 		box: {
 			display: 'inline-block', width: 20, height: 20, border: 2,
@@ -461,8 +475,8 @@ action:#toggle
 			borderColor: 'primary', backgroundColor: 'primary',
 			color: 'onPrimary'
 		}
-	}, DisabledCSS, FocusCircleCSS ],
-	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ]
+	}, FocusCircleCSS ],
+	attributes: [ 'checked', 'true-value', 'false-value' ]
 }, {
 	value: cxl.Undefined,
 	checked: false,
@@ -640,7 +654,7 @@ component({
 	events: [ 'submit' ],
 	bindings: `
 role(form)
-registable.host(cxl-form):=elements
+registable.host(form):=elements
 
 on(cxl-form.submit):#onSubmit:host.trigger(submit)
 keypress(enter):#onSubmit:host.trigger(submit)
@@ -785,27 +799,19 @@ component({
 
 component({
 	name: 'cxl-input',
-	attributes: [
-		'value', 'disabled', 'inverse', 'invalid', 'name', 'touched', 'maxlength', 'aria-label'
-	],
+	extend: 'cxl-form-input',
+	attributes: [ 'name', 'maxlength', 'aria-label' ],
 	methods: [ 'focus' ],
-	events: [ 'change', 'input', 'blur', 'invalid' ],
 	template: `
 <input &="id(input) =type:|attribute(type) .input
 	=aria-label:attribute(aria-label)
-	=value:value:host.trigger(change):host.trigger(input)
+	=value:value:host.trigger(input)
 	=maxlength:filter:@maxLength value:=value
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
 <div &=".focusLine =focused:.expand"></div>
 	`,
-	bindings: `
-id(component)
-role(textbox)
-registable(cxl-form)
-touchable
-=invalid:aria.prop(invalid):host.trigger(invalid)
-	`,
+	bindings: `role(textbox)`,
 	styles: [ FocusLineCSS, {
 		$: { marginBottom: 8 },
 		input: {
@@ -818,7 +824,7 @@ touchable
 		input$inverse: { borderColor: 'onPrimary', color: 'onPrimary' },
 		input$invalid$touched: { borderColor: 'error' },
 		expand: { scaleX: 1 }
-	}, DisabledCSS ]
+	} ]
 
 }, {
 	value: '',
@@ -846,9 +852,9 @@ touchable
 
 component({
 	name: 'cxl-input-icon',
-	styles: {
+	styles: [{
 		$: { position: 'absolute', top: 8, right: 0, cursor: 'pointer' }
-	}
+	}, FocusCircleCSS ]
 });
 
 component({
@@ -1116,13 +1122,11 @@ component({
 
 component({
 	name: 'cxl-datepicker',
-	events: [ 'change', 'input' ],
-	attributes: [ 'value' ],
-	bindings: '=value:host.trigger(change):host.trigger(input)',
+	extend: 'cxl-form-input',
 	template: `
-<cxl-input &="@value:#onInput =inputValue:@value"></cxl-input>
+<cxl-input &="@value:#onInput =disabled:@disabled =inputValue:@value"></cxl-input>
 <cxl-input-icon>
-	<cxl-toggle>
+	<cxl-toggle &="=disabled:@disabled">
 	<cxl-icon icon="calendar"></cxl-icon>
 	<cxl-toggle-popup &="role(dialog)">
 		<cxl-card>
@@ -1131,7 +1135,10 @@ component({
 	</cxl-toggle-popup>
 	</cxl-toggle>
 </cxl-input-icon>
-	`
+	`,
+	styles: {
+		$: { position: 'relative' }
+	}
 }, {
 	value: null,
 	inputValue: '',
@@ -1233,7 +1240,6 @@ action:#show:event.stop
 role(button)
 	`,
 	styles: {
-		icon: { color: 'onSurface', cursor: 'pointer', width: 8 },
 		popup: { height: 0, elevation: 5, position: 'absolute' }
 	}
 }, {
@@ -1244,6 +1250,9 @@ role(button)
 	},
 	show(ev, el)
 	{
+		if (this.disabled)
+			return;
+
 		if (!this.showMenu)
 		{
 			this.showMenu = true;
@@ -1389,18 +1398,17 @@ const radioValues = [];
 
 component({
 	name: 'cxl-radio',
+	extend: 'cxl-form-input',
 	template: `
 <x &=".focusCircle .focusCirclePrimary"></x>
 <cxl-icon icon="circle" &=".box"></cxl-icon>
 <span &=".content content"></span>
 	`,
-	events: [ 'change' ],
 	bindings: `
 role(radio) focusable id(host)
 action:#toggle
 =name:#register
 =checked:host.trigger(change):aria.prop(checked)
-=value:host.trigger(change)
 disconnect:#unregister
 	`,
 	styles: [{
@@ -1415,9 +1423,9 @@ disconnect:#unregister
 		},
 		box$checked: { borderColor: 'primary', color: 'primary' }
 
-	}, DisabledCSS, FocusCircleCSS ],
+	}, FocusCircleCSS ],
 
-	attributes: [ 'checked', 'value', 'disabled', 'name', 'touched' ]
+	attributes: [ 'checked', 'name' ]
 }, {
 	checked: false,
 
@@ -1484,26 +1492,8 @@ component({
 });
 
 component({
-	name: 'cxl-multiselect',
-	template: `
-	`,
-	events: [ 'change' ],
-	attributes: [ 'disabled', 'value', 'touched', 'placeholder' ],
-	bindings: `
-		focusable
-		selectable.host:#onSelected
-		=value:host.trigger(change)
-		keypress:#onKey
-	`
-}, {
-	onSelected(el)
-	{
-		console.log(el);
-	}
-});
-
-component({
 	name: 'cxl-select',
+	extend: 'cxl-form-input',
 	template: `
 <div &=".container =opened:.opened">
 	<div &="id(menu) .menu =opened:.menuOpened content"></div>
@@ -1512,14 +1502,12 @@ component({
 </div>
 <div &=".focusLine"></div>
 	`,
-	events: [ 'change' ],
-	attributes: [ 'disabled', 'value', 'touched', 'placeholder' ],
+	attributes: [ 'placeholder' ],
 	bindings: `
 		focusable
 		selectable.host:#onSelected
 
 		id(component)
-		=value:host.trigger(change)
 		keypress(escape):#close
 		on(blur):#close
 		action:#onAction
@@ -1540,7 +1528,7 @@ component({
 			 borderBottom: 1, borderStyle: 'solid'
 		},
 		opened: { overflowY: 'visible' }
-	}, DisabledCSS ]
+	} ]
 
 }, {
 	opened: false,
@@ -1636,10 +1624,24 @@ component({
 });
 
 component({
+	name: 'cxl-multiselect',
+	extend: 'cxl-select'
+}, {
+	calculateDimensions()
+	{
+	}
+});
+
+component({
 	name: 'cxl-slider',
-	events: [ 'change' ],
-	attributes: [ 'value', 'disabled', 'step', 'touched' ],
-	bindings: 'focusable keypress(arrowleft):#onLeft keypress(arrowright):#onRight drag.x:#onDrag =value:host.trigger(change) role(slider)',
+	extend: 'cxl-form-input',
+	attributes: [ 'step' ],
+	bindings: `
+		focusable
+		role(slider)
+		keypress(arrowleft):#onLeft keypress(arrowright):#onRight
+		drag.x:#onDrag
+	`,
 	template: `
 <div &=".background =disabled:.disabled"><div &=".line =value:#update">
 <x &=".focusCircle .focusCirclePrimary"></x>
@@ -1655,7 +1657,7 @@ component({
 		focusCircle: { marginLeft: -4, marginTop: -8 },
 		background: { backgroundColor: 'primaryLight', height: 2 },
 		line: { backgroundColor: 'primary', height: 2, textAlign: 'right' }
-	}, DisabledCSS, FocusCircleCSS ]
+	}, FocusCircleCSS ]
 }, {
 	value: 0,
 	step: 0.05,
@@ -1816,15 +1818,15 @@ component({
 
 component({
 	name: 'cxl-switch',
+	extend: 'cxl-form-input',
 	template: `
 <span &=".background =checked:#update"></span>
 <div &=".knob">
 <x &=".focusCircle"></x>
 </div>
 	`,
-	attributes: [ 'checked', 'true-value', 'false-value', 'value', 'disabled', 'touched' ],
-	events: [ 'change' ],
-	bindings: `focusable =value:host.trigger(change) action:#onClick role(switch) =checked:aria.prop(checked)`,
+	attributes: [ 'checked', 'true-value', 'false-value' ],
+	bindings: `focusable action:#onClick role(switch) =checked:aria.prop(checked)`,
 	styles: [{
 		$: {
 			position: 'relative', display: 'inline-block', width: 46, height: 20,
@@ -1850,7 +1852,7 @@ component({
 		background$checked: { backgroundColor: 'primaryLight' },
 		knob$checked: { translateX: 24, backgroundColor: 'primary' },
 		focusCircle$checked: { backgroundColor: 'primary' }
-	}, FocusCircleCSS, DisabledCSS ]
+	}, FocusCircleCSS ]
 }, {
 	'true-value': true,
 	'false-value': false,
@@ -2000,24 +2002,24 @@ component({
 
 component({
 	name: 'cxl-textarea',
+	extend: 'cxl-form-input',
 	template: `
 <div &="id(span) .input .measure"></div>
-<textarea &="id(textarea) .input .textarea
+<textarea &=".input .textarea
 	value:=value on(input):event.stop
-	=value:value:#calculateHeight:host.trigger(change):host.trigger(input)
+	=value:value:#calculateHeight
 	=aria-label:attribute(aria-label)
 	=disabled:attribute(disabled)
 	on(focus):bool:=focused
 	on(change):event.stop
 	on(blur):not:=focused =focused:.focused">
 </textarea>`,
-	bindings: 'role(textbox) =disabled:aria.prop(disabled) aria.prop(multiline)',
-	attributes: [ 'value', 'disabled', 'aria-label' ],
-	events: [ 'change', 'input' ],
-	styles: {
-		$: {
-			marginBottom: 8, marginTop: 8, position: 'relative'
-		},
+	bindings: `
+role(textbox) aria.prop(multiline)
+	`,
+	attributes: [ 'aria-label' ],
+	styles: [{
+		$: { marginBottom: 8, marginTop: 8, position: 'relative' },
 		input: {
 			fontSize: 16, border: 1, backgroundColor: 'transparent', padding: 16,
 			lineHeight: 20, fontFamily: 'inherit', borderStyle: 'solid'
@@ -2027,18 +2029,16 @@ component({
 			height: '100%', outline: 0, borderRadius: 0
 		},
 		focused: { borderColor: 'primary' },
-		//input$hover: { borderBottom: 2, borderStyle: 'solid' },
 		inverse: { borderColor: 'onPrimary', color: 'onPrimary' },
 		inverse$focus: { borderColor: 'onPrimary' },
 		invalid: { borderColor: 'error' },
 		invalid$focus: { borderColor: 'error' },
-		// TODO move to textarea when inheritance works
 		measure: { opacity: 0, whiteSpace: 'pre-wrap' }
-	},
+	}],
 
 	initialize(state)
 	{
-		var initial = this.innerHTML;
+		const initial = this.innerHTML;
 
 		if (initial)
 			state.value = initial;
@@ -2047,9 +2047,9 @@ component({
 }, {
 	value: '',
 
-	calculateHeight()
+	calculateHeight(val)
 	{
-		this.span.innerHTML = this.textarea.value + '&nbsp;';
+		this.span.innerHTML = val + '&nbsp;';
 	}
 });
 

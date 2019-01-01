@@ -11,10 +11,13 @@
 
 		attributes: {
 
-			alt: { summary: 'Alternative text description for the component' },
+			alt: { summary: 'Alternative text description for the component', type: 'string' },
+			big: { summary: 'Makes the component more prominent' },
 			disabled: { summary: 'Indicates whether or not the element can receive focus and respond to user actions.' },
 			invalid: { summary: 'Indicates whether or not the component has a valid value' },
 			name: { summary: 'Specifies the name of the compopent inside a form' },
+			primary: { summary: 'Changes the component\'s appereance to match the theme\'s primary color' },
+			secondary: { summary: 'Changes the component\'s appereance to match the theme\'s secondary color' },
 			touched: { summary: 'Indicates whether or not the component has been blurred' },
 			value: { summary: 'Specifies the current value of the component' }
 
@@ -24,7 +27,8 @@
 			blur: { summary: 'Fired when the component has lost focus' },
 			change: { summary: 'Fired when the component\'s value has changed' },
 			input: { summary: 'Fired when the component\'s value has changed' },
-			invalid: { summary: 'Fired when invalid attribute has changed' }
+			invalid: { summary: 'Fired when invalid attribute has changed' },
+			focus: { summary: 'Fired when the component has received focus' }
 		},
 
 		methods: {
@@ -142,6 +146,9 @@
 		'cxl-menu-toggle': {
 			icon: 'ellipsis-v',
 			tags: [ 'button' ]
+		},
+		'cxl-multiselect': {
+			beta: true
 		},
 		'cxl-navbar': {
 			icon: 'bars',

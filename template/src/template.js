@@ -1196,7 +1196,8 @@ class Anchor
 
 	destroy()
 	{
-		delete ANCHORS[this.name];
+		if (ANCHORS[this.name]===this)
+			delete ANCHORS[this.name];
 	}
 }
 
