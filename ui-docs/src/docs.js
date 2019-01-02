@@ -409,21 +409,45 @@ Checked: <span &="=test:text"></span>
 <docs-component name="cxl-form">
 	<docs-demo &="owner:@owner" label="Input Validation"><!--
 <cxl-form>
-	<cxl-block>
-		<cxl-form-group>
-			<cxl-label>E-mail Address</cxl-label>
-			<cxl-input &="valid(email)"></cxl-input>
-		</cxl-form-group>
-		<cxl-form-group>
-			<cxl-label for="password">Password</cxl-label>
-			<cxl-password &="valid(required)"></cxl-password>
-		</cxl-form-group>
-		<p &="=submitted:show">Form Submitted!</p>
-	</cxl-block>
-	<cxl-block>
-		<cxl-button>Cancel</cxl-button>
-		<cxl-submit>Submit</cxl-submit>
-	</cxl-block>
+	<cxl-form-group>
+		<cxl-label>E-mail Address</cxl-label>
+		<cxl-input &="valid(email)"></cxl-input>
+	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-label>Password</cxl-label>
+		<cxl-password &="valid(required)"></cxl-password>
+	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-label>Required Date</cxl-label>
+		<cxl-datepicker &="valid(required)"></cxl-datepicker>
+	</cxl-form-group>
+	<cxl-form-group floating>
+		<cxl-label>Required Select Box</cxl-label>
+		<cxl-select &="valid(required)">
+			<cxl-option value="1">Value 1</cxl-option>
+			<cxl-option value="2">Value 2</cxl-option>
+		</cxl-select>
+	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-checkbox name="checkbox" &="valid(required)">Required checkbox</cxl-checkbox>
+	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-radio invalid name="form-radio">Radio Option 1</cxl-radio>
+		<cxl-radio invalid name="form-radio">Radio Option 2</cxl-radio>
+		<cxl-radio invalid name="form-radio">Radio Option 3</cxl-radio>
+	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-switch &="valid(required)">Turn On</cxl-switch>
+	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-slider &="valid(notZero)"></cxl-slider>
+	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-label>Enter Comment</cxl-label>
+		<cxl-textarea &="valid(required)"></cxl-textarea>
+	</cxl-form-group>
+	<br>
+	<cxl-submit>Submit</cxl-submit>
 </cxl-form>
 	--></docs-demo>
 </docs-component>
@@ -691,14 +715,15 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-multiselect">
 <docs-demo><!--
-<cxl-form-group>
+<cxl-form-group floating>
 	<cxl-label>Multi Select Box with label</cxl-label>
-	<cxl-multiselect>
-		<cxl-checkbox>Option 1</cxl-checkbox>
-		<cxl-checkbox>Option 2</cxl-checkbox>
-		<cxl-checkbox>Option 3</cxl-checkbox>
+	<cxl-multiselect &="@value:=multiValue">
+		<cxl-option value="1">Option 1</cxl-option>
+		<cxl-option value="2">Option 2</cxl-option>
+		<cxl-option value="3">Option 3</cxl-option>
 	</cxl-multiselect>
 </cxl-form-group>
+<p &="=multiValue:text"></p>
 --></docs-demo>
 </docs-component>
 			`
@@ -1420,15 +1445,19 @@ cxl.component({
 
 cxl.component({
 	name: 'uid-component-card',
-	attributes: [ 'name' ],
-	template: `
-<docs-component-card &="=name:@name =meta.icon:@icon =meta.tags:@tags"></docs-component-card>
-	`,
-	bindings: '=name:#getMeta'
+	extend: 'docs-component-card',
+	bindings: '=name:#getMeta:text'
 }, {
 	getMeta(name)
 	{
-		this.meta = META[name];
+		const meta = META[name];
+		if (meta)
+		{
+			this.icon = meta.icon;
+			this.tags = meta.tags;
+
+			return meta.summary || '';
+		}
 	}
 });
 
@@ -1441,7 +1470,7 @@ cxl.route({
 <br>
 <cxl-grid columns="repeat(12, 1fr)" gap="16px 16px">
 <template &="=components:each:repeat">
-<cxl-c xl3 md4 sm6 &="item:#setKey =filter:#match:show">
+<cxl-c xl4 sm6 &="item:#setKey =filter:#match:show">
 	<uid-component-card &="item:@name"></uid-component-card>
 </cxl-c>
 </template>

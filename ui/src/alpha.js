@@ -280,6 +280,7 @@ cxl.validate = Object.assign(validate, {
 		zipcode: 'Please enter a valid zip code',
 		equalTo: 'Values do not match',
 		required: 'This field is required',
+		notZero: 'Value cannot be zero',
 		email: 'Please enter a valid email address'
 	},
 
@@ -301,9 +302,14 @@ cxl.validate = Object.assign(validate, {
 			return true;
 		},
 
+		notZero(val)
+		{
+			return val !== 0;
+		},
+
 		required(val)
 		{
-			return val!==null && val!==undefined && val!=='';
+			return val!==null && val!==undefined && val!=='' && val!==false;
 		},
 
 		zipcode(value)

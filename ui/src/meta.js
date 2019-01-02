@@ -13,12 +13,15 @@
 
 			alt: { summary: 'Alternative text description for the component', type: 'string' },
 			big: { summary: 'Makes the component more prominent' },
+			checked: { summary: 'Whether the component is checked' },
 			disabled: { summary: 'Indicates whether or not the element can receive focus and respond to user actions.' },
+			'false-value': { summary: 'Value to use when the component is not in the checked status.' },
 			invalid: { summary: 'Indicates whether or not the component has a valid value' },
 			name: { summary: 'Specifies the name of the compopent inside a form' },
 			primary: { summary: 'Changes the component\'s appereance to match the theme\'s primary color' },
 			secondary: { summary: 'Changes the component\'s appereance to match the theme\'s secondary color' },
 			touched: { summary: 'Indicates whether or not the component has been blurred' },
+			'true-value': { summary: 'Value to use when the component is in the checked status' },
 			value: { summary: 'Specifies the current value of the component' }
 
 		},
@@ -28,7 +31,8 @@
 			change: { summary: 'Fired when the component\'s value has changed' },
 			input: { summary: 'Fired when the component\'s value has changed' },
 			invalid: { summary: 'Fired when invalid attribute has changed' },
-			focus: { summary: 'Fired when the component has received focus' }
+			focus: { summary: 'Fired when the component has received focus' },
+			submit: { summary: 'Fired when the component has been submitted' }
 		},
 
 		methods: {

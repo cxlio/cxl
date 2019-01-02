@@ -229,7 +229,7 @@ cxl.component({
 		tags: { color: '#ccc', marginTop: 8 },
 		link: { color: 'link' },
 		icon: {
-			width: 80, height: 80, lineHeight: 80, fontSize: 48, textAlign: 'center',
+			width: 48, height: 48, lineHeight: 48, fontSize: 24, textAlign: 'center',
 			backgroundColor: '#ccc', color: '#fff', marginRight: 16
 		}
 	}

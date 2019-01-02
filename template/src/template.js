@@ -1753,9 +1753,13 @@ pipes({
 		return promise;
 	},
 
+	reverse(val) { return val && val.reverse(); },
+
 	show(value) { this.element.style.display = value ? '' : 'none'; },
 
-	sort(value) { return value && value.sort(); },
+	sort(value) {
+		return this.parameter ? cxl.sortBy(value, this.parameter) : value && value.sort();
+	},
 
 	'style.inline'(val) { this.element.style[this.parameter] = val; },
 
