@@ -17,6 +17,7 @@
 			disabled: { summary: 'Indicates whether or not the element can receive focus and respond to user actions.' },
 			'false-value': { summary: 'Value to use when the component is not in the checked status.' },
 			invalid: { summary: 'Indicates whether or not the component has a valid value' },
+			maxlength: { summary: 'Max value length of the input field' },
 			name: { summary: 'Specifies the name of the compopent inside a form' },
 			primary: { summary: 'Changes the component\'s appereance to match the theme\'s primary color' },
 			secondary: { summary: 'Changes the component\'s appereance to match the theme\'s secondary color' },

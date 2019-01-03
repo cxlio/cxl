@@ -86,31 +86,34 @@ behavior('navigation.grid', {
 		switch (ev.key) {
 		case 'ArrowUp':
 			while (cols--) next = next.previousElementSibling;
-			return next.focus();
+			break;
 		case 'ArrowDown':
 			while (cols--) next = next.nextElementSibling;
-			return next.focus();
-		case 'ArrowLeft': return focused.previousElementSibling.focus();
-		case 'ArrowRight': return focused.nextElementSibling.focus();
+			break;
+		case 'ArrowLeft': next = focused.previousElementSibling; break;
+		case 'ArrowRight': next = focused.nextElementSibling; break;
+		default: return;
 		}
+
+		this.$behavior.next(next);
 	}
 });
 
 behavior('navigation.list', {
 	bindings: 'keypress:#onKey:event.prevent',
-	selected: null,
 	onKey(ev, host)
 	{
 	var
-		el = this.selected,
+		el = this.$behavior.value,
+		children = new cxl.ElementChildren(host),
 		key = ev.key
 	;
 		switch (key) {
 		case 'ArrowDown':
-			el = el ? el.nextElementSibling || el : host.firstElementChild;
+			el = el ? children.nextTo(el) || el : children.first;
 			break;
 		case 'ArrowUp':
-			el = el ? el.previousElementSibling || el : host.lastElementChild;
+			el = el ? children.previousTo(el) || el : children.last;
 			break;
 		default:
 			key = key.toLowerCase();
@@ -126,11 +129,7 @@ behavior('navigation.list', {
 				return cxl.Skip;
 		}
 
-		if (el !== this.selected)
-		{
-			this.selected = el;
-			this.$behavior.next(el);
-		}
+		this.$behavior.next(el);
 	}
 });
 
@@ -146,7 +145,7 @@ behavior('touchable', `
 `);
 behavior('selectable', `
 	registable(selectable)
-	action:host.trigger(selectable.action)
+	action:host.trigger(selectable.action):event.stop
 	@selected:aria.prop(selected)
 `);
 behavior('selectable.host', {
@@ -969,7 +968,7 @@ component({
 	name: 'cxl-calendar-month',
 	attributes: [ 'value', 'month' ],
 	template: `
-<cxl-table &="navigation.grid">
+<cxl-table &="navigation.grid:#onNavigation">
 	<cxl-th>S</cxl-th>
 	<cxl-th>M</cxl-th>
 	<cxl-th>T</cxl-th>
@@ -997,6 +996,11 @@ component({
 }, {
 	selected: null,
 	value: null,
+
+	onNavigation(el)
+	{
+		el.focus();
+	},
 
 	parse(val)
 	{
@@ -1532,11 +1536,11 @@ component({
 	bindings: `
 		focusable
 		selectable.host:#onSelected
-		navigation.list:#onNavigation
+		=focused:navigation.list:#onNavigation
 		id(component)
 		keypress(escape):#close
 		on(blur):#close
-		action:#onAction
+		action:#onAction:event.prevent
 	`,
 	styles: [ FocusLineCSS, {
 		$: { cursor: 'pointer' },
@@ -1719,6 +1723,9 @@ component({
 
 			const selected = this.selected, i = selected.indexOf(selectedEl);
 
+			if (this.focused)
+				this.focused.focused = false;
+
 			if (i ===-1)
 			{
 				selectedEl.selected = true;
@@ -1730,6 +1737,9 @@ component({
 				selected.splice(i, 1);
 			}
 
+			selectedEl.focused = true;
+			this.focused = selectedEl;
+
 			if (selected.length===0)
 				this.selected = this.value = null;
 			else
@@ -1739,22 +1749,24 @@ component({
 		this.calculateDimensions();
 	},
 
-	onAction()
+	onAction(ev)
 	{
 		if (this.disabled)
 			return;
 
 	 	if (this.opened)
 		{
+			if (ev.type==='keypress' && this.focused)
+				this.onSelected(this.focused);
+		} else
+		{
 			if (this.focused)
 			{
-				this.onSelected(this.focused);
 				this.focused.focused = false;
+				this.focused = null;
 			}
-		} else
 			this.open();
-
-		this.focused = null;
+		}
 	}
 });
 

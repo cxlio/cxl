@@ -307,6 +307,46 @@ const
 	return child;
 }
 
+cxl.extend(cxl.ElementChildren.prototype, {
+
+	get first()
+	{
+		var el = this.el.childNodes[0];
+		return el.tagName ? el : this.nextTo(el);
+	},
+
+	get last()
+	{
+		var el = this.el.childNodes[this.el.childNodes.length-1];
+		return el.tagName ? el : this.previousTo(el);
+	},
+
+	nextTo(el)
+	{
+		var i = this.el.$indexOf(el);
+
+		do {
+			i++;
+			el = this.el.childNodes[i];
+		} while (el && !el.tagName);
+
+		return el;
+	},
+
+	previousTo(el)
+	{
+		var i = this.el.$indexOf(el);
+
+		do {
+			i--;
+			el = this.el.childNodes[i];
+		} while (el && !el.tagName);
+
+		return el;
+	}
+
+});
+
 function $extendComponent(component, shadow)
 {
 	cxl.extend(component, {

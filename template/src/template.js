@@ -916,6 +916,23 @@ directive('each', {
 
 });
 
+class ElementChildren
+{
+	constructor(element)
+	{
+		if (element.$elementChildren)
+			return element.$elementChildren;
+
+		this.el = element;
+	}
+
+	get first() { return this.el.firstElementChild; }
+	get last() { return this.el.lastElementChild; }
+
+	nextTo(el) { return el.nextElementSibling; }
+	previousTo(el) { return el.previousElementSibling; }
+}
+
 class ElementList
 {
 	constructor(element, owner)
@@ -1423,6 +1440,7 @@ Object.assign(cxl, {
 	ChildrenObserver: ChildrenObserver,
 	Compiler: Compiler,
 	Directive: Directive,
+	ElementChildren: ElementChildren,
 	ElementList: ElementList,
 	Event: Event,
 	EventObservable: EventObservable,
