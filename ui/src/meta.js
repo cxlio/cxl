@@ -19,6 +19,7 @@
 			invalid: { summary: 'Indicates whether or not the component has a valid value' },
 			maxlength: { summary: 'Max value length of the input field' },
 			name: { summary: 'Specifies the name of the compopent inside a form' },
+			placeholder: { summary: 'Text to display when the component has no value set' },
 			primary: { summary: 'Changes the component\'s appereance to match the theme\'s primary color' },
 			secondary: { summary: 'Changes the component\'s appereance to match the theme\'s secondary color' },
 			touched: { summary: 'Indicates whether or not the component has been blurred' },

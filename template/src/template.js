@@ -929,8 +929,8 @@ class ElementChildren
 	get first() { return this.el.firstElementChild; }
 	get last() { return this.el.lastElementChild; }
 
-	nextTo(el) { return el.nextElementSibling; }
-	previousTo(el) { return el.previousElementSibling; }
+	nextTo(el) { return el && el.nextElementSibling; }
+	previousTo(el) { return el && el.previousElementSibling; }
 }
 
 class ElementList

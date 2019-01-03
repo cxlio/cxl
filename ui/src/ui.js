@@ -76,8 +76,10 @@ behavior('navigation.grid', {
 	bindings: 'keypress:#onKey:event.prevent',
 	onKey(ev, el)
 	{
-		const focused = el.querySelector(':focus');
-
+	const
+		focused = el.querySelector(':focus'),
+		children = new cxl.ElementChildren(el)
+	;
 		if (!focused)
 			return;
 
@@ -85,17 +87,18 @@ behavior('navigation.grid', {
 
 		switch (ev.key) {
 		case 'ArrowUp':
-			while (cols--) next = next.previousElementSibling;
+			while (cols--) next = children.previousTo(next);
 			break;
 		case 'ArrowDown':
-			while (cols--) next = next.nextElementSibling;
+			while (cols--) next = children.nextTo(next);
 			break;
-		case 'ArrowLeft': next = focused.previousElementSibling; break;
-		case 'ArrowRight': next = focused.nextElementSibling; break;
+		case 'ArrowLeft': next = children.previousTo(next); break;
+		case 'ArrowRight': next = children.nextTo(next); break;
 		default: return;
 		}
 
-		this.$behavior.next(next);
+		if (next)
+			this.$behavior.next(next);
 	}
 });
 
@@ -854,6 +857,7 @@ component({
 component({
 	name: 'cxl-calendar',
 	attributes: [ 'value' ],
+	methods: [ 'focus' ],
 	template: `
 <div &=".header action:event.stop">
 	<cxl-button &="action:#toggleYear:#getMonthText" flat><x &="=monthText:text"></x>
@@ -863,7 +867,7 @@ component({
 	<cxl-button &="action:#nextMonth" flat>&nbsp;<cxl-icon icon="arrow-right"></cxl-icon>&nbsp;</cxl-button>
 </div>
 <div &=".rel">
-	<cxl-calendar-month &="=selectedMonth:@month @value:=value"></cxl-calendar-month>
+	<cxl-calendar-month &="id(calendarMonth) =selectedMonth:@month @value:=value"></cxl-calendar-month>
 	<cxl-calendar-year &="action:event.stop:not:=yearOpen =selectedYear::@value =startYear:@start-year @start-year:=startYear:#getMonthText .closed =yearOpen:.opened"></cxl-calendar-year>
 </div>
 	`,
@@ -877,7 +881,23 @@ component({
 	bindings: '=value:#render =selectedMonth:#getMonthText =selectedYear:#updateMonth'
 
 }, {
+	today: null,
 	value: null,
+	calendarMonth: null,
+
+	focus()
+	{
+		const val = this.value || this.today, month = this.selectedMonth;
+
+		if (val.getMonth()!==month.getMonth() || val.getFullYear()!==month.getFullYear())
+		{
+			this.selectedMonth = new Date(val);
+			this.selectedYear = this.selectedMonth.getFullYear();
+		}
+
+		// TODO ?
+		setTimeout(() => this.calendarMonth.focus());
+	},
 
 	toggleYear()
 	{
@@ -889,9 +909,10 @@ component({
 
 	updateMonth(year)
 	{
-		if (year)
+		const month = this.selectedMonth;
+
+		if (year && month.getFullYear() !== year)
 		{
-			const month = this.selectedMonth;
 			month.setYear(year);
 			this.selectedMonth = new Date(month);
 		}
@@ -931,8 +952,9 @@ component({
 
 	render(val)
 	{
+		this.today = new Date();
 		if (!this.selectedMonth)
-			this.selectedMonth = val ? new Date(val) : new Date();
+			this.selectedMonth = val ? new Date(val) : this.today;
 	}
 });
 
@@ -967,6 +989,7 @@ component({
 component({
 	name: 'cxl-calendar-month',
 	attributes: [ 'value', 'month' ],
+	methods: [ 'focus' ],
 	template: `
 <cxl-table &="navigation.grid:#onNavigation">
 	<cxl-th>S</cxl-th>
@@ -977,7 +1000,7 @@ component({
 	<cxl-th>F</cxl-th>
 	<cxl-th>S</cxl-th>
 	<template &="=dates:marker.empty:each:repeat">
-	<cxl-calendar-date &="action:#onAction $date:@value $disabled:@disabled $today:.today =value:#isSelected:@selected"></cxl-calendar-date>
+	<cxl-calendar-date &="action:#onAction $date:@value $disabled:@disabled $today:.today:filter:#setTodayEl =value:#isSelected:@selected"></cxl-calendar-date>
 	</template>
 </cxl-table>
 	`,
@@ -996,6 +1019,22 @@ component({
 }, {
 	selected: null,
 	value: null,
+	todayEl: null,
+	setFocus: false,
+
+	setTodayEl(val, el)
+	{
+		if (val)
+			this.todayEl = el;
+	},
+
+	focus()
+	{
+		const val = this.selected || this.todayEl;
+
+		if (val)
+			val.focus();
+	},
 
 	onNavigation(el)
 	{
@@ -1126,11 +1165,11 @@ component({
 	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
 <div &=".focusLine =focused:.expand"></div>
 <cxl-input-icon>
-	<cxl-toggle &="=disabled:@disabled">
+	<cxl-toggle &="=disabled:@disabled @opened:=opened">
 	<cxl-icon icon="calendar"></cxl-icon>
 	<cxl-toggle-popup &="role(dialog)">
 		<cxl-card>
-			<cxl-calendar &="@value:#update:=value =value:@value"></cxl-calendar>
+			<cxl-calendar &="=opened:filter:focus @value:#update:=value =value:@value"></cxl-calendar>
 		</cxl-card>
 	</cxl-toggle-popup>
 	</cxl-toggle>
@@ -1228,10 +1267,10 @@ component({
 
 component({
 	name: 'cxl-toggle',
-	attributes: [ 'disabled', 'touched' ],
+	attributes: [ 'disabled', 'touched', 'opened' ],
 	template: `
 <div &="content"></div>
-<div &="id(popup) =showMenu:show .popup content(cxl-toggle-popup)"></div>
+<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
 	`,
 	bindings: `
 focusable
@@ -1243,19 +1282,19 @@ role(button)
 		popup: { height: 0, elevation: 5, position: 'absolute' }
 	}
 }, {
-	showMenu: false,
+	opened: false,
 	close()
 	{
-		this.showMenu = false;
+		this.opened = false;
 	},
 	show(ev, el)
 	{
 		if (this.disabled)
 			return;
 
-		if (!this.showMenu)
+		if (!this.opened)
 		{
-			this.showMenu = true;
+			this.opened = true;
 			this.popup.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
 		} else
 			this.close();
