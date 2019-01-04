@@ -148,7 +148,7 @@ behavior('touchable', `
 `);
 behavior('selectable', `
 	registable(selectable)
-	action:host.trigger(selectable.action):event.stop
+	action:host.trigger(selectable.action)
 	@selected:aria.prop(selected)
 `);
 behavior('selectable.host', {
@@ -1604,6 +1604,7 @@ component({
 
 	getSelectedText()
 	{
+		return cxl.Skip;
 	},
 
 	/**
