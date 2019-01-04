@@ -447,6 +447,14 @@ Checked: <span &="=test:text"></span>
 		<cxl-label>Enter Comment</cxl-label>
 		<cxl-textarea &="valid(required)"></cxl-textarea>
 	</cxl-form-group>
+	<cxl-form-group>
+		<cxl-label>Multiselect</cxl-label>
+		<cxl-multiselect>
+			<cxl-option>Option 1</cxl-option>
+			<cxl-option>Option 2</cxl-option>
+			<cxl-option>Option 3</cxl-option>
+		</cxl-multiselect>
+	</cxl-form-group>
 	<br>
 	<cxl-submit>Submit</cxl-submit>
 </cxl-form>

@@ -1591,7 +1591,8 @@ component({
 		id(component)
 		keypress(escape):#close
 		on(blur):#close
-		action:#onAction:event.prevent
+		action:log:#onAction:event.prevent:event.stop
+		keypress(enter):log:event.stop
 	`,
 	styles: [ FocusLineCSS, {
 		$: { cursor: 'pointer' },
@@ -2209,7 +2210,7 @@ component({
 	on(blur):not:=focused =focused:.focused">
 </textarea>`,
 	bindings: `
-role(textbox) touchable aria.prop(multiline)
+role(textbox) touchable aria.prop(multiline) keypress(enter):event.stop
 	`,
 	attributes: [ 'aria-label' ],
 	styles: [{
