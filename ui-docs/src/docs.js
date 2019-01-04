@@ -376,6 +376,7 @@ Checked: <span &="=test:text"></span>
 <docs-component name="cxl-drawer">
 	<docs-demo><!--
 <cxl-button &="action:bool:=showDrawer" primary>Show Drawer</cxl-button>
+&nbsp;&nbsp;
 <cxl-checkbox &="value:=permanent">Permanent</cxl-checkbox>
 <cxl-drawer right &="on(backdrop.click):not:=showDrawer =permanent:@permanent =showDrawer:@visible">
 	<docs-placeholder></docs-placeholder>

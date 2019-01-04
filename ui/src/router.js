@@ -494,7 +494,8 @@ cxl.component({
 		router: { margin: 16 },
 		router$medium: { margin: 32 },
 		router$large: { margin: 64 },
-		router$xlarge: { width: 1200, marginLeft: 'auto', marginRight: 'auto' }
+		router$xlarge: { width: 1200 },
+		router$xlarge$center: { marginLeft: 'auto', marginRight: 'auto' }
 	}
 }, {
 

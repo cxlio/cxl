@@ -746,6 +746,7 @@ component({
 	}
 }, {
 	// TODO
+	columns: 'repeat(12, 1fr)',
 	gap: '16px 16px',
 	setColumns(val, el)
 	{
@@ -1483,6 +1484,7 @@ disconnect:#unregister
 			backgroundColor: 'primary', scaleX: 0, scaleY: 0, marginTop: 3
 		},
 		circle$checked: { scaleX: 1, scaleY: 1 },
+		circle$invalid$touched: { backgroundColor: 'error' },
 		box: {
 			position: 'absolute', border: 2, width: 20, height: 20, display: 'inline-block',
 			borderColor: 'onSurface', marginRight: 8, borderRadius: 10,

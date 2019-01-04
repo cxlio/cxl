@@ -154,7 +154,9 @@
 			tags: [ 'button' ]
 		},
 		'cxl-multiselect': {
-			beta: true
+			icon: 'caret-square-down',
+			beta: true,
+			tags: [ 'forms', 'multiple' ]
 		},
 		'cxl-navbar': {
 			icon: 'bars',
