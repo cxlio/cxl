@@ -799,30 +799,30 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			template: `
 <docs-component name="cxl-radio">
 <docs-demo><!--
-<cxl-radio name="test" value="1">Radio Button 1</cxl-radio><br>
-<cxl-radio name="test" value="2" checked>Radio Button 2</cxl-radio><br>
-<cxl-radio name="test" value="3">Radio Button 3</cxl-radio><br>
+<cxl-radio name="test" value="1">Radio Button 1</cxl-radio>
+<cxl-radio name="test" value="2" checked>Radio Button 2</cxl-radio>
+<cxl-radio name="test" value="3">Radio Button 3</cxl-radio>
 --></docs-demo>
 </docs-component>
 <docs-attribute name="checked">
 	<docs-demo><!--
-<cxl-radio &="@checked:=checked" name="test" value="1">Radio Button 1</cxl-radio><br>
+<cxl-radio &="@checked:=checked" name="test" value="1">Radio Button 1</cxl-radio>
 <p>Checked: <x &="=checked:text"></x></p>
 	--></docs-demo>
 </docs-attribute>
 <docs-attribute name="disabled">
 	<docs-demo><!--
-<cxl-radio name="test" value="1">Radio Button 1</cxl-radio><br>
-<cxl-radio disabled name="test" value="2">Radio Button 2</cxl-radio><br>
-<cxl-radio name="test" value="3">Radio Button 3</cxl-radio><br>
+<cxl-radio name="test" value="1">Radio Button 1</cxl-radio>
+<cxl-radio disabled name="test" value="2">Radio Button 2</cxl-radio>
+<cxl-radio name="test" value="3">Radio Button 3</cxl-radio>
 	--></docs-demo>
 </docs-attribute>
 <docs-attribute name="name">
 	<docs-demo><!--
-<cxl-radio name="test3" value="1">Radio Button 1</cxl-radio><br>
-<cxl-radio name="test3" value="2">Radio Button 2</cxl-radio><br>
-<cxl-radio name="test2" value="3">Radio Button 3</cxl-radio><br>
-<cxl-radio name="test2" value="3">Radio Button 3</cxl-radio><br>
+<cxl-radio name="test3" value="1">Radio Button 1</cxl-radio>
+<cxl-radio name="test3" value="2">Radio Button 2</cxl-radio>
+<cxl-radio name="test2" value="3">Radio Button 3</cxl-radio>
+<cxl-radio name="test2" value="3">Radio Button 3</cxl-radio>
 	--></docs-demo>
 </docs-attribute>
 			`
@@ -1446,7 +1446,7 @@ cxl.component({
 cxl.component({
 	name: 'uid-component-card',
 	extend: 'docs-component-card',
-	bindings: '=name:#getMeta:text'
+	bindings: '=name:#getMeta'
 }, {
 	getMeta(name)
 	{
@@ -1455,8 +1455,6 @@ cxl.component({
 		{
 			this.icon = meta.icon;
 			this.tags = meta.tags;
-
-			return meta.summary || '';
 		}
 	}
 });

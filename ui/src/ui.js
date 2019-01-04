@@ -456,7 +456,10 @@ action:#toggle
 =checked:#update:aria.prop(checked) =false-value:#update =true-value:#update
 	`,
 	styles: [ {
-		$: { marginBottom: 16, position: 'relative', cursor: 'pointer' },
+		$: {
+			margin: 16, marginLeft: 0, display: 'inline-block',
+			position: 'relative', cursor: 'pointer'
+		},
 		$focus: { outline: 0 },
 		box: {
 			display: 'inline-block', width: 20, height: 20, border: 2,
@@ -1458,7 +1461,7 @@ component({
 	extend: 'cxl-form-input',
 	template: `
 <x &=".focusCircle .focusCirclePrimary"></x>
-<cxl-icon icon="circle" &=".box"></cxl-icon>
+<x &=".box"><x &=".circle"></x></x>
 <span &=".content content"></span>
 	`,
 	bindings: `
@@ -1470,15 +1473,22 @@ disconnect:#unregister
 	`,
 	styles: [{
 
-		$: { position: 'relative', cursor: 'pointer', marginBottom: 16 },
-		content: { marginLeft: 36 },
-		box: {
-			position: 'absolute', border: 2, width: 20, display: 'inline-block',
-			borderColor: 'onSurface', marginRight: 8, borderRadius: 10,
-			borderStyle: 'solid', color: 'rgba(0,0,0,0)', fontSize: 12,
-			lineHeight: 16, textAlign: 'center'
+		$: {
+			position: 'relative', display: 'inline-block', cursor: 'pointer',
+			margin: 16, marginLeft: 0
 		},
-		box$checked: { borderColor: 'primary', color: 'primary' },
+		content: { marginLeft: 32 },
+		circle: {
+			borderRadius: 10, width: 10, height: 10, display: 'inline-block',
+			backgroundColor: 'primary', scaleX: 0, scaleY: 0, marginTop: 3
+		},
+		circle$checked: { scaleX: 1, scaleY: 1 },
+		box: {
+			position: 'absolute', border: 2, width: 20, height: 20, display: 'inline-block',
+			borderColor: 'onSurface', marginRight: 8, borderRadius: 10,
+			borderStyle: 'solid', color: 'primary', lineHeight: 16, textAlign: 'center'
+		},
+		box$checked: { borderColor: 'primary' },
 		box$invalid$touched: { borderColor: 'error' },
 		box$checked$invalid$touched: { color: 'error' }
 
