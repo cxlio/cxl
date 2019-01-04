@@ -449,7 +449,7 @@ Checked: <span &="=test:text"></span>
 	</cxl-form-group>
 	<cxl-form-group>
 		<cxl-label>Multiselect</cxl-label>
-		<cxl-multiselect>
+		<cxl-multiselect &="valid(required)">
 			<cxl-option>Option 1</cxl-option>
 			<cxl-option>Option 2</cxl-option>
 			<cxl-option>Option 3</cxl-option>
@@ -1257,6 +1257,8 @@ cxl.route({
 	title: 'Styles',
 	template: `
 <cxl-t h4>Color</cxl-t>
+<p>The Following colors are used by the theme. Each of them are defined in a variable prefixed by <code>--cxl-</code></p>
+<br>
 <uid-palette></uid-palette>
 <br><br>
 <cxl-t h4>Typography</cxl-t>

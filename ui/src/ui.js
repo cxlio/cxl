@@ -1591,8 +1591,8 @@ component({
 		id(component)
 		keypress(escape):#close
 		on(blur):#close
-		action:log:#onAction:event.prevent:event.stop
-		keypress(enter):log:event.stop
+		action:#onAction:event.prevent:event.stop
+		keypress(enter):event.stop
 	`,
 	styles: [ FocusLineCSS, {
 		$: { cursor: 'pointer' },
