@@ -214,20 +214,19 @@ cxl.component({
 <cxl-card &=".card">
 	<a &="=name:route.link"><cxl-icon &=".icon =icon:@icon"></cxl-icon></a>
 	<cxl-c grow>
-		<a &="=name:route.link .link"><cxl-t subtitle>&lt;<x &="=name:text"></x>&gt;</cxl-t></a>
-		<cxl-t caption><cxl-icon &=".tags" icon="tags"></cxl-icon>
+		<a &="=name:route.link .link">&lt;<x &="=name:text"></x>&gt;</a>
+		<cxl-icon &=".tags" icon="tags"></cxl-icon>
 		<template &="=tags:each:repeat">
 			<span &="item:text"></span>
 		</template>
-		</cxl-t>
 		<cxl-t subtitle2 &="content"></cxl-t>
 	</cxl>
 </cxl-card>
 	`,
 	styles: {
-		card: { padding: 16, display: 'flex' },
+		card: { padding: 16, display: 'flex', font: 'caption' },
 		tags: { color: '#ccc', marginTop: 8 },
-		link: { color: 'link' },
+		link: { color: 'link', font: 'subtitle', display: 'block', textDecoration: 'none' },
 		icon: {
 			width: 48, height: 48, lineHeight: 48, fontSize: 24, textAlign: 'center',
 			backgroundColor: '#ccc', color: '#fff', marginRight: 16

@@ -10,17 +10,17 @@ const
 	},
 
 	FocusCSS = {
-		$active: { filter: 'brightness(0.75)' },
-		$active$primary: { filter: 'brightness(1.3)' },
-		$active$secondary: { filter: 'brightness(1.8)' },
+		$active: { state: 'active' },
+		//$active$primary: { filter: 'brightness(1.3)' },
+		//$active$secondary: { filter: 'brightness(1.8)' },
 
-		$hover: { filter: 'brightness(0.95)' },
-		$hover$primary: { filter: 'brightness(1.05)' },
-		$hover$secondary: { filter: 'brightness(1.05)' },
+		$hover: { state: 'hover' },
+		//$hover$primary: { filter: 'brightness(1.05)' },
+		//$hover$secondary: { filter: 'brightness(1.05)' },
 
-		$focus: { outline: 0, filter: 'brightness(0.85)' },
-		$focus$primary: { filter: 'brightness(1.2)' },
-		$focus$secondary: { filter: 'brightness(1.4)' }
+		$focus: { state: 'focus' }
+		//$focus$primary: { filter: 'brightness(1.2)' },
+		//$focus$secondary: { filter: 'brightness(1.4)' }
 	},
 
 	FocusCircleCSS = {
@@ -31,6 +31,7 @@ const
 			translateX: -14, translateY: -14
 		},
 		focusCirclePrimary: { backgroundColor: 'primary' },
+		focusCircle$invalid$touched: { backgroundColor: 'error' },
 		focusCircle$hover: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.14 },
 		focusCircle$focus: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.25 },
 		focusCircle$disabled: { scaleX: 0, scaleY: 0 }
@@ -420,6 +421,7 @@ component({
 		$md0$medium: { display: 'none' },
 		$sm0$small: { display: 'none' },
 		$xs0: { display: 'none' },
+		$flex: { display: 'flex' },
 		// Padding
 		$pad16: { padding: 16 },
 		$pad8: { padding: 8 },
@@ -2082,6 +2084,7 @@ component({
 		$h4: { font: 'h4', marginBottom: 24 },
 		$h5: { font: 'h5', marginBottom: 16 },
 		$h6: { font: 'h6', marginBottom: 16 },
+		$button: { font: 'button' },
 		$subtitle: { font: 'subtitle', marginBottom: 0 },
 		$subtitle2: { font: 'subtitle2', opacity: 0.73 }
 	}

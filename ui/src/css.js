@@ -214,6 +214,15 @@ class Style
 
 	get font() { return this.$value.font; }
 
+	set state(name)
+	{
+		const state = css.states[name];
+		this.$value.state = name;
+		state.applyTo(this.$style);
+	}
+
+	get state() { return this.$value.state; }
+
 	set userSelect(val)
 	{
 		this.$style.userSelect = this.$style.msUserSelect = this.$style['-ms-user-select'] =
@@ -434,6 +443,7 @@ function applyStyles()
 	// Get Variables
 const
 	typo = css.typography,
+	states = css.states,
 	variables = css.appliedVariables = Object.assign({}, css.variables)
 ;
 	for (var i in css.colors)
@@ -450,6 +460,10 @@ const
 			}, css));
 		}
 	}
+
+	for (i in states)
+		if (!(states[i] instanceof Style))
+			states[i] = new Style(states[i]);
 
 	css.rootStyles.reset({
 		$: { backgroundColor: 'background', variables: variables }
@@ -539,6 +553,15 @@ cxl.css = Object.assign(css, {
 
 	// Stylesheet used for variables and other :root properties
 	rootStyles: new RootStyles(),
+
+	states: {
+		/*active: { filter: 'brightness(0.75)' },
+		focus: { outline: 0, filter: 'brightness(0.85)' },
+		hover: { filter: 'brightness(0.95)' }*/
+		active: { filter: 'invert(0.1)' },
+		focus: { outline: 0, filter: 'invert(0.15) saturate(1.5)' },
+		hover: { filter: 'invert(0.05) saturate(1.25)' }
+	},
 
 	variables: {
 		// Animation speed

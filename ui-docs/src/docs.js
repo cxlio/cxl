@@ -240,21 +240,17 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 <docs-demo label="Card with Images"><!--
 <cxl-card>
-<cxl-block flex>
+<cxl-c flex pad16>
 	<cxl-avatar style="background:#ccc"></cxl-avatar>
-	<cxl-col style="margin-left: 24px">
-		<cxl-h6>Card Title</cxl-h6>
-		Secondary Text
-	</cxl-col>
-</cxl-block>
+	<cxl-c style="margin-left: 24px">
+		<cxl-t subtitle>Card Title</cxl-t>
+		<cxl-t subtitle2>Secondary Text</cxl-t>
+	</cxl-c>
+</cxl-c>
 <docs-placeholder style="height:180px"></docs-placeholder>
-<cxl-block>
+<cxl-c pad16>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</cxl-block>
-<cxl-block compact>
-	<cxl-button flat>Action 1</cxl-button>
-	<cxl-button flat>Action 2</cxl-button>
-</cxl-block>
+</cxl-c>
 </cxl-card>
 --></docs-demo>
 </docs-component>
@@ -1140,8 +1136,8 @@ cxl.route({
 <cxl-grid columns="1fr 1fr" style="margin-top: 48px">
 	<cxl-c sm2 md1>
 		<cxl-t h2>@cxl/ui</cxl-t>
-		<cxl-t subtitle>
-			@cxl/ui is an open source collection of lightweight, production ready Web Components.
+		<cxl-t h5>
+			Framework agnostic web components with a focus on accessibility and performance.
 		</cxl-t>
 		<br>
 		<p>
@@ -1177,7 +1173,7 @@ Library and Source Code released under the <a href="https://www.gnu.org/licenses
 
 	<cxl-c>
 		<cxl-t h5><cxl-icon icon="globe"></cxl-icon> &nbsp;Framework Agnostic</cxl-t>
-		<p>No dependencies, No polyfills. Works out of the box on all major browsers. Optional <a href="#getting-started">plugins</a> for popular frameworks are included.
+		<p>No dependencies, No polyfills. Works out of the box on all major browsers. <!--Optional <a href="#getting-started">plugins</a> for popular frameworks are included.-->
 		</p>
 	</cxl-c>
 	<cxl-c>
