@@ -2,6 +2,7 @@
 
 const
 	META = cxl.ui.meta,
+	STYLES = { $: { animation: 'fadeIn' } },
 	DEFS = {
 		appbar: {
 			template: `
@@ -1133,6 +1134,7 @@ cxl.route({
 	defaultRoute: true,
 	path: '*default',
 	title: 'Home',
+	styles: STYLES,
 	template: `
 <style>a { color: var(--cxl-link) }</style>
 <cxl-grid columns="1fr 1fr" style="margin-top: 48px">
@@ -1202,6 +1204,7 @@ cxl.route({
 	id: "getting-started",
 	path: 'getting-started',
 	title: 'Getting Started',
+	styles: STYLES,
 	template: `
 <style>a { color: var(--cxl-link) }</style>
 <cxl-t h4>Installation</cxl-t>
@@ -1250,6 +1253,7 @@ cxl.each(DEFS, (def, name) => {
 
 	def.path = path;
 	def.title = '<' + path + '>';
+	def.styles = STYLES;
 
 	COMPONENTS.push(path);
 
@@ -1279,6 +1283,7 @@ cxl.route({
 <uid-theme></uid-theme>
 	`,
 	styles: {
+		$: { animation: 'fadeIn' },
 		iconbox: { display: 'inline-block', width: 80, height: 80, textAlign: 'center' },
 		icon: { fontSize: 24, marginBottom: 8, lineHeight: 40 }
 	},
@@ -1477,6 +1482,7 @@ cxl.component({
 cxl.route({
 	path: 'components',
 	title: 'Overview',
+	styles: STYLES,
 	template: `
 <cxl-t h5>Available Components</cxl-t>
 <cxl-search-input &="@value:=filter"></cxl-search-input>
