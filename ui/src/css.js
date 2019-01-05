@@ -503,7 +503,6 @@ cxl.css = Object.assign(css, {
 	colors: {
 		elevation: rgba(0,0,0,0.26),
 		primary: rgba(0x34, 0x49, 0x55),
-		primaryDark: rgba(0x23, 0x2f, 0x34),
 		primaryLight: rgba(0x4a, 0x65, 0x72, 0.24),
 
 		secondary: rgba(0xf9, 0xaa, 0x33),

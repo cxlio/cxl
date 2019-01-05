@@ -12,10 +12,10 @@
 			link: { label: 'Color for <a> links', type: 'color' },
 			primary: { label: 'Primary Color', type: 'color' },
 			onPrimary: { label: 'Color of elements on top of a primary background', type: 'color' },
+			onPrimaryLight: { label: 'Color of elements on top of a primaryLight background', type: 'color' },
 			onSecondary: { label: 'Color of elements on top of a secondary background', type: 'color' },
 			onSurface: { label: 'Color of elements on top of a surface background', type: 'color' },
 			onError: { label: 'Color of elements on top of an error background', type: 'color' },
-			primaryDark: { label: 'Primary Dark Variation Color', type: 'color' },
 			primaryLight: { label: 'Primary Light Variation Color', type: 'color' },
 			secondary: { label: 'Secondary/Accent Color', type: 'color' },
 			surface: { label: 'Surface Color', type: 'color' }

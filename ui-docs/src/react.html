@@ -20,9 +20,8 @@
 			return (
 <cxl-router-app>
 	<cxl-c pad16>
-		<cxl-t h6>@cxl/ui-react
-		<cxl-t inline subtitle2>${cxl.version}</cxl-t>
-		</cxl-t>
+		<cxl-t h6 inline>@cxl/ui-react</cxl-t>
+		&nbsp;<cxl-t inline subtitle2>{cxl.version}</cxl-t>
 	</cxl-c>
 	<cxl-item icon="book" href="#home">Developer Guide</cxl-item>
 	<cxl-item icon="book" href="#forms">Forms</cxl-item>
@@ -34,6 +33,14 @@
 	const ui = cxl.ui;
 	
 	class HomeRoute extends React.Component
+	{
+		render()
+		{
+			return <cxl-t h4>Getting Started</cxl-t>;
+		}
+	}
+
+	class FormsRoute extends React.Component
 	{
 		constructor()
 		{
@@ -60,7 +67,7 @@
 			
 			return <React.Fragment>
 				<cxl-block inverse>
-					<ui.Button onAction={ev => this.onChange({ active: this.state.active ? null : true })} secondary={this.state.active}>Toggle Button</ui.Button>
+					<ui.Button onClick={ev => this.onChange({ active: this.state.active ? null : true })} secondary={this.state.active}>Toggle Button</ui.Button>
 					<br /><br />
 					<cxl-t>Active: {this.state.active ? 'Yes' : 'No' }</cxl-t>
 				</cxl-block>
@@ -108,7 +115,7 @@
 		title: 'Using Forms',
 		bindings: 'connect:#init'
 	},{
-		init(val, el) { ReactDOM.render(<HomeRoute />, el); }
+		init(val, el) { ReactDOM.render(<FormsRoute />, el); }
 	});
 	
 	ReactDOM.render(<Main />, document.getElementById('root'));

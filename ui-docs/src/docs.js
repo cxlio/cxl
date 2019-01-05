@@ -1207,8 +1207,10 @@ cxl.route({
 <cxl-t h4>Installation</cxl-t>
 
 <cxl-t h5>Using NPM</cxl-t>
-
 <docs-code type="bash"><!--npm install @cxl/ui--></docs-code>
+<br>
+<cxl-t h5>Using Yarn</cxl-t>
+<docs-code type="bash"><!--yarn add @cxl/ui--></docs-code>
 <br>
 
 <cxl-t h4>Usage</cxl-t>
@@ -1218,7 +1220,7 @@ cxl.route({
 <cxl-t h6>Using &lt;script&gt; tag</cxl-t>
 
 <docs-code type="html"><!--
-<script src="node_modules/@cxl/ui/dist/index.js"></script>
+<script src="node_modules/@cxl/ui/index.js"></script>
 --></docs-code>
 
 <cxl-t h6>Using Typescript</cxl-t>
@@ -1227,15 +1229,17 @@ cxl.route({
 <br>
 <cxl-t h5>Optional Modules</cxl-t>
 <br>
-<cxl-t h6>@cxl/ui/dist/debug.js</cxl-t>
+<cxl-t h6>@cxl/ui/debug.js</cxl-t>
 <p>Include this module to enable debug mode.</p>
 
-<cxl-t h6>@cxl/ui/dist/icons.js</cxl-t>
-<p>FontAwesome Icon support. Use with <a href="#cxl-icon"><code>&lt;cxl-icon></code></a> Component.</p>
+<cxl-t h6>@cxl/ui/icons.js</cxl-t>
+<p>FontAwesome Icon support. Required for some components. Use with <a href="#cxl-icon"><code>&lt;cxl-icon></code></a> Component.</p>
 
-<!--cxl-t h6>@cxl/ui/react <cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
-<p>ReactJS compatibility module. See <a href="react.html">Demo</a>.</p>
+<!--
+<cxl-t h6>@cxl/ui/react <cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
+<p>ReactJS compatibility module. Experimental version.</p>
 
+See <a href="react.html">Demo</a>.</p>
 <cxl-t h5>@cxl/ui/angular </cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
 <p>Angular compatibility module. See <a href="angular.html">Demo</a>.</p-->
 	`

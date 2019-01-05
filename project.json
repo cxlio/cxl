@@ -35,6 +35,11 @@
 			"docs": {
 				"files": [ "docs/src/*", "docs/build.js" ],
 				"tasks": "cd docs && node build"
+			},
+
+			"ui-docs": {
+				"files": [ "ui-docs/src/*", "ui-docs/build.js" ],
+				"tasks": "node ui-docs/build"
 			}
 		}
 	}

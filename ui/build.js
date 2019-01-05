@@ -43,26 +43,34 @@ require('../build').build({
 			]
 		},
 		{
-			output: 'cxl-ui-alpha.js',
-			src: [
-				'src/alpha.js'
-			],
+			output: 'alpha.dbg.js',
+			src: [ 'src/alpha.js' ],
 			minify: 'alpha.js'
-		},
-		{
-			output: 'cxl-ui-debug.js',
-			src: [ 'src/ui-debug.js' ]
 		},
 		{
 			output: 'cxl-router.js',
 			src: [ 'src/router.js' ],
-			minify: 'cxl-router.min.js'
+			minify: 'router.js'
 		},
 		{
-			output: 'cxl-router.dbg.js',
+			output: 'router.dbg.js',
 			src: [
 				'src/router.js',
 				'src/router-debug.js'
+			]
+		},
+		{
+			output: 'package.json',
+			src: [
+				c => JSON.stringify({
+					name: "@cxl/ui",
+					version: c.package.version,
+					files: "*.js",
+					main: c.package.main,
+					homepage: c.package.homepage,
+					bugs: c.package.bugs,
+					repository: c.package.repository
+				})
 			]
 		}
 	]
