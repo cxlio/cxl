@@ -596,6 +596,9 @@ cxl.css = Object.assign(css, {
 		if (def.typography)
 			cxl.extend(this.typography, def.typography);
 
+		if (def.states)
+			cxl.extend(this.states, def.states);
+
 		applyStyles();
 	},
 

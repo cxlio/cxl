@@ -1180,7 +1180,7 @@ directive('action', {
 	{
 		this.bindings = [
 			new EventListener(this.element, 'click', this.onEvent.bind(this)),
-			new EventListener(this.element, 'keypress', this.onKeyPress.bind(this))
+			new EventListener(this.element, 'keyup', this.onKeyPress.bind(this))
 		];
 	}
 

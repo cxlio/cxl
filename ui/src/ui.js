@@ -304,7 +304,7 @@ component({
 
 component({
 	name: 'cxl-appbar',
-	attributes: [ 'extended', 'fixed' ],
+	attributes: [ 'extended' ],
 	bindings: 'role(heading)',
 	template: `
 <div &=".flex content anchor(cxl-appbar-actions)"></div>
@@ -367,7 +367,7 @@ component({
 
 component({
 	name: 'cxl-button',
-	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'inverse', 'touched', 'big', 'value' ],
+	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'touched', 'big', 'value' ],
 	bindings: 'focusable role(button) action:#onAction',
 	styles: [FocusCSS, {
 		$: {
@@ -383,7 +383,6 @@ component({
 			elevation: 0, fontWeight: 500, paddingRight: 8, paddingLeft: 8, color: 'link'
 		},
 		$flat$large: { paddingLeft: 12, paddingRight: 12 },
-		$flat$inverse: { backgroundColor: 'primary', color: 'onPrimary' },
 
 		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
 		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
@@ -421,7 +420,6 @@ component({
 		$md0$medium: { display: 'none' },
 		$sm0$small: { display: 'none' },
 		$xs0: { display: 'none' },
-		$flex: { display: 'flex' },
 		// Padding
 		$pad16: { padding: 16 },
 		$pad8: { padding: 8 },
@@ -431,7 +429,7 @@ component({
 		$error: { backgroundColor: 'error', color: 'onError' },
 		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
 		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
-	}, {}, {}, {}, {}, {} ])
+	}, {}, {}, {}, {}, {}, { $flex: { display: 'flex' }} ])
 });
 
 component({
@@ -850,9 +848,9 @@ component({
 
 component({
 	name: 'cxl-input-icon',
-	styles: [{
-		$: { position: 'absolute', top: 8, right: 0, cursor: 'pointer' }
-	}, FocusCircleCSS ]
+	styles: {
+		$: { position: 'absolute', top: 0, right: 0, cursor: 'pointer' }
+	}
 });
 
 component({
@@ -1170,19 +1168,19 @@ component({
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
 <div &=".focusLine =focused:.expand"></div>
-<cxl-input-icon>
-	<cxl-toggle &="=disabled:@disabled @opened:=opened">
-	<cxl-icon icon="calendar"></cxl-icon>
+<cxl-input-icon &=".inputIcon">
+	<cxl-icon-toggle icon="calendar" &="=disabled:@disabled @opened:=opened">
 	<cxl-toggle-popup &="role(dialog)">
 		<cxl-card>
 			<cxl-calendar &="=opened:filter:focus @value:#update:=value =value:@value"></cxl-calendar>
 		</cxl-card>
 	</cxl-toggle-popup>
-	</cxl-toggle>
+	</cxl-icon-toggle>
 </cxl-input-icon>
 	`,
 	styles: {
-		$: { position: 'relative' }
+		$: { position: 'relative' },
+		inputIcon: { right: -12 }
 	}
 }, {
 	value: null,
@@ -1197,6 +1195,7 @@ component({
 	{
 		if (date && date !== this.value && !isNaN(date.getTime()))
 			this.inputValue = date.toLocaleDateString();
+		this.input.focus();
 	}
 });
 
@@ -1305,6 +1304,21 @@ role(button)
 		} else
 			this.close();
 	}
+});
+
+component({
+	name: 'cxl-icon-toggle',
+	attributes: [ 'icon' ],
+	extend: 'cxl-toggle',
+	template: `
+<span &="=opened:hide .focusCircle .focusCirclePrimary"></span>
+<cxl-icon &="=icon:@icon"></cxl-icon>
+<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
+	`,
+	styles: [FocusCircleCSS, {
+		$: { paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12 },
+		focusCircle: { left: 9 }
+	}]
 });
 
 component({
@@ -1593,6 +1607,7 @@ component({
 		id(component)
 		keypress(escape):#close
 		on(blur):#close
+		root.on(click):#close
 		action:#onAction:event.prevent:event.stop
 		keypress(enter):event.stop
 	`,
@@ -1811,8 +1826,11 @@ component({
 
 	 	if (this.opened)
 		{
-			if (ev.type==='keypress' && this.focused)
+			if (ev.type==='keyup' && this.focused)
+			{
 				this.onSelected(this.focused);
+				ev.preventDefault();
+			}
 		} else
 		{
 			if (this.focused)

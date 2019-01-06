@@ -470,6 +470,17 @@ cxl.component({
 });
 
 cxl.component({
+	name: 'cxl-router-content',
+	styles: {
+		content: {
+			position: 'relative', flexGrow: 1, overflowY: 'auto',
+			overflowScrolling: 'touch', backgroundColor: 'surface',
+			color: 'onSurface'
+		}
+	}
+});
+
+cxl.component({
 	name: 'cxl-router-app',
 	template: `
 <cxl-meta></cxl-meta>

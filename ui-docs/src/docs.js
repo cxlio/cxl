@@ -10,9 +10,9 @@ const
 	<docs-demo label="Appbar with actions"><!--
 <cxl-appbar>
 	<cxl-appbar-title>Appbar Title</cxl-appbar-title>
-	<cxl-button flat inverse><cxl-icon icon="heart"></cxl-icon></cxl-button>
-	<cxl-button flat inverse><cxl-icon icon="search"></cxl-icon></cxl-button>
-	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+	<cxl-button flat primary><cxl-icon icon="heart"></cxl-icon></cxl-button>
+	<cxl-button flat primary><cxl-icon icon="search"></cxl-icon></cxl-button>
+	<cxl-button flat primary><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
 </cxl-appbar>
 	--></docs-demo>
 	<docs-demo label="Appbar with Navigation"><!--
@@ -34,7 +34,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	<docs-demo label="Appbar with Tabs"><!--
 <cxl-appbar>
 	<cxl-appbar-title>Appbar Title</cxl-appbar-title>
-	<cxl-button flat inverse><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+	<cxl-button flat primary><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
 	<cxl-tabs>
 		<cxl-tab selected>Tab 1</cxl-tab>
 		<cxl-tab>Tab 2</cxl-tab>
@@ -53,7 +53,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </div>
 	--></docs-demo>
 </docs-attribute>
-<docs-attribute name="fixed"></docs-attribute>
 </docs-component>
 			`
 		},
@@ -729,7 +728,7 @@ Checked: <span &="=test:text"></span>
 		<cxl-option value="3">Option 3</cxl-option>
 	</cxl-multiselect>
 </cxl-form-group>
-<p &="=multiValue:text"></p>
+<p>Value: <x &="=multiValue:text"></x></p>
 --></docs-demo>
 </docs-component>
 			`
@@ -1137,7 +1136,7 @@ cxl.route({
 	<cxl-c sm2 md1>
 		<cxl-t h2>@cxl/ui</cxl-t>
 		<cxl-t h5>
-			Framework agnostic web components with a focus on accessibility and performance.
+			Framework agnostic UI components with a focus on accessibility and performance.
 		</cxl-t>
 		<br>
 		<p>
