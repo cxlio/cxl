@@ -95,7 +95,7 @@ behavior('navigation.grid', {
 			break;
 		case 'ArrowLeft': next = children.previousTo(next); break;
 		case 'ArrowRight': next = children.nextTo(next); break;
-		default: return;
+		default: return cxl.Skip;
 		}
 
 		if (next)
@@ -872,7 +872,7 @@ component({
 </div>
 <div &=".rel">
 	<cxl-calendar-month &="id(calendarMonth) =selectedMonth:@month @value:=value"></cxl-calendar-month>
-	<cxl-calendar-year &="action:event.stop:not:=yearOpen =selectedYear::@value =startYear:@start-year @start-year:=startYear:#getMonthText .closed =yearOpen:.opened"></cxl-calendar-year>
+	<cxl-calendar-year &="action:event.stop:not:=yearOpen =selectedYear::@value =startYear:@start-year @start-year:=startYear:#getMonthText .closed =yearOpen:.opened:filter:focus"></cxl-calendar-year>
 </div>
 	`,
 	styles: {
@@ -1125,24 +1125,52 @@ component({
 component({
 	name: 'cxl-calendar-year',
 	attributes: [ 'value', 'start-year' ],
+	methods: [ 'focus' ],
 	template: `
+<div &=".grid =columns:@columns navigation.grid:#onNav">
 <template &="=years:marker.empty:each:repeat">
 	<cxl-button flat &="item:text:@value action:#select =value:#isSelected:@primary"></cxl-button>
 </template>
+</div>
 	`,
 	styles: {
 		$: {
 			position: 'absolute', top: 0, left: 0, bottom: 0, right: 0,
-			backgroundColor: 'surface', color: 'onSurface', display: 'grid',
+			backgroundColor: 'surface', color: 'onSurface'
+		},
+		grid: {
+			display: 'grid', height: '100%',
 			gridTemplateColumns: '1fr 1fr 1fr 1fr'
 		}
 	},
 	bindings: '=start-year:#render action:#select'
 }, {
+	columns: 4,
+
+	focus()
+	{
+		// TODO
+		setTimeout(() => {
+			if (this.selected)
+				this.selected.focus();
+		});
+	},
+
+	onNav(el)
+	{
+		el.focus();
+	},
+
 	isSelected(val, el)
 	{
-		return el.value === val;
+		const result = el.value === val;
+
+		if (result)
+			this.selected = el;
+
+		return result;
 	},
+
 	select(ev, target)
 	{
 		this.value = target.value;
