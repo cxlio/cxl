@@ -1882,15 +1882,16 @@ component({
 		drag.x:#onDrag
 	`,
 	template: `
-<div &=".background"><div &=".line =value:#update">
-<x &=".focusCircle .focusCirclePrimary"></x>
-<div &=".knob"></div></div></div>
+<div &=".background">
+	<div &=".line =value:#update"><x &=".focusCircle .focusCirclePrimary"></x>
+	<div &=".knob"></div>
+</div></div>
 	`,
 	styles: [{
-		$: { paddingTop: 15, paddingBottom: 15, userSelect: 'none' },
+		$: { paddingTop: 15, paddingBottom: 15, userSelect: 'none', position: 'relative' },
 		knob: {
 			backgroundColor: 'primary', width: 12, height: 12, display: 'inline-block',
-			borderRadius: 6, translateY: -8
+			borderRadius: 6, position: 'absolute', top: 10
 		},
 		focusCircle: { marginLeft: -4, marginTop: -8 },
 		background: { backgroundColor: 'primaryLight', height: 2 },

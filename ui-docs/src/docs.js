@@ -1273,7 +1273,7 @@ cxl.route({
 <uid-typography></uid-typography>
 <br><br>
 <cxl-t h4>Theme Variables</cxl-t>
-<p>The following CSS Variables can be modified to costumize the look and feel of the components in your application.</p>
+<p>The following CSS Variables can be modified to customize the look and feel of the components in your application.</p>
 <br>
 <uid-theme></uid-theme>
 	`,

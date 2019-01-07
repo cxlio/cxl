@@ -60,13 +60,18 @@ require('../build').build({
 			]
 		},
 		{
+			output: 'LICENSE',
+			src: [ '../LICENSE' ]
+		},
+		{
 			output: 'package.json',
 			src: [
 				c => JSON.stringify({
 					name: "@cxl/ui",
 					version: c.package.version,
+					license: c.package.license,
 					files: "*.js",
-					main: c.package.main,
+					main: "index.js",
 					homepage: c.package.homepage,
 					bugs: c.package.bugs,
 					repository: c.package.repository
