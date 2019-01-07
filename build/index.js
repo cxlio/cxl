@@ -218,7 +218,19 @@ Object.assign(Builder, {
 	read: read,
 	stat: $stat,
 	write: write,
-	list(path) {
+
+	copy(src, dest)
+	{
+		if (Array.isArray(src))
+			return Promise.all(src.map(s => this.copy(s, dest)));
+
+		return new Promise((resolve, reject) => {
+			fs.copyFile(src, dest, err => err ? reject(err) : resolve());
+		});
+	},
+
+	list(path)
+	{
 		return new Promise((resolve, reject) => {
 			fs.readdir(path, (err, files) => err ? reject(err) : resolve(files));
 		});

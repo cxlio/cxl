@@ -8,7 +8,7 @@ require('../build').build({
 			src: [
 				'../ui/dist/cxl-ui.js',
 				'../ui/dist/icons.js',
-				'../ui/dist/cxl-ui-alpha.js',
+				'../ui/dist/alpha.dbg.js',
 				'../ui/dist/cxl-router.js',
 				'../ui/src/meta.js',
 				'../docs/dist/docs.js',

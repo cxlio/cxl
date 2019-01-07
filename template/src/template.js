@@ -1054,7 +1054,7 @@ directive('drag.x', {
 			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
 			new EventListener(window, 'mousemove', this.onMouseMove.bind(this)),
 			new EventListener(window, 'mouseup', this.onMouseUp.bind(this)),
-			new EventListener(this.element, 'touchstart', this.onTouchDown.bind(this)),
+			new EventListener(this.element, 'touchstart', this.onTouchDown.bind(this), { passive: true }),
 			new EventListener(window, 'touchmove', this.onTouchMove.bind(this)),
 			new EventListener(window, 'touchend', this.onMouseUp.bind(this))
 		];

@@ -849,7 +849,7 @@ component({
 component({
 	name: 'cxl-input-icon',
 	styles: {
-		$: { position: 'absolute', top: 0, right: 0, cursor: 'pointer' }
+		$: { position: 'absolute', top: 8, right: 0, cursor: 'pointer' }
 	}
 });
 
@@ -1208,7 +1208,7 @@ component({
 	`,
 	styles: {
 		$: { position: 'relative' },
-		inputIcon: { right: -12 }
+		inputIcon: { right: -12, top: 0 }
 	}
 }, {
 	value: null,
@@ -1641,7 +1641,7 @@ component({
 	`,
 	styles: [ FocusLineCSS, {
 		$: { cursor: 'pointer' },
-		icon: { position: 'absolute', right: 8, top: 8, lineHeight: 16 },
+		icon: { position: 'absolute', right: 2, top: 8, lineHeight: 16 },
 		placeholder: {
 			color: 'onSurface', lineHeight: 20, paddingRight: 16,
 			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14,
@@ -1884,14 +1884,13 @@ component({
 	template: `
 <div &=".background"><div &=".line =value:#update">
 <x &=".focusCircle .focusCirclePrimary"></x>
-<div &=".knob"></div></div>
-</div>
+<div &=".knob"></div></div></div>
 	`,
 	styles: [{
 		$: { paddingTop: 15, paddingBottom: 15, userSelect: 'none' },
 		knob: {
 			backgroundColor: 'primary', width: 12, height: 12, display: 'inline-block',
-			borderRadius: 6, translateY: -5
+			borderRadius: 6, translateY: -8
 		},
 		focusCircle: { marginLeft: -4, marginTop: -8 },
 		background: { backgroundColor: 'primaryLight', height: 2 },

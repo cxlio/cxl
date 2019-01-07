@@ -323,6 +323,9 @@ cxl.extend(cxl.ElementChildren.prototype, {
 
 	nextTo(el)
 	{
+		if (!this.el.$indexOf)
+			return el.nextElementSibling;
+
 		var i = this.el.$indexOf(el);
 
 		do {
@@ -335,6 +338,9 @@ cxl.extend(cxl.ElementChildren.prototype, {
 
 	previousTo(el)
 	{
+		if (!this.el.$indexOf)
+			return el.previousElementSibling;
+
 		var i = this.el.$indexOf(el);
 
 		do {

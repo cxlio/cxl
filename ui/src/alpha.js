@@ -130,7 +130,7 @@ component({
 		meta('mobile-web-app-capable', 'yes');
 
 		const style = document.createElement('STYLE');
-		style.innerHTML = 'body{padding:0;margin:0;}';
+		style.innerHTML = 'body,html{padding:0;margin:0;height:100%}';
 		document.head.appendChild(style);
 		const font = cxl.dom('link', {
 			rel: 'stylesheet',
