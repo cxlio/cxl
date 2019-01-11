@@ -1404,7 +1404,7 @@ component({
 		toggler$permanent$large: { display: 'none' }
 	}
 }, {
-
+	permanent: false,
 	visible: false,
 	toggle() { this.visible = !this.visible; },
 

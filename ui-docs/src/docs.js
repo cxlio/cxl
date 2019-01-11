@@ -1672,11 +1672,11 @@ cxl.component({
 	name: 'docs-root',
 	template: `
 <cxl-router-app>
-	<cxl-block>
+	<cxl-c pad16>
 		<cxl-t h6>@cxl/ui
 		<cxl-t inline subtitle2>${cxl.version}</cxl-t>
 		</cxl-t>
-	</cxl-block>
+	</cxl-c>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
 	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
