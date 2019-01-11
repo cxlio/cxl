@@ -11,16 +11,8 @@ const
 
 	FocusCSS = {
 		$active: { state: 'active' },
-		//$active$primary: { filter: 'brightness(1.3)' },
-		//$active$secondary: { filter: 'brightness(1.8)' },
-
 		$hover: { state: 'hover' },
-		//$hover$primary: { filter: 'brightness(1.05)' },
-		//$hover$secondary: { filter: 'brightness(1.05)' },
-
 		$focus: { state: 'focus' }
-		//$focus$primary: { filter: 'brightness(1.2)' },
-		//$focus$secondary: { filter: 'brightness(1.4)' }
 	},
 
 	FocusCircleCSS = {
@@ -69,9 +61,7 @@ function prefix(prefix, css)
 	return result;
 }
 
-behavior('focusable', `
-	@disabled:aria.prop(disabled):not:focus.enable touchable
-`);
+behavior('focusable', `@disabled:aria.prop(disabled):not:focus.enable touchable`);
 
 behavior('navigation.grid', {
 	bindings: 'keypress:#onKey:event.prevent',

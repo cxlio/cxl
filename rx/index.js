@@ -1,4 +1,5 @@
 (rx => {
+"use strict";
 
 class Subscriber {
 

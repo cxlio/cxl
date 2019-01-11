@@ -579,7 +579,7 @@ cxl.css = Object.assign(css, {
 		h3: { fontSize: 48 },
 		h4: { fontSize: 34, letterSpacing: 0.25 },
 		h5: { fontSize: 24 },
-		h6: { fontSize: 20, fontWeight: 500, letterSpacing: 0.15 },
+		h6: { fontSize: 20, fontWeight: 400, letterSpacing: 0.15 },
 		subtitle: { fontSize: 16, lineHeight: 22, letterSpacing: 0.15 },
 		subtitle2: { fontSize: 14, lineHeight: 18, letterSpacing: 0.1 },
 		button: { fontSize: 14, lineHeight: 20, letterSpacing: 1.25, textTransform: 'uppercase' }
