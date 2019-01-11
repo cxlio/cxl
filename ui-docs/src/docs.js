@@ -27,8 +27,8 @@ const
 		<cxl-tab>Tab 2</cxl-tab>
 	</cxl-tabs>
 </cxl-appbar>
-<cxl-block>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-block>
+<cxl-c pad16>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-c>
 </div>
 	--></docs-demo>
 	<docs-demo label="Appbar with Tabs"><!--
@@ -138,13 +138,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 <docs-attribute name="inverse">
 	<docs-demo><!--
-<cxl-block inverse>
+<cxl-c pad16 inverse>
 	<cxl-button primary inverse><cxl-animate spin><cxl-icon icon="spinner"></cxl-animate></cxl-icon> Loading</cxl-button>
 	<cxl-button secondary inverse>Loading</cxl-button>
 	<cxl-button inverse><cxl-animate pulse><cxl-icon icon="spinner"></cxl-animate> </cxl-icon> Loading</cxl-button>
 	<cxl-button flat inverse>Flat Inverse</cxl-button>
 	<cxl-button disabled inverse>Disabled Inverse</cxl-button>
-</cxl-block>
+</cxl-c>
 	--></docs-demo>
 </docs-attribute>
 
@@ -322,14 +322,14 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-dialog">
 	<docs-demo><!--
-<cxl-block style="position:relative; min-height:300px; z-index: 0; overflow:hidden">
+<cxl-c pad16 style="position:relative; min-height:300px; z-index: 0; overflow:hidden">
 	<cxl-dialog>
-		<cxl-block>
+		<cxl-c>
 		<cxl-t h5>Title</cxl-t>
 		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.</p>
-		</cxl-block>
+		</cxl-c>
 	</cxl-dialog>
-</cxl-block>
+</cxl-c>
 	--></docs-demo>
 </docs-component>
 			`
@@ -338,10 +338,10 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-dialog-alert">
 	<docs-demo><!--
-<cxl-block style="position:relative; height:300px; z-index: 0; overflow: hidden">
+<cxl-c pad16 style="position:relative; height:300px; z-index: 0; overflow: hidden">
 	<cxl-dialog-alert title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
 	</cxl-dialog-alert>
-</cxl-block>
+</cxl-c>
 	--></docs-demo>
 <docs-attribute name="title-text"></docs-attribute>
 <docs-attribute name="message"></docs-attribute>
@@ -354,10 +354,10 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-dialog-confirm">
 	<docs-demo><!--
-<cxl-block style="position:relative; height:300px; z-index: 0; overflow: hidden">
+<cxl-c pad16 style="position:relative; height:300px; z-index: 0; overflow: hidden">
 	<cxl-dialog-confirm title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
 	</cxl-dialog-alert>
-</cxl-block>
+</cxl-c>
 	--></docs-demo>
 <docs-attribute name="cancel-text"></docs-attribute>
 <docs-attribute name="title-text"></docs-attribute>
@@ -376,11 +376,11 @@ Checked: <span &="=test:text"></span>
 <cxl-checkbox &="value:=permanent">Permanent</cxl-checkbox>
 <cxl-drawer right &="on(backdrop.click):not:=showDrawer =permanent:@permanent =showDrawer:@visible">
 	<docs-placeholder></docs-placeholder>
-	<cxl-block>
+	<cxl-c>
 		<cxl-title>Right Drawer Title</cxl-title>
 		<cxl-hr></cxl-hr>
 		<p>Right Drawer Content</p>
-	</cxl-block>
+	</cxl-c>
 </cxl-drawer>
 	--></docs-demo>
 <docs-attribute name="permanent"></docs-attribute>
@@ -565,12 +565,12 @@ Checked: <span &="=test:text"></span>
 </docs-attribute>
 <docs-attribute name="inverse">
 <docs-demo><!--
-<cxl-block inverse>
+<cxl-c pad16 inverse>
 <cxl-form-group>
 	<cxl-label>Inverse Label</cxl-label>
 	<cxl-input inverse></cxl-input>
 </cxl-form-group>
-</cxl-block>
+</cxl-c>
 --></docs-demo>
 </docs-attribute>
 <docs-attribute name="maxlength">
@@ -694,9 +694,9 @@ Checked: <span &="=test:text"></span>
 			template: `
 <docs-component name="cxl-menu-toggle">
 <docs-demo><!--
-<cxl-block inverse>
+<cxl-c pad16 inverse>
 	<cxl-card>
-		<cxl-block flex>
+		<cxl-c pad16 flex>
 	<cxl-c grow>
 		<cxl-t subtitle>Card Title</cxl-t>
 	</cxl-c>
@@ -708,9 +708,9 @@ Checked: <span &="=test:text"></span>
 		<cxl-hr></cxl-hr>
 		<cxl-item>Option 3</cxl-item>
 	</cxl-menu-toggle>
-		</cxl-block>
+		</cxl-c>
 	</cxl-card>
-</cxl-block>
+</cxl-c>
 --></docs-demo>
 </docs-component>
 			`
@@ -749,8 +749,8 @@ Checked: <span &="=test:text"></span>
 		<cxl-tab>Tab 2</cxl-tab>
 	</cxl-tabs>
 </cxl-appbar>
-<cxl-block>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-block>
+<cxl-c pad16>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</cxl-c>
 </div>
 	--></docs-demo>
 <docs-attribute name="permanent"></docs-attribute>
@@ -1092,9 +1092,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	<cxl-tab>Checks</cxl-tab>
 	<cxl-tab>Extra</cxl-tab>
 </cxl-tabs>
-<cxl-block>
+<cxl-c pad16>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa. Pellentesque cursus vestibulum aliquam. Nam elementum bibendum urna sed pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-</cxl-block>
+</cxl-c>
 	--></docs-demo>
 </docs-component>
 			`,
@@ -1609,10 +1609,10 @@ cxl.component({
 	{
 		const meta = META.attributes[name];
 
-		if (name && !cxl.anchor.anchors[name])
+		/*if (name && !cxl.anchor.anchors[name])
 			this.host.appendChild(cxl.dom('docs-attribute', {
 				name: name, demo: meta && meta.type || true
-			}));
+			}));*/
 
 		return meta && meta.summary || '';
 	},
@@ -1682,7 +1682,7 @@ cxl.component({
 	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
 	<!--cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item-->
 	<cxl-hr></cxl-hr>
-	<cxl-block><cxl-t subtitle2>Components</cxl-t></cxl-block>
+	<cxl-c pad16><cxl-t subtitle2>Components</cxl-t></cxl-c>
 	<cxl-item icon="" &="route.link(components)">Overview</cxl-item>
 	<template &="=components:each:repeat">
 	<cxl-item icon="" &="item:route.link">

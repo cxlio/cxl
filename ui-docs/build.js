@@ -6,10 +6,9 @@ require('../build').build({
 		{
 			output: 'ui-docs.js',
 			src: [
-				'../ui/dist/cxl-ui.js',
+				'../ui/dist/index.js',
 				'../ui/dist/icons.js',
-				'../ui/dist/alpha.dbg.js',
-				'../ui/dist/cxl-router.js',
+				'../ui/dist/router.js',
 				'../ui/src/meta.js',
 				'../docs/dist/docs.js',
 				'src/docs.js',
@@ -19,10 +18,9 @@ require('../build').build({
 		{
 			output: 'ui-docs-react.js',
 			src: [
-				'../ui/dist/cxl-ui.js',
+				'../ui/dist/index.js',
 				'../ui/dist/icons.js',
-				'../ui/dist/alpha.dbg.js',
-				'../ui/dist/cxl-router.js',
+				'../ui/dist/router.js',
 				'../ui-react/index.js'
 			],
 			minify: 'ui-docs-react.min.js'
