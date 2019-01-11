@@ -1297,7 +1297,7 @@ cxl.route({
 <cxl-t h5>Layout Grid</cxl-t>
 
 <docs-bg>
-	<cxl-layout>
+	<cxl-grid>
 		<cxl-c xs3 sm2 lg1 &=".col"></cxl-c>
 		<cxl-c xs3 sm2 lg1 &=".col"></cxl-c>
 		<cxl-c xs3 sm2 lg1 &=".col"></cxl-c>
@@ -1312,7 +1312,7 @@ cxl.route({
 		<cxl-c xs0 lg1 &=".col"></cxl-c>
 		<cxl-c xs0 lg1 &=".col"></cxl-c>
 		<cxl-c xs0 lg1 &=".col"></cxl-c>
-	</cxl-layout>
+	</cxl-grid>
 </docs-bg>
 
 <cxl-t h6>Columns</cxl-t>

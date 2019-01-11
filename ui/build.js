@@ -23,12 +23,12 @@ require('../build').build({
 	outputDir: 'dist',
 	targets: [
 		{
-			output: 'cxl-ui.js',
+			output: 'index.js',
 			src: [
 				...template,
 				...ui
 			],
-			minify: 'index.js'
+			minify: 'index.min.js'
 		},
 		{
 			output: 'debug.js',
@@ -42,15 +42,15 @@ require('../build').build({
 				'src/meta.js'
 			]
 		},
-		{
+		/*{
 			output: 'alpha.dbg.js',
 			src: [ 'src/alpha.js' ],
 			minify: 'alpha.js'
-		},
+		},*/
 		{
-			output: 'cxl-router.js',
+			output: 'router.js',
 			src: [ 'src/router.js' ],
-			minify: 'router.js'
+			minify: 'router.min.js'
 		},
 		{
 			output: 'router.dbg.js',

@@ -1289,6 +1289,32 @@ component({
 });
 
 component({
+	name: 'cxl-meta',
+	initialize()
+	{
+		function meta(name, content)
+		{
+			document.head.appendChild(cxl.dom('meta', { name: name, content: content }));
+		}
+
+		document.documentElement.lang = 'en-US';
+
+		meta('viewport', 'width=device-width, initial-scale=1');
+		meta('apple-mobile-web-app-capable', 'yes');
+		meta('mobile-web-app-capable', 'yes');
+
+		const style = document.createElement('STYLE');
+		style.innerHTML = 'body,html{padding:0;margin:0;height:100%}';
+		document.head.appendChild(style);
+		const font = cxl.dom('link', {
+			rel: 'stylesheet',
+			href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500'
+		});
+		document.head.appendChild(font);
+	}
+});
+
+component({
 	name: 'cxl-toggle',
 	attributes: [ 'disabled', 'touched', 'opened' ],
 	template: `
