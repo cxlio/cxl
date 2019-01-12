@@ -1638,7 +1638,7 @@ component({
 	template: `
 <div &=".container =opened:.opened">
 	<cxl-select-menu &="id(menu) =menuHeight:style.inline(height)
-		=menuTransform:style.inline(transform) =menuScroll:@scrollTop
+		=menuTransform:style.inline(transform) =menuScroll:@scrollTop =menuTop:style.inline(top)
 		=opened:@opened content"></cxl-select-menu>
 	<div &="=value:hide .placeholder =placeholder:text"></div>
 	<div &="=value:show:#getSelectedText:text id(selectedText) .selectedText"></div>
@@ -1687,6 +1687,7 @@ component({
 	selected: null,
 	value: null,
 	menuScroll: 0,
+	menuTop: 0,
 
 	getSelectedText()
 	{
@@ -1815,18 +1816,10 @@ component({
 		return this.selected && this.selected.map(s => s.innerText).join(', ');
 	},
 
-	calculateDimensions()
+	_calculateDimensions()
 	{
-	const
-		rect = this.component.getBoundingClientRect(),
-		menuStyle = this.menu.style
-	;
-		menuStyle.top = rect.height + 'px';
-		if (this.opened)
-		{
-			menuStyle.transform = 'scaleY(1)';
-		} else
-			menuStyle.transform = 'scaleY(0)';
+		this.menuTransform = this.opened ? 'scaleY(1)' : 'scaleY(0)';
+		this.menuTop = '100%';
 	},
 
 	onRegister(ev)
