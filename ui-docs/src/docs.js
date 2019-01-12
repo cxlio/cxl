@@ -186,9 +186,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 	<docs-demo label="Responsive Layout"><!--
 <docs-bg>
-	<cxl-grid columns="repeat(12, 1fr)">
+	<cxl-grid id="cxl-grid-layout" columns="repeat(12, 1fr)">
 		<style>
-			cxl-c { background: rgba(255,0,0,0.25); height: 100px; }
+			#cxl-grid-layout cxl-c { background: rgba(255,0,0,0.25); height: 100px; }
 		</style>
 		<cxl-c xs3 sm2 lg1></cxl-c>
 		<cxl-c xs3 sm2 lg1 ></cxl-c>
@@ -324,7 +324,7 @@ Checked: <span &="=test:text"></span>
 	<docs-demo><!--
 <cxl-c pad16 style="position:relative; min-height:300px; z-index: 0; overflow:hidden">
 	<cxl-dialog>
-		<cxl-c>
+		<cxl-c pad16>
 		<cxl-t h5>Title</cxl-t>
 		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.</p>
 		</cxl-c>
@@ -1136,7 +1136,7 @@ cxl.route({
 	<cxl-c sm2 md1>
 		<cxl-t h2>@cxl/ui</cxl-t>
 		<cxl-t h5>
-			Framework agnostic UI components with a focus on accessibility and performance.
+			UI components with a focus on accessibility and performance.
 		</cxl-t>
 		<br>
 		<p>

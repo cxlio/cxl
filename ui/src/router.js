@@ -493,8 +493,9 @@ cxl.component({
 	<div &=".footer content(cxl-router-footer)"></div>
 </div>
 	`,
+	bindings: 'route.change:#start',
 	styles: {
-		$: { display: 'flex', flexDirection: 'column', height: '100%' },
+		$: { display: 'none', flexDirection: 'column', height: '100%' },
 		$large: { paddingLeft: 288 },
 		content: {
 			position: 'relative', flexGrow: 1, overflowY: 'auto',
@@ -507,6 +508,11 @@ cxl.component({
 		router$large: { margin: 64 },
 		router$xlarge: { width: 1200 },
 		router$xlarge$center: { marginLeft: 'auto', marginRight: 'auto' }
+	}
+}, {
+	start(val, el)
+	{
+		el.style.display = 'flex';
 	}
 });
 

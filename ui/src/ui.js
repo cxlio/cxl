@@ -704,8 +704,9 @@ on(form.register):#onChange on(focusable.touched):#update on(invalid):#update
 	{
 		this.inputEl = ev.target;
 
-		if (this.labelEl)
-			this.inputEl['aria-label'] = this.labelEl.innerText;
+		// TODO Prevent layout refresh
+		/*if (this.labelEl)
+			this.inputEl['aria-label'] = this.labelEl.innerText;*/
 
 		this.isEmpty = !ev.target.value;
 	},
@@ -1636,7 +1637,9 @@ component({
 	extend: 'cxl-form-input',
 	template: `
 <div &=".container =opened:.opened">
-	<cxl-select-menu &="id(menu) =opened:@opened content"></cxl-select-menu>
+	<cxl-select-menu &="id(menu) =menuHeight:style.inline(height)
+		=menuTransform:style.inline(transform) =menuScroll:@scrollTop
+		=opened:@opened content"></cxl-select-menu>
 	<div &="=value:hide .placeholder =placeholder:text"></div>
 	<div &="=value:show:#getSelectedText:text id(selectedText) .selectedText"></div>
 	<cxl-icon &=".icon" icon="caret-down"></cxl-icon>
@@ -1668,35 +1671,66 @@ component({
 			 borderBottom: 1, borderStyle: 'solid'
 		},
 		opened: { overflowY: 'visible' }
-	} ]
+	} ],
+
+	initialize(state)
+	{
+		state.calculateDimensions = cxl.debounce(() => {
+			state._calculateDimensions();
+			this.$view.digest();
+		});
+	}
 
 }, {
 	opened: false,
 	placeholder: '',
 	selected: null,
 	value: null,
+	menuScroll: 0,
 
 	getSelectedText()
 	{
 		return cxl.Skip;
 	},
 
-	/**
-	 * Calculate the menu dimensions based on content and position.
-	 */
-	calculateDimensions()
+	updateMenu(selectedRect)
 	{
 	var
 		rootRect = window,
-		rect = this.component.getBoundingClientRect(),
 		menuRect = this.menu,
-		selectedRect = this.selected,
-		// Min top is appbar length... safe?
-		minTop = 56, //rect.height,
+		rect = this.component.getBoundingClientRect(),
+		minTop = 56,
 		maxTop = rect.top-minTop,
 		maxHeight,
 		marginTop = selectedRect ? selectedRect.offsetTop : 0,
-		scrollTop = 0, height,
+		scrollTop = 0, height
+	;
+		if (marginTop > maxTop)
+		{
+			scrollTop = marginTop-maxTop;
+			marginTop = maxTop;
+		}
+
+		height = menuRect.scrollHeight-scrollTop;
+		maxHeight = rootRect.clientHeight - rect.bottom + marginTop;
+
+		if (height > maxHeight)
+			height = maxHeight;
+		else if (height < minTop)
+			height = minTop;
+
+		this.menuTransform = 'translateY(' + (-marginTop-8) + 'px)';
+		this.menuHeight = height + 'px';
+		this.menuScroll = scrollTop;
+	},
+
+	/**
+	 * Calculate the menu dimensions based on content and position.
+	 */
+	_calculateDimensions()
+	{
+	var
+		selectedRect = this.selected,
 		menuStyle = this.menu.style
 	;
 		if (this.opened)
@@ -1708,24 +1742,7 @@ component({
 		else
 			selectedRect.selected = false;
 
-		if (marginTop > maxTop)
-		{
-			scrollTop = marginTop-maxTop;
-			marginTop = maxTop;
-		}
-
-		menuStyle.transform = 'translateY(' + (-marginTop-8) + 'px)';
-
-		height = menuRect.scrollHeight-scrollTop;
-		maxHeight = rootRect.clientHeight - rect.clientBottom + marginTop;
-
-		if (height > maxHeight)
-			height = maxHeight;
-		else if (height < minTop)
-			height = minTop;
-
-		menuStyle.height = height+'px';
-		menuRect.scrollTop = scrollTop;
+		this.updateMenu(selectedRect);
 	},
 
 	onNavigation(el)
@@ -1735,7 +1752,7 @@ component({
 
 	open()
 	{
-		if (this.disabled)
+		if (this.disabled || this.opened)
 			return;
 
 		this.opened = true;
@@ -1744,8 +1761,11 @@ component({
 
 	close()
 	{
-		this.opened = false;
-		this.calculateDimensions();
+		if (this.opened)
+		{
+			this.opened = false;
+			this.calculateDimensions();
+		}
 	},
 
 	onSelected(selected)
@@ -2176,7 +2196,7 @@ component({
 	attributes: [ 'columns' ],
 	bindings: 'registable.host(table):=event =event:#updateColumns',
 	styles: {
-		$: { display: 'grid', overflowX: 'auto' }
+		$: { display: 'none', overflowX: 'auto' }
 	}
 }, {
 	columns: 0,
@@ -2191,7 +2211,9 @@ component({
 
 			this.columns = set.length;
 
+			// TODO
 			table.style.gridTemplateColumns = columns;
+			table.style.display = 'grid';
 		}
 	}
 });
@@ -2244,7 +2266,7 @@ component({
 
 		// Add delay so styles finish rendering...
 		// TODO find better way
-		setTimeout(() => {
+		requestAnimationFrame(() => {
 			bar.style.transform = 'translate(' + tab.offsetLeft + 'px, 0)';
 			bar.style.width = tab.clientWidth + 'px';
 		}, 50);
