@@ -1730,16 +1730,18 @@ component({
 	 */
 	_calculateDimensions()
 	{
-	var
-		selectedRect = this.selected,
-		menuStyle = this.menu.style
+	const
+		selectedRect = this.selected
 	;
 		if (this.opened)
 		{
 			if (selectedRect)
 				selectedRect.selected = true;
 		} else if (!selectedRect)
-			return (menuStyle.height = 0);
+		{
+			this.menuHeight = 0; //Transform = 'scaleY(0)';
+			return;
+		}
 		else
 			selectedRect.selected = false;
 
