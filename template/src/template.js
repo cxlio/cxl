@@ -812,7 +812,7 @@ directive('state', {
 
 directive('style', {
 	update(val) {
-		this.element.classList.toggle(this.parameter || val, val||false);
+		dom.setStyle(this.element, this.parameter||val, val||false, this.prefix);
 	},
 	digest() {
 		this.update(true);
@@ -824,7 +824,7 @@ directive('getset', {
 
 	update(val)
 	{
-		this.element[this.parameter] = val;
+		this.element[this.parameter || val] = val;
 	},
 
 	$digest()
@@ -1400,6 +1400,11 @@ Object.assign(dom, {
 		return dom.removeChild(child.parentNode, child);
 	},
 
+	setStyle(el, className, enable)
+	{
+		el.classList[enable || enable===undefined ? 'add' : 'remove'](className);
+	},
+
 	trigger(el, event, detail)
 	{
 		var ev = new window.Event(event, { bubbles: true });
@@ -1780,6 +1785,13 @@ pipes({
 	},
 
 	'style.inline'(val) { this.element.style[this.parameter] = val; },
+
+	'style.animate'() {
+		dom.setStyle(this.element, this.parameter, false, this.prefix);
+		requestAnimationFrame(() => {
+			dom.setStyle(this.element, this.parameter, true, this.prefix);
+		});
+	},
 
 	text(value) { dom.setContent(this.element, value); },
 

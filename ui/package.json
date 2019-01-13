@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/ui",
-	"version": "1.5.2",
+	"version": "1.6.0",
 	"files": [
 		"dist/*.js"
 	],
@@ -15,6 +15,6 @@
 	"scripts": {
 		"build-all": "node build; node build-icons",
 		"build": "node build",
-		"prepublish": "node build test minify; node build-icons"
+		"prepublish": "node build test minify; node build-icons; node publish"
 	}
 }

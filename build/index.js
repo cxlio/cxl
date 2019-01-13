@@ -86,6 +86,51 @@ function stat(file)
 	return $stat(file).catch(() => ({size:0}));
 }
 
+class Operation {
+
+	constructor(msg, fn)
+	{
+		this.start = () => {
+		const
+			t = hrtime(),
+			result = typeof(fn)==='function' ? fn() : fn,
+			done = () => this.log(`${msg} (${formatTime(t)})`)
+		;
+			if (result && result.then)
+				return result.then(function(res) {
+					done();
+					return res;
+				});
+			else
+				done();
+
+			return result;
+		};
+	}
+
+	error(msg)
+	{
+		console.error(colors.red(`${this.prefix} ${msg}`));
+		process.exit(1);
+	}
+
+	log(msg)
+	{
+		console.log(`${this.prefix} ${msg}`);
+	}
+
+}
+
+class Task {
+
+	constructor(name, fn)
+	{
+		this.name = name;
+		this.fn = fn;
+	}
+
+}
+
 class Builder {
 
 	static build(config)

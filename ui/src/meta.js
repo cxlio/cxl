@@ -74,6 +74,12 @@
 			icon: 'hand-pointer',
 			tags: [ 'button' ]
 		},
+		'cxl-button-ripple': {
+			icon: 'hand-pointer',
+			added: '1.6.0',
+			beta: true,
+			tags: [ 'button' ]
+		},
 		'cxl-backdrop': {
 			tags: [ 'popup' ]
 		},
@@ -194,6 +200,10 @@
 			icon: 'dot-circle',
 			tags: [ 'forms' ]
 		},
+		'cxl-ripple': {
+			added: '1.6.0',
+			beta: true
+		},
 		'cxl-search-input': {
 			beta: true,
 			icon: 'search',
@@ -245,6 +255,7 @@
 			icon: 'align-left',
 			tags: [ 'forms' ]
 		}
+
 	};
 
 })(this.cxl);

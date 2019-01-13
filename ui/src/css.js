@@ -349,7 +349,7 @@ function property(setter)
 	'alignItems', 'display', 'position', 'boxSizing', 'boxShadow', 'opacity', 'fontFamily',
 	'fontWeight', 'fontStyle', 'background', 'cursor', 'overflowX', 'filter',
   	'textDecoration', 'borderStyle', 'transition', 'textTransform', 'textAlign', 'flexGrow',
-  	'flexShrink',
+  	'flexShrink', 'animationDuration',
   	'alignContent', 'flexDirection', 'justifyContent', 'whiteSpace', 'scrollBehavior',
   	'transformOrigin', 'alignSelf', 'wordBreak',
 
@@ -497,8 +497,12 @@ cxl.css = Object.assign(css, {
 			keyframes: '0% { transform: rotate(0); } to { transform: rotate(360deg); }',
 			value: 'cxl-pulse 1s infinite steps(8)'
 		},
+		expand: {
+			keyframes: '0% { transform: scale(0,0); } 100% { transform: scale(1,1); }',
+			value: 'cxl-expand var(--cxl-speed) 1 ease-in'
+		},
 		fadeIn: {
-			keyframes: '0% { display: block; opacity: 0; } to { opacity: 1; }',
+			keyframes: '0% { display: block; opacity: 0; } 100% { opacity: 1; }',
 			value: 'cxl-fadeIn var(--cxl-speed) linear'
 		},
 		wait: {
@@ -516,8 +520,8 @@ cxl.css = Object.assign(css, {
 
 	colors: {
 		elevation: rgba(0,0,0,0.26),
-		primary: rgba(0x34, 0x49, 0x55),
-		primaryLight: rgba(0x4a, 0x65, 0x72, 0.24),
+		primary: rgba(0x15, 0x65, 0xc0),
+		get primaryLight() { return this.primary.alpha(0.24); }, //: rgba(0x4a, 0x65, 0x72, 0.24),
 
 		secondary: rgba(0xf9, 0xaa, 0x33),
 		surface: rgba(0xff, 0xff, 0xff),
@@ -555,12 +559,10 @@ cxl.css = Object.assign(css, {
 	rootStyles: new RootStyles(),
 
 	states: {
-		/*active: { filter: 'brightness(0.75)' },
-		focus: { outline: 0, filter: 'brightness(0.85)' },
-		hover: { filter: 'brightness(0.95)' }*/
-		active: { filter: 'invert(0.1)' },
-		focus: { outline: 0, filter: 'invert(0.15) saturate(1.5)' },
-		hover: { filter: 'invert(0.05) saturate(1.25)' }
+		active: { filter: 'invert(0.2)' },
+		focus: { outline: 0, filter: 'invert(0.2) saturate(2) brightness(1.1)' },
+		hover: { filter: 'invert(0.1) saturate(1.3) brightness(1.1)' },
+		disabled: { filter: 'saturate(0)', opacity: 0.38 }
 	},
 
 	variables: {

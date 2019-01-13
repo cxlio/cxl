@@ -2,6 +2,7 @@
 
 const
 	META = cxl.ui.meta,
+	component = cxl.component,
 	STYLES = { $: { animation: 'fadeIn' } },
 	DEFS = {
 		appbar: {
@@ -164,6 +165,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			controller: {
 				toggle() { this.primary = !this.primary; }
 			}
+		},
+		'button-ripple': {
+			template: `
+<docs-component name="cxl-button-ripple">
+	<docs-demo><!--
+<cxl-button-ripple>Default</cxl-button-ripple>
+<cxl-button-ripple primary>Primary</cxl-button-ripple>
+<cxl-button-ripple secondary>Secondary</cxl-button-ripple>
+<cxl-button-ripple flat>Flat</cxl-button-ripple>
+<cxl-button-ripple big>Default</cxl-button-ripple>
+<cxl-button-ripple big primary>Primary</cxl-button-ripple>
+<cxl-button-ripple big secondary>Secondary</cxl-button-ripple>
+<cxl-button-ripple big flat>Flat</cxl-button-ripple>
+	--></docs-demo>
+</docs-component>
+			`
 		},
 		c: {
 			template: `
@@ -832,6 +849,30 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-attribute>
 			`
 		},
+		ripple: {
+			template: `
+<docs-component name="cxl-ripple">
+<docs-demo><!--
+<cxl-ripple style="padding: 16px; border: 1px solid #000;">
+	<cxl-t style="text-align:center" h5>Click Here</cxl-t>
+</cxl-ripple>
+<br>
+<cxl-ripple primary style="padding: 16px; border: 1px solid #000;">
+	<cxl-t style="text-align:center" h5>Click Here</cxl-t>
+</cxl-ripple>
+<br>
+<cxl-ripple secondary style="padding: 16px; border: 1px solid #000;">
+	<cxl-t style="text-align:center" h5>Click Here</cxl-t>
+</cxl-ripple>
+--></docs-demo>
+<docs-demo label="Ripple Buttons"><!--
+<cxl-button-ripple>Click Me</cxl-button-ripple>
+<cxl-button-ripple primary>Click Me</cxl-button-ripple>
+<cxl-button-ripple secondary>Click Me</cxl-button-ripple>
+--></docs-demo>
+</docs-component>
+			`
+		},
 		'search-input': {
 			template: `
 <docs-component name="cxl-search-input">
@@ -1255,6 +1296,30 @@ cxl.each(DEFS, (def, name) => {
 	cxl.route(def);
 });
 
+component({
+	name: 'uid-states',
+	template: `
+<cxl-grid>
+	<template &="=states:each:repeat">
+	<cxl-c sm6 md3 &="item:style:text .item"></cxl-c>
+	<cxl-c sm6 md3 &="item:style .disabled .item">Disabled</cxl-c>
+	<cxl-c sm6 md3 &="item:style .focused .item">Focus</cxl-c>
+	<cxl-c sm6 md3 &="item:style .hover .item">Hover</cxl-c>
+	</template>
+</cxl-grid>
+	`,
+	styles: {
+		item: { padding: 16, backgroundColor: 'surface', color: 'onSurface' },
+		hover: { state: 'hover' },
+		focused: { state: 'focus' },
+		disabled: { state: 'disabled' },
+		Primary: { color: 'onPrimary', backgroundColor: 'primary' },
+		Secondary: { color: 'onSecondary', backgroundColor: 'secondary' }
+	}
+}, {
+	states: [ 'Default', 'Primary', 'Secondary' ]
+});
+
 cxl.route({
 	path: 'theming',
 	title: 'Styles',
@@ -1263,6 +1328,10 @@ cxl.route({
 <p>The Following colors are used by the theme. Each of them are defined in a variable prefixed by <code>--cxl-</code></p>
 <br>
 <uid-palette></uid-palette>
+<br><br>
+<cxl-t h4>States</cxl-t>
+<br>
+<uid-states></uid-states>
 <br><br>
 <cxl-t h4>Typography</cxl-t>
 <br>
@@ -1516,7 +1585,6 @@ cxl.component({
 	name: 'docs-component',
 	attributes: [ 'name' ],
 	template: `
-<style>a,a:visited { color: var(--cxl-link) }</style>
 <cxl-t h5>Basic Usage</cxl-t>
 <div &="content"></div>
 <br><br>
@@ -1653,7 +1721,7 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'docs-footer',
 	template: `
 <div></div>
@@ -1668,7 +1736,7 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'docs-root',
 	template: `
 <cxl-router-app>

@@ -100,7 +100,7 @@ override(cxl.dom, 'trigger', function(el, event) {
 });
 
 directives.getset.prototype.initialize = function(el, param) {
-	if (!(param in el))
+	if (param && !(param in el))
 	{
 		const msg = `Attribute "${param}" does not exist.`;
 

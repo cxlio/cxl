@@ -178,33 +178,6 @@ cxl.dom.createElement = function() {
 	return walkChildren(result, upgrade);
 };
 
-/*const cloneNode = window.DocumentFragment.prototype.cloneNode;
-const importNode = document.importNode.bind(document);
-
-function cloneDeep(node)
-{
-var
-	result = node.tagName==='TEMPLATE' && node.content ? node.cloneNode(true) : node.cloneNode(),
-	i = 0,
-	l = node.childNodes.length
-;
-	for (;i<l;i++)
-		result.appendChild(cloneDeep(node.childNodes[i]));
-
-	return result;
-}
-
-window.DocumentFragment.prototype.cloneNode = function(deep)
-{
-	return deep ? doWalk(cloneDeep(this), upgrade) : cloneNode.call(this);
-};
-
-// TODO do this properly
-/*document.importNode = function(node, deep)
-{
-	return deep ? doWalk(cloneDeep(node), upgrade) : importNode.call(this);
-};*/
-
 window.addEventListener('DOMContentLoaded', observe);
 
 })(this.cxl);
@@ -214,6 +187,10 @@ window.addEventListener('DOMContentLoaded', observe);
 
 if (!window.$$cxlShady && window.Element.prototype.attachShadow)
 	return;
+
+const
+	directives = cxl.compiler.directives
+;
 
 cxl.$$shadyShadowDOM = true;
 
@@ -229,28 +206,16 @@ Object.assign(cxl.css.StyleSheet.prototype, {
 
 });
 
-cxl.directive('style', {
+cxl.dom.setStyle = function(el, className, enable, prefix)
+{
+	el.classList[enable || enable===undefined ? 'add' : 'remove'](prefix + className);
+};
 
-	initialize()
-	{
-		this.prefix = this.owner.host ? this.owner.host.tagName.toLowerCase() + '--' : '';
-	},
-
-	update(val)
-	{
-		if (this.parameter)
-			this.element.classList.toggle(this.prefix + this.parameter, !!val);
-		else
-			this.element.classList.add(val);
-	},
-
-	digest()
-	{
-		this.update(true);
-		this.digest = null;
-	}
-
-});
+// CSS Apply style with prefix
+directives['style.animate'].prototype.initialize =
+	directives.style.prototype.initialize = function() {
+		this.prefix = (this.owner.host ? this.owner.host.tagName.toLowerCase() + '--' : '');
+	};
 
 function $indexOf(child)
 {

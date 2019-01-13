@@ -42,11 +42,6 @@ require('../build').build({
 				'src/meta.js'
 			]
 		},
-		/*{
-			output: 'alpha.dbg.js',
-			src: [ 'src/alpha.js' ],
-			minify: 'alpha.js'
-		},*/
 		{
 			output: 'router.js',
 			src: [ 'src/router.js' ],

@@ -41,9 +41,9 @@ const
 	},
 
 	DisabledCSS = {
-		$disabled: { cursor: 'default', filter: 'saturate(0)', opacity: 0.38 },
-		$active$disabled: { filter: 'saturate(0)', opacity: 0.38 },
-		$hover$disabled: { filter: 'saturate(0)', opacity: 0.38 }
+		$disabled: { cursor: 'default', state: 'disabled' },
+		$active$disabled: { state: 'disabled' },
+		$hover$disabled: { state: 'disabled' }
 	},
 
 	InvalidCSS = {
@@ -1605,6 +1605,80 @@ disconnect:#unregister
 });
 
 component({
+	name: 'cxl-button-ripple',
+	extend: 'cxl-button',
+	bindings: 'keypress:#onKey',
+	template: `
+<cxl-ripple &="id(ripple) .ripple"></cxl-ripple>
+<div &="content"></div>
+	`,
+	styles: {
+		$: { position: 'relative' },
+		ripple: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }
+	}
+}, {
+	onKey(ev) {
+		if (ev.key==='Enter' || ev.key===' ')
+		{
+			this.ripple.trigger();
+			ev.preventDefault();
+		}
+	}
+});
+
+component({
+	name: 'cxl-ripple',
+	attributes: [ 'primary', 'secondary' ],
+	methods: ['trigger'],
+	template: `
+<div &="content"></div>
+<div &="id(ripple) .ripple =expand:style.animate(expand)"></div>
+	`,
+	styles: {
+		$: { position: 'relative', overflowX: 'hidden', overflowY: 'hidden' },
+		ripple: {
+			position: 'absolute', borderRadius: '100%', scaleX: 0, scaleY: 0,
+			backgroundColor: 'onSurface', opacity: 0.16, top: 0, left: 0
+		},
+		ripple$primary: { backgroundColor: 'primary' },
+		ripple$secondary: { backgroundColor: 'secondary' },
+		expand: { animation: 'expand', animationDuration: '0.4s' }
+	},
+	bindings: 'id(host) on(mousedown):=event on(touchstart):=event =event:#onAction'
+}, {
+
+	setPosition(x, y)
+	{
+	const
+		el = this.host,
+		style = this.ripple.style,
+		rect = el.getBoundingClientRect(),
+		radius = (rect.width > rect.height ? rect.width : rect.height),
+		left = x===undefined ? (rect.width/2)-radius : x - rect.left - radius,
+		top = y===undefined ? (rect.height/2)-radius : y - rect.top - radius
+	;
+		style.width = style.height = radius*2 + 'px';
+		style.top = top + 'px';
+		style.left = left + 'px';
+	},
+
+	trigger()
+	{
+		this.setPosition();
+		this.expand = {};
+	},
+
+	onAction(ev)
+	{
+		if (!ev)
+			return;
+
+		this.setPosition(ev.x, ev.y);
+		this.expand = ev;
+	}
+});
+
+component({
 	name: 'cxl-search-input',
 	events: [ 'change' ],
 	attributes: [ 'value' ],
@@ -1739,7 +1813,7 @@ component({
 				selectedRect.selected = true;
 		} else if (!selectedRect)
 		{
-			this.menuHeight = 0; //Transform = 'scaleY(0)';
+			this.menuHeight = 0;
 			return;
 		}
 		else
@@ -2230,9 +2304,19 @@ component({
 	name: 'cxl-td',
 	styles: {
 		$: {
-			paddingTop: 12, paddingBottom: 12, paddingLeft: 6, paddingRight: 6,
+			paddingTop: 12, paddingBottom: 12, paddingLeft: 8, paddingRight: 8,
 			flexGrow: 1, borderBottom: '1px solid', borderColor: 'divider'
-		}
+		},
+		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
+		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' }
+	}
+});
+
+component({
+	name: 'cxl-tr',
+	bindings: 'role(row)',
+	styles: {
+		$: { display: 'contents' }
 	}
 });
 
