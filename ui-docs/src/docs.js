@@ -842,6 +842,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <cxl-button big secondary>Click Me</cxl-button>
 <cxl-button big disabled>Click Me</cxl-button>
 --></docs-demo>
+<docs-demo label="cxl-ripple-container"><!--
+<cxl-ripple-container style="border:1px solid #000;padding:16px;font-size:24px;text-align:center;" >Click Me</cxl-ripple-container>
+--></docs-demo>
 </docs-component>
 			`
 		},

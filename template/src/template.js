@@ -1709,6 +1709,8 @@ pipes({
 
 	empty() { cxl.dom.empty(this.element); },
 
+	'dom.remove'(el) { cxl.dom.remove(el); },
+
 	'event.prevent'(ev) { ev.preventDefault(); },
 
 	'event.stop'(ev) { ev.stopPropagation(); },

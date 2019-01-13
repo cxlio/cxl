@@ -1654,7 +1654,6 @@ component({
 		style.left = (this.x - this.radius) + 'px';
 		style.top = (this.y - this.radius) + 'px';
 		style.width = style.height = this.radius*2 + 'px';
-		//style.zIndex = 5;
 	},
 
 	end()
@@ -1665,54 +1664,11 @@ component({
 
 component({
 	name: 'cxl-ripple-container',
-	attributes: [ 'primary', 'secondary' ],
-	methods: ['trigger'],
-	template: `
-<div &="content"></div>
-<div &="id(ripple) .ripple =expand:style.animate(expand)"></div>
-	`,
+	attributes: [ 'disabled' ],
 	styles: {
-		$: { position: 'relative', overflowX: 'hidden', overflowY: 'hidden' },
-		ripple: {
-			position: 'absolute', borderRadius: '100%', scaleX: 0, scaleY: 0,
-			backgroundColor: 'onSurface', opacity: 0.16, top: 0, left: 0
-		},
-		ripple$primary: { backgroundColor: 'primary' },
-		ripple$secondary: { backgroundColor: 'secondary' },
-		expand: { animation: 'expand', animationDuration: '0.4s' }
+		$: { position: 'relative', overflowX: 'hidden', overflowY: 'hidden' }
 	},
-	bindings: 'id(host) on(mousedown):=event on(touchstart):=event =event:#onAction'
-}, {
-
-	setPosition(x, y)
-	{
-	const
-		el = this.host,
-		style = this.ripple.style,
-		rect = el.getBoundingClientRect(),
-		radius = (rect.width > rect.height ? rect.width : rect.height),
-		left = x===undefined ? (rect.width/2)-radius : x - rect.left - radius,
-		top = y===undefined ? (rect.height/2)-radius : y - rect.top - radius
-	;
-		style.width = style.height = radius*2 + 'px';
-		style.top = top + 'px';
-		style.left = left + 'px';
-	},
-
-	trigger()
-	{
-		this.setPosition();
-		this.expand = {};
-	},
-
-	onAction(ev)
-	{
-		if (!ev)
-			return;
-
-		this.setPosition(ev.x, ev.y);
-		this.expand = ev;
-	}
+	bindings: 'ripple'
 });
 
 component({
