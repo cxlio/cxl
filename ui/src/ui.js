@@ -61,6 +61,28 @@ function prefix(prefix, css)
 	return result;
 }
 
+
+behavior('ripple', {
+	bindings: '@disabled:=disabled on(touchstart):=event on(mousedown):=event keypress:#onKey =event:#ripple',
+
+	ripple(ev, el)
+	{
+		if (!this.disabled && ev) {
+			ui.ripple(el, ev);
+			this.$behavior.next(ev);
+		}
+	},
+
+	onKey(ev)
+	{
+		if (ev.key==='Enter' || ev.key===' ')
+		{
+			this.event = ev;
+			ev.preventDefault();
+		}
+	}
+});
+
 behavior('focusable', `@disabled:aria.prop(disabled):not:focus.enable touchable`);
 
 behavior('navigation.grid', {
@@ -358,11 +380,11 @@ component({
 component({
 	name: 'cxl-button',
 	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'touched', 'big', 'value' ],
-	bindings: 'focusable role(button) action:#onAction',
+	bindings: 'focusable ripple role(button) action:#onAction',
 	styles: [FocusCSS, {
 		$: {
 			elevation: 1, paddingTop: 8, paddingBottom: 8, paddingRight: 16,
-			paddingLeft: 16, cursor: 'pointer', display: 'inline-block',
+			paddingLeft: 16, cursor: 'pointer', display: 'inline-block', position: 'relative',
 			font: 'button', borderRadius: 2, userSelect: 'none',
 			backgroundColor: 'surface', color: 'onSurface', textAlign: 'center'
 		},
@@ -620,7 +642,7 @@ component({
 component({
 	name: 'cxl-fab',
 	attributes: [ 'disabled', 'touched', 'static' ],
-	bindings: 'focusable',
+	bindings: 'focusable ripple',
 	styles: [{
 		$: {
 			elevation: 2, backgroundColor: 'secondary', color: 'onSecondary',
@@ -1227,11 +1249,11 @@ component({
 </a>
 	`,
 	bindings: `
-focusable role(listitem)
+focusable ripple role(listitem)
 	`,
 	attributes: [ 'href', 'icon', 'selected', 'disabled', 'touched' ],
 	styles: [ prefix('link', FocusCSS), {
-		$: { cursor: 'pointer', fontSize: 16 },
+		$: { cursor: 'pointer', fontSize: 16, position: 'relative' },
 		'link:focus': { outline: 0 },
 		link: {
 			color: 'onSurface', lineHeight: 24, paddingRight: 16, paddingLeft: 16,
@@ -1254,7 +1276,7 @@ component({
 			backgroundColor: 'surface', overflowY: 'auto', color: 'onSurface'
 		},
 		$dense: { paddingTop: 0, paddingBottom: 0 },
-		$closed: { /*scaleX: 0,*/ scaleY: 0 }
+		$closed: { scaleY: 0 }
 	},
 	attributes: [ 'closed' ],
 	methods: [ 'focus' ],
@@ -1444,7 +1466,7 @@ component({
 
 component({
 	name: 'cxl-option',
-	attributes: [ 'value', 'selected', 'multiple', 'focused' ],
+	attributes: [ 'value', 'selected', 'multiple', 'focused', 'disabled' ],
 	events: [ 'selectable.action', 'change' ],
 	template: `
 <cxl-icon icon="check" &="=multiple:show .box"></cxl-icon>
@@ -1471,6 +1493,7 @@ role(option) selectable
 		$hover: { filter: 'brightness(0.95)' },
 		$selected: { backgroundColor: 'primaryLight', color: 'onPrimaryLight' },
 		$focused: { filter: 'brightness(0.85)' },
+		$disabled: { state: 'disabled' }
 	},
 	initialize(state)
 	{
@@ -1605,29 +1628,43 @@ disconnect:#unregister
 });
 
 component({
-	name: 'cxl-button-ripple',
-	extend: 'cxl-button',
-	bindings: 'keypress:#onKey',
-	template: `
-<cxl-ripple &="id(ripple) .ripple"></cxl-ripple>
-<div &="content"></div>
-	`,
+	name: 'cxl-ripple',
+	attributes: [ 'primary', 'secondary', 'x', 'y', 'radius' ],
+	bindings: 'id(host) connect:#connect',
+	template: `<div &="id(ripple) on(animationend):#end .ripple"></div>`,
 	styles: {
-		$: { position: 'relative' },
-		ripple: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }
+		$: {
+			position: 'absolute', overflowX: 'hidden', overflowY: 'hidden',
+			top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none'
+		},
+		ripple: {
+			position: 'relative', borderRadius: '100%', scaleX: 0, scaleY: 0,
+			backgroundColor: 'onSurface', opacity: 0.16,
+			animation: 'expand', animationDuration: '0.4s'
+		},
+		ripple$primary: { backgroundColor: 'primary' },
+		ripple$secondary: { backgroundColor: 'secondary' }
 	}
 }, {
-	onKey(ev) {
-		if (ev.key==='Enter' || ev.key===' ')
-		{
-			this.ripple.trigger();
-			ev.preventDefault();
-		}
+	connect()
+	{
+	const
+		style = this.ripple.style
+	;
+		style.left = (this.x - this.radius) + 'px';
+		style.top = (this.y - this.radius) + 'px';
+		style.width = style.height = this.radius*2 + 'px';
+		//style.zIndex = 5;
+	},
+
+	end()
+	{
+		cxl.dom.remove(this.host);
 	}
 });
 
 component({
-	name: 'cxl-ripple',
+	name: 'cxl-ripple-container',
 	attributes: [ 'primary', 'secondary' ],
 	methods: ['trigger'],
 	template: `
@@ -2244,7 +2281,7 @@ component({
 component({
 	name: 'cxl-tab',
 	template: '<a &=".link =href:attribute(href) content"></a>',
-	bindings: 'role(tab) focusable =selected:filter:host.trigger(cxl-tab.selected)',
+	bindings: 'role(tab) focusable ripple =selected:filter:host.trigger(cxl-tab.selected)',
 	attributes: ['href', 'selected', 'disabled', 'touched'],
 	styles: [{
 		$: { flexShrink: 0 },
@@ -2461,6 +2498,21 @@ Object.assign(ui, {
 			cxl.dom.insert(snackbar, options.content);
 
 		bar.notify(snackbar);
+	},
+
+	ripple(hostEl, ev)
+	{
+	const
+		x = ev.x, y = ev.y,
+		rect = hostEl.getBoundingClientRect(),
+		radius = (rect.width > rect.height ? rect.width : rect.height),
+		ripple = cxl.dom('cxl-ripple', {
+			x: x===undefined ? (rect.width/2) : x - rect.left,
+			y: y===undefined ? (rect.height/2) : y - rect.top,
+			radius: radius
+		})
+	;
+		hostEl.appendChild(ripple);
 	}
 
 });

@@ -74,12 +74,6 @@
 			icon: 'hand-pointer',
 			tags: [ 'button' ]
 		},
-		'cxl-button-ripple': {
-			icon: 'hand-pointer',
-			added: '1.6.0',
-			beta: true,
-			tags: [ 'button' ]
-		},
 		'cxl-backdrop': {
 			tags: [ 'popup' ]
 		},
@@ -201,6 +195,10 @@
 			tags: [ 'forms' ]
 		},
 		'cxl-ripple': {
+			added: '1.6.0',
+			beta: true
+		},
+		'cxl-ripple-container': {
 			added: '1.6.0',
 			beta: true
 		},

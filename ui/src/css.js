@@ -349,7 +349,7 @@ function property(setter)
 	'alignItems', 'display', 'position', 'boxSizing', 'boxShadow', 'opacity', 'fontFamily',
 	'fontWeight', 'fontStyle', 'background', 'cursor', 'overflowX', 'filter',
   	'textDecoration', 'borderStyle', 'transition', 'textTransform', 'textAlign', 'flexGrow',
-  	'flexShrink', 'animationDuration',
+  	'flexShrink', 'animationDuration', 'pointerEvents',
   	'alignContent', 'flexDirection', 'justifyContent', 'whiteSpace', 'scrollBehavior',
   	'transformOrigin', 'alignSelf', 'wordBreak',
 

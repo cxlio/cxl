@@ -166,22 +166,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 				toggle() { this.primary = !this.primary; }
 			}
 		},
-		'button-ripple': {
-			template: `
-<docs-component name="cxl-button-ripple">
-	<docs-demo><!--
-<cxl-button-ripple>Default</cxl-button-ripple>
-<cxl-button-ripple primary>Primary</cxl-button-ripple>
-<cxl-button-ripple secondary>Secondary</cxl-button-ripple>
-<cxl-button-ripple flat>Flat</cxl-button-ripple>
-<cxl-button-ripple big>Default</cxl-button-ripple>
-<cxl-button-ripple big primary>Primary</cxl-button-ripple>
-<cxl-button-ripple big secondary>Secondary</cxl-button-ripple>
-<cxl-button-ripple big flat>Flat</cxl-button-ripple>
-	--></docs-demo>
-</docs-component>
-			`
-		},
 		c: {
 			template: `
 <docs-component name="cxl-c">
@@ -853,22 +837,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			template: `
 <docs-component name="cxl-ripple">
 <docs-demo><!--
-<cxl-ripple style="padding: 16px; border: 1px solid #000;">
-	<cxl-t style="text-align:center" h5>Click Here</cxl-t>
-</cxl-ripple>
-<br>
-<cxl-ripple primary style="padding: 16px; border: 1px solid #000;">
-	<cxl-t style="text-align:center" h5>Click Here</cxl-t>
-</cxl-ripple>
-<br>
-<cxl-ripple secondary style="padding: 16px; border: 1px solid #000;">
-	<cxl-t style="text-align:center" h5>Click Here</cxl-t>
-</cxl-ripple>
---></docs-demo>
-<docs-demo label="Ripple Buttons"><!--
-<cxl-button-ripple>Click Me</cxl-button-ripple>
-<cxl-button-ripple primary>Click Me</cxl-button-ripple>
-<cxl-button-ripple secondary>Click Me</cxl-button-ripple>
+<cxl-button big>Click Me</cxl-button>
+<cxl-button big primary>Click Me</cxl-button>
+<cxl-button big secondary>Click Me</cxl-button>
+<cxl-button big disabled>Click Me</cxl-button>
 --></docs-demo>
 </docs-component>
 			`
