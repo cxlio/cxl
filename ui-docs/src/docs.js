@@ -1302,9 +1302,9 @@ component({
 <cxl-grid>
 	<template &="=states:each:repeat">
 	<cxl-c sm6 md3 &="item:style:text .item"></cxl-c>
-	<cxl-c sm6 md3 &="item:style .disabled .item">Disabled</cxl-c>
 	<cxl-c sm6 md3 &="item:style .focused .item">Focus</cxl-c>
 	<cxl-c sm6 md3 &="item:style .hover .item">Hover</cxl-c>
+	<cxl-c sm6 md3 &="item:style .disabled .item">Disabled</cxl-c>
 	</template>
 </cxl-grid>
 	`,
