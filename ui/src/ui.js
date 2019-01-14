@@ -63,7 +63,7 @@ function prefix(prefix, css)
 
 
 behavior('ripple', {
-	bindings: '@disabled:=disabled on(touchstart):=event on(mousedown):=event keypress:#onKey =event:#ripple',
+	bindings: '@disabled:=disabled on(mousedown):=event keypress:#onKey =event:#ripple',
 
 	ripple(ev, el)
 	{
@@ -1996,7 +1996,8 @@ component({
 		background: { backgroundColor: 'primaryLight', height: 2 },
 		line: { backgroundColor: 'primary', height: 2, textAlign: 'right' },
 		line$invalid$touched: { backgroundColor: 'error' },
-		knob$invalid$touched: { backgroundColor: 'error' }
+		knob$invalid$touched: { backgroundColor: 'error' },
+		background$invalid$touched: { backgroundColor: 'error' }
 	}, FocusCircleCSS ]
 }, {
 	value: 0,
