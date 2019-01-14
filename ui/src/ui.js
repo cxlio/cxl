@@ -2468,9 +2468,11 @@ Object.assign(ui, {
 			x: x===undefined ? (rect.width/2) : x - rect.left,
 			y: y===undefined ? (rect.height/2) : y - rect.top,
 			radius: radius
-		})
+		}),
+		// Add to shadow root if present to avoid layout changes
+		parent = hostEl.shadowRoot || hostEl
 	;
-		hostEl.appendChild(ripple);
+		parent.appendChild(ripple);
 	}
 
 });
