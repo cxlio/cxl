@@ -9,6 +9,7 @@ require('../build').build({
 				'../ui/dist/index.js',
 				'../ui/dist/icons.js',
 				'../ui/dist/router.js',
+				'../ui/dist/validation.js',
 				'../ui/src/meta.js',
 				'../docs/dist/docs.js',
 				'src/docs.js',

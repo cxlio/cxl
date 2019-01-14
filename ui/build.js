@@ -38,9 +38,13 @@ require('../build').build({
 				'../template/src/template-debug.js',
 				...ui,
 				'src/ui-debug.js',
-				'src/alpha.js',
 				'src/meta.js'
 			]
+		},
+		{
+			output: 'validation.js',
+			src: [ 'src/validation.js' ],
+			minify: 'validation.min.js'
 		},
 		{
 			output: 'router.js',
