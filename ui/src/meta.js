@@ -196,11 +196,13 @@
 		},
 		'cxl-ripple': {
 			added: '1.6.0',
-			beta: true
+			beta: true,
+			tags: [ 'interaction' ]
 		},
 		'cxl-ripple-container': {
 			added: '1.6.0',
-			beta: true
+			beta: true,
+			tags: [ 'interaction' ]
 		},
 		'cxl-search-input': {
 			beta: true,
@@ -224,7 +226,7 @@
 			tags: [ 'indicator' ]
 		},
 		'cxl-submit': {
-			icon: '',
+			icon: 'hand-pointer',
 			beta: true,
 			tags: [ 'forms' ]
 		},

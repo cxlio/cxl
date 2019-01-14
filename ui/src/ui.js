@@ -512,7 +512,7 @@ action:#toggle
 
 component({
 	name: 'cxl-chip',
-	attributes: [ 'removable', 'disabled', 'touched', 'primary', 'secondary' ],
+	attributes: [ 'removable', 'disabled', 'touched', 'primary', 'secondary', 'little' ],
 	events: [ 'cxl-chip.remove' ],
 	bindings: 'focusable keypress:#onKey',
 	template: `
@@ -521,13 +521,14 @@ component({
 	styles: [{
 		$: {
 			borderRadius: 16, fontSize: 14, backgroundColor: 'divider',
-			display: 'inline-flex', color: 'onSurface'
+			display: 'inline-flex', color: 'onSurface', lineHeight: 32, height: 32
 		},
 		$primary: { color: 'onPrimary', backgroundColor: 'primary' },
 		$secondary: { color: 'onSecondary', backgroundColor: 'secondary' },
-		content: { display: 'inline-block', marginLeft: 12, paddingRight: 12, lineHeight: 32 },
-		avatar: { display: 'inline-block', height: 32 },
-		remove: { display: 'inline-block', marginRight: 12, cursor: 'pointer', lineHeight: 32 }
+		$little: { fontSize: 12, lineHeight: 20, height: 20 },
+		content: { display: 'inline-block', marginLeft: 12, paddingRight: 12 },
+		avatar: { display: 'inline-block' },
+		remove: { display: 'inline-block', marginRight: 12, cursor: 'pointer' }
 	}, FocusCSS ]
 }, {
 	onKey(ev, el)
@@ -642,7 +643,7 @@ component({
 component({
 	name: 'cxl-fab',
 	attributes: [ 'disabled', 'touched', 'static' ],
-	bindings: 'focusable ripple',
+	bindings: 'focusable',
 	styles: [{
 		$: {
 			elevation: 2, backgroundColor: 'secondary', color: 'onSecondary',
@@ -1629,7 +1630,7 @@ disconnect:#unregister
 
 component({
 	name: 'cxl-ripple',
-	attributes: [ 'primary', 'secondary', 'x', 'y', 'radius' ],
+	attributes: [ 'x', 'y', 'radius' ],
 	bindings: 'id(host) connect:#connect',
 	template: `<div &="id(ripple) on(animationend):#end .ripple"></div>`,
 	styles: {

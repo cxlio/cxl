@@ -300,6 +300,7 @@ Checked: <span &="=test:text"></span>
 <cxl-chip removable>Removable Chip</cxl-chip>
 <cxl-chip><cxl-icon icon="home"></cxl-icon> Chip with Icon</cxl-chip>
 <cxl-chip><cxl-avatar little></cxl-avatar> Chip with Avatar</cxl-chip>
+<cxl-chip little removable>Removable Chip</cxl-chip>
 --></docs-demo>
 </docs-component>
 			`
@@ -845,6 +846,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-demo label="cxl-ripple-container"><!--
 <cxl-ripple-container style="border:1px solid #000;padding:16px;font-size:24px;text-align:center;" >Click Me</cxl-ripple-container>
 --></docs-demo>
+<docs-implementation></docs-implementation>
 </docs-component>
 			`
 		},
@@ -1178,7 +1180,7 @@ cxl.route({
 	<cxl-c>
 		<cxl-t h5><cxl-icon icon="code-branch"></cxl-icon> &nbsp;Open Source</cxl-t>
 		<p>
-Library and Source Code released under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL</a> open source license. The complete library source code is hosted on <a href="https://github.com/cxlio/cxl">Github</a>
+Library and Source Code released under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL</a> open source license. The complete source code is hosted on <a href="https://github.com/cxlio/cxl">Github</a>
 		</p>
 	</cxl-c>
 	<cxl-c>
@@ -1490,7 +1492,7 @@ cxl.component({
 });
 
 cxl.component({
-	name: 'ui-docs-color-tool',
+	name: 'uid-color-tool',
 	attributes: [ 'theme' ],
 	template: `
 <ui-docs-color label="primary" &="=theme.primary:@color =theme.onPrimary:@text-color"></ui-docs-color>
@@ -1510,10 +1512,18 @@ cxl.component({
 	getMeta(name)
 	{
 		const meta = META[name];
-		if (meta)
+		if (!meta)
+			return;
+
+		this.icon = meta.icon;
+
+		if (meta.tags)
 		{
-			this.icon = meta.icon;
-			this.tags = meta.tags;
+			const tags = this.tags = meta.tags.slice(0);
+			if (meta.added)
+				tags.push(meta.added);
+			if (meta.beta)
+				tags.push('beta');
 		}
 	}
 });
@@ -1554,6 +1564,14 @@ cxl.component({
 	template: `
 
 	`
+});
+
+component({
+	name: 'uid-mdn',
+	template: '<a &=".link content"></a>',
+	styles: {
+		link: { color: 'link' }
+	}
 });
 
 cxl.component({
@@ -1622,9 +1640,10 @@ cxl.component({
 	</cxl-table>
 </div>
 <br>
-	<div &="content(docs-attribute)"></div>
-	<div &="content(docs-event)"></div>
-	<div &="content(docs-method)"></div>
+<div &="content(docs-attribute)"></div>
+<div &="content(docs-event)"></div>
+<div &="content(docs-method)"></div>
+<div &="content(docs-implementation)"></div>
 	`,
 	bindings: '=name:#initialize'
 }, {

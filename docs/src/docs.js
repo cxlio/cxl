@@ -215,9 +215,8 @@ cxl.component({
 	<a &="=name:route.link"><cxl-icon &=".icon =icon:@icon"></cxl-icon></a>
 	<cxl-c grow>
 		<a &="=name:route.link .link">&lt;<x &="=name:text"></x>&gt;</a>
-		<cxl-icon &=".tags" icon="tags"></cxl-icon>
 		<template &="=tags:each:repeat">
-			<span &="item:text"></span>
+			<cxl-chip little &="item:text"></cxl-chip>
 		</template>
 		<cxl-t subtitle2 &="content"></cxl-t>
 	</cxl>
@@ -226,7 +225,7 @@ cxl.component({
 	styles: {
 		card: { padding: 16, display: 'flex', font: 'caption' },
 		tags: { color: '#ccc', marginTop: 8 },
-		link: { color: 'link', font: 'subtitle', display: 'block', textDecoration: 'none' },
+		link: { color: 'link', font: 'subtitle', display: 'block', textDecoration: 'none', marginBottom: 4 },
 		icon: {
 			width: 48, height: 48, lineHeight: 48, fontSize: 24, textAlign: 'center',
 			backgroundColor: '#ccc', color: '#fff', marginRight: 16
