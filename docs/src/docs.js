@@ -4,6 +4,7 @@
 
 const
 	LOREM_SHORT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+	component = cxl.component,
 	LOREM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at elementum orci. Vestibulum facilisis vel risus a commodo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris velit sapien, dignissim quis fermentum a, porta at urna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.`
 ;
 
@@ -78,7 +79,31 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
+	name: 'docs-mdn',
+	attributes: [ 'href' ],
+	template: '<a &="=href:#setHref content .link"></a>',
+	styles: {
+		$: { display: 'inline' },
+		link: { color: 'link', font: 'code' }
+	}
+}, {
+	setHref(href, el)
+	{
+		if (href)
+			el.href = 'https://developer.mozilla.org/en-US/docs/Web/' + href;
+	}
+});
+
+component({
+	name: 'docs-implementation',
+	template: `
+<cxl-t h5>Implementation Details</cxl-t>
+<div &="content"></div>
+	`
+});
+
+component({
 	name: 'docs-directive',
 	attributes: [ 'name' ],
 	template: `
@@ -103,7 +128,7 @@ cxl.component({
 
 });
 
-cxl.component({
+component({
 	name: 'docs-demo',
 	attributes: ['label', 'owner'],
 	bindings: 'connect:#connect',
@@ -138,7 +163,7 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'docs-code',
 	attributes: [ 'source', 'type', 'source-id' ],
 	template: `
@@ -172,7 +197,7 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'docs-attribute',
 	attributes: [ 'name', 'demo', 'lorem' ],
 	template: `
@@ -198,7 +223,7 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'docs-method',
 	attributes: [ 'name' ],
 	template: `
@@ -207,7 +232,7 @@ cxl.component({
 	`
 });
 
-cxl.component({
+component({
 	name: 'docs-component-card',
 	attributes: [ 'name', 'icon', 'tags' ],
 	template: `
@@ -233,7 +258,7 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'docs-placeholder',
 	template: '<cxl-icon &=".icon" icon="images"></cxl-icon>',
 	styles: {

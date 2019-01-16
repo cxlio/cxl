@@ -358,7 +358,7 @@ Checked: <span &="=test:text"></span>
 	<docs-demo><!--
 <cxl-c pad16 style="position:relative; height:300px; z-index: 0; overflow: hidden">
 	<cxl-dialog-confirm title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
-	</cxl-dialog-alert>
+	</cxl-dialog-confirm>
 </cxl-c>
 	--></docs-demo>
 <docs-attribute name="cancel-text"></docs-attribute>
@@ -846,7 +846,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-demo label="cxl-ripple-container"><!--
 <cxl-ripple-container style="border:1px solid #000;padding:16px;font-size:24px;text-align:center;" >Click Me</cxl-ripple-container>
 --></docs-demo>
-<docs-implementation></docs-implementation>
+<docs-implementation>
+<ul>
+	<li>The <docs-mdn href="Element/getBoundingClientRect">getBoundingClientRect()</docs-mdn> function is used to calculate the position of the ripple element.</li>
+	<li>The ripple effect is triggered by the following events: <code>mousedown</code> and <code>keypress(Enter, Space)</code> for focusable elements.</li>
+	<li>To prevent layout trashing and improve performance the ripple animation uses the <code>scale()</code> transform function. The animation is set to only run once.</li>
+	<li>The <docs-mdn href="Events/animationend">animationend</docs-mdn> event is used to automatically remove the ripple element from the DOM.</li>
+<li>In order for the click event to propagate properly, the <docs-mdn href="CSS/pointer-events">pointer-events</docs-mdn> property is set to <code>none</code></li>
+<li>The ripple element container requires a <code>position: relative</code> for the positioning code to work.</li>
+</ul>
+</docs-implementation>
 </docs-component>
 			`
 		},

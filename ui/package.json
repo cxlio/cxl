@@ -15,6 +15,6 @@
 	"scripts": {
 		"build-all": "node build; node build-icons",
 		"build": "node build",
-		"prepublish": "node build test minify; node build-icons; node publish"
+		"prepublish": "node build test minify; node build-icons"
 	}
 }

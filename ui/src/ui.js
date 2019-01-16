@@ -254,7 +254,8 @@ directive('aria.prop', {
 directive('role', {
 	connect()
 	{
-		this.element.setAttribute('role', this.parameter);
+		if (!this.element.hasAttribute('role'))
+			this.element.setAttribute('role', this.parameter);
 	}
 });
 
@@ -881,8 +882,8 @@ component({
 	<cxl-button &="action:#toggleYear:#getMonthText" flat><x &="=monthText:text"></x>
 	<cxl-icon icon="caret-down"></cxl-icon></cxl-button>
 	<span &=".divider"></span>
-	<cxl-button &="action:#previousMonth" flat>&nbsp;<cxl-icon icon="arrow-left"></cxl-icon>&nbsp;</cxl-button>
-	<cxl-button &="action:#nextMonth" flat>&nbsp;<cxl-icon icon="arrow-right"></cxl-icon>&nbsp;</cxl-button>
+	<cxl-button aria-label="Previus Month" &="action:#previousMonth" flat>&nbsp;<cxl-icon icon="arrow-left"></cxl-icon>&nbsp;</cxl-button>
+	<cxl-button aria-label="Next Month" &="action:#nextMonth" flat>&nbsp;<cxl-icon icon="arrow-right"></cxl-icon>&nbsp;</cxl-button>
 </div>
 <div &=".rel">
 	<cxl-calendar-month &="id(calendarMonth) =selectedMonth:@month @value:=value"></cxl-calendar-month>
@@ -1245,7 +1246,7 @@ component({
 	name: 'cxl-item',
 	template: `
 <a &=".link =href:attribute(href)" tabindex="-1">
-	<cxl-icon &="=icon:show:@icon .icon"></cxl-icon>
+	<cxl-icon role="presentation" &="=icon:show:@icon .icon"></cxl-icon>
 	<div &=".content content"></div>
 </a>
 	`,
@@ -1710,7 +1711,7 @@ component({
 		=opened:@opened content"></cxl-select-menu>
 	<div &="=value:hide .placeholder =placeholder:text"></div>
 	<div &="=value:show:#getSelectedText:text id(selectedText) .selectedText"></div>
-	<cxl-icon &=".icon" icon="caret-down"></cxl-icon>
+	<cxl-icon &=".icon" icon="caret-down" role="presentation"></cxl-icon>
 </div>
 <div &=".focusLine"></div>
 	`,
