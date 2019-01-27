@@ -502,6 +502,7 @@ cxl.component({
 			overflowScrolling: 'touch', backgroundColor: 'surface',
 			color: 'onSurface'
 		},
+		router$marginless: { margin: 0 },
 		footer: { },
 		router: { margin: 16 },
 		router$medium: { margin: 32 },

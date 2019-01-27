@@ -83,6 +83,29 @@ behavior('ripple', {
 	}
 });
 
+behavior('draggable', {
+	bindings: `
+on(mousedown):=startEvent on(touchstart):=startEvent =startEvent:log:host.trigger(draggable.start)
+drag(x):=x =x:#move drag(y):=y =y:#move
+=transformOrigin:style.inline(transform-origin) =transform:style.inline(transform)
+root.on(mouseup):=endEvent root.on(touchend):=endEvent =endEvent:#reset:host.trigger(draggable.end)
+	`,
+	x: 0,
+	y: 0,
+	startEvent: cxl.Undefined,
+	endEvent: cxl.Undefined,
+
+	reset(ev, el)
+	{
+		el.style.zIndex = this.zIndex;
+		this.x = this.y = 0;
+	},
+	move()
+	{
+		this.transform = `translate(${this.x*100}%, ${this.y*100}%)`;
+	}
+});
+
 behavior('focusable', `@disabled:aria.prop(disabled):not:focus.enable touchable`);
 
 behavior('navigation.grid', {
@@ -379,6 +402,13 @@ component({
 });
 
 component({
+	name: 'cxl-block',
+	styles: {
+		$: { padding: 16 }
+	}
+});
+
+component({
 	name: 'cxl-button',
 	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'touched', 'big', 'value' ],
 	bindings: 'focusable ripple role(button) action:#onAction',
@@ -428,6 +458,7 @@ component({
 		$: { gridColumnEnd: 'span 12', flexShrink: 0 },
 		$grow: { flexGrow: 1, flexShrink: 1 },
 		$small: { gridColumnEnd: 'auto' },
+		$fill: { position: 'absolute', top:0, left:0, right:0, bottom:0 },
  		$xl0$xlarge: { display: 'none' },
 		$lg0$large: { display: 'none' },
 		$md0$medium: { display: 'none' },
@@ -442,7 +473,7 @@ component({
 		$error: { backgroundColor: 'error', color: 'onError' },
 		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
 		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
-	}, {}, {}, {}, {}, {}, { $flex: { display: 'flex' }} ])
+	}, {}, {}, {}, {}, {}, { $flex: { display: 'flex' }, $vflex: { display: 'flex', flexDirection: 'column' } } ])
 });
 
 component({
@@ -698,6 +729,7 @@ component({
 	name: 'cxl-form-group',
 	styles: {
 		$: { marginBottom: 16 },
+		$inverse: { filter: 'invert(1)' },
 		$inline: { display: 'inline-block' },
 		error: { color: 'error', borderColor: 'error' },
 		content: { position: 'relative', marginBottom: 8 },
@@ -707,7 +739,7 @@ component({
 			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
 		}
 	},
-	attributes: [ 'floating' ],
+	attributes: [ 'floating', 'inverse' ],
 	template: `
 <div &=".label =invalid:.error =isEmpty:.labelEmpty content(cxl-label):#onLabel"></div>
 <div &=".content content =invalid:.error on(change):#onChange"></div>
@@ -832,7 +864,6 @@ component({
 			borderRadius: 0, outline: 0, fontFamily: 'inherit', paddingLeft: 0, paddingRight: 0
 		},
 		input$focus: { outline: 0, borderColor: 'primary' },
-		input$inverse: { borderColor: 'onPrimary', color: 'onPrimary' },
 		input$invalid$touched: { borderColor: 'error' },
 		expand: { scaleX: 1 }
 	} ]
@@ -1405,7 +1436,7 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 	styles: {
 		icon: {
 			color: 'onSurface', cursor: 'pointer',
-			width: 8
+			width: 8//, paddingLeft: 8, paddingRight: 8
 		},
 		icon$inverse: { color: 'onPrimary' },
 		menuControl: {
@@ -1417,6 +1448,7 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 		}
 	}
 }, {
+	flat: true,
 	showMenu: false,
 	itemSelector: 'cxl-item:not([disabled])',
 	close()
@@ -1979,7 +2011,7 @@ component({
 		focusable
 		role(slider)
 		keypress(arrowleft):#onLeft keypress(arrowright):#onRight
-		drag.x:#onDrag
+		drag.in:#onDrag
 	`,
 	template: `
 <div &=".background">

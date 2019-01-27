@@ -1046,16 +1046,26 @@ directive('id', {
 
 });
 
-directive('drag.x', {
+directive('drag.in', {
+	yProp: 'clientX',
+	hProp: 'offsetWidth',
+	startProp: 'left',
 
 	connect()
 	{
+		if (this.parameter==='y')
+		{
+			this.yProp = 'clientY';
+			this.hProp = 'offsetHeight';
+			this.startProp = 'top';
+		}
+
 		this.bindings = [
 			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
-			new EventListener(window, 'mousemove', this.onMouseMove.bind(this)),
+			new EventListener(window, 'mousemove', this.onMove.bind(this)),
 			new EventListener(window, 'mouseup', this.onMouseUp.bind(this)),
-			new EventListener(this.element, 'touchstart', this.onTouchDown.bind(this), { passive: true }),
-			new EventListener(window, 'touchmove', this.onTouchMove.bind(this)),
+			new EventListener(this.element, 'touchstart', this.onMouseDown.bind(this), { passive: true }),
+			new EventListener(window, 'touchmove', this.onMove.bind(this)),
 			new EventListener(window, 'touchend', this.onMouseUp.bind(this))
 		];
 	},
@@ -1064,39 +1074,83 @@ directive('drag.x', {
 	{
 		if (this.capture)
 		{
-			var x = (ev.changedTouches ? ev.changedTouches[0] : ev).clientX;
-			this.set((x-this.offset) / this.capture.clientWidth);
+			var x = (ev.changedTouches ? ev.changedTouches[0] : ev)[this.yProp];
+			this.set((x-this.offset) / this.height);
 		}
 		this.capture=false;
 	},
 
 	onMouseDown(ev)
 	{
-		var el=this.capture=ev.currentTarget;
-		this.offset = el.getBoundingClientRect().left;
+	const
+		el = this.capture = ev.currentTarget,
+		rect = el.getBoundingClientRect()
+	;
+		this.height = el[this.hProp];
+		this.offset = rect[this.startProp];
 	},
 
-	onTouchDown(ev)
-	{
-		var el = this.capture=ev.currentTarget;
-		this.offset=el.offsetLeft;
-	},
-
-	onTouchMove(ev)
+	onMove(ev)
 	{
 		if (this.capture)
 		{
-			const el = this.capture;
-			this.set((ev.touches[0].clientX-this.offset) / el.clientWidth);
+			const y = (ev.touches ? ev.touches[0] : ev)[this.yProp];
+			this.set((y-this.offset) / this.height);
 		}
+	}
+});
+
+directive('drag', {
+
+	yProp: 'clientX',
+	hProp: 'offsetHeight',
+
+	connect()
+	{
+		if (this.parameter==='y')
+		{
+			this.yProp = 'clientY';
+			this.hProp = 'offsetHeight';
+		}
+
+		this.bindings = [
+			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
+			new EventListener(window, 'mousemove', this.onMove.bind(this)),
+			new EventListener(window, 'mouseup', this.onMouseUp.bind(this)),
+			new EventListener(this.element, 'touchstart', this.onMouseDown.bind(this), { passive: true }),
+			new EventListener(window, 'touchmove', this.onMove.bind(this)),
+			new EventListener(window, 'touchend', this.onMouseUp.bind(this))
+		];
 	},
 
-	onMouseMove(ev)
+	onMouseUp(ev)
 	{
 		if (this.capture)
 		{
-			const el = this.capture;
-			this.set((ev.clientX-this.offset) / el.clientWidth);
+			var x = (ev.changedTouches ? ev.changedTouches[0] : ev)[this.yProp];
+			this.set((x-this.offset) / this.height);
+		}
+		this.capture=false;
+	},
+
+	onMouseDown(ev)
+	{
+	const
+		el = this.capture = ev.currentTarget,
+		// rect = el.getBoundingClientRect(),
+		y = (ev.touches ? ev.touches[0] : ev)[this.yProp]
+	;
+		//console.log(el.clientHeight, el.offsetHeight);
+		this.height = el[this.hProp];//offsetHeight; //rect.height;
+		this.offset = y;
+	},
+
+	onMove(ev)
+	{
+		if (this.capture)
+		{
+			const y = (ev.touches ? ev.touches[0] : ev)[this.yProp];
+			this.set((y-this.offset) / this.height);
 		}
 	}
 
