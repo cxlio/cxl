@@ -122,6 +122,18 @@
 			icon: 'window-maximize',
 			tags: [ 'popup' ]
 		},
+		'cxl-drag': {
+			icon: 'arrows-alt',
+			beta: true
+		},
+		'cxl-drag-region': {
+			icon: 'vector-square',
+			beta: true
+		},
+		'cxl-drag-slot': {
+			beta: true,
+			icon: 'grip-horizontal'
+		},
 		'cxl-drawer': {
 			beta: true,
 			icon: 'columns',

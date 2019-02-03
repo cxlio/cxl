@@ -13,6 +13,7 @@ const
 		'src/component.js',
 		'src/css.js',
 		'src/shady.js',
+		'src/drag.js',
 		'src/ui.js',
 		c => `cxl.version="${c.package.version}";`
 	]

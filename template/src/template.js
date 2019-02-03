@@ -1046,116 +1046,6 @@ directive('id', {
 
 });
 
-directive('drag.in', {
-	yProp: 'clientX',
-	hProp: 'offsetWidth',
-	startProp: 'left',
-
-	connect()
-	{
-		if (this.parameter==='y')
-		{
-			this.yProp = 'clientY';
-			this.hProp = 'offsetHeight';
-			this.startProp = 'top';
-		}
-
-		this.bindings = [
-			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
-			new EventListener(window, 'mousemove', this.onMove.bind(this)),
-			new EventListener(window, 'mouseup', this.onMouseUp.bind(this)),
-			new EventListener(this.element, 'touchstart', this.onMouseDown.bind(this), { passive: true }),
-			new EventListener(window, 'touchmove', this.onMove.bind(this)),
-			new EventListener(window, 'touchend', this.onMouseUp.bind(this))
-		];
-	},
-
-	onMouseUp(ev)
-	{
-		if (this.capture)
-		{
-			var x = (ev.changedTouches ? ev.changedTouches[0] : ev)[this.yProp];
-			this.set((x-this.offset) / this.height);
-		}
-		this.capture=false;
-	},
-
-	onMouseDown(ev)
-	{
-	const
-		el = this.capture = ev.currentTarget,
-		rect = el.getBoundingClientRect()
-	;
-		this.height = el[this.hProp];
-		this.offset = rect[this.startProp];
-	},
-
-	onMove(ev)
-	{
-		if (this.capture)
-		{
-			const y = (ev.touches ? ev.touches[0] : ev)[this.yProp];
-			this.set((y-this.offset) / this.height);
-		}
-	}
-});
-
-directive('drag', {
-
-	yProp: 'clientX',
-	hProp: 'offsetHeight',
-
-	connect()
-	{
-		if (this.parameter==='y')
-		{
-			this.yProp = 'clientY';
-			this.hProp = 'offsetHeight';
-		}
-
-		this.bindings = [
-			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
-			new EventListener(window, 'mousemove', this.onMove.bind(this)),
-			new EventListener(window, 'mouseup', this.onMouseUp.bind(this)),
-			new EventListener(this.element, 'touchstart', this.onMouseDown.bind(this), { passive: true }),
-			new EventListener(window, 'touchmove', this.onMove.bind(this)),
-			new EventListener(window, 'touchend', this.onMouseUp.bind(this))
-		];
-	},
-
-	onMouseUp(ev)
-	{
-		if (this.capture)
-		{
-			var x = (ev.changedTouches ? ev.changedTouches[0] : ev)[this.yProp];
-			this.set((x-this.offset) / this.height);
-		}
-		this.capture=false;
-	},
-
-	onMouseDown(ev)
-	{
-	const
-		el = this.capture = ev.currentTarget,
-		// rect = el.getBoundingClientRect(),
-		y = (ev.touches ? ev.touches[0] : ev)[this.yProp]
-	;
-		//console.log(el.clientHeight, el.offsetHeight);
-		this.height = el[this.hProp];//offsetHeight; //rect.height;
-		this.offset = y;
-	},
-
-	onMove(ev)
-	{
-		if (this.capture)
-		{
-			const y = (ev.touches ? ev.touches[0] : ev)[this.yProp];
-			this.set((y-this.offset) / this.height);
-		}
-	}
-
-});
-
 directive('content', {
 
 	initialize()
@@ -1439,6 +1329,11 @@ Object.assign(dom, {
 			content = document.createTextNode(content);
 
 		el.appendChild(content);
+	},
+
+	isEmpty(el)
+	{
+		return el.childNodes.length === 0;
 	},
 
 	removeChild(el, child)

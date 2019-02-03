@@ -5,6 +5,7 @@ const
 	component = cxl.component,
 	behavior = cxl.behavior,
 	directive = cxl.directive,
+	Undefined = cxl.Undefined,
 	ui = cxl.ui = {
 		icons: {}
 	},
@@ -80,29 +81,6 @@ behavior('ripple', {
 			this.event = ev;
 			ev.preventDefault();
 		}
-	}
-});
-
-behavior('draggable', {
-	bindings: `
-on(mousedown):=startEvent on(touchstart):=startEvent =startEvent:log:host.trigger(draggable.start)
-drag(x):=x =x:#move drag(y):=y =y:#move
-=transformOrigin:style.inline(transform-origin) =transform:style.inline(transform)
-root.on(mouseup):=endEvent root.on(touchend):=endEvent =endEvent:#reset:host.trigger(draggable.end)
-	`,
-	x: 0,
-	y: 0,
-	startEvent: cxl.Undefined,
-	endEvent: cxl.Undefined,
-
-	reset(ev, el)
-	{
-		el.style.zIndex = this.zIndex;
-		this.x = this.y = 0;
-	},
-	move()
-	{
-		this.transform = `translate(${this.x*100}%, ${this.y*100}%)`;
 	}
 });
 
@@ -2011,7 +1989,7 @@ component({
 		focusable
 		role(slider)
 		keypress(arrowleft):#onLeft keypress(arrowright):#onRight
-		drag.in:#onDrag
+		drag.in(x):log:#onDrag
 	`,
 	template: `
 <div &=".background">

@@ -369,6 +369,89 @@ Checked: <span &="=test:text"></span>
 			`
 		},
 
+		drag: {
+			template: `
+<docs-component name="cxl-drag">
+<docs-demo><!--
+<style>
+	.drag-slot {
+		display:block;border:1px solid #ccc;text-align:center; font-size: 32px;
+		background-image: linear-gradient(45deg, #ddd 25%, transparent 25%), linear-gradient(-45deg, #ddd 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ddd 75%), linear-gradient(-45deg, transparent 75%, #ddd 75%);
+		background-size: 20px 20px;
+		background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+	}
+	.drag-slot[over] { box-shadow: 0 0 2px var(--cxl-primary); }
+	.draggable {font-size:30px;cursor:move;display:block;width:100%;line-height:128px; background:#fff;}
+</style>
+<cxl-grid columns="repeat(5, 1fr)">
+	<cxl-drag-slot swap class="drag-slot"><cxl-drag class="draggable""><cxl-icon icon="arrow-down"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot"><cxl-drag class="draggable""><cxl-icon icon="arrow-left"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot"><cxl-drag class="draggable""><cxl-icon icon="arrow-right"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot"><cxl-drag class="draggable""><cxl-icon icon="arrow-up"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot"></cxl-drag-slot>
+</cxl-grid>
+--></docs-demo>
+</docs-component>
+			`
+		},
+
+		'drag-region': {
+			template: `
+<docs-component name="cxl-drag-region">
+<docs-demo label="Drop Region"><!--
+<style>
+	.drag-region {display:block;border:1px solid #ccc;text-align:center;padding: 64px; font-size: 32px }
+	.drag-region[over] { box-shadow: 0 0 2px var(--cxl-primary); background: var(--cxl-primaryLight); }
+	.drag-region-item {
+		display:inline-block;cursor:move;font-size:24px; border: 1px solid #ccc; padding: 4px;
+	}
+</style>
+<cxl-drag-region class="drag-region" &="@in-count:=count">
+Drag Here <x &="=count:text"></x>
+</cxl-drag-region>
+<br>
+<cxl-drag class="drag-region-item">
+	<cxl-icon icon="grip-horizontal"></cxl-icon>
+	Drag
+</cxl-drag>
+<cxl-drag class="drag-region-item">
+	<cxl-icon icon="grip-horizontal"></cxl-icon>
+	Drag
+</cxl-drag>
+<cxl-drag class="drag-region-item">
+	<cxl-icon icon="grip-horizontal"></cxl-icon>
+	Drag
+</cxl-drag>
+--></docs-demo>
+</docs-component>
+			`
+		},
+
+		'drag-slot': {
+			template: `
+<docs-component name="cxl-drag-slot">
+<docs-demo><!--
+<style>
+	.drag-slot-demo1 {
+		display:block;border:1px solid #ccc;text-align:center; font-size: 32px;
+		background-image: linear-gradient(45deg, #ddd 25%, transparent 25%), linear-gradient(-45deg, #ddd 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ddd 75%), linear-gradient(-45deg, transparent 75%, #ddd 75%);
+		background-size: 20px 20px;
+		background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+	}
+	.drag-slot-demo1[over] { box-shadow: 0 0 2px var(--cxl-primary); }
+	.drag-slot-draggable {font-size:30px;cursor:move;display:block;width:100%;line-height:128px; background:#fff;}
+</style>
+<cxl-grid columns="repeat(5, 1fr)">
+	<cxl-drag-slot swap class="drag-slot-demo1"><cxl-drag class="drag-slot-draggable""><cxl-icon icon="arrow-down"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot-demo1"><cxl-drag class="drag-slot-draggable""><cxl-icon icon="arrow-left"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot-demo1"><cxl-drag class="drag-slot-draggable""><cxl-icon icon="arrow-right"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot-demo1"><cxl-drag class="drag-slot-draggable""><cxl-icon icon="arrow-up"></cxl-icon></cxl-drag></cxl-drag-slot>
+	<cxl-drag-slot swap class="drag-slot-demo1"></cxl-drag-slot>
+</cxl-grid>
+--></docs-demo>
+</docs-component>`
+		},
+
 		drawer: {
 			template: `
 <docs-component name="cxl-drawer">
