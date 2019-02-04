@@ -39,8 +39,8 @@ const
 
 			if (this.dragging.has(element))
 			{
-				this.subject.next({ type: 'end', target: element, directive: directive });
 				this.dragging.delete(element);
+				this.subject.next({ type: 'end', target: element, directive: directive });
 			}
 		}
 	}
@@ -51,7 +51,6 @@ class DragBase extends cxl.Directive
 	connect()
 	{
 		this.element.$$drag = this;
-		this.element.style.userSelect = 'none';
 		this.bindings = [
 			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
 			new EventListener(window, 'mousemove', this.onMove.bind(this)),
@@ -85,6 +84,10 @@ class DragBase extends cxl.Directive
 		this.onEnd(touch);
 		this.touchId = null;
 		this.capture = false;
+
+		const style = this.element.style;
+		style.userSelect = this.$userSelect;
+		style.transition = this.$transition;
 	}
 
 	onMouseUp(ev)
@@ -105,6 +108,12 @@ class DragBase extends cxl.Directive
 			this.touchId = this.$getTouchId(ev);
 			ev.preventDefault();
 		}
+
+		const style = this.element.style;
+
+		this.$userSelect = style.userSelect;
+		this.$transition = style.transition;
+		style.userSelect = style.transition = 'none';
 
 		this.capture = ev.currentTarget;
 		this.onStart(this.$getEvent(ev));
@@ -369,13 +378,14 @@ class DraggableSlot extends DraggableRegion {
 			else if (host.swap && parent.swap)
 			{
 				const dest = host.childNodes[0];
-				parent.appendChild(dest);
-				host.appendChild(el);
 
 				// Cancel drag if element is swapped
 				// TODO move this somewhere else?
 				if (dest.$$drag)
 					dest.$$drag.cancel();
+
+				parent.appendChild(dest);
+				host.appendChild(el);
 			}
 		}
 	}
