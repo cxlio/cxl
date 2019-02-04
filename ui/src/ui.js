@@ -549,6 +549,18 @@ component({
 });
 
 component({
+	name: 'cxl-content',
+	attributes: [ 'center' ],
+	styles: {
+		$: { margin: 16 },
+		$medium: { margin: 32 },
+		$large: { margin: 64 },
+		$xlarge: { width: 1200 },
+		$xlarge$center: { marginLeft: 'auto', marginRight: 'auto' }
+	}
+});
+
+component({
 	name: 'cxl-dialog',
 	template: '<cxl-backdrop><div &=".content content"></div></cxl-backdrop>',
 	bindings: 'role(dialog)',

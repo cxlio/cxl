@@ -8,6 +8,7 @@ const
 	splatParam    = /\*\w+/g,
 	escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g,
 	directive = cxl.directive,
+	component = cxl.component,
 	goLink = window.document.createElement('A')
 ;
 
@@ -480,7 +481,7 @@ cxl.component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'cxl-router-app',
 	template: `
 <cxl-meta></cxl-meta>

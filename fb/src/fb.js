@@ -221,7 +221,6 @@ Object.assign(fb, {
 
 	Collection: FireCollection,
 	Reference: FireReference,
-	//FireSubscriber: FireSubscriber,
 	Model: FireModel,
 
 	database: null,

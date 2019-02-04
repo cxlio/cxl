@@ -4,7 +4,6 @@ const
 	rx = cxl.rx,
 	EventListener = cxl.EventListener,
 	directive = cxl.directive,
-	behavior = cxl.behavior,
 	component = cxl.component,
 	dragManager = {
 		dragging: new Set(),
@@ -51,6 +50,7 @@ class DragBase extends cxl.Directive
 {
 	connect()
 	{
+		this.element.$$drag = this;
 		this.element.style.userSelect = 'none';
 		this.bindings = [
 			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
@@ -80,6 +80,13 @@ class DragBase extends cxl.Directive
 				return touch.identifier;
 	}
 
+	cancel(touch)
+	{
+		this.onEnd(touch);
+		this.touchId = null;
+		this.capture = false;
+	}
+
 	onMouseUp(ev)
 	{
 		if (this.capture)
@@ -87,11 +94,7 @@ class DragBase extends cxl.Directive
 			const touch = this.$getEvent(ev);
 
 			if (touch)
-			{
-				this.onEnd(touch);
-				this.touchId = null;
-				this.capture = false;
-			}
+				this.cancel(touch);
 		}
 	}
 
@@ -183,9 +186,9 @@ class DragMove extends DragBase {
 		var transform;
 
 		if (p==='x')
-			transform = `translateX(${this.x})`;
+			transform = `translateX(${this.x*100}%)`;
 		else if (p==='y')
-			transform = `translateY(${this.y})`;
+			transform = `translateY(${this.y*100}%)`;
 		else
 			transform = `translate(${this.x*100}%, ${this.y*100}%)`;
 
@@ -194,6 +197,7 @@ class DragMove extends DragBase {
 
 	onDrag(ev)
 	{
+		this.lastEvent = ev;
 		this.calculateDrag(ev);
 		this.performDrag(ev, this.parameter);
 		dragManager.drag(this, ev);
@@ -219,9 +223,6 @@ class DragMoveIn extends DragMove {
 
 	performDrag(ev, p)
 	{
-		this.x = (ev.clientX-this.offsetX) / this.width;
-		this.y = (ev.clientY-this.offsetY) / this.height;
-
 		if (p==='x')
 			this.set(this.x);
 		else if (p==='y')
@@ -232,11 +233,7 @@ class DragMoveIn extends DragMove {
 
 }
 
-directive('drag.in', DragMoveIn);
-
-directive('drag.region', {
-
-	elementsIn: null,
+class DragRegion extends cxl.Directive {
 
 	connect()
 	{
@@ -244,15 +241,16 @@ directive('drag.region', {
 		this.bindings = [
 			dragManager.subject.subscribe(this.onDragEvent.bind(this))
 		];
-	},
+	}
 
 	$event(type, element)
 	{
-		this.set({
-			type: type, target: this.element, elementsIn: this.elementsIn,
-			droppedElement: element
-		});
-	},
+		if (this.subscriber)
+			this.set({
+				type: type, target: this.element, elementsIn: this.elementsIn,
+				droppedElement: element
+			});
+	}
 
 	onDragEvent(ev)
 	{
@@ -260,14 +258,14 @@ directive('drag.region', {
 			this.rect = this.element.getBoundingClientRect();
 		else if (ev.type==='end')
 		{
-			if (this.isElementIn(ev))
+			if (this.elementsIn.has(ev.target))
 				this.$event('drop', ev.target);
 
 			this.onLeave(ev.target);
 
 		} else if (ev.type==='drag')
 			this.onMove(ev);
-	},
+	}
 
 	isElementIn(ev)
 	{
@@ -277,7 +275,7 @@ directive('drag.region', {
 		rect = this.rect
 	;
 		return (x > rect.left && x < rect.right && y > rect.top && y < rect.bottom);
-	},
+	}
 
 	onEnter(el)
 	{
@@ -291,7 +289,7 @@ directive('drag.region', {
 
 		if (size===0)
 			this.$event('enter');
-	},
+	}
 
 	onLeave(el)
 	{
@@ -305,7 +303,7 @@ directive('drag.region', {
 			if (els.size===0)
 				this.$event('leave');
 		}
-	},
+	}
 
 	onMove(ev)
 	{
@@ -319,68 +317,103 @@ directive('drag.region', {
 			this.onLeave(target);
 	}
 
-});
+}
 
-behavior('draggable.region', {
+class Draggable extends DragMove {
 
-	bindings: `drag.region:#onEvent`,
-	onEvent(ev, el)
+	onStart(ev)
 	{
-		cxl.dom.trigger(el, 'draggable.' + ev.type);
-
-		if (ev.type==='drop')
-			this.$behavior.next(ev);
+		super.onStart(ev);
+		this.element.dragging = true;
+		cxl.dom.trigger(this.element, 'draggable.start');
 	}
 
-});
+	onEnd(ev)
+	{
+		super.onEnd(ev);
+		this.element.dragging = false;
+		cxl.dom.trigger(this.element, 'draggable.end');
+	}
 
+}
+
+class DraggableRegion extends DragRegion {
+
+	$event(type, element)
+	{
+		const host = this.element;
+
+		super.$event(type, element);
+		cxl.dom.trigger(host, 'draggable.' + type);
+
+		if (type==='leave' || type==='enter')
+			host.over = type==='enter';
+
+		host['in-count'] = this.elementsIn.size;
+	}
+
+}
+
+class DraggableSlot extends DraggableRegion {
+
+	$event(type, el)
+	{
+		super.$event(type, el);
+
+		if (type==='drop')
+		{
+			const host = this.element, parent = el.parentElement;
+
+			if (cxl.dom.isEmpty(host))
+				host.appendChild(el);
+			else if (host.swap && parent.swap)
+			{
+				const dest = host.childNodes[0];
+				parent.appendChild(dest);
+				host.appendChild(el);
+
+				// Cancel drag if element is swapped
+				// TODO move this somewhere else?
+				if (dest.$$drag)
+					dest.$$drag.cancel();
+			}
+		}
+	}
+
+}
+
+directive('drag.in', DragMoveIn);
+directive('drag.region', DragRegion);
 directive('drag.events', DragEvents);
-directive('draggable', DragMove);
+directive('drag', DragMove);
+
+directive('draggable.region', DraggableRegion);
+directive('draggable.slot', DraggableSlot);
+directive('draggable', Draggable);
 
 component({
 	name: 'cxl-drag-region',
 	events: [ 'draggable.in', 'draggable.out', 'draggable.leave', 'draggable.enter', 'draggable.drop' ],
 	attributes: [ 'over', 'in-count' ],
-	bindings: 'drag.region:#onEvent'
+	bindings: 'draggable.region'
 }, {
 	'in-count': 0,
-
-	onEvent(ev, host)
-	{
-		switch (ev.type) {
-		case 'drop': this.onDrop(ev, host); break;
-		case 'enter': case 'leave': this.over = ev.type==='enter'; break;
-		}
-
-		this['in-count'] = ev.elementsIn.size;
-		cxl.dom.trigger(host, 'draggable.' + ev.type);
-	},
-	onDrop()
-	{
-	}
+	over: false
 });
 
 component({
 	name: 'cxl-drag-slot',
-	extend: 'cxl-drag-region',
-	attributes: ['swap']
+	events: [ 'draggable.in', 'draggable.out', 'draggable.leave', 'draggable.enter', 'draggable.drop' ],
+	attributes: [ 'over', 'in-count', 'swap' ],
+	bindings: 'draggable.slot'
 }, {
-	onDrop(ev, host)
-	{
-		const el = ev.droppedElement, parent = el.parentElement;
-
-		if (cxl.dom.isEmpty(host))
-			host.appendChild(el);
-		else if (this.swap && parent.swap)
-		{
-			parent.appendChild(host.childNodes[0]);
-			host.appendChild(el);
-		}
-	}
+	'in-count': 0,
+	over: false
 });
 
 component({
 	name: 'cxl-drag',
+	attributes: [ 'dragging' ],
 	events: [ 'draggable.start', 'draggable.end' ],
 	bindings: 'draggable'
 });

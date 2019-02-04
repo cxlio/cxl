@@ -382,6 +382,7 @@ Checked: <span &="=test:text"></span>
 	}
 	.drag-slot[over] { box-shadow: 0 0 2px var(--cxl-primary); }
 	.draggable {font-size:30px;cursor:move;display:block;width:100%;line-height:128px; background:#fff;}
+	.draggable[dragging] { z-index: 5; box-shadow: 5px 5px 15px var(--cxl-elevation); }
 </style>
 <cxl-grid columns="repeat(5, 1fr)">
 	<cxl-drag-slot swap class="drag-slot"><cxl-drag class="draggable""><cxl-icon icon="arrow-down"></cxl-icon></cxl-drag></cxl-drag-slot>
@@ -440,6 +441,7 @@ Drag Here <x &="=count:text"></x>
 	}
 	.drag-slot-demo1[over] { box-shadow: 0 0 2px var(--cxl-primary); }
 	.drag-slot-draggable {font-size:30px;cursor:move;display:block;width:100%;line-height:128px; background:#fff;}
+	.drag-slot-draggable[dragging] { z-index: 5; box-shadow: 5px 5px 15px var(--cxl-elevation); }
 </style>
 <cxl-grid columns="repeat(5, 1fr)">
 	<cxl-drag-slot swap class="drag-slot-demo1"><cxl-drag class="drag-slot-draggable""><cxl-icon icon="arrow-down"></cxl-icon></cxl-drag></cxl-drag-slot>
