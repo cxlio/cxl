@@ -2001,7 +2001,7 @@ component({
 		focusable
 		role(slider)
 		keypress(arrowleft):#onLeft keypress(arrowright):#onRight
-		drag.in(x):log:#onDrag
+		drag.in(x):#onDrag
 	`,
 	template: `
 <div &=".background">
