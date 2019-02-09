@@ -5,7 +5,6 @@ const
 	component = cxl.component,
 	behavior = cxl.behavior,
 	directive = cxl.directive,
-	Undefined = cxl.Undefined,
 	ui = cxl.ui = {
 		icons: {}
 	},
@@ -1895,7 +1894,7 @@ component({
 component({
 	name: 'cxl-multiselect',
 	extend: 'cxl-select',
-	bindings: 'on(selectable.register):#onRegister',
+	bindings: 'on(selectable.register):#onRegister root.on(touchend):#close',
 	styles: {
 		selectedText: {
 			color: 'onSurface', lineHeight: 20, paddingRight: 16,

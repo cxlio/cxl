@@ -46,6 +46,66 @@ function defineSchema(model, prop, def)
 	return def;
 }
 
+function normalizeEntity(def)
+{
+	const schema = def.schema;
+
+	if (typeof(def.schema) !== 'function')
+		def.schema = () => schema;
+
+	return def;
+}
+
+function getReference(path, key)
+{
+	const parent = fb(path);
+
+	return (key===undefined || key===null) ? parent.push() : parent.reference(key);
+}
+
+function applySchema(entity, schema)
+{
+	const ref = entity.reference.$ref;
+
+	for (let i in schema)
+	{
+		const Field = schema[i];
+		entity[i] = new Field(ref.child(i)); //defineSchema(this, i, schema[i]);
+	}
+}
+
+class Entity
+{
+	static create(data)
+	{
+		return new Promise(resolve => {
+			const result = new this();
+			result.reference.set(data);
+			resolve(result);
+		});
+	}
+
+	get key()
+	{
+		return this.reference.key;
+	}
+
+	constructor(key)
+	{
+	const
+		def = normalizeEntity(this.constructor.define()),
+		reference = getReference(def.path, key),
+		schema = def.schema(reference)
+	;
+		Object.defineProperty(this, 'reference', {
+			value: reference,
+			enumerable: false
+		});
+
+		applySchema(this, schema);
+	}
+}
+
 /**
  * A FireModel helps build and validate Firebase data models
  */
@@ -121,6 +181,12 @@ class FireReference extends cxl.rx.Observable
 
 	set(value) { return this.$ref.set(value); }
 
+	push(value)
+	{
+		const ref = this.$ref.push(value);
+		return new FireReference(ref);
+	}
+
 	get parent() { return new FireReference(this.$ref.parent); }
 
 	reference(path)
@@ -147,6 +213,13 @@ class FireReference extends cxl.rx.Observable
 
 class FireCollection extends FireReference
 {
+	static of(EntityClass)
+	{
+		const collection = class extends FireCollection {};
+		collection.prototype.$getItem = function(snap) { return new EntityClass(snap.value); };
+		return collection;
+	}
+
 	constructor(pathOrRef)
 	{
 		super();
@@ -163,15 +236,18 @@ class FireCollection extends FireReference
 		return this.destroy.bind(this);
 	}
 
-	push(value)
+	$getItem(snap)
 	{
-		const ref = this.$ref.push(value);
-		return new FireReference(ref);
+		return snap;
 	}
 
 	$onSnapshot(type, subscriber, snap)
 	{
-		const item = new Snapshot(snap);
+		let item = new Snapshot(snap);
+
+		if (type==='added' || type==='removed')
+			item = this.$getItem(item);
+
 		subscriber.next(new cxl.rx.CollectionEvent(this, type, item));
 	}
 }
@@ -222,6 +298,8 @@ Object.assign(fb, {
 	Collection: FireCollection,
 	Reference: FireReference,
 	Model: FireModel,
+
+	Entity: Entity,
 
 	database: null,
 	started: false,

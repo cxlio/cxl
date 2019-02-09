@@ -568,7 +568,8 @@ cxl.css = Object.assign(css, {
 	variables: {
 		// Animation speed
 		speed: '0.2s',
-		font: 'Roboto, sans-serif'
+		font: 'Roboto, sans-serif',
+		fontMonospace: 'monospace'
 	},
 
 	typography: {
@@ -585,7 +586,7 @@ cxl.css = Object.assign(css, {
 		subtitle: { fontSize: 16, lineHeight: 22, letterSpacing: 0.15 },
 		subtitle2: { fontSize: 14, lineHeight: 18, letterSpacing: 0.1 },
 		button: { fontSize: 14, lineHeight: 20, letterSpacing: 1.25, textTransform: 'uppercase' },
-		code: { fontFamily: 'monospace' }
+		code: { fontFamily: 'var(--fontMonospace)' }
 	},
 
 	extend(def)

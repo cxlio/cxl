@@ -228,7 +228,7 @@ class Router {
 
 	getPath(routeId, params)
 	{
-		var path = this.routes[routeId].path;
+		const path = this.routes[routeId].path;
 
 		params = params || cxl.router.current;
 
@@ -240,7 +240,7 @@ class Router {
 	 */
 	path(path)
 	{
-		var hash;
+		/*var hash;
 		// TODO
 		if (path[0]!=='/')
 		{
@@ -250,7 +250,7 @@ class Router {
 
 		goLink.setAttribute('href', path);
 		path = goLink.href.slice(window.location.origin.length);
-
+		*/
 		return path;
 	}
 
