@@ -6,49 +6,63 @@ function isJSON(xhr)
 	return contentType && contentType.indexOf('application/json')!==-1;
 }
 
-function ajax(def)
+function parse(xhr)
 {
-	function parse(xhr)
-	{
-		return isJSON(xhr) ?
-			JSON.parse(xhr.responseText) : xhr.responseText;
-	}
-
-	return cxl.ajax.xhr(def).then(parse, function(xhr) {
-		return Promise.reject(parse(xhr));
-	});
+	return isJSON(xhr) ?
+		JSON.parse(xhr.responseText) : xhr.responseText;
 }
 
-cxl.ajax = Object.assign(ajax, {
+class Ajax
+{
+	constructor(defaults)
+	{
+		this.defaults = Object.assign({}, {
+			method: 'GET',
+			contentType: 'application/json',
+			// 'json', 'text' or 'arraybuffer'
+			dataType: 'json',
+			// function(xhr)
+			setup: null,
+			// URL prefix
+			baseURL: '',
+			// Resolve before sending request
+			resolve: null
+		}, defaults);
+	}
 
 	xhr(def)
 	{
-		return new Promise(function(resolve, reject) {
+		return new Promise((resolve, reject) => {
 		var
 			xhr = new XMLHttpRequest(),
-			options = Object.assign({}, cxl.ajax.defaults, def),
+			options = Object.assign({}, this.defaults, def),
 			data
 		;
 			if (options.setup)
 				options.setup(xhr);
 
-			xhr.open(options.method, options.url);
+			xhr.open(options.method, options.baseURL + options.url);
 
-			if ('data' in options)
+			function send()
 			{
-				if (options.contentType)
-					xhr.setRequestHeader('Content-Type', options.contentType);
+				if ('data' in options)
+				{
+					if (options.contentType)
+						xhr.setRequestHeader('Content-Type', options.contentType);
 
-				data = options.dataType==='json' && typeof(options.data)!=='string' ?
-					JSON.stringify(options.data) :
-					options.data;
+					data = options.dataType==='json' && typeof(options.data)!=='string' ?
+						JSON.stringify(options.data) :
+						options.data;
+				}
+
+				if (options.responseType)
+					xhr.responseType = options.responseType;
+
+				if (options.progress)
+					xhr.addEventListener('progress', options.progress);
+
+				xhr.send(data);
 			}
-
-			if (options.responseType)
-				xhr.responseType = options.responseType;
-
-			if (options.progress)
-				xhr.addEventListener('progress', options.progress);
 
 			xhr.onreadystatechange = function()
 			{
@@ -59,9 +73,19 @@ cxl.ajax = Object.assign(ajax, {
 				}
 			};
 
-			xhr.send(data);
+			if (options.resolve)
+				Promise.resolve(options.resolve(xhr)).then(send, reject);
+			else
+				send();
 		});
-	},
+	}
+
+	request(def)
+	{
+		return this.xhr(def).then(parse, function(xhr) {
+			return Promise.reject(parse(xhr));
+		});
+	}
 
 	get(url, params)
 	{
@@ -76,23 +100,17 @@ cxl.ajax = Object.assign(ajax, {
 			url += '?' + q.join('&');
 		}
 
-		return cxl.ajax({ url: url });
-	},
+		return this.request({ url: url });
+	}
 
 	post(url, params)
 	{
-		return cxl.ajax({ method: 'POST', url: url, data: params });
-	},
-
-	defaults: {
-		method: 'GET',
-		contentType: 'application/json',
-		// 'json', 'text' or 'arraybuffer'
-		dataType: 'json',
-		// function(xhr)
-		setup: null
+		return this.request({ method: 'POST', url: url, data: params });
 	}
+}
 
+cxl.ajax = Object.assign(new Ajax(), {
+	Ajax: Ajax
 });
 
 })(this.cxl);
