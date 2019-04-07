@@ -173,6 +173,11 @@
 			icon: 'list',
 			tags: [ 'layout' ]
 		},
+		'cxl-list': {
+			icon: 'list',
+			tags: [ 'layout' ],
+			beta: true
+		},
 		'cxl-menu': {
 			icon: 'list-alt',
 			tags: [ 'navigation' ]

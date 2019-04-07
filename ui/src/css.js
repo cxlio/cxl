@@ -69,6 +69,29 @@ function rgba(r, g, b, a)
 	return new RGBA(r, g, b, a);
 }
 
+const
+	COLORS = {
+		elevation: rgba(0,0,0,0.26),
+		primary: rgba(0x15, 0x65, 0xc0),
+		get primaryLight() { return this.primary.alpha(0.24); }, //: rgba(0x4a, 0x65, 0x72, 0.24),
+
+		secondary: rgba(0xf9, 0xaa, 0x33),
+		surface: rgba(0xff, 0xff, 0xff),
+		error: rgba(0xb0, 0x00, 0x20),
+
+		onPrimary: rgba(0xff,0xff,0xff),
+		get onPrimaryLight() { return this.primary; },
+		onSecondary: rgba(0,0,0),
+		onSurface: rgba(0, 0, 0),
+		onError: rgba(0xff, 0xff, 0xff),
+
+		get background() { return this.surface; },
+		get link() { return this.primary; },
+		get headerText() { return this.onSurface.alpha(0.6); },
+		get divider() { return this.onSurface.alpha(0.16); }
+	}
+;
+
 class StyleSheet
 {
 	constructor(meta, native)
@@ -518,26 +541,17 @@ cxl.css = Object.assign(css, {
 
 	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
 
-	colors: {
-		elevation: rgba(0,0,0,0.26),
-		primary: rgba(0x15, 0x65, 0xc0),
-		get primaryLight() { return this.primary.alpha(0.24); }, //: rgba(0x4a, 0x65, 0x72, 0.24),
+	colors: COLORS,
 
-		secondary: rgba(0xf9, 0xaa, 0x33),
-		surface: rgba(0xff, 0xff, 0xff),
-		error: rgba(0xb0, 0x00, 0x20),
-
-		onPrimary: rgba(0xff,0xff,0xff),
-		get onPrimaryLight() { return this.primary; },
-		onSecondary: rgba(0,0,0),
-		onSurface: rgba(0, 0, 0),
-		onError: rgba(0xff, 0xff, 0xff),
-
-		get background() { return this.surface; },
-		get link() { return this.primary; },
-		get headerText() { return this.onSurface.alpha(0.6); },
-		get divider() { return this.onSurface.alpha(0.16); },
-	},
+	colorsPrimary: cxl.extend({}, COLORS, {
+		surface: COLORS.primary,
+		onSurface: COLORS.onPrimary,
+		primary: COLORS.secondary,
+		onPrimary: COLORS.onSecondary,
+		link: COLORS.onPrimary,
+		error: rgba(0xff,0x6e,0x40),
+		onError: rgba(0,0,0)
+	}),
 
 	fonts: {},
 

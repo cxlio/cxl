@@ -2,11 +2,13 @@
 "use strict";
 
 const
-	fb = cxl.fb = function(path) {
-		return new fb.Reference(path);
-	},
-	map = cxl.rx.operators.map,
-	directive = cxl.directive
+	fb = cxl.fb = path => new fb.Reference(path),
+	rx = cxl.rx,
+	map = rx.operators.map,
+	directive = cxl.directive,
+
+	Observable = rx.Observable,
+	CollectionEvent = rx.CollectionEvent
 ;
 
 function getPath(path, state)
@@ -46,66 +48,6 @@ function defineSchema(model, prop, def)
 	return def;
 }
 
-function normalizeEntity(def)
-{
-	const schema = def.schema;
-
-	if (typeof(def.schema) !== 'function')
-		def.schema = () => schema;
-
-	return def;
-}
-
-function getReference(path, key)
-{
-	const parent = fb(path);
-
-	return (key===undefined || key===null) ? parent.push() : parent.reference(key);
-}
-
-function applySchema(entity, schema)
-{
-	const ref = entity.reference.$ref;
-
-	for (let i in schema)
-	{
-		const Field = schema[i];
-		entity[i] = new Field(ref.child(i)); //defineSchema(this, i, schema[i]);
-	}
-}
-
-class Entity
-{
-	static create(data)
-	{
-		return new Promise(resolve => {
-			const result = new this();
-			result.reference.set(data);
-			resolve(result);
-		});
-	}
-
-	get key()
-	{
-		return this.reference.key;
-	}
-
-	constructor(key)
-	{
-	const
-		def = normalizeEntity(this.constructor.define()),
-		reference = getReference(def.path, key),
-		schema = def.schema(reference)
-	;
-		Object.defineProperty(this, 'reference', {
-			value: reference,
-			enumerable: false
-		});
-
-		applySchema(this, schema);
-	}
-}
-
 /**
  * A FireModel helps build and validate Firebase data models
  */
@@ -117,7 +59,7 @@ class FireModel
 	 */
 	constructor(refPath, schema)
 	{
-		this.reference = refPath instanceof fb.Reference ? refPath : cxl.fb(refPath);
+		this.reference = refPath instanceof fb.Reference ? refPath : fb(refPath);
 
 		const props = typeof(schema)==='function' ? schema(this.reference) : schema;
 
@@ -127,7 +69,7 @@ class FireModel
 
 }
 
-class FireMeta extends cxl.rx.Observable
+class FireMeta extends Observable
 {
 	constructor(ref)
 	{
@@ -147,22 +89,35 @@ class FireMeta extends cxl.rx.Observable
 	}
 }
 
-class FireReference extends cxl.rx.Observable
+class FireReference extends Observable
 {
+	static of(EntityClass)
+	{
+		return class extends this {
+			$createRef(ref) { return new EntityClass(new FireReference(ref)); }
+			$getItem(snap) { return new EntityClass(snap.val()); }
+		};
+	}
+
 	constructor(path)
 	{
 		super();
-		this.$ref = (!path || typeof(path)==='string') ? cxl.fb.database.ref(path) : path;
+		this.$ref = (!path || typeof(path)==='string') ? fb.database.ref(path) : path;
 	}
 
-	$onValue(snap)
+	$getItem(snap)
 	{
-		this.next(snap.val());
+		return snap.val();
+	}
+
+	$onValue(subscriber, snap)
+	{
+		subscriber.next(this.$getItem(snap));
 	}
 
 	__subscribe(subscriber)
 	{
-		const onValue = this.$onValue.bind(subscriber);
+		const onValue = this.$onValue.bind(this, subscriber);
 		this.$ref.on('value', onValue);
 		return this.$ref.off.bind(this.$ref, 'value', onValue);
 	}
@@ -179,12 +134,11 @@ class FireReference extends cxl.rx.Observable
 	get key() { return this.$ref.key; }
 	get path() { return this.$ref.path.toString(); }
 
-	set(value) { return this.$ref.set(value); }
+	set(value) { return this.$ref.set(value).then(() => this); }
 
 	push(value)
 	{
-		const ref = this.$ref.push(value);
-		return new FireReference(ref);
+		return this.$ref.push(value).then(ref => new FireReference(ref));
 	}
 
 	get parent() { return new FireReference(this.$ref.parent); }
@@ -213,22 +167,28 @@ class FireReference extends cxl.rx.Observable
 
 class FireCollection extends FireReference
 {
-	static of(EntityClass)
+	static map(path, EntityClass)
 	{
-		const collection = class extends FireCollection {};
-		collection.prototype.$getItem = function(snap) { return new EntityClass(snap.value); };
-		return collection;
+		return class Collection extends this {
+			$createRef(ref) { return new EntityClass(new FireReference(ref)); }
+			$getItem(snap) {
+				return new EntityClass(fb(path).reference(snap.val()));
+			}
+		};
 	}
 
-	constructor(pathOrRef)
+	static mapKey(path, EntityClass)
 	{
-		super();
-		this.$ref = typeof(pathOrRef)==='string' ? fb.database.ref(pathOrRef) : pathOrRef;
+		return class Collection extends this {
+			$getItem(snap) {
+				return new EntityClass(fb(path).reference(snap.key));
+			}
+		};
 	}
 
 	__subscribe(subscriber)
 	{
-		subscriber.next(new cxl.rx.CollectionEvent(this, 'empty'));
+		subscriber.next(new CollectionEvent(this, 'empty'));
 		this.$ref.on('child_added', this.$onSnapshot.bind(this, 'added', subscriber));
 		this.$ref.on('child_removed', this.$onSnapshot.bind(this, 'removed', subscriber));
 		this.$ref.limitToFirst(1).once('value', this.$onSnapshot.bind(this, 'meta', subscriber));
@@ -236,19 +196,25 @@ class FireCollection extends FireReference
 		return this.destroy.bind(this);
 	}
 
+	$createRef(ref)
+	{
+		return new FireReference(ref);
+	}
+
+	push(value)
+	{
+		return this.$ref.push(value).then(this.$createRef);
+	}
+
 	$getItem(snap)
 	{
-		return snap;
+		return new Snapshot(snap);
 	}
 
 	$onSnapshot(type, subscriber, snap)
 	{
-		let item = new Snapshot(snap);
-
-		if (type==='added' || type==='removed')
-			item = this.$getItem(item);
-
-		subscriber.next(new cxl.rx.CollectionEvent(this, type, item));
+		let item = (type==='added' || type==='removed') ? this.$getItem(snap) : new Snapshot(snap);
+		subscriber.next(new CollectionEvent(this, type, item));
 	}
 }
 
@@ -298,8 +264,7 @@ Object.assign(fb, {
 	Collection: FireCollection,
 	Reference: FireReference,
 	Model: FireModel,
-
-	Entity: Entity,
+	Snapshot: Snapshot,
 
 	database: null,
 	started: false,

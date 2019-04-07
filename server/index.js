@@ -4,184 +4,225 @@
 const
 	path = require('path'),
 	fs = require('fs'),
-	os = require('os'),
+	cp = require('child_process'),
 
 	express = require('express'),
 	colors = require('colors/safe'),
-	pathToRegexp = require('path-to-regexp'),
 
 	protocols = {
 		http: require('http'),
 		https: require('https')
-	},
-
-	modules = []
+	}
 ;
 
-class Route {
-
-	constructor(options)
+class Route
+{
+	constructor(method, path, handle)
 	{
-		if (typeof(options)==='string')
-			this.path = options;
-		else
-			Object.assign(this, options);
+		this.method = method;
+		this.path = path;
+		this.handle = handle;
 	}
 
-	get path()
+	load(server)
 	{
-		return this.__path;
+		server.server[this.method](this.path, this.request.bind(server, this.handle));
 	}
 
-	set path(val)
+	request(handle, req, res)
 	{
-		this.__path = val;
-		this.__keys = [];
-
-		this.regex = pathToRegexp(val, this.__keys);
-	}
-
-	match(path)
-	{
-		var m = this.regex.exec(path);
-
-		if (m)
+		function onError(e)
 		{
-			this.params = {};
-			this.__keys.forEach((k, i) => {
-				this.params[k.name] = m[i+1];
-			});
+			res.sendStatus(500);
+			return Promise.reject(e);
+		}
 
-			return true;
+		try {
+			const result = handle(req, res);
+
+			return Promise.resolve(result).then(response => {
+				if (response !== undefined)
+					res.send(response);
+			}, onError);
+
+		} catch(e)
+		{
+			return onError(e);
 		}
 	}
+}
 
+function hrtime()
+{
+	return process.hrtime.bigint();
+}
+
+function operation(fn)
+{
+const
+	t = hrtime(),
+	result = typeof(fn)==='function' ? fn() : fn
+;
+	return Promise.resolve(result).then(res => ({
+		start: t,
+		end: hrtime() - t,
+		result: res
+	}));
+}
+
+function formatTime(time)
+{
+const
+	s = time / 1000,
+	str = s.toFixed(4) + 's'
+;
+	// Color code based on time,
+	return s > 0.1 ? (s > 0.5 ? colors.red(str) : colors.yellow(str)) : str;
 }
 
 class Logger
 {
-	constructor(prefix)
+	constructor(prefix, color = 'green')
 	{
-		this.prefix = prefix;
-	}
+		const coloredPrefix = colors[color](prefix);
 
-	error(msg)
-	{
-		console.error(colors.red(`${this.prefix} ${msg}`));
-	}
+		function log(msg)
+		{
+			console.log(`${coloredPrefix} ${msg}`);
+		}
 
-	dbg()
-	{
-	}
-
-	log(msg)
-	{
-		console.log(`${this.prefix} ${msg}`);
-	}
-
-	operation(msg, fn, scope)
-	{
-	var
-		t = this.hrtime(),
-		result = typeof(fn)==='function' ? fn.call(scope) : fn,
-		done = () => this.log(`${msg} (${this.formatTime(t)})`)
-	;
-		if (result && result.then)
-			result = result.then(function(res) {
-				done();
-				return res;
+		log.dbg = this.dbg;
+		log.error = msg => console.error(colors.red(`${prefix} ${msg}`));
+		log.operation = (msg, fn, scope) => {
+			return operation(scope ? fn.bind(scope) : fn).then(result => {
+				log(msg + ` ${formatTime(result.end)}`);
+				return result.result;
 			});
-		else
-			done();
+		};
 
-		return result;
+		return log;
 	}
+}
+
+class ServerOptions
+{
+	constructor(p)
+	{
+		this.port = p.port;
+		this.host = p.host;
+		this.cors = p.cors;
+
+		if (p.secure)
+			this.loadCertificates(p.secure);
+	}
+
+	loadCertificates(p)
+	{
+		if (p.pfx)
+			p.pfx = fs.readFileSync(p.pfx);
+		else
+		{
+			p.key = fs.readFileSync(p.key);
+			p.cert = fs.readFileSync(p.cert);
+		}
+
+		this.secure = p;
+	}
+
+
+}
+
+function parseBody(req)
+{
+	return new Promise((resolve, reject) => {
+		const body = [];
+		req.on('data', chunk => body.push(chunk));
+		req.on('end', () => {
+			try {
+				const raw = Buffer.concat(body).toString();
+
+				if (req.is('application/json'))
+					resolve(JSON.parse(raw));
+				else
+					resolve(raw);
+			} catch(e)
+			{
+				reject(e);
+			}
+		});
+	});
 }
 
 class Server {
 
-	constructor()
+	constructor(p)
 	{
-		this.server = express();
-		this.server.set('env', 'production');
+		this.options = new ServerOptions(p);
+
+		if (this.options.cors)
+			this.cors(this.options.cors);
 	}
 
-	__findAddress(a)
+	$createServer()
 	{
-	var
-		ni = os.networkInterfaces(),
-		me=this, i, dns=require('dns')
-	;
+		const server = express();
+		server.set('env', 'production');
 
-		function log(ip, err, host)
-		{
-			me.log(`Listening to ${me.secure?'https':'http'}://${host}:${a.port} (${ip})`);
-		}
+		// body parser
+		server.use((req, res, next) => {
+			parseBody(req).then(body => {
+				req.body = body;
+				next();
+			});
+		});
 
-		function resolve(address)
-		{
-			dns.lookupService(address.address, me.port, log.bind(me, address.address));
-		}
-
-		for (i in ni)
-			ni[i].forEach(resolve, this);
+		return server;
 	}
 
-	onServerStart()
+	get server()
 	{
-	var
-		a = this.__listener.address(),
-		address = a.address
-	;
-		if (!this.port)
-			this.port = a.port;
+		return this.$server || (this.$server = this.$createServer());
+	}
 
-		if (address==='::')
-			this.__findAddress(a);
-		else
-			this.log('Listening to ' + address + ':' + a.port);
+	get port()
+	{
+		return this.__listener.address().port;
+	}
+
+	get host()
+	{
+		return this.__listener.address().address;
 	}
 
 	onServerError(e)
 	{
 		if (e.code==='EACCES')
-			this.error('Could not start server in ' +
+			throw new Error('Could not start server in ' +
 				this.host + ':' + this.port +
 				'. Make sure the host and port are not already in use.'
 			);
-		this.error(e);
-	}
-
-	createSecureServer(options)
-	{
-		if (options.pfx)
-			options.pfx = fs.readFileSync(options.pfx);
 		else
-		{
-			options.key = fs.readFileSync(options.key);
-			options.cert = fs.readFileSync(options.cert);
-		}
-
-		return protocols.https.createServer(options, this.server);
+			throw new Error(e);
 	}
 
-	// TODO add validation
-	_loadRoute(def)
+	cors(hosts)
 	{
-		var args = cxl.result(def, 'args');
+		this.server.use((req, res, next) => {
+			res.header('Access-Control-Allow-Origin', hosts || '*');
+			res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+			if (req.method==='OPTIONS')
+				res.end();
+			else
+				next();
+		});
 
-		this.server[def.fn].apply(this.server, args);
+		return this;
 	}
 
-	_safeRoute(fn, req, res)
+	use(middleware)
 	{
-		try {
-			fn.call(this, req, res);
-		} catch(e)
-		{
-			this.error(e);
-			res.sendStatus(500);
-		}
+		this.server.use(middleware);
+		return this;
 	}
 
 	static(a, b)
@@ -194,120 +235,103 @@ class Server {
 
 	/**
 	 * Add new route. Order matters.
-	 *
-	 * @param {string|function} fn Function to execute or method name. It will
-	 *                             be executed in the module's context.
 	 */
 	route(method, path, fn)
 	{
-		if (typeof(fn)==='string')
-			fn = this[fn];
-
-		this.__routes.push({
-			id: `route ${method} ${path}`,
-			fn: method.toLowerCase(),
-			args: [ path, this._safeRoute.bind(this, fn) ]
-		});
-
+		const route = new Route(method.toLowerCase(), path, fn);
+		route.load(this);
 		return this;
 	}
 
 	start()
 	{
-	var
-		l = this.__listener = this.secure ?
-			this.createSecureServer(this.secure) :
+	const
+		p = this.options,
+		l = this.__listener = p.secure ?
+			protocols.https.createServer(p.secure, this.server) :
 			protocols.http.createServer(this.server)
 	;
-		l.listen(this.port, this.host, this.onServerStart.bind(this));
+		l.listen(p.port, p.host);
 
-		this.server.started = true;
-
-		process.on('close', l.close.bind(l));
 		l.on('error', this.onServerError.bind(this));
 	}
 
 }
 
-class Module extends Logger {
-
-	static create(name)
+class Application
+{
+	constructor(env)
 	{
-		return new this(name);
+		this.$loadPackage();
+		this.$loadEnvironment(env);
+		this.log = new Logger(this.name);
 	}
 
-	constructor(name)
+	$loadPackage()
 	{
-		super();
-
-		this.name = name;
-		this.logColor = this.logColor || 'green';
-		this.port = 80;
-		this.host = '';
-		this.resources = [];
-		this.prefix = colors[this.logColor](name);
+	const
+		SCRIPTDIR = path.dirname(process.argv[1]),
+		BASEDIR = cp.execSync(`npm prefix`, { cwd: SCRIPTDIR }).toString().trim(),
+		pkg = this.package = require(BASEDIR + '/package.json')
+	;
+		this.name = pkg.name;
+		this.version = pkg.version;
+		this.plugins = [];
 	}
 
-	/**
-	 * Initialize module
-	 */
-	start()
+	$loadEnvironment(environment)
 	{
+		environment = environment || require(process.cwd() + '/environment.json');
+		this.environment = environment;
+
+		if (environment.debug)
+			exports.enableDebug();
 	}
 
+	start(fn)
+	{
+		fn.call(this, this.environment);
+
+		return this;
+	}
 }
 
-class CXL extends Module
-{
+Object.assign(exports, global.cxl = {
+
+	debug: false,
+
+	Application: Application,
+	Logger: Logger,
+	Route: Route,
+	Server: Server,
+
+	serverModule()
+	{
+		return env => new Server(env.server);
+	},
+
+	application(env)
+	{
+		return new Application(env);
+	},
+
+	extend(A, B, C, D)
+	{
+		for (var i in B)
+			if (B.hasOwnProperty(i))
+				Object.defineProperty(A, i, Object.getOwnPropertyDescriptor(B, i));
+		if (C || D)
+			cxl.extend(A, C, D);
+
+		return A;
+	},
+
 	/**
 	 * Enable debug module
 	 */
 	enableDebug()
 	{
-		this.debug = true;
-		require('./debug');
-	}
-
-	module(name, Def)
-	{
-		if (typeof(Def)!=='function')
-			Def = this.extendClass(Module, Def);
-
-		return (modules[name] = Def);
-	}
-
-	start()
-	{
-		process.title = this.name;
-
-		for (var i in modules)
-		{
-			modules[i].create(i).start();
-			this.dbg(`Module started ${i}`);
-		}
-	}
-}
-
-Object.assign(exports, {
-
-	// TODO dont load automatically
-	Logger: Logger,
-	Module: Module,
-	Route: Route,
-	Server: Server,
-
-	formatTime(time, time2)
-	{
-		if (time2===undefined)
-			time2 = cxl.hrtime();
-
-	var
-		s = time2-time,
-		str = s.toFixed(4) + 's'
-	;
-
-		// Color code based on time,
-		return s > 0.1 ? (s > 0.5 ? colors.red(str) : colors.yellow(str)) : str;
+		this.debug = require('./debug')(this);
 	}
 
 });

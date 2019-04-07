@@ -36,7 +36,6 @@ const
 			borderColor: 'primary', scaleX: 0, top: -1
 		},
 		focusLine$invalid$touched: { borderColor: 'error' },
-		focusLine$inverse: { borderColor: 'secondary' },
 		focusLine$focus: { scaleX: 1 }
 	},
 
@@ -115,7 +114,7 @@ behavior('navigation.grid', {
 	}
 });
 
-behavior('navigation.list', {
+behavior('navigation.select', {
 	bindings: 'keypress:#onKey:event.prevent',
 	onKey(ev, host)
 	{
@@ -143,6 +142,36 @@ behavior('navigation.list', {
 				el = cxl.dom.findNext(el, findByFirst) || cxl.dom.find(host, findByFirst) || this.selected;
 			else
 				return cxl.Skip;
+		}
+
+		this.$behavior.next(el);
+	}
+});
+
+behavior('navigation.list', {
+	bindings: 'keypress:#onKey:event.prevent',
+	onKey(ev, host)
+	{
+	var
+		children = new cxl.ElementChildren(host),
+		el = children.focused,
+		key = ev.key
+	;
+		switch (key) {
+		case 'ArrowDown':
+			do {
+				el = el ? children.nextTo(el) || el : children.first;
+			} while (el && el.tabIndex === -1 && el !== children.first);
+
+			break;
+		case 'ArrowUp':
+			do {
+				el = el ? children.previousTo(el) || el : children.last;
+			} while (el && el.tabIndex === -1 && el !== children.last);
+
+			break;
+		default:
+			return cxl.Skip;
 		}
 
 		this.$behavior.next(el);
@@ -310,7 +339,7 @@ directive('registable.host', {
 component({
 	name: 'cxl-form-input',
 	events: [ 'change', 'input', 'invalid', 'blur', 'focus' ],
-	attributes: [ 'value', 'invalid', 'disabled', 'touched' ],
+	attributes: [ 'value', 'invalid', 'disabled', 'touched', 'autocomplete' ],
 	bindings: 'form.input',
 	styles: [ DisabledCSS, InvalidCSS ]
 });
@@ -566,7 +595,7 @@ component({
 	styles: {
 		content: {
 			backgroundColor: 'surface', position: 'absolute',
-			top: 0, left: 0, right: 0, bottom: 0
+			top: 0, left: 0, right: 0, bottom: 0, color: 'onSurface'
 		},
 		content$small: {
 			elevation: 12, translateY: '-50%', top: '50%', bottom: 'auto',
@@ -642,7 +671,7 @@ component({
 	styles: {
 		drawer: {
 			backgroundColor: 'surface', position: 'absolute', top: 0, left: 0,
-			width: '85%', bottom: 0, opacity: 0,
+			width: '85%', bottom: 0, opacity: 0, color: 'onSurface',
 			overflowY: 'auto', elevation: 5, translateX: '-105%'
 		},
 		drawer$right$permanent$xlarge: { translateX: '-100%', width: 320 },
@@ -679,6 +708,12 @@ component({
 });
 
 component({
+	name: 'cxl-appbar-fab',
+	extend: 'cxl-fab',
+	bindings: 'anchor.send(cxl-appbar-actions)'
+});
+
+component({
 	name: 'cxl-form',
 	events: [ 'submit' ],
 	bindings: `
@@ -687,7 +722,14 @@ registable.host(form):=elements
 
 on(cxl-form.submit):#onSubmit:host.trigger(submit)
 keypress(enter):#onSubmit:host.trigger(submit)
-	`
+	`,
+	initialize(state)
+	{
+		state.form = cxl.dom('FORM', {
+			action: '#',
+			onsubmit: ev => ev.preventDefault()
+		});
+	}
 }, {
 	// TODO better focusing
 	onSubmit(ev)
@@ -710,6 +752,7 @@ keypress(enter):#onSubmit:host.trigger(submit)
 			}
 		}
 
+		this.form.submit();
 		ev.stopPropagation();
 	}
 });
@@ -718,42 +761,68 @@ component({
 	name: 'cxl-form-group',
 	styles: {
 		$: { marginBottom: 16 },
-		$inverse: { filter: 'invert(1)' },
 		$inline: { display: 'inline-block' },
+		$outline: {
+			borderColor: 'onSurface', borderWidth: 1, borderStyle: 'solid',
+			paddingLeft: 8, paddingRight: 8, borderRadius: 4, paddingTop: 8
+		},
 		error: { color: 'error', borderColor: 'error' },
-		content: { position: 'relative', marginBottom: 8 },
-		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75 },
+		content: {
+			position: 'relative', marginBottom: 8, border: 0
+		},
+		content$underline: {
+			borderBottom: 1, borderColor: 'onSurface', borderStyle: 'solid'
+		},
+		'content.error': { borderColor: 'error' },
+		content$outline: { border: 0 },
 		label: {
 			fontSize: 12, lineHeight: 16,
 			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
-		}
+		},
+		label$outline: {
+			translateY: -16, backgroundColor: 'surface', display: 'inline-block',
+			paddingLeft: 4, paddingRight: 4, position: 'absolute'
+		},
+		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75, paddingLeft: 0, paddingRight: 0  },
+		labelEmpty$floating$outline: { translateY: 10 },
 	},
-	attributes: [ 'floating', 'inverse' ],
+	attributes: [ 'floating', 'outline', 'underline' ],
 	template: `
 <div &=".label =invalid:.error =isEmpty:.labelEmpty content(cxl-label):#onLabel"></div>
 <div &=".content content =invalid:.error on(change):#onChange"></div>
+<div &=".focusLine =focused:.expand =outline:hide"></div>
 <cxl-t caption &=".error =error:text"></cxl-t>
 	`,
 	bindings: `
 on(form.register):#onChange on(focusable.touched):#update on(invalid):#update
+on(form.focus):#onFocus on(form.blur):#onBlur
 	`
 }, {
 	isEmpty: true,
+	underline: null,
 
 	onLabel(label)
 	{
 		this.labelEl = label;
 	},
 
+	onFocus()
+	{
+		this.focused = true;
+	},
+
+	onBlur()
+	{
+		this.focused = false;
+	},
+
 	onChange(ev)
 	{
 		this.inputEl = ev.target;
-
-		// TODO Prevent layout refresh
-		/*if (this.labelEl)
-			this.inputEl['aria-label'] = this.labelEl.innerText;*/
-
 		this.isEmpty = !ev.target.value;
+
+		if (!this.outline && this.underline===null)
+			this.underline = this.inputEl.type==='text';
 	},
 
 	update(ev)
@@ -832,7 +901,7 @@ component({
 component({
 	name: 'cxl-input',
 	extend: 'cxl-form-input',
-	attributes: [ 'name', 'maxlength', 'aria-label' ],
+	attributes: [ 'name', 'maxlength', 'aria-label', 'type' ],
 	methods: [ 'focus' ],
 	template: `
 <input &="id(input) =type:|attribute(type) .input
@@ -840,27 +909,25 @@ component({
 	=value:value
 	=maxlength:filter:@maxLength value:=value
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
+	=autocomplete:attribute(autocomplete)
 	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
-<div &=".focusLine =focused:.expand"></div>
 	`,
 	bindings: `role(textbox) touchable`,
-	styles: [ FocusLineCSS, {
-		$: { marginBottom: 8 },
+	styles: {
 		input: {
 			fontSize: 16, border: 0, height: 32, backgroundColor: 'transparent',
 			color: 'onSurface', width: '100%', paddingTop: 6, paddingBottom: 6, lineHeight: 20,
-			borderBottom: 1, borderColor: 'onSurface', borderStyle: 'solid',
 			borderRadius: 0, outline: 0, fontFamily: 'inherit', paddingLeft: 0, paddingRight: 0
 		},
-		input$focus: { outline: 0, borderColor: 'primary' },
-		input$invalid$touched: { borderColor: 'error' },
+		input$focus: { outline: 0 },
 		expand: { scaleX: 1 }
-	} ]
+	}
 
 }, {
 	value: '',
 	focused: false,
 	name: null,
+	autocomplete: null,
 	type: 'text',
 	invalid: false,
 	maxlength: null,
@@ -886,6 +953,17 @@ component({
 	styles: {
 		$: { position: 'absolute', top: 8, right: 0, cursor: 'pointer' }
 	}
+});
+
+component({
+	name: 'cxl-list',
+	styles: {
+		$: { paddingTop: 8, paddingBottom: 8 }
+	},
+	bindings: '=tabIndex:@tabIndex navigation.list:#onNav'
+}, {
+	tabIndex: -1,
+	onNav(el) { if (el) el.focus(); }
 });
 
 component({
@@ -1230,7 +1308,6 @@ component({
 	=maxlength:filter:@maxLength value:#onInput
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
-<div &=".focusLine =focused:.expand"></div>
 <cxl-input-icon &=".inputIcon">
 	<cxl-icon-toggle icon="calendar" &="=disabled:@disabled @opened:=opened">
 	<cxl-toggle-popup &="role(dialog)">
@@ -1294,16 +1371,18 @@ component({
 	name: 'cxl-menu',
 	styles: {
 		$: {
-			elevation: 1, display: 'inline-block', paddingTop: 8, paddingBottom: 8,
-			backgroundColor: 'surface', overflowY: 'auto', color: 'onSurface'
+			elevation: 1, display: 'inline-block',
+			backgroundColor: 'surface', overflowY: 'auto', color: 'onSurface',
+			paddingTop: 8, paddingBottom: 8
 		},
 		$dense: { paddingTop: 0, paddingBottom: 0 },
 		$closed: { scaleY: 0 }
 	},
-	attributes: [ 'closed' ],
+	attributes: [ 'closed', 'dense' ],
 	methods: [ 'focus' ],
-	bindings: 'id(self) role(list) keypress:#onKey:event.prevent'
+	bindings: '=tabIndex:@tabIndex id(self) role(list) navigation.list:#onNav'
 }, {
+	tabIndex: -1,
 	itemSelector: 'cxl-item:not([disabled])',
 
 	focus()
@@ -1314,22 +1393,9 @@ component({
 			item.focus();
 	},
 
-	onKey(ev)
+	onNav(el)
 	{
-		var el;
-
-		switch (ev.key) {
-		case 'ArrowDown':
-			if ((el = this.focused && cxl.dom.findNext(this.focused, this.itemSelector)))
-				el.focus();
-			break;
-		case 'ArrowUp':
-			if ((el = this.focused && cxl.dom.findPrevious(this.focused, this.itemSelector)))
-				el.focus();
-			break;
-		default:
-			return cxl.Skip;
-		}
+		el.focus();
 	}
 });
 
@@ -1412,7 +1478,7 @@ component({
 
 component({
 	name: 'cxl-menu-toggle',
-	attributes: [ 'inverse', 'disabled', 'touched' ],
+	attributes: [ 'disabled', 'touched' ],
 	template: `
 <div &=".menu action:event.stop:not:=showMenu">
 <cxl-menu dense closed &="id(menu) .menuControl =showMenu:not:@closed content"></cxl-menu>
@@ -1424,10 +1490,8 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 	`,
 	styles: {
 		icon: {
-			color: 'onSurface', cursor: 'pointer',
-			width: 8//, paddingLeft: 8, paddingRight: 8
+			color: 'onSurface', cursor: 'pointer', width: 8
 		},
-		icon$inverse: { color: 'onPrimary' },
 		menuControl: {
 			position: 'absolute', transformOrigin: 'right top', textAlign: 'left',
 			right: 0
@@ -1466,12 +1530,11 @@ component({
 	`,
 	styles: {
 		$: {
-			display: 'inline-block', color: 'onSurface', fontSize: 16,
+			display: 'inline-block', fontSize: 16,
 			marginTop: 8, marginBottom: 8, overflowScrolling: 'touch'
 		},
 		toggler: {
-			fontSize: 18, width: 16, marginRight: 32,
-			color: 'onPrimary', cursor: 'pointer', display: 'inline-block'
+			width: 16, marginRight: 32, cursor: 'pointer'
 		},
 		toggler$permanent$large: { display: 'none' }
 	}
@@ -1580,7 +1643,6 @@ action:#toggle
 disconnect:#unregister
 	`,
 	styles: [{
-
 		$: {
 			position: 'relative', display: 'inline-block', cursor: 'pointer',
 			margin: 16, marginLeft: 0
@@ -1734,13 +1796,12 @@ component({
 	<div &="=value:show:#getSelectedText:text id(selectedText) .selectedText"></div>
 	<cxl-icon &=".icon" icon="caret-down" role="presentation"></cxl-icon>
 </div>
-<div &=".focusLine"></div>
 	`,
 	attributes: [ 'placeholder' ],
 	bindings: `
 		focusable
 		selectable.host:#onSelected
-		=focused:navigation.list:#onNavigation
+		=focused:navigation.select:#onNavigation
 		id(component)
 		keypress(escape):#close
 		on(blur):#close
@@ -1748,7 +1809,7 @@ component({
 		action:#onAction:event.prevent:event.stop
 		keypress(enter):event.stop
 	`,
-	styles: [ FocusLineCSS, {
+	styles: [ {
 		$: { cursor: 'pointer' },
 		icon: { position: 'absolute', right: 2, top: 8, lineHeight: 16 },
 		placeholder: {
@@ -1757,8 +1818,7 @@ component({
 			position: 'absolute', left: -16, top: -8, right: 0, height: 48
 		},
 		container: {
-			 overflowY: 'hidden', height: 33, position: 'relative', border: 0,
-			 borderBottom: 1, borderStyle: 'solid'
+			 overflowY: 'hidden', height: 33, position: 'relative'
 		},
 		opened: { overflowY: 'visible' }
 	} ],
@@ -2387,7 +2447,6 @@ component({
 	=value:value:#calculateHeight
 	=aria-label:attribute(aria-label)
 	=disabled:attribute(disabled)
-	=invalid:.invalid
 	on(focus):bool:=focused
 	on(change):event.stop
 	on(blur):not:=focused =focused:.focused">
@@ -2399,17 +2458,14 @@ role(textbox) touchable aria.prop(multiline) keypress(enter):event.stop
 	styles: [{
 		$: { marginBottom: 8, marginTop: 8, position: 'relative' },
 		input: {
-			fontSize: 16, border: 1, backgroundColor: 'transparent', padding: 16,
-			lineHeight: 20, fontFamily: 'inherit', borderStyle: 'solid'
+			fontSize: 16, backgroundColor: 'transparent',
+			lineHeight: 20, fontFamily: 'inherit', border: 0
 		},
 		textarea: {
 			width: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
 			height: '100%', outline: 0, borderRadius: 0
 		},
 		focused: { borderColor: 'primary' },
-		inverse: { borderColor: 'onPrimary', color: 'onPrimary' },
-		inverse$focus: { borderColor: 'onPrimary' },
-		invalid$touched: { borderColor: 'error' },
 		measure: { opacity: 0, whiteSpace: 'pre-wrap' }
 	}],
 

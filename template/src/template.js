@@ -569,11 +569,11 @@ class AttributeObserver extends rx.Subject
 
 class Marker {
 
-	constructor(text, element)
+	constructor(element, text)
 	{
 		const parent = element.parentNode;
 
-		this.node = document.createComment(text);
+		this.node = document.createComment(text || '');
 		this.children = [];
 		parent.insertBefore(this.node, element);
 		parent.removeChild(element);
@@ -928,6 +928,7 @@ class ElementChildren
 
 	get first() { return this.el.firstElementChild; }
 	get last() { return this.el.lastElementChild; }
+	get focused() { return this.el.querySelector(':focus'); }
 
 	nextTo(el) { return el && el.nextElementSibling; }
 	previousTo(el) { return el && el.previousElementSibling; }
@@ -939,7 +940,7 @@ class ElementList
 	{
 		this.items = new Map();
 		this.template = new Template(element);
-		this.marker = new Marker('list', element);
+		this.marker = new Marker(element, 'list');
 		this.owner = owner;
 	}
 
@@ -1184,20 +1185,28 @@ directive('anchor', {
 	}
 });
 
-/*directive('anchor.marker', {
-	connect() {
-		this.marker = new Marker('anchor', this.element);
-		if (this.parameter) this.update(this.parameter); },
-	disconnect() { delete ANCHORS[this.name]; },
-	insert(el) { this.marker.insert(el); },
-	update(val) {
-		if (this.name)
-			delete ANCHORS[this.name];
+directive('anchor.send', {
+	connect()
+	{
+		//if (this.element === this.owner.host)
+		//	throw new Error("Cannot use host element");
+		if (!this.anchor)
+		{
+			const anchor = this.anchor = cxl.anchor(this.parameter);
+			anchor.insert(this.element);
+			this.placed = true;
+		}
+	},
 
-		this.name = val;
-		ANCHORS[val] = this;
+	disconnect()
+	{
+		if (this.placed)
+		{
+			cxl.dom.remove(this.element);
+			this.placed = false;
+		}
 	}
-});*/
+});
 
 function dom(el, attributes) {
 	var result = dom.createElement(el);
@@ -1553,12 +1562,6 @@ directive('on.message', {
 
 connectedSources({
 
-	'anchor.send'(el, param)
-	{
-		cxl.anchor(param).insert(el);
-		return cxl.dom.remove.bind(null, el);
-	},
-
 	/**
 	 * Binds to DOM element event.
 	 */
@@ -1631,7 +1634,7 @@ operators({
 	{
 	const
 		tpl = new Template(el),
-		marker = new Marker('repeat', el)
+		marker = new Marker(el, 'repeat')
 	;
 		return item => {
 			view.state.$item = item;

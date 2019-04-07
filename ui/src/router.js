@@ -8,8 +8,7 @@ const
 	splatParam    = /\*\w+/g,
 	escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g,
 	directive = cxl.directive,
-	component = cxl.component,
-	goLink = window.document.createElement('A')
+	component = cxl.component
 ;
 
 var
@@ -27,7 +26,7 @@ var
 			names.push(match.substr(1));
 			return optional ? match : '([^/?]+)';
 		})
-		.replace(splatParam, '([^?]*?)') + '(?:\/|\\?|$)')
+		.replace(splatParam, '([^?]*?)') + '(?:\/$|\\?|$)')
 	;
 	result.names = names;
 
@@ -214,7 +213,7 @@ class Router {
 	var
 		instances = {},
 		oldInstances = this.instances,
-		current = this.current = this.executeRoute(Route, args, instances)
+		current = this.current = this.executeRoute(Route, args || {}, instances)
 	;
 		this.currentRoute = Route;
 
@@ -494,20 +493,19 @@ component({
 	<div &=".footer content(cxl-router-footer)"></div>
 </div>
 	`,
-	bindings: 'route.change:#start',
 	styles: {
-		$: { display: 'none', flexDirection: 'column', height: '100%' },
+		$: { display: 'flex', flexDirection: 'column', height: '100%' },
 		$large: { paddingLeft: 288 },
 		content: {
 			position: 'relative', flexGrow: 1, overflowY: 'auto',
 			overflowScrolling: 'touch', backgroundColor: 'surface',
-			color: 'onSurface'
+			color: 'onSurface', elevation: 0
 		},
 		router$marginless: { margin: 0 },
 		footer: { },
 		router: { margin: 16 },
 		router$medium: { margin: 32 },
-		router$large: { margin: 64 },
+		router$large: { marginLeft: 64, marginRight: 64 },
 		router$xlarge: { width: 1200 },
 		router$xlarge$center: { marginLeft: 'auto', marginRight: 'auto' }
 	}

@@ -367,8 +367,6 @@ class DraggableSlot extends DraggableRegion {
 
 	$event(type, el)
 	{
-		super.$event(type, el);
-
 		if (type==='drop')
 		{
 			const host = this.element, parent = el.parentElement;
@@ -388,6 +386,8 @@ class DraggableSlot extends DraggableRegion {
 				host.appendChild(el);
 			}
 		}
+
+		super.$event(type, el);
 	}
 
 }

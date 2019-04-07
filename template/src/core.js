@@ -4,7 +4,7 @@ this.cxl = {
 
 	extendClass(Parent, p)
 	{
-		var Result = class extends Parent { };
+		class Result extends Parent { }
 		cxl.extend(Result.prototype, p);
 		return Result;
 	},

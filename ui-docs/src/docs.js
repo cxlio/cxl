@@ -557,6 +557,14 @@ Drag Here <x &="=count:text"></x>
 	<cxl-label>Floating Label</cxl-label>
 	<cxl-input />
 </cxl-form-group>
+<cxl-form-group outline>
+	<cxl-label>Outlined Form Group</cxl-label>
+	<cxl-input />
+</cxl-form-group>
+<cxl-form-group outline floating>
+	<cxl-label>Outlined Floating Form Group</cxl-label>
+	<cxl-input />
+</cxl-form-group>
 	--></docs-demo>
 	<docs-attribute name="floating">
 	<docs-demo><!--

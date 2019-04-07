@@ -2,6 +2,14 @@
 QUnit.config.autostart = false;
 QUnit.module('fb');
 
+QUnit.test('Entity', function(a) {
+const
+	E = cxl.entity({
+	})
+;
+	a.ok(E);
+});
+
 QUnit.test('Reference#constructor', function(a) {
 var
 	db = new cxl.fb.Reference()

@@ -70,17 +70,6 @@ class Observable {
 		return operator(this);
 	}
 
-	toPromise()
-	{
-		return new Promise((resolve, reject) =>
-		{
-			this.subscribe(function(val) {
-				this.unsubscribe();
-				resolve(val);
-			}, e => setTimeout(reject.bind(this, e)));
-		});
-	}
-
 	subscribe(observer, error, complete)
 	{
 		const subscriber = new Subscriber(observer, error, complete);
@@ -278,6 +267,17 @@ Object.assign(rx, {
 	Subject: Subject,
 	Subscriber: Subscriber,
 
+	toPromise(observable)
+	{
+		return new Promise((resolve, reject) =>
+		{
+			observable.subscribe(function(val) {
+				this.unsubscribe();
+				resolve(val);
+			}, e => setTimeout(reject.bind(this, e)));
+		});
+	},
+
 	operators: {
 		map: map,
 		filter(fn) { return operator(subscriber => val => fn(val) && subscriber.next(val)); }
@@ -285,4 +285,4 @@ Object.assign(rx, {
 
 });
 
-})(this.cxl ? (this.cxl.rx={}) : module.exports);
+})(this.cxl ? (this.cxl.rx={}) : (global.cxl.rx = module.exports));

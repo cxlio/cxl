@@ -8,7 +8,7 @@ const
 	MAXLENGTH = 500
 ;
 
-debug.override(fb.Reference.prototype, '$onValue', function(snap)
+debug.override(fb.Reference.prototype, '$onValue', function(subscriber, snap)
 {
 	const value = JSON.stringify(snap.val());
 
