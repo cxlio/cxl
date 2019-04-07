@@ -1560,6 +1560,24 @@ directive('on.message', {
 	}
 });
 
+directive('host.state', {
+	connect()
+	{
+		const el = this.owner.host, fn = cxl.debounce(() => this.set({
+			invalid: el.invalid,
+			focused: el.focused,
+			touched: el.touched,
+			disabled: el.disabled
+		}));
+
+		this.bindings = [
+			new EventListener(el, 'invalid', fn),
+			new EventListener(el, 'focus', fn),
+			new EventListener(el, 'blur', fn)
+		];
+	}
+});
+
 connectedSources({
 
 	/**

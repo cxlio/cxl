@@ -658,16 +658,6 @@ Drag Here <x &="=count:text"></x>
 </cxl-form-group>
 --></docs-demo>
 </docs-attribute>
-<docs-attribute name="inverse">
-<docs-demo><!--
-<cxl-c pad16 inverse>
-<cxl-form-group>
-	<cxl-label>Inverse Label</cxl-label>
-	<cxl-input inverse></cxl-input>
-</cxl-form-group>
-</cxl-c>
---></docs-demo>
-</docs-attribute>
 <docs-attribute name="maxlength">
 <docs-demo><!--
 <cxl-form-group>

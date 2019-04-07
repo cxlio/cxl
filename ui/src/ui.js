@@ -36,7 +36,8 @@ const
 			borderColor: 'primary', scaleX: 0, top: -1
 		},
 		focusLine$invalid$touched: { borderColor: 'error' },
-		focusLine$focus: { scaleX: 1 }
+		focusLine$focus: { scaleX: 1 },
+		'focusLine.expand': { scaleX: 1 }
 	},
 
 	DisabledCSS = {
@@ -178,11 +179,18 @@ behavior('navigation.list', {
 	}
 });
 
-behavior('form.input', `
-	registable(form)
-	@invalid:aria.prop(invalid):host.trigger(invalid)
-	@value:host.trigger(change):host.trigger(input)
-`);
+behavior('form.input', {
+	bindings: `
+registable(form)
+@invalid:aria.prop(invalid):host.trigger(invalid)
+@value:host.trigger(change):host.trigger(input)
+on(focus):#onFocus on(blur):not:@focused
+	`,
+	onFocus(ev, el)
+	{
+		el.focused = !el.disabled;
+	}
+});
 
 behavior('touchable', `
 	on(blur):event.stop:bool:@touched
@@ -339,7 +347,7 @@ directive('registable.host', {
 component({
 	name: 'cxl-form-input',
 	events: [ 'change', 'input', 'invalid', 'blur', 'focus' ],
-	attributes: [ 'value', 'invalid', 'disabled', 'touched', 'autocomplete' ],
+	attributes: [ 'value', 'invalid', 'disabled', 'touched', 'autocomplete', 'focused' ],
 	bindings: 'form.input',
 	styles: [ DisabledCSS, InvalidCSS ]
 });
@@ -723,13 +731,9 @@ registable.host(form):=elements
 on(cxl-form.submit):#onSubmit:host.trigger(submit)
 keypress(enter):#onSubmit:host.trigger(submit)
 	`,
-	initialize(state)
-	{
-		state.form = cxl.dom('FORM', {
-			action: '#',
-			onsubmit: ev => ev.preventDefault()
-		});
-	}
+	template: `
+<form action="#" &="id(form) content on(submit):event.prevent"></form>
+	`
 }, {
 	// TODO better focusing
 	onSubmit(ev)
@@ -762,58 +766,33 @@ component({
 	styles: {
 		$: { marginBottom: 16 },
 		$inline: { display: 'inline-block' },
-		$outline: {
+		/*$outline: {
 			borderColor: 'onSurface', borderWidth: 1, borderStyle: 'solid',
 			paddingLeft: 8, paddingRight: 8, borderRadius: 4, paddingTop: 8
-		},
+		},*/
 		error: { color: 'error', borderColor: 'error' },
-		content: {
-			position: 'relative', marginBottom: 8, border: 0
-		},
-		content$underline: {
-			borderBottom: 1, borderColor: 'onSurface', borderStyle: 'solid'
-		},
-		'content.error': { borderColor: 'error' },
-		content$outline: { border: 0 },
+		content: { position: 'relative', marginBottom: 8, border: 0 },
 		label: {
 			fontSize: 12, lineHeight: 16,
 			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
 		},
-		label$outline: {
-			translateY: -16, backgroundColor: 'surface', display: 'inline-block',
-			paddingLeft: 4, paddingRight: 4, position: 'absolute'
-		},
-		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75, paddingLeft: 0, paddingRight: 0  },
-		labelEmpty$floating$outline: { translateY: 10 },
+		labelEmpty$floating: { fontSize: 16, translateY: 24, opacity: 0.75, paddingLeft: 0, paddingRight: 0  }
 	},
-	attributes: [ 'floating', 'outline', 'underline' ],
+	attributes: [ 'floating' ],
 	template: `
 <div &=".label =invalid:.error =isEmpty:.labelEmpty content(cxl-label):#onLabel"></div>
 <div &=".content content =invalid:.error on(change):#onChange"></div>
-<div &=".focusLine =focused:.expand =outline:hide"></div>
 <cxl-t caption &=".error =error:text"></cxl-t>
 	`,
 	bindings: `
 on(form.register):#onChange on(focusable.touched):#update on(invalid):#update
-on(form.focus):#onFocus on(form.blur):#onBlur
 	`
 }, {
 	isEmpty: true,
-	underline: null,
 
 	onLabel(label)
 	{
 		this.labelEl = label;
-	},
-
-	onFocus()
-	{
-		this.focused = true;
-	},
-
-	onBlur()
-	{
-		this.focused = false;
 	},
 
 	onChange(ev)
@@ -899,6 +878,30 @@ component({
 });
 
 component({
+	name: 'cxl-input-focus',
+	attributes: [ 'state', 'invalid' ],
+	bindings: '=state:#onState',
+	template: `<div &=".line =focused:.focused =invalid:.invalid"></div`,
+	styles: {
+		$: { border: 0, borderTop: 1, borderStyle: 'solid', borderColor: 'onSurface' },
+		$invalid: { borderColor: 'error' },
+		line: {
+			position: 'relative', border: 0, borderTop: 2, borderStyle: 'solid',
+			borderColor: 'primary', scaleX: 0, top: -1
+		},
+		line$invalid: { borderColor: 'error' },
+		focused: { scaleX: 1 }
+	}
+}, {
+	state: cxl.Undefined,
+	onState(state)
+	{
+		this.invalid = state.invalid && state.touched;
+		this.focused = state.focused;
+	}
+});
+
+component({
 	name: 'cxl-input',
 	extend: 'cxl-form-input',
 	attributes: [ 'name', 'maxlength', 'aria-label', 'type' ],
@@ -910,7 +913,8 @@ component({
 	=maxlength:filter:@maxLength value:=value
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	=autocomplete:attribute(autocomplete)
-	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
+	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
+<cxl-input-focus &="host.state:@state"></cxl-input-focus>
 	`,
 	bindings: `role(textbox) touchable`,
 	styles: {
@@ -919,8 +923,7 @@ component({
 			color: 'onSurface', width: '100%', paddingTop: 6, paddingBottom: 6, lineHeight: 20,
 			borderRadius: 0, outline: 0, fontFamily: 'inherit', paddingLeft: 0, paddingRight: 0
 		},
-		input$focus: { outline: 0 },
-		expand: { scaleX: 1 }
+		input$focus: { outline: 0 }
 	}
 
 }, {
@@ -931,16 +934,6 @@ component({
 	type: 'text',
 	invalid: false,
 	maxlength: null,
-
-	onFocus()
-	{
-		this.focused = !this.disabled;
-	},
-
-	onBlur()
-	{
-		this.focused = false;
-	},
 
 	focus()
 	{
@@ -1307,7 +1300,7 @@ component({
 	=inputValue:value
 	=maxlength:filter:@maxLength value:#onInput
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
-	on(blur):#onBlur:host.trigger(blur) on(focus):#onFocus" />
+	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
 <cxl-input-icon &=".inputIcon">
 	<cxl-icon-toggle icon="calendar" &="=disabled:@disabled @opened:=opened">
 	<cxl-toggle-popup &="role(dialog)">
@@ -1317,6 +1310,7 @@ component({
 	</cxl-toggle-popup>
 	</cxl-icon-toggle>
 </cxl-input-icon>
+<cxl-input-focus &="host.state:@state"></cxl-input-focus>
 	`,
 	styles: {
 		$: { position: 'relative' },
@@ -1796,12 +1790,13 @@ component({
 	<div &="=value:show:#getSelectedText:text id(selectedText) .selectedText"></div>
 	<cxl-icon &=".icon" icon="caret-down" role="presentation"></cxl-icon>
 </div>
+<cxl-input-focus &="host.state:@state"></cxl-input-focus>
 	`,
 	attributes: [ 'placeholder' ],
 	bindings: `
 		focusable
 		selectable.host:#onSelected
-		=focused:navigation.select:#onNavigation
+		=focusedItem:navigation.select:#onNavigation
 		id(component)
 		keypress(escape):#close
 		on(blur):#close
@@ -1811,6 +1806,7 @@ component({
 	`,
 	styles: [ {
 		$: { cursor: 'pointer' },
+		$focus: { outline: 0 },
 		icon: { position: 'absolute', right: 2, top: 8, lineHeight: 16 },
 		placeholder: {
 			color: 'onSurface', lineHeight: 20, paddingRight: 16,
@@ -1983,12 +1979,12 @@ component({
 
 	onNavigation(element)
 	{
-		if (this.focused!==element)
+		if (this.focusedItem!==element)
 		{
-			if (this.focused)
-				this.focused.focused = false;
+			if (this.focusedItem)
+				this.focusedItem.focused = false;
 
-			this.focused = element;
+			this.focusedItem = element;
 			element.focused = true;
 		}
 	},
@@ -2002,8 +1998,8 @@ component({
 
 			const selected = this.selected, i = selected.indexOf(selectedEl);
 
-			if (this.focused)
-				this.focused.focused = false;
+			if (this.focusedItem)
+				this.focusedItem.focused = false;
 
 			if (i ===-1)
 			{
@@ -2017,7 +2013,7 @@ component({
 			}
 
 			selectedEl.focused = true;
-			this.focused = selectedEl;
+			this.focusedItem = selectedEl;
 
 			if (selected.length===0)
 				this.selected = this.value = null;
@@ -2037,15 +2033,15 @@ component({
 		{
 			if (ev.type==='keyup' && this.focused)
 			{
-				this.onSelected(this.focused);
+				this.onSelected(this.focusedItem);
 				ev.preventDefault();
 			}
 		} else
 		{
-			if (this.focused)
+			if (this.focusedItem)
 			{
-				this.focused.focused = false;
-				this.focused = null;
+				this.focusedItem.focused = false;
+				this.focusedItem = null;
 			}
 			this.open();
 		}
@@ -2447,25 +2443,26 @@ component({
 	=value:value:#calculateHeight
 	=aria-label:attribute(aria-label)
 	=disabled:attribute(disabled)
-	on(focus):bool:=focused
 	on(change):event.stop
-	on(blur):not:=focused =focused:.focused">
-</textarea>`,
+	on(blur):host.trigger(blur) on(focus):host.trigger(focus)">
+</textarea>
+<cxl-input-focus &="host.state:@state"></cxl-input-focus>
+`,
 	bindings: `
 role(textbox) touchable aria.prop(multiline) keypress(enter):event.stop
 	`,
 	attributes: [ 'aria-label' ],
-	styles: [{
+	styles: [FocusLineCSS, {
 		$: { marginBottom: 8, marginTop: 8, position: 'relative' },
 		input: {
 			fontSize: 16, backgroundColor: 'transparent',
-			lineHeight: 20, fontFamily: 'inherit', border: 0
+			lineHeight: 20, fontFamily: 'inherit', border: 0,
+			paddingTop: 8, paddingBottom: 8
 		},
 		textarea: {
 			width: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-			height: '100%', outline: 0, borderRadius: 0
+			height: '100%', outline: 0, borderRadius: 0,
 		},
-		focused: { borderColor: 'primary' },
 		measure: { opacity: 0, whiteSpace: 'pre-wrap' }
 	}],
 
