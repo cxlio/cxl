@@ -1688,7 +1688,10 @@ disconnect:#unregister
 		{
 			radioValues.forEach(r => {
 				if (r.name===this.name && r !== this.host)
+				{
 					r.checked = false;
+					r.touched = true;
+				}
 			});
 		}
 	},
@@ -1700,7 +1703,7 @@ disconnect:#unregister
 
 		if (!this.checked)
 		{
-			this.checked = true;
+			this.checked = this.touched = true;
 			this.update();
 		}
 	}
@@ -2457,7 +2460,7 @@ role(textbox) touchable aria.prop(multiline) keypress(enter):event.stop
 		input: {
 			fontSize: 16, backgroundColor: 'transparent',
 			lineHeight: 20, fontFamily: 'inherit', border: 0,
-			paddingTop: 8, paddingBottom: 8
+			paddingTop: 6, paddingBottom: 6
 		},
 		textarea: {
 			width: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
