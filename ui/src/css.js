@@ -576,7 +576,8 @@ cxl.css = Object.assign(css, {
 		active: { filter: 'invert(0.2)' },
 		focus: { outline: 0, filter: 'invert(0.2) saturate(2) brightness(1.1)' },
 		hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
-		disabled: { filter: 'saturate(0)', opacity: 0.38 }
+		disabled: { filter: 'saturate(0)', opacity: 0.38 },
+		none: { filter: 'none', opacity: 1 }
 	},
 
 	variables: {

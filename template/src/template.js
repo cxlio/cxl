@@ -1560,16 +1560,19 @@ directive('on.message', {
 	}
 });
 
-directive('host.state', {
+directive('input.state', {
 	connect()
 	{
-		const el = this.owner.host, fn = cxl.debounce(() => this.set({
-			invalid: el.invalid,
-			focused: el.focused,
-			touched: el.touched,
-			disabled: el.disabled
-		}));
-
+	const
+		el = this.element,
+		apply = cxl.debounce(target => this.set({
+			invalid: target.invalid,
+			focused: target.focused,
+			touched: target.touched,
+			disabled: target.disabled
+		})),
+		fn = ev => apply(ev.target)
+	;
 		this.bindings = [
 			new EventListener(el, 'invalid', fn),
 			new EventListener(el, 'focus', fn),

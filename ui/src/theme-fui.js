@@ -4,7 +4,7 @@
 const
 	rgba = cxl.css.rgba,
 	SURFACE = rgba(0,0,0),
-	PRIMARY = SURFACE,
+	PRIMARY = rgba(0, 0x90, 0),
 	SECONDARY = rgba(0xc6, 0xff, 0)
 ;
 

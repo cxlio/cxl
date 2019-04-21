@@ -1621,6 +1621,102 @@ cxl.component({
 });
 
 cxl.route({
+	path: 'core',
+	title: 'Core Concepts',
+	template: `
+	`
+});
+
+cxl.route({
+	path: 'forms',
+	title: 'Forms',
+	template: `
+<cxl-t h4>Input Components</cxl-t>
+<cxl-t h5>Available Components</cxl-t>
+<cxl-t h5>States</cxl-t>
+<docs-demo><!--
+<cxl-card><cxl-c pad16>
+<cxl-form-group>
+<cxl-label>Enabled</cxl-label>
+<cxl-input></cxl-input>
+</cxl-form-group>
+<cxl-form-group>
+<cxl-label>Disabled</cxl-label>
+<cxl-input disabled></cxl-input>
+</cxl-form-group>
+<cxl-form-group &=".hover">
+<cxl-label>Hover</cxl-label>
+<cxl-input></cxl-input>
+</cxl-form-group>
+<cxl-form-group &=".focused">
+<cxl-label>Focused</cxl-label>
+<cxl-input focused></cxl-input>
+</cxl-form-group>
+<cxl-form-group>
+<cxl-label>Invalid</cxl-label>
+<cxl-input invalid touched></cxl-input>
+</cxl-form-group>
+</cxl-c></cxl-card>
+--></docs-demo>
+<cxl-t h5>Variations</cxl-t>
+<cxl-t h6>Outline</cxl-t>
+<cxl-t h5>Events</cxl-t>
+<cxl-t h4>Form Groups</cxl-t>
+<cxl-t h5>Floating Labels</cxl-t>
+<docs-demo><!--
+<cxl-form-group floating>
+	<cxl-label>Floating Label Input Box</cxl-label>
+	<cxl-input></cxl-input>
+</cxl-form-group>
+--></docs-demo>
+<cxl-t h5>Outline</cxl-t>
+<docs-demo><!--
+<cxl-form-group outline>
+	<cxl-label>Outline Label</cxl-label>
+	<cxl-input></cxl-input>
+	<cxl-input-help>Help Text with Outline</cxl-input-help>
+</cxl-form-group>
+<cxl-form-group outline floating>
+	<cxl-label>Floating Label with Outline</cxl-label>
+	<cxl-input></cxl-input>
+</cxl-form-group>
+<cxl-form-group outline>
+	<cxl-label>Text Area Outline</cxl-label>
+	<cxl-textarea></cxl-textarea>
+</cxl-form-group>
+--></docs-demo>
+<cxl-t h5>Help Text</cxl-t>
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Label</cxl-label>
+	<cxl-input></cxl-input>
+	<cxl-input-help>Help Text</cxl-input-help>
+</cxl-form-group>
+--></docs-demo>
+<cxl-t h5>Icons</cxl-t>
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Leading Icon</cxl-label>
+	<cxl-input-icon icon="dollar-sign"></cxl-input-icon>
+	<cxl-input></cxl-input>
+</cxl-form-group>
+--></docs-demo>
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Trailing Icon</cxl-label>
+	<cxl-input></cxl-input>
+	<cxl-input-icon trailing icon="percent"></cxl-input-icon>
+</cxl-form-group>
+--></docs-demo>
+<cxl-t h4>Form Component</cxl-t>
+<cxl-t h5>Validation</cxl-t>
+	`,
+	styles: {
+		hover: { state: 'hover' }
+	}
+});
+
+cxl.route({
 	path: 'components',
 	title: 'Overview',
 	styles: STYLES,
@@ -1651,7 +1747,7 @@ cxl.route({
 	components: COMPONENTS
 });
 
-cxl.component({
+component({
 	name: 'uid-attributes',
 	template: `
 
@@ -1666,7 +1762,7 @@ component({
 	}
 });
 
-cxl.component({
+component({
 	name: 'docs-component',
 	attributes: [ 'name' ],
 	template: `
@@ -1833,9 +1929,11 @@ component({
 	</cxl-c>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
-	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
-	<!--cxl-item icon="drafting-compass" &="route.link(layout)">Layout</cxl-item-->
 	<cxl-hr></cxl-hr>
+	<cxl-c pad16><cxl-t subtitle2>Guides</cxl-t></cxl-c>
+	<cxl-item icon="puzzle" &="route.link(core)">Core Concepts</cxl-item>
+	<cxl-item icon="dialog" &="route.link(forms)">Forms</cxl-item>
+	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
 	<cxl-c pad16><cxl-t subtitle2>Components</cxl-t></cxl-c>
 	<cxl-item icon="" &="route.link(components)">Overview</cxl-item>
 	<template &="=components:each:repeat">
