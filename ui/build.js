@@ -10,12 +10,15 @@ const
 	],
 
 	ui = [
+		header,
 		'src/component.js',
 		'src/css.js',
 		'src/shady.js',
 		'src/drag.js',
 		'src/ui.js',
-		c => `cxl.version="${c.package.version}";`
+		'src/forms.js',
+		'src/time.js',
+		c => `cxl.ui.version="${c.package.version}";})(this.cxl);`
 	]
 ;
 

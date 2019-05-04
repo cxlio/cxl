@@ -1216,13 +1216,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			template: `
 <docs-component name="cxl-textarea">
 <docs-demo><!--
-<cxl-form-group>
-	<cxl-label>Text Area</cxl-label>
-	<cxl-textarea></cxl-textarea>
-</cxl-form-group>
-<cxl-form-group>
+<cxl-textarea label="Text Area"></cxl-textarea>
+<cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
 	<cxl-label>Prefilled Text Area</cxl-label>
-	<cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></cxl-textarea>
+</cxl-textarea>
 </cxl-form-group>
 --></docs-demo>
 <docs-attribute name="disabled" demo lorem></docs-attribute>
@@ -1631,82 +1628,125 @@ cxl.route({
 	path: 'forms',
 	title: 'Forms',
 	template: `
-<cxl-t h4>Input Components</cxl-t>
-<cxl-t h5>Available Components</cxl-t>
+<cxl-t h4>Components</cxl-t>
 <cxl-t h5>States</cxl-t>
 <docs-demo><!--
 <cxl-card><cxl-c pad16>
-<cxl-form-group>
-<cxl-label>Enabled</cxl-label>
-<cxl-input></cxl-input>
-</cxl-form-group>
-<cxl-form-group>
-<cxl-label>Disabled</cxl-label>
-<cxl-input disabled></cxl-input>
-</cxl-form-group>
-<cxl-form-group &=".hover">
-<cxl-label>Hover</cxl-label>
-<cxl-input></cxl-input>
-</cxl-form-group>
-<cxl-form-group &=".focused">
-<cxl-label>Focused</cxl-label>
-<cxl-input focused></cxl-input>
-</cxl-form-group>
-<cxl-form-group>
-<cxl-label>Invalid</cxl-label>
-<cxl-input invalid touched></cxl-input>
-</cxl-form-group>
+<cxl-input label="Enabled"></cxl-input>
+<cxl-input disabled label="Disabled"></cxl-input>
+<cxl-input label="Hover" &=".hover"></cxl-input>
+<cxl-input focused label="Focused"></cxl-input>
+<cxl-input invalid touched label="Invalid"></cxl-input>
 </cxl-c></cxl-card>
 --></docs-demo>
-<cxl-t h5>Variations</cxl-t>
-<cxl-t h6>Outline</cxl-t>
-<cxl-t h5>Events</cxl-t>
+<cxl-t h5>Text Fields</cxl-t>
+<docs-demo><!--
+<cxl-input label="Single Line Text Field"></cxl-input>
+<cxl-textarea label="Multiple Line Expandable Text Area"></cxl-textarea>
+<cxl-input label="Text Field with Outline" outline></cxl-input>
+<cxl-textarea label="Expandable Text Area with Outline" outline></cxl-textarea>
+--></docs-demo>
+<cxl-t h5>Selection Controls</cxl-t>
+
+<docs-demo><!--
+<cxl-fieldset>
+	<cxl-label>Checkboxes</cxl-label>
+	<cxl-checkbox checked>Checkbox 1 Selected</cxl-checkbox>
+	<cxl-checkbox>Checkbox 2</cxl-checkbox>
+</cxl-fieldset>
+<cxl-fieldset>
+	<cxl-label>Radio Boxes</cxl-label>
+	<cxl-radio name="radio-demo" checked>Radio 1 Selected</cxl-radio>
+	<cxl-radio name="radio-demo">Radio 2</cxl-radio>
+</cxl-fieldset>
+<cxl-fieldset>
+	<cxl-label>Switches</cxl-label>
+	<cxl-switch checked>Switch 1 Selected</cxl-switch>
+	<cxl-switch>Switch 2</cxl-switch>
+</cxl-fieldset>
+--></docs-demo>
+<cxl-t h5>Sliders</cxl-t>
+<docs-demo><!--
+<cxl-fieldset>
+	<cxl-slider></cxl-slider>
+</cxl-fieldset>
+--></docs-demo>
+<cxl-t h5>Dropdown Menus</cxl-t>
+<docs-demo><!--
+<cxl-form-group>
+	<cxl-label>Single Selection Menu</cxl-label>
+	<cxl-select>
+		<cxl-option>Select Item One</cxl-option>
+		<cxl-option>Select Item Two</cxl-option>
+		<cxl-option>Select Item Three</cxl-option>
+	</cxl-select>
+</cxl-form-group>
+--></docs-demo>
+<cxl-t h4>Fieldsets</cxl-t>
+<docs-demo><!--
+<cxl-fieldset>
+	<cxl-label>Checkbox Fieldset</cxl-label>
+	<cxl-checkbox checked>Checkbox 1 Selected</cxl-checkbox>
+	<cxl-checkbox>Checkbox 2</cxl-checkbox>
+</cxl-fieldset>
+<cxl-fieldset outline>
+	<cxl-label>Fieldset with Outline</cxl-label>
+	<cxl-switch checked>Switch 1 Selected</cxl-switch>
+	<cxl-switch>Switch 2</cxl-switch>
+</cxl-fieldset>
+<cxl-fieldset>
+	<cxl-label>Invalid Radio Group</cxl-label>
+	<cxl-radio invalid touched name="form-radio">Radio Option 1</cxl-radio>
+	<cxl-radio invalid touched name="form-radio">Radio Option 2</cxl-radio>
+	<cxl-radio invalid touched name="form-radio">Radio Option 3</cxl-radio>
+</cxl-fieldset>
+<cxl-fieldset outline>
+	<cxl-checkbox touched &="valid(required)">Required Checkbox</cxl-checkbox>
+</cxl-fieldset>
+--></docs-demo>
+
 <cxl-t h4>Form Groups</cxl-t>
 <cxl-t h5>Floating Labels</cxl-t>
 <docs-demo><!--
-<cxl-form-group floating>
+<cxl-input floating>
 	<cxl-label>Floating Label Input Box</cxl-label>
-	<cxl-input></cxl-input>
-</cxl-form-group>
+</cxl-input>
 --></docs-demo>
 <cxl-t h5>Outline</cxl-t>
 <docs-demo><!--
-<cxl-form-group outline>
-	<cxl-label>Outline Label</cxl-label>
-	<cxl-input></cxl-input>
-	<cxl-input-help>Help Text with Outline</cxl-input-help>
-</cxl-form-group>
-<cxl-form-group outline floating>
+<cxl-input label="Outline Label" outline>
+	<cxl-input-help>Help Text</cxl-input-help>
+</cxl-input>
+<cxl-input outline floating>
 	<cxl-label>Floating Label with Outline</cxl-label>
-	<cxl-input></cxl-input>
-</cxl-form-group>
-<cxl-form-group outline>
+</cxl-input>
+<cxl-textarea outline>
 	<cxl-label>Text Area Outline</cxl-label>
-	<cxl-textarea></cxl-textarea>
-</cxl-form-group>
+</cxl-textarea>
+<cxl-input invalid touched outline>
+	<cxl-label>Invalid Input Outline</cxl-label>
+	<cxl-input-help>Invalid Input Message</cxl-input-help>
+</cxl-input>
 --></docs-demo>
 <cxl-t h5>Help Text</cxl-t>
 <docs-demo><!--
-<cxl-form-group>
+<cxl-input>
 	<cxl-label>Label</cxl-label>
-	<cxl-input></cxl-input>
 	<cxl-input-help>Help Text</cxl-input-help>
-</cxl-form-group>
+</cxl-input>
 --></docs-demo>
 <cxl-t h5>Icons</cxl-t>
 <docs-demo><!--
-<cxl-form-group>
+<cxl-input>
 	<cxl-label>Leading Icon</cxl-label>
 	<cxl-input-icon icon="dollar-sign"></cxl-input-icon>
-	<cxl-input></cxl-input>
-</cxl-form-group>
+</cxl-input>
 --></docs-demo>
 <docs-demo><!--
-<cxl-form-group>
+<cxl-input>
 	<cxl-label>Trailing Icon</cxl-label>
-	<cxl-input></cxl-input>
 	<cxl-input-icon trailing icon="percent"></cxl-input-icon>
-</cxl-form-group>
+</cxl-input>
 --></docs-demo>
 <cxl-t h4>Form Component</cxl-t>
 <cxl-t h5>Validation</cxl-t>
@@ -1931,8 +1971,8 @@ component({
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
 	<cxl-hr></cxl-hr>
 	<cxl-c pad16><cxl-t subtitle2>Guides</cxl-t></cxl-c>
-	<cxl-item icon="puzzle" &="route.link(core)">Core Concepts</cxl-item>
-	<cxl-item icon="dialog" &="route.link(forms)">Forms</cxl-item>
+	<!--cxl-item icon="puzzle" &="route.link(core)">Core Concepts</cxl-item-->
+	<cxl-item icon="window-restore" &="route.link(forms)">Forms</cxl-item>
 	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
 	<cxl-c pad16><cxl-t subtitle2>Components</cxl-t></cxl-c>
 	<cxl-item icon="" &="route.link(components)">Overview</cxl-item>

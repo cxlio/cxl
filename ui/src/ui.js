@@ -1,5 +1,4 @@
-(cxl => {
-"use strict";
+(() => {
 
 const
 	component = cxl.component,
@@ -15,39 +14,10 @@ const
 		$focus: { state: 'focus' }
 	},
 
-	FocusCircleCSS = {
-		$focus: { outline: 0 },
-		focusCircle: {
-			position: 'absolute', width: 48, height: 48, backgroundColor: '#ccc', borderRadius: 24,
-			opacity: 0, scaleX: 0, scaleY: 0, display: 'inline-block',
-			translateX: -14, translateY: -14
-		},
-		focusCirclePrimary: { backgroundColor: 'primary' },
-		focusCircle$invalid$touched: { backgroundColor: 'error' },
-		focusCircle$hover: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.14 },
-		focusCircle$focus: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.25 },
-		focusCircle$disabled: { scaleX: 0, scaleY: 0 }
-	},
-
-	FocusLineCSS = {
-		$focus: { outline: 0 },
-		focusLine: {
-			position: 'relative', border: 0, borderTop: 2, borderStyle: 'solid',
-			borderColor: 'primary', scaleX: 0, top: -1
-		},
-		focusLine$invalid$touched: { borderColor: 'error' },
-		focusLine$focus: { scaleX: 1 },
-		'focusLine.expand': { scaleX: 1 }
-	},
-
 	DisabledCSS = {
 		$disabled: { cursor: 'default', state: 'disabled' },
 		$active$disabled: { state: 'disabled' },
 		$hover$disabled: { state: 'disabled' }
-	},
-
-	InvalidCSS = {
-		$invalid$touched: { borderColor: 'error', color: 'error' }
 	}
 ;
 
@@ -82,8 +52,6 @@ behavior('ripple', {
 		}
 	}
 });
-
-behavior('focusable', `@disabled:aria.prop(disabled):not:focus.enable touchable`);
 
 behavior('navigation.grid', {
 	bindings: 'keypress:#onKey:event.prevent',
@@ -179,23 +147,12 @@ behavior('navigation.list', {
 	}
 });
 
-behavior('form.input', {
-	bindings: `
-registable(form)
-@invalid:aria.prop(invalid):host.trigger(invalid)
-@value:host.trigger(change):host.trigger(input)
-on(focus):#onFocus on(blur):not:@focused
-	`,
-	onFocus(ev, el)
-	{
-		el.focused = !el.disabled;
-	}
-});
-
 behavior('touchable', `
 	on(blur):bool:@touched
 	@touched:host.trigger(focusable.touched)
 `);
+behavior('focusable', `@disabled:aria.prop(disabled):not:focus.enable`);
+
 behavior('selectable', `
 	registable(selectable)
 	action:host.trigger(selectable.action)
@@ -345,14 +302,6 @@ directive('registable.host', {
 });
 
 component({
-	name: 'cxl-form-input',
-	events: [ 'change', 'input', 'invalid', 'blur', 'focus' ],
-	attributes: [ 'value', 'invalid', 'disabled', 'touched', 'autocomplete', 'focused' ],
-	bindings: 'form.input',
-	styles: [ DisabledCSS, InvalidCSS ]
-});
-
-component({
 	name: 'cxl-appbar',
 	attributes: [ 'extended' ],
 	bindings: 'role(heading)',
@@ -496,64 +445,6 @@ component({
 		elevation: 1, borderRadius: 2, backgroundColor: 'surface',
 		color: 'onSurface'
 	} }
-});
-
-component({
-	name: 'cxl-checkbox',
-	extend: 'cxl-form-input',
-	template: `
-<span &=".focusCircle .focusCirclePrimary"></span>
-<cxl-icon icon="check" &=".box"></cxl-icon>
-<span &="content"></span>
-	`,
-	bindings: `
-role(checkbox)
-focusable
-action:#toggle
-=value:#onValue
-=checked:#update:aria.prop(checked) =false-value:#update =true-value:#update
-	`,
-	styles: [ {
-		$: {
-			margin: 16, marginLeft: 0, display: 'inline-block',
-			position: 'relative', cursor: 'pointer'
-		},
-		$focus: { outline: 0 },
-		box: {
-			display: 'inline-block', width: 20, height: 20, border: 2,
-			borderColor: 'onSurface', marginRight: 8, lineHeight: 16,
-			borderStyle: 'solid', color: 'rgba(0,0,0,0)', fontSize: 16
-		},
-		box$checked: {
-			borderColor: 'primary', backgroundColor: 'primary', color: 'onPrimary'
-		},
-		box$invalid$touched: { borderColor: 'error' }
-	}, FocusCircleCSS ],
-	attributes: [ 'checked', 'true-value', 'false-value' ]
-}, {
-	value: cxl.Undefined,
-	checked: false,
-	'true-value': true,
-	'false-value': false,
-
-	onValue(val)
-	{
-		this.checked = val===this['true-value'];
-	},
-
-	update()
-	{
-		this.value = this[this.checked ? 'true-value' : 'false-value'];
-	},
-
-	toggle(ev)
-	{
-		if (this.disabled)
-			return;
-
-		this.checked = !this.checked;
-		ev.preventDefault();
-	}
 });
 
 component({
@@ -722,178 +613,6 @@ component({
 });
 
 component({
-	name: 'cxl-form',
-	events: [ 'submit' ],
-	attributes: [ 'autocomplete', 'elements' ],
-	bindings: `
-role(form)
-registable.host(form):=elements:#buildForm
-
-on(cxl-form.submit):#onSubmit
-keypress(enter):#onSubmit
-	`,
-	template: `
-<div &="content"></div>
-<form style="display:none;" method="post" &="id(form) on(submit):event.prevent:host.trigger(submit) =autocomplete:@autocomplete">
-	<div &="id(inputs)"></div>
-	<input &="id(input)" type="submit" />
-</form>
-	`,
-	initialize(state)
-	{
-		state.id = 'cxl-form-' + (Math.random() * 100 | 0);
-	}
-}, {
-	autocomplete: 'off',
-
-	buildForm(elements)
-	{
-		if (this.autocomplete !== 'on')
-			return;
-
-		const inputs = this.inputs;
-
-		cxl.dom.empty(inputs);
-
-		elements.forEach(el => {
-			const i = cxl.dom('input');
-
-			if (el.type==='password')
-				i.type = 'password';
-
-			if (el.autocomplete)
-				i.autocomplete = el.autocomplete;
-
-			if (el.name)
-				i.name = el.name;
-
-			if (el.value)
-				i.value = el.value;
-
-			i.addEventListener('change', () => el.value = i.value);
-			el.addEventListener('change', () => i.value = el.value);
-
-			inputs.appendChild(i);
-		});
-	},
-
-	// TODO better focusing
-	onSubmit(ev)
-	{
-		let focus;
-
-		if (this.elements)
-		{
-			this.elements.forEach(el => {
-				if (el.invalid)
-					focus = focus || el;
-
-				el.touched = true;
-			});
-
-			if (focus)
-			{
-				focus.focus();
-				return cxl.Skip;
-			}
-		}
-
-		this.input.click();
-		ev.stopPropagation();
-	}
-});
-
-component({
-	name: 'cxl-input-help',
-	styles: {
-		$: { lineHeight: 12, verticalAlign: 'bottom', fontSize: 12, paddingTop: 8 }
-	}
-});
-
-component({
-	name: 'cxl-form-group',
-	styles: {
-		$: {
-			marginBottom: 16, backgroundColor: 'surface', color: 'onSurface',
-			paddingLeft: 12, paddingRight: 12, paddingTop: 10
-		},
-		$hover: { state: 'hover' },
-		$hover$disabled: { state: 'none' },
-		$inline: { display: 'inline-block' },
-		focused: { color: 'primary' },
-		error: { color: 'error', borderColor: 'error' },
-		content: {
-			display: 'flex', position: 'relative',
-			paddingTop: 8, paddingBottom: 6, lineHeight: 20
-		},
-		label: {
-			fontSize: 12, lineHeight: 10, verticalAlign: 'bottom',
-			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
-		},
-		labelEmpty$floating: { fontSize: 16, translateY: 23, opacity: 0.75 },
-
-		$outline: { paddingTop: 0 },
-		label$outline: {
-			position: 'relative', top: -10, left: -4,
-			paddingLeft: 4, paddingRight: 4,
-			backgroundColor: 'surface', display: 'inline-block'
-		},
-		labelEmpty$floating$outline: { translateY: 28 },
-		content$outline: { marginTop: -10 },
-		outline$outline: {
-			borderColor: 'onSurface', borderWidth: 1, borderStyle: 'solid',
-			borderRadius: 4, marginLeft: -12, marginRight: -12, paddingLeft: 12, paddingRight: 12,
-			paddingBottom: 10
-		},
-		'outline.focused$outline': {
-			boxShadow: '0 0 0 1px var(--cxl-primary)', borderColor: 'primary'
-		}
-	},
-	attributes: [ 'floating', 'outline', 'help-text' ],
-	template: `
-<div &=".outline =inputState.focused:.focused">
-<div &=".label =inputState.focused:.focused =invalid:.error =isEmpty:.labelEmpty content(cxl-label):#onLabel"></div>
-<div &=".content content =invalid:.error on(change):#onChange input.state:=inputState"></div>
-</div>
-<cxl-input-focus &="=outline:hide =inputState:@state"></cxl-input-focus>
-<cxl-input-help caption &=".error =error:show:text"></cxl-input-help>
-<div &="content(cxl-input-help)"></div>
-	`,
-	bindings: `
-on(form.register):#onChange on(focusable.touched):#update on(invalid):#update
-	`
-}, {
-	isEmpty: true,
-	inputState: cxl.Undefined,
-
-	onLabel(label)
-	{
-		this.labelEl = label;
-	},
-
-	onChange(ev)
-	{
-		this.inputEl = ev.target;
-		this.isEmpty = !ev.target.value;
-
-		if (!this.outline && this.underline===null)
-			this.underline = this.inputEl.type==='text';
-	},
-
-	update(ev)
-	{
-		var el = ev.target;
-
-		if (el.touched)
-		{
-			this.invalid = el.invalid;
-			this.error = el.$validity && el.$validity.message;
-		}
-	}
-
-});
-
-component({
 	name: 'cxl-grid',
 	attributes: [ 'rows', 'columns', 'gap' ],
 	bindings: `
@@ -954,85 +673,6 @@ component({
 });
 
 component({
-	name: 'cxl-input-focus',
-	attributes: [ 'state', 'invalid' ],
-	bindings: '=state:#onState',
-	template: `<div &=".line =focused:.focused =invalid:.invalid"></div`,
-	styles: {
-		$: {
-			//position: 'absolute', left: 0, right: 0,
-			marginLeft: -12, marginRight: -12,
-			border: 0, height: 2, borderBottom: 1, borderStyle: 'solid', borderColor: 'onSurface'
-		},
-		$invalid: { borderColor: 'error' },
-		line: {
-			marginTop: -1, backgroundColor: 'primary',
-			scaleX: 0, height: 2
-		},
-		line$invalid: { backgroundColor: 'error' },
-		focused: { scaleX: 1 }
-	}
-}, {
-	state: cxl.Undefined,
-	onState(state)
-	{
-		if (state) {
-			this.invalid = state.invalid && state.touched;
-			this.focused = state.focused;
-		}
-	}
-});
-
-component({
-	name: 'cxl-input',
-	extend: 'cxl-form-input',
-	attributes: [ 'name', 'maxlength', 'aria-label', 'type' ],
-	methods: [ 'focus' ],
-	template: `
-<input &="id(input) =type:|attribute(type) .input
-	=aria-label:attribute(aria-label)
-	=value:value
-	=maxlength:filter:@maxLength value:=value
-	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
-	=autocomplete:attribute(autocomplete)
-	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
-	`,
-	bindings: `role(textbox) touchable`,
-	styles: {
-		$: { flexGrow: 1 },
-		input: {
-			fontSize: 16, border: 0, backgroundColor: 'transparent',
-			color: 'onSurface', width: '100%', lineHeight: 20,
-			borderRadius: 0, outline: 0, fontFamily: 'inherit'
-		},
-		input$focus: { outline: 0 }
-	}
-
-}, {
-	value: '',
-	focused: false,
-	name: null,
-	autocomplete: null,
-	type: 'text',
-	invalid: false,
-	maxlength: null,
-
-	focus()
-	{
-		this.input.focus();
-	}
-});
-
-component({
-	name: 'cxl-input-icon',
-	extend: 'cxl-icon',
-	styles: {
-		$: { paddingRight: 8 },
-		$trailing: { paddingRight: 0, paddingLeft: 8 }
-	}
-});
-
-component({
 	name: 'cxl-list',
 	styles: {
 		$: { paddingTop: 8, paddingBottom: 8 }
@@ -1041,376 +681,6 @@ component({
 }, {
 	tabIndex: -1,
 	onNav(el) { if (el) el.focus(); }
-});
-
-component({
-	name: 'cxl-calendar-header',
-	template: ``
-});
-
-component({
-	name: 'cxl-calendar',
-	attributes: [ 'value' ],
-	methods: [ 'focus' ],
-	template: `
-<div &=".header action:event.stop">
-	<cxl-button &="action:#toggleYear:#getMonthText" flat><x &="=monthText:text"></x>
-	<cxl-icon icon="caret-down"></cxl-icon></cxl-button>
-	<span &=".divider"></span>
-	<cxl-button aria-label="Previus Month" &="action:#previousMonth" flat>&nbsp;<cxl-icon icon="arrow-left"></cxl-icon>&nbsp;</cxl-button>
-	<cxl-button aria-label="Next Month" &="action:#nextMonth" flat>&nbsp;<cxl-icon icon="arrow-right"></cxl-icon>&nbsp;</cxl-button>
-</div>
-<div &=".rel">
-	<cxl-calendar-month &="id(calendarMonth) =selectedMonth:@month @value:=value"></cxl-calendar-month>
-	<cxl-calendar-year &="action:event.stop:not:=yearOpen =selectedYear::@value =startYear:@start-year @start-year:=startYear:#getMonthText .closed =yearOpen:.opened:filter:focus"></cxl-calendar-year>
-</div>
-	`,
-	styles: {
-		header: { display: 'flex', padding: 8 },
-		divider: { flexGrow: 1 },
-		closed: { scaleY: 0, transformOrigin: 'top' },
-		opened: { scaleY: 1 },
-		rel: { position: 'relative' }
-	},
-	bindings: '=value:#render =selectedMonth:#getMonthText =selectedYear:#updateMonth'
-
-}, {
-	today: null,
-	value: null,
-	calendarMonth: null,
-
-	focus()
-	{
-		const val = this.value || this.today, month = this.selectedMonth;
-
-		if (val.getMonth()!==month.getMonth() || val.getFullYear()!==month.getFullYear())
-		{
-			this.selectedMonth = new Date(val);
-			this.selectedYear = this.selectedMonth.getFullYear();
-		}
-
-		// TODO ?
-		setTimeout(() => this.calendarMonth.focus());
-	},
-
-	toggleYear()
-	{
-		this.yearOpen = !this.yearOpen;
-		const year = this.selectedMonth.getFullYear();
-		this.startYear = year - year % 16;
-		this.selectedYear = year;
-	},
-
-	updateMonth(year)
-	{
-		const month = this.selectedMonth;
-
-		if (year && month.getFullYear() !== year)
-		{
-			month.setYear(year);
-			this.selectedMonth = new Date(month);
-		}
-	},
-
-	nextMonth()
-	{
-		if (this.yearOpen)
-			this.startYear += 16;
-		else
-		{
-			const c = this.selectedMonth;
-			this.selectedMonth = new Date(c.getFullYear(), c.getMonth()+1, 1);
-		}
-	},
-
-	previousMonth()
-	{
-		if (this.yearOpen)
-			this.startYear -= 16;
-		else
-		{
-			const c = this.selectedMonth;
-			this.selectedMonth = new Date(c.getFullYear(), c.getMonth()-1, 1);
-		}
-	},
-
-	getMonthText()
-	{
-		if (this.selectedMonth)
-		{
-			const options = { year: 'numeric', month: 'long' };
-			this.monthText = this.yearOpen ? this.startYear + '-' + (this.startYear+16) :
-				this.selectedMonth.toLocaleDateString(navigator.language, options);
-		}
-	},
-
-	render(val)
-	{
-		this.today = new Date();
-		if (!this.selectedMonth)
-			this.selectedMonth = val ? new Date(val) : this.today;
-	}
-});
-
-component({
-	name: 'cxl-calendar-date',
-	attributes: [ 'touched', 'value', 'selected', 'disabled' ],
-	bindings: 'focusable =label:aria.prop(label)',
-	template: `
-<span &=".btn =value:#getDate:text"></span>
-	`,
-	styles: [ FocusCSS, DisabledCSS, {
-		$: { textAlign: 'center', cursor: 'pointer' },
-		btn: {
-			borderRadius: 40, width: 40, height: 40, lineHeight: 40, display: 'inline-block',
-			padding: 0, backgroundColor: 'surface', color: 'onSurface', margin: 4
-		},
-		btn$selected: {
-			backgroundColor: 'primary', color: 'onPrimary'
-		}
-	}]
-}, {
-	getDate(val) {
-		if (!val || typeof(val)==='string')
-			val = new Date(val);
-
-		this.label = val.toDateString();
-
-		return val.getDate();
-	}
-});
-
-component({
-	name: 'cxl-calendar-month',
-	attributes: [ 'value', 'month' ],
-	methods: [ 'focus' ],
-	template: `
-<cxl-table &="navigation.grid:#onNavigation">
-	<cxl-th>S</cxl-th>
-	<cxl-th>M</cxl-th>
-	<cxl-th>T</cxl-th>
-	<cxl-th>W</cxl-th>
-	<cxl-th>T</cxl-th>
-	<cxl-th>F</cxl-th>
-	<cxl-th>S</cxl-th>
-	<template &="=dates:marker.empty:each:repeat">
-	<cxl-calendar-date &="action:#onAction $date:@value $disabled:@disabled $today:.today:filter:#setTodayEl =value:#isSelected:@selected"></cxl-calendar-date>
-	</template>
-</cxl-table>
-	`,
-	bindings: `=month:#render =value:#parse`,
-	styles: {
-		$: { textAlign: 'center' },
-		today: { border: 1, borderStyle: 'solid', borderColor: 'primary' }
-	},
-	initialize(state)
-	{
-		const now = new Date();
-		state.today = (new Date(now.getFullYear(), now.getMonth(), now.getDate())).getTime();
-		state.month = state.month || now;
-	}
-
-}, {
-	selected: null,
-	value: null,
-	todayEl: null,
-	setFocus: false,
-
-	setTodayEl(val, el)
-	{
-		if (val)
-			this.todayEl = el;
-	},
-
-	focus()
-	{
-		const val = this.selected || this.todayEl;
-
-		if (val)
-			val.focus();
-	},
-
-	onNavigation(el)
-	{
-		el.focus();
-	},
-
-	parse(val)
-	{
-		if (val && !(val instanceof Date))
-			this.value = new Date(val);
-	},
-
-	isSelected(val, el)
-	{
-	const
-		date = el.value,
-		result = (val && date.getMonth()===val.getMonth() &&
-			date.getFullYear()===val.getFullYear() &&
-			date.getDate() === val.getDate())
-	;
-		if (result)
-			this.selected = el;
-
-		return result;
-	},
-
-	setSelected(el)
-	{
-		this.value = el.value;
-	},
-
-	onAction(ev, el)
-	{
-		if (!el.disabled)
-			this.setSelected(el);
-	},
-
-	getFirstDate(date)
-	{
-		const result = new Date(date.getFullYear(), date.getMonth(), 1);
-		result.setDate(1-result.getDay());
-		return result;
-	},
-
-	getLastDate(date)
-	{
-		const result = new Date(date.getFullYear(), date.getMonth()+1, 1);
-		result.setDate(7 - result.getDay());
-		return result;
-	},
-
-	createItem(current)
-	{
-		return {
-			date: new Date(current),
-			disabled: current.getMonth() !== this.monthNumber,
-			today: this.today === current.getTime()
-		};
-	},
-
-	render(startDate)
-	{
-		if (!(startDate instanceof Date))
-			startDate = new Date(startDate);
-
-	const
-		dates = this.dates = [],
-		lastDate = startDate && this.getLastDate(startDate)
-	;
-		if (!startDate)
-			return;
-
-		this.monthNumber = startDate.getMonth();
-
-		var current = this.getFirstDate(startDate);
-
-		do {
-			dates.push(this.createItem(current));
-			current.setDate(current.getDate() + 1);
-		} while (current <= lastDate || dates.length > 50);
-	}
-});
-
-component({
-	name: 'cxl-calendar-year',
-	attributes: [ 'value', 'start-year' ],
-	methods: [ 'focus' ],
-	template: `
-<div &=".grid =columns:@columns navigation.grid:#onNav">
-<template &="=years:marker.empty:each:repeat">
-	<cxl-button flat &="item:text:@value action:#select =value:#isSelected:@primary"></cxl-button>
-</template>
-</div>
-	`,
-	styles: {
-		$: {
-			position: 'absolute', top: 0, left: 0, bottom: 0, right: 0,
-			backgroundColor: 'surface', color: 'onSurface'
-		},
-		grid: {
-			display: 'grid', height: '100%',
-			gridTemplateColumns: '1fr 1fr 1fr 1fr'
-		}
-	},
-	bindings: '=start-year:#render action:#select'
-}, {
-	columns: 4,
-
-	focus()
-	{
-		// TODO
-		setTimeout(() => {
-			if (this.selected)
-				this.selected.focus();
-		});
-	},
-
-	onNav(el)
-	{
-		el.focus();
-	},
-
-	isSelected(val, el)
-	{
-		const result = el.value === val;
-
-		if (result)
-			this.selected = el;
-
-		return result;
-	},
-
-	select(ev, target)
-	{
-		this.value = target.value;
-	},
-
-	render(startYear)
-	{
-		const years = this.years = [];
-
-		for (var i=startYear;i<startYear+16; i++)
-			years.push(i);
-	}
-});
-
-component({
-	name: 'cxl-datepicker',
-	extend: 'cxl-input',
-	template: `
-<input &="id(input) .input
-	=aria-label:attribute(aria-label)
-	=inputValue:value
-	=maxlength:filter:@maxLength value:#onInput
-	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
-	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
-	<cxl-icon-toggle icon="calendar" &="=disabled:@disabled @opened:=opened">
-	<cxl-toggle-popup &="role(dialog)">
-		<cxl-card>
-			<cxl-calendar &="=opened:filter:focus @value:#update:=value =value:@value"></cxl-calendar>
-		</cxl-card>
-	</cxl-toggle-popup>
-</cxl-input-icon>
-	`,
-	styles: {
-		$: { position: 'relative', flexGrow: 1, display: 'flex' }
-	}
-}, {
-	value: null,
-	inputValue: '',
-
-	onInput(val)
-	{
-		this.value = val && new Date(val);
-	},
-
-	update(date)
-	{
-		if (date && date !== this.value && !isNaN(date.getTime()))
-			this.inputValue = date.toLocaleDateString();
-		this.input.focus();
-	}
 });
 
 component({
@@ -1500,27 +770,59 @@ component({
 });
 
 component({
+	name: 'cxl-popup',
+	attributes: [ 'visible', 'position' ],
+	bindings: '=visible:#show',
+	styles: {
+		$: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
+		$small: { top: 'auto', left: 'auto', right: 'auto', bottom: 'auto' }
+	}
+}, {
+	visible: false,
+
+	place(el, pos)
+	{
+		const style = el.style;
+
+		if (pos)
+		{
+			if ('right' in pos)
+				style.right = pos.right + 'px';
+			if ('left' in pos)
+				style.left = pos.left + 'px';
+			if ('top' in pos)
+				style.top = pos.top + 'px';
+		}
+
+		document.body.appendChild(el);
+	},
+
+	show(visible, el)
+	{
+		if (visible)
+			this.place(el, this.position);
+		else
+			cxl.dom.remove(el);
+	}
+});
+
+component({
 	name: 'cxl-toggle',
-	attributes: [ 'disabled', 'touched', 'opened' ],
-	template: `
-<div &="content"></div>
-<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
-	`,
+	attributes: [ 'disabled', 'touched', 'opened', 'position' ],
 	bindings: `
 focusable
 root.on(click):#close keypress(escape):#close
 action:#show:event.stop
 role(button)
-	`,
-	styles: {
-		popup: { height: 0, elevation: 5, position: 'absolute' }
-	}
+	`
 }, {
 	opened: false,
+
 	close()
 	{
 		this.opened = false;
 	},
+
 	show(ev, el)
 	{
 		if (this.disabled)
@@ -1528,27 +830,16 @@ role(button)
 
 		if (!this.opened)
 		{
+			const pos = el.getBoundingClientRect(), w = document.body.clientWidth;
 			this.opened = true;
-			this.popup.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
-		} else
+			this.position = {
+				top: pos.top,
+				right: w - pos.right
+			};
+		}
+		else
 			this.close();
 	}
-});
-
-component({
-	name: 'cxl-icon-toggle',
-	attributes: [ 'icon' ],
-	extend: 'cxl-toggle',
-	template: `
-<span &="=opened:hide .focusCircle .focusCirclePrimary"></span>
-<cxl-icon &="=icon:@icon"></cxl-icon>
-<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
-	`,
-	styles: [FocusCircleCSS, {
-		$: { paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12 },
-		focusCircle: { left: 9 },
-		popup: { filter: 'none' }
-	}]
 });
 
 component({
@@ -1626,53 +917,6 @@ component({
 });
 
 component({
-	name: 'cxl-option',
-	attributes: [ 'value', 'selected', 'multiple', 'focused', 'disabled' ],
-	events: [ 'selectable.action', 'change' ],
-	template: `
-<cxl-icon icon="check" &="=multiple:show .box"></cxl-icon>
-<div &="content .content"></div>
-	`,
-	bindings: `
-role(option) selectable
-=value:host.trigger(change)
-	`,
-	styles: {
-		$: {
-			cursor: 'pointer', color: 'onSurface', lineHeight: 20, paddingRight: 16,
-			display: 'flex', backgroundColor: 'surface',
-			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14
-		},
-		box: {
-			display: 'inline-block', width: 20, height: 20, border: 2,
-			borderColor: 'onSurface', marginRight: 12, lineHeight: 16,
-			borderStyle: 'solid', color: 'rgba(0,0,0,0)', fontSize: 16
-		},
-		box$selected: { borderColor: 'primary', backgroundColor: 'primary', color: 'onPrimary' },
-		checkbox: { marginBottom: 0, marginRight: 8 },
-		content: { flexGrow: 1 },
-		$hover: { filter: 'brightness(0.95)' },
-		$selected: { backgroundColor: 'primaryLight', color: 'onPrimaryLight' },
-		$focused: { filter: 'brightness(0.85)' },
-		$disabled: { state: 'disabled' }
-	},
-	initialize(state)
-	{
-		if (!state.value)
-			state.value = this.innerText;
-	}
-}, {
-	value: null
-});
-
-component({
-	name: 'cxl-password',
-	extend: 'cxl-input'
-}, {
-	type: 'password'
-});
-
-component({
 	name: 'cxl-progress',
 	events: [ 'change' ],
 	attributes: [ 'value' ],
@@ -1697,96 +941,6 @@ component({
 		}
 
 		return true;
-	}
-});
-
-const radioValues = [];
-
-component({
-	name: 'cxl-radio',
-	extend: 'cxl-form-input',
-	template: `
-<x &=".focusCircle .focusCirclePrimary"></x>
-<x &=".box"><x &=".circle"></x></x>
-<span &=".content content"></span>
-	`,
-	bindings: `
-role(radio) focusable id(host)
-action:#toggle
-=name:#register
-=checked:host.trigger(change):aria.prop(checked)
-disconnect:#unregister
-	`,
-	styles: [{
-		$: {
-			position: 'relative', display: 'inline-block', cursor: 'pointer',
-			margin: 16, marginLeft: 0
-		},
-		content: { marginLeft: 32 },
-		circle: {
-			borderRadius: 10, width: 10, height: 10, display: 'inline-block',
-			backgroundColor: 'primary', scaleX: 0, scaleY: 0, marginTop: 3
-		},
-		circle$checked: { scaleX: 1, scaleY: 1 },
-		circle$invalid$touched: { backgroundColor: 'error' },
-		box: {
-			position: 'absolute', border: 2, width: 20, height: 20, display: 'inline-block',
-			borderColor: 'onSurface', marginRight: 8, borderRadius: 10,
-			borderStyle: 'solid', color: 'primary', lineHeight: 16, textAlign: 'center'
-		},
-		box$checked: { borderColor: 'primary' },
-		box$invalid$touched: { borderColor: 'error' },
-		box$checked$invalid$touched: { color: 'error' }
-
-	}, FocusCircleCSS ],
-
-	attributes: [ 'checked', 'name' ]
-}, {
-	checked: false,
-
-	register(name)
-	{
-		if (name && !this.registered)
-		{
-			radioValues.push(this.host);
-			this.registered = true;
-		}
-	},
-
-	unregister()
-	{
-		var i = radioValues.indexOf(this);
-
-		if (i!==-1)
-			radioValues.splice(i, 1);
-
-		this.registered = false;
-	},
-
-	update()
-	{
-		if (this.name)
-		{
-			radioValues.forEach(r => {
-				if (r.name===this.name && r !== this.host)
-				{
-					r.checked = false;
-					r.touched = true;
-				}
-			});
-		}
-	},
-
-	toggle()
-	{
-		if (this.disabled)
-			return;
-
-		if (!this.checked)
-		{
-			this.checked = this.touched = true;
-			this.update();
-		}
 	}
 });
 
@@ -1832,363 +986,6 @@ component({
 		$: { position: 'relative', overflowX: 'hidden', overflowY: 'hidden' }
 	},
 	bindings: 'ripple'
-});
-
-component({
-	name: 'cxl-search-input',
-	events: [ 'change' ],
-	attributes: [ 'value' ],
-	bindings: 'role(searchbox)',
-	template: `
-<cxl-icon icon="search" &=".icon"></cxl-icon>
-<input &="value:=value =value:host.trigger(change) .input" placeholder="Search"></input>
-	`,
-	styles: {
-		$: { elevation: 1, position: 'relative', padding: 16, paddingBottom: 14, fontSize: 18 },
-		icon: { position: 'absolute', top: 18 },
-		input: {
-			outline: 0, border: 0, width: '100%', backgroundColor: 'surface', color: 'onSurface',
-			lineHeight: 24, padding: 0, paddingLeft: 48, fontSize: 18
-		}
-	}
-});
-
-component({
-	name: 'cxl-select-menu',
-	attributes: [ 'opened' ],
-	styles: {
-		$: { position: 'absolute', elevation: 0, right: 0, left: -16, overflowY: 'hidden', transformOrigin: 'top' },
-		$opened: { elevation: 3, overflowY: 'auto', backgroundColor: 'surface' },
-	}
-});
-
-component({
-	name: 'cxl-select',
-	extend: 'cxl-form-input',
-	template: `
-<div &=".container =opened:.opened">
-	<cxl-select-menu &="id(menu) =menuHeight:style.inline(height)
-		=menuTransform:style.inline(transform) =menuScroll:@scrollTop =menuTop:style.inline(top)
-		=opened:@opened content"></cxl-select-menu>
-	<div &="=value:hide .placeholder =placeholder:text"></div>
-	<div &="=value:show:#getSelectedText:text id(selectedText) .selectedText"></div>
-	<cxl-icon &=".icon" icon="caret-down" role="presentation"></cxl-icon>
-</div>
-	`,
-	attributes: [ 'placeholder' ],
-	bindings: `
-		focusable
-		selectable.host:#onSelected
-		=focusedItem:navigation.select:#onNavigation
-		id(component)
-		keypress(escape):#close
-		on(blur):#close
-		root.on(click):#close
-		action:#onAction:event.prevent:event.stop
-		keypress(enter):event.stop
-	`,
-	styles: [ {
-		$: { cursor: 'pointer', flexGrow: 1 },
-		$focus: { outline: 0 },
-		icon: { position: 'absolute', right: 2, top: 8, lineHeight: 16 },
-		placeholder: {
-			color: 'onSurface', lineHeight: 20, paddingRight: 16,
-			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14,
-			position: 'absolute', left: -16, top: -8, right: 0, height: 48
-		},
-		container: {
-			 overflowY: 'hidden', height: 33, position: 'relative',
-			 paddingLeft: 12, paddingRight: 12
-		},
-		opened: { overflowY: 'visible' }
-	} ],
-
-	initialize(state)
-	{
-		state.calculateDimensions = cxl.debounce(() => {
-			state._calculateDimensions();
-			this.$view.digest();
-		});
-	}
-
-}, {
-	opened: false,
-	placeholder: '',
-	selected: null,
-	value: null,
-	menuScroll: 0,
-	menuTop: 0,
-
-	getSelectedText()
-	{
-		return cxl.Skip;
-	},
-
-	updateMenu(selectedRect)
-	{
-	var
-		rootRect = window,
-		menuRect = this.menu,
-		rect = this.component.getBoundingClientRect(),
-		minTop = 56,
-		maxTop = rect.top-minTop,
-		maxHeight,
-		marginTop = selectedRect ? selectedRect.offsetTop : 0,
-		scrollTop = 0, height
-	;
-		if (marginTop > maxTop)
-		{
-			scrollTop = marginTop-maxTop;
-			marginTop = maxTop;
-		}
-
-		height = menuRect.scrollHeight-scrollTop;
-		maxHeight = rootRect.clientHeight - rect.bottom + marginTop;
-
-		if (height > maxHeight)
-			height = maxHeight;
-		else if (height < minTop)
-			height = minTop;
-
-		this.menuTransform = 'translateY(' + (-marginTop-8) + 'px)';
-		this.menuHeight = height + 'px';
-		this.menuScroll = scrollTop;
-	},
-
-	/**
-	 * Calculate the menu dimensions based on content and position.
-	 */
-	_calculateDimensions()
-	{
-	const
-		selectedRect = this.selected
-	;
-		if (this.opened)
-		{
-			if (selectedRect)
-				selectedRect.selected = true;
-		} else if (!selectedRect)
-		{
-			this.menuHeight = 0;
-			return;
-		}
-		else
-			selectedRect.selected = false;
-
-		this.updateMenu(selectedRect);
-	},
-
-	onNavigation(el)
-	{
-		this.onSelected(el);
-	},
-
-	open()
-	{
-		if (this.disabled || this.opened)
-			return;
-
-		this.opened = true;
-		this.calculateDimensions();
-	},
-
-	close()
-	{
-		if (this.opened)
-		{
-			this.opened = false;
-			this.calculateDimensions();
-		}
-	},
-
-	onSelected(selected)
-	{
-		if (selected)
-		{
-			if (this.value !== selected.value)
-				this.value = selected.value;
-
-			if (this.selected)
-				this.selected.selected = false;
-
-			selected.selected = true;
-		}
-
-		this.selected = selected;
-		this.calculateDimensions();
-	},
-
-	onAction()
-	{
-		if (this.disabled)
-			return;
-
-		if (this.opened)
-			this.close();
-		else
-			this.open();
-	}
-
-});
-
-component({
-	name: 'cxl-multiselect',
-	extend: 'cxl-select',
-	bindings: 'on(selectable.register):#onRegister root.on(touchend):#close',
-	styles: {
-		selectedText: {
-			color: 'onSurface', lineHeight: 20, paddingRight: 16,
-			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14,
-			position: 'absolute', left: -16, top: -8, right: 0, height: 48
-		}
-	}
-}, {
-	getSelectedText()
-	{
-		return this.selected && this.selected.map(s => s.innerText).join(', ');
-	},
-
-	_calculateDimensions()
-	{
-		this.menuTransform = this.opened ? 'scaleY(1)' : 'scaleY(0)';
-		this.menuTop = '100%';
-	},
-
-	onRegister(ev)
-	{
-		const el = ev.target;
-		// TODO safe?
-		el.multiple = true;
-	},
-
-	onNavigation(element)
-	{
-		if (this.focusedItem!==element)
-		{
-			if (this.focusedItem)
-				this.focusedItem.focused = false;
-
-			this.focusedItem = element;
-			element.focused = true;
-		}
-	},
-
-	onSelected(selectedEl)
-	{
-		if (selectedEl)
-		{
-			if (!this.selected)
-				this.selected = [];
-
-			const selected = this.selected, i = selected.indexOf(selectedEl);
-
-			if (this.focusedItem)
-				this.focusedItem.focused = false;
-
-			if (i ===-1)
-			{
-				selectedEl.selected = true;
-				selected.push(selectedEl);
-			}
-			else
-			{
-				selectedEl.selected = false;
-				selected.splice(i, 1);
-			}
-
-			selectedEl.focused = true;
-			this.focusedItem = selectedEl;
-
-			if (selected.length===0)
-				this.selected = this.value = null;
-			else
-				this.value = selected.map(o => o.value);
-		}
-
-		this.calculateDimensions();
-	},
-
-	onAction(ev)
-	{
-		if (this.disabled)
-			return;
-
-	 	if (this.opened)
-		{
-			if (ev.type==='keyup' && this.focused)
-			{
-				this.onSelected(this.focusedItem);
-				ev.preventDefault();
-			}
-		} else
-		{
-			if (this.focusedItem)
-			{
-				this.focusedItem.focused = false;
-				this.focusedItem = null;
-			}
-			this.open();
-		}
-	}
-});
-
-component({
-	name: 'cxl-slider',
-	extend: 'cxl-form-input',
-	attributes: [ 'step' ],
-	bindings: `
-		focusable
-		role(slider)
-		keypress(arrowleft):#onLeft keypress(arrowright):#onRight
-		drag.in(x):#onDrag
-	`,
-	template: `
-<div &=".background">
-	<div &=".line =value:#update"><x &=".focusCircle .focusCirclePrimary"></x>
-	<div &=".knob"></div>
-</div></div>
-	`,
-	styles: [{
-		$: { paddingTop: 15, paddingBottom: 15, userSelect: 'none', position: 'relative', flexGrow: 1 },
-		knob: {
-			backgroundColor: 'primary', width: 12, height: 12, display: 'inline-block',
-			borderRadius: 6, position: 'absolute', top: 10
-		},
-		focusCircle: { marginLeft: -4, marginTop: -8 },
-		background: { backgroundColor: 'primaryLight', height: 2 },
-		line: { backgroundColor: 'primary', height: 2, textAlign: 'right' },
-		line$invalid$touched: { backgroundColor: 'error' },
-		knob$invalid$touched: { backgroundColor: 'error' },
-		background$invalid$touched: { backgroundColor: 'error' }
-	}, FocusCircleCSS ]
-}, {
-	value: 0,
-	step: 0.05,
-
-	onLeft() { this.value -= +this.step; },
-
-	onRight() { this.value += +this.step; },
-
-	update(value, el)
-	{
-		if (value < 0)
-			value = 0;
-		else if (value > 1)
-			value = 1;
-
-		el.style.marginRight = (100-value*100) + '%';
-
-		return (this.value = value);
-	},
-
-	onDrag(x)
-	{
-		if (this.disabled)
-			return;
-
-		this.value = x;
-	}
-
 });
 
 component({
@@ -2299,84 +1096,6 @@ component({
 	styles: {
 		$: { animation: 'spin', display: 'inline-block' },
 		circle: { animation: 'spinnerstroke' }
-	}
-});
-
-component({
-	name: 'cxl-submit',
-	extend: 'cxl-button',
-	template: `
-<cxl-icon &="=disabled:show =icon:@icon .icon"></cxl-icon>
-<span &="content"></span>
-	`,
-	styles: {
-		icon: { animation: 'spin', marginRight: 8 }
-	},
-	events: [ 'cxl-form.submit' ],
-	bindings: 'action:host.trigger(cxl-form.submit)'
-}, {
-	primary: true,
-	icon: 'spinner',
-	submit()
-	{
-		this.input.click();
-	}
-});
-
-component({
-	name: 'cxl-switch',
-	extend: 'cxl-form-input',
-	template: `
-<span &=".background =checked:#update"></span>
-<div &=".knob">
-<x &=".focusCircle"></x>
-</div>
-	`,
-	attributes: [ 'checked', 'true-value', 'false-value' ],
-	bindings: `focusable action:#onClick role(switch) =checked:aria.prop(checked)`,
-	styles: [{
-		$: {
-			position: 'relative', display: 'inline-block', width: 46, height: 20,
-			cursor: 'pointer', userSelect: 'none'
-		},
-		background: {
-			position: 'absolute',
-			display: 'block', left: 10, top: 2,
-			height: 16,
-			borderRadius: 8,
-			width: 26,
-			backgroundColor: 'divider'
-		},
-
-		knob: {
-			width: 20, height: 20,
-			borderRadius: 10,
-			backgroundColor: '#fff',
-			position: 'absolute',
-			elevation: 1
-		},
-
-		background$checked: { backgroundColor: 'primaryLight' },
-		knob$checked: { translateX: 24, backgroundColor: 'primary' },
-		knob$invalid$touched: { backgroundColor: 'error' },
-		focusCircle$checked: { backgroundColor: 'primary' }
-	}, FocusCircleCSS ]
-}, {
-	'true-value': true,
-	'false-value': false,
-	'checked': false,
-
-	update()
-	{
-		this.value = this[this.checked ? 'true-value' : 'false-value'];
-	},
-
-	onClick()
-	{
-		if (this.disabled)
-			return;
-
-		this.checked = !this.checked;
 	}
 });
 
@@ -2521,54 +1240,6 @@ component({
 	}
 });
 
-component({
-	name: 'cxl-textarea',
-	extend: 'cxl-form-input',
-	template: `
-<div &="id(span) .input .measure"></div>
-<textarea &=".input .textarea
-	value:=value on(input):event.stop
-	=value:value:#calculateHeight
-	=aria-label:attribute(aria-label)
-	=disabled:attribute(disabled)
-	on(change):event.stop
-	on(blur):host.trigger(blur) on(focus):host.trigger(focus)">
-</textarea>
-`,
-	bindings: `
-role(textbox) touchable aria.prop(multiline) keypress(enter):event.stop
-	`,
-	attributes: [ 'aria-label' ],
-	styles: [FocusLineCSS, {
-		$: { position: 'relative', flexGrow: 1 },
-		input: {
-			fontSize: 16, backgroundColor: 'transparent',
-			lineHeight: 20, fontFamily: 'inherit', border: 0
-		},
-		textarea: {
-			width: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-			height: '100%', outline: 0, borderRadius: 0,
-		},
-		measure: { opacity: 0, whiteSpace: 'pre-wrap' }
-	}],
-
-	initialize(state)
-	{
-		const initial = this.innerHTML;
-
-		if (initial)
-			state.value = initial;
-	}
-
-}, {
-	value: '',
-
-	calculateHeight(val)
-	{
-		this.span.innerHTML = val + '&nbsp;';
-	}
-});
-
 Object.assign(ui, {
 
 	alert(options)
@@ -2638,4 +1309,4 @@ Object.assign(ui, {
 
 });
 
-})(this.cxl);
+})();

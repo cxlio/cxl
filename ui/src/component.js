@@ -248,6 +248,7 @@ class ComponentDefinition
 
 			disconnectedCallback()
 			{
+				cxl.renderer.commitDigest(this.$view);
 				this.$view.disconnect();
 			}
 		}
