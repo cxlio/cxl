@@ -177,8 +177,11 @@ class ComponentDefinition
 		this.meta = meta;
 		this.Component = this.componentConstructor();
 
-		COMPONENTS[this.name] = this;
-		this.$registerElement(this.name, this.Component);
+		if (this.name)
+		{
+			COMPONENTS[this.name] = this;
+			this.$registerElement(this.name, this.Component);
+		}
 	}
 
 	extend(def)
@@ -217,7 +220,8 @@ class ComponentDefinition
 
 	extendComponent(def, parent)
 	{
-		return COMPONENTS[parent].extend(def);
+		return (parent instanceof ComponentDefinition ?
+			parent : COMPONENTS[parent]).extend(def);
 	}
 
 	componentConstructor()

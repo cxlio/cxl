@@ -1628,24 +1628,44 @@ cxl.route({
 	path: 'forms',
 	title: 'Forms',
 	template: `
-<cxl-t h4>Components</cxl-t>
+<cxl-t h4>Component Guidelines</cxl-t>
+<cxl-t h5>Anatomy</cxl-t>
+<docs-demo><!--
+<cxl-field leading>
+	<cxl-label>Field Label</cxl-label>
+	<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
+	<cxl-input value="Input Value"></cxl-input>
+	<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
+	<cxl-field-help>Helper Text</cxl-field-help>
+</cxl-field>
+--></docs-demo>
+<docs-demo><!--
+<cxl-field outline>
+	<cxl-label>Field Label</cxl-label>
+	<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
+	<cxl-input value="Input Value"></cxl-input>
+	<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
+	<cxl-field-help>Helper Text</cxl-field-help>
+</cxl-field>
+--></docs-demo>
 <cxl-t h5>States</cxl-t>
 <docs-demo><!--
 <cxl-card><cxl-c pad16>
-<cxl-input label="Enabled"></cxl-input>
-<cxl-input disabled label="Disabled"></cxl-input>
-<cxl-input label="Hover" &=".hover"></cxl-input>
-<cxl-input focused label="Focused"></cxl-input>
-<cxl-input invalid touched label="Invalid"></cxl-input>
+<cxl-field-input label="Enabled"></cxl-field-input>
+<cxl-field-input disabled label="Disabled"></cxl-field-input>
+<cxl-field-input label="Hover" &=".hover"></cxl-field-input>
+<cxl-field-input focused label="Focused"></cxl-field-input>
+<cxl-field-input invalid touched label="Invalid"></cxl-field-input>
 </cxl-c></cxl-card>
 --></docs-demo>
-<cxl-t h5>Text Fields</cxl-t>
+<cxl-t h4>Text Fields</cxl-t>
 <docs-demo><!--
-<cxl-input label="Single Line Text Field"></cxl-input>
-<cxl-textarea label="Multiple Line Expandable Text Area"></cxl-textarea>
-<cxl-input label="Text Field with Outline" outline></cxl-input>
-<cxl-textarea label="Expandable Text Area with Outline" outline></cxl-textarea>
+<cxl-field-input label="Single Line Text Field"></cxl-field-input>
+<cxl-field-textarea label="Multiple Line Expandable Text Area"></cxl-field-textarea>
+<cxl-field-input label="Text Field with Outline" outline></cxl-field-input>
+<cxl-field-textarea label="Expandable Text Area with Outline" outline></cxl-field-textarea>
 --></docs-demo>
+
 <cxl-t h5>Selection Controls</cxl-t>
 
 <docs-demo><!--
@@ -1673,14 +1693,22 @@ cxl.route({
 --></docs-demo>
 <cxl-t h5>Dropdown Menus</cxl-t>
 <docs-demo><!--
-<cxl-form-group>
+<cxl-field>
 	<cxl-label>Single Selection Menu</cxl-label>
 	<cxl-select>
 		<cxl-option>Select Item One</cxl-option>
 		<cxl-option>Select Item Two</cxl-option>
 		<cxl-option>Select Item Three</cxl-option>
 	</cxl-select>
-</cxl-form-group>
+</cxl-field>
+<cxl-field>
+	<cxl-label>Multiple Selection Menu</cxl-label>
+	<cxl-multiselect>
+		<cxl-option>Select Item One</cxl-option>
+		<cxl-option>Select Item Two</cxl-option>
+		<cxl-option>Select Item Three</cxl-option>
+	</cxl-select>
+</cxl-field>
 --></docs-demo>
 <cxl-t h4>Fieldsets</cxl-t>
 <docs-demo><!--
@@ -1708,45 +1736,39 @@ cxl.route({
 <cxl-t h4>Form Groups</cxl-t>
 <cxl-t h5>Floating Labels</cxl-t>
 <docs-demo><!--
-<cxl-input floating>
-	<cxl-label>Floating Label Input Box</cxl-label>
-</cxl-input>
+<cxl-field-input floating label="Floating Label Input Box"></cxl-field-input>
 --></docs-demo>
 <cxl-t h5>Outline</cxl-t>
 <docs-demo><!--
-<cxl-input label="Outline Label" outline>
+<cxl-field-input label="Outline Label" outline>
 	<cxl-input-help>Help Text</cxl-input-help>
-</cxl-input>
-<cxl-input outline floating>
-	<cxl-label>Floating Label with Outline</cxl-label>
-</cxl-input>
-<cxl-textarea outline>
-	<cxl-label>Text Area Outline</cxl-label>
-</cxl-textarea>
-<cxl-input invalid touched outline>
-	<cxl-label>Invalid Input Outline</cxl-label>
+</cxl-field-input>
+<cxl-field-input outline floating label="Floating Label with Outline"></cxl-field-input>
+<cxl-field-textarea outline label="Text Area Outline"></cxl-field-textarea>
+<cxl-field-input invalid touched outline label="Invalid Input Outline">
 	<cxl-input-help>Invalid Input Message</cxl-input-help>
-</cxl-input>
+</cxl-field-input>
 --></docs-demo>
 <cxl-t h5>Help Text</cxl-t>
 <docs-demo><!--
-<cxl-input>
-	<cxl-label>Label</cxl-label>
-	<cxl-input-help>Help Text</cxl-input-help>
-</cxl-input>
+<cxl-field-input label="Input Label">
+	<cxl-field-help>Help Text</cxl-field-help>
+</cxl-field-input>
 --></docs-demo>
 <cxl-t h5>Icons</cxl-t>
 <docs-demo><!--
-<cxl-input>
+<cxl-field>
 	<cxl-label>Leading Icon</cxl-label>
-	<cxl-input-icon icon="dollar-sign"></cxl-input-icon>
-</cxl-input>
+	<cxl-field-icon icon="dollar-sign"></cxl-field-icon>
+	<cxl-input></cxl-input>
+</cxl-field>
 --></docs-demo>
 <docs-demo><!--
-<cxl-input>
+<cxl-field>
 	<cxl-label>Trailing Icon</cxl-label>
-	<cxl-input-icon trailing icon="percent"></cxl-input-icon>
-</cxl-input>
+	<cxl-input></cxl-input>
+	<cxl-field-icon trailing icon="percent"></cxl-field-icon>
+</cxl-field>
 --></docs-demo>
 <cxl-t h4>Form Component</cxl-t>
 <cxl-t h5>Validation</cxl-t>
@@ -1964,7 +1986,7 @@ component({
 <cxl-router-app>
 	<cxl-c pad16>
 		<cxl-t h6>@cxl/ui
-		<cxl-t inline subtitle2>${cxl.version}</cxl-t>
+		<cxl-t inline subtitle2>${cxl.ui.version}</cxl-t>
 		</cxl-t>
 	</cxl-c>
 	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
@@ -1980,6 +2002,7 @@ component({
 	<cxl-item icon="" &="item:route.link">
 		&lt;<span &="item:text"></span>&gt;
 		<cxl-t &="item:#isBeta:show" caption inline>beta</cxl-t>
+		<cxl-t &="item:#isDeprecated:show" caption inline>deprecated</cxl-t>
 	</cxl-item>
 	</template>
 </cxl-router-app>
@@ -1989,7 +2012,12 @@ component({
 	isBeta(tag)
 	{
 		return !!(META[tag] && META[tag].beta);
+	},
+	isDeprecated(tag)
+	{
+		return cxl.componentFactory.components[tag].meta.deprecated || 0;
 	}
+
 });
 
 })(this.cxl);

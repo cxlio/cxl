@@ -1,12 +1,13 @@
 (() => {
 
 const
-	component = cxl.component
+	component = cxl.component,
+	InputBase = cxl.ui.InputBase
 ;
 
 component({
 	name: 'cxl-calendar-date',
-	extend: 'cxl-input-base',
+	extend: InputBase,
 	attributes: [ 'selected' ],
 	bindings: 'focusable =label:aria.prop(label)',
 	template: `
@@ -347,7 +348,7 @@ component({
 	=maxlength:filter:@maxLength value:#onInput
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
-<cxl-icon-toggle icon="calendar" &="@position:=popupPos =disabled:@disabled @opened:=opened .icon"></cxl-icon-toggle>
+<cxl-field-toggle icon="calendar" &="@position:=popupPos =disabled:@disabled @opened:=opened .icon"></cxl-field-toggle>
 <cxl-popup &="=opened:@visible =popupPos:@position">
 	<cxl-card>
 		<cxl-calendar &="=opened:filter:focus @value:#update:=value =value:@value"></cxl-calendar>

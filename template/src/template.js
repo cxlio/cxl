@@ -1666,6 +1666,8 @@ operators({
 
 });
 
+directive('host.state', {});
+
 function pipes(defs) {
 	for (var i in defs)
 		directive(i, { update: defs[i] });

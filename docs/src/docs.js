@@ -135,14 +135,25 @@ component({
 	template: `
 <cxl-t h6><span &="=label:show:text"></span></cxl-t>
 <div &="content"></div>
-<docs-code &="=source:@source"></docs-code>
+<a &=".link action:#toggleSource"><cxl-icon icon="code"></cxl-icon> <x &="=sourceLabel:text"></x></a>
+<docs-code &="=displaySource:show =source:@source"></docs-code>
 `,
 
 	styles: {
-		$: { marginTop: 24, marginBottom: 24 }
+		$: { marginTop: 24, marginBottom: 24 },
+		link: { color: 'primary', fontSize: 12, display: 'block', textAlign: 'right', marginTop: 16, marginBottom: 16 }
 	}
 
 }, {
+	sourceLabel: 'Show Source',
+	displaySource: false,
+
+	toggleSource()
+	{
+		this.displaySource = !this.displaySource;
+		this.sourceLabel = this.displaySource ? 'Hide Source' : 'Show Source';
+	},
+
 	connect(val, host)
 	{
 	var

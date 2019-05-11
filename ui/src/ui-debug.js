@@ -9,7 +9,7 @@ const
 	MAX_TEMPLATE_LENGTH = 2000,
 	VALID_COMPONENT_META = [
 		'template', 'name', 'extend', 'attributes', 'methods', 'styles', 'events', 'bindings',
-		'initialize', 'templateId', 'controller'
+		'initialize', 'templateId', 'controller', 'deprecated'
 	],
 	VALID_ROUTE_META = [
 		'path', 'id', 'title', 'resolve', 'defaultRoute', 'redirectTo', 'parent'
@@ -22,7 +22,8 @@ const
 override(cxl.componentFactory, 'createComponent', function(meta, node) {
 	if (node.$view)
 		throw new Error("Trying to initialize node more than once.");
-
+	if (meta.deprecated)
+		warn(`Component ${meta.name} is deprecated`);
 	node.$$meta = meta;
 });
 

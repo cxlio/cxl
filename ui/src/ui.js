@@ -1,4 +1,5 @@
-(() => {
+(cxl => {
+"use strict";
 
 const
 	component = cxl.component,
@@ -12,6 +13,20 @@ const
 		$active: { state: 'active' },
 		$hover: { state: 'hover' },
 		$focus: { state: 'focus' }
+	},
+
+	FocusCircleCSS = {
+		$focus: { outline: 0 },
+		focusCircle: {
+			position: 'absolute', width: 48, height: 48, backgroundColor: '#ccc', borderRadius: 24,
+			opacity: 0, scaleX: 0, scaleY: 0, display: 'inline-block',
+			translateX: -14, translateY: -14
+		},
+		focusCirclePrimary: { backgroundColor: 'primary' },
+		focusCircle$invalid$touched: { backgroundColor: 'error' },
+		focusCircle$hover: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.14 },
+		focusCircle$focus: { scaleX: 1, scaleY: 1, translateX: -14, translateY: -14, opacity: 0.25 },
+		focusCircle$disabled: { scaleX: 0, scaleY: 0 }
 	},
 
 	DisabledCSS = {
@@ -152,7 +167,6 @@ behavior('touchable', `
 	@touched:host.trigger(focusable.touched)
 `);
 behavior('focusable', `@disabled:aria.prop(disabled):not:focus.enable`);
-
 behavior('selectable', `
 	registable(selectable)
 	action:host.trigger(selectable.action)
@@ -612,6 +626,46 @@ component({
 	bindings: 'anchor.send(cxl-appbar-actions)'
 });
 
+/*component({
+	name: 'cxl-form',
+	events: [ 'submit' ],
+	bindings: `
+role(form)
+registable.host(form):=elements
+
+on(cxl-form.submit):#onSubmit:host.trigger(submit)
+keypress(enter):#onSubmit:host.trigger(submit)
+	`,
+	template: `
+<form action="#" &="id(form) content on(submit):event.prevent"></form>
+	`
+}, {
+	// TODO better focusing
+	onSubmit(ev)
+	{
+		var focus;
+
+		if (this.elements)
+		{
+			this.elements.forEach(el => {
+				if (el.invalid)
+					focus = focus || el;
+
+				el.touched = true;
+			});
+
+			if (focus)
+			{
+				focus.focus();
+				return cxl.Skip;
+			}
+		}
+
+		this.form.submit();
+		ev.stopPropagation();
+	}
+});*/
+
 component({
 	name: 'cxl-grid',
 	attributes: [ 'rows', 'columns', 'gap' ],
@@ -770,59 +824,27 @@ component({
 });
 
 component({
-	name: 'cxl-popup',
-	attributes: [ 'visible', 'position' ],
-	bindings: '=visible:#show',
-	styles: {
-		$: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
-		$small: { top: 'auto', left: 'auto', right: 'auto', bottom: 'auto' }
-	}
-}, {
-	visible: false,
-
-	place(el, pos)
-	{
-		const style = el.style;
-
-		if (pos)
-		{
-			if ('right' in pos)
-				style.right = pos.right + 'px';
-			if ('left' in pos)
-				style.left = pos.left + 'px';
-			if ('top' in pos)
-				style.top = pos.top + 'px';
-		}
-
-		document.body.appendChild(el);
-	},
-
-	show(visible, el)
-	{
-		if (visible)
-			this.place(el, this.position);
-		else
-			cxl.dom.remove(el);
-	}
-});
-
-component({
 	name: 'cxl-toggle',
-	attributes: [ 'disabled', 'touched', 'opened', 'position' ],
+	attributes: [ 'disabled', 'touched', 'opened' ],
+	template: `
+<div &="content"></div>
+<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
+	`,
 	bindings: `
 focusable
 root.on(click):#close keypress(escape):#close
 action:#show:event.stop
 role(button)
-	`
+	`,
+	styles: {
+		popup: { height: 0, elevation: 5, position: 'absolute' }
+	}
 }, {
 	opened: false,
-
 	close()
 	{
 		this.opened = false;
 	},
-
 	show(ev, el)
 	{
 		if (this.disabled)
@@ -830,16 +852,26 @@ role(button)
 
 		if (!this.opened)
 		{
-			const pos = el.getBoundingClientRect(), w = document.body.clientWidth;
 			this.opened = true;
-			this.position = {
-				top: pos.top,
-				right: w - pos.right
-			};
-		}
-		else
+			this.popup.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
+		} else
 			this.close();
 	}
+});
+
+component({
+	name: 'cxl-icon-toggle',
+	attributes: [ 'icon' ],
+	extend: 'cxl-toggle',
+	template: `
+<span &="=opened:hide .focusCircle .focusCirclePrimary"></span>
+<cxl-icon &="=icon:@icon"></cxl-icon>
+<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
+	`,
+	styles: [ FocusCircleCSS, {
+		$: { paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12 },
+		focusCircle: { left: 9 }
+	}]
 });
 
 component({
@@ -1309,4 +1341,4 @@ Object.assign(ui, {
 
 });
 
-})();
+})(this.cxl);
