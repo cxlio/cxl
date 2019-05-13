@@ -226,6 +226,12 @@ class DragMoveIn extends DragMove {
 		this.offsetX = rect.left;
 	}
 
+	onStart(ev)
+	{
+		super.onStart(ev);
+		this.onDrag(ev);
+	}
+
 	reset()
 	{
 	}

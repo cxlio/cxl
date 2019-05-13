@@ -135,13 +135,16 @@ component({
 	template: `
 <cxl-t h6><span &="=label:show:text"></span></cxl-t>
 <div &="content"></div>
-<a &=".link action:#toggleSource"><cxl-icon icon="code"></cxl-icon> <x &="=sourceLabel:text"></x></a>
+<div &=".showMore">
+	<a href="#" &=".link action:#toggleSource:event.prevent"><cxl-icon icon="code"></cxl-icon> <x &="=sourceLabel:text"></x></a>
 <docs-code &="=displaySource:show =source:@source"></docs-code>
+</div>
 `,
 
 	styles: {
 		$: { marginTop: 24, marginBottom: 24 },
-		link: { color: 'primary', fontSize: 12, display: 'block', textAlign: 'right', marginTop: 16, marginBottom: 16 }
+		showMore: { textAlign: 'right' },
+		link: { color: 'primary', textDecoration: 'none', fontSize: 12, marginTop: 16, marginBottom: 16 }
 	}
 
 }, {

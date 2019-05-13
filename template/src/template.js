@@ -575,10 +575,26 @@ class Marker {
 
 		this.node = document.createComment(text || '');
 		this.children = [];
+		this.element = element;
 		parent.insertBefore(this.node, element);
 		parent.removeChild(element);
 		// TODO
-		element.$marker = this;
+		// element.$marker = this;
+	}
+
+	toggle(val, removeTo)
+	{
+		const el = this.element;
+
+		if (val)
+			this.node.parentNode.insertBefore(el, this.node);
+		else
+		{
+			if (removeTo)
+				removeTo.appendChild(el);
+			else
+				cxl.dom.remove(el);
+		}
 	}
 
 	insert(content, nextNode)
@@ -1247,7 +1263,11 @@ function $$findSelector(selector)
 	return selector;
 }
 
-Object.assign(dom, {
+cxl.extend(dom, {
+
+	get root() {
+		return document.body;
+	},
 
 	createElement(name)
 	{
@@ -1355,7 +1375,8 @@ Object.assign(dom, {
 		if (Array.isArray(child))
 			return child.forEach(c => dom.removeChild(child.parentNode, c));
 
-		return dom.removeChild(child.parentNode, child);
+		if (child.parentNode)
+			dom.removeChild(child.parentNode, child);
 	},
 
 	setStyle(el, className, enable)

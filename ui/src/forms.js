@@ -126,32 +126,11 @@ component({
 });
 
 component({
-	name: 'cxl-label-container',
-	attributes: [ 'outline', 'floating', 'invalid', 'focused', 'leading' ],
-	styles: {
-		$: {
-			position: 'absolute', top: 10,
-			fontSize: 12, lineHeight: 10, verticalAlign: 'bottom',
-			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
-		},
-		$focused: { color: 'primary' },
-		$invalid: { color: 'error' },
-		$outline: {
-			top: -4, left: 8,
-			paddingLeft: 4, paddingRight: 4, marginBottom: 0,
-			backgroundColor: 'inherit', display: 'inline-block'
-		},
-		$floating: { fontSize: 16, translateY: 23, opacity: 0.75 },
-		$leading: { paddingLeft: 24 },
-		$floating$outline: { translateY: 28 }
-	}
-});
-
-component({
 	name: 'cxl-field-base',
-	attributes: [ 'outline', 'floating', 'invalid', 'focused', 'leading', 'disabled' ],
+	attributes: [ 'outline', 'floating', 'invalid', 'focused', 'leading', 'disabled', 'hovered' ],
 	template: `
-<cxl-label-container &="=invalid:@invalid =outline:@outline =floating:@floating =focused:@focused =leading:@leading content(cxl-label-slot)"></cxl-label-container>
+<div &=".mask"></div>
+<div &=".label content(cxl-label-slot)"></div>
 <div &=".content content(cxl-field-content)"></div>
 <slot &="content"></slot>
 	`,
@@ -172,15 +151,31 @@ component({
 		$invalid: { color: 'error' },
 		$invalid$outline: {
 			boxShadow: '0 0 0 1px var(--cxl-error)', borderColor: 'error'
-		}
-	}
-});
+		},
+		content: { position: 'relative', fontSize: 16 },
+		mask$hover$hovered: {
+			position: 'absolute', top: 0, right: 0, left: 0, bottom: 0,
+			backgroundColor: 'surface', state: 'hover'
+		},
+		$disabled: { state: 'disabled' },
+		mask$hover$hovered$disabled: { state: 'disabled' },
 
-component({
-	name: 'cxl-field-content',
-	styles: {
-		$: { fontSize: 16 },
-		$flex: { display: 'flex' }
+		// LABEL classes, merged for performance
+		label: {
+			position: 'absolute', top: 10,
+			fontSize: 12, lineHeight: 10, verticalAlign: 'bottom',
+			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
+		},
+		label$focused: { color: 'primary' },
+		label$invalid: { color: 'error' },
+		label$outline: {
+			top: -4, left: 8,
+			paddingLeft: 4, paddingRight: 4, marginBottom: 0,
+			backgroundColor: 'inherit', display: 'inline-block'
+		},
+		label$floating: { fontSize: 16, translateY: 21, opacity: 0.75 },
+		label$leading: { paddingLeft: 24 },
+		label$floating$outline: { translateY: 27 }
 	}
 });
 
@@ -198,9 +193,9 @@ on(blur):not:=focused
 on(click):#focus
 	`,
 	template: `
-<cxl-field-base &="=focused:@focused =invalid:@invalid =disabled:.disabled =empty:@floating =leading:@leading =outline:@outline .base">
+<cxl-field-base &="=focused:@focused =invalid:@invalid =disabled:@disabled =empty:@floating =leading:@leading =outline:@outline" hovered>
 	<cxl-label-slot &="content(cxl-label)"></cxl-label-slot>
-	<cxl-field-content flex &="content"></cxl-field-content>
+	<cxl-field-content &="content .flex"></cxl-field-content>
 	<cxl-focus-line &=".line =outline:hide =focused:@focused =invalid:@invalid =invalid:@touched"></cxl-focus-line>
 </cxl-field-base>
 <div &=".help">
@@ -210,14 +205,16 @@ on(click):#focus
 	`,
 	styles: {
 		$: { marginBottom: 16 },
-		base$hover: { state: 'hover' },
-		disabled: { state: 'disabled' },
-		disabled$hover: { state: 'disabled' },
+		flex: { display: 'flex' },
 		line: { position: 'absolute', marginTop: 7, left: 0, right: 0 },
 		help: { paddingLeft: 12, paddingRight: 12 },
 		help$leading: { paddingLeft: 38 }
 	}
 }, {
+	floating: false,
+	leading: false,
+	outline: false,
+
 	onRegister(ev)
 	{
 		this.inputEl = ev.target;
@@ -270,7 +267,7 @@ component({
 	`,
 	styles: {
 		$: { marginBottom: 16 },
-		content: { marginTop: 16 },
+		content: { display: 'block', marginTop: 16 },
 		content$outline: { marginTop: 0 }
 	}
 }, {
@@ -514,10 +511,12 @@ component({
 
 component({
 	name: 'cxl-select-menu',
-	// extend: 'cxl-popup'
 	attributes: [ 'visible' ],
 	styles: {
-		$: { position: 'absolute', elevation: 0, right: 0, left: -16, overflowY: 'hidden', transformOrigin: 'top' },
+		$: {
+			position: 'absolute', elevation: 0, right: -16, left: -16,
+			overflowY: 'hidden', transformOrigin: 'top'
+		},
 		$visible: { elevation: 3, overflowY: 'auto', backgroundColor: 'surface' },
 	}
 });
@@ -548,18 +547,16 @@ component({
 		keypress(enter):event.stop
 	`,
 	styles: [ {
-		$: { cursor: 'pointer', flexGrow: 1 },
+		$: { cursor: 'pointer', flexGrow: 1, position: 'relative' },
 		$focus: { outline: 0 },
 		icon: { position: 'absolute', right: 0, top: 0, lineHeight: 20 },
 		placeholder: {
 			color: 'onSurface', lineHeight: 20, paddingRight: 16,
 			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14,
-			position: 'absolute', left: -16, top: -8, right: 0, height: 48
+			position: 'absolute', left: -16, top: -11, right: 0, height: 48
 		},
-		container: {
-			 overflowY: 'hidden', height: 22, position: 'relative'
-		},
-		opened: { overflowY: 'visible' }
+		container: { overflowY: 'hidden', overflowX: 'hidden', height: 22, position: 'relative' },
+		opened: { overflowY: 'visible', overflowX: 'visible' }
 	} ],
 
 	initialize(state)
@@ -609,7 +606,7 @@ component({
 		else if (height < minTop)
 			height = minTop;
 
-		this.menuTransform = 'translateY(' + (-marginTop-12) + 'px)';
+		this.menuTransform = 'translateY(' + (-marginTop-11) + 'px)';
 		this.menuHeight = height + 'px';
 		this.menuScroll = scrollTop;
 	},
@@ -704,7 +701,7 @@ component({
 		selectedText: {
 			color: 'onSurface', lineHeight: 20, paddingRight: 16,
 			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14,
-			position: 'absolute', left: -16, top: -8, right: 0, height: 48
+			position: 'absolute', left: -16, top: -11, right: 0, height: 48
 		}
 	}
 }, {
@@ -716,7 +713,7 @@ component({
 	_calculateDimensions()
 	{
 		this.menuTransform = this.opened ? 'scaleY(1)' : 'scaleY(0)';
-		this.menuTop = '100%';
+		this.menuTop = '31px';
 	},
 
 	onRegister(ev)
