@@ -129,8 +129,7 @@ component({
 	name: 'cxl-field-base',
 	attributes: [ 'outline', 'floating', 'invalid', 'focused', 'leading', 'disabled', 'hovered' ],
 	template: `
-<div &=".mask"></div>
-<div &=".label content(cxl-label-slot)"></div>
+<div &=".mask"><div &=".label content(cxl-label-slot)"></div></div>
 <div &=".content content(cxl-field-content)"></div>
 <slot &="content"></slot>
 	`,
@@ -153,16 +152,19 @@ component({
 			boxShadow: '0 0 0 1px var(--cxl-error)', borderColor: 'error'
 		},
 		content: { position: 'relative', fontSize: 16 },
+		mask: {
+			position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'surface'
+		},
+		mask$outline: { borderRadius: 4 },
 		mask$hover$hovered: {
-			position: 'absolute', top: 0, right: 0, left: 0, bottom: 0,
-			backgroundColor: 'surface', state: 'hover'
+			state: 'hover'
 		},
 		$disabled: { state: 'disabled' },
-		mask$hover$hovered$disabled: { state: 'disabled' },
+		mask$hover$hovered$disabled: { state: 'none' },
 
 		// LABEL classes, merged for performance
 		label: {
-			position: 'absolute', top: 10,
+			position: 'absolute', top: 10, left: 12,
 			fontSize: 12, lineHeight: 10, verticalAlign: 'bottom',
 			transition: 'transform var(--cxl-speed), font-size var(--cxl-speed)'
 		},
@@ -816,6 +818,7 @@ component({
 			backgroundColor: 'primary', width: 12, height: 12, display: 'inline-block',
 			borderRadius: 6, position: 'absolute', top: 10
 		},
+		$disabled: { state: 'disabled' },
 		focusCircle: { marginLeft: -4, marginTop: -8 },
 		background: { backgroundColor: 'primaryLight', height: 2 },
 		line: { backgroundColor: 'primary', height: 2, textAlign: 'right' },
