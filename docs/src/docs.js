@@ -143,8 +143,8 @@ component({
 
 	styles: {
 		$: { marginTop: 24, marginBottom: 24 },
-		showMore: { textAlign: 'right' },
-		link: { color: 'primary', textDecoration: 'none', fontSize: 12, marginTop: 16, marginBottom: 16 }
+		showMore: { textAlign: 'right', marginTop: 16 },
+		link: { color: 'primary', textDecoration: 'none', fontSize: 12 }
 	}
 
 }, {

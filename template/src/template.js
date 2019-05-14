@@ -578,8 +578,8 @@ class Marker {
 		this.element = element;
 		parent.insertBefore(this.node, element);
 		parent.removeChild(element);
-		// TODO
-		// element.$marker = this;
+		// TODO. Used by marker.empty directive
+		element.$marker = this;
 	}
 
 	toggle(val, removeTo)

@@ -15,6 +15,8 @@ component({
 	`,
 	styles: {
 		$: { textAlign: 'center', cursor: 'pointer' },
+		$disabled: { state: 'disabled' },
+		$hover: { state: 'hover' },
 		btn: {
 			borderRadius: 40, width: 40, height: 40, lineHeight: 40, display: 'inline-block',
 			padding: 0, backgroundColor: 'surface', color: 'onSurface', margin: 4
@@ -348,12 +350,14 @@ component({
 	=maxlength:filter:@maxLength value:#onInput
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
-<cxl-field-toggle icon="calendar" &="@position:=popupPos =disabled:@disabled @opened:=opened .icon"></cxl-field-toggle>
-<cxl-popup &="=opened:@visible =popupPos:@position">
+<div &=".focusLine =focused:.expand"></div>
+<cxl-icon-toggle icon="calendar" &=".icon =disabled:@disabled @opened:=opened">
+<cxl-toggle-popup &="role(dialog)">
 	<cxl-card>
 		<cxl-calendar &="=opened:filter:focus @value:#update:=value =value:@value"></cxl-calendar>
 	</cxl-card>
-</cxl-popup>
+</cxl-toggle-popup>
+</cxl-icon-toggle>
 	`,
 	styles: {
 		$: { position: 'relative', flexGrow: 1, display: 'flex' },

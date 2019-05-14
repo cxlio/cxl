@@ -853,7 +853,7 @@ role(button)
 		if (!this.opened)
 		{
 			this.opened = true;
-			this.popup.style.right = 'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
+			this.popup.style.right = 0; //'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
 		} else
 			this.close();
 	}
@@ -869,8 +869,11 @@ component({
 <div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
 	`,
 	styles: [ FocusCircleCSS, {
-		$: { paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12 },
-		focusCircle: { left: 9 }
+		$: {
+			paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12,
+			cursor: 'pointer', position: 'relative'
+		},
+		focusCircle: { left: -4 }
 	}]
 });
 
