@@ -377,7 +377,7 @@ component({
 
 component({
 	name: 'cxl-option',
-	attributes: [ 'value', 'selected', 'multiple', 'focused', 'disabled' ],
+	attributes: [ 'value', 'selected', 'multiple', 'focused', 'disabled', 'inactive' ],
 	events: [ 'selectable.action', 'change' ],
 	template: `
 <cxl-icon icon="check" &="=multiple:show .box"></cxl-icon>
@@ -390,7 +390,7 @@ role(option) selectable
 	styles: {
 		$: {
 			cursor: 'pointer', color: 'onSurface', lineHeight: 20, paddingRight: 16,
-			display: 'flex',
+			display: 'flex', backgroundColor: 'surface',
 			paddingLeft: 16, fontSize: 16, paddingTop: 14, paddingBottom: 14
 		},
 		box: {
@@ -401,10 +401,11 @@ role(option) selectable
 		box$selected: { borderColor: 'primary', backgroundColor: 'primary', color: 'onPrimary' },
 		checkbox: { marginBottom: 0, marginRight: 8 },
 		content: { flexGrow: 1 },
-		$hover: { filter: 'brightness(0.95)' },
+		$hover: { state: 'hover' },
+		$focused: { state: 'focus' },
 		$selected: { backgroundColor: 'primaryLight', color: 'onPrimaryLight' },
-		$focused: { filter: 'brightness(0.85)' },
-		$disabled: { state: 'disabled' }
+		$disabled: { state: 'disabled' },
+		$inactive: { backgroundColor: 'transparent' }
 	},
 	initialize(state)
 	{
@@ -542,7 +543,7 @@ component({
 	extend: InputBase,
 	template: `
 <div &=".container =opened:.opened">
-	<cxl-select-menu &="id(menu) action:#onMenuAction =menuHeight:style.inline(height)
+	<cxl-select-menu &="id(menu) =menuHeight:style.inline(height)
 		=menuTransform:style.inline(transform) =menuScroll:@scrollTop =menuTop:style.inline(top)
 		=opened:@visible content"></cxl-select-menu>
 	<div &="=value:hide .placeholder =placeholder:text"></div>
@@ -560,10 +561,9 @@ component({
 		on(blur):#close
 		root.on(click):#close
 		action:#onAction:event.prevent:event.stop
-		keypress(enter):event.stop
 		role(listbox)
 	`,
-	styles: [ {
+	styles: {
 		$: { cursor: 'pointer', flexGrow: 1, position: 'relative' },
 		$focus: { outline: 0 },
 		icon: { position: 'absolute', right: 0, top: 0, lineHeight: 20 },
@@ -574,7 +574,7 @@ component({
 		},
 		container: { overflowY: 'hidden', overflowX: 'hidden', height: 22, position: 'relative' },
 		opened: { overflowY: 'visible', overflowX: 'visible' }
-	} ],
+	},
 
 	initialize(state)
 	{
@@ -639,14 +639,14 @@ component({
 		if (this.opened)
 		{
 			if (selectedRect)
-				selectedRect.selected = true;
+				selectedRect.inactive = false;
 		} else if (!selectedRect)
 		{
 			this.menuHeight = 0;
 			return;
 		}
 		else
-			selectedRect.selected = false;
+			selectedRect.inactive = true;
 
 		this.updateMenu(selectedRect);
 	},
@@ -700,10 +700,6 @@ component({
 			this.close();
 		else
 			this.open();
-	},
-
-	onMenuAction()
-	{
 	}
 
 });
@@ -789,15 +785,17 @@ component({
 	{
 		if (this.disabled)
 			return;
-
+console.log(ev, ev.currentTarget, ev.target);
 	 	if (this.opened)
 		{
 			if (ev.type==='keyup' && this.focused)
 			{
 				this.onSelected(this.focusedItem);
-				ev.preventDefault();
+				return ev.preventDefault();
 			}
-			this.close();
+
+			if (ev.target === this.component)
+				this.close();
 		} else
 		{
 			if (this.focusedItem)

@@ -151,9 +151,8 @@ component({
 	sourceLabel: 'Show Source',
 	displaySource: false,
 
-	toggleSource(ev)
+	toggleSource()
 	{
-		console.log(ev);
 		this.displaySource = !this.displaySource;
 		this.sourceLabel = this.displaySource ? 'Hide Source' : 'Show Source';
 	},
