@@ -197,7 +197,7 @@ on(click):#focus
 	`,
 	template: `
 <cxl-field-base &="=focused:@focused =invalid:@invalid =disabled:@disabled =empty:@floating =leading:@leading =outline:@outline" hovered>
-	<cxl-label-slot &="content(cxl-label):#onLabel"></cxl-label-slot>
+	<cxl-label-slot &="content(cxl-label)"></cxl-label-slot>
 	<cxl-field-content &="content .flex"></cxl-field-content>
 	<cxl-focus-line &=".line =outline:hide =focused:@focused =invalid:@invalid =invalid:@touched"></cxl-focus-line>
 </cxl-field-base>
@@ -785,7 +785,7 @@ component({
 	{
 		if (this.disabled)
 			return;
-console.log(ev, ev.currentTarget, ev.target);
+
 	 	if (this.opened)
 		{
 			if (ev.type==='keyup' && this.focused)

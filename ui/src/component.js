@@ -62,7 +62,7 @@ class ComponentFactory
 		});
 
 		const observer = view.attributeObserver = new MutationObserver(onMutation);
-		observer.observe(node, { attributes: true, attributesFilter: attributes });
+		observer.observe(node, { attributes: true, attributeFilter: attributes });
 	}
 
 	$bindings(component, value)

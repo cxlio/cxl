@@ -53,10 +53,8 @@ class DragBase extends cxl.Directive
 		this.element.$$drag = this;
 		this.bindings = [
 			new EventListener(this.element, 'mousedown', this.onMouseDown.bind(this)),
-			new EventListener(window, 'mousemove', this.onMove.bind(this)),
 			new EventListener(window, 'mouseup', this.onMouseUp.bind(this)),
 			new EventListener(this.element, 'touchstart', this.onMouseDown.bind(this)),
-			new EventListener(window, 'touchmove', this.onMove.bind(this)),
 			new EventListener(window, 'touchend', this.onMouseUp.bind(this))
 		];
 	}
@@ -98,6 +96,9 @@ class DragBase extends cxl.Directive
 
 			if (touch)
 				this.cancel(touch);
+
+			this.moveBindings[0].destroy();
+			this.moveBindings[1].destroy();
 		}
 	}
 
@@ -116,6 +117,10 @@ class DragBase extends cxl.Directive
 		style.userSelect = style.transition = 'none';
 
 		this.capture = ev.currentTarget;
+		this.moveBindings = [
+			new EventListener(window, 'mousemove', this.onMove.bind(this)),
+			new EventListener(window, 'touchmove', this.onMove.bind(this))
+		];
 		this.onStart(this.$getEvent(ev));
 	}
 

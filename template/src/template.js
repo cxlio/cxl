@@ -21,6 +21,7 @@ class Renderer {
 	constructor()
 	{
 		this.pipeline = [];
+		this.raf = null;
 		this.commit = this.$commit.bind(this);
 	}
 
@@ -49,6 +50,7 @@ class Renderer {
 	commitDigest(view)
 	{
 		var i, b = view.bindings, changed=true, count=0, binding;
+		const l = b.length;
 
 		while (changed)
 		{
@@ -57,7 +59,7 @@ class Renderer {
 			if (count++>MAX_DIGEST)
 				throw new Error("Max digest cycle iterations reached.");
 
-			for (i=0; i<b.length; i++)
+			for (i=0; i<l; i++)
 			{
 				binding = b[i];
 
@@ -81,7 +83,8 @@ class Renderer {
 
 	request()
 	{
-		return this.raf || (this.raf = requestAnimationFrame(this.commit));
+		if (this.raf===null)
+			this.raf = requestAnimationFrame(this.commit);
 	}
 
 	digest(view)
@@ -1125,8 +1128,6 @@ directive('content', {
 });
 
 directive('action', {
-
-	event: Undefined,
 
 	onEvent(ev)
 	{
