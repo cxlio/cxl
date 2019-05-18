@@ -73,7 +73,7 @@ const
 	COLORS = {
 		elevation: rgba(0,0,0,0.26),
 		primary: rgba(0x15, 0x65, 0xc0),
-		get primaryLight() { return this.primary.alpha(0.24); }, //: rgba(0x4a, 0x65, 0x72, 0.24),
+		get primaryLight() { return this.primary.alpha(0.18); }, //: rgba(0x4a, 0x65, 0x72, 0.24),
 
 		secondary: rgba(0xf9, 0xaa, 0x33),
 		surface: rgba(0xff, 0xff, 0xff),

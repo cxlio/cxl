@@ -137,8 +137,8 @@ component({
 <div &="content"></div>
 <div &=".showMore">
 	<a href="#" &=".link action:#toggleSource:event.prevent"><cxl-icon icon="code"></cxl-icon> <x &="=sourceLabel:text"></x></a>
-<docs-code &="=displaySource:show =source:@source"></docs-code>
 </div>
+<docs-code &="=displaySource:show =source:@source"></docs-code>
 `,
 
 	styles: {
@@ -151,8 +151,9 @@ component({
 	sourceLabel: 'Show Source',
 	displaySource: false,
 
-	toggleSource()
+	toggleSource(ev)
 	{
+		console.log(ev);
 		this.displaySource = !this.displaySource;
 		this.sourceLabel = this.displaySource ? 'Hide Source' : 'Show Source';
 	},

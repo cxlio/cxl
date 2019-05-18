@@ -78,7 +78,7 @@ action:#toggle
 			paddingTop: 12, paddingBottom: 12
 		},
 		$inline: { display: 'inline-block' },
-		$invalid: { color: 'error' },
+		$invalid$touched: { color: 'error' },
 		box: {
 			display: 'inline-block', width: 20, height: 20, border: 2,
 			borderColor: 'onSurface', marginRight: 8, lineHeight: 16,
@@ -136,13 +136,13 @@ component({
 	styles: {
 		$: {
 			position: 'relative',
-			paddingLeft: 12, paddingRight: 12, paddingTop: 24, paddingBottom: 10,
+			paddingLeft: 12, paddingRight: 12, paddingTop: 26, paddingBottom: 8,
 			backgroundColor: 'surface', color: 'onSurface', fontSize: 0
 		},
 		$focused: { borderColor: 'primary', color: 'primary' },
 		$outline: {
 			borderColor: 'onSurface', borderWidth: 1, borderStyle: 'solid',
-			borderRadius: 4, marginTop: 8, paddingTop: 16, paddingBottom: 16,
+			borderRadius: 4, marginTop: 6, paddingTop: 16, paddingBottom: 16,
 		},
 		$focused$outline: {
 			boxShadow: '0 0 0 1px var(--cxl-primary)', borderColor: 'primary'
@@ -171,11 +171,11 @@ component({
 		label$focused: { color: 'primary' },
 		label$invalid: { color: 'error' },
 		label$outline: {
-			top: -4, left: 8,
+			top: -5, left: 8,
 			paddingLeft: 4, paddingRight: 4, marginBottom: 0,
 			backgroundColor: 'inherit', display: 'inline-block'
 		},
-		label$floating: { fontSize: 16, translateY: 21, opacity: 0.75 },
+		label$floating: { fontSize: 16, translateY: 23, opacity: 0.75 },
 		label$leading: { paddingLeft: 24 },
 		label$floating$outline: { translateY: 27 }
 	}
@@ -187,16 +187,17 @@ component({
 	bindings: `
 on(form.register):#onRegister
 on(focusable.touched):#update
+on(focusable.focus):#update
+on(focusable.blur):#update
+
 on(invalid):#update
 on(input):#onChange
 on(form.disabled):#update
-on(focus):bool:=focused
-on(blur):not:=focused
 on(click):#focus
 	`,
 	template: `
 <cxl-field-base &="=focused:@focused =invalid:@invalid =disabled:@disabled =empty:@floating =leading:@leading =outline:@outline" hovered>
-	<cxl-label-slot &="content(cxl-label)"></cxl-label-slot>
+	<cxl-label-slot &="content(cxl-label):#onLabel"></cxl-label-slot>
 	<cxl-field-content &="content .flex"></cxl-field-content>
 	<cxl-focus-line &=".line =outline:hide =focused:@focused =invalid:@invalid =invalid:@touched"></cxl-focus-line>
 </cxl-field-base>
@@ -207,8 +208,9 @@ on(click):#focus
 	`,
 	styles: {
 		$: { marginBottom: 16 },
-		flex: { display: 'flex' },
-		line: { position: 'absolute', marginTop: 7, left: 0, right: 0 },
+		$outline: { paddingTop: 2 },
+		flex: { display: 'flex', alignItems: 'center' },
+		line: { position: 'absolute', marginTop: 8, left: 0, right: 0 },
 		help: { paddingLeft: 12, paddingRight: 12 },
 		help$leading: { paddingLeft: 38 }
 	}
@@ -216,10 +218,22 @@ on(click):#focus
 	floating: false,
 	leading: false,
 	outline: false,
+	label: null,
+
+	onLabel(label)
+	{
+		this.label = label.innerText;
+
+		if (this.inputEl)
+			this.inputEl['aria-label'] = label.innerText;
+	},
 
 	onRegister(ev)
 	{
 		this.inputEl = ev.target;
+
+		if (this.label && !this.inputEl['aria-label'])
+			this.inputEl['aria-label'] = this.label;
 	},
 
 	onChange(ev)
@@ -299,7 +313,7 @@ component({
 	=autocomplete:attribute(autocomplete)
 	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
 	`,
-	bindings: `role(textbox)`,
+	bindings: `role(textbox) focusable.events`,
 	styles: {
 		$: { flexGrow: 1 },
 		input: {
@@ -423,7 +437,7 @@ disconnect:#unregister
 			paddingTop: 12, paddingBottom: 12
 		},
 		$inline: { display: 'inline-block' },
-		$invalid: { color: 'error' },
+		$invalid$touched: { color: 'error' },
 		content: { marginLeft: 32, lineHeight: 20 },
 		circle: {
 			borderRadius: 10, width: 10, height: 10, display: 'inline-block',
@@ -528,7 +542,7 @@ component({
 	extend: InputBase,
 	template: `
 <div &=".container =opened:.opened">
-	<cxl-select-menu &="id(menu) =menuHeight:style.inline(height)
+	<cxl-select-menu &="id(menu) action:#onMenuAction =menuHeight:style.inline(height)
 		=menuTransform:style.inline(transform) =menuScroll:@scrollTop =menuTop:style.inline(top)
 		=opened:@visible content"></cxl-select-menu>
 	<div &="=value:hide .placeholder =placeholder:text"></div>
@@ -547,6 +561,7 @@ component({
 		root.on(click):#close
 		action:#onAction:event.prevent:event.stop
 		keypress(enter):event.stop
+		role(listbox)
 	`,
 	styles: [ {
 		$: { cursor: 'pointer', flexGrow: 1, position: 'relative' },
@@ -685,20 +700,18 @@ component({
 			this.close();
 		else
 			this.open();
+	},
+
+	onMenuAction()
+	{
 	}
 
 });
 
 component({
-	name: 'cxl-field-select',
-	template: `
-	`
-});
-
-component({
 	name: 'cxl-multiselect',
 	extend: 'cxl-select',
-	bindings: 'on(selectable.register):#onRegister root.on(touchend):#close',
+	bindings: 'on(selectable.register):#onRegister root.on(touchend):#close role(listbox) aria.prop(multiselectable)',
 	styles: {
 		selectedText: {
 			color: 'onSurface', lineHeight: 20, paddingRight: 16,
@@ -784,6 +797,7 @@ component({
 				this.onSelected(this.focusedItem);
 				ev.preventDefault();
 			}
+			this.close();
 		} else
 		{
 			if (this.focusedItem)
@@ -793,6 +807,12 @@ component({
 			}
 			this.open();
 		}
+	},
+
+	onMenuAction(ev)
+	{
+		if (this.opened)
+			ev.stopPropagation();
 	}
 });
 
@@ -805,6 +825,9 @@ component({
 		role(slider)
 		keypress(arrowleft):#onLeft keypress(arrowright):#onRight
 		drag.in(x):#onDrag
+		=value:aria.prop(valuenow)
+		=max:aria.prop(valuemax)
+		=min:aria.prop(valuemin)
 	`,
 	template: `
 <div &=".background">
@@ -813,10 +836,13 @@ component({
 </div></div>
 	`,
 	styles: [{
-		$: { paddingTop: 15, paddingBottom: 15, userSelect: 'none', position: 'relative', flexGrow: 1 },
+		$: {
+			paddingTop: 24, paddingBottom: 24, userSelect: 'none',
+			position: 'relative', flexGrow: 1, cursor: 'pointer'
+		},
 		knob: {
 			backgroundColor: 'primary', width: 12, height: 12, display: 'inline-block',
-			borderRadius: 6, position: 'absolute', top: 10
+			borderRadius: 6, position: 'absolute', top: 19
 		},
 		$disabled: { state: 'disabled' },
 		focusCircle: { marginLeft: -4, marginTop: -8 },
@@ -827,6 +853,8 @@ component({
 		background$invalid$touched: { backgroundColor: 'error' }
 	}, FocusCircleCSS ]
 }, {
+	max: 1,
+	min: 0,
 	value: 0,
 	step: 0.05,
 
@@ -920,20 +948,21 @@ component({
 
 component({
 	name: 'cxl-textarea',
+	methods: [ 'focus' ],
 	extend: InputBase,
 	template: `
 <div &="id(span) .input .measure"></div>
-<textarea &=".input .textarea
+<textarea &="id(input) .input .textarea
 	value:=value on(input):event.stop
 	=value:value:#calculateHeight
 	=aria-label:attribute(aria-label)
 	=disabled:attribute(disabled)
 	on(change):event.stop
-	on(blur):host.trigger(blur) on(focus):host.trigger(focus)">
-</textarea>
+	on(blur):host.trigger(blur) on(focus):host.trigger(focus)
+"></textarea>
 `,
 	bindings: `
-role(textbox) touchable aria.prop(multiline) keypress(enter):event.stop
+role(textbox) aria.prop(multiline) keypress(enter):event.stop focusable.events
 	`,
 	attributes: [ 'aria-label' ],
 	styles: {
@@ -945,13 +974,18 @@ role(textbox) touchable aria.prop(multiline) keypress(enter):event.stop
 		},
 		textarea: {
 			width: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-			height: '100%', outline: 0, borderRadius: 0,
+			height: '100%', outline: 0, borderRadius: 0, margin: 0
 		},
 		measure: { opacity: 0, whiteSpace: 'pre-wrap' }
 	}
 
 }, {
 	value: '',
+
+	focus()
+	{
+		this.input.focus();
+	},
 
 	calculateHeight(val)
 	{

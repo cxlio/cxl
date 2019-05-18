@@ -512,20 +512,14 @@ Drag Here <x &="=count:text"></x>
 			<cxl-option value="2">Value 2</cxl-option>
 		</cxl-select>
 	</cxl-form-group>
-	<cxl-form-group>
-		<cxl-checkbox name="checkbox" &="valid(required)">Required checkbox</cxl-checkbox>
-	</cxl-form-group>
-	<cxl-form-group>
+	<cxl-checkbox name="checkbox" &="valid(required)">Required checkbox</cxl-checkbox>
+	<cxl-fieldset>
 		<cxl-radio invalid name="form-radio">Radio Option 1</cxl-radio>
 		<cxl-radio invalid name="form-radio">Radio Option 2</cxl-radio>
 		<cxl-radio invalid name="form-radio">Radio Option 3</cxl-radio>
-	</cxl-form-group>
-	<cxl-form-group>
-		<cxl-switch &="valid(required)">Turn On</cxl-switch>
-	</cxl-form-group>
-	<cxl-form-group>
-		<cxl-slider &="valid(notZero)"></cxl-slider>
-	</cxl-form-group>
+	</cxl-fieldset>
+	<cxl-switch &="valid(required)">Turn On</cxl-switch>
+	<cxl-slider &="valid(notZero)"></cxl-slider>
 	<cxl-form-group>
 		<cxl-label>Enter Comment</cxl-label>
 		<cxl-textarea &="valid(required)"></cxl-textarea>
@@ -542,6 +536,42 @@ Drag Here <x &="=count:text"></x>
 	<cxl-submit>Submit</cxl-submit>
 </cxl-form>
 	--></docs-demo>
+</docs-component>
+			`
+		},
+		field: {
+			template: `
+<docs-component name="cxl-form-group">
+	<docs-demo><!--
+<cxl-field>
+	<cxl-label>Input Label</cxl-label>
+	<cxl-input required />
+</cxl-field>
+<cxl-field floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input />
+</cxl-field>
+<cxl-field outline>
+	<cxl-label>Outlined Form Group</cxl-label>
+	<cxl-input />
+</cxl-field>
+<cxl-field outline floating>
+	<cxl-label>Outlined Floating Form Group</cxl-label>
+	<cxl-input />
+</cxl-field>
+	--></docs-demo>
+	<docs-attribute name="floating">
+	<docs-demo><!--
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input />
+</cxl-form-group>
+<cxl-form-group floating>
+	<cxl-label>Floating Label</cxl-label>
+	<cxl-input value="Floating Label Value" />
+</cxl-form-group>
+	--></docs-demo>
+	</docs-attribute>
 </docs-component>
 			`
 		},
@@ -637,7 +667,7 @@ Drag Here <x &="=count:text"></x>
 <cxl-form-group floating>
 	<cxl-label>Floating Label</cxl-label>
 	<cxl-input invalid touched></cxl-input>
-	<cxl-input-icon><cxl-icon icon="exclamation-circle"></cxl-icon></cxl-input-icon>
+	<cxl-icon icon="exclamation-circle"></cxl-icon>
 </cxl-form-group>
 --></docs-demo>
 
@@ -1752,7 +1782,7 @@ cxl.route({
 <cxl-t h5>Help Text</cxl-t>
 <docs-demo><!--
 <cxl-field-input label="Input Label">
-	<cxl-field-help>Help Text</cxl-field-help>
+	<cxl-field-help><cxl-icon icon="info"></cxl-icon> Help Text with Icon</cxl-field-help>
 </cxl-field-input>
 --></docs-demo>
 <cxl-t h5>Icons</cxl-t>

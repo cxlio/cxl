@@ -166,7 +166,14 @@ behavior('touchable', `
 	on(blur):bool:@touched
 	@touched:host.trigger(focusable.touched)
 `);
-behavior('focusable', `@disabled:aria.prop(disabled):not:focus.enable`);
+behavior('focusable.events', `
+	on(focus):host.trigger(focusable.focus)
+	on(blur):host.trigger(focusable.blur)
+`);
+behavior('focusable', `
+	@disabled:aria.prop(disabled):not:focus.enable
+	focusable.events
+`);
 behavior('selectable', `
 	registable(selectable)
 	action:host.trigger(selectable.action)
@@ -318,7 +325,7 @@ directive('registable.host', {
 component({
 	name: 'cxl-appbar',
 	attributes: [ 'extended' ],
-	bindings: 'role(heading)',
+	bindings: 'role(heading) =ariaLevel:|attribute(aria-level)',
 	template: `
 <div &=".flex content anchor(cxl-appbar-actions)"></div>
 <div &="content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
@@ -336,6 +343,8 @@ component({
 		flex$extended: { alignItems: 'start', height: 128, paddingBottom: 24 },
 		flex$medium: { paddingTop: 8, paddingBottom: 8 }
 	}
+}, {
+	ariaLevel: 1
 });
 
 component({
@@ -698,8 +707,7 @@ component({
 
 component({
 	name: 'cxl-icon',
-	template: `<span &="=icon:#setIcon"></span>`,
-	bindings: 'role(img) #getAlt:attribute(alt)',
+	bindings: 'role(img) #getAlt:attribute(alt) =icon:#setIcon',
 	attributes: [ 'icon', 'alt' ],
 	styles: {
 		$: { display: 'inline-block', fontFamily: 'Font Awesome\\ 5 Free' }
@@ -845,7 +853,7 @@ role(button)
 	{
 		this.opened = false;
 	},
-	show(ev, el)
+	show()
 	{
 		if (this.disabled)
 			return;

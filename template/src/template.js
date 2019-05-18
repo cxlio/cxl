@@ -413,13 +413,10 @@ class Template
 
 	static getFragmentFromString(content)
 	{
-		//if (content in TEMPLATES)
-		//	return TEMPLATES[content];
 		// We use <template> so components are not initialized
 		const template = document.createElement('TEMPLATE');
 		template.innerHTML = content;
 		return template.content;
-		//return (TEMPLATES[content] = template.content);
 	}
 
 	static getFragment(content)
@@ -445,8 +442,13 @@ class Template
 
 	constructor(content)
 	{
-		this.$content = Template.getFragment(content);
-		this.$content.normalize();
+		this.$content = this.normalize(Template.getFragment(content));
+	}
+
+	normalize(fragment)
+	{
+		fragment.normalize();
+		return fragment;
 	}
 
 	clone()
@@ -1133,7 +1135,8 @@ directive('action', {
 
 	onKeyPress(ev)
 	{
-		if (ev.key==='Enter' || ev.key===' ')
+		// Prevent double firing for links, Enter key generates a click event.
+		if ((this.element.tagName !=='A' && ev.key==='Enter') || ev.key===' ')
 			this.onEvent(ev);
 	},
 
