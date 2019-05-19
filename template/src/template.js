@@ -50,7 +50,6 @@ class Renderer {
 	commitDigest(view)
 	{
 		var i, b = view.bindings, changed=true, count=0, binding;
-		const l = b.length;
 
 		while (changed)
 		{
@@ -59,7 +58,7 @@ class Renderer {
 			if (count++>MAX_DIGEST)
 				throw new Error("Max digest cycle iterations reached.");
 
-			for (i=0; i<l; i++)
+			for (i=0; i<b.length; ++i)
 			{
 				binding = b[i];
 
@@ -73,10 +72,12 @@ class Renderer {
 
 	$commit()
 	{
-		var view;
+		const pipeline = this.pipeline;
 
-		while ((view=this.pipeline.shift()))
-			this.commitDigest(view);
+		for (let i=0; i<pipeline.length; ++i)
+			this.commitDigest(pipeline[i]);
+
+		pipeline.length = 0;
 
 		this.raf = null;
 	}
