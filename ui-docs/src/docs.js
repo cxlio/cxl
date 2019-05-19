@@ -463,9 +463,8 @@ Drag Here <x &="=count:text"></x>
 <cxl-checkbox &="value:=permanent">Permanent</cxl-checkbox>
 <cxl-drawer right &="on(backdrop.click):not:=showDrawer =permanent:@permanent =showDrawer:@visible">
 	<docs-placeholder></docs-placeholder>
-	<cxl-c>
-		<cxl-title>Right Drawer Title</cxl-title>
-		<cxl-hr></cxl-hr>
+	<cxl-c pad16>
+		<cxl-t h6>Right Drawer Title</cxl-t>
 		<p>Right Drawer Content</p>
 	</cxl-c>
 </cxl-drawer>
@@ -2031,22 +2030,21 @@ component({
 	<template &="=components:each:repeat">
 	<cxl-item icon="" &="item:route.link">
 		&lt;<span &="item:text"></span>&gt;
-		<cxl-t &="item:#isBeta:show" caption inline>beta</cxl-t>
-		<cxl-t &="item:#isDeprecated:show" caption inline>deprecated</cxl-t>
+		<cxl-t &="item:#getLabel:text" caption inline></cxl-t>
 	</cxl-item>
 	</template>
 </cxl-router-app>
 	`
 }, {
 	components: COMPONENTS,
-	isBeta(tag)
+
+	getLabel(tag)
 	{
-		return !!(META[tag] && META[tag].beta);
-	},
-	isDeprecated(tag)
-	{
-		return cxl.componentFactory.components[tag].meta.deprecated || 0;
+		const meta = META[tag];
+		return meta && meta.beta ? 'beta' :
+			(cxl.componentFactory.components[tag].meta.deprecated ? 'deprecated' : cxl.Skip);
 	}
+
 
 });
 

@@ -574,14 +574,6 @@ component({
 		},
 		container: { overflowY: 'hidden', overflowX: 'hidden', height: 22, position: 'relative' },
 		opened: { overflowY: 'visible', overflowX: 'visible' }
-	},
-
-	initialize(state)
-	{
-		state.calculateDimensions = cxl.debounceRender(() => {
-			state._calculateDimensions();
-			this.$view.digest();
-		});
 	}
 
 }, {
@@ -628,6 +620,16 @@ component({
 		this.menuScroll = scrollTop;
 	},
 
+	calculateDimensions()
+	{
+		this.calculateDimensions = cxl.debounceRender(() => {
+			this._calculateDimensions();
+			// TODO ?
+			this.component.$view.digest();
+		});
+
+		this._calculateDimensions();
+	},
 	/**
 	 * Calculate the menu dimensions based on content and position.
 	 */
