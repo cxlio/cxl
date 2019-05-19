@@ -9,16 +9,19 @@ class AttributeMonitor extends cxl.Directive {
 	{
 	const
 		el = this.element,
-		newVal = state[this.parameter]
+		attr = this.parameter,
+		newVal = state[attr]
 	;
 		if (newVal !== this.value)
 		{
 			// Automatically reflect the attribute if it is a boolean
-			if (newVal===true || newVal===false || newVal===null)
-				cxl.dom.setAttribute(el, this.parameter, newVal);
+			if (newVal===true)
+				el.setAttribute(attr, "");
+			else if (newVal===false)
+				el.removeAttribute(attr);
 
 			if (el.$$attributeObserver)
-				el.$$attributeObserver.trigger(this.parameter);
+				el.$$attributeObserver.trigger(attr);
 		}
 
 		return newVal;

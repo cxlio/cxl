@@ -1460,6 +1460,27 @@ Object.assign(cxl, {
 		return path.replace(PARAM_REGEX, (match, key) => params[key]);
 	},
 
+	debounceRender(fn)
+	{
+		let raf = null;
+
+		function Result() {
+			const args = arguments, thisVal = this;
+
+			if (raf === null)
+				raf = requestAnimationFrame(() => {
+					raf = null;
+					Result.fn.apply(thisVal, args);
+				});
+		}
+		Result.fn = fn;
+		Result.cancel = function() {
+			cancelAnimationFrame(raf);
+		};
+
+		return Result;
+	},
+
 	debounce(fn, delay)
 	{
 		var to;
@@ -1690,8 +1711,6 @@ operators({
 	}
 
 });
-
-directive('host.state', {});
 
 function pipes(defs) {
 	for (var i in defs)

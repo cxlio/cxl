@@ -661,18 +661,12 @@ component({
 
 component({
 	name: 'cxl-icon',
-	bindings: 'role(img) #getAlt:attribute(alt) =icon:#setIcon',
-	attributes: [ 'icon', 'alt' ],
+	bindings: 'role(img) =icon:#setIcon',
+	attributes: [ 'icon' ],
 	styles: {
 		$: { display: 'inline-block', fontFamily: 'Font Awesome\\ 5 Free' }
 	}
 }, {
-	alt: '',
-	getAlt()
-	{
-		return this.alt || this.icon || '';
-	},
-
 	setIcon(val, el)
 	{
 		const icon = ui.icons[this.icon];
@@ -684,6 +678,9 @@ component({
 
 			this.iconNode = document.createTextNode(icon);
 			el.appendChild(this.iconNode);
+
+			if (!el.hasAttribute('alt'))
+				cxl.dom.setAttribute(el, 'alt', this.icon);
 		}
 	}
 });

@@ -43,14 +43,22 @@ override(cxl.Anchor.prototype, '$create', function(name) {
 		warn(`Anchor "${name}" already exists`);
 });
 
+override(cxl.renderer, 'request', function() {
+	if (this.raf)
+		return;
+
+	console.groupCollapsed(`[dom] Renderer#request`);
+	console.trace();
+	console.groupEnd();
+});
+
 override(cxl.renderer, 'commit', function() {
 	pipeline = cxl.renderer.pipeline.concat();
-	time = Date.now();
+	time = performance.now();
 }, function() {
 
-	time = Date.now() - time;
-	console.groupCollapsed('[dom] Renderer#commit: ' + pipeline.length + ' items. ' +
-		time + ' ms. ');
+	time = performance.now() - time;
+	console.groupCollapsed(`[dom] Renderer#commit: ${pipeline.length} items. ${time}ms.`);
 	console.log(pipeline);
 	console.groupEnd();
 });

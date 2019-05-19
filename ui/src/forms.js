@@ -405,7 +405,7 @@ role(option) selectable
 		$focused: { state: 'focus' },
 		$selected: { backgroundColor: 'primaryLight', color: 'onPrimaryLight' },
 		$disabled: { state: 'disabled' },
-		$inactive: { backgroundColor: 'transparent' }
+		$inactive: { backgroundColor: 'transparent', color: 'onSurface' }
 	},
 	initialize(state)
 	{
@@ -578,7 +578,7 @@ component({
 
 	initialize(state)
 	{
-		state.calculateDimensions = cxl.debounce(() => {
+		state.calculateDimensions = cxl.debounceRender(() => {
 			state._calculateDimensions();
 			this.$view.digest();
 		});
