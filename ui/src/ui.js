@@ -630,52 +630,6 @@ component({
 });
 
 component({
-	name: 'cxl-appbar-fab',
-	extend: 'cxl-fab',
-	bindings: 'anchor.send(cxl-appbar-actions)'
-});
-
-/*component({
-	name: 'cxl-form',
-	events: [ 'submit' ],
-	bindings: `
-role(form)
-registable.host(form):=elements
-
-on(cxl-form.submit):#onSubmit:host.trigger(submit)
-keypress(enter):#onSubmit:host.trigger(submit)
-	`,
-	template: `
-<form action="#" &="id(form) content on(submit):event.prevent"></form>
-	`
-}, {
-	// TODO better focusing
-	onSubmit(ev)
-	{
-		var focus;
-
-		if (this.elements)
-		{
-			this.elements.forEach(el => {
-				if (el.invalid)
-					focus = focus || el;
-
-				el.touched = true;
-			});
-
-			if (focus)
-			{
-				focus.focus();
-				return cxl.Skip;
-			}
-		}
-
-		this.form.submit();
-		ev.stopPropagation();
-	}
-});*/
-
-component({
 	name: 'cxl-grid',
 	attributes: [ 'rows', 'columns', 'gap' ],
 	bindings: `
@@ -734,7 +688,7 @@ component({
 	}
 });
 
-component({
+/*component({
 	name: 'cxl-list',
 	styles: {
 		$: { paddingTop: 8, paddingBottom: 8 }
@@ -743,7 +697,7 @@ component({
 }, {
 	tabIndex: -1,
 	onNav(el) { if (el) el.focus(); }
-});
+});*/
 
 component({
 	name: 'cxl-item',

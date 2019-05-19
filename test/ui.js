@@ -68,7 +68,7 @@ var
 	$$fixture(c);
 	a.ok(c.$view.isConnected, 'Component connected');
 
-	if (c.hasAttribute('tabindex'))
+	if (c.hasAttribute('tabindex') && c.tabIndex !== -1)
 		testFocus(c, a);
 
 	if (def.attributes)
