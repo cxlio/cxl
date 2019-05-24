@@ -215,28 +215,12 @@ class EventEmitter
 		handlers.splice(i, 1);
 	}
 
-	emit(type, a, b, c)
+	$eachHandler(type, fn)
 	{
-		this.trigger(type, a, b, c);
-	}
-
-	trigger(type, a, b, c)
-	{
-		var combinedResult;
-
 		if (this.__handlers && this.__handlers[type])
-			this.__handlers[type].forEach(h => {
+			this.__handlers[type].forEach(handler => {
 				try {
-					let result = h.fn.call(h.scope, a, b, c);
-
-					if (result !== undefined)
-					{
-						if (!combinedResult)
-							combinedResult = [];
-
-						combinedResult.push(result);
-					}
-
+					fn(handler);
 				} catch(e) {
 					if (type!=='error')
 						this.trigger('error', e);
@@ -244,8 +228,25 @@ class EventEmitter
 						throw e;
 				}
 			});
+	}
 
-		return combinedResult;
+	emit(type, a, b, c)
+	{
+		this.$eachHandler(type, handler => handler.fn.call(handler.scope, a, b, c));
+	}
+
+	emitAndCollect(type, a, b, c)
+	{
+		const result = [];
+
+		this.$eachHandler(type, handler => result.push(handler.fn.call(handler.scope, a, b, c)));
+
+		return result;
+	}
+
+	trigger(type, a, b, c)
+	{
+		return this.emit(type, a, b, c);
 	}
 
 	once(type, callback, scope)
