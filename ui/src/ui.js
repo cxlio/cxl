@@ -638,7 +638,10 @@ component({
 =gap:style.inline(gridGap)
 	`,
 	styles: {
-		$: { display: 'grid' }
+		$: { display: 'grid' },
+		$pad16: { padding: 16 },
+		$pad8: { padding: 8 },
+		$pad24: { padding: 24 }
 	}
 }, {
 	// TODO
@@ -664,7 +667,12 @@ component({
 	bindings: 'role(img) =icon:#setIcon',
 	attributes: [ 'icon' ],
 	styles: {
-		$: { display: 'inline-block', fontFamily: 'Font Awesome\\ 5 Free' }
+		$: { display: 'inline-block', fontFamily: 'Font Awesome\\ 5 Free' },
+		$round: {
+			borderRadius: '50%', width: '1.375em', height: '1.375em',
+			lineHeight: '1.375em', textAlign: 'center'
+		},
+		$outline: { borderWidth: 1, borderStyle: 'solid' }
 	}
 }, {
 	setIcon(val, el)
@@ -850,7 +858,7 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 	`,
 	styles: {
 		icon: {
-			color: 'onSurface', cursor: 'pointer', width: 8
+			cursor: 'pointer', width: 8
 		},
 		menuControl: {
 			position: 'absolute', transformOrigin: 'right top', textAlign: 'left',

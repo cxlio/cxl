@@ -419,7 +419,7 @@ class Template
 	{
 		// We use <template> so components are not initialized
 		const template = document.createElement('TEMPLATE');
-		template.innerHTML = content;
+		template.innerHTML = content.trim();
 		return template.content;
 	}
 

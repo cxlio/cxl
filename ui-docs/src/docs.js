@@ -1676,18 +1676,76 @@ cxl.route({
 	<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
 	<cxl-field-help>Helper Text</cxl-field-help>
 </cxl-field>
+<cxl-field>
+	<cxl-label>Field Label with Suffix Text</cxl-label>
+	<cxl-input style="text-align: right" value="form.input.value"></cxl-input>
+	<div>@gmail.com</div>
+	<cxl-field-help>Helper Text</cxl-field-help>
+</cxl-field>
 --></docs-demo>
 <cxl-t h5>States</cxl-t>
 <docs-demo><!--
-<cxl-card><cxl-c pad16>
-<cxl-field-input label="Enabled"></cxl-field-input>
-<cxl-field-input disabled label="Disabled"></cxl-field-input>
-<cxl-field-input label="Hover" &=".hover"></cxl-field-input>
-<cxl-field-input focused label="Focused"></cxl-field-input>
-<cxl-field-input invalid touched label="Invalid"></cxl-field-input>
-</cxl-c></cxl-card>
+<cxl-card><cxl-grid pad16>
+	<cxl-c sm6>
+		<cxl-field-input label="Enabled"></cxl-field-input>
+		<cxl-field-input disabled label="Disabled"></cxl-field-input>
+		<cxl-field-input label="Hover" &=".hover"></cxl-field-input>
+		<cxl-field-input focused label="Focused"></cxl-field-input>
+		<cxl-field-input invalid touched label="Invalid"></cxl-field-input>
+	</cxl-c>
+	<cxl-c sm6>
+		<cxl-field-input outline label="Enabled"></cxl-field-input>
+		<cxl-field-input outline disabled label="Disabled"></cxl-field-input>
+		<cxl-field-input outline label="Hover" &=".hover"></cxl-field-input>
+		<cxl-field-input outline focused label="Focused"></cxl-field-input>
+		<cxl-field-input outline invalid touched label="Invalid"></cxl-field-input>
+	</cxl-c>
+</cxl-grid></cxl-card>
 --></docs-demo>
-<cxl-t h4>Text Fields</cxl-t>
+<cxl-t h5>Floating Labels</cxl-t>
+<docs-demo><!--
+<cxl-field-input floating label="Floating Label Input Box"></cxl-field-input>
+<cxl-field-input outline floating label="Floating Label with Outline"></cxl-field-input>
+--></docs-demo>
+<cxl-t h5>Field Outline</cxl-t>
+<docs-demo><!--
+<cxl-field-input label="Outline Label" outline>
+	<cxl-input-help>Help Text</cxl-input-help>
+</cxl-field-input>
+<cxl-field-textarea outline label="Text Area Outline"></cxl-field-textarea>
+<cxl-field-input invalid touched outline label="Invalid Input Outline">
+	<cxl-input-help>Invalid Input Message</cxl-input-help>
+</cxl-field-input>
+--></docs-demo>
+<cxl-t h5>Help Text</cxl-t>
+<docs-demo><!--
+<cxl-field-input label="Input Label">
+	<cxl-field-help><cxl-icon icon="info" round outline></cxl-icon> Help Text with Icon</cxl-field-help>
+</cxl-field-input>
+--></docs-demo>
+<cxl-t h5>Icons</cxl-t>
+<docs-demo><!--
+<cxl-field>
+	<cxl-label>Leading Icon</cxl-label>
+	<cxl-field-icon icon="dollar-sign"></cxl-field-icon>
+	<cxl-input></cxl-input>
+</cxl-field>
+--></docs-demo>
+<docs-demo><!--
+<cxl-field>
+	<cxl-label>Trailing Icon</cxl-label>
+	<cxl-input></cxl-input>
+	<cxl-field-icon trailing icon="percent"></cxl-field-icon>
+</cxl-field>
+--></docs-demo>
+
+<cxl-t h5>Attributes</cxl-t>
+<p>All input components share the following attributes:</p>
+<docs-attributes-table &="=inputBaseAttributes:@attributes"></docs-attributes-table>
+<cxl-t h5>Events</cxl-t>
+<docs-events-table &="=inputBaseEvents:@events"></docs-events-table>
+<cxl-t h4>Components</cxl-t>
+<cxl-t h5>Text Fields</cxl-t>
 <docs-demo><!--
 <cxl-field-input label="Single Line Text Field"></cxl-field-input>
 <cxl-field-textarea label="Multiple Line Expandable Text Area"></cxl-field-textarea>
@@ -1702,22 +1760,27 @@ cxl.route({
 	<cxl-label>Checkboxes</cxl-label>
 	<cxl-checkbox checked>Checkbox 1 Selected</cxl-checkbox>
 	<cxl-checkbox>Checkbox 2</cxl-checkbox>
+	<cxl-checkbox disabled checked>Checkbox 3 Disabled</cxl-checkbox>
 </cxl-fieldset>
 <cxl-fieldset>
 	<cxl-label>Radio Boxes</cxl-label>
 	<cxl-radio name="radio-demo" checked>Radio 1 Selected</cxl-radio>
 	<cxl-radio name="radio-demo">Radio 2</cxl-radio>
+	<cxl-radio disabled name="radio-demo">Radio 3 Disabled</cxl-radio>
 </cxl-fieldset>
 <cxl-fieldset>
 	<cxl-label>Switches</cxl-label>
 	<cxl-switch checked>Switch 1 Selected</cxl-switch>
 	<cxl-switch>Switch 2</cxl-switch>
+	<cxl-switch disabled>Switch 3 Disabled</cxl-switch>
 </cxl-fieldset>
 --></docs-demo>
 <cxl-t h5>Sliders</cxl-t>
 <docs-demo><!--
 <cxl-fieldset>
 	<cxl-slider></cxl-slider>
+	<cxl-slider disabled></cxl-slider>
+	<cxl-slider invalid></cxl-slider>
 </cxl-fieldset>
 --></docs-demo>
 <cxl-t h5>Dropdown Menus</cxl-t>
@@ -1733,6 +1796,22 @@ cxl.route({
 <cxl-field>
 	<cxl-label>Multiple Selection Menu</cxl-label>
 	<cxl-multiselect>
+		<cxl-option>Select Item One</cxl-option>
+		<cxl-option>Select Item Two</cxl-option>
+		<cxl-option>Select Item Three</cxl-option>
+	</cxl-select>
+</cxl-field>
+<cxl-field>
+	<cxl-label>Disabled Selection Menu</cxl-label>
+	<cxl-select disabled>
+		<cxl-option>Select Item One</cxl-option>
+		<cxl-option>Select Item Two</cxl-option>
+		<cxl-option>Select Item Three</cxl-option>
+	</cxl-select>
+</cxl-field>
+<cxl-field outline>
+	<cxl-label>Outlined Selection Menu</cxl-label>
+	<cxl-select>
 		<cxl-option>Select Item One</cxl-option>
 		<cxl-option>Select Item Two</cxl-option>
 		<cxl-option>Select Item Three</cxl-option>
@@ -1762,48 +1841,26 @@ cxl.route({
 </cxl-fieldset>
 --></docs-demo>
 
-<cxl-t h4>Form Groups</cxl-t>
-<cxl-t h5>Floating Labels</cxl-t>
+<cxl-t h5>Submit Button</cxl-t>
 <docs-demo><!--
-<cxl-field-input floating label="Floating Label Input Box"></cxl-field-input>
+<cxl-form &="on(submit):#onSubmit">
+	<cxl-field>
+		<cxl-label>Required Date Picker</cxl-label>
+		<cxl-datepicker &="valid(required)"></cxl-datepicker>
+	</cxl-field>
+	<cxl-submit>Validate and Submit</cxl-submit>
+</cxl-form>
 --></docs-demo>
-<cxl-t h5>Outline</cxl-t>
-<docs-demo><!--
-<cxl-field-input label="Outline Label" outline>
-	<cxl-input-help>Help Text</cxl-input-help>
-</cxl-field-input>
-<cxl-field-input outline floating label="Floating Label with Outline"></cxl-field-input>
-<cxl-field-textarea outline label="Text Area Outline"></cxl-field-textarea>
-<cxl-field-input invalid touched outline label="Invalid Input Outline">
-	<cxl-input-help>Invalid Input Message</cxl-input-help>
-</cxl-field-input>
---></docs-demo>
-<cxl-t h5>Help Text</cxl-t>
-<docs-demo><!--
-<cxl-field-input label="Input Label">
-	<cxl-field-help><cxl-icon icon="info"></cxl-icon> Help Text with Icon</cxl-field-help>
-</cxl-field-input>
---></docs-demo>
-<cxl-t h5>Icons</cxl-t>
-<docs-demo><!--
-<cxl-field>
-	<cxl-label>Leading Icon</cxl-label>
-	<cxl-field-icon icon="dollar-sign"></cxl-field-icon>
-	<cxl-input></cxl-input>
-</cxl-field>
---></docs-demo>
-<docs-demo><!--
-<cxl-field>
-	<cxl-label>Trailing Icon</cxl-label>
-	<cxl-input></cxl-input>
-	<cxl-field-icon trailing icon="percent"></cxl-field-icon>
-</cxl-field>
---></docs-demo>
-<cxl-t h4>Form Component</cxl-t>
-<cxl-t h5>Validation</cxl-t>
 	`,
 	styles: {
 		hover: { state: 'hover' }
+	}
+}, {
+	inputBaseAttributes: cxl.ui.InputBase.meta.attributes,
+	inputBaseEvents: cxl.ui.InputBase.meta.events,
+	onSubmit()
+	{
+		cxl.notify('Form successfully submitted');
 	}
 });
 
@@ -1854,6 +1911,50 @@ component({
 });
 
 component({
+	name: 'docs-attributes-table',
+	attributes: [ 'attributes' ],
+	template: `
+<cxl-table>
+	<cxl-th>Name</cxl-th>
+	<cxl-th width="1fr">Description</cxl-th>
+	<template &="=attributes:sort:each:repeat">
+	<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
+	<cxl-td &="item:#getAttributeSummary:text"></cxl-td>
+	</template>
+</cxl-table>
+	`,
+	styles: { $: { marginBottom: 32 } }
+}, {
+	getAttributeSummary(name)
+	{
+		const meta = META.attributes[name];
+		return meta && meta.summary || '';
+	}
+});
+
+component({
+	name: 'docs-events-table',
+	attributes: [ 'events' ],
+	template: `
+<cxl-table>
+	<cxl-th>Name</cxl-th>
+	<cxl-th width="1fr">Description</cxl-th>
+	<template &="=events:sort:each:repeat">
+	<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
+	<cxl-td &="item:#getEventSummary:text"></cxl-td>
+	</template>
+</cxl-table>
+	`,
+	styles: { $: { marginBottom: 32 } }
+}, {
+	getEventSummary(name)
+	{
+		const meta = META.events[name];
+		return meta && meta.summary || '';
+	}
+});
+
+component({
 	name: 'docs-component',
 	attributes: [ 'name' ],
 	template: `
@@ -1884,27 +1985,13 @@ component({
 <div &="=attributes:show">
 	<br>
 	<cxl-t h6>Attributes</cxl-t>
-	<cxl-table>
-		<cxl-th>Name</cxl-th>
-		<cxl-th width="1fr">Description</cxl-th>
-		<template &="=attributes:sort:each:repeat">
-		<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
-		<cxl-td &="item:#getAttributeSummary:text"></cxl-td>
-		</template>
-	</cxl-table>
+	<docs-attributes-table &="=attributes:@attributes"></docs-attributes-table>
 	<br>
 </div>
 <div &="=events:show">
 	<br>
 	<cxl-t h6>Events</cxl-t>
-	<cxl-table>
-		<cxl-th>Name</cxl-th>
-		<cxl-th width="1fr">Description</cxl-th>
-		<template &="=events:sort:each:repeat">
-		<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
-		<cxl-td &="item:#getEventSummary:text"></cxl-td>
-		</template>
-	</cxl-table>
+	<docs-events-table &="=events:@events"></docs-events-table>
 </div>
 <div &="=methods:show">
 	<br>
@@ -1944,24 +2031,6 @@ component({
 
 		state.role = view.host.getAttribute('role');
 		this.processBindings(view);
-	},
-
-	getAttributeSummary(name)
-	{
-		const meta = META.attributes[name];
-
-		/*if (name && !cxl.anchor.anchors[name])
-			this.host.appendChild(cxl.dom('docs-attribute', {
-				name: name, demo: meta && meta.type || true
-			}));*/
-
-		return meta && meta.summary || '';
-	},
-
-	getEventSummary(name)
-	{
-		const meta = META.events[name];
-		return meta && meta.summary || '';
 	},
 
 	getMethodSummary(name)

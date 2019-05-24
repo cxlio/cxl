@@ -77,6 +77,7 @@ action:#toggle
 			marginRight: 16, marginLeft: 0, position: 'relative', cursor: 'pointer',
 			paddingTop: 12, paddingBottom: 12
 		},
+		$disabled: { state: 'disabled' },
 		$inline: { display: 'inline-block' },
 		$invalid$touched: { color: 'error' },
 		box: {
@@ -136,13 +137,13 @@ component({
 	styles: {
 		$: {
 			position: 'relative',
-			paddingLeft: 12, paddingRight: 12, paddingTop: 26, paddingBottom: 8,
+			paddingLeft: 12, paddingRight: 12, paddingTop: 28, paddingBottom: 6,
 			backgroundColor: 'surface', color: 'onSurface', fontSize: 0
 		},
 		$focused: { borderColor: 'primary', color: 'primary' },
 		$outline: {
 			borderColor: 'onSurface', borderWidth: 1, borderStyle: 'solid',
-			borderRadius: 4, marginTop: 6, paddingTop: 16, paddingBottom: 16,
+			borderRadius: 4, marginTop: 2, paddingTop: 14, paddingBottom: 14,
 		},
 		$focused$outline: {
 			boxShadow: '0 0 0 1px var(--cxl-primary)', borderColor: 'primary'
@@ -209,8 +210,8 @@ on(click):#focus
 	styles: {
 		$: { marginBottom: 16 },
 		$outline: { paddingTop: 2 },
-		flex: { display: 'flex', alignItems: 'center' },
-		line: { position: 'absolute', marginTop: 8, left: 0, right: 0 },
+		flex: { display: 'flex', alignItems: 'center', lineHeight: 22 },
+		line: { position: 'absolute', marginTop: 6, left: 0, right: 0 },
 		help: { paddingLeft: 12, paddingRight: 12 },
 		help$leading: { paddingLeft: 38 }
 	}
@@ -304,22 +305,21 @@ component({
 	extend: InputBase,
 	attributes: [ 'maxlength', 'aria-label' ],
 	methods: [ 'focus' ],
-	template: `
-<input &="id(input) =type:|attribute(type) .input
+	template: `<input &="id(input) =type:|attribute(type) .input
 	=aria-label:attribute(aria-label)
 	=value:value
 	=maxlength:filter:@maxLength value:=value
 	=disabled:attribute(disabled) on(input):event.stop =name:attribute(name)
 	=autocomplete:attribute(autocomplete)
-	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />
-	`,
+	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />`,
 	bindings: `role(textbox) focusable.events`,
 	styles: {
-		$: { flexGrow: 1 },
+		$: { flexGrow: 1, height: 22 },
 		input: {
-			fontSize: 16, border: 0, height: 22, backgroundColor: 'transparent',
-			color: 'onSurface', width: '100%', lineHeight: 20,
-			borderRadius: 0, outline: 0, fontFamily: 'inherit', paddingLeft: 0, paddingRight: 0
+			fontSize: 16, border: 0, padding: 0,
+			backgroundColor: 'transparent', margin: 0,
+			color: 'onSurface', width: '100%', lineHeight: 22, textAlign: 'inherit',
+			borderRadius: 0, outline: 0, fontFamily: 'inherit'
 		},
 		input$focus: { outline: 0 }
 	}
@@ -437,6 +437,7 @@ disconnect:#unregister
 			position: 'relative', cursor: 'pointer', marginRight: 16, marginLeft: 0,
 			paddingTop: 12, paddingBottom: 12
 		},
+		$disabled: { state: 'disabled' },
 		$inline: { display: 'inline-block' },
 		$invalid$touched: { color: 'error' },
 		content: { marginLeft: 32, lineHeight: 20 },
@@ -925,7 +926,8 @@ component({
 		background$checked: { backgroundColor: 'primaryLight' },
 		knob$checked: { translateX: 24, backgroundColor: 'primary' },
 		knob$invalid$touched: { backgroundColor: 'error' },
-		focusCircle$checked: { backgroundColor: 'primary' }
+		focusCircle$checked: { backgroundColor: 'primary' },
+		$disabled: { state: 'disabled' }
 	}, FocusCircleCSS ]
 }, {
 	'true-value': true,
