@@ -29,6 +29,7 @@
 			disabled: { summary: 'Indicates whether or not the element can receive focus and respond to user actions.' },
 			'false-value': { summary: 'Value to use when the component is not in the checked status.' },
 			flat: { summary: 'Remove elevation' },
+			focused: { summary: 'Indicates if the component is focused' },
 			little: { summary: 'Use a smaller version of the component' },
 			invalid: { summary: 'Indicates whether or not the component has a valid value' },
 			maxlength: { summary: 'Max value length of the input field' },
@@ -142,6 +143,15 @@
 		'cxl-fab': {
 			icon: 'plus-circle',
 			tags: [ 'button' ]
+		},
+		'cxl-field': {
+			icon: 'edit',
+			tags: [ 'new' ]
+		},
+		'cxl-fieldset': {
+			icon: 'edit',
+			tags: [ 'new' ],
+			beta: true
 		},
 		'cxl-form': {
 			icon: 'edit',

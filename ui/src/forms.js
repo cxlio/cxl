@@ -902,6 +902,7 @@ component({
 			display: 'flex', cursor: 'pointer',
 			paddingTop: 12, paddingBottom: 12
 		},
+		$inline: { display: 'inline-flex' },
 		content: { flexGrow: 1 },
 		switch: {
 			position: 'relative', width: 46, height: 20, userSelect: 'none'
@@ -926,6 +927,7 @@ component({
 		background$checked: { backgroundColor: 'primaryLight' },
 		knob$checked: { translateX: 24, backgroundColor: 'primary' },
 		knob$invalid$touched: { backgroundColor: 'error' },
+		content$invalid$touched: { color: 'error' },
 		focusCircle$checked: { backgroundColor: 'primary' },
 		$disabled: { state: 'disabled' }
 	}, FocusCircleCSS ]

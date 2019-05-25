@@ -574,6 +574,33 @@ Drag Here <x &="=count:text"></x>
 </docs-component>
 			`
 		},
+		fieldset: {
+			template: `
+<docs-component name="cxl-fieldset">
+<docs-demo><!--
+<cxl-fieldset>
+	<cxl-label>Checkbox Fieldset</cxl-label>
+	<cxl-checkbox checked>Checkbox 1 Selected</cxl-checkbox>
+	<cxl-checkbox>Checkbox 2</cxl-checkbox>
+</cxl-fieldset>
+<cxl-fieldset outline>
+	<cxl-label>Fieldset with Outline</cxl-label>
+	<cxl-switch checked>Switch 1 Selected</cxl-switch>
+	<cxl-switch>Switch 2</cxl-switch>
+</cxl-fieldset>
+<cxl-fieldset>
+	<cxl-label>Invalid Radio Group</cxl-label>
+	<cxl-radio invalid touched name="form-radio">Radio Option 1</cxl-radio>
+	<cxl-radio invalid touched name="form-radio">Radio Option 2</cxl-radio>
+	<cxl-radio invalid touched name="form-radio">Radio Option 3</cxl-radio>
+</cxl-fieldset>
+<cxl-fieldset outline>
+	<cxl-checkbox touched &="valid(required)">Required Checkbox</cxl-checkbox>
+</cxl-fieldset>
+--></docs-demo>
+</docs-component>
+			`
+		},
 		'form-group': {
 			template: `
 <docs-component name="cxl-form-group">
@@ -1130,17 +1157,17 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-component name="cxl-switch">
 <docs-demo><!--
 <div>
-	<cxl-switch &="@value:=switchValue"></cxl-switch>
+	<cxl-switch inline &="@value:=switchValue"></cxl-switch>
 	<br>
 	<p &="=switchValue:text"></p>
 </div>
 <div>
-	<cxl-switch checked &="@value:=switchValue2"></cxl-switch>
+	<cxl-switch inline checked &="@value:=switchValue2"></cxl-switch>
 	<br>
 	<p &="=switchValue2:text"></p>
 </div>
 <div>
-	<cxl-switch checked &="@value:=switchValue3" true-value="1" false-value="0"></cxl-switch>
+	<cxl-switch inline checked &="@value:=switchValue3" true-value="1" false-value="0"></cxl-switch>
 	<br>
 	<p &="=switchValue3:text"></p>
 </div>
@@ -1657,7 +1684,7 @@ cxl.route({
 	path: 'forms',
 	title: 'Forms',
 	template: `
-<cxl-t h4>Component Guidelines</cxl-t>
+<cxl-t h4>Form Fields</cxl-t>
 <cxl-t h5>Anatomy</cxl-t>
 <docs-demo><!--
 <cxl-field leading>
@@ -1674,12 +1701,6 @@ cxl.route({
 	<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
 	<cxl-input value="Input Value"></cxl-input>
 	<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
-	<cxl-field-help>Helper Text</cxl-field-help>
-</cxl-field>
-<cxl-field>
-	<cxl-label>Field Label with Suffix Text</cxl-label>
-	<cxl-input style="text-align: right" value="form.input.value"></cxl-input>
-	<div>@gmail.com</div>
 	<cxl-field-help>Helper Text</cxl-field-help>
 </cxl-field>
 --></docs-demo>
@@ -1702,6 +1723,11 @@ cxl.route({
 	</cxl-c>
 </cxl-grid></cxl-card>
 --></docs-demo>
+<cxl-t h5>Attributes</cxl-t>
+<p>All input components share the following attributes:</p>
+<docs-attributes-table &="=inputBaseAttributes:@attributes"></docs-attributes-table>
+<cxl-t h5>Events</cxl-t>
+<docs-events-table &="=inputBaseEvents:@events"></docs-events-table>
 <cxl-t h5>Floating Labels</cxl-t>
 <docs-demo><!--
 <cxl-field-input floating label="Floating Label Input Box"></cxl-field-input>
@@ -1723,7 +1749,7 @@ cxl.route({
 	<cxl-field-help><cxl-icon icon="info" round outline></cxl-icon> Help Text with Icon</cxl-field-help>
 </cxl-field-input>
 --></docs-demo>
-<cxl-t h5>Icons</cxl-t>
+<cxl-t h5>Field Decoration</cxl-t>
 <docs-demo><!--
 <cxl-field>
 	<cxl-label>Leading Icon</cxl-label>
@@ -1738,12 +1764,15 @@ cxl.route({
 	<cxl-field-icon trailing icon="percent"></cxl-field-icon>
 </cxl-field>
 --></docs-demo>
+<docs-demo><!--
+<cxl-field>
+	<cxl-label>Field Label with Suffix Text</cxl-label>
+	<cxl-input style="text-align: right" value="form.input.value"></cxl-input>
+	<div>@gmail.com</div>
+	<cxl-field-help>Helper Text</cxl-field-help>
+</cxl-field>
+--></docs-demo>
 
-<cxl-t h5>Attributes</cxl-t>
-<p>All input components share the following attributes:</p>
-<docs-attributes-table &="=inputBaseAttributes:@attributes"></docs-attributes-table>
-<cxl-t h5>Events</cxl-t>
-<docs-events-table &="=inputBaseEvents:@events"></docs-events-table>
 <cxl-t h4>Components</cxl-t>
 <cxl-t h5>Text Fields</cxl-t>
 <docs-demo><!--

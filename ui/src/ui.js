@@ -1150,6 +1150,7 @@ component({
 		$: { display: 'none', overflowX: 'auto' }
 	}
 }, {
+	event: cxl.Undefined,
 	columns: 0,
 	updateColumns(set, table)
 	{
