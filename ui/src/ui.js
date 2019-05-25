@@ -2,6 +2,7 @@
 "use strict";
 
 const
+	Undefined = cxl.Undefined,
 	component = cxl.component,
 	behavior = cxl.behavior,
 	directive = cxl.directive,
@@ -1150,7 +1151,7 @@ component({
 		$: { display: 'none', overflowX: 'auto' }
 	}
 }, {
-	event: cxl.Undefined,
+	event: Undefined,
 	columns: 0,
 	updateColumns(set, table)
 	{
@@ -1206,7 +1207,12 @@ component({
 component({
 	name: 'cxl-tabs',
 	template: `<div &=".content content"></div><div &="id(indicator) .selected"></div>`,
-	bindings: 'role(tablist) on(cxl-tab.selected):#onSelected =selected:#update',
+	bindings: `
+role(tablist)
+on(cxl-tab.selected):#onSelected
+=selected:#update
+root.on(load):#update
+	`,
 	attributes: [ 'selected' ],
 	styles: {
 		$: {
@@ -1214,24 +1220,27 @@ component({
 			display: 'block', flexShrink: 0, position: 'relative', cursor: 'pointer',
 			overflowX: 'auto'
 		},
-		selected: { backgroundColor: 'secondary', height: 4 },
+		selected: {
+			transformOrigin: 'left', backgroundColor: 'secondary', height: 4, width: 100,
+			transform: 'scaleX(0)'
+		},
 		content: { display: 'flex' },
 		content$small: { display: 'block' }
 	}
 }, {
-	update(tab)
+	selected: Undefined,
+	update()
 	{
-		const bar = this.indicator;
+		const bar = this.indicator, tab = this.selected;
 
 		if (!tab)
-			return (bar.style.width = 0);
+			return (bar.style.transform = 'scaleX(0)');
 
 		// Add delay so styles finish rendering...
-		// TODO find better way
 		requestAnimationFrame(() => {
-			bar.style.transform = 'translate(' + tab.offsetLeft + 'px, 0)';
-			bar.style.width = tab.clientWidth + 'px';
-		}, 50);
+			const scaleX = tab.clientWidth / 100;
+			bar.style.transform = `translate(${tab.offsetLeft}px, 0) scaleX(${scaleX})`;
+		});
 	},
 
 	onSelected(ev)
