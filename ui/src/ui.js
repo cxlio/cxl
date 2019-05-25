@@ -389,13 +389,6 @@ component({
 });
 
 component({
-	name: 'cxl-block',
-	styles: {
-		$: { padding: 16 }
-	}
-});
-
-component({
 	name: 'cxl-button',
 	attributes: [ 'disabled', 'primary', 'flat', 'secondary', 'touched', 'big', 'value' ],
 	bindings: 'focusable ripple role(button) action:#onAction',
@@ -1148,7 +1141,7 @@ component({
 	attributes: [ 'columns' ],
 	bindings: 'registable.host(table):=event =event:#updateColumns',
 	styles: {
-		$: { display: 'none', overflowX: 'auto' }
+		$: { display: 'grid', overflowX: 'auto' }
 	}
 }, {
 	event: Undefined,
@@ -1164,9 +1157,7 @@ component({
 
 			this.columns = set.length;
 
-			// TODO
 			table.style.gridTemplateColumns = columns;
-			table.style.display = 'grid';
 		}
 	}
 });

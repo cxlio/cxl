@@ -198,7 +198,7 @@ on(click):#focus
 	`,
 	template: `
 <cxl-field-base &="=focused:@focused =invalid:@invalid =disabled:@disabled =empty:@floating =leading:@leading =outline:@outline" hovered>
-	<cxl-label-slot &="content(cxl-label)"></cxl-label-slot>
+	<cxl-label-slot &="content(cxl-label):#onLabel"></cxl-label-slot>
 	<cxl-field-content &="content .flex"></cxl-field-content>
 	<cxl-focus-line &=".line =outline:hide =focused:@focused =invalid:@invalid =invalid:@touched"></cxl-focus-line>
 </cxl-field-base>
@@ -223,18 +223,15 @@ on(click):#focus
 
 	onLabel(label)
 	{
-		this.label = label.innerText;
-
-		if (this.inputEl)
-			this.inputEl['aria-label'] = label.innerText;
+		requestAnimationFrame(() => {
+			if (this.inputEl && !this.inputEl['aria-label'])
+				this.inputEl['aria-label'] = label.textContent;
+		});
 	},
 
 	onRegister(ev)
 	{
 		this.inputEl = ev.target;
-
-		if (this.label && !this.inputEl['aria-label'])
-			this.inputEl['aria-label'] = this.label;
 	},
 
 	onChange(ev)
