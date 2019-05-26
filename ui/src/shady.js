@@ -443,18 +443,26 @@ function $extendComponent(component, shadow)
 				allowCross.indexOf(prop)===-1 ? eventHandlerStop : eventHandler, { passive: true });
 }
 
-/*cxl.compiler.directives.content.prototype.createSlot = function()
+function $findSlotByName(slots, name)
 {
-	return this.element;
-};*/
+	return slots.find(slot => name===slot.parameter);
+}
 
 function $findSlot(host, child)
 {
-	const slot = (child.matches && (host.$view.slots && host.$view.slots.find(function(slot) {
-		return child.matches && child.matches(slot.parameter);
-	}))) || host.$view.defaultSlot;
+	const slots = host.$view.slots;
 
-	return slot && slot.slot;
+	if (slots)
+	{
+		const slotName = child.getAttribute && child.getAttribute('slot');
+
+		const slot = (slotName && $findSlotByName(slots, slotName)) ||
+			(child.matches && slots.find(slot => slot.parameter && child.matches(slot.parameter))) ||
+			host.$view.defaultSlot
+		;
+
+		return slot && slot.slot;
+	}
 }
 
 function $assignSlot(host, child)

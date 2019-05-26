@@ -149,9 +149,8 @@ component({
 			boxShadow: '0 0 0 1px var(--cxl-primary)', borderColor: 'primary'
 		},
 		$invalid: { color: 'error' },
-		$invalid$outline: {
-			boxShadow: '0 0 0 1px var(--cxl-error)', borderColor: 'error'
-		},
+		$invalid$outline: { borderColor: 'error' },
+		$invalid$outline$focused: { boxShadow: '0 0 0 1px var(--cxl-error)' },
 		content: { position: 'relative', fontSize: 16 },
 		mask: {
 			position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, backgroundColor: 'surface'

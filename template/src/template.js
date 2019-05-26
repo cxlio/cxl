@@ -267,10 +267,7 @@ class View extends Store
 	registerSlot(slot)
 	{
 		if (!slot.parameter)
-		{
 			this.defaultSlot = slot;
-			return;
-		}
 
 		if (!this.slots)
 			this.slots = [];
