@@ -458,10 +458,11 @@ component({
 
 component({
 	name: 'cxl-card',
-	styles: { $: {
-		elevation: 1, borderRadius: 2, backgroundColor: 'surface',
-		color: 'onSurface'
-	} }
+	styles: {
+		$: { elevation: 1, borderRadius: 2, backgroundColor: 'surface', color: 'onSurface' },
+		$pad8: { padding: 8 },
+		$pad16: { padding: 16 }
+	}
 });
 
 component({

@@ -2,8 +2,33 @@
 
 const
 	component = cxl.component,
+	directive = cxl.directive,
 	InputBase = cxl.ui.InputBase
 ;
+
+directive('date', {
+	update(val) {
+		if (!val) return '';
+		if (!(val instanceof Date)) val = new Date(val);
+		return val.toLocaleDateString();
+	}
+});
+
+directive('datetime', {
+	update(val) {
+		if (!val) return '';
+		if (!(val instanceof Date)) val = new Date(val);
+		return val.toLocaleDateString() + ' ' + val.toLocaleTimeString();
+	}
+});
+
+directive('time', {
+	update(val) {
+		if (!val) return '';
+		if (!(val instanceof Date)) val = new Date(val);
+		return val.toLocaleTimeString();
+	}
+});
 
 component({
 	name: 'cxl-calendar-date',
