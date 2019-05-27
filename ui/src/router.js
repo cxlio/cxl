@@ -208,19 +208,23 @@ class Router {
 		return instance;
 	}
 
+	discardOldRoutes(newInstances)
+	{
+		const oldInstances = this.instances;
+
+		for (let i in oldInstances)
+			if (newInstances[i]!==oldInstances[i])
+				delete oldInstances[i];
+	}
+
 	execute(Route, args)
 	{
-	var
+	const
 		instances = {},
-		oldInstances = this.instances,
 		current = this.current = this.executeRoute(Route, args || {}, instances)
 	;
 		this.currentRoute = Route;
-
-		for (var i in oldInstances)
-			if (instances[i]!==oldInstances[i])
-				delete oldInstances[i];
-
+		this.discardOldRoutes(instances);
 		this.instances = instances;
 		this.subject.next(current);
 	}
@@ -239,17 +243,6 @@ class Router {
 	 */
 	path(path)
 	{
-		/*var hash;
-		// TODO
-		if (path[0]!=='/')
-		{
-			hash = window.location.hash;
-			path = hash.substr(1) + (hash[hash.length-1]==='/' ? '' : '/') + path;
-		}
-
-		goLink.setAttribute('href', path);
-		path = goLink.href.slice(window.location.origin.length);
-		*/
 		return path;
 	}
 
@@ -399,7 +392,7 @@ directive('route.title', {
 
 cxl.component({
 	name: 'cxl-router-title',
-	bindings: 'id(el) route.change:#render',
+	bindings: 'route.change:#render',
 	template: `
 <x &=".extended">
 	<a &=".link =href4:attribute(href) =title4:show:text"></a> <x &=".link =title4:show">&gt;</x>

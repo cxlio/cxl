@@ -11,7 +11,6 @@ const
 ;
 
 var
-	pipeline,
 	time
 ;
 
@@ -43,26 +42,6 @@ override(cxl.Anchor.prototype, '$create', function(name) {
 		warn(`Anchor "${name}" already exists`);
 });
 
-override(cxl.renderer, 'request', function() {
-	if (this.raf)
-		return;
-
-	console.groupCollapsed(`[dom] Renderer#request`);
-	console.trace();
-	console.groupEnd();
-});
-
-override(cxl.renderer, 'commit', function() {
-	pipeline = cxl.renderer.pipeline.concat();
-	time = performance.now();
-}, function() {
-
-	time = performance.now() - time;
-	console.groupCollapsed(`[dom] Renderer#commit: ${pipeline.length} items. ${time}ms.`);
-	console.log(pipeline);
-	console.groupEnd();
-});
-
 //
 // rx
 //
@@ -76,6 +55,23 @@ override(cxl.rx.Subscriber.prototype, 'error', function(e) {
 // Skip try..catch in debug mode
 cxl.renderer.digestBinding = cxl.renderer.$doDigest;
 
+const commitRequesters = [];
+
+override(cxl.renderer, 'commitDigest', function(view) {
+	commitRequesters.push(view);
+});
+
+override(cxl.renderer, 'commit', function() {
+	time = performance.now();
+}, function() {
+
+	time = performance.now() - time;
+	console.groupCollapsed(`[dom] Renderer#commit: ${commitRequesters.length} items. ${time}ms.`);
+	console.log('Pipeline', commitRequesters.concat());
+	console.groupEnd();
+
+	commitRequesters.length = 0;
+});
 //
 // Directives
 //

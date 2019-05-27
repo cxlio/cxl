@@ -124,7 +124,7 @@ class Directive
 	subscribe(subscriber)
 	{
 		this.subscriber = subscriber;
-		return subscriber;
+		return this;
 	}
 
 	doConnect()
@@ -132,12 +132,17 @@ class Directive
 		if (this.connect)
 			this.connect(this.owner.state);
 
+		this.connected = true;
+
 		if (this.subscriber && this.subscriber.doConnect)
 			this.subscriber.doConnect();
 	}
 
 	destroy()
 	{
+		if (this.disconnect)
+			this.disconnect();
+
 		if (this.subscriber && this.subscriber.destroy)
 			this.subscriber.destroy();
 
@@ -147,8 +152,7 @@ class Directive
 
 		this.bindings = null;
 
-		if (this.disconnect)
-			this.disconnect();
+		this.connected = false;
 	}
 
 	error(e)
@@ -162,6 +166,9 @@ class Directive
 	set(newVal)
 	{
 		this.value = newVal;
+
+		if (this.connected===false)
+			return;
 
 		if (this.owner)
 			this.owner.digest();
@@ -766,15 +773,20 @@ directive('ref.val', {
 		this.bindings = [
 			this.owner.observe(this.parameter).subscribe({
 				next: this.setup.bind(this),
-				destroy() { }
+				destroy: this.destroySubscription.bind(this)
 			})
 		];
+	},
+
+	destroySubscription()
+	{
+		this.subscription.unsubscribe();
 	},
 
 	setup(ref)
 	{
 		if (this.subscription)
-			this.subscription.unsubscribe();
+			this.destroySubscription();
 
 		this.reference = ref;
 

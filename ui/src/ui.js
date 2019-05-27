@@ -687,16 +687,14 @@ component({
 	}
 });
 
-/*component({
+component({
 	name: 'cxl-list',
 	styles: {
-		$: { paddingTop: 8, paddingBottom: 8 }
-	},
-	bindings: '=tabIndex:@tabIndex navigation.list:#onNav'
+		$: { paddingTop: 8, paddingBottom: 8, marginLeft: -16, marginRight: -16 }
+	}
 }, {
-	tabIndex: -1,
 	onNav(el) { if (el) el.focus(); }
-});*/
+});
 
 component({
 	name: 'cxl-item',
