@@ -202,9 +202,11 @@ on(click):#focus
 	<cxl-focus-line &=".line =outline:hide =focused:@focused =invalid:@invalid =invalid:@touched"></cxl-focus-line>
 </cxl-field-base>
 <div &=".help">
-	<cxl-field-help invalid &="=error:text:show"></cxl-field-help>
+	<div &=".grow">
+		<cxl-field-help invalid &="=error:text:show"></cxl-field-help>
+		<div &="=error:hide content(cxl-field-help)"></div>
+	</div>
 	<cxl-field-help &=".counter =counter:show =count:#getCountText:text"></cxl-field-help>
-	<div &="=error:hide content(cxl-field-help)"></div>
 </div>
 	`,
 	styles: {
@@ -212,8 +214,9 @@ on(click):#focus
 		$outline: { paddingTop: 2 },
 		flex: { display: 'flex', alignItems: 'center', lineHeight: 22 },
 		line: { position: 'absolute', marginTop: 6, left: 0, right: 0 },
-		help: { paddingLeft: 12, paddingRight: 12 },
-		counter: { textAlign: 'right' },
+		help: { paddingLeft: 12, paddingRight: 12, display: 'flex' },
+		grow: { flexGrow: 1 },
+		counter: { float: 'right' },
 		help$leading: { paddingLeft: 38 }
 	}
 }, {

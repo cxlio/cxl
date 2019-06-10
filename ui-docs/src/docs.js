@@ -1754,6 +1754,7 @@ cxl.route({
 <cxl-field counter>
 	<cxl-label>Input Label</cxl-label>
 	<cxl-input maxlength="100"></cxl-input>
+	<cxl-field-help>Field Help Text</cxl-field-help>
 </cxl-field>
 --></docs-demo>
 <cxl-t h5>Field Decoration</cxl-t>
