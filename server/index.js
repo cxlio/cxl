@@ -73,7 +73,7 @@ const
 function formatTime(time)
 {
 const
-	s = time / 1000,
+	s = Number(time) / 1e9,
 	str = s.toFixed(4) + 's'
 ;
 	// Color code based on time,
@@ -281,17 +281,19 @@ class Application
 
 	$loadEnvironment(environment)
 	{
-		environment = environment || require(process.cwd() + '/environment.json');
-		this.environment = environment;
+		try {
+			environment = environment || require(process.cwd() + '/environment.json');
+		} catch(e) {}
 
-		if (environment.debug)
+		this.environment = environment || {};
+
+		if (this.environment.debug)
 			exports.enableDebug();
 	}
 
 	start(fn)
 	{
-		fn.call(this, this.environment);
-
+		fn(this, this.environment);
 		return this;
 	}
 }

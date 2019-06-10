@@ -46,21 +46,21 @@ class ResourceManager
 	}
 }
 
+function onMutation(events)
+{
+	for (const mutation of events) {
+		const node = mutation.target, newVal = node.getAttribute(mutation.attributeName);
+		node.$view.setAttribute(mutation.attributeName, newVal);
+	}
+}
+
 class ComponentFactory
 {
 	$attributes(node, attributes)
 	{
 		const view = node.$view;
 
-		function onMutation(events)
-		{
-			for (const mutation of events) {
-				const newVal = node.getAttribute(mutation.attributeName);
-				view.setAttribute(mutation.attributeName, newVal);
-			}
-		}
-
-		attributes.forEach(function(a) {
+		attributes.forEach(a => {
 			view.bindings.push(new AttributeMonitor(node, a, view));
 		});
 
@@ -100,13 +100,16 @@ class ComponentFactory
 
 	createComponent(meta, node)
 	{
-		const view = node.$view = new cxl.View(meta.controller, node);
+		const view = node.$view = new cxl.View(meta.controller, node), state = view.state;
 
 		if (meta.attributes)
 		{
 			meta.attributes.forEach(function(a) {
 				if (node.hasAttribute(a))
-					view.state[a] = node.getAttribute(a) || true;
+					state[a] = node.getAttribute(a) || true;
+				// TODO verify
+				else if (state[a]===undefined)
+					state[a] = null;
 			});
 		}
 
@@ -119,7 +122,8 @@ class ComponentFactory
 		{
 			this.$renderTemplate(node, meta.$template);
 			// Commit all the template bindings.
-			cxl.renderer.commitDigest(view);
+			if (view.bindings.length)
+				cxl.renderer.commitDigest(view);
 		}
 
 		// Initialize Attributes and bindings after the first commit
@@ -255,7 +259,6 @@ class ComponentDefinition
 
 			disconnectedCallback()
 			{
-				cxl.renderer.commitDigest(this.$view);
 				this.$view.disconnect();
 			}
 		}

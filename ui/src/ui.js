@@ -325,11 +325,11 @@ directive('registable.host', {
 
 component({
 	name: 'cxl-appbar',
-	attributes: [ 'extended' ],
+	attributes: [ 'extended', 'center' ],
 	bindings: 'role(heading) =ariaLevel:|attribute(aria-level)',
 	template: `
 <div &=".flex content anchor(cxl-appbar-actions)"></div>
-<div &="content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
+<div &=".tabs content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
 	`,
 	styles: {
 		flex: {
@@ -342,7 +342,13 @@ component({
 		},
 		$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 		flex$extended: { alignItems: 'start', height: 128, paddingBottom: 24 },
-		flex$medium: { paddingTop: 8, paddingBottom: 8 }
+		flex$medium: { paddingTop: 8, paddingBottom: 8 },
+
+		flex$xlarge$center: {
+			width: 1200, marginLeft: 'auto', marginRight: 'auto',
+			paddingRight: 0, paddingLeft: 0
+		},
+		tabs$xlarge$center: { width: 1200, marginLeft: 'auto', marginRight: 'auto' }
 	}
 }, {
 	ariaLevel: 1
@@ -350,7 +356,6 @@ component({
 
 component({
 	name: 'cxl-appbar-title',
-	bindings: 'role(heading)',
 	attributes: [ 'extended' ],
 	styles: {
 		$: { flexGrow: 1 },
@@ -497,11 +502,14 @@ component({
 	name: 'cxl-content',
 	attributes: [ 'center' ],
 	styles: {
-		$: { margin: 16 },
-		$medium: { margin: 32 },
-		$large: { margin: 64 },
+		$: {
+			padding: 16, position: 'relative', flexGrow: 1, overflowY: 'auto',
+			overflowScrolling: 'touch'
+		},
+		$medium: { padding: 32 },
+		$large: { padding: 64 },
 		$xlarge: { width: 1200 },
-		$xlarge$center: { marginLeft: 'auto', marginRight: 'auto' }
+		$xlarge$center: { padding: 0, marginLeft: 'auto', marginRight: 'auto' }
 	}
 });
 

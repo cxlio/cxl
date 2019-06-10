@@ -183,7 +183,7 @@ component({
 
 component({
 	name: 'cxl-field',
-	attributes: [ 'floating', 'leading', 'outline' ],
+	attributes: [ 'floating', 'leading', 'outline', 'counter' ],
 	bindings: `
 on(form.register):#onRegister
 on(focusable.touched):#update
@@ -203,6 +203,7 @@ on(click):#focus
 </cxl-field-base>
 <div &=".help">
 	<cxl-field-help invalid &="=error:text:show"></cxl-field-help>
+	<cxl-field-help &=".counter =counter:show =count:#getCountText:text"></cxl-field-help>
 	<div &="=error:hide content(cxl-field-help)"></div>
 </div>
 	`,
@@ -212,6 +213,7 @@ on(click):#focus
 		flex: { display: 'flex', alignItems: 'center', lineHeight: 22 },
 		line: { position: 'absolute', marginTop: 6, left: 0, right: 0 },
 		help: { paddingLeft: 12, paddingRight: 12 },
+		counter: { textAlign: 'right' },
 		help$leading: { paddingLeft: 38 }
 	}
 }, {
@@ -219,6 +221,11 @@ on(click):#focus
 	leading: false,
 	outline: false,
 	label: null,
+
+	getCountText(count)
+	{
+		return count + (this.max ? '/' + this.max : '');
+	},
 
 	onLabel(label)
 	{
@@ -235,7 +242,10 @@ on(click):#focus
 
 	onChange(ev)
 	{
-		this.empty = this.floating && !ev.target.value;
+		const value = ev.target.value;
+		this.empty = this.floating && !value;
+		this.count = value ? value.length : 0;
+		this.max = ev.target.maxlength;
 	},
 
 	focus()

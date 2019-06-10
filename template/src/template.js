@@ -55,9 +55,6 @@ class Renderer {
 		{
 			changed = false;
 
-			if (count++>MAX_DIGEST)
-				throw new Error("Max digest cycle iterations reached.");
-
 			for (i=0; i<b.length; ++i)
 			{
 				binding = b[i];
@@ -65,6 +62,9 @@ class Renderer {
 				if (binding.digest && this.digestBinding(binding, view))
 					changed = true;
 			}
+
+			if (count++>MAX_DIGEST)
+				throw new Error("Max digest cycle iterations reached.");
 		}
 
 		view.$dirty = false;
@@ -284,14 +284,20 @@ class View extends Store
 
 	connect()
 	{
+		if (this.bindings.length)
+		{
+			this.bindings.forEach(b => b.doConnect());
+			cxl.renderer.commitDigest(this);
+		}
+
 		this.isConnected = true;
 		this.connected.next(true);
-		this.bindings.forEach(b => b.doConnect());
-		cxl.renderer.commitDigest(this);
 	}
 
 	disconnect()
 	{
+		if (this.bindings.length)
+			renderer.commitDigest(this);
 		this.isConnected = false;
 		this.connected.next(false);
 		this.destroy();
@@ -947,6 +953,61 @@ directive('each', {
 
 });
 
+// TODO
+directive('each.list', {
+
+	notify(subscriber, oldList, list)
+	{
+		if (!list)
+			return subscriber.next({type: 'empty'});
+
+		const keys = Object.keys(list);
+
+		// TODO performance
+		cxl.each(oldList, (value, key) => {
+		const
+			index = keys.indexOf(key.toString()),
+			event = index!==-1 ?
+				{
+					type: 'changed',
+					value: list[key],
+					oldValue: value,
+					nextValue: list[keys[index+1]]
+				} :
+				{ type: 'removed', value: value }
+		;
+			subscriber.next(event);
+		});
+
+		cxl.each(list, (value, key) => {
+
+			const index = keys.indexOf(key.toString());
+
+			if (!oldList || !(key in oldList))
+				subscriber.next({
+					type: 'added',
+					value: value,
+					nextValue: list[keys[index+1]]
+				});
+		});
+	},
+
+	update(list)
+	{
+	const
+		oldList = this.value,
+		subscriber = this.subscriber
+	;
+		this.value = list;
+
+		if (subscriber)
+			this.notify(subscriber, oldList, list);
+
+		return Skip;
+	}
+
+});
+
 class ElementChildren
 {
 	constructor(element)
@@ -987,6 +1048,22 @@ class ElementList
 		this.marker.insert(fragment, nextNode && nextNode.nodes[0]);
 	}
 
+	change(item, oldItem)
+	{
+		// TODO Find a better way
+		// TODO Implement reordering
+		this.owner.bindings.forEach(b => {
+			if (b.item === oldItem)
+				b.item = item;
+		});
+
+		if (item !== oldItem)
+		{
+			this.items.set(item, this.items[oldItem]);
+			this.items.delete(oldItem);
+		}
+	}
+
 	remove(item)
 	{
 		this.items[item].remove();
@@ -1021,6 +1098,8 @@ directive('list', {
 			this.list.add(event.value, event.nextValue);
 		else if (event.type==='removed')
 			this.list.remove(event.value);
+		else if (event.type==='changed')
+			this.list.change(event.value, event.oldValue, event.nextValue);
 		else if (event.type==='empty')
 			this.list.empty();
 	}
@@ -1750,7 +1829,7 @@ pipes({
 
 	focus(val) { if (val) this.element.focus(); },
 
-	gate(val) { return this.owner.state[this.parameter] ? val : Skip; },
+	gate(val, state) { return state[this.parameter] ? val : Skip; },
 
 	'focus.gate'(ev, state)
 	{

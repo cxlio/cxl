@@ -1749,6 +1749,13 @@ cxl.route({
 	<cxl-field-help><cxl-icon icon="info" round outline></cxl-icon> Help Text with Icon</cxl-field-help>
 </cxl-field-input>
 --></docs-demo>
+<cxl-t h5>Character Counter</cxl-t>
+<docs-demo><!--
+<cxl-field counter>
+	<cxl-label>Input Label</cxl-label>
+	<cxl-input maxlength="100"></cxl-input>
+</cxl-field>
+--></docs-demo>
 <cxl-t h5>Field Decoration</cxl-t>
 <docs-demo><!--
 <cxl-field>
@@ -2128,7 +2135,7 @@ component({
 	<template &="=components:each:repeat">
 	<cxl-item icon="" &="item:route.link">
 		&lt;<span &="item:text"></span>&gt;
-		<cxl-t &="item:#getLabel:text" caption inline></cxl-t>
+		<cxl-t &="item:#getLabel:text" primary caption inline></cxl-t>
 	</cxl-item>
 	</template>
 </cxl-router-app>

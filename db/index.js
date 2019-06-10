@@ -191,11 +191,6 @@ class Collection extends Observable
 		return this.$ref.push(value).then(ref => this.child(ref.key));
 	}
 
-	/*where(field, value)
-	{
-		this.$ref  = this.$ref.orderByChild(field).equalTo(value);
-		return this;
-	}*/
 }
 
 class Query extends Observable

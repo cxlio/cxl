@@ -73,7 +73,7 @@ class FireMeta extends Observable
 {
 	constructor(ref)
 	{
-		ref = ref.limitToFirst(0);
+		ref = ref.limitToFirst(1);
 
 		super(subscriber => {
 			function onValue(snap)
@@ -82,9 +82,9 @@ class FireMeta extends Observable
 				subscriber.complete();
 			}
 
-			ref.once('value', onValue);
+			ref.once('child_added', onValue);
 
-			return () => ref.off('value', onValue);
+			return () => ref.off('child_added', onValue);
 		});
 	}
 }
@@ -191,7 +191,7 @@ class FireCollection extends FireReference
 		subscriber.next(new CollectionEvent(this, 'empty'));
 		this.$ref.on('child_added', this.$onSnapshot.bind(this, 'added', subscriber));
 		this.$ref.on('child_removed', this.$onSnapshot.bind(this, 'removed', subscriber));
-		this.$ref.limitToFirst(1).once('value', this.$onSnapshot.bind(this, 'meta', subscriber));
+		// this.$ref.limitToFirst(1).once('value', this.$onSnapshot.bind(this, 'meta', subscriber));
 
 		return this.destroy.bind(this);
 	}
@@ -217,6 +217,20 @@ class FireCollection extends FireReference
 		subscriber.next(new CollectionEvent(this, type, item));
 	}
 }
+
+directive('fb.snap', {
+	update(ref)
+	{
+		return ref && ref.limitToFirst(1).once('value', snap => new Snapshot(snap)).catch(() => {});
+	}
+});
+
+directive('fb.len', {
+	update(ref)
+	{
+		return ref && ref.limitToFirst(1).once('value', snap => snap.numChildren()).catch(() => {});
+	}
+});
 
 directive('fb', {
 

@@ -53,13 +53,15 @@ override(cxl.rx.Subscriber.prototype, 'error', function(e) {
 // Renderer
 //
 // Skip try..catch in debug mode
-cxl.renderer.digestBinding = cxl.renderer.$doDigest;
 
 const commitRequesters = [];
+let lastDigest = 0;
 
-override(cxl.renderer, 'commitDigest', function(view) {
+override(cxl.renderer, 'digest', function(view) {
 	commitRequesters.push(view);
 });
+
+cxl.renderer.digestBinding = cxl.renderer.$doDigest;
 
 override(cxl.renderer, 'commit', function() {
 	time = performance.now();
@@ -70,6 +72,7 @@ override(cxl.renderer, 'commit', function() {
 	console.log('Pipeline', commitRequesters.concat());
 	console.groupEnd();
 
+	lastDigest++;
 	commitRequesters.length = 0;
 });
 //
