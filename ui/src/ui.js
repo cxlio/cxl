@@ -237,44 +237,6 @@ on(selectable.action):#onAction
 	}
 });
 
-directive('aria.prop', {
-
-	initialize()
-	{
-		const view = this.element.$view;
-
-		if (view)
-		{
-			// TODO keep here?
-			const states = view.$ariaStates || (view.$ariaStates = []);
-			states.push('aria-' + this.parameter);
-		}
-	},
-
-	digest()
-	{
-		this.digest = null;
-		return this.update(true);
-	},
-
-	update(val)
-	{
-		if (val===undefined || val===null)
-			val = false;
-
-		this.element.setAttribute('aria-' + this.parameter, val);
-	}
-
-});
-
-directive('role', {
-	connect()
-	{
-		if (!this.element.hasAttribute('role'))
-			this.element.setAttribute('role', this.parameter);
-	}
-});
-
 directive('registable', {
 	connect()
 	{
@@ -326,7 +288,7 @@ directive('registable.host', {
 component({
 	name: 'cxl-appbar',
 	attributes: [ 'extended', 'center' ],
-	bindings: 'role(heading) =ariaLevel:|attribute(aria-level)',
+	bindings: 'role(heading) aria.level(1)',
 	template: `
 <div &=".flex content anchor(cxl-appbar-actions)"></div>
 <div &=".tabs content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
@@ -350,8 +312,6 @@ component({
 		},
 		tabs$xlarge$center: { width: 1200, marginLeft: 'auto', marginRight: 'auto' }
 	}
-}, {
-	ariaLevel: 1
 });
 
 component({

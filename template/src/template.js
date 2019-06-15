@@ -284,13 +284,16 @@ class View extends Store
 
 	connect()
 	{
+		// Set as connected so bindings added by template directives
+		// Auto connect
+		this.isConnected = true;
+
 		if (this.bindings.length)
 		{
 			this.bindings.forEach(b => b.doConnect());
 			cxl.renderer.commitDigest(this);
 		}
 
-		this.isConnected = true;
 		this.connected.next(true);
 	}
 
@@ -472,9 +475,9 @@ class Template
 
 	compile(owner)
 	{
-		var nodes = this.clone();
+		const nodes = this.clone();
 
-		cxl.compiler.traverse(nodes.firstChild, owner);
+		compiler.traverse(nodes.firstChild, owner);
 
 		return nodes;
 	}

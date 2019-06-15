@@ -35,9 +35,7 @@ component({
 	extend: InputBase,
 	attributes: [ 'selected' ],
 	bindings: 'focusable =label:aria.prop(label)',
-	template: `
-<span &=".btn =value:#getDate:text"></span>
-	`,
+	template: `<span &=".btn =value:#getDate:text"></span>`,
 	styles: {
 		$: { textAlign: 'center', cursor: 'pointer' },
 		$disabled: { state: 'disabled' },
@@ -75,7 +73,7 @@ component({
 	<cxl-th>F</cxl-th>
 	<cxl-th>S</cxl-th>
 	<template &="=dates:marker.empty:each:repeat">
-	<cxl-calendar-date &="action:#onAction $date:|@value $disabled:@disabled $today:.today:filter:#setTodayEl =value:#isSelected:@selected"></cxl-calendar-date>
+	<cxl-calendar-date &="action:log:#onAction $date:|@value $disabled:@disabled $today:.today:filter:#setTodayEl =value:#isSelected:@selected"></cxl-calendar-date>
 	</template>
 </cxl-table>
 	`,

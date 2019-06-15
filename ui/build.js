@@ -14,6 +14,7 @@ const
 		'src/component.js',
 		'src/css.js',
 		'src/shady.js',
+		'src/a11y.js',
 		'src/drag.js',
 		'src/ui.js',
 		'src/forms.js',

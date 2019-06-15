@@ -137,18 +137,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-attribute>
 
-<docs-attribute name="inverse">
-	<docs-demo><!--
-<cxl-c pad16 inverse>
-	<cxl-button primary inverse><cxl-animate spin><cxl-icon icon="spinner"></cxl-animate></cxl-icon> Loading</cxl-button>
-	<cxl-button secondary inverse>Loading</cxl-button>
-	<cxl-button inverse><cxl-animate pulse><cxl-icon icon="spinner"></cxl-animate> </cxl-icon> Loading</cxl-button>
-	<cxl-button flat inverse>Flat Inverse</cxl-button>
-	<cxl-button disabled inverse>Disabled Inverse</cxl-button>
-</cxl-c>
-	--></docs-demo>
-</docs-attribute>
-
 <docs-attribute name="primary">
 	<docs-demo><!--
 <cxl-button primary>Primary</cxl-button>
