@@ -501,6 +501,9 @@ component({
 component({
 	name: 'cxl-content',
 	attributes: [ 'center' ],
+	template: `
+<div &=".content content"></div>
+	`,
 	styles: {
 		$: {
 			padding: 16, position: 'relative', flexGrow: 1, overflowY: 'auto',
@@ -508,8 +511,8 @@ component({
 		},
 		$medium: { padding: 32 },
 		$large: { padding: 64 },
-		$xlarge: { width: 1200 },
-		$xlarge$center: { padding: 0, marginLeft: 'auto', marginRight: 'auto' }
+		content$xlarge: { width: 1200 },
+		content$xlarge$center: { padding: 0, marginLeft: 'auto', marginRight: 'auto' }
 	}
 });
 

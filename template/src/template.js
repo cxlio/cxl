@@ -956,11 +956,12 @@ directive('each', {
 // TODO
 directive('each.list', {
 
+	value: null,
+
 	notify(subscriber, oldList, list)
 	{
 		if (!list)
 			return subscriber.next({type: 'empty'});
-
 		const keys = Object.keys(list);
 
 		// TODO performance
@@ -1040,11 +1041,11 @@ class ElementList
 	{
 		this.owner.state.$item = item;
 	const
-		nextNode = next && this.items[next],
+		nextNode = next && this.items.get(next),
 		fragment = this.template.compile(this.owner)
 	;
 		this.items.set(item, new NodeSnapshot(fragment.childNodes));
-		cxl.renderer.commitDigest(this.owner);
+		// cxl.renderer.commitDigest(this.owner);
 		this.marker.insert(fragment, nextNode && nextNode.nodes[0]);
 	}
 
@@ -1059,14 +1060,17 @@ class ElementList
 
 		if (item !== oldItem)
 		{
-			this.items.set(item, this.items[oldItem]);
+			if (!this.items.has(oldItem))
+				throw new Error("Invalid item");
+
+			this.items.set(item, this.items.get(oldItem));
 			this.items.delete(oldItem);
 		}
 	}
 
 	remove(item)
 	{
-		this.items[item].remove();
+		this.items.get(item).remove();
 		this.items.delete(item);
 	}
 
