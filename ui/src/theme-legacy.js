@@ -58,7 +58,8 @@
 		`,
 		styles: {
 			box: { border: 0, marginRight: 0, width: 'auto' },
-			box$checked: { backgroundColor: 'transparent', color: 'onSurface' }
+			box$checked: { backgroundColor: 'transparent', color: 'onSurface' },
+			focusCircle: { left: 6 }
 		}
 	});
 
@@ -84,7 +85,10 @@
 <x &=".focusCircle .focusCirclePrimary"></x>
 (<x &=".circle"></x>)
 <span &=".content content"></span>
-		`
+		`,
+		styles: {
+			focusCircle: { left: 4 }
+		}
 	});
 
 	extendStyles('cxl-slider', {

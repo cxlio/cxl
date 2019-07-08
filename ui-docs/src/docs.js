@@ -1284,10 +1284,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			Web Components with a focus on accessibility and performance.
 		</cxl-t>
 		<br>
-		<p>
-		<a href="#getting-started" style="color:var(--cxl-onSecondary)"><cxl-button secondary big>Learn More</cxl-button></a>
-		</p>
-		<br>
 	</cxl-c>
 	<cxl-c sm2 md1>
 <!--img alt="Image of @cxl/ui Applications" src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; " /-->
