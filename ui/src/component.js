@@ -1,306 +1,284 @@
 (cxl => {
-"use strict";
+    "use strict";
 
-const COMPONENTS = {};
+    const COMPONENTS = {};
 
-class AttributeMonitor extends cxl.Directive {
+    class AttributeMonitor extends cxl.Directive {
+        digest(state) {
+            const el = this.element,
+                attr = this.parameter,
+                newVal = state[attr];
+            if (newVal !== this.value) {
+                // Automatically reflect the attribute if it is a boolean
+                if (newVal === true) el.setAttribute(attr, "");
+                else if (newVal === false) el.removeAttribute(attr);
 
-	digest(state)
-	{
-	const
-		el = this.element,
-		attr = this.parameter,
-		newVal = state[attr]
-	;
-		if (newVal !== this.value)
-		{
-			// Automatically reflect the attribute if it is a boolean
-			if (newVal===true)
-				el.setAttribute(attr, "");
-			else if (newVal===false)
-				el.removeAttribute(attr);
+                if (el.$$attributeObserver)
+                    el.$$attributeObserver.trigger(attr);
+            }
 
-			if (el.$$attributeObserver)
-				el.$$attributeObserver.trigger(attr);
-		}
+            return newVal;
+        }
+    }
 
-		return newVal;
-	}
+    class ResourceManager {
+        push(resource) {
+            if (!this.$resources) this.$resources = [];
 
-}
+            this.$resources.push(resource);
+        }
 
-class ResourceManager
-{
-	push(resource)
-	{
-		if (!this.$resources)
-			this.$resources = [];
+        destroy() {
+            if (this.$resources)
+                this.$resources.forEach(b => (b.destroy || b.unsubscribe)());
+        }
+    }
 
-		this.$resources.push(resource);
-	}
+    function onMutation(events) {
+        for (const mutation of events) {
+            const node = mutation.target,
+                newVal = node.getAttribute(mutation.attributeName);
+            node.$view.setAttribute(mutation.attributeName, newVal);
+        }
+    }
 
-	destroy()
-	{
-		if (this.$resources)
-			this.$resources.forEach(b => (b.destroy || b.unsubscribe)());
-	}
-}
+    class ComponentFactory {
+        $attributes(node, attributes) {
+            const view = node.$view;
 
-function onMutation(events)
-{
-	for (const mutation of events) {
-		const node = mutation.target, newVal = node.getAttribute(mutation.attributeName);
-		node.$view.setAttribute(mutation.attributeName, newVal);
-	}
-}
+            attributes.forEach(a => {
+                view.bindings.push(new AttributeMonitor(node, a, view));
+            });
 
-class ComponentFactory
-{
-	$attributes(node, attributes)
-	{
-		const view = node.$view;
+            const observer = (view.attributeObserver = new MutationObserver(
+                onMutation
+            ));
+            observer.observe(node, {
+                attributes: true,
+                attributeFilter: attributes
+            });
+        }
 
-		attributes.forEach(a => {
-			view.bindings.push(new AttributeMonitor(node, a, view));
-		});
+        $bindings(component, value) {
+            cxl.compiler.parseBinding(component, value, component.$view);
+        }
 
-		const observer = view.attributeObserver = new MutationObserver(onMutation);
-		observer.observe(node, { attributes: true, attributeFilter: attributes });
-	}
+        $attachShadow(node) {
+            return node.attachShadow({ mode: "open" });
+        }
 
-	$bindings(component, value)
-	{
-		cxl.compiler.parseBinding(component, value, component.$view);
-	}
+        $renderTemplate(node, template) {
+            const parent = this.$attachShadow(node),
+                nodes = template.compile(node.$view);
+            parent.appendChild(nodes);
+        }
 
-	$attachShadow(node)
-	{
-		return node.attachShadow({ mode: 'open' });
-	}
+        $initializeTemplate(node, meta) {
+            if (!meta.$template) {
+                if (meta.templateId)
+                    meta.$template = cxl.Template.fromId(meta.templateId);
+                else if (meta.template)
+                    meta.$template = new cxl.Template(meta.template);
+            }
 
-	$renderTemplate(node, template)
-	{
-		const parent = this.$attachShadow(node), nodes=template.compile(node.$view);
-		parent.appendChild(nodes);
-	}
+            if (meta.styles && !meta.$styles)
+                meta.$styles = new cxl.css.StyleSheet(meta);
+        }
 
-	$initializeTemplate(node, meta)
-	{
-		if (!meta.$template)
-		{
-			if (meta.templateId)
-				meta.$template = cxl.Template.fromId(meta.templateId);
-			else if (meta.template)
-				meta.$template = new cxl.Template(meta.template);
-		}
+        createComponent(meta, node) {
+            const view = (node.$view = new cxl.View(meta.controller, node)),
+                state = view.state;
 
-		if (meta.styles && !meta.$styles)
-			meta.$styles = new cxl.css.StyleSheet(meta);
-	}
+            if (meta.attributes) {
+                meta.attributes.forEach(function(a) {
+                    if (node.hasAttribute(a))
+                        state[a] = node.getAttribute(a) || true;
+                    // TODO verify
+                    else if (state[a] === undefined) state[a] = null;
+                });
+            }
 
-	createComponent(meta, node)
-	{
-		const view = node.$view = new cxl.View(meta.controller, node), state = view.state;
+            if (meta.initialize) meta.initialize.call(node, view.state);
 
-		if (meta.attributes)
-		{
-			meta.attributes.forEach(function(a) {
-				if (node.hasAttribute(a))
-					state[a] = node.getAttribute(a) || true;
-				// TODO verify
-				else if (state[a]===undefined)
-					state[a] = null;
-			});
-		}
+            this.$initializeTemplate(node, meta);
 
-		if (meta.initialize)
-			meta.initialize.call(node, view.state);
+            if (meta.$template) {
+                this.$renderTemplate(node, meta.$template);
+                // Commit all the template bindings.
+                if (view.bindings.length) cxl.renderer.commitDigest(view);
+            }
 
-		this.$initializeTemplate(node, meta);
+            // Initialize Attributes and bindings after the first commit
+            if (meta.attributes) this.$attributes(node, meta.attributes);
 
-		if (meta.$template)
-		{
-			this.$renderTemplate(node, meta.$template);
-			// Commit all the template bindings.
-			if (view.bindings.length)
-				cxl.renderer.commitDigest(view);
-		}
+            if (meta.bindings) this.$bindings(node, meta.bindings);
 
-		// Initialize Attributes and bindings after the first commit
-		if (meta.attributes)
-			this.$attributes(node, meta.attributes);
+            return node;
+        }
+    }
 
-		if (meta.bindings)
-			this.$bindings(node, meta.bindings);
+    const factory = new ComponentFactory();
 
-		return node;
-	}
-}
+    factory.components = COMPONENTS;
 
-const factory = new ComponentFactory();
+    class ComponentDefinition {
+        $attributes(prototype, value) {
+            value.forEach(function(a) {
+                Object.defineProperty(prototype, a, {
+                    enumerable: true,
+                    name: a,
+                    get() {
+                        return this.$view.state[a];
+                    },
+                    set(newVal) {
+                        this.$view.set(a, newVal);
+                        return newVal;
+                    }
+                });
+            });
+        }
 
-factory.components = COMPONENTS;
+        $methods(prototype, value) {
+            value.forEach(function(m) {
+                prototype[m] = function() {
+                    const result = this.$view.state[m].apply(
+                        this.$view.state,
+                        arguments
+                    );
+                    this.$view.digest();
+                    return result;
+                };
+            });
+        }
 
-class ComponentDefinition
-{
-	$attributes(prototype, value)
-	{
-		value.forEach(function(a) {
-			Object.defineProperty(prototype, a, {
-				enumerable: true,
-				name: a,
-				get() { return this.$view.state[a]; },
-				set(newVal) { this.$view.set(a, newVal); return newVal; }
-			});
-		});
-	}
+        $registerElement(name, Constructor) {
+            window.customElements.define(name, Constructor);
+        }
 
-	$methods(prototype, value)
-	{
-		value.forEach(function(m) {
-			prototype[m] = function() {
-				const result = this.$view.state[m].apply(this.$view.state, arguments);
-				this.$view.digest();
-				return result;
-			};
-		});
-	}
+        constructor(meta, controller) {
+            if (controller)
+                meta.controller =
+                    typeof controller === "function"
+                        ? controller
+                        : this.normalizeController(controller);
 
-	$registerElement(name, Constructor)
-	{
-		window.customElements.define(name, Constructor);
-	}
+            if (meta.extend) meta = this.extendComponent(meta, meta.extend);
 
-	constructor(meta, controller)
-	{
-		if (controller)
-			meta.controller = typeof(controller)==='function' ?
-				controller : this.normalizeController(controller);
+            this.name = meta.name;
+            this.meta = meta;
+            this.Component = this.componentConstructor();
 
-		if (meta.extend)
-			meta = this.extendComponent(meta, meta.extend);
+            if (this.name) {
+                COMPONENTS[this.name] = this;
+                this.$registerElement(this.name, this.Component);
+            }
+        }
 
-		this.name = meta.name;
-		this.meta = meta;
-		this.Component = this.componentConstructor();
+        extend(def) {
+            const parentDef = this.meta,
+                result = Object.assign({}, parentDef, def);
+            if (def.events && parentDef.events)
+                result.events = parentDef.events.concat(def.events);
+            if (def.methods && parentDef.methods)
+                result.methods = parentDef.methods.concat(def.methods);
+            if (def.attributes && parentDef.attributes)
+                result.attributes = parentDef.attributes.concat(def.attributes);
 
-		if (this.name)
-		{
-			COMPONENTS[this.name] = this;
-			this.$registerElement(this.name, this.Component);
-		}
-	}
+            if (def.styles && parentDef.styles) {
+                let css = (result.styles = Array.isArray(parentDef.styles)
+                    ? [].concat(parentDef.styles)
+                    : [parentDef.styles]);
 
-	extend(def)
-	{
-	const
-		parentDef = this.meta,
-		result = Object.assign({}, parentDef, def)
-	;
-		if (def.events && parentDef.events)
-			result.events = parentDef.events.concat(def.events);
-		if (def.methods && parentDef.methods)
-			result.methods = parentDef.methods.concat(def.methods);
-		if (def.attributes && parentDef.attributes)
-			result.attributes = parentDef.attributes.concat(def.attributes);
+                if (Array.isArray(def.styles))
+                    result.styles = css.concat(def.styles);
+                else css.push(def.styles);
+            }
 
-		if (def.styles && parentDef.styles)
-		{
-			let css = result.styles = Array.isArray(parentDef.styles) ?
-				[].concat(parentDef.styles) : [ parentDef.styles ];
+            if (def.controller && parentDef.controller)
+                result.controller.prototype = Object.assign(
+                    {},
+                    parentDef.controller.prototype,
+                    def.controller.prototype
+                );
 
-			if (Array.isArray(def.styles))
-				result.styles = css.concat(def.styles);
-			else
-				css.push(def.styles);
-		}
+            if (def.bindings && parentDef.bindings)
+                result.bindings = parentDef.bindings + " " + def.bindings;
 
-		if (def.controller && parentDef.controller)
-			result.controller.prototype = Object.assign(
-				{}, parentDef.controller.prototype, def.controller.prototype);
+            return result;
+        }
 
-		if (def.bindings && parentDef.bindings)
-			result.bindings = parentDef.bindings + ' ' + def.bindings;
+        extendComponent(def, parent) {
+            return (parent instanceof ComponentDefinition
+                ? parent
+                : COMPONENTS[parent]
+            ).extend(def);
+        }
 
-		return result;
-	}
+        componentConstructor() {
+            const def = this,
+                meta = def.meta;
 
-	extendComponent(def, parent)
-	{
-		return (parent instanceof ComponentDefinition ?
-			parent : COMPONENTS[parent]).extend(def);
-	}
+            class Component extends cxl.HTMLElement {
+                constructor() {
+                    super();
+                    factory.createComponent(def.meta, this);
+                }
 
-	componentConstructor()
-	{
-		const def = this, meta = def.meta;
+                connectedCallback() {
+                    // FIX for safari, component not always have attributes initialized
+                    if (meta.attributes) {
+                        meta.attributes.forEach(a => {
+                            if (this.hasAttribute(a))
+                                this.$view.state[a] =
+                                    this.getAttribute(a) || true;
+                        });
+                    }
 
-		class Component extends cxl.HTMLElement {
+                    this.$view.connect();
+                }
 
-			constructor()
-			{
-				super();
-				factory.createComponent(def.meta, this);
-			}
+                disconnectedCallback() {
+                    this.$view.disconnect();
+                }
+            }
 
-			connectedCallback()
-			{
-				// FIX for safari, component not always have attributes initialized
-				if (meta.attributes)
-				{
-					meta.attributes.forEach(a => {
-						if (this.hasAttribute(a))
-							this.$view.state[a] = this.getAttribute(a) || true;
-					});
-				}
+            if (meta.attributes)
+                this.$attributes(Component.prototype, meta.attributes);
 
-				this.$view.connect();
-			}
+            if (meta.methods) this.$methods(Component.prototype, meta.methods);
 
-			disconnectedCallback()
-			{
-				this.$view.disconnect();
-			}
-		}
+            return Component;
+        }
 
-		if (meta.attributes)
-			this.$attributes(Component.prototype, meta.attributes);
+        normalizeController(controller) {
+            var State = controller.hasOwnProperty("constructor")
+                ? controller.constructor
+                : function Controller() {};
 
-		if (meta.methods)
-			this.$methods(Component.prototype, meta.methods);
+            State.prototype = controller;
 
-		return Component;
-	}
+            return State;
+        }
+    }
 
-	normalizeController(controller)
-	{
-		var State = controller.hasOwnProperty('constructor') ?
-			controller.constructor : function Controller() { };
+    Object.assign(cxl, {
+        ResourceManager: ResourceManager,
+        ComponentDefinition: ComponentDefinition,
+        ComponentFactory: ComponentFactory,
+        componentFactory: factory,
 
-		State.prototype = controller;
+        component(meta, controller) {
+            var def = new ComponentDefinition(meta, controller);
+            return cxl.dom.bind(cxl, def.name);
+        },
 
-		return State;
-	}
+        extendComponent(name, meta) {
+            const parentDef = COMPONENTS[name];
+            parentDef.meta = parentDef.extend(meta);
+        },
 
-}
-
-Object.assign(cxl, {
-	ResourceManager: ResourceManager,
-	ComponentDefinition: ComponentDefinition,
-	ComponentFactory: ComponentFactory,
-	componentFactory: factory,
-
-	component(meta, controller)
-	{
-		var def = new ComponentDefinition(meta, controller);
-		return cxl.dom.bind(cxl, def.name);
-	},
-
-	extendComponent(name, meta)
-	{
-		const parentDef = COMPONENTS[name];
-		parentDef.meta = parentDef.extend(meta);
-	}
-});
-
+        extendStyles(name, styles) {
+            return cxl.extendComponent(name, { styles: styles });
+        }
+    });
 })(this.cxl);

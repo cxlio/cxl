@@ -1,12 +1,12 @@
-(cxl => { "use strict";
+(cxl => {
+	'use strict';
 
-const
-	META = cxl.ui.meta,
-	component = cxl.component,
-	STYLES = { $: { animation: 'fadeIn' } },
-	DEFS = {
-		appbar: {
-			template: `
+	const META = cxl.ui.meta,
+		component = cxl.component,
+		STYLES = { $: { animation: 'fadeIn' } },
+		DEFS = {
+			appbar: {
+				template: `
 <docs-component name="cxl-appbar">
 	<docs-demo label="Appbar with actions"><!--
 <cxl-appbar>
@@ -56,9 +56,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-attribute>
 </docs-component>
 			`
-		},
-		avatar: {
-			template: `
+			},
+			avatar: {
+				template: `
 <docs-component name="cxl-avatar">
 
 <docs-demo><!--
@@ -103,9 +103,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 </docs-component>
 			`
-		},
-		backdrop: {
-			template: `
+			},
+			backdrop: {
+				template: `
 <docs-component name="cxl-backdrop">
 	<docs-demo><!--
 <cxl-button &="action:bool:=showBackdrop">Show Backdrop</cxl-button>
@@ -113,9 +113,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 			`
-		},
-		button: {
-			template: `
+			},
+			button: {
+				template: `
 <docs-component name="cxl-button">
 <docs-demo &="owner:@owner"><!--
 <cxl-button &="on(click):=event:#toggle =primary:@primary">Toggle</cxl-button>
@@ -150,12 +150,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-attribute>
 </docs-component>
 			`,
-			controller: {
-				toggle() { this.primary = !this.primary; }
-			}
-		},
-		c: {
-			template: `
+				controller: {
+					toggle() {
+						this.primary = !this.primary;
+					}
+				}
+			},
+			c: {
+				template: `
 <docs-component name="cxl-c">
 	<docs-demo label="Flex Layout"><!--
 <div style="display: flex; font-size:20px; color:#fff; text-align:center">
@@ -198,10 +200,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		calendar: {
-			template: `
+			calendar: {
+				template: `
 <docs-component name="cxl-calendar">
 	<docs-demo><!--
 <cxl-calendar &="@value:=value"></cxl-calendar>
@@ -209,10 +211,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		card: {
-			template: `
+			card: {
+				template: `
 <docs-component name="cxl-card">
 <docs-demo label="Card Layout"><!--
 <cxl-card>
@@ -243,9 +245,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 </docs-component>
 			`
-		},
-		checkbox: {
-			template: `
+			},
+			checkbox: {
+				template: `
 <docs-component name="cxl-checkbox">
 <docs-demo><!--
 <cxl-checkbox>Checkbox Label</cxl-checkbox>
@@ -278,10 +280,9 @@ Checked: <span &="=test:text"></span>
 </docs-attribute>
 </docs-component>
 			`
-
-		},
-		chip: {
-			template: `
+			},
+			chip: {
+				template: `
 <docs-component name="cxl-chip">
 <docs-demo><!--
 <cxl-chip>Single Chip</cxl-chip>
@@ -292,10 +293,9 @@ Checked: <span &="=test:text"></span>
 --></docs-demo>
 </docs-component>
 			`
-
-		},
-		datepicker: {
-			template: `
+			},
+			datepicker: {
+				template: `
 <docs-component name="cxl-datepicker">
 	<docs-demo><!--
 <cxl-form-group floating>
@@ -307,9 +307,9 @@ Checked: <span &="=test:text"></span>
 <docs-attribute name="disabled" demo></docs-attribute>
 </docs-component>
 			`
-		},
-		dialog: {
-			template: `
+			},
+			dialog: {
+				template: `
 <docs-component name="cxl-dialog">
 	<docs-demo><!--
 <cxl-c pad16 style="position:relative; min-height:300px; z-index: 0; overflow:hidden">
@@ -323,9 +323,9 @@ Checked: <span &="=test:text"></span>
 	--></docs-demo>
 </docs-component>
 			`
-		},
-		'dialog-alert': {
-			template: `
+			},
+			'dialog-alert': {
+				template: `
 <docs-component name="cxl-dialog-alert">
 	<docs-demo><!--
 <cxl-c pad16 style="position:relative; height:300px; z-index: 0; overflow: hidden">
@@ -338,10 +338,10 @@ Checked: <span &="=test:text"></span>
 <docs-attribute name="promise"></docs-attribute>
 </docs-component>
 			`
-		},
+			},
 
-		'dialog-confirm': {
-			template: `
+			'dialog-confirm': {
+				template: `
 <docs-component name="cxl-dialog-confirm">
 	<docs-demo><!--
 <cxl-c pad16 style="position:relative; height:300px; z-index: 0; overflow: hidden">
@@ -355,10 +355,10 @@ Checked: <span &="=test:text"></span>
 <docs-attribute name="promise"></docs-attribute>
 </docs-component>
 			`
-		},
+			},
 
-		drag: {
-			template: `
+			drag: {
+				template: `
 <docs-component name="cxl-drag">
 <docs-demo><!--
 <style>
@@ -382,10 +382,10 @@ Checked: <span &="=test:text"></span>
 --></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		'drag-region': {
-			template: `
+			'drag-region': {
+				template: `
 <docs-component name="cxl-drag-region">
 <docs-demo label="Drop Region"><!--
 <style>
@@ -414,10 +414,10 @@ Drag Here <x &="=count:text"></x>
 --></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		'drag-slot': {
-			template: `
+			'drag-slot': {
+				template: `
 <docs-component name="cxl-drag-slot">
 <docs-demo><!--
 <style>
@@ -440,10 +440,10 @@ Drag Here <x &="=count:text"></x>
 </cxl-grid>
 --></docs-demo>
 </docs-component>`
-		},
+			},
 
-		drawer: {
-			template: `
+			drawer: {
+				template: `
 <docs-component name="cxl-drawer">
 	<docs-demo><!--
 <cxl-button &="action:bool:=showDrawer" primary>Show Drawer</cxl-button>
@@ -462,10 +462,10 @@ Drag Here <x &="=count:text"></x>
 <docs-attribute name="visible"></docs-attribute>
 </docs-component>
 			`
-		},
+			},
 
-		fab: {
-			template: `
+			fab: {
+				template: `
 <docs-component name="cxl-fab">
 <docs-demo><!--
 <cxl-fab static title="Floating Action Button"><cxl-icon icon="plus"></cxl-icon></cxl-fab>
@@ -474,9 +474,9 @@ Drag Here <x &="=count:text"></x>
 <docs-attribute name="touched"></docs-attribute>
 </docs-component>
 			`
-		},
-		form: {
-			template: `
+			},
+			form: {
+				template: `
 <docs-component name="cxl-form">
 	<docs-demo &="owner:@owner" label="Input Validation"><!--
 <cxl-form>
@@ -525,9 +525,9 @@ Drag Here <x &="=count:text"></x>
 	--></docs-demo>
 </docs-component>
 			`
-		},
-		field: {
-			template: `
+			},
+			field: {
+				template: `
 <docs-component name="cxl-form-group">
 	<docs-demo><!--
 <cxl-field>
@@ -561,9 +561,9 @@ Drag Here <x &="=count:text"></x>
 	</docs-attribute>
 </docs-component>
 			`
-		},
-		fieldset: {
-			template: `
+			},
+			fieldset: {
+				template: `
 <docs-component name="cxl-fieldset">
 <docs-demo><!--
 <cxl-fieldset>
@@ -588,9 +588,9 @@ Drag Here <x &="=count:text"></x>
 --></docs-demo>
 </docs-component>
 			`
-		},
-		'form-group': {
-			template: `
+			},
+			'form-group': {
+				template: `
 <docs-component name="cxl-form-group">
 	<docs-demo><!--
 <cxl-form-group>
@@ -624,9 +624,9 @@ Drag Here <x &="=count:text"></x>
 	</docs-attribute>
 </docs-component>
 			`
-		},
-		grid: {
-			template: `
+			},
+			grid: {
+				template: `
 <docs-component name="cxl-grid">
 	<docs-demo label="Grid Layout"><!--
 <cxl-grid columns="auto auto auto" style="color:#fff">
@@ -639,19 +639,18 @@ Drag Here <x &="=count:text"></x>
 	--></docs-demo>
 </docs-component>
 			`
-		},
-		hr: {
-			template: `
+			},
+			hr: {
+				template: `
 <docs-component name="cxl-hr">
 	<docs-demo><!--
 <cxl-hr>
 	--></docs-demo>
 </docs-component>
 			`
-
-		},
-		icon: {
-			template: `
+			},
+			icon: {
+				template: `
 <docs-component name="cxl-icon">
 <docs-demo><!--
 <cxl-icon icon="image"></cxl-icon>
@@ -665,9 +664,9 @@ Drag Here <x &="=count:text"></x>
 </docs-attribute>
 </docs-component>
 			`
-		},
-		input: {
-			template: `
+			},
+			input: {
+				template: `
 <docs-component name="cxl-input">
 <docs-demo &="owner:@owner"><!--
 <cxl-form-group>
@@ -735,9 +734,9 @@ Drag Here <x &="=count:text"></x>
 --></docs-demo>
 </docs-attribute>
 			`
-		},
-		item: {
-			template: `
+			},
+			item: {
+				template: `
 <docs-component name="cxl-item">
 	<docs-demo><!--
 <cxl-item>
@@ -791,10 +790,9 @@ Drag Here <x &="=count:text"></x>
 </docs-attribute>
 </docs-component>
 			`
-
-		},
-		menu: {
-			template: `
+			},
+			menu: {
+				template: `
 <docs-component name="cxl-menu">
 <docs-demo><!--
 <cxl-menu>
@@ -817,10 +815,9 @@ Drag Here <x &="=count:text"></x>
 --></docs-demo></docs-attribute>
 </docs-component>
 			`
-
-		},
-		'menu-toggle': {
-			template: `
+			},
+			'menu-toggle': {
+				template: `
 <docs-component name="cxl-menu-toggle">
 <docs-demo><!--
 <cxl-c pad16 inverse>
@@ -843,10 +840,10 @@ Drag Here <x &="=count:text"></x>
 --></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		multiselect: {
-			template: `
+			multiselect: {
+				template: `
 <docs-component name="cxl-multiselect">
 <docs-demo><!--
 <cxl-form-group floating>
@@ -861,10 +858,10 @@ Drag Here <x &="=count:text"></x>
 --></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		navbar: {
-			template: `
+			navbar: {
+				template: `
 <docs-component name="cxl-navbar">
 	<docs-demo label="Appbar with Navigation"><!--
 <div style="position:relative; height: 200px; overflow:hidden">
@@ -885,10 +882,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-attribute name="permanent"></docs-attribute>
 </docs-component>
 			`
-		},
+			},
 
-		option: {
-			template: `
+			option: {
+				template: `
 <docs-component name="cxl-option">
 <docs-demo><!--
 <cxl-form-group>
@@ -902,9 +899,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 </docs-component>
 			`
-		},
-		password: {
-			template: `
+			},
+			password: {
+				template: `
 <docs-component name="cxl-password">
 <docs-demo><!--
 <cxl-form-group>
@@ -914,10 +911,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 </docs-component>
 			`
-
-		},
-		progress: {
-			template: `
+			},
+			progress: {
+				template: `
 <docs-component name="cxl-progress">
 	<docs-demo><!--
 <cxl-progress></cxl-progress><br>
@@ -927,10 +923,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 			`
-
-		},
-		radio: {
-			template: `
+			},
+			radio: {
+				template: `
 <docs-component name="cxl-radio">
 <docs-demo><!--
 <cxl-radio name="test" value="1">Radio Button 1</cxl-radio>
@@ -960,9 +955,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-attribute>
 			`
-		},
-		ripple: {
-			template: `
+			},
+			ripple: {
+				template: `
 <docs-component name="cxl-ripple">
 <docs-demo><!--
 <cxl-button big>Click Me</cxl-button>
@@ -985,18 +980,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-implementation>
 </docs-component>
 			`
-		},
-		'search-input': {
-			template: `
+			},
+			'search-input': {
+				template: `
 <docs-component name="cxl-search-input">
 <docs-demo><!--
 <cxl-search-input></cxl-search-input>
 --></docs-demo>
 </docs-component>
 			`
-		},
-		select: {
-			template: `
+			},
+			select: {
+				template: `
 <docs-component name="cxl-select">
 <docs-demo &="owner:@owner"><!--
 <cxl-form-group>
@@ -1062,15 +1057,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-attribute>
 </docs-component>
 			`,
-			controller: {
-				testValue: 'two',
-				onChange(ev, el) {
-					this.selectChange = el.value;
+				controller: {
+					testValue: 'two',
+					onChange(ev, el) {
+						this.selectChange = el.value;
+					}
 				}
-			}
-		},
-		slider: {
-			template: `
+			},
+			slider: {
+				template: `
 <docs-component name="cxl-slider">
 	<docs-demo><!--
 <cxl-slider></cxl-slider>
@@ -1089,10 +1084,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	</docs-attribute>
 </docs-component>
 			`
-		},
+			},
 
-		snackbar: {
-			template: `
+			snackbar: {
+				template: `
 <docs-component name="cxl-snackbar">
 	<docs-demo &="owner:@owner"><!--
 <cxl-button primary &="action:#notify">Notify</cxl-button>
@@ -1105,28 +1100,27 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 			`,
-			controller: {
-				index: 0,
+				controller: {
+					index: 0,
 
-				notify()
-				{
-					return cxl.ui.notify('Hello World ' + this.index++);
+					notify() {
+						return cxl.ui.notify('Hello World ' + this.index++);
+					}
 				}
-			}
-		},
+			},
 
-		spinner: {
-			template: `
+			spinner: {
+				template: `
 <docs-component name="cxl-spinner">
 <docs-demo><!--
 <cxl-spinner></cxl-spinner>
 --></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		submit: {
-			template: `
+			submit: {
+				template: `
 <docs-component name="cxl-submit">
 	<docs-demo><!--
 <cxl-submit>Submit</cxl-submit>
@@ -1138,10 +1132,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	</docs-attribute>
 </docs-component>
 			`
-		},
+			},
 
-		switch: {
-			template: `
+			switch: {
+				template: `
 <docs-component name="cxl-switch">
 <docs-demo><!--
 <div>
@@ -1184,16 +1178,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-attribute>
 </docs-component>
 			`
-		},
-		t: {
-			template: `
+			},
+			t: {
+				template: `
 <docs-component name="cxl-t">
 	<uid-typography></uid-typography>
 </docs-component>
 			`
-		},
-		tab: {
-			template: `
+			},
+			tab: {
+				template: `
 <docs-component name="cxl-tab">
 	<docs-demo><!--
 <cxl-tabs>
@@ -1204,10 +1198,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 </docs-component>
 			`
-		},
+			},
 
-		table: {
-			template: `
+			table: {
+				template: `
 <docs-component name="cxl-table">
 	<docs-demo label="Basic Table"><!--
 <cxl-table>
@@ -1234,9 +1228,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 			`
-		},
-		tabs: {
-			template: `
+			},
+			tabs: {
+				template: `
 <docs-component name="cxl-tabs">
 	<docs-demo &="owner:@owner"><!--
 <cxl-tabs &="action:#select">
@@ -1252,12 +1246,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	--></docs-demo>
 </docs-component>
 			`,
-			controller: {
-				select(ev) { if (ev.target.tagName==='CXL-TAB') ev.target.selected = true; }
-			}
-		},
-		textarea: {
-			template: `
+				controller: {
+					select(ev) {
+						if (ev.target.tagName === 'CXL-TAB')
+							ev.target.selected = true;
+					}
+				}
+			},
+			textarea: {
+				template: `
 <docs-component name="cxl-textarea">
 <docs-demo><!--
 <cxl-field-textarea label="Text Area"></cxl-field-textarea>
@@ -1270,33 +1267,30 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-attribute name="invalid" demo></docs-attribute>
 </docs-component>
 			`
-		}
-	},
-	COMPONENTS = []
-;
-
-cxl.route({
-	id: 'home',
-	defaultRoute: true,
-	path: '*default',
-	title: 'Home',
-	styles: STYLES,
-	template: `
+			}
+		},
+		COMPONENTS = [];
+	cxl.route({
+		id: 'home',
+		defaultRoute: true,
+		path: '*default',
+		title: { text: '@cxl/ui' },
+		styles: STYLES,
+		template: `
 <style>a { color: var(--cxl-link) }</style>
 <cxl-grid columns="1fr 1fr" style="margin-top: 48px">
 	<cxl-c sm2 md1>
-		<cxl-t h2>@cxl/ui</cxl-t>
-		<cxl-t h5>
-			UI components with a focus on accessibility and performance.
+		<cxl-t h4>
+			Web Components with a focus on accessibility and performance.
 		</cxl-t>
 		<br>
 		<p>
-		<a href="#getting-started"><cxl-button secondary big>Get Started!</cxl-button></a>
+		<a href="#getting-started" style="color:var(--cxl-onSecondary)"><cxl-button secondary big>Learn More</cxl-button></a>
 		</p>
 		<br>
 	</cxl-c>
 	<cxl-c sm2 md1>
-<!--img alt="Image of @cxl/ui Applications" src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; "></img-->
+<!--img alt="Image of @cxl/ui Applications" src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; " /-->
 	</cxl-c>
 
 	<cxl-c xs2><cxl-t h4>Features</cxl-t></cxl-c>
@@ -1323,7 +1317,8 @@ Library and Source Code released under the <a href="https://www.gnu.org/licenses
 
 	<cxl-c>
 		<cxl-t h5><cxl-icon icon="globe"></cxl-icon> &nbsp;Framework Agnostic</cxl-t>
-		<p>No dependencies, No polyfills. Works out of the box on all major browsers. <!--Optional <a href="#getting-started">plugins</a> for popular frameworks are included.-->
+		<p>No dependencies. Works out of the box on all major browsers. Compatible with most
+		popular frameworks.
 		</p>
 	</cxl-c>
 	<cxl-c>
@@ -1344,14 +1339,14 @@ Components are easily styled via attributes and CSS variables. See <a href="#the
 	<li>Edge: 17</li>
 </ul>
 	`
-});
+	});
 
-cxl.route({
-	id: "getting-started",
-	path: 'getting-started',
-	title: 'Getting Started',
-	styles: STYLES,
-	template: `
+	cxl.route({
+		id: 'getting-started',
+		path: 'getting-started',
+		title: 'Getting Started',
+		styles: STYLES,
+		template: `
 <style>a { color: var(--cxl-link) }</style>
 <cxl-t h4>Installation</cxl-t>
 
@@ -1392,23 +1387,24 @@ See <a href="react.html">Demo</a>.</p>
 <cxl-t h5>@cxl/ui/angular </cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
 <p>Angular compatibility module. See <a href="angular.html">Demo</a>.</p-->
 	`
-});
+	});
 
-cxl.each(DEFS, (def, name) => {
-	const path = 'cxl-' + name;
+	cxl.each(DEFS, (def, name) => {
+		const path = 'cxl-' + name;
 
-	def.path = path;
-	def.title = '<' + path + '>';
-	def.styles = STYLES;
+		def.path = path;
+		def.title = '<' + path + '>';
+		def.styles = STYLES;
 
-	COMPONENTS.push(path);
+		COMPONENTS.push(path);
 
-	cxl.route(def);
-});
+		cxl.route(def);
+	});
 
-component({
-	name: 'uid-states',
-	template: `
+	component(
+		{
+			name: 'uid-states',
+			template: `
 <cxl-grid>
 	<template &="=states:each:repeat">
 	<cxl-c sm6 md3 &="item:style:text .item"></cxl-c>
@@ -1418,22 +1414,31 @@ component({
 	</template>
 </cxl-grid>
 	`,
-	styles: {
-		item: { padding: 16, backgroundColor: 'surface', color: 'onSurface' },
-		hover: { state: 'hover' },
-		focused: { state: 'focus' },
-		disabled: { state: 'disabled' },
-		Primary: { color: 'onPrimary', backgroundColor: 'primary' },
-		Secondary: { color: 'onSecondary', backgroundColor: 'secondary' }
-	}
-}, {
-	states: [ 'Default', 'Primary', 'Secondary' ]
-});
+			styles: {
+				item: {
+					padding: 16,
+					backgroundColor: 'surface',
+					color: 'onSurface'
+				},
+				hover: { state: 'hover' },
+				focused: { state: 'focus' },
+				disabled: { state: 'disabled' },
+				Primary: { color: 'onPrimary', backgroundColor: 'primary' },
+				Secondary: {
+					color: 'onSecondary',
+					backgroundColor: 'secondary'
+				}
+			}
+		},
+		{
+			states: ['Default', 'Primary', 'Secondary']
+		}
+	);
 
-cxl.route({
-	path: 'theming',
-	title: 'Styles',
-	template: `
+	cxl.route({
+		path: 'theming',
+		title: 'Styles',
+		template: `
 <cxl-t h4>Color</cxl-t>
 <p>The Following colors are used by the theme. Each of them are defined in a variable prefixed by <code>--cxl-</code></p>
 <br>
@@ -1456,23 +1461,26 @@ cxl.route({
 <br>
 <uid-theme></uid-theme>
 	`,
-	styles: {
-		$: { animation: 'fadeIn' },
-		iconbox: { display: 'inline-block', width: 80, height: 80, textAlign: 'center' },
-		icon: { fontSize: 24, marginBottom: 8, lineHeight: 40 }
-	},
+		styles: {
+			$: { animation: 'fadeIn' },
+			iconbox: {
+				display: 'inline-block',
+				width: 80,
+				height: 80,
+				textAlign: 'center'
+			},
+			icon: { font: 'h5', marginBottom: 8, lineHeight: 40 }
+		},
 
-	initialize(state)
-	{
-		state.font = cxl.css.variables.font;
-	}
+		initialize(state) {
+			state.font = cxl.css.variables.font;
+		}
+	});
 
-});
-
-cxl.route({
-	path: 'layout',
-	title: 'Layout',
-	template: `
+	cxl.route({
+		path: 'layout',
+		title: 'Layout',
+		template: `
 <cxl-t h5>Layout Grid</cxl-t>
 
 <docs-bg>
@@ -1499,14 +1507,14 @@ cxl.route({
 <cxl-t h6>Elevation</cxl-t>
 <cxl-t h6>UI Regions</cxl-t>
 	`,
-	styles: {
-		col: { backgroundColor: 'rgba(255,0,0,0.25)', height: 100 }
-	}
-});
+		styles: {
+			col: { backgroundColor: 'rgba(255,0,0,0.25)', height: 100 }
+		}
+	});
 
-cxl.component({
-	name: 'uid-palette',
-	template: `
+	cxl.component({
+		name: 'uid-palette',
+		template: `
 <cxl-grid columns="1fr 1fr 1fr 1fr 1fr 1fr">
 <template &="=vars:each:repeat">
 	<cxl-c xs6 sm3 md2>
@@ -1515,54 +1523,62 @@ cxl.component({
 </template>
 </cxl-grid>
 	`,
-	initialize(state)
-	{
-		const vars = cxl.css.colors;
+		initialize(state) {
+			const vars = cxl.css.colors;
 
-		state.vars = [];
+			state.vars = [];
 
-		for (const i in vars)
-		{
-			state.vars.push({
-				name: i,
-				color: vars[i].toString(),
-				onColor: vars['on' + i[0].toUpperCase() + i.slice(1)] ||
-					(vars.surface.blend(vars[i]).luminance() > 0.5 ? '#000' : '#fff')
-			});
+			for (const i in vars) {
+				state.vars.push({
+					name: i,
+					color: vars[i].toString(),
+					onColor:
+						vars['on' + i[0].toUpperCase() + i.slice(1)] ||
+						(vars.surface.blend(vars[i]).luminance() > 0.5
+							? '#000'
+							: '#fff')
+				});
+			}
 		}
+	});
 
-	}
-});
+	cxl.component({
+		name: 'uid-logo',
+		template: `<svg xmlns="http://www.w3.org/2000/svg" width="398.66666" height="180.93466"><defs><linearGradient id="a" x2="1" gradientTransform="matrix(405.94919 0 0 -405.94919 -261.92822 217.5498)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#231f20"/><stop offset=".29776" stop-color="#231f20"/><stop offset=".65586592" stop-color="#231f20"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="b" x2="1" gradientTransform="matrix(221.0459 0 0 -221.0459 157.95117 144.88867)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".00561523" stop-color="#fff"/><stop offset=".26231876" stop-color="#231f20"/><stop offset="1" stop-color="#231f20"/></linearGradient></defs><path fill="#e32522" d="M243.78252724 37.10226401L88.46653112 146.24092795h59.53866518L300.96385914 37.10226401z"/><path fill="url(#a)" d="M1 248.271v-20.186h60.16l12.446-7.546h45.08s-21.217 15.386-28.097 19.892c0 0-9.756 6.38-28.673 7.84zm72.606-27.732l47.96-33.71 22.455 15.944-25.335 17.766z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/><path fill="url(#b)" d="M157.951 161.146l31.789-22.555h.157c2.74-1.989 21.372-15.468 27.746-19.638 0 0 9.43-6.211 28.67-6.383H300v18.159h-52.937l-12.442 8.119h-.043l-54.355 38.358z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/></svg>`
+	});
 
-cxl.component({
-	name: 'uid-logo',
-	template: `<svg xmlns="http://www.w3.org/2000/svg" width="398.66666" height="180.93466"><defs><linearGradient id="a" x2="1" gradientTransform="matrix(405.94919 0 0 -405.94919 -261.92822 217.5498)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#231f20"/><stop offset=".29776" stop-color="#231f20"/><stop offset=".65586592" stop-color="#231f20"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="b" x2="1" gradientTransform="matrix(221.0459 0 0 -221.0459 157.95117 144.88867)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".00561523" stop-color="#fff"/><stop offset=".26231876" stop-color="#231f20"/><stop offset="1" stop-color="#231f20"/></linearGradient></defs><path fill="#e32522" d="M243.78252724 37.10226401L88.46653112 146.24092795h59.53866518L300.96385914 37.10226401z"/><path fill="url(#a)" d="M1 248.271v-20.186h60.16l12.446-7.546h45.08s-21.217 15.386-28.097 19.892c0 0-9.756 6.38-28.673 7.84zm72.606-27.732l47.96-33.71 22.455 15.944-25.335 17.766z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/><path fill="url(#b)" d="M157.951 161.146l31.789-22.555h.157c2.74-1.989 21.372-15.468 27.746-19.638 0 0 9.43-6.211 28.67-6.383H300v18.159h-52.937l-12.442 8.119h-.043l-54.355 38.358z" transform="matrix(1.33333 0 0 -1.33333 -1.3333333 331.02799)"/></svg>`
-});
-
-cxl.component({
-	name: 'uid-color',
-	attributes: [ 'label', 'color', 'text-color'],
-	bindings: '=color:style.inline(background-color) =text-color:style.inline(color)',
-	template: `
+	cxl.component({
+		name: 'uid-color',
+		attributes: ['label', 'color', 'text-color'],
+		bindings:
+			'=color:style.inline(background-color) =text-color:style.inline(color)',
+		template: `
 <cxl-t &="=label:text"></cxl-t>
 <cxl-t &="=color:text"></cxl-t>
 	`,
-	styles: {
-		$: { padding: 16 }
-	}
-});
+		styles: {
+			$: { padding: 16 }
+		}
+	});
 
-cxl.component({
-	name: 'uid-link',
-	attributes: ['tag'],
-	template: '<a style="color:var(--cxl-link)" &="=tag:#setHref"><code>&lt;<x &="=tag:text"></x>&gt;</code></a>'
-}, {
-	setHref(val, el) { el.href='#'+val; }
-});
+	cxl.component(
+		{
+			name: 'uid-link',
+			attributes: ['tag'],
+			template:
+				'<a style="color:var(--cxl-link)" &="=tag:#setHref"><code>&lt;<x &="=tag:text"></x>&gt;</code></a>'
+		},
+		{
+			setHref(val, el) {
+				el.href = '#' + val;
+			}
+		}
+	);
 
-cxl.component({
-	name: 'uid-theme',
-	template: `
+	cxl.component(
+		{
+			name: 'uid-theme',
+			template: `
 <cxl-card><cxl-table>
 	<cxl-th>Name</cxl-th>
 	<cxl-th>Default Value</cxl-th>
@@ -1574,21 +1590,21 @@ cxl.component({
 	</template>
 </cxl-table></cxl-card>
 	`,
-	initialize(state)
-	{
-		state.variables = cxl.css.appliedVariables;
-		state.meta = META['theme-variables'];
-	}
-}, {
-	getDescription(key)
-	{
-		return this.meta[key] ? this.meta[key].label : '';
-	}
-});
+			initialize(state) {
+				state.variables = cxl.css.appliedVariables;
+				state.meta = META['theme-variables'];
+			}
+		},
+		{
+			getDescription(key) {
+				return this.meta[key] ? this.meta[key].label : '';
+			}
+		}
+	);
 
-cxl.component({
-	name: 'uid-typography',
-	template: `
+	cxl.component({
+		name: 'uid-typography',
+		template: `
 <cxl-card>
 <cxl-table>
 
@@ -1608,26 +1624,25 @@ cxl.component({
 </cxl-card>
 	`,
 
-	initialize(state)
-	{
-	const
-		meta = cxl.css.typography,
-		styles = state.styles = [],
-		def = meta.default
-	;
-		cxl.each(meta, (s, key) => styles.push({
-			key: key || 'default',
-			weight: s.fontWeight || def.fontWeight,
-			size: s.fontSize || def.fontSize,
-			spacing: s.letterSpacing || def.letterSpacing
-		}));
-	}
-});
+		initialize(state) {
+			const meta = cxl.css.typography,
+				styles = (state.styles = []),
+				def = meta.default;
+			cxl.each(meta, (s, key) =>
+				styles.push({
+					key: key || 'default',
+					weight: s.fontWeight || def.fontWeight,
+					size: s.fontSize || def.fontSize,
+					spacing: s.letterSpacing || def.letterSpacing
+				})
+			);
+		}
+	});
 
-cxl.component({
-	name: 'uid-color-tool',
-	attributes: [ 'theme' ],
-	template: `
+	cxl.component({
+		name: 'uid-color-tool',
+		attributes: ['theme'],
+		template: `
 <ui-docs-color label="primary" &="=theme.primary:@color =theme.onPrimary:@text-color"></ui-docs-color>
 <ui-docs-color label="primaryLight" &="=theme.primaryLight:@color =theme.onPrimary:@text-color"></ui-docs-color>
 <ui-docs-color label="primaryDark" &="=theme.primaryDark:@color =theme.onPrimary:@text-color"></ui-docs-color>
@@ -1635,43 +1650,42 @@ cxl.component({
 <ui-docs-color label="surface" &="=theme.surface:@color =theme.onSurface:@text-color"></ui-docs-color>
 <ui-docs-color label="error" &="=theme.error:@color =theme.onError:@text-color"></ui-docs-color>
 	`
-});
+	});
 
-cxl.component({
-	name: 'uid-component-card',
-	extend: 'docs-component-card',
-	bindings: '=name:#getMeta'
-}, {
-	getMeta(name)
-	{
-		const meta = META[name];
-		if (!meta)
-			return;
-
-		this.icon = meta.icon;
-
-		if (meta.tags)
+	cxl.component(
 		{
-			const tags = this.tags = meta.tags.slice(0);
-			if (meta.added)
-				tags.push(meta.added);
-			if (meta.beta)
-				tags.push('beta');
+			name: 'uid-component-card',
+			extend: 'docs-component-card',
+			bindings: '=name:#getMeta'
+		},
+		{
+			getMeta(name) {
+				const meta = META[name];
+				if (!meta) return;
+
+				this.icon = meta.icon;
+
+				if (meta.tags) {
+					const tags = (this.tags = meta.tags.slice(0));
+					if (meta.added) tags.push(meta.added);
+					if (meta.beta) tags.push('beta');
+				}
+			}
 		}
-	}
-});
+	);
 
-cxl.route({
-	path: 'core',
-	title: 'Core Concepts',
-	template: `
+	cxl.route({
+		path: 'core',
+		title: 'Core Concepts',
+		template: `
 	`
-});
+	});
 
-cxl.route({
-	path: 'forms',
-	title: 'Forms',
-	template: `
+	cxl.route(
+		{
+			path: 'forms',
+			title: 'Forms',
+			template: `
 <cxl-t h4>Form Fields</cxl-t>
 <cxl-t h5>Anatomy</cxl-t>
 <docs-demo><!--
@@ -1877,23 +1891,25 @@ cxl.route({
 </cxl-form>
 --></docs-demo>
 	`,
-	styles: {
-		hover: { state: 'hover' }
-	}
-}, {
-	inputBaseAttributes: cxl.ui.InputBase.meta.attributes,
-	inputBaseEvents: cxl.ui.InputBase.meta.events,
-	onSubmit()
-	{
-		cxl.notify('Form successfully submitted');
-	}
-});
+			styles: {
+				hover: { state: 'hover' }
+			}
+		},
+		{
+			inputBaseAttributes: cxl.ui.InputBase.meta.attributes,
+			inputBaseEvents: cxl.ui.InputBase.meta.events,
+			onSubmit() {
+				cxl.notify('Form successfully submitted');
+			}
+		}
+	);
 
-cxl.route({
-	path: 'components',
-	title: 'Overview',
-	styles: STYLES,
-	template: `
+	cxl.route(
+		{
+			path: 'components',
+			title: 'Overview',
+			styles: STYLES,
+			template: `
 <cxl-t h5>Available Components</cxl-t>
 <cxl-search-input &="@value:=filter"></cxl-search-input>
 <br>
@@ -1905,40 +1921,42 @@ cxl.route({
 </template>
 </cxl-grid>
 	`
-},{
-	setKey(name, el)
-	{
-		const meta = META[name];
+		},
+		{
+			setKey(name, el) {
+				const meta = META[name];
 
-		el.dataset.key = name + (meta && meta.tags ? meta.tags.join(' ') : '');
-	},
-	match(val, el)
-	{
-		return !val || el.dataset.key.indexOf(val)!==-1;
-	},
+				el.dataset.key =
+					name + (meta && meta.tags ? meta.tags.join(' ') : '');
+			},
+			match(val, el) {
+				return !val || el.dataset.key.indexOf(val) !== -1;
+			},
 
-	components: COMPONENTS
-});
+			components: COMPONENTS
+		}
+	);
 
-component({
-	name: 'uid-attributes',
-	template: `
+	component({
+		name: 'uid-attributes',
+		template: `
 
 	`
-});
+	});
 
-component({
-	name: 'uid-mdn',
-	template: '<a &=".link content"></a>',
-	styles: {
-		link: { color: 'link' }
-	}
-});
+	component({
+		name: 'uid-mdn',
+		template: '<a &=".link content"></a>',
+		styles: {
+			link: { color: 'link' }
+		}
+	});
 
-component({
-	name: 'docs-attributes-table',
-	attributes: [ 'attributes' ],
-	template: `
+	component(
+		{
+			name: 'docs-attributes-table',
+			attributes: ['attributes'],
+			template: `
 <cxl-table>
 	<cxl-th>Name</cxl-th>
 	<cxl-th width="1fr">Description</cxl-th>
@@ -1948,19 +1966,21 @@ component({
 	</template>
 </cxl-table>
 	`,
-	styles: { $: { marginBottom: 32 } }
-}, {
-	getAttributeSummary(name)
-	{
-		const meta = META.attributes[name];
-		return meta && meta.summary || '';
-	}
-});
+			styles: { $: { marginBottom: 32 } }
+		},
+		{
+			getAttributeSummary(name) {
+				const meta = META.attributes[name];
+				return (meta && meta.summary) || '';
+			}
+		}
+	);
 
-component({
-	name: 'docs-events-table',
-	attributes: [ 'events' ],
-	template: `
+	component(
+		{
+			name: 'docs-events-table',
+			attributes: ['events'],
+			template: `
 <cxl-table>
 	<cxl-th>Name</cxl-th>
 	<cxl-th width="1fr">Description</cxl-th>
@@ -1970,19 +1990,21 @@ component({
 	</template>
 </cxl-table>
 	`,
-	styles: { $: { marginBottom: 32 } }
-}, {
-	getEventSummary(name)
-	{
-		const meta = META.events[name];
-		return meta && meta.summary || '';
-	}
-});
+			styles: { $: { marginBottom: 32 } }
+		},
+		{
+			getEventSummary(name) {
+				const meta = META.events[name];
+				return (meta && meta.summary) || '';
+			}
+		}
+	);
 
-component({
-	name: 'docs-component',
-	attributes: [ 'name' ],
-	template: `
+	component(
+		{
+			name: 'docs-component',
+			attributes: ['name'],
+			template: `
 <cxl-t h5>Basic Usage</cxl-t>
 <div &="content"></div>
 <br><br>
@@ -1991,10 +2013,10 @@ component({
 <div &="=role:show">
 	<cxl-t h6>Accessibility</cxl-t>
 	<ul>
-		<li>ARIA Role: <a &="=role:text:#getAriaLink:attribute(href)"></a></li>
+		<li>ARIA Role: <a style="color:var(--cxl-link)" &="=role:text:#getAriaLink:attribute(href)"></a></li>
 		<li &="=ariaStates:show">Properties:
 	<template &="=ariaStates:each:repeat">
-		<a &="item:text:#getAriaLink:attribute(href)"></a>
+		<a style="color:var(--cxl-link)" &="item:text:#getAriaLink:attribute(href)"></a>
 	</template>
 		</li>
 	</ul>
@@ -2036,76 +2058,77 @@ component({
 <div &="content(docs-method)"></div>
 <div &="content(docs-implementation)"></div>
 	`,
-	bindings: '=name:#initialize'
-}, {
-	initialize(name, host)
-	{
-	const
-		state = this,
-		component = cxl.componentFactory.components[name],
-		meta = component && component.meta || {},
-		view = cxl.dom(name).$view
-	;
-		state.instance = cxl.dom(name);
-		state.attributes = meta.attributes;
-		state.events = meta.events;
-		state.methods = meta.methods;
-		state.host = host;
+			bindings: '=name:#initialize'
+		},
+		{
+			initialize(name, host) {
+				const state = this,
+					component = cxl.componentFactory.components[name],
+					meta = (component && component.meta) || {},
+					view = cxl.dom(name).$view;
+				state.instance = cxl.dom(name);
+				state.attributes = meta.attributes;
+				state.events = meta.events;
+				state.methods = meta.methods;
+				state.host = host;
 
-		view.connect();
+				view.connect();
 
-		state.role = view.host.getAttribute('role');
-		this.processBindings(view);
-	},
+				state.role = view.host.getAttribute('role');
+				this.processBindings(view);
+			},
 
-	getMethodSummary(name)
-	{
-		const meta = META.methods[name];
-		return meta && meta.summary || '';
-	},
+			getMethodSummary(name) {
+				const meta = META.methods[name];
+				return (meta && meta.summary) || '';
+			},
 
-	getAriaLink(val)
-	{
-		return 'https://www.w3.org/TR/wai-aria-1.1/#' + val;
-	},
+			getAriaLink(val) {
+				return 'https://www.w3.org/TR/wai-aria-1.1/#' + val;
+			},
 
-	processBindings(view)
-	{
-		const anchors = [];
+			processBindings(view) {
+				const anchors = [];
 
-		view.bindings.forEach(b => {
-			if (b.anchor)
-				anchors.push(b);
-		});
+				view.bindings.forEach(b => {
+					if (b.anchor) anchors.push(b);
+				});
 
-		if (anchors.length) this.anchors = anchors;
-		if (view.$ariaStates) this.ariaStates = view.$ariaStates;
-	},
+				if (anchors.length) this.anchors = anchors;
+				if (view.$ariaStates) this.ariaStates = view.$ariaStates;
+			},
 
-	onAttributeClick()
-	{
-		cxl.dom.scrollTo(this.name);
-	}
-});
+			onAttributeClick() {
+				cxl.dom.scrollTo(this.name);
+			}
+		}
+	);
 
-component({
-	name: 'docs-footer',
-	template: `
+	component({
+		name: 'docs-footer',
+		template: `
 <div></div>
 <cxl-t subtitle>@cxl/ui v${cxl.version}</cxl-t>
 <cxl-hr></cxl-hr>
 <br>
 <cxl-t subtitle2>&copy; 2018</cxl-t>
 	`,
-	styles: {
-		$: { marginTop: 64, padding: 16, paddingTop: 32, paddingBottom: 32, backgroundColor: '#f1f3f4' },
-		$medium: { paddingLeft: 24, paddingRight: 24 }
-	}
-});
+		styles: {
+			$: {
+				marginTop: 64,
+				padding: 16,
+				paddingTop: 32,
+				paddingBottom: 32,
+				backgroundColor: '#f1f3f4'
+			},
+			$medium: { paddingLeft: 24, paddingRight: 24 }
+		}
+	});
 
-component({
-	name: 'docs-root',
-	template: `
+	component(
+		{
+			name: 'docs-root',
+			template: `
 <cxl-router-app>
 	<cxl-c pad16>
 		<cxl-t h6>@cxl/ui
@@ -2116,7 +2139,7 @@ component({
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
 	<cxl-hr></cxl-hr>
 	<cxl-c pad16><cxl-t subtitle2>Guides</cxl-t></cxl-c>
-	<!--cxl-item icon="puzzle" &="route.link(core)">Core Concepts</cxl-item-->
+	<!--cxl-item icon="puzzle-piece" &="route.link(core)">Core Concepts</cxl-item-->
 	<cxl-item icon="window-restore" &="route.link(forms)">Forms</cxl-item>
 	<cxl-item icon="palette" &="route.link(theming)">Styles</cxl-item>
 	<cxl-c pad16><cxl-t subtitle2>Components</cxl-t></cxl-c>
@@ -2129,17 +2152,18 @@ component({
 	</template>
 </cxl-router-app>
 	`
-}, {
-	components: COMPONENTS,
+		},
+		{
+			components: COMPONENTS,
 
-	getLabel(tag)
-	{
-		const meta = META[tag];
-		return meta && meta.beta ? 'beta' :
-			(cxl.componentFactory.components[tag].meta.deprecated ? 'deprecated' : cxl.Skip);
-	}
-
-
-});
-
+			getLabel(tag) {
+				const meta = META[tag];
+				return meta && meta.beta
+					? 'beta'
+					: cxl.componentFactory.components[tag].meta.deprecated
+					? 'deprecated'
+					: cxl.Skip;
+			}
+		}
+	);
 })(this.cxl);

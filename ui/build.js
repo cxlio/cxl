@@ -1,14 +1,11 @@
-
-const
-	header = () => `(cxl=>{"use strict";`,
-	footer = () => `})(exports?exports.cxl||(exports.cxl={}):window.cxl||(window.cxl={}))`,
-
+const header = () => `(cxl=>{"use strict";`,
+	footer = () =>
+		`})(exports?exports.cxl||(exports.cxl={}):window.cxl||(window.cxl={}))`,
 	template = [
 		'../template/src/core.js',
 		'../rx/index.js',
 		'../template/src/template.js'
 	],
-
 	ui = [
 		header,
 		'src/component.js',
@@ -20,19 +17,13 @@ const
 		'src/forms.js',
 		'src/time.js',
 		c => `cxl.ui.version="${c.package.version}";})(this.cxl);`
-	]
-;
-
+	];
 require('../build').build({
-
 	outputDir: 'dist',
 	targets: [
 		{
 			output: 'index.js',
-			src: [
-				...template,
-				...ui
-			],
+			src: [...template, ...ui],
 			minify: 'index.min.js'
 		},
 		{
@@ -47,42 +38,43 @@ require('../build').build({
 			]
 		},
 		{
+			output: 'theme-legacy.js',
+			src: ['src/theme-legacy.js'],
+			minify: 'theme-legacy.min.js'
+		},
+		{
 			output: 'validation.js',
-			src: [ 'src/validation.js' ],
+			src: ['src/validation.js'],
 			minify: 'validation.min.js'
 		},
 		{
 			output: 'router.js',
-			src: [ 'src/router.js' ],
+			src: ['src/router.js'],
 			minify: 'router.min.js'
 		},
 		{
 			output: 'router.dbg.js',
-			src: [
-				'src/router.js',
-				'src/router-debug.js'
-			]
+			src: ['src/router.js', 'src/router-debug.js']
 		},
 		{
 			output: 'LICENSE',
-			src: [ '../LICENSE' ]
+			src: ['../LICENSE']
 		},
 		{
 			output: 'package.json',
 			src: [
-				c => JSON.stringify({
-					name: "@cxl/ui",
-					version: c.package.version,
-					license: c.package.license,
-					files: "*.js",
-					main: "index.js",
-					homepage: c.package.homepage,
-					bugs: c.package.bugs,
-					repository: c.package.repository
-				})
+				c =>
+					JSON.stringify({
+						name: '@cxl/ui',
+						version: c.package.version,
+						license: c.package.license,
+						files: '*.js',
+						main: 'index.js',
+						homepage: c.package.homepage,
+						bugs: c.package.bugs,
+						repository: c.package.repository
+					})
 			]
 		}
 	]
-
-
 });

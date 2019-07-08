@@ -1,139 +1,138 @@
 (cxl => {
-"use strict";
+	'use strict';
 
-const
-	console = window.console,
-	debug = cxl.debug,
-	override = debug.override,
-	directives = cxl.compiler.directives,
-	warn = debug.warn,
-	dbg = debug.dbg
-;
+	const console = window.console,
+		debug = cxl.debug,
+		override = debug.override,
+		directives = cxl.compiler.directives,
+		warn = debug.warn,
+		dbg = debug.dbg;
+	var time;
 
-var
-	time
-;
-
-/*const ua = window.navigator.userAgent;
+	/*const ua = window.navigator.userAgent;
 const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
 const webkit = !!ua.match(/WebKit/i);
 const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);*/
 
-function error(e)
-{
-	console.error(e);
-}
-
-window.addEventListener('error', function(ev) {
-	error(ev.error);
-});
-
-cxl.Undefined.toString = () => '?';
-cxl.Skip.toString = () => 'Skip';
-
-cxl.directive('log', {
-	update(val) {
-		window.console.info('log: ' + this.value + ' ->', val);
+	function error(e) {
+		console.error(e);
+		throw e;
 	}
-});
 
-override(cxl.Anchor.prototype, '$create', function(name) {
-	if (cxl.anchor.anchors[name])
-		warn(`Anchor "${name}" already exists`);
-});
+	window.addEventListener('error', function(ev) {
+		error(ev.error);
+	});
 
-//
-// rx
-//
-override(cxl.rx.Subscriber.prototype, 'error', function(e) {
-	error(e);
-});
+	cxl.Undefined.toString = () => '?';
+	cxl.Skip.toString = () => 'Skip';
 
-//
-// Renderer
-//
-// Skip try..catch in debug mode
+	cxl.directive('log', {
+		update(val) {
+			window.console.info('log: ' + this.value + ' ->', val);
+		}
+	});
 
-const commitRequesters = [];
-let lastDigest = 0;
+	override(cxl.Anchor.prototype, '$create', function(name) {
+		if (cxl.anchor.anchors[name]) warn(`Anchor "${name}" already exists`);
+	});
 
-override(cxl.renderer, 'digest', function(view) {
-	commitRequesters.push(view);
-});
+	//
+	// rx
+	//
+	override(cxl.rx.Subscriber.prototype, 'error', function(e) {
+		error(e);
+	});
 
-cxl.renderer.digestBinding = cxl.renderer.$doDigest;
+	//
+	// Renderer
+	//
+	// Skip try..catch in debug mode
 
-override(cxl.renderer, 'commit', function() {
-	time = performance.now();
-}, function() {
+	const commitRequesters = [];
+	let lastDigest = 0;
 
-	time = performance.now() - time;
-	console.groupCollapsed(`[dom] Renderer#commit: ${commitRequesters.length} items. ${time}ms.`);
-	console.log('Pipeline', commitRequesters.concat());
-	console.groupEnd();
+	override(cxl.renderer, 'digest', function(view) {
+		commitRequesters.push(view);
+	});
 
-	lastDigest++;
-	commitRequesters.length = 0;
-});
-//
-// Directives
-//
-override(cxl.compiler, 'getDirective', null, function(res, parsed) {
-	const shortcut = parsed[2];
-	res.$$name = shortcut ? this.shortcuts[shortcut] : parsed[3];
-});
+	cxl.renderer.digestBinding = cxl.renderer.$doDigest;
 
-override(cxl.compiler, 'directiveNotFound', function(directive, element, owner) {
-	console.log(element, owner);
-});
+	override(
+		cxl.renderer,
+		'commit',
+		function() {
+			time = performance.now();
+		},
+		function() {
+			time = performance.now() - time;
+			console.groupCollapsed(
+				`[dom] Renderer#commit: ${
+					commitRequesters.length
+				} items. ${time}ms.`
+			);
+			console.log('Pipeline', commitRequesters.concat());
+			console.groupEnd();
 
-override(directives.style.prototype, 'update', function() {
-	if (this.element===this.owner.host)
-		throw new Error('Applying style to host element');
-});
+			lastDigest++;
+			commitRequesters.length = 0;
+		}
+	);
+	//
+	// Directives
+	//
+	override(cxl.compiler, 'getDirective', null, function(res, parsed) {
+		const shortcut = parsed[2];
+		res.$$name = shortcut ? this.shortcuts[shortcut] : parsed[3];
+	});
 
-override(cxl.dom, 'trigger', function(el, event) {
-	if (!el.$$meta)
-		return;
+	override(cxl.compiler, 'directiveNotFound', function(
+		directive,
+		element,
+		owner
+	) {
+		console.log(element, owner);
+	});
 
-	// Ignore Custom APIs
-	if (event.indexOf('.')!==-1)
-		return;
+	override(directives.style.prototype, 'update', function() {
+		if (this.element === this.owner.host)
+			throw new Error('Applying style to host element');
+	});
 
-	const events = el.$$meta.events;
+	override(cxl.dom, 'trigger', function(el, event) {
+		if (!el.$$meta) return;
 
-	if (!events || events.indexOf(event)===-1)
-		throw new Error('Event "' + event + '" not defined');
-});
+		// Ignore Custom APIs
+		if (event.indexOf('.') !== -1) return;
 
-directives.getset.prototype.initialize = function(el, param) {
-	if (param && !(param in el))
-	{
-		const msg = `Attribute "${param}" does not exist.`;
+		const events = el.$$meta.events;
 
-		if (el.$view)
-			throw new Error(msg);
-		else
-			warn(msg);
+		if (!events || events.indexOf(event) === -1)
+			throw new Error('Event "' + event + '" not defined');
+	});
 
-		dbg(el);
-	}
-};
+	directives.getset.prototype.initialize = function(el, param) {
+		if (param && !(param in el)) {
+			const msg = `Attribute "${param}" does not exist.`;
 
-//
-// View
-//
-override(cxl.View.prototype, 'connect', function() {
-	if (this.isConnected)
-		throw new Error("Trying to connect view twice");
-});
+			if (el.$view) throw new Error(msg);
+			else warn(msg);
 
-// DOM
-override(cxl.dom, 'query', function(el) {
-	if (!el.tagName)
-		throw new Error("First parameter must be a DOM element");
-});
+			dbg(el);
+		}
+	};
 
-debug.error = error;
+	//
+	// View
+	//
+	override(cxl.View.prototype, 'connect', function() {
+		if (this.isConnected) throw new Error('Trying to connect view twice');
+	});
 
+	// DOM
+	override(cxl.dom, 'query', function(el) {
+		if (!el.tagName)
+			throw new Error('First parameter must be a DOM element');
+	});
+
+	debug.error = error;
 })(this.cxl);

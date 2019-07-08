@@ -73,7 +73,7 @@ component({
 	<cxl-th>F</cxl-th>
 	<cxl-th>S</cxl-th>
 	<template &="=dates:marker.empty:each:repeat">
-	<cxl-calendar-date &="action:log:#onAction $date:|@value $disabled:@disabled $today:.today:filter:#setTodayEl =value:#isSelected:@selected"></cxl-calendar-date>
+	<cxl-calendar-date &="action:#onAction $date:|@value $disabled:@disabled $today:.today:filter:#setTodayEl =value:#isSelected:@selected"></cxl-calendar-date>
 	</template>
 </cxl-table>
 	`,
