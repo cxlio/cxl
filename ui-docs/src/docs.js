@@ -123,6 +123,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <cxl-button disabled>Disabled</cxl-button>
 --></docs-demo>
 
+<docs-attribute name="big">
+	<docs-demo><!--
+<cxl-button big>Big</cxl-button>
+<cxl-button big primary>Primary Big</cxl-button>
+<cxl-button flat big>Big Disabled</cxl-button>
+	--></docs-demo>
+</docs-attribute>
 <docs-attribute name="disabled">
 	<docs-demo><!--
 <cxl-button disabled>Disabled</cxl-button>
@@ -1635,7 +1642,32 @@ See <a href="react.html">Demo</a>.</p>
 		}
 	});
 
-	cxl.component({
+	component(
+		{
+			name: 'uid-component-tags',
+			attributes: ['name'],
+			bindings: '=name:#initialize',
+			template: `
+			<template &="=tags:each:repeat">
+				<cxl-chip &="item:text"></cxl-chip>
+			</template>
+			<br><br>
+		`
+		},
+		{
+			initialize(name) {
+				const meta = META[name];
+				if (!meta) return;
+
+				const tags = (this.tags = meta.tags ? meta.tags.slice(0) : []);
+
+				if (meta.added) tags.push(meta.added);
+				if (meta.beta) tags.push('beta');
+			}
+		}
+	);
+
+	component({
 		name: 'uid-color-tool',
 		attributes: ['theme'],
 		template: `
@@ -1661,11 +1693,10 @@ See <a href="react.html">Demo</a>.</p>
 
 				this.icon = meta.icon;
 
-				if (meta.tags) {
-					const tags = (this.tags = meta.tags.slice(0));
-					if (meta.added) tags.push(meta.added);
-					if (meta.beta) tags.push('beta');
-				}
+				const tags = meta.tags ? meta.tags.slice(0) : [];
+
+				if (meta.added) tags.push(meta.added);
+				if (meta.beta) tags.push('beta');
 			}
 		}
 	);
@@ -2001,6 +2032,7 @@ See <a href="react.html">Demo</a>.</p>
 			name: 'docs-component',
 			attributes: ['name'],
 			template: `
+<uid-component-tags &="=name:@name"></uid-component-tags>
 <cxl-t h5>Basic Usage</cxl-t>
 <div &="content"></div>
 <br><br>
@@ -2066,6 +2098,7 @@ See <a href="react.html">Demo</a>.</p>
 				state.attributes = meta.attributes;
 				state.events = meta.events;
 				state.methods = meta.methods;
+				state.deprecated = meta.deprecated;
 				state.host = host;
 
 				view.connect();

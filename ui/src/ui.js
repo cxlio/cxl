@@ -443,10 +443,11 @@ on(selectable.action):#onAction
 						userSelect: 'none',
 						backgroundColor: 'surface',
 						color: 'onSurface',
-						textAlign: 'center'
+						textAlign: 'center',
+						height: 36
 					},
 
-					$big: { padding: 16, font: 'h5' },
+					$big: { padding: 16, font: 'h5', height: 52 },
 					$flat: {
 						backgroundColor: 'surface',
 						elevation: 0,
@@ -757,7 +758,7 @@ on(selectable.action):#onAction
 			drawer$large$permanent: { translateX: 0, opacity: 1 },
 			drawer$visible: { translateX: 0, opacity: 1 },
 
-			backdrop: { width: 0, opacity: 0 },
+			backdrop: { width: 0, opacity: 0, position: 'fixed' },
 			backdrop$visible: { width: '100%', opacity: 1 },
 			backdrop$visible$permanent$large: { width: 0 },
 			backdrop$visible$right$large: { width: '100%' },
@@ -843,7 +844,8 @@ on(selectable.action):#onAction
 			styles: {
 				$: {
 					display: 'inline-block',
-					fontFamily: 'Font Awesome\\ 5 Free'
+					fontFamily: 'Font Awesome\\ 5 Free',
+					fontSize: 'inherit'
 				},
 				$round: {
 					borderRadius: '50%',

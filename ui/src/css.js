@@ -653,7 +653,8 @@
 					display: 'block',
 					reset: '-webkit-tap-highlight-color:transparent;',
 					fontFamily: 'var(--cxl-font)',
-					fontSize: 'var(--cxl-fontSize)'
+					fontSize: 'var(--cxl-fontSize)',
+					verticalAlign: 'middle'
 				},
 				'*': {
 					boxSizing: 'border-box',
