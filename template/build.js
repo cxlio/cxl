@@ -1,14 +1,5 @@
-
-const
-	SRC = [
-		'src/core.js',
-		'../rx/index.js',
-		'src/template.js'
-	]
-;
-
+const SRC = ['src/core.js', '../rx/index.js', 'src/dom.js', 'src/template.js'];
 require('../build').build({
-
 	outputDir: 'dist',
 	targets: [
 		{
@@ -18,8 +9,7 @@ require('../build').build({
 		},
 		{
 			output: 'cxl-template.dbg.js',
-			src: [ ...SRC, 'src/debug.js', 'src/template-debug.js' ]
+			src: [...SRC, 'src/debug.js', 'src/template-debug.js']
 		}
 	]
-
 });

@@ -3,6 +3,7 @@
 
 	const META = cxl.ui.meta,
 		component = cxl.component,
+		route = cxl.route,
 		STYLES = { $: { animation: 'fadeIn' } },
 		DEFS = {
 			appbar: {
@@ -114,6 +115,29 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-component>
 			`
 			},
+			badge: {
+				template: `
+<docs-component name="cxl-badge">
+	<docs-demo label="Icon buttons"><!--
+<cxl-button big flat>
+	<cxl-icon icon="envelope"></cxl-icon><cxl-badge top over>5</cxl-badge>
+</cxl-button>
+<cxl-button big flat>
+	<cxl-icon icon="shopping-cart"></cxl-icon><cxl-badge secondary top over>5</cxl-badge>
+</cxl-button>
+<cxl-button big flat>
+	<cxl-icon icon="exclamation-triangle"></cxl-icon><cxl-badge error top over>5</cxl-badge>
+</cxl-button>
+	--></docs-demo>
+	<docs-demo label="Tabs"><!--
+<cxl-tabs>
+	<cxl-tab active>Tab One <cxl-badge error top>10</cxl-badge></cxl-tab>
+	<cxl-tab>Tab Two</cxl-tab>
+	<cxl-tab>Tab Three</cxl-tab>
+</cxl-tabs>
+	--></docs-demo>
+</docs-component>`
+			},
 			button: {
 				template: `
 <docs-component name="cxl-button">
@@ -127,7 +151,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	<docs-demo><!--
 <cxl-button big>Big</cxl-button>
 <cxl-button big primary>Primary Big</cxl-button>
-<cxl-button flat big>Big Disabled</cxl-button>
+<cxl-button flat big disabled>Big Disabled</cxl-button>
 	--></docs-demo>
 </docs-attribute>
 <docs-attribute name="disabled">
@@ -1277,7 +1301,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			}
 		},
 		COMPONENTS = [];
-	cxl.route({
+	route({
 		id: 'home',
 		defaultRoute: true,
 		path: '*default',
@@ -1286,15 +1310,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 		template: `
 <style>a { color: var(--cxl-link) }</style>
 <cxl-grid columns="1fr 1fr" style="margin-top: 48px">
-	<cxl-c sm2 md1>
-		<cxl-t h4>
-			Web Components with a focus on accessibility and performance.
-		</cxl-t>
-		<br>
-	</cxl-c>
-	<cxl-c sm2 md1>
-<!--img alt="Image of @cxl/ui Applications" src="http://coaxialsoftware.com/images/slide-ui.png" style="margin:auto; display:block; max-width: 100%; " /-->
-	</cxl-c>
 
 	<cxl-c xs2><cxl-t h4>Features</cxl-t></cxl-c>
 
@@ -1344,7 +1359,7 @@ Components are easily styled via attributes and CSS variables. See <a href="#the
 	`
 	});
 
-	cxl.route({
+	route({
 		id: 'getting-started',
 		path: 'getting-started',
 		title: 'Getting Started',
@@ -1374,7 +1389,7 @@ Components are easily styled via attributes and CSS variables. See <a href="#the
 
 <docs-code type="javascript"><!--import "@cxl/ui";--></docs-code>
 <br>
-<cxl-t h5>Optional Modules</cxl-t>
+<cxl-t h5>Modules</cxl-t>
 <br>
 <cxl-t h6>@cxl/ui/debug.js</cxl-t>
 <p>Include this module to enable debug mode.</p>
@@ -1401,7 +1416,7 @@ See <a href="react.html">Demo</a>.</p>
 
 		COMPONENTS.push(path);
 
-		cxl.route(def);
+		route(def);
 	});
 
 	component(
@@ -1438,7 +1453,7 @@ See <a href="react.html">Demo</a>.</p>
 		}
 	);
 
-	cxl.route({
+	route({
 		path: 'theming',
 		title: 'Styles',
 		template: `
@@ -1480,7 +1495,7 @@ See <a href="react.html">Demo</a>.</p>
 		}
 	});
 
-	cxl.route({
+	route({
 		path: 'layout',
 		title: 'Layout',
 		template: `
@@ -1701,14 +1716,14 @@ See <a href="react.html">Demo</a>.</p>
 		}
 	);
 
-	cxl.route({
+	route({
 		path: 'core',
 		title: 'Core Concepts',
 		template: `
 	`
 	});
 
-	cxl.route(
+	route(
 		{
 			path: 'forms',
 			title: 'Forms',
@@ -1931,7 +1946,7 @@ See <a href="react.html">Demo</a>.</p>
 		}
 	);
 
-	cxl.route(
+	route(
 		{
 			path: 'components',
 			title: 'Overview',

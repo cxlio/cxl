@@ -413,6 +413,38 @@ on(selectable.action):#onAction
 		}
 	});
 
+	component({
+		name: 'cxl-badge',
+		attributes: ['secondary', 'error', 'over'],
+		styles: {
+			$: {
+				display: 'inline-block',
+				position: 'relative',
+				width: 22,
+				height: 22,
+				lineHeight: 22,
+				font: 'caption',
+				borderRadius: '50%',
+				color: 'onPrimary',
+				backgroundColor: 'primary'
+			},
+			$secondary: {
+				color: 'onSecondary',
+				backgroundColor: 'secondary'
+			},
+			$error: {
+				color: 'onError',
+				backgroundColor: 'error'
+			},
+			$top: {
+				translateY: -11
+			},
+			$over: {
+				marginLeft: -8
+			}
+		}
+	});
+
 	component(
 		{
 			name: 'cxl-button',
@@ -758,7 +790,11 @@ on(selectable.action):#onAction
 			drawer$large$permanent: { translateX: 0, opacity: 1 },
 			drawer$visible: { translateX: 0, opacity: 1 },
 
-			backdrop: { width: 0, opacity: 0, position: 'fixed' },
+			backdrop: {
+				width: 0,
+				opacity: 0,
+				position: 'fixed'
+			},
 			backdrop$visible: { width: '100%', opacity: 1 },
 			backdrop$visible$permanent$large: { width: 0 },
 			backdrop$visible$right$large: { width: '100%' },
@@ -862,10 +898,12 @@ on(selectable.action):#onAction
 				const icon = ui.icons[this.icon];
 
 				if (icon) {
-					if (this.iconNode) el.removeChild(this.iconNode);
-
-					this.iconNode = document.createTextNode(icon);
-					el.appendChild(this.iconNode);
+					if (this.iconNode) {
+						this.iconNode.data = icon;
+					} else {
+						this.iconNode = document.createTextNode(icon);
+						el.appendChild(this.iconNode);
+					}
 
 					if (!el.hasAttribute('alt'))
 						cxl.dom.setAttribute(el, 'alt', this.icon);

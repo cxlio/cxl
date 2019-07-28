@@ -2,7 +2,6 @@
 	'use strict';
 
 	const ANCHORS = {},
-		//TEMPLATES = {},
 		MAX_DIGEST = 9,
 		PARAM_REGEX = /\:([\w_\$]+)/g,
 		Undefined = {},
@@ -10,7 +9,9 @@
 		GETTERS = {},
 		SETTERS = {},
 		rx = cxl.rx,
+		dom = cxl.dom,
 		bindRegex = /\s*([:|])?([^\w])?([^\(:\s>"'=\|]+)(?:\(([^\)]+)\))?(:|\|)?/g;
+
 	class Renderer {
 		constructor() {
 			this.pipeline = [];
@@ -494,7 +495,7 @@
 			this.children = [];
 			this.element = element;
 			parent.insertBefore(this.node, element);
-			parent.removeChild(element);
+			dom.remove(element);
 			// TODO. Used by marker.empty directive
 			element.$marker = this;
 		}
@@ -1121,191 +1122,6 @@
 		}
 	});
 
-	function dom(el, attributes) {
-		var result = dom.createElement(el);
-
-		if (attributes) for (var i in attributes) result[i] = attributes[i];
-
-		return result;
-	}
-
-	function $$find(child, selector, first, next) {
-		var result;
-
-		while (child) {
-			if (selector(child)) return child;
-
-			if (child[first]) {
-				if ((result = $$find(child[first], selector))) return result;
-			}
-
-			child = child[next];
-		}
-
-		return null;
-	}
-
-	function $$findSelector(selector) {
-		if (typeof selector === 'string')
-			return item => item.matches && item.matches(selector);
-
-		return selector;
-	}
-
-	const EMPTY_NODE_REGEX = /\S/;
-
-	cxl.extend(dom, {
-		get root() {
-			return document.body;
-		},
-
-		createElement(name) {
-			return document.createElement(name);
-		},
-
-		empty(el) {
-			var c;
-			while ((c = el.childNodes[0])) el.removeChild(c);
-		},
-
-		find(el, selector) {
-			return $$find(
-				el.firstChild,
-				$$findSelector(selector),
-				'firstChild',
-				'nextSibling'
-			);
-		},
-
-		findNext(child, selector) {
-			return $$find(
-				child.nextSibling,
-				$$findSelector(selector),
-				'firstChild',
-				'nextSibling'
-			);
-		},
-
-		findPrevious(child, selector) {
-			return $$find(
-				child.previousSibling,
-				$$findSelector(selector),
-				'lastChild',
-				'previousSibling'
-			);
-		},
-
-		/**
-		 * Remove empty nodes
-		 * TODO Improve performance, or move it to build time.
-		 */
-		normalize(node) {
-			let child = node.firstChild;
-
-			while (child) {
-				const nodeType = child.nodeType;
-
-				if (nodeType === Node.COMMENT_NODE) node.removeChild(child);
-				else if (
-					nodeType === Node.TEXT_NODE &&
-					!EMPTY_NODE_REGEX.test(child.nodeValue)
-				)
-					node.removeChild(child);
-				else if (
-					nodeType === Node.ELEMENT_NODE &&
-					child.childNodes.length
-				)
-					dom.normalize(child);
-
-				child = child.nextSibling;
-			}
-
-			return node;
-		},
-
-		query(el, selector, result) {
-			var child = el.firstChild;
-			result = result || [];
-
-			while (child) {
-				if (child.matches && child.matches(selector))
-					result.push(child);
-
-				if (child.firstChild) dom.query(child, selector, result);
-
-				child = child.nextSibling;
-			}
-
-			return result;
-		},
-
-		setContent(el, content) {
-			dom.empty(el);
-			dom.insert(el, content);
-		},
-
-		on(element, event, handler, options) {
-			element.addEventListener(event, handler, options);
-			return element.removeEventListener.bind(
-				element,
-				event,
-				handler,
-				options
-			);
-		},
-
-		setAttribute(el, attr, val) {
-			if (val === false || val === null || val === undefined) val = null;
-			else if (val === true) val = '';
-			else val = val.toString();
-
-			if (val === null) el.removeAttribute(attr);
-			else el.setAttribute(attr, val);
-
-			return val;
-		},
-
-		text(content) {
-			return document.createTextNode(content);
-		},
-
-		insert(el, content) {
-			if (content === undefined || content === null) return;
-
-			if (!(content instanceof window.Node))
-				content = document.createTextNode(content);
-
-			el.appendChild(content);
-		},
-
-		isEmpty(el) {
-			return el.childNodes.length === 0;
-		},
-
-		removeChild(el, child) {
-			el.removeChild(child);
-		},
-
-		remove(child) {
-			if (Array.isArray(child))
-				return child.forEach(c => dom.removeChild(child.parentNode, c));
-
-			if (child.parentNode) dom.removeChild(child.parentNode, child);
-		},
-
-		setStyle(el, className, enable) {
-			el.classList[enable || enable === undefined ? 'add' : 'remove'](
-				className
-			);
-		},
-
-		trigger(el, event, detail) {
-			var ev = new window.Event(event, { bubbles: true });
-			ev.detail = detail;
-			el.dispatchEvent(ev);
-		}
-	});
-
 	directive('call', {
 		update(val, state) {
 			return state[this.parameter].call(state, val, this.element);
@@ -1357,7 +1173,6 @@
 		behavior: behavior,
 		compiler: compiler,
 		directive: directive,
-		dom: dom,
 
 		replaceParameters(path, params) {
 			if (params === null || params === undefined) return path;
@@ -1436,9 +1251,7 @@
 				GETTERS[expr] ||
 				(GETTERS[expr] =
 					expr.indexOf('.') === -1
-						? function(state) {
-								return state[expr];
-						  }
+						? state => state[expr]
 						: new Function(
 								'state',
 								`try{return(state.${expr});}catch(e){return null;}`
@@ -1461,9 +1274,7 @@
 				SETTERS[expr] ||
 				(SETTERS[expr] =
 					expr.indexOf('.') === -1
-						? function(val, state) {
-								state[expr] = val;
-						  }
+						? (val, state) => (state[expr] = val)
 						: new Function('val', 'state', `state.${expr}=val;`))
 			);
 		},

@@ -176,8 +176,10 @@
 					? this.executeRoute(Parent, args, instances)
 					: cxl.router.root,
 				instance = this.findRoute(id, args) || route.create(args);
-			if (instance && parent && instance.parentNode !== parent)
+
+			if (instance && parent && instance.parentNode !== parent) {
 				cxl.dom.setContent(parent, instance);
+			}
 
 			instances[id] = instance;
 
@@ -240,6 +242,7 @@
 				path = hash.slice(1),
 				route = cxl.router.findRouteDefinition(path),
 				args;
+
 			if (route) {
 				args =
 					route.path &&
@@ -253,8 +256,8 @@
 					route = cxl.router.routes[route.redirectTo];
 				}
 
-				cxl.router.href = path;
-				cxl.router.execute(route, args);
+				router.href = path;
+				router.execute(route, args);
 			}
 		}
 	});

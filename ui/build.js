@@ -4,6 +4,7 @@ const header = () => `(cxl=>{"use strict";`,
 	template = [
 		'../template/src/core.js',
 		'../rx/index.js',
+		'../template/src/dom.js',
 		'../template/src/template.js'
 	],
 	ui = [
@@ -22,10 +23,22 @@ require('../build').build({
 	outputDir: 'dist',
 	targets: [
 		{
+			output: 'core.js',
+			src: [
+				...template,
+				'src/component.js',
+				'src/css.js',
+				'src/shady.js',
+				'src/a11y.js',
+				'src/drag.js'
+			]
+		},
+		{
 			output: 'index.js',
 			src: [...template, ...ui],
 			minify: 'index.min.js'
 		},
+
 		{
 			output: 'debug.js',
 			src: [
