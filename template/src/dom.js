@@ -27,7 +27,7 @@
 	}
 
 	function dom(tagName, attr) {
-		const el = document.createElement(tagName);
+		const el = dom.createElement(tagName);
 
 		for (const i in attr) el[i] = attr[i];
 
@@ -35,6 +35,10 @@
 	}
 
 	cxl.dom = Object.assign(dom, {
+		createElement(tagName) {
+			return document.createElement(tagName);
+		},
+
 		empty(el) {
 			let c;
 			while ((c = el.childNodes[0])) el.removeChild(c);

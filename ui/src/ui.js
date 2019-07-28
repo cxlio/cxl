@@ -905,8 +905,8 @@ on(selectable.action):#onAction
 						el.appendChild(this.iconNode);
 					}
 
-					if (!el.hasAttribute('alt'))
-						cxl.dom.setAttribute(el, 'alt', this.icon);
+					if (!el.hasAttribute('aria-label'))
+						cxl.dom.setAttribute(el, 'aria-label', this.icon);
 				}
 			}
 		}
@@ -1455,77 +1455,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 			selected: false
 		}
 	);
-
-	component(
-		{
-			name: 'cxl-table',
-			attributes: ['columns'],
-			bindings: 'registable.host(table):=event =event:#updateColumns',
-			styles: {
-				$: { display: 'grid', overflowX: 'auto' }
-			}
-		},
-		{
-			event: Undefined,
-			columns: 0,
-			updateColumns(set, table) {
-				if (set) {
-					let columns = '';
-
-					for (let th of set) columns += (th.width || 'auto') + ' ';
-
-					this.columns = set.length;
-
-					table.style.gridTemplateColumns = columns;
-				}
-			}
-		}
-	);
-
-	component({
-		name: 'cxl-th',
-		attributes: ['width'],
-		bindings: 'registable(table) role(columnheader)',
-		styles: {
-			$: {
-				flexGrow: 1,
-				font: 'caption',
-				color: 'headerText',
-				paddingTop: 12,
-				paddingBottom: 12,
-				paddingLeft: 8,
-				paddingRight: 8,
-				borderBottom: '1px solid',
-				borderColor: 'divider',
-				lineHeight: 24
-			}
-		}
-	});
-
-	component({
-		name: 'cxl-td',
-		styles: {
-			$: {
-				paddingTop: 12,
-				paddingBottom: 12,
-				paddingLeft: 8,
-				paddingRight: 8,
-				flexGrow: 1,
-				borderBottom: '1px solid',
-				borderColor: 'divider'
-			},
-			$primary: { backgroundColor: 'primary', color: 'onPrimary' },
-			$secondary: { backgroundColor: 'secondary', color: 'onSecondary' }
-		}
-	});
-
-	component({
-		name: 'cxl-tr',
-		bindings: 'role(row)',
-		styles: {
-			$: { display: 'contents' }
-		}
-	});
 
 	component(
 		{

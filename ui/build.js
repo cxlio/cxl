@@ -15,6 +15,7 @@ const header = () => `(cxl=>{"use strict";`,
 		'src/a11y.js',
 		'src/drag.js',
 		'src/ui.js',
+		'src/table.js',
 		'src/forms.js',
 		'src/time.js',
 		c => `cxl.ui.version="${c.package.version}";})(this.cxl);`

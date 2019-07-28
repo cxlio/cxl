@@ -86,8 +86,9 @@
 	const COLORS = {
 		elevation: rgba(0, 0, 0, 0.26),
 		primary: rgba(0x15, 0x65, 0xc0),
+		// 0.14 opacity will pass accessibility contrast requirements
 		get primaryLight() {
-			return this.primary.alpha(0.18);
+			return this.primary.alpha(0.14);
 		},
 
 		secondary: rgba(0xf9, 0xaa, 0x33),

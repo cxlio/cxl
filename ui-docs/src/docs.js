@@ -1236,25 +1236,33 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-component name="cxl-table">
 	<docs-demo label="Basic Table"><!--
 <cxl-table>
-	<cxl-th width="100px">Header 1</cxl-th>
-	<cxl-th>Header 2</cxl-th>
-	<cxl-th>Header 3</cxl-th>
-	<cxl-th>Header 4</cxl-th>
+	<cxl-tr>
+		<cxl-th width="100px">Header 1</cxl-th>
+		<cxl-th>Header 2</cxl-th>
+		<cxl-th>Header 3</cxl-th>
+		<cxl-th>Header 4</cxl-th>
+	</cxl-tr>
 
-	<cxl-td>Cell 1</cxl-td>
-	<cxl-td>Cell 2</cxl-td>
-	<cxl-td>Cell 3</cxl-td>
-	<cxl-td>Cell 4</cxl-td>
+	<cxl-tr>
+		<cxl-td>Cell 1</cxl-td>
+		<cxl-td>Cell 2</cxl-td>
+		<cxl-td>Cell 3</cxl-td>
+		<cxl-td>Cell 4</cxl-td>
+	</cxl-tr>
 
-	<cxl-td>Cell 5</cxl-td>
-	<cxl-td>Cell 6</cxl-td>
-	<cxl-td>Cell 7</cxl-td>
-	<cxl-td>Cell 8</cxl-td>
+	<cxl-tr>
+		<cxl-td>Cell 5</cxl-td>
+		<cxl-td>Cell 6</cxl-td>
+		<cxl-td>Cell 7</cxl-td>
+		<cxl-td>Cell 8</cxl-td>
+	</cxl-tr>
 
-	<cxl-td>Cell 9</cxl-td>
-	<cxl-td>Cell 10</cxl-td>
-	<cxl-td>Cell 11</cxl-td>
-	<cxl-td>Cell 12</cxl-td>
+	<cxl-tr>
+		<cxl-td>Cell 9</cxl-td>
+		<cxl-td>Cell 10</cxl-td>
+		<cxl-td>Cell 11</cxl-td>
+		<cxl-td>Cell 12</cxl-td>
+	</cxl-tr>
 </cxl-table>
 	--></docs-demo>
 </docs-component>
@@ -2108,8 +2116,10 @@ See <a href="react.html">Demo</a>.</p>
 				const state = this,
 					component = cxl.componentFactory.components[name],
 					meta = (component && component.meta) || {},
-					view = cxl.dom(name).$view;
-				state.instance = cxl.dom(name);
+					instance = (state.instance = cxl.dom(name)),
+					view = instance.$view;
+
+				state.instance = instance;
 				state.attributes = meta.attributes;
 				state.events = meta.events;
 				state.methods = meta.methods;
