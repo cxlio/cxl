@@ -1,26 +1,30 @@
 <html>
-<head>
-	<title>cxl - Test Suite</title>
-	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.0.css" />
-</head>
-<body>
-	<div id="qunit"></div>
-	<div id="qunit-fixture"></div>
-	<script src="https://code.jquery.com/qunit/qunit-2.6.0.js"></script>
+	<head>
+		<title>cxl - Test Suite</title>
+		<link
+			rel="stylesheet"
+			href="https://code.jquery.com/qunit/qunit-2.6.0.css"
+		/>
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+		<script src="https://code.jquery.com/qunit/qunit-2.6.0.js"></script>
 
-	<script>
-		if (location.search.indexOf('?shady')===0)
-			window.$$cxlShady = true;
-	</script>
-	<script src="../ui/dist/debug.js"></script>
-	<script src="../ui/dist/cxl-router.dbg.js"></script>
+		<script>
+			if (location.search.indexOf('?shady') === 0)
+				window.$$cxlShady = true;
+		</script>
+		<script src="../ui/dist/debug.js"></script>
+		<script src="../ui/dist/router.dbg.js"></script>
 
-	<!-- TESTS -->
-	<script src="template.js"></script>
-	<script src="rx.js"></script>
-	<script src="component.js"></script>
-	<script src="ui.js"></script>
-	<script src="css.js"></script>
-	<script src="shady.js"></script>
-</body>
+		<!-- TESTS -->
+		<script src="mock.js"></script>
+		<script src="template.js"></script>
+		<script src="rx.js"></script>
+		<script src="component.js"></script>
+		<script src="ui.js"></script>
+		<script src="css.js"></script>
+		<script src="shady.js"></script>
+	</body>
 </html>

@@ -712,6 +712,17 @@
 		'style',
 		{
 			update(val) {
+				if (!this.parameter) {
+					if (this.oldValue !== val)
+						dom.setStyle(
+							this.element,
+							this.oldValue,
+							false,
+							this.prefix
+						);
+					this.oldValue = val;
+				}
+
 				dom.setStyle(
 					this.element,
 					this.parameter || val,
@@ -1054,6 +1065,34 @@
 		}
 	});
 
+	directive('action.disable', {
+		disable() {
+			if (this.bindings) {
+				this.bindings.forEach(b => b.destroy());
+				this.bindings = null;
+			}
+		},
+
+		update(val) {
+			if (!val) return this.disable();
+
+			const el = this.element;
+
+			function onKey(ev) {
+				if (
+					(el.tagName !== 'A' && ev.key === 'Enter') ||
+					ev.key === ' '
+				)
+					dom.event.stop(ev);
+			}
+
+			this.bindings = [
+				new EventListener(el, 'click', dom.event.stop, true),
+				new EventListener(el, 'keyup', onKey, true)
+			];
+		}
+	});
+
 	class Anchor {
 		$create(name, el) {
 			this.name = name;
@@ -1234,14 +1273,6 @@
 			return (
 				str && str.replace(cxl.ENTITIES_REGEX, e => cxl.ENTITIES_MAP[e])
 			);
-		},
-
-		event: {
-			halt(ev) {
-				ev.preventDefault();
-				ev.stopPropagation();
-				ev.stopImmediatePropagation();
-			}
 		},
 
 		/** Returns a getter function with a state parameter */
@@ -1445,6 +1476,10 @@
 			return val !== undefined && val !== null && val !== false;
 		},
 
+		data(val) {
+			this.element.dataset[this.parameter] = val;
+		},
+
 		empty() {
 			cxl.dom.empty(this.element);
 		},
@@ -1461,7 +1496,7 @@
 			ev.stopPropagation();
 		},
 
-		'event.halt': cxl.event.halt,
+		'event.halt': dom.event.halt,
 
 		filter(val) {
 			return val || cxl.Skip;
@@ -1477,7 +1512,7 @@
 
 		'focus.gate'(ev, state) {
 			if (!state[this.parameter]) {
-				cxl.event.halt(ev);
+				dom.event.halt(ev);
 				return Skip;
 			}
 		},

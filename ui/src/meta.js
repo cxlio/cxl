@@ -158,6 +158,12 @@
 			icon: 'capsules',
 			tags: ['indicator']
 		},
+		'cxl-datatable': {
+			icon: 'table',
+			beta: true,
+			added: '2.0.2',
+			tags: ['table']
+		},
 		'cxl-datepicker': {
 			icon: 'calendar',
 			beta: true,

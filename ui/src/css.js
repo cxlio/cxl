@@ -298,6 +298,15 @@
 			this.$transform();
 		}
 
+		set rotate(val) {
+			this.$value.rotate = val;
+			this.$transform();
+		}
+
+		get rotate() {
+			return this.$value.rotate;
+		}
+
 		get translateX() {
 			return this.$value.translateX;
 		}
@@ -353,7 +362,8 @@
 					  ',' +
 					  (v.scaleY === undefined ? 1 : v.scaleY) +
 					  ')'
-					: '');
+					: '') +
+				(v.rotate !== undefined ? 'rotate(' + v.rotate + ')' : '');
 		}
 
 		$toCSS() {

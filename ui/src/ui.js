@@ -189,9 +189,8 @@
 	behavior(
 		'focusable',
 		`
-	@disabled:aria.prop(disabled):not:focus.enable
-	focusable.events
-`
+		@disabled:=disabled:aria.prop(disabled):action.disable:not:focus.enable
+		focusable.events`
 	);
 	behavior(
 		'selectable',
@@ -454,8 +453,7 @@ on(selectable.action):#onAction
 				'flat',
 				'secondary',
 				'touched',
-				'big',
-				'value'
+				'big'
 			],
 			bindings: 'focusable ripple role(button) action:#onAction',
 			styles: [
@@ -498,6 +496,7 @@ on(selectable.action):#onAction
 						backgroundColor: 'secondary',
 						color: 'onSecondary'
 					},
+					$round: { borderRadius: '50%' },
 
 					$active: { elevation: 3 },
 					$active$disabled: { elevation: 1 },

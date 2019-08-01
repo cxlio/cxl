@@ -325,6 +325,66 @@ Checked: <span &="=test:text"></span>
 </docs-component>
 			`
 			},
+			datatable: {
+				template: `
+<docs-component name="cxl-datatable">
+	<docs-demo &="owner:@owner"><!--
+<cxl-datatable>
+	<cxl-tr>
+		<cxl-th checkbox></cxl-th>
+		<cxl-th sortable>Dessert (100g serving)</cxl-th>
+		<cxl-th sortable>Calories</cxl-th>
+		<cxl-th sortable>Fat (g)</cxl-th>
+		<cxl-th sortable>Carbs (g)</cxl-th>
+		<cxl-th sortable>Protein (g)</cxl-th>
+	</cxl-tr>
+	<template &="=paginatedData:marker.empty:each:repeat">
+	<cxl-tr>
+		<cxl-td-checkbox></cxl-td-checkbox>
+		<cxl-td &="$name:text"></cxl-td>
+		<cxl-td &="$calories:text"></cxl-td>
+		<cxl-td &="$fat:text"></cxl-td>
+		<cxl-td &="$carbs:text"></cxl-td>
+		<cxl-td &="$protein:text"></cxl-td>
+	</cxl-tr>
+	</template>
+</cxl-datatable>
+<cxl-pagination &="=data:@data @paginatedData:=paginatedData"></cxl-pagination>
+	--></docs-demo>
+</docs-component>
+				`,
+				initialize(state) {
+					let counter;
+
+					function createData(name, calories, fat, carbs, protein) {
+						counter += 1;
+						return {
+							id: counter,
+							name,
+							calories,
+							fat,
+							carbs,
+							protein
+						};
+					}
+
+					state.data = [
+						createData('Cupcake', 305, 3.7, 67, 4.3),
+						createData('Donut', 452, 25.0, 51, 4.9),
+						createData('Eclair', 262, 16.0, 24, 6.0),
+						createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+						createData('Gingerbread', 356, 16.0, 49, 3.9),
+						createData('Honeycomb', 408, 3.2, 87, 6.5),
+						createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+						createData('Jelly Bean', 375, 0.0, 94, 0.0),
+						createData('KitKat', 518, 26.0, 65, 7.0),
+						createData('Lollipop', 392, 0.2, 98, 0.0),
+						createData('Marshmallow', 318, 0, 81, 2.0),
+						createData('Nougat', 360, 19.0, 9, 37.0),
+						createData('Oreo', 437, 18.0, 63, 4.0)
+					];
+				}
+			},
 			datepicker: {
 				template: `
 <docs-component name="cxl-datepicker">
@@ -1605,14 +1665,17 @@ See <a href="react.html">Demo</a>.</p>
 		{
 			name: 'uid-theme',
 			template: `
-<cxl-card><cxl-table>
+<cxl-card><cxl-table><cxl-tr>
 	<cxl-th>Name</cxl-th>
 	<cxl-th>Default Value</cxl-th>
 	<cxl-th>Description</cxl-th>
+	</cxl-tr>
 	<template &="=variables:item.each:repeat">
+	<cxl-tr>
 		<cxl-td>--cxl-<span &="$key:text"></span></cxl-td>
 		<cxl-td &="$value:text"></cxl-td>
 		<cxl-td &="$key:#getDescription:text"></cxl-td>
+	</cxl-tr>
 	</template>
 </cxl-table></cxl-card>
 	`,
@@ -1633,17 +1696,20 @@ See <a href="react.html">Demo</a>.</p>
 		template: `
 <cxl-card>
 <cxl-table>
-
+	<cxl-tr>
 	<cxl-th>Scale</cxl-th>
 	<cxl-th>Weight</cxl-th>
 	<cxl-th>Size</cxl-th>
 	<cxl-th>Spacing</cxl-th>
+	</cxl-tr>
 
 	<template &="=styles:each:repeat">
+	<cxl-tr>
 	<cxl-td><cxl-t &="$key:text:attribute" style="margin-bottom: 0"></cxl-t></cxl-td>
 	<cxl-td &="$weight:text"></cxl-td>
 	<cxl-td &="$size:text"></cxl-td>
 	<cxl-td &="$spacing:text"></cxl-td>
+	</cxl-tr>
 	</template>
 
 </cxl-table>
@@ -2008,11 +2074,15 @@ See <a href="react.html">Demo</a>.</p>
 			attributes: ['attributes'],
 			template: `
 <cxl-table>
+	<cxl-tr>
 	<cxl-th>Name</cxl-th>
 	<cxl-th width="1fr">Description</cxl-th>
+	</cxl-tr>
 	<template &="=attributes:sort:each:repeat">
-	<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
-	<cxl-td &="item:#getAttributeSummary:text"></cxl-td>
+	<cxl-tr>
+		<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
+		<cxl-td &="item:#getAttributeSummary:text"></cxl-td>
+	</cxl-tr>
 	</template>
 </cxl-table>
 	`,
@@ -2032,11 +2102,15 @@ See <a href="react.html">Demo</a>.</p>
 			attributes: ['events'],
 			template: `
 <cxl-table>
-	<cxl-th>Name</cxl-th>
-	<cxl-th width="1fr">Description</cxl-th>
+	<cxl-tr>
+		<cxl-th>Name</cxl-th>
+		<cxl-th width="1fr">Description</cxl-th>
+	</cxl-tr>
 	<template &="=events:sort:each:repeat">
-	<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
-	<cxl-td &="item:#getEventSummary:text"></cxl-td>
+	<cxl-tr>
+		<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
+		<cxl-td &="item:#getEventSummary:text"></cxl-td>
+	</cxl-tr>
 	</template>
 </cxl-table>
 	`,
@@ -2095,11 +2169,15 @@ See <a href="react.html">Demo</a>.</p>
 	<br>
 	<cxl-t h6>Methods</cxl-t>
 	<cxl-table>
-		<cxl-th>Name</cxl-th>
-		<cxl-th width="1fr">Description</cxl-th>
+		<cxl-tr>
+			<cxl-th>Name</cxl-th>
+			<cxl-th width="1fr">Description</cxl-th>
+		</cxl-tr>
 		<template &="=methods:sort:each:repeat">
-		<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
-		<cxl-td &="item:#getMethodSummary:text"></cxl-td>
+		<cxl-tr>
+			<cxl-td><docs-link style="margin-right: 16px" &="item:text:@anchor"></docs-link></cxl-td>
+			<cxl-td &="item:#getMethodSummary:text"></cxl-td>
+		</cxl-tr>
 		</template>
 	</cxl-table>
 </div>

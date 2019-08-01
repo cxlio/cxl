@@ -1206,6 +1206,7 @@ role(textbox) aria.prop(multiline) keypress(enter):event.stop focusable.events
 
 	component({
 		name: 'cxl-field-control',
+		events: ['change'],
 		attributes: [
 			'value',
 			'invalid',

@@ -348,16 +348,21 @@
 			bindings: 'route.change:#render',
 			template: `
 <x &=".responsive">
-	<a &=".link =href4:attribute(href) =title4:show:text"></a> <x &=".link =title4:show">&gt;</x>
-	<a &=".link =href3:attribute(href) =title3:show:text"></a> <x &=".link =title3:show">&gt;</x>
-	<a &=".link =href2:attribute(href) =title2:show:text"></a> <x &=".link =title2:show">&gt;</x>
-	<a &=".link =href1:attribute(href) =title1:show:text"></a> <x &=".link =title1:show">&gt;</x>
+	<a &=".link =href4:attribute(href) =title4:show:text"></a><x &=".link =title4:show">&gt;</x>
+	<a &=".link =href3:attribute(href) =title3:show:text"></a><x &=".link =title3:show">&gt;</x>
+	<a &=".link =href2:attribute(href) =title2:show:text"></a><x &=".link =title2:show">&gt;</x>
+	<a &=".link =href1:attribute(href) =title1:show:text"></a><x &=".link =title1:show">&gt;</x>
 </x>
 <a &=".link =href0:attribute(href) =title0:text"></a>
 	`,
 			styles: {
 				$: { lineHeight: 22, flexGrow: 1 },
-				link: { textDecoration: 'none', color: 'onPrimary' },
+				link: {
+					display: 'inline-block',
+					textDecoration: 'none',
+					color: 'onPrimary',
+					marginRight: 4
+				},
 				responsive: { display: 'none' },
 				responsive$medium: { display: 'inline-block' }
 			}

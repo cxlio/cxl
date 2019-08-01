@@ -1,13 +1,9 @@
-
-
 QUnit.test('EventListener', function(a) {
-var
-	A = cxl.dom('INPUT'),
-	done = a.async(),
-	un = new cxl.EventListener(A, 'test', function(e) {
-		a.ok(!e);
-	})
-;
+	var A = cxl.dom('INPUT'),
+		done = a.async(),
+		un = new cxl.EventListener(A, 'test', function(e) {
+			a.ok(!e);
+		});
 	un.destroy();
 	cxl.dom.trigger(A, 'test');
 
@@ -20,19 +16,15 @@ var
 });
 
 QUnit.test('insert() - Text', function(a) {
-var
-	A = cxl.dom('SPAN')
-;
-	cxl.dom.insert(A, "Hello World and <b>HTML</b>");
-	a.equal(A.innerHTML, "Hello World and &lt;b&gt;HTML&lt;/b&gt;");
+	var A = cxl.dom('SPAN');
+	cxl.dom.insert(A, 'Hello World and <b>HTML</b>');
+	a.equal(A.innerHTML, 'Hello World and &lt;b&gt;HTML&lt;/b&gt;');
 	a.equal(A.childNodes.length, 1);
-
 });
 
 QUnit.module('component');
 
 QUnit.test('name - Register a Component', function(a) {
-
 	cxl.component({ name: 'cxl-test' }, function() {
 		this.test = 123;
 	});
@@ -53,9 +45,11 @@ QUnit.test('name - Register a Component', function(a) {
 QUnit.test('template', function(a) {
 	var id = 'cxl-test' + a.test.testId;
 
-	cxl.component({
-		name: id,
-		template: '<h1 &="=test:text"></h1>' },
+	cxl.component(
+		{
+			name: id,
+			template: '<h1 &="=test:text"></h1>'
+		},
 		{ test: 123 }
 	);
 
@@ -64,15 +58,12 @@ QUnit.test('template', function(a) {
 });
 
 QUnit.test('templateId', function(a) {
-const
-	fromId = cxl.Template.fromId,
-	name = 'cxl-' + a.test.testId
-;
-
-	cxl.Template.fromId = function(id)
-	{
-		return id==='template1' ? new cxl.Template('<div &="=test:text"></div>') :
-			fromId(id);
+	const fromId = cxl.Template.fromId,
+		name = 'cxl-' + a.test.testId;
+	cxl.Template.fromId = function(id) {
+		return id === 'template1'
+			? new cxl.Template('<div &="=test:text"></div>')
+			: fromId(id);
 	};
 
 	cxl.component({
@@ -89,27 +80,27 @@ const
 });
 
 QUnit.test('attributes', function(a) {
-
 	const name = 'cxl-' + a.test.testId;
 
 	cxl.component({
 		name: name,
-		attributes: [ 'test' ]
+		attributes: ['test']
 	});
 
-	var comp = $$compile('<' + name + ' &="id(A)" test="String"></' + name + '>');
+	var comp = $$compile(
+		'<' + name + ' &="id(A)" test="String"></' + name + '>'
+	);
 
 	a.ok(comp.state.A.hasAttribute('test'));
 	a.equal(comp.state.A.test, 'String');
 });
 
 QUnit.test('attributes - parent', function(a) {
-
 	const name = 'cxl-' + a.test.testId;
 
 	cxl.component({
 		name: name,
-		attributes: [ 'test' ]
+		attributes: ['test']
 	});
 
 	var comp = $$compile('<' + name + ' &="id(A)" test="123">');
@@ -119,39 +110,42 @@ QUnit.test('attributes - parent', function(a) {
 	a.equal(comp.state.A.test, 123);
 
 	comp = $$compile('<' + name + ' &="id(A) =test:@test">', {
-		test: "Hello World"
+		test: 'Hello World'
 	});
 
 	a.equal(comp.state.A.test, 'Hello World');
 });
 
 QUnit.test('bindings', function(a) {
-
 	const name = 'cxl-' + a.test.testId;
 
-	cxl.component({
-		name: name,
-		template: '<div &="id(A) =test:text =test:@test2">'
-	}, { test: 123 });
+	cxl.component(
+		{
+			name: name,
+			template: '<div &="id(A) =test:text =test:@test2">'
+		},
+		{ test: 123 }
+	);
 
-	const C = cxl.dom(name), A = C.$view.state.A;
+	const C = cxl.dom(name),
+		A = C.$view.state.A;
 
 	$$render(C.$view);
 	a.equal(A.firstChild.data, '123');
 	a.equal(A.test2, 123);
-
 });
 
 QUnit.test('empty()', function(a) {
-
 	cxl.component({
 		name: 'cxl-demo'
 	});
 
-	var comp = $$compile('<cxl-demo &="id(A)"><div>Hello</div> <b>World</b></cxl-demo>');
+	var comp = $$compile(
+		'<cxl-demo &="id(A)"><div>Hello</div> <b>World</b></cxl-demo>'
+	);
 	var A = comp.state.A;
 
-	a.equal(A.childNodes.length, 3);
+	a.equal(A.childNodes.length, 2);
 	cxl.dom.empty(A);
 	a.equal(A.childNodes.length, 0);
 	A.appendChild(cxl.dom('cxl-demo'));
@@ -159,11 +153,9 @@ QUnit.test('empty()', function(a) {
 	a.equal(A.childNodes.length, 2);
 	cxl.dom.empty(A);
 	a.equal(A.childNodes.length, 0);
-
 });
 
 QUnit.test('parent - catch all content slot', function(a) {
-
 	var name = a.test.testId;
 
 	cxl.component({
@@ -171,7 +163,10 @@ QUnit.test('parent - catch all content slot', function(a) {
 		template: '<div &="content"></div>'
 	});
 
-	var A = cxl.dom('cxl-' + name), B, C, D;
+	var A = cxl.dom('cxl-' + name),
+		B,
+		C,
+		D;
 
 	B = A.shadowRoot.firstChild;
 	D = cxl.dom('B');
@@ -189,7 +184,6 @@ QUnit.test('parent - catch all content slot', function(a) {
 });
 
 QUnit.test('parent - named content slot', function(a) {
-
 	var name = a.test.testId;
 
 	cxl.component({
@@ -197,7 +191,10 @@ QUnit.test('parent - named content slot', function(a) {
 		template: '<div &="content(b)"></div>'
 	});
 
-	var A = cxl.dom('cxl-' + name), B, C, D;
+	var A = cxl.dom('cxl-' + name),
+		B,
+		C,
+		D;
 
 	B = A.shadowRoot.firstChild;
 	D = cxl.dom('B');
@@ -215,7 +212,6 @@ QUnit.test('parent - named content slot', function(a) {
 });
 
 QUnit.test('parent - multiple content slots', function(a) {
-
 	var name = a.test.testId;
 
 	cxl.component({
@@ -223,7 +219,10 @@ QUnit.test('parent - multiple content slots', function(a) {
 		template: '<div &="content(b)"></div><span &="content"></span>'
 	});
 
-	var A = cxl.dom('cxl-' + name), B, C, D;
+	var A = cxl.dom('cxl-' + name),
+		B,
+		C,
+		D;
 
 	B = A.shadowRoot.firstChild;
 	C = A.shadowRoot.childNodes[1];
@@ -249,13 +248,9 @@ QUnit.test('parent - multiple content slots', function(a) {
 });
 
 QUnit.test('parent - multiple level component', function(a) {
-
-	const
-		P = 'cxl-' + a.test.testId,
+	const P = 'cxl-' + a.test.testId,
 		C1 = P + '-child1',
-		C2 = P + '-child2'
-	;
-
+		C2 = P + '-child2';
 	cxl.component({
 		name: C2,
 		template: '<div &="content"></div>'
@@ -328,21 +323,18 @@ QUnit.test('parent - multiple level component', function(a) {
 });
 
 QUnit.test('removeChild()', function(a) {
-
 	const name = 'cxl-' + a.test.testId;
 
 	cxl.component({
 		name: name
 	});
 
-	var A = $$compile('<' +name+ ' &="id(A)"><div>Hello</div> <b>World</b></' + name +'>').state.A;
+	var A = $$compile(
+		'<' + name + ' &="id(A)"><div>Hello</div> <b>World</b></' + name + '>'
+	).state.A;
 
-	a.equal(A.childNodes.length, 3);
-	A.firstChild.parentNode.removeChild(A.firstChild);
 	a.equal(A.childNodes.length, 2);
-	a.equal(A.firstChild.data, ' ');
-	A.removeChild(A.firstChild);
-	a.equal(A.childNodes.length, 1);
+	A.firstChild.parentNode.removeChild(A.firstChild);
 	a.equal(A.firstChild.tagName, 'B');
 	A.removeChild(A.firstChild);
 
@@ -355,17 +347,13 @@ QUnit.test('removeChild()', function(a) {
 	B.parentNode.removeChild(B);
 	a.equal(A.childNodes.length, 1);
 	a.ok(!B.parentNode);
-	A.removeChild(B = A.firstChild);
+	A.removeChild((B = A.firstChild));
 	a.ok(!B.parentNode);
 });
 
 QUnit.test('empty() - child components', function(a) {
-
-	const
-		parent = 'cxl-' + a.test.testId,
-		child = parent + '-child'
-	;
-
+	const parent = 'cxl-' + a.test.testId,
+		child = parent + '-child';
 	cxl.component({
 		name: child,
 		template: '<div &="content"></div>'
@@ -393,7 +381,6 @@ QUnit.test('empty() - child components', function(a) {
 });
 
 QUnit.test('empty - multiple content slots', function(a) {
-
 	var name = a.test.testId;
 
 	cxl.component({
@@ -401,12 +388,9 @@ QUnit.test('empty - multiple content slots', function(a) {
 		template: '<div &="content(b)"></div><span &="content"></span>'
 	});
 
-	var
-		A = cxl.dom('cxl-' + name),
+	var A = cxl.dom('cxl-' + name),
 		child1 = cxl.dom('B'),
-		child2 = cxl.dom('SPAN')
-	;
-
+		child2 = cxl.dom('SPAN');
 	cxl.dom.insert(A, child1);
 	cxl.dom.insert(A, child2);
 	a.equal(A.childNodes.length, 2);
@@ -419,139 +403,192 @@ QUnit.test('empty - multiple content slots', function(a) {
 });
 
 QUnit.test('Initialize Order', function(a) {
-var
-	i = 0,
-	done = a.async(),
-	nameA = $$tagName(),
-	nameB = $$tagName(),
-	nameC = $$tagName(),
-	A = cxl.component({
-		name: nameA,
-		template: '<div></div>',
-		initialize() { a.equal(i++, 2); done(); }}),
-	B = cxl.component({
-		name: nameB,
-		template: `<${nameA}>`,
-		initialize() { a.equal(i++, 1); }
-	}),
-	C = cxl.component({
-		name: nameC,
-		template: `<${nameB}>`,
-		initialize() { a.equal(i++, 0); }
-	}),
-	view = $$compile(`<${nameC}>`)
-;
-
+	var i = 0,
+		done = a.async(),
+		nameA = $$tagName(),
+		nameB = $$tagName(),
+		nameC = $$tagName(),
+		A = cxl.component({
+			name: nameA,
+			template: '<div></div>',
+			initialize() {
+				a.equal(i++, 2);
+				done();
+			}
+		}),
+		B = cxl.component({
+			name: nameB,
+			template: `<${nameA}>`,
+			initialize() {
+				a.equal(i++, 1);
+			}
+		}),
+		C = cxl.component({
+			name: nameC,
+			template: `<${nameB}>`,
+			initialize() {
+				a.equal(i++, 0);
+			}
+		}),
+		view = $$compile(`<${nameC}>`);
 });
 
 QUnit.test('Digest Order', function(a) {
-var
-	i = 0,
-	done = a.async(),
-	nameA = $$tagName(),
-	nameB = $$tagName(),
-	nameC = $$tagName(),
-	A = cxl.component({ name: nameA, template: '<div &="=test:#third"></div>'}, {
-		third() { a.equal(i++, 0, 'Digest First'); }
-	}),
-	B = cxl.component({ name: nameB, template: `<${nameA} &="=test:#second">` }, {
-		second() { a.equal(i++, 1, 'Digest Second'); }
-	}),
-	C = cxl.component({ name: nameC, template: `<${nameB} &="=test:#first">` }, {
-		first() { a.equal(i++, 2, 'Digest Third'); done(); }
-	}),
-	view = $$compile(`<${nameC}>`)
-;
+	var i = 0,
+		done = a.async(),
+		nameA = $$tagName(),
+		nameB = $$tagName(),
+		nameC = $$tagName(),
+		A = cxl.component(
+			{ name: nameA, template: '<div &="=test:#third"></div>' },
+			{
+				third() {
+					a.equal(i++, 0, 'Digest First');
+				}
+			}
+		),
+		B = cxl.component(
+			{ name: nameB, template: `<${nameA} &="=test:#second">` },
+			{
+				second() {
+					a.equal(i++, 1, 'Digest Second');
+				}
+			}
+		),
+		C = cxl.component(
+			{ name: nameC, template: `<${nameB} &="=test:#first">` },
+			{
+				first() {
+					a.equal(i++, 2, 'Digest Third');
+					done();
+				}
+			}
+		),
+		view = $$compile(`<${nameC}>`);
 });
 
 QUnit.test('Connect Order', function(a) {
-var
-	i = 0,
-	done = a.async(),
-	nameA = $$tagName(),
-	nameB = $$tagName(),
-	nameC = $$tagName(),
-	A = cxl.component({
-			name: nameA,
-			template: '<div></div>',
-			bindings: 'connect:#connect'
-		}, {
-			connect() { a.equal(i++, 2); done(); }
-		}),
-	B = cxl.component({
-			name: nameB,
-			bindings: 'connect:#connect',
-			template: `<${nameA}>`
-		}, {
-			connect() { a.equal(i++, 1); }
-		}),
-	C = cxl.component({
-			name: nameC,
-			bindings: 'connect:#connect',
-			template: `<${nameB}>`
-		}, {
-			connect() { a.equal(i++, 0); }
-		}),
-	view = $$compile(`<${nameC}>`)
-;
+	var i = 0,
+		done = a.async(),
+		nameA = $$tagName(),
+		nameB = $$tagName(),
+		nameC = $$tagName(),
+		A = cxl.component(
+			{
+				name: nameA,
+				template: '<div></div>',
+				bindings: 'connect:#connect'
+			},
+			{
+				connect() {
+					a.equal(i++, 2);
+					done();
+				}
+			}
+		),
+		B = cxl.component(
+			{
+				name: nameB,
+				bindings: 'connect:#connect',
+				template: `<${nameA}>`
+			},
+			{
+				connect() {
+					a.equal(i++, 1);
+				}
+			}
+		),
+		C = cxl.component(
+			{
+				name: nameC,
+				bindings: 'connect:#connect',
+				template: `<${nameB}>`
+			},
+			{
+				connect() {
+					a.equal(i++, 0);
+				}
+			}
+		),
+		view = $$compile(`<${nameC}>`);
 });
 
 QUnit.test('Disconnect Order', function(a) {
-var
-	i = 0,
-	done = a.async(),
-	nameA = $$tagName(),
-	nameB = $$tagName(),
-	nameC = $$tagName(),
-	A = cxl.component({
-			name: nameA,
-			template: '<div></div>',
-			bindings: 'disconnect:#disconnect'
-		}, {
-			disconnect() { a.equal(i++, 2); done(); }
-		}),
-	B = cxl.component({
-			name: nameB,
-			template: `<${nameA}>`,
-			bindings: 'disconnect:#disconnect'
-		}, {
-			disconnect() { a.equal(i++, 1); }
-		}),
-	C = cxl.component({
-			name: nameC,
-			template: `<${nameB}>`,
-			bindings: 'disconnect:#disconnect'
-		}, {
-			disconnect() { a.equal(i++, 0); }
-		}),
-	view = $$compile(`<${nameC}>`)
-;
+	var i = 0,
+		done = a.async(),
+		nameA = $$tagName(),
+		nameB = $$tagName(),
+		nameC = $$tagName(),
+		A = cxl.component(
+			{
+				name: nameA,
+				template: '<div></div>',
+				bindings: 'disconnect:#disconnect'
+			},
+			{
+				disconnect() {
+					a.equal(i++, 2);
+					done();
+				}
+			}
+		),
+		B = cxl.component(
+			{
+				name: nameB,
+				template: `<${nameA}>`,
+				bindings: 'disconnect:#disconnect'
+			},
+			{
+				disconnect() {
+					a.equal(i++, 1);
+				}
+			}
+		),
+		C = cxl.component(
+			{
+				name: nameC,
+				template: `<${nameB}>`,
+				bindings: 'disconnect:#disconnect'
+			},
+			{
+				disconnect() {
+					a.equal(i++, 0);
+				}
+			}
+		),
+		view = $$compile(`<${nameC}>`);
 	dom.remove(view.host);
 });
 
 QUnit.test('Lifecycle Order', function(a) {
-var
-	i = 0,
-	done = a.async(),
-	name = $$tagName(),
-	A = cxl.component({
-		name: name,
-		attributes: [ 'test' ],
-		bindings: 'connect:#connect disconnect:#disconnect',
-		template: '<div &="=test:#digest"></div>',
-		initialize() { a.equal(i++, 0, 'Initialize'); }
-	}, {
-		test: false,
-		connect() {
-			a.equal(i++, 2, 'Connect');
-		},
-		disconnect() { a.equal(i, 3, 'Disconnect'); done(); },
-		digest() {
-			a.equal(this.test, 'value', 'Attributes set before digest');
-			a.equal(i++, 1, 'Digest');
-		}
-	}),
-	view = $$compile(`<${name} test="value">`)
-;
+	var i = 0,
+		done = a.async(),
+		name = $$tagName(),
+		A = cxl.component(
+			{
+				name: name,
+				attributes: ['test'],
+				bindings: 'connect:#connect disconnect:#disconnect',
+				template: '<div &="=test:#digest"></div>',
+				initialize() {
+					a.equal(i++, 0, 'Initialize');
+				}
+			},
+			{
+				test: false,
+				connect() {
+					a.equal(i++, 2, 'Connect');
+				},
+				disconnect() {
+					a.equal(i, 3, 'Disconnect');
+					done();
+				},
+				digest() {
+					a.equal(this.test, 'value', 'Attributes set before digest');
+					a.equal(i++, 1, 'Digest');
+				}
+			}
+		),
+		view = $$compile(`<${name} test="value">`);
 	dom.remove(view.host);
 });

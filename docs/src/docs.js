@@ -153,12 +153,14 @@
 <div &=".showMore">
 	<a href="#" &=".link action:#toggleSource:event.prevent"><cxl-icon icon="code"></cxl-icon> <x &="=sourceLabel:text"></x></a>
 </div>
-<docs-code &="=displaySource:show =source:@source"></docs-code>
+<docs-code &=".source =displaySource:.show =source:@source"></docs-code>
 `,
 
 			styles: {
 				$: { marginTop: 24, marginBottom: 24 },
 				showMore: { textAlign: 'right', marginTop: 16 },
+				source: { transformOrigin: 'top', scaleY: 0, height: 0 },
+				show: { scaleY: 1, height: 'auto' },
 				link: {
 					color: 'primary',
 					textDecoration: 'none',

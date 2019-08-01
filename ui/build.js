@@ -7,19 +7,22 @@ const header = () => `(cxl=>{"use strict";`,
 		'../template/src/dom.js',
 		'../template/src/template.js'
 	],
-	ui = [
+	core = [
 		header,
 		'src/component.js',
 		'src/css.js',
 		'src/shady.js',
 		'src/a11y.js',
-		'src/drag.js',
+		'src/drag.js'
+	],
+	ui = [
 		'src/ui.js',
 		'src/table.js',
 		'src/forms.js',
 		'src/time.js',
 		c => `cxl.ui.version="${c.package.version}";})(this.cxl);`
 	];
+
 require('../build').build({
 	outputDir: 'dist',
 	targets: [
@@ -36,7 +39,7 @@ require('../build').build({
 		},
 		{
 			output: 'index.js',
-			src: [...template, ...ui],
+			src: [...template, ...core, ...ui],
 			minify: 'index.min.js'
 		},
 
@@ -46,8 +49,9 @@ require('../build').build({
 				...template,
 				'../template/src/debug.js',
 				'../template/src/template-debug.js',
-				...ui,
+				...core,
 				'src/ui-debug.js',
+				...ui,
 				'src/meta.js'
 			]
 		},

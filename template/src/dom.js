@@ -44,6 +44,17 @@
 			while ((c = el.childNodes[0])) el.removeChild(c);
 		},
 
+		event: {
+			stop(ev) {
+				ev.stopPropagation();
+				ev.stopImmediatePropagation();
+			},
+			halt(ev) {
+				ev.preventDefault();
+				dom.event.stop();
+			}
+		},
+
 		find(el, selector) {
 			return $$find(
 				el.firstChild,
