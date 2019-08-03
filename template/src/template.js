@@ -1066,30 +1066,8 @@
 	});
 
 	directive('action.disable', {
-		disable() {
-			if (this.bindings) {
-				this.bindings.forEach(b => b.destroy());
-				this.bindings = null;
-			}
-		},
-
 		update(val) {
-			if (!val) return this.disable();
-
-			const el = this.element;
-
-			function onKey(ev) {
-				if (
-					(el.tagName !== 'A' && ev.key === 'Enter') ||
-					ev.key === ' '
-				)
-					dom.event.stop(ev);
-			}
-
-			this.bindings = [
-				new EventListener(el, 'click', dom.event.stop, true),
-				new EventListener(el, 'keyup', onKey, true)
-			];
+			this.element.style.pointerEvents = val ? 'none' : '';
 		}
 	});
 

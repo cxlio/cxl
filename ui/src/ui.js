@@ -47,7 +47,9 @@
 			focusCircle$disabled: { scaleX: 0, scaleY: 0 }
 		},
 		DisabledCSS = {
-			$disabled: { cursor: 'default', state: 'disabled' },
+			$disabled: {
+				state: 'disabled'
+			},
 			$active$disabled: { state: 'disabled' },
 			$hover$disabled: { state: 'disabled' }
 		};
@@ -189,7 +191,7 @@
 	behavior(
 		'focusable',
 		`
-		@disabled:=disabled:aria.prop(disabled):action.disable:not:focus.enable
+		@disabled:=disabled:aria.prop(disabled):not:focus.enable
 		focusable.events`
 	);
 	behavior(
@@ -444,76 +446,66 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component(
-		{
-			name: 'cxl-button',
-			attributes: [
-				'disabled',
-				'primary',
-				'flat',
-				'secondary',
-				'touched',
-				'big'
-			],
-			bindings: 'focusable ripple role(button) action:#onAction',
-			styles: [
-				FocusCSS,
-				{
-					$: {
-						elevation: 1,
-						paddingTop: 8,
-						paddingBottom: 8,
-						paddingRight: 16,
-						paddingLeft: 16,
-						cursor: 'pointer',
-						display: 'inline-block',
-						position: 'relative',
-						font: 'button',
-						borderRadius: 2,
-						userSelect: 'none',
-						backgroundColor: 'surface',
-						color: 'onSurface',
-						textAlign: 'center',
-						height: 36
-					},
-
-					$big: { padding: 16, font: 'h5', height: 52 },
-					$flat: {
-						backgroundColor: 'surface',
-						elevation: 0,
-						fontWeight: 500,
-						paddingRight: 8,
-						paddingLeft: 8,
-						color: 'link'
-					},
-					$flat$large: { paddingLeft: 12, paddingRight: 12 },
-
-					$primary: {
-						backgroundColor: 'primary',
-						color: 'onPrimary'
-					},
-					$secondary: {
-						backgroundColor: 'secondary',
-						color: 'onSecondary'
-					},
-					$round: { borderRadius: '50%' },
-
-					$active: { elevation: 3 },
-					$active$disabled: { elevation: 1 },
-					$active$flat$disabled: { elevation: 0 }
+	component({
+		name: 'cxl-button',
+		attributes: [
+			'disabled',
+			'primary',
+			'flat',
+			'secondary',
+			'touched',
+			'big'
+		],
+		bindings: 'focusable ripple role(button)',
+		styles: [
+			FocusCSS,
+			{
+				$: {
+					elevation: 1,
+					paddingTop: 8,
+					paddingBottom: 8,
+					paddingRight: 16,
+					paddingLeft: 16,
+					cursor: 'pointer',
+					display: 'inline-block',
+					position: 'relative',
+					font: 'button',
+					borderRadius: 2,
+					userSelect: 'none',
+					backgroundColor: 'surface',
+					color: 'onSurface',
+					textAlign: 'center',
+					height: 36
 				},
-				DisabledCSS
-			]
-		},
-		{
-			onAction(ev) {
-				if (this.disabled) {
-					ev.stopPropagation();
-					ev.stopImmediatePropagation();
-				}
-			}
-		}
-	);
+
+				$big: { padding: 16, font: 'h5', height: 52 },
+				$flat: {
+					backgroundColor: 'surface',
+					elevation: 0,
+					fontWeight: 500,
+					paddingRight: 8,
+					paddingLeft: 8,
+					color: 'link'
+				},
+				$flat$large: { paddingLeft: 12, paddingRight: 12 },
+
+				$primary: {
+					backgroundColor: 'primary',
+					color: 'onPrimary'
+				},
+				$secondary: {
+					backgroundColor: 'secondary',
+					color: 'onSecondary'
+				},
+				$round: { borderRadius: '50%' },
+
+				$active: { elevation: 3 },
+				$active$disabled: { elevation: 1 },
+				$active$flat$disabled: { elevation: 0 }
+			},
+			DisabledCSS
+		]
+	});
 
 	component({
 		name: 'cxl-c',
@@ -631,7 +623,8 @@ on(selectable.action):#onAction
 						cursor: 'pointer'
 					}
 				},
-				FocusCSS
+				FocusCSS,
+				DisabledCSS
 			]
 		},
 		{
@@ -828,7 +821,8 @@ on(selectable.action):#onAction
 				$focus: { elevation: 4 },
 				$small: { top: 28, bottom: '' }
 			},
-			FocusCSS
+			FocusCSS,
+			DisabledCSS
 		]
 	});
 
@@ -946,6 +940,7 @@ focusable ripple role(listitem)
 			prefix('link', FocusCSS),
 			{
 				$: { cursor: 'pointer', position: 'relative' },
+				$disabled: { pointerEvents: 'none' },
 				'link:focus': { outline: 0 },
 				link: {
 					color: 'onSurface',
@@ -1056,7 +1051,8 @@ action:#show:event.stop
 role(button)
 	`,
 			styles: {
-				popup: { height: 0, elevation: 5, position: 'absolute' }
+				popup: { height: 0, elevation: 5, position: 'absolute' },
+				$disabled: { pointerEvents: 'none' }
 			}
 		},
 		{
@@ -1113,23 +1109,26 @@ role(button)
 			bindings: `
 id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show:event.stop role(button)
 	`,
-			styles: {
-				icon: {
-					cursor: 'pointer',
-					width: 8
+			styles: [
+				{
+					icon: {
+						cursor: 'pointer',
+						width: 8
+					},
+					menuControl: {
+						position: 'absolute',
+						transformOrigin: 'right top',
+						textAlign: 'left',
+						right: 0
+					},
+					menu: {
+						height: 0,
+						textAlign: 'right',
+						elevation: 5
+					}
 				},
-				menuControl: {
-					position: 'absolute',
-					transformOrigin: 'right top',
-					textAlign: 'left',
-					right: 0
-				},
-				menu: {
-					height: 0,
-					textAlign: 'right',
-					elevation: 5
-				}
-			}
+				DisabledCSS
+			]
 		},
 		{
 			icon: 'ellipsis-v',
@@ -1446,7 +1445,8 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 						display: 'block'
 					}
 				},
-				FocusCSS
+				FocusCSS,
+				DisabledCSS
 			]
 		},
 		{

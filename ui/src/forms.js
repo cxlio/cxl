@@ -743,6 +743,7 @@ disconnect:#unregister
 	`,
 			styles: {
 				$: { cursor: 'pointer', flexGrow: 1, position: 'relative' },
+				$disabled: { pointerEvents: 'none' },
 				$focus: { outline: 0 },
 				icon: {
 					position: 'absolute',

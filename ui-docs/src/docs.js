@@ -2076,7 +2076,7 @@ See <a href="react.html">Demo</a>.</p>
 <cxl-table>
 	<cxl-tr>
 	<cxl-th>Name</cxl-th>
-	<cxl-th width="1fr">Description</cxl-th>
+	<cxl-th width="100%">Description</cxl-th>
 	</cxl-tr>
 	<template &="=attributes:sort:each:repeat">
 	<cxl-tr>
@@ -2104,7 +2104,7 @@ See <a href="react.html">Demo</a>.</p>
 <cxl-table>
 	<cxl-tr>
 		<cxl-th>Name</cxl-th>
-		<cxl-th width="1fr">Description</cxl-th>
+		<cxl-th width="100%">Description</cxl-th>
 	</cxl-tr>
 	<template &="=events:sort:each:repeat">
 	<cxl-tr>
@@ -2171,7 +2171,7 @@ See <a href="react.html">Demo</a>.</p>
 	<cxl-table>
 		<cxl-tr>
 			<cxl-th>Name</cxl-th>
-			<cxl-th width="1fr">Description</cxl-th>
+			<cxl-th width="100%">Description</cxl-th>
 		</cxl-tr>
 		<template &="=methods:sort:each:repeat">
 		<cxl-tr>
