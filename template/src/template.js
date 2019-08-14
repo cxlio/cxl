@@ -1065,12 +1065,6 @@
 		}
 	});
 
-	directive('action.disable', {
-		update(val) {
-			this.element.style.pointerEvents = val ? 'none' : '';
-		}
-	});
-
 	class Anchor {
 		$create(name, el) {
 			this.name = name;
@@ -1458,6 +1452,12 @@
 			this.element.dataset[this.parameter] = val;
 		},
 
+		delay(val) {
+			return new Promise(resolve => {
+				setTimeout(() => resolve(val), this.parameter);
+			});
+		},
+
 		empty() {
 			cxl.dom.empty(this.element);
 		},
@@ -1510,6 +1510,14 @@
 
 		insert(value) {
 			dom.insert(this.element, value);
+		},
+
+		len(value) {
+			return Array.isArray(value)
+				? value.length
+				: value instanceof Set
+				? value.size
+				: 0;
 		},
 
 		'list.loading'(event) {

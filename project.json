@@ -2,17 +2,27 @@
 	"watch": {
 		"rules": {
 			"template": {
-				"files": [ "template/src/*", "template/build.js" ],
+				"files": ["template/src/*", "template/build.js"],
 				"tasks": "cd template && npm run build"
 			},
 
+			"store": {
+				"files": ["store/index.ts", "store/tsconfig.json"],
+				"tasks": "cd store && npm run build"
+			},
+
+			"store-test": {
+				"files": ["store/test.ts"],
+				"tasks": "cd store && npm test"
+			},
+
 			"diff": {
-				"files": [ "diff/src/*.js" ],
+				"files": ["diff/src/*.js"],
 				"tasks": "node diff/build"
 			},
 
 			"icons": {
-				"files": [ "ui/build-icons.js" ],
+				"files": ["ui/build-icons.js"],
 				"tasks": "node ui/build-icons"
 			},
 
@@ -28,17 +38,17 @@
 			},
 
 			"fb": {
-				"files": [ "fb/src/*", "fb/build.js" ],
+				"files": ["fb/src/*", "fb/build.js"],
 				"tasks": "node fb/build"
 			},
 
 			"docs": {
-				"files": [ "docs/src/*", "docs/build.js" ],
+				"files": ["docs/src/*", "docs/build.js"],
 				"tasks": "cd docs && node build"
 			},
 
 			"ui-docs": {
-				"files": [ "ui-docs/src/*", "ui-docs/build.js" ],
+				"files": ["ui-docs/src/*", "ui-docs/build.js"],
 				"tasks": "node ui-docs/build"
 			}
 		}

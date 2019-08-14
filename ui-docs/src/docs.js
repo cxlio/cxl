@@ -283,6 +283,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <docs-demo><!--
 <cxl-checkbox>Checkbox Label</cxl-checkbox>
 <cxl-checkbox checked>Checkbox Label</cxl-checkbox>
+<cxl-checkbox indeterminate>Checkbox Indeterminate</cxl-checkbox>
+<cxl-checkbox indeterminate checked>Checkbox Checked Indeterminate</cxl-checkbox>
 --></docs-demo>
 <docs-attribute name="disabled">
 	<docs-demo><!--
@@ -329,27 +331,33 @@ Checked: <span &="=test:text"></span>
 				template: `
 <docs-component name="cxl-datatable">
 	<docs-demo &="owner:@owner"><!--
-<cxl-datatable>
-	<cxl-tr>
-		<cxl-th checkbox></cxl-th>
-		<cxl-th sortable>Dessert (100g serving)</cxl-th>
-		<cxl-th sortable>Calories</cxl-th>
-		<cxl-th sortable>Fat (g)</cxl-th>
-		<cxl-th sortable>Carbs (g)</cxl-th>
-		<cxl-th sortable>Protein (g)</cxl-th>
-	</cxl-tr>
-	<template &="=paginatedData:marker.empty:each:repeat">
-	<cxl-tr>
-		<cxl-td-checkbox></cxl-td-checkbox>
-		<cxl-td &="$name:text"></cxl-td>
-		<cxl-td &="$calories:text"></cxl-td>
-		<cxl-td &="$fat:text"></cxl-td>
-		<cxl-td &="$carbs:text"></cxl-td>
-		<cxl-td &="$protein:text"></cxl-td>
-	</cxl-tr>
-	</template>
-</cxl-datatable>
-<cxl-pagination &="=data:@data @paginatedData:=paginatedData"></cxl-pagination>
+<cxl-card>
+
+	<cxl-datatable &="=data:@data @value:=displayData @selected:=selected">
+		<cxl-table-header>Nutrition</cxl-table-header>
+		<cxl-table-selected &="=selected:@selected">
+			<cxl-button flat><cxl-icon icon="trash"></cxl-icon></cxl-button>
+		</cxl-table-selected>
+		<cxl-tr>
+			<cxl-th-checkbox></cxl-th-checkbox>
+			<cxl-th sortable="name">Dessert (100g serving)</cxl-th>
+			<cxl-th sortable="calories">Calories</cxl-th>
+			<cxl-th sortable="fat">Fat (g)</cxl-th>
+			<cxl-th sortable="carbs">Carbs (g)</cxl-th>
+			<cxl-th sortable="protein">Protein (g)</cxl-th>
+		</cxl-tr>
+		<template &="=displayData:marker.empty:each:repeat">
+		<cxl-tr>
+			<cxl-td-checkbox &="item:@data"></cxl-td-checkbox>
+			<cxl-td &="$name:text"></cxl-td>
+			<cxl-td &="$calories:text"></cxl-td>
+			<cxl-td &="$fat:text"></cxl-td>
+			<cxl-td &="$carbs:text"></cxl-td>
+			<cxl-td &="$protein:text"></cxl-td>
+		</cxl-tr>
+		</template>
+	</cxl-datatable>
+</cxl-card>
 	--></docs-demo>
 </docs-component>
 				`,

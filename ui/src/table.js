@@ -37,12 +37,12 @@
 	component(
 		{
 			name: 'cxl-th',
-			events: ['table.sort'],
-			attributes: ['width', 'sortable', 'sort'],
+			events: ['datatable.sort'],
+			attributes: ['width', 'sortable', 'sortOrder'],
 			bindings:
-				'role(columnheader) =width:style.inline(width) action:#onAction',
+				'role(columnheader) =width:style.inline(width) action:#onAction =sortable:bool:attribute(sort)',
 			template: `
-	<cxl-icon &="=sortable:show .sortIcon =sort:style:host.trigger(table.sort)" icon="arrow-up"></cxl-icon><span &="content"></span>
+	<cxl-icon &="=sortable:.sortable .sortIcon =sortOrder:style:host.trigger(datatable.sort)" icon="arrow-up"></cxl-icon><span &="content"></span>
 			`,
 			styles: {
 				$: {
@@ -58,17 +58,16 @@
 					borderColor: 'divider',
 					lineHeight: 24
 				},
-				$sortable: { cursor: 'pointer' },
 				sortIcon: {
 					display: 'none',
-					marginLeft: -16,
+					marginLeft: -18,
 					marginRight: 8,
 					scaleY: 0,
 					scaleX: 0
 				},
-				sortIcon$sortable: {
-					display: 'inline-block'
-				},
+				$sort: { cursor: 'pointer' },
+				$sort$hover: { color: 'onSurface' },
+				sortIcon$sort: { display: 'inline-block' },
 				asc: { rotate: 0, scaleX: 1, scaleY: 1 },
 				desc: {
 					rotate: '180deg',
@@ -78,11 +77,11 @@
 			}
 		},
 		{
-			sort: 'none',
+			sortOrder: 'none',
 
 			toggleSort() {
-				const sort = this.sort;
-				this.sort =
+				const sort = this.sortOrder;
+				this.sortOrder =
 					sort === 'asc' ? 'desc' : sort === 'desc' ? 'none' : 'asc';
 			},
 			onAction() {
@@ -105,47 +104,205 @@
 				borderBottom: '1px solid',
 				borderColor: 'divider'
 			},
+			$firstChild: { paddingLeft: 16 },
+			$lastChild: { paddingRight: 16 },
 			$primary: { backgroundColor: 'primary', color: 'onPrimary' },
 			$secondary: { backgroundColor: 'secondary', color: 'onSecondary' }
 		}
 	});
 
 	component({
-		name: 'cxl-tr',
-		bindings: 'role(row)',
+		name: 'cxl-td-checkbox',
+		extend: 'cxl-td',
+		attributes: ['data', 'checked'],
+		bindings:
+			'=checked:host.trigger(datatable.select) registable(datatable.checkbox)',
 		styles: {
-			$: { display: 'table-row' }
+			$: { width: 48 },
+			checkbox: { paddingTop: 0, paddingBottom: 0 }
+		},
+		template: `<cxl-checkbox &=".checkbox @checked::=checked"></cxl-checkbox>`
+	});
+
+	component(
+		{
+			name: 'cxl-th-checkbox',
+			extend: 'cxl-td',
+			attributes: ['checked'],
+			bindings: 'registable(datatable.checkboxAll)',
+			styles: {
+				$: { width: 48 },
+				checkbox: { paddingTop: 0, paddingBottom: 0 }
+			},
+			template: `<cxl-checkbox &=".checkbox @checked:=checked =checked:#onChecked action:#onAction:delay(50):host.trigger(datatable.selectAll)"></cxl-checkbox>`
+		},
+		{
+			onAction(ev, el) {
+				if (this.checked === null && el.checked === false)
+					this.checked = false;
+			},
+			onChecked(val, el) {
+				el.indeterminate = val === null;
+				return val === null ? cxl.Skip : (el.checked = val);
+			}
+		}
+	);
+
+	component(
+		{
+			name: 'cxl-tr',
+			attributes: ['selected'],
+			bindings: 'role(row) on(datatable.select):#onSelect',
+			styles: {
+				$: { display: 'table-row' },
+				$selected: { backgroundColor: 'primaryLight' }
+			}
+		},
+		{
+			onSelect(ev) {
+				this.selected = ev.target.checked;
+			}
+		}
+	);
+
+	component({
+		name: 'cxl-table-header',
+		styles: {
+			$: {
+				font: 'h6',
+				lineHeight: 36,
+				paddingTop: 16,
+				paddingBottom: 16,
+				paddingLeft: 16,
+				paddingRight: 16
+			}
+		}
+	});
+
+	component({
+		name: 'cxl-table-selected',
+		extend: 'cxl-table-header',
+		attributes: ['selected'],
+		template: `
+		<cxl-c grow><x &="=selected:len:text"></x> selected</cxl-c><div &="content"></div>
+		`,
+		styles: {
+			$: {
+				font: 'subtitle',
+				lineHeight: 36,
+				height: 68,
+				backgroundColor: 'primaryLight',
+				color: 'onPrimaryLight',
+				display: 'flex'
+			}
 		}
 	});
 
 	component(
 		{
 			name: 'cxl-datatable',
-			extend: 'cxl-table',
-			bindings: '=data:#update on(table.sort):#onSort',
-			attributes: ['data', 'rows', 'page'],
-			styles: {
-				row: { display: 'table-row' }
-			}
+			events: ['change'],
+			bindings: `
+				registable.host(datatable.checkbox):=selectable:#resetSelect
+				registable.host(datatable.checkboxAll):=selectAll
+				on(datatable.select):#onSelect
+				on(datatable.selectAll):#onSelectAll
+				=selected:#updateSelected
+				=data:#update on(datatable.sort):#onSort:#update
+				=value:host.trigger(change)
+			`,
+			attributes: ['data', 'rows', 'page', 'value', 'selected'],
+			template: `
+<div &="=selected:len:hide content(cxl-table-header)"></div>
+<div &="=selected:len:show content(cxl-table-selected)"></div>
+<cxl-table &="content"></cxl-table>
+<cxl-pagination &="=rows:@rows =sortedData:@data @paginatedData:=value"></cxl-pagination>
+			`
 		},
 		{
+			selectAll: null,
+			value: cxl.Undefined,
 			rows: 5,
 			page: 0,
 			sortedByHeader: null,
 
+			updateSelectAll(selected, selectAll) {
+				if (!this.selectable || !selected || selected.size === 0)
+					return selectAll.forEach(s => (s.checked = false));
+
+				for (let el of this.selectable)
+					if (!el.checked) {
+						return selectAll.forEach(s => (s.checked = null));
+					}
+
+				selectAll.forEach(s => (s.checked = true));
+			},
+
+			updateSelected(selected) {
+				if (this.selectable)
+					this.selectable.forEach(
+						el => (el.checked = selected && selected.has(el.data))
+					);
+
+				if (this.selectAll)
+					this.updateSelectAll(selected, this.selectAll);
+			},
+
+			resetSelect() {
+				this.selected = null;
+			},
+
+			onSelect(ev) {
+				const el = ev.target,
+					data = ev.target.data;
+
+				this.selected = new Set(this.selected);
+				this.selected[el.checked ? 'add' : 'delete'](data);
+			},
+
+			onSelectAll(ev) {
+				if (this.selectable) {
+					const checked = ev.target.checked;
+					this.selectable.forEach(el => (el.checked = checked));
+				}
+			},
+
 			onSort(ev) {
-				if (ev.detail === 'none') return;
+				const order = ev.detail,
+					th = ev.target,
+					sortedEl = this.sortedByHeader;
+				if (order === 'none') {
+					if (sortedEl === th)
+						this.sortedByHeader = this.sortFn = null;
+					return;
+				}
 
-				if (this.sortedByHeader && this.sortedByHeader !== ev.target)
-					this.sortedByHeader.sort = 'none';
+				if (sortedEl && sortedEl !== th)
+					this.sortedByHeader.sortOrder = 'none';
 
-				this.sortedByHeader = ev.target;
+				this.sortedByHeader = th;
+
+				this.sortField = th.sortable;
+				this.sortFn = order === 'none' ? null : this[order];
+			},
+
+			asc(a, b) {
+				const field = this.sortField;
+				return a[field] > b[field] ? 1 : -1;
+			},
+
+			desc(a, b) {
+				const field = this.sortField;
+				return a[field] > b[field] ? -1 : 1;
 			},
 
 			update() {
-				const data = this.data;
+				const data = this.data,
+					sortFn = this.sortFn;
 				this.count = data ? data.length : 0;
-				this.displayData = data;
+				this.sortedData = sortFn
+					? data.slice(0).sort(sortFn.bind(this))
+					: data;
 			}
 		}
 	);
@@ -153,7 +310,7 @@
 	component(
 		{
 			name: 'cxl-pagination',
-			attributes: ['rows', 'data', 'paginatedData'],
+			attributes: ['rows', 'data', 'paginatedData', 'rowsOptions'],
 			bindings: `=rows:#updatePage =data:#updatePage`,
 			styles: {
 				$: {
@@ -164,11 +321,17 @@
 					textAlign: 'right'
 				},
 				rpp: {
-					marginRight: 32
+					marginRight: 32,
+					display: 'inline-block'
 				}
 			},
 			template: `
-Rows per page: <span &="=rows:text .rpp"></span>
+Rows per page:
+<cxl-select inline &="=rows::value .rpp">
+	<template &="=rowsOptions:marker.empty:each:repeat">
+	<cxl-option &="$value:@value $label:text"></cxl-option>
+	</template>
+</cxl-select>
 <span &="=pageStart:text"></span>-<span &="=pageEnd:text"></span> of <span &="=count:text"></span>
 <cxl-button &="=disablePrev:@disabled action:#previusPage" flat round aria-label="Go To Previous Page"><cxl-icon icon="arrow-left"></cxl-icon></cxl-button>
 <cxl-button &="=disableNext:@disabled action:#nextPage" flat round aria-label="Go To Next Page"><cxl-icon icon="arrow-right"></cxl-icon></cxl-button>
@@ -178,6 +341,11 @@ Rows per page: <span &="=rows:text .rpp"></span>
 			rows: 5,
 			page: 0,
 			count: 0,
+			rowsOptions: [
+				{ label: 5, value: 5 },
+				{ label: 10, value: 10 },
+				{ label: 25, value: 25 }
+			],
 
 			nextPage() {
 				this.page += 1;
@@ -192,7 +360,7 @@ Rows per page: <span &="=rows:text .rpp"></span>
 			updatePage() {
 				const data = this.data;
 
-				if (!data || !Array.isArray(data)) {
+				if (!data || !Array.isArray(data) || !this.rows) {
 					this.page = this.count = this.pageStart = this.pageEnd = 0;
 				} else {
 					const pageStart = this.page * (this.rows - 1);

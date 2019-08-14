@@ -91,7 +91,7 @@
 			extend: InputBase,
 			template: `
 <span &=".focusCircle .focusCirclePrimary"></span>
-<cxl-icon icon="check" &=".box"></cxl-icon>
+<cxl-icon &="=indeterminate:#setIcon .box"></cxl-icon>
 <span &="content"></span>
 	`,
 			bindings: `
@@ -133,17 +133,33 @@ action:#toggle
 						backgroundColor: 'primary',
 						color: 'onPrimary'
 					},
+					box$indeterminate: {
+						borderColor: 'primary',
+						backgroundColor: 'primary',
+						color: 'onPrimary'
+					},
 					box$invalid$touched: { borderColor: 'error' }
 				},
 				FocusCircleCSS
 			],
-			attributes: ['checked', 'true-value', 'false-value', 'inline']
+			attributes: [
+				'checked',
+				'true-value',
+				'false-value',
+				'inline',
+				'indeterminate'
+			]
 		},
 		{
 			value: cxl.Undefined,
 			checked: false,
+			indeterminate: false,
 			'true-value': true,
 			'false-value': false,
+
+			setIcon(val, el) {
+				el.icon = val ? 'minus' : 'check';
+			},
 
 			onValue(val) {
 				this.checked = val === this['true-value'];
@@ -156,7 +172,11 @@ action:#toggle
 			toggle(ev) {
 				if (this.disabled) return;
 
-				this.checked = !this.checked;
+				if (this.indeterminate) {
+					this.checked = false;
+					this.indeterminate = false;
+				} else this.checked = !this.checked;
+
 				ev.preventDefault();
 			}
 		}
@@ -697,7 +717,7 @@ disconnect:#unregister
 
 	component({
 		name: 'cxl-select-menu',
-		attributes: ['visible'],
+		attributes: ['visible', 'inline'],
 		styles: {
 			$: {
 				position: 'absolute',
@@ -706,6 +726,11 @@ disconnect:#unregister
 				left: -16,
 				overflowY: 'hidden',
 				transformOrigin: 'top'
+			},
+			$inline: {
+				position: 'static',
+				marginLeft: -16,
+				marginRight: -16
 			},
 			$visible: {
 				elevation: 3,
@@ -721,15 +746,15 @@ disconnect:#unregister
 			extend: InputBase,
 			template: `
 <div &=".container =opened:.opened">
+	<cxl-icon &=".icon" icon="caret-down" role="presentation"></cxl-icon>
 	<cxl-select-menu &="id(menu) =menuHeight:style.inline(height)
 		=menuTransform:style.inline(transform) =menuScroll:@scrollTop =menuTop:style.inline(top)
-		=opened:@visible content"></cxl-select-menu>
+		=opened:@visible =inline:@inline content"></cxl-select-menu>
 	<div &="=value:hide .placeholder =placeholder:text"></div>
 	<div &="=value:show:#getSelectedText:text id(selectedText) .selectedText"></div>
-	<cxl-icon &=".icon" icon="caret-down" role="presentation"></cxl-icon>
 </div>
 	`,
-			attributes: ['placeholder'],
+			attributes: ['placeholder', 'inline'],
 			bindings: `
 		focusable
 		selectable.host:#onSelected
@@ -768,7 +793,8 @@ disconnect:#unregister
 					overflowY: 'hidden',
 					overflowX: 'hidden',
 					height: 22,
-					position: 'relative'
+					position: 'relative',
+					paddingRight: 16
 				},
 				opened: { overflowY: 'visible', overflowX: 'visible' }
 			}

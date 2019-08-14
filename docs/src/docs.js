@@ -15,7 +15,7 @@
 			template:
 				'<a href="#" &=".link action:#onAction:event.prevent content"></a>',
 			styles: {
-				link: { color: 'link' }
+				link: { color: 'link', whiteSpace: 'nowrap' }
 			}
 		},
 		{

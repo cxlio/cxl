@@ -416,7 +416,7 @@ on(selectable.action):#onAction
 
 	component({
 		name: 'cxl-badge',
-		attributes: ['secondary', 'error', 'over'],
+		attributes: ['secondary', 'error', 'over', 'top'],
 		styles: {
 			$: {
 				display: 'inline-block',
@@ -480,12 +480,12 @@ on(selectable.action):#onAction
 
 				$big: { padding: 16, font: 'h5', height: 52 },
 				$flat: {
-					backgroundColor: 'surface',
+					backgroundColor: 'inherit',
 					elevation: 0,
 					fontWeight: 500,
 					paddingRight: 8,
 					paddingLeft: 8,
-					color: 'link'
+					color: 'inherit'
 				},
 				$flat$large: { paddingLeft: 12, paddingRight: 12 },
 
@@ -543,6 +543,10 @@ on(selectable.action):#onAction
 				$surface: { backgroundColor: 'surface', color: 'onSurface' },
 				$error: { backgroundColor: 'error', color: 'onError' },
 				$primary: { backgroundColor: 'primary', color: 'onPrimary' },
+				$primaryLight: {
+					backgroundColor: 'primaryLight',
+					color: 'onPrimaryLight'
+				},
 				$secondary: {
 					backgroundColor: 'secondary',
 					color: 'onSecondary'

@@ -1,63 +1,64 @@
 /*jshint node:true */
-const
-	fs = require('fs'),
+const fs = require('fs'),
 	cp = require('child_process'),
 	path = require('path'),
 	colors = require('colors'),
 	UglifyJS = require('uglify-es'),
-
 	SCRIPTDIR = path.dirname(process.argv[1]),
-	BASEDIR = cp.execSync(`npm prefix`, { cwd: SCRIPTDIR }).toString().trim(),
-	ARGV = process.argv.slice(2).reduce(
-		(acc, cur) => { acc[cur]=true; return acc; }, {}),
+	BASEDIR = cp
+		.execSync(`npm prefix`, { cwd: SCRIPTDIR })
+		.toString()
+		.trim(),
+	ARGV = process.argv.slice(2).reduce((acc, cur) => {
+		acc[cur] = true;
+		return acc;
+	}, {}),
 	PACKAGE = require(BASEDIR + '/package.json'),
 	CONFIG = {
 		package: PACKAGE
-	}
-;
-
+	},
+	AMD = `
+function define(name, injects, module) {
+	const modules = define.modules || (define.modules = {}),
+		exports = {},
+		arguments = [null, exports];
+	injects.forEach(i => arguments.push(modules[i]));
+	module.apply(null, arguments);
+	modules[name] = exports;
+}
+	`;
 console.log(`Running in ${BASEDIR}`);
 process.chdir(BASEDIR);
 
-function hrtime()
-{
+function hrtime() {
 	var time = process.hrtime();
-	return time[0] + (time[1]/1e9);
+	return time[0] + time[1] / 1e9;
 }
 
-function formatTime(time, time2)
-{
-	if (time2===undefined)
-		time2 = hrtime();
-const
-	s = time2-time,
-	str = s.toFixed(4) + 's'
-;
+function formatTime(time, time2) {
+	if (time2 === undefined) time2 = hrtime();
+	const s = time2 - time,
+		str = s.toFixed(4) + 's';
 	// Color code based on time,
 	return s > 0.1 ? (s > 0.5 ? colors.red(str) : colors.yellow(str)) : str;
 }
 
-function readFile(filename, encoding)
-{
-	return new Promise((resolve, reject) =>
-	{
-		fs.readFile(filename, encoding, (err, content) =>
-		{
+function readFile(filename, encoding) {
+	return new Promise((resolve, reject) => {
+		fs.readFile(filename, encoding, (err, content) => {
 			if (err) return reject(err);
 			resolve(content);
 		});
 	});
 }
 
-function read(filename, encoding)
-{
-	return Array.isArray(filename) ?
-		Promise.all(filename.map(f => readFile(f, encoding))) :
-		readFile(filename, encoding);
+function read(filename, encoding) {
+	return Array.isArray(filename)
+		? Promise.all(filename.map(f => readFile(f, encoding)))
+		: readFile(filename, encoding);
 }
 
-function write(filename, content)
-{
+function write(filename, content) {
 	return new Promise(function(resolve, reject) {
 		fs.writeFile(filename, content, err => {
 			if (err) return reject(err);
@@ -66,8 +67,7 @@ function write(filename, content)
 	});
 }
 
-function $stat(filename)
-{
+function $stat(filename) {
 	return new Promise(function(resolve, reject) {
 		fs.stat(filename, function(err, stat) {
 			if (err) return reject(err);
@@ -76,133 +76,120 @@ function $stat(filename)
 	});
 }
 
-function kb(bytes)
-{
-	return (bytes/1000).toFixed(2);
+function kb(bytes) {
+	return (bytes / 1000).toFixed(2);
 }
 
-function stat(file)
-{
-	return $stat(file).catch(() => ({size:0}));
+function stat(file) {
+	return $stat(file).catch(() => ({ size: 0 }));
 }
 
 class Operation {
-
-	constructor(msg, fn)
-	{
+	constructor(msg, fn) {
 		this.start = () => {
-		const
-			t = hrtime(),
-			result = typeof(fn)==='function' ? fn() : fn,
-			done = () => this.log(`${msg} (${formatTime(t)})`)
-		;
+			const t = hrtime(),
+				result = typeof fn === 'function' ? fn() : fn,
+				done = () => this.log(`${msg} (${formatTime(t)})`);
 			if (result && result.then)
 				return result.then(function(res) {
 					done();
 					return res;
 				});
-			else
-				done();
+			else done();
 
 			return result;
 		};
 	}
 
-	error(msg)
-	{
+	error(msg) {
 		console.error(colors.red(`${this.prefix} ${msg}`));
 		process.exit(1);
 	}
 
-	log(msg)
-	{
+	log(msg) {
 		console.log(`${this.prefix} ${msg}`);
 	}
-
 }
 
 class Task {
-
-	constructor(name, fn)
-	{
+	constructor(name, fn) {
 		this.name = name;
 		this.fn = fn;
 	}
-
 }
 
 class Builder {
-
-	static build(config)
-	{
+	static build(config) {
 		var builder = new Builder();
 
 		return builder.buildAll(config);
 	}
 
-	error(msg)
-	{
+	error(msg) {
 		console.error(colors.red(`${this.prefix} ${msg}`));
 		process.exit(1);
 	}
 
-	log(msg)
-	{
+	log(msg) {
 		console.log(`${this.prefix} ${msg}`);
 	}
 
-	operation(msg, fn, scope)
-	{
-	var
-		t = hrtime(),
-		result = typeof(fn)==='function' ? fn.call(scope) : fn,
-		done = () => this.log(`${msg} (${formatTime(t)})`)
-	;
+	operation(msg, fn, scope) {
+		var t = hrtime(),
+			result = typeof fn === 'function' ? fn.call(scope) : fn,
+			done = () => this.log(`${msg} (${formatTime(t)})`);
 		if (result && result.then)
 			result = result.then(function(res) {
 				done();
 				return res;
 			});
-		else
-			done();
+		else done();
 
 		return result;
 	}
 
-	buildAll(config)
-	{
+	buildAll(config) {
 		this.prefix = config.name || 'build';
 		this.outputDir = config.outputDir || 'dist';
 		this.config = config;
 		this.reportOutput = { targets: {} };
 
-		try { fs.mkdirSync(this.outputDir); } catch(e) {}
+		try {
+			fs.mkdirSync(this.outputDir);
+		} catch (e) {}
 
-		Promise.all(config.targets.map(
-			target => this.operation(`Building ${target.output}`, this.build(target))
-		)).then(() => {
-		}, err => this.error(err));
+		Promise.all(
+			config.targets.map(target =>
+				this.operation(`Building ${target.output}`, this.build(target))
+			)
+		).then(() => {}, err => this.error(err));
 	}
 
-	report(old, config)
-	{
+	report(old, config) {
 		const output = this.reportOutput.targets;
 
 		return this.stat(config).then(stats => {
-			console.log(config.output + `: ${kb(old[0].size)}Kb -> ${kb(stats[0].size)}Kb`);
+			console.log(
+				config.output +
+					`: ${kb(old[0].size)}Kb -> ${kb(stats[0].size)}Kb`
+			);
 			output[config.output] = stats[0].size;
 
-			if (ARGV.minify && config.minify)
-			{
-				console.log(config.minify + ': ' + kb(stats[1].size) + 'Kb (' +
-					(stats[1].size/stats[0].size*100).toFixed(2) + '%)');
+			if (ARGV.minify && config.minify) {
+				console.log(
+					config.minify +
+						': ' +
+						kb(stats[1].size) +
+						'Kb (' +
+						((stats[1].size / stats[0].size) * 100).toFixed(2) +
+						'%)'
+				);
 				output[config.minify] = stats[1].size;
 			}
 		});
 	}
 
-	minify(source, output)
-	{
+	minify(source, output) {
 		return this.operation('Minifying', () => {
 			const result = UglifyJS.minify(source, {
 				sourceMap: false,
@@ -210,45 +197,38 @@ class Builder {
 				output: { ascii_only: true }
 			});
 
-			if (result.error)
-				throw new Error(result.error);
+			if (result.error) throw new Error(result.error);
 
 			return write(output, result.code);
 		});
 	}
 
-	stat(config)
-	{
+	stat(config) {
 		return Promise.all([
 			stat(this.outputDir + '/' + config.output),
 			stat(this.outputDir + '/' + config.minify)
 		]);
 	}
 
-	processSource(source)
-	{
-		const type = typeof(source);
+	processSource(source) {
+		const type = typeof source;
 
-		if (type==='function')
-			return source(CONFIG);
+		if (type === 'function') return source(CONFIG);
 
 		return read(source, 'utf8');
 	}
 
-	async readSource(src)
-	{
-		if (!Array.isArray(src))
-			src = [ src ];
+	async readSource(src) {
+		if (!Array.isArray(src)) src = [src];
 
 		return Promise.all(src.map(this.processSource));
 	}
 
-	async build(target)
-	{
-	const
-		oldStat = await this.stat(target),
-		source = (await this.readSource(target.src)).join("\n")
-	;
+	async build(target) {
+		const oldStat = await this.stat(target),
+			source = (await this.readSource(target.src)).join('\n');
+		if (target.module === 'amd') source = AMD + source;
+
 		await write(this.outputDir + '/' + target.output, source);
 
 		if (ARGV.minify && target.minify)
@@ -256,28 +236,30 @@ class Builder {
 
 		this.report(oldStat, target);
 	}
-
 }
 
 Object.assign(Builder, {
+	AMD: () => AMD,
+	exec: cmd => cp.execSync(cmd),
+
 	read: read,
 	stat: $stat,
 	write: write,
 
-	copy(src, dest)
-	{
+	copy(src, dest) {
 		if (Array.isArray(src))
 			return Promise.all(src.map(s => this.copy(s, dest)));
 
 		return new Promise((resolve, reject) => {
-			fs.copyFile(src, dest, err => err ? reject(err) : resolve());
+			fs.copyFile(src, dest, err => (err ? reject(err) : resolve()));
 		});
 	},
 
-	list(path)
-	{
+	list(path) {
 		return new Promise((resolve, reject) => {
-			fs.readdir(path, (err, files) => err ? reject(err) : resolve(files));
+			fs.readdir(path, (err, files) =>
+				err ? reject(err) : resolve(files)
+			);
 		});
 	}
 });

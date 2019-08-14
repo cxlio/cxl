@@ -592,3 +592,13 @@ QUnit.test('Lifecycle Order', function(a) {
 		view = $$compile(`<${name} test="value">`);
 	dom.remove(view.host);
 });
+
+QUnit.test('Proper init', function(a) {
+	const view = $$compile(
+			`<cxl-icon icon="check" &="=icon:@icon id(iconEl)"></cxl-icon>`,
+			{ icon: 'minus' }
+		),
+		icon = view.state.iconEl;
+	a.ok(icon);
+	a.equal(icon.icon, 'minus');
+});
