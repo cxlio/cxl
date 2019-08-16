@@ -1,30 +1,6 @@
 (cxl => {
 	'use strict';
-	const Undefined = cxl.Undefined,
-		component = cxl.component;
-
-	/*component(
-		{
-			name: 'cxl-table',
-			bindings: 'registable.host(table):=event =event:#updateColumns',
-			styles: {
-				$: { display: 'grid', overflowX: 'auto' }
-			}
-		},
-		{
-			event: Undefined,
-			columns: 0,
-			updateColumns(set, table) {
-				if (set) {
-					let columns = '';
-
-					for (let th of set) columns += (th.width || 'auto') + ' ';
-
-					table.style.gridTemplateColumns = columns;
-				}
-			}
-		}
-	);*/
+	const component = cxl.component;
 
 	component({
 		name: 'cxl-table',
@@ -363,7 +339,11 @@ Rows per page:
 				if (!data || !Array.isArray(data) || !this.rows) {
 					this.page = this.count = this.pageStart = this.pageEnd = 0;
 				} else {
-					const pageStart = this.page * (this.rows - 1);
+					const count = (this.count = data.length);
+					let pageStart = this.page * (this.rows - 1);
+
+					if (pageStart > count) pageStart = this.page = 0;
+
 					const pageEnd = pageStart + this.rows;
 
 					this.count = data.length;
