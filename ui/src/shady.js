@@ -526,9 +526,12 @@
 
 			const shadow = this.host.shadowRoot;
 
-			shadow.$slots.push(slot.slot);
 			$extendSlot(slot.slot, this.host);
-			shadow.$updateSlots();
+
+			if (shadow) {
+				shadow.$slots.push(slot.slot);
+				shadow.$updateSlots();
+			}
 		}
 	});
 })(this.cxl);

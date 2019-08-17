@@ -34,12 +34,10 @@ QUnit.module('ui');
 
 		a.equal(c.tabIndex, 0, 'tabIndex is initially 0');
 		c.focus();
-		a.equal(document.activeElement, c, 'Element is focused');
-		//a.ok(c.matches(':focus'), 'Element is focused');
+		a.ok(c.matches(':focus'), 'Element is focused');
 
 		unfocus.focus();
-		a.equal(document.activeElement, unfocus, 'Element was unfocused');
-		//a.ok(!c.matches(':focus'), 'Element was unfocused');
+		a.ok(!c.matches(':focus'), 'Element was unfocused');
 
 		a.equal(c.tabIndex, 0);
 		a.ok('disabled' in c, 'Element can be disabled');

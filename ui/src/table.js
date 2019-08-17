@@ -97,7 +97,7 @@
 			$: { width: 48 },
 			checkbox: { paddingTop: 0, paddingBottom: 0 }
 		},
-		template: `<cxl-checkbox &=".checkbox @checked::=checked"></cxl-checkbox>`
+		template: `<cxl-checkbox &=".checkbox =checked::@checked"></cxl-checkbox>`
 	});
 
 	component(
@@ -110,16 +110,18 @@
 				$: { width: 48 },
 				checkbox: { paddingTop: 0, paddingBottom: 0 }
 			},
-			template: `<cxl-checkbox &=".checkbox @checked:=checked =checked:#onChecked action:#onAction:delay(50):host.trigger(datatable.selectAll)"></cxl-checkbox>`
+			template: `<cxl-checkbox &=".checkbox =checked:#onChecked action:delay:#onAction:host.trigger(datatable.selectAll)"></cxl-checkbox>`
 		},
 		{
 			onAction(ev, el) {
 				if (this.checked === null && el.checked === false)
 					this.checked = false;
+				else this.checked = el.checked;
 			},
 			onChecked(val, el) {
 				el.indeterminate = val === null;
-				return val === null ? cxl.Skip : (el.checked = val);
+
+				if (val !== null) el.checked = val;
 			}
 		}
 	);
@@ -302,13 +304,13 @@
 				}
 			},
 			template: `
-Rows per page:
+<cxl-t inline>Rows per page:&nbsp;</cxl-t>
 <cxl-select inline &="=rows::value .rpp">
 	<template &="=rowsOptions:marker.empty:each:repeat">
 	<cxl-option &="$value:@value $label:text"></cxl-option>
 	</template>
 </cxl-select>
-<span &="=pageStart:text"></span>-<span &="=pageEnd:text"></span> of <span &="=count:text"></span>
+<cxl-t inline><span &="=pageStart:text"></span>-<span &="=pageEnd:text"></span> of <span &="=count:text"></span></cxl-t>
 <cxl-button &="=disablePrev:@disabled action:#previusPage" flat round aria-label="Go To Previous Page"><cxl-icon icon="arrow-left"></cxl-icon></cxl-button>
 <cxl-button &="=disableNext:@disabled action:#nextPage" flat round aria-label="Go To Next Page"><cxl-icon icon="arrow-right"></cxl-icon></cxl-button>
 		`

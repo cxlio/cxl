@@ -99,7 +99,7 @@ QUnit.module('rx');
 	QUnit.test('Subject#error', function(a) {
 		var subject = new cxl.rx.Subject(),
 			c = 1;
-		subject.subscribe(b => a.equal(b, c));
+		subject.subscribe(b => a.equal(b, c), () => {});
 		subject.subscribe(null, b => a.equal(b, c));
 
 		subject.next(c);

@@ -40,7 +40,7 @@ const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);*/
 	// rx
 	//
 	override(cxl.rx.Subscriber.prototype, 'error', function(e) {
-		error(e);
+		if (!this.__error) error(e);
 	});
 
 	//

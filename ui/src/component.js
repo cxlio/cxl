@@ -3,6 +3,9 @@
 
 	const COMPONENTS = {};
 
+	/**
+	 * Persist attributes from state.
+	 */
 	class AttributeMonitor extends cxl.Directive {
 		digest(state) {
 			const el = this.element,
@@ -226,13 +229,13 @@
 
 				connectedCallback() {
 					// FIX for safari, component not always have attributes initialized
-					if (meta.attributes) {
+					/*if (meta.attributes) {
 						meta.attributes.forEach(a => {
 							if (this.hasAttribute(a))
 								this.$view.state[a] =
 									this.getAttribute(a) || true;
 						});
-					}
+					}*/
 
 					this.$view.connect();
 				}

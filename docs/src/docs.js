@@ -8,7 +8,7 @@
 		LOREM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at elementum orci. Vestibulum facilisis vel risus a commodo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris velit sapien, dignissim quis fermentum a, porta at urna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.`;
 	hljs.configure({ tabReplace: '    ' });
 
-	cxl.component(
+	component(
 		{
 			name: 'docs-link',
 			attributes: ['anchor'],
@@ -25,14 +25,14 @@
 		}
 	);
 
-	cxl.component({
+	component({
 		name: 'docs-bg',
 		styles: {
 			$: { background: '#eee', elevation: 1 }
 		}
 	});
 
-	cxl.component(
+	component(
 		{
 			name: 'docs-directive-update',
 			attributes: ['directive'],

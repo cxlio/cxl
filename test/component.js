@@ -595,7 +595,7 @@ QUnit.test('Lifecycle Order', function(a) {
 
 QUnit.test('Proper init', function(a) {
 	const view = $$compile(
-			`<cxl-icon icon="check" &="=icon:@icon id(iconEl)"></cxl-icon>`,
+			`<cxl-icon icon="check" &="=icon:log:@icon id(iconEl)"></cxl-icon>`,
 			{ icon: 'minus' }
 		),
 		icon = view.state.iconEl;

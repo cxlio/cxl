@@ -2137,7 +2137,6 @@ See <a href="react.html">Demo</a>.</p>
 			name: 'docs-component',
 			attributes: ['name'],
 			template: `
-<uid-component-tags &="=name:@name"></uid-component-tags>
 <cxl-t h5>Basic Usage</cxl-t>
 <div &="content"></div>
 <br><br>
@@ -2194,6 +2193,7 @@ See <a href="react.html">Demo</a>.</p>
 <div &="content(docs-event)"></div>
 <div &="content(docs-method)"></div>
 <div &="content(docs-implementation)"></div>
+<uid-component-tags &="=name:@name"></uid-component-tags>
 	`,
 			bindings: '=name:#initialize'
 		},
