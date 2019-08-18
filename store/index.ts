@@ -25,9 +25,23 @@ export class Store<State> {
 		];
 	}
 
-	select<K extends keyof State>(key: K): Observable<State[K]> {
+	select<K extends keyof State>(key: K): Observable<State[K]> {}
+	select<K extends keyof State, K2 extends keyof State[K]>(
+		key: K,
+		key2: K2
+	): Observable<State[K][K2]> {}
+	select<
+		K extends keyof State,
+		K2 extends keyof State[K],
+		K3 extends keyof State[K][K2]
+	>(key: K, key2: K2, key3: K3): Observable<State[K][K2][K3]> {}
+	select(...keys) {
 		return this.subject.pipe(
-			map((state: State): any => state && state[key])
+			map(
+				(state: State): any =>
+					keys.reduce((result, key) => result && result[key], state)
+			),
+			distinctUntilChanged()
 		);
 	}
 

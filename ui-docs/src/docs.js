@@ -1444,17 +1444,14 @@ Components are easily styled via attributes and CSS variables. See <a href="#the
 <style>a { color: var(--cxl-link) }</style>
 <cxl-t h4>Installation</cxl-t>
 
-<cxl-t h5>Using NPM</cxl-t>
-<docs-code type="bash"><!--npm install @cxl/ui--></docs-code>
-<br>
-<cxl-t h5>Using Yarn</cxl-t>
-<docs-code type="bash"><!--yarn add @cxl/ui--></docs-code>
-<br>
+<cxl-t h5>Using NPM/Yarn</cxl-t>
+<docs-code type="bash"><!--
+npm install @cxl/ui
+yarn add @cxl/ui
+--></docs-code>
 
 <cxl-t h4>Usage</cxl-t>
 
-<cxl-t h5>Include it in your application</cxl-t>
-<br>
 <cxl-t h6>Using &lt;script&gt; tag</cxl-t>
 
 <docs-code type="html"><!--
@@ -1472,6 +1469,10 @@ Components are easily styled via attributes and CSS variables. See <a href="#the
 
 <cxl-t h6>@cxl/ui/icons.js</cxl-t>
 <p>FontAwesome Icon support. Required for some components. Use with <a href="#cxl-icon"><code>&lt;cxl-icon></code></a> Component.</p>
+
+<cxl-t h5>Themes</cxl-t>
+<cxl-t h6><a href="index.html">Default</a></cxl-t>
+<cxl-t h6><a href="theme-legacy.html">@cxl/ui/theme-legacy.js</a></cxl-t>
 
 <!--
 <cxl-t h6>@cxl/ui/react <cxl-t inline caption>dist/react.js</cxl-t></cxl-t>
