@@ -79,6 +79,10 @@ require('../build').build({
 			src: ['../LICENSE']
 		},
 		{
+			output: 'README.md',
+			src: ['README.md']
+		},
+		{
 			output: 'package.json',
 			src: [
 				c =>

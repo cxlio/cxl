@@ -114,6 +114,9 @@
 			icon: 'window-maximize',
 			tags: ['navigation']
 		},
+		'cxl-autocomplete': {
+			beta: true
+		},
 		'cxl-avatar': {
 			icon: 'user-circle',
 			tags: ['indicator']

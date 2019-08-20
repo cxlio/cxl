@@ -58,6 +58,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 </docs-component>
 			`
 			},
+
 			avatar: {
 				template: `
 <docs-component name="cxl-avatar">

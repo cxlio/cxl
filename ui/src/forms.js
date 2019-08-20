@@ -457,6 +457,12 @@ on(click):#focus
 		}
 	);
 
+	component({
+		name: 'cxl-autocomplete',
+		template: `
+		`
+	});
+
 	component(
 		{
 			name: 'cxl-password',

@@ -6,7 +6,8 @@
 		name: 'cxl-table',
 		bindings: 'role(table)',
 		styles: {
-			$: { display: 'table', width: '100%' }
+			$: { display: 'block', width: '100%', overflowX: 'auto' },
+			$small: { display: 'table' }
 		}
 	});
 
@@ -32,7 +33,8 @@
 					paddingRight: 8,
 					borderBottom: '1px solid',
 					borderColor: 'divider',
-					lineHeight: 24
+					lineHeight: 24,
+					whiteSpace: 'nowrap'
 				},
 				sortIcon: {
 					display: 'none',
@@ -301,10 +303,14 @@
 				rpp: {
 					marginRight: 32,
 					display: 'inline-block'
-				}
+				},
+				res: {
+					display: 'none'
+				},
+				res$small: { display: 'inline' }
 			},
 			template: `
-<cxl-t inline>Rows per page:&nbsp;</cxl-t>
+<cxl-t inline>Rows <x &=".res">per page:</x>&nbsp;</cxl-t>
 <cxl-select inline &="=rows::value .rpp">
 	<template &="=rowsOptions:marker.empty:each:repeat">
 	<cxl-option &="$value:@value $label:text"></cxl-option>

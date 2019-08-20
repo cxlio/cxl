@@ -57,6 +57,7 @@
 <span &="content"></span>
 		`,
 		styles: {
+			$: { whiteSpace: 'nowrap' },
 			box: { border: 0, marginRight: 0, width: 'auto' },
 			box$checked: { backgroundColor: 'transparent', color: 'onSurface' },
 			focusCircle: { left: 6 }
