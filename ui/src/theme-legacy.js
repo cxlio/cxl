@@ -53,13 +53,17 @@
 	extendComponent('cxl-checkbox', {
 		template: `
 <span &=".focusCircle .focusCirclePrimary"></span>
-[<cxl-icon icon="check" &=".box"></cxl-icon>]
+<x &=".cont">[<cxl-icon &="=indeterminate:#setIcon .box"></cxl-icon>]</x>
 <span &="content"></span>
 		`,
 		styles: {
-			$: { whiteSpace: 'nowrap' },
+			cont: { whiteSpace: 'nowrap' },
 			box: { border: 0, marginRight: 0, width: 'auto' },
 			box$checked: { backgroundColor: 'transparent', color: 'onSurface' },
+			box$indeterminate: {
+				backgroundColor: 'transparent',
+				color: 'onSurface'
+			},
 			focusCircle: { left: 6 }
 		}
 	});
@@ -84,10 +88,11 @@
 	extendComponent('cxl-radio', {
 		template: `
 <x &=".focusCircle .focusCirclePrimary"></x>
-(<x &=".circle"></x>)
+<x &=".cont">(<x &=".circle"></x>)</x>
 <span &=".content content"></span>
 		`,
 		styles: {
+			cont: { whiteSpace: 'nowrap' },
 			focusCircle: { left: 4 }
 		}
 	});
