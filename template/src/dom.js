@@ -4,7 +4,7 @@
 	const EMPTY_NODE_REGEX = /\S/;
 
 	function $$find(child, selector, first, next) {
-		var result;
+		let result;
 
 		while (child) {
 			if (selector(child)) return child;

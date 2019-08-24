@@ -162,6 +162,7 @@
 			tags: ['indicator']
 		},
 		'cxl-datatable': {
+			summary: 'Data tables display sets of data across rows and columns',
 			icon: 'table',
 			beta: true,
 			added: '2.0.2',

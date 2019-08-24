@@ -457,12 +457,6 @@ on(click):#focus
 		}
 	);
 
-	component({
-		name: 'cxl-autocomplete',
-		template: `
-		`
-	});
-
 	component(
 		{
 			name: 'cxl-password',
@@ -1007,6 +1001,35 @@ disconnect:#unregister
 
 			onMenuAction(ev) {
 				if (this.opened) ev.stopPropagation();
+			}
+		}
+	);
+
+	component(
+		{
+			name: 'cxl-autocomplete',
+			template: `
+	<div contenteditable="true" &=".selectedText"></div>
+	<cxl-select-menu &="content">
+	</cxl-select-menu>
+			`,
+			styles: {},
+			attributes: ['search-term'],
+			bindings: `=search-term:#applyFilter`,
+			initialize(state) {
+				state.applyFilter = cxl.debounceRender(state.applyFilter);
+			}
+		},
+		{
+			filter(regex, item) {
+				if (item.tagName)
+					item.style.display =
+						regex && regex.test(item.innerText) ? 'block' : 'none';
+			},
+
+			applyFilter(term, el) {
+				const regex = term && new RegExp(term, 'i');
+				cxl.dom.find(el, item => this.filter(regex, item));
 			}
 		}
 	);

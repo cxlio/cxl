@@ -59,6 +59,23 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			`
 			},
 
+			/*autocomplete: {
+				template: `
+<docs-component name="cxl-autocomplete">
+<docs-demo><!--
+<cxl-field>
+	<cxl-label>States</cxl-label>
+	<cxl-autocomplete>
+		<cxl-option>District of Columbia</cxl-option>
+		<cxl-option>Maryland</cxl-option>
+		<cxl-option>Virginia</cxl-option>
+	</cxl-autocomplete>
+</cxl-field>
+--></docs-demo>
+</docs-component>
+				`
+			},*/
+
 			avatar: {
 				template: `
 <docs-component name="cxl-avatar">
@@ -1392,7 +1409,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 	<cxl-c>
 		<cxl-t h5><cxl-icon icon="fighter-jet"></cxl-icon> &nbsp;Lightweight and Fast</cxl-t>
-		<p>The entire library is less than 50Kb. Intuitive, consistent and easy to use API. Components are fine-tuned for performance to provide a native-like experience.
+		<p>The entire library is less than <b>50Kb</b>. Intuitive, consistent and easy to use API. Components are fine-tuned for performance to provide a native-like experience.
 		</p>
 	</cxl-c>
 	<cxl-c>

@@ -115,9 +115,10 @@
 	behavior('navigation.select', {
 		bindings: 'keypress:#onKey:event.prevent',
 		onKey(ev, host) {
-			var el = this.$behavior.value,
-				children = new cxl.ElementChildren(host),
+			let el = this.$behavior.value,
 				key = ev.key;
+			const children = new cxl.ElementChildren(host);
+
 			switch (key) {
 				case 'ArrowDown':
 					el = el ? children.nextTo(el) || el : children.first;
@@ -137,7 +138,7 @@
 					// TODO ?
 					if (/^[a-z]$/.test(key))
 						el =
-							cxl.dom.findNext(el, findByFirst) ||
+							(el && cxl.dom.findNext(el, findByFirst)) ||
 							cxl.dom.find(host, findByFirst) ||
 							this.selected;
 					else return cxl.Skip;
