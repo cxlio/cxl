@@ -52,7 +52,6 @@
 	=disabled:host.trigger(form.disabled)
 	=invalid:aria.prop(invalid):host.trigger(invalid)
 	=value:host.trigger(change):host.trigger(input)
-	on(focus):#onFocus on(blur):not:=focused
 		`
 			},
 			{
@@ -1006,8 +1005,8 @@ disconnect:#unregister
 			methods: ['focus'],
 			extend: InputBase,
 			template: `
-	<input autocomplete="off" &="id(input) focusable.delegate .input value::=value keypress:#onKey on(blur):#deselect" />
-	<cxl-menu &="=showMenu:show:log content .menu"></cxl-menu>
+	<input autocomplete="off" &="id(input) focusable.events .input value::=value keypress:#onKey on(blur):delay(100):#deselect" />
+	<div &="=showMenu:#show:log content .menu"></div>
 			`,
 			styles: {
 				input: {
@@ -1028,15 +1027,15 @@ disconnect:#unregister
 					position: 'absolute',
 					left: -12,
 					right: -12,
-					top: 32
+					top: 32,
+					overflowY: 'auto',
+					elevation: 1
 				}
 			},
-			attributes: ['search-term'],
-			events: ['change'],
 			bindings: `
 				navigation.list:#onNav
 				=value:#applyFilter:#shouldShow
-				on(selectable.action):#onSelect
+				on(selectable.action):event.stop:#onSelect:log
 			`,
 			initialize(state) {
 				state.applyFilter = cxl.debounceRender(state.applyFilter);
@@ -1052,6 +1051,12 @@ disconnect:#unregister
 				this.select(ev.target);
 				this.focus();
 			},
+			show(val, el) {
+				if (val) {
+					el.style.maxHeight = '250px';
+					el.style.display = 'block';
+				} else el.style.display = 'none';
+			},
 
 			select(option) {
 				this.value = option.value;
@@ -1062,6 +1067,7 @@ disconnect:#unregister
 			deselect() {
 				if (this.focusedElement)
 					this.focusedElement = this.focusedElement.selected = false;
+				this.showMenu = false;
 			},
 			onNav(el) {
 				if (this.focusedElement) this.focusedElement.selected = false;
@@ -1074,14 +1080,13 @@ disconnect:#unregister
 			},
 
 			onKey(ev) {
-				const key = ev.key;
-				switch (key) {
+				switch (ev.key) {
 					case 'Enter':
 						if (this.focusedElement)
 							this.select(this.focusedElement);
 						break;
 					case 'Escape':
-						this.showMenu = false;
+						this.deselect();
 						break;
 				}
 			},

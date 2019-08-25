@@ -195,26 +195,21 @@
 `
 	);
 	behavior(
-		'focusable.events',
-		`
-	on(focus):host.trigger(focusable.focus)
-	on(blur):host.trigger(focusable.blur)
-`
-	);
-	behavior(
 		'focusable',
 		`
 		@disabled:aria.prop(disabled):not:focus.enable
 		focusable.events`
 	);
 
-	behavior('focusable.delegate', {
+	behavior('focusable.events', {
 		bindings: `
 	on(focus):#update:host.trigger(focusable.focus)
 	on(blur):#update:host.trigger(focusable.blur)
 		`,
 		update(ev) {
-			this.$behavior.owner.host.focused = ev.type === 'focus';
+			const host = this.$behavior.owner.host;
+
+			host.focused = !host.disabled && ev.type === 'focus';
 		}
 	});
 
@@ -1045,7 +1040,6 @@ focusable ripple role(listitem)
 					cxl.dom('meta', { name: name, content: content })
 				);
 			}
-
 			document.documentElement.lang = 'en-US';
 
 			meta('viewport', 'width=device-width, initial-scale=1');

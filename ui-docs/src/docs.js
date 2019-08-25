@@ -66,9 +66,32 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 <cxl-field>
 	<cxl-label>States</cxl-label>
 	<cxl-autocomplete>
+		<cxl-option>Alabama</cxl-option>
+		<cxl-option>Alaska</cxl-option>
+		<cxl-option>America Samoa</cxl-option>
+		<cxl-option>Arizona</cxl-option>
+		<cxl-option>Arkansas</cxl-option>
+		<cxl-option>California</cxl-option>
+		<cxl-option>Colorado</cxl-option>
+		<cxl-option>Connecticut</cxl-option>
+		<cxl-option>Delaware</cxl-option>
 		<cxl-option>District of Columbia</cxl-option>
+		<cxl-option>Florida</cxl-option>
+		<cxl-option>Georgia</cxl-option>
+		<cxl-option>Guam</cxl-option>
+		<cxl-option>Hawaii</cxl-option>
+		<cxl-option>Idaho</cxl-option>
+		<cxl-option>Illinois</cxl-option>
+		<cxl-option>Indiana</cxl-option>
+		<cxl-option>Iowa</cxl-option>
+		<cxl-option>Kansas</cxl-option>
+		<cxl-option>Kentucky</cxl-option>
+		<cxl-option>Louisiana</cxl-option>
+		<cxl-option>Maine</cxl-option>
 		<cxl-option>Maryland</cxl-option>
+		<cxl-option>Marshall Islands</cxl-option>
 		<cxl-option>Virginia</cxl-option>
+
 	</cxl-autocomplete>
 </cxl-field>
 --></docs-demo>
