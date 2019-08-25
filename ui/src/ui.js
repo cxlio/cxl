@@ -150,28 +150,40 @@
 
 	behavior('navigation.list', {
 		bindings: 'keypress:#onKey:event.prevent',
+
 		onKey(ev, host) {
-			var children = new cxl.ElementChildren(host),
-				el = children.focused,
+			const children = new cxl.ElementChildren(host),
 				key = ev.key;
+			let el =
+					this.$behavior.value !== cxl.Undefined &&
+					this.$behavior.value,
+				newEl = el;
 			switch (key) {
 				case 'ArrowDown':
-					do {
-						el = el ? children.nextTo(el) || el : children.first;
-					} while (el && el.tabIndex === -1 && el !== children.first);
+					newEl = (newEl && children.nextTo(newEl)) || children.first;
+
+					while (newEl && (newEl.disabled || !newEl.clientHeight)) {
+						newEl = newEl && children.nextTo(newEl);
+					}
+
+					newEl = newEl || el;
 
 					break;
 				case 'ArrowUp':
-					do {
-						el = el ? children.previousTo(el) || el : children.last;
-					} while (el && el.tabIndex === -1 && el !== children.last);
+					newEl =
+						(newEl && children.previousTo(newEl)) || children.last;
 
+					while (newEl && (newEl.disabled || !newEl.clientHeight)) {
+						newEl = newEl && children.previousTo(newEl);
+					}
+
+					newEl = newEl || el;
 					break;
 				default:
 					return cxl.Skip;
 			}
 
-			this.$behavior.next(el);
+			if (newEl) this.$behavior.set(newEl);
 		}
 	});
 
@@ -192,9 +204,20 @@
 	behavior(
 		'focusable',
 		`
-		@disabled:=disabled:aria.prop(disabled):not:focus.enable
+		@disabled:aria.prop(disabled):not:focus.enable
 		focusable.events`
 	);
+
+	behavior('focusable.delegate', {
+		bindings: `
+	on(focus):#update:host.trigger(focusable.focus)
+	on(blur):#update:host.trigger(focusable.blur)
+		`,
+		update(ev) {
+			this.$behavior.owner.host.focused = ev.type === 'focus';
+		}
+	});
+
 	behavior(
 		'selectable',
 		`

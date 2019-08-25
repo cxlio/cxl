@@ -515,8 +515,7 @@ on(click):#focus
 				'selected',
 				'multiple',
 				'focused',
-				'disabled',
-				'inactive'
+				'disabled'
 			],
 			events: ['selectable.action', 'change'],
 			template: `
@@ -565,11 +564,7 @@ role(option) selectable
 					backgroundColor: 'primaryLight',
 					color: 'onPrimaryLight'
 				},
-				$disabled: { state: 'disabled' },
-				$inactive: {
-					backgroundColor: 'transparent',
-					color: 'onSurface'
-				}
+				$disabled: { state: 'disabled' }
 			},
 			initialize(state) {
 				if (!state.value) state.value = this.innerText;
@@ -1008,27 +1003,97 @@ disconnect:#unregister
 	component(
 		{
 			name: 'cxl-autocomplete',
+			methods: ['focus'],
+			extend: InputBase,
 			template: `
-	<div contenteditable="true" &=".selectedText"></div>
-	<cxl-select-menu &="content">
-	</cxl-select-menu>
+	<input autocomplete="off" &="id(input) focusable.delegate .input value::=value keypress:#onKey on(blur):#deselect" />
+	<cxl-menu &="=showMenu:show:log content .menu"></cxl-menu>
 			`,
-			styles: {},
+			styles: {
+				input: {
+					color: 'onSurface',
+					lineHeight: 22,
+					height: 22,
+					outline: 0,
+					border: 0,
+					padding: 0,
+					backgroundColor: 'transparent',
+					width: '100%',
+					textAlign: 'inherit',
+					borderRadius: 0,
+					fontFamily: 'inherit'
+				},
+				input$focus: { outline: 0 },
+				menu: {
+					position: 'absolute',
+					left: -12,
+					right: -12,
+					top: 32
+				}
+			},
 			attributes: ['search-term'],
-			bindings: `=search-term:#applyFilter`,
+			events: ['change'],
+			bindings: `
+				navigation.list:#onNav
+				=value:#applyFilter:#shouldShow
+				on(selectable.action):#onSelect
+			`,
 			initialize(state) {
 				state.applyFilter = cxl.debounceRender(state.applyFilter);
 			}
 		},
 		{
+			showMenu: false,
+			value: '',
+			focus() {
+				this.input.focus();
+			},
+			onSelect(ev) {
+				this.select(ev.target);
+				this.focus();
+			},
+
+			select(option) {
+				this.value = option.value;
+				this.deselect();
+				this.showMenu = null;
+			},
+
+			deselect() {
+				if (this.focusedElement)
+					this.focusedElement = this.focusedElement.selected = false;
+			},
+			onNav(el) {
+				if (this.focusedElement) this.focusedElement.selected = false;
+				this.focusedElement = el;
+				el.selected = true;
+			},
+			shouldShow() {
+				this.showMenu =
+					this.showMenu !== null && !!(this.value && this.focused);
+			},
+
+			onKey(ev) {
+				const key = ev.key;
+				switch (key) {
+					case 'Enter':
+						if (this.focusedElement)
+							this.select(this.focusedElement);
+						break;
+					case 'Escape':
+						this.showMenu = false;
+						break;
+				}
+			},
+
 			filter(regex, item) {
 				if (item.tagName)
 					item.style.display =
-						regex && regex.test(item.innerText) ? 'block' : 'none';
+						regex && regex.test(item.value) ? 'block' : 'none';
 			},
 
 			applyFilter(term, el) {
-				const regex = term && new RegExp(term, 'i');
+				const regex = term && new RegExp(cxl.escapeRegex(term), 'i');
 				cxl.dom.find(el, item => this.filter(regex, item));
 			}
 		}

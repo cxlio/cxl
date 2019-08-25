@@ -1247,6 +1247,10 @@
 			);
 		},
 
+		escapeRegex(str) {
+			return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+		},
+
 		/** Returns a getter function with a state parameter */
 		getter(expr) {
 			/*jshint evil:true*/
@@ -1602,7 +1606,7 @@
 		directive(name, {
 			initialize(el) {
 				const state = Object.assign({}, def),
-					view = (this.view = new View(state, el));
+					view = (this.view = new View(state, this.owner.host));
 				// TODO keep this here?
 				state.$behavior = this;
 				compiler.parseBinding(el, state.bindings, view);

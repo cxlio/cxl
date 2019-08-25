@@ -59,7 +59,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 			`
 			},
 
-			/*autocomplete: {
+			autocomplete: {
 				template: `
 <docs-component name="cxl-autocomplete">
 <docs-demo><!--
@@ -74,7 +74,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 --></docs-demo>
 </docs-component>
 				`
-			},*/
+			},
 
 			avatar: {
 				template: `
