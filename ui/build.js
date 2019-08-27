@@ -90,7 +90,7 @@ require('../build').build({
 						name: '@cxl/ui',
 						version: c.package.version,
 						license: c.package.license,
-						files: '*.js',
+						files: ['*.js', 'LICENSE'],
 						main: 'index.js',
 						homepage: c.package.homepage,
 						bugs: c.package.bugs,

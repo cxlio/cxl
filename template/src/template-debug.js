@@ -27,6 +27,9 @@ const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);*/
 	cxl.Skip.toString = () => 'Skip';
 
 	cxl.directive('log', {
+		initialize() {
+			warn('log directive only available in debug mode');
+		},
 		update(val) {
 			window.console.info('log: ' + this.value + ' ->', val);
 		}

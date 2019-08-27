@@ -514,7 +514,8 @@ on(click):#focus
 				'selected',
 				'multiple',
 				'focused',
-				'disabled'
+				'disabled',
+				'inactive'
 			],
 			events: ['selectable.action', 'change'],
 			template: `
@@ -563,7 +564,11 @@ role(option) selectable
 					backgroundColor: 'primaryLight',
 					color: 'onPrimaryLight'
 				},
-				$disabled: { state: 'disabled' }
+				$disabled: { state: 'disabled' },
+				$inactive: {
+					backgroundColor: 'transparent',
+					color: 'onSurface'
+				}
 			},
 			initialize(state) {
 				if (!state.value) state.value = this.innerText;
@@ -1006,7 +1011,7 @@ disconnect:#unregister
 			extend: InputBase,
 			template: `
 	<input autocomplete="off" &="id(input) focusable.events .input value::=value keypress:#onKey on(blur):delay(100):#deselect" />
-	<div &="=showMenu:#show:log content .menu"></div>
+	<div &="=showMenu:#show content .menu"></div>
 			`,
 			styles: {
 				input: {
@@ -1020,7 +1025,7 @@ disconnect:#unregister
 					width: '100%',
 					textAlign: 'inherit',
 					borderRadius: 0,
-					fontFamily: 'inherit'
+					font: 'default'
 				},
 				input$focus: { outline: 0 },
 				menu: {
@@ -1035,7 +1040,7 @@ disconnect:#unregister
 			bindings: `
 				navigation.list:#onNav
 				=value:#applyFilter:#shouldShow
-				on(selectable.action):event.stop:#onSelect:log
+				on(selectable.action):event.stop:#onSelect
 			`,
 			initialize(state) {
 				state.applyFilter = cxl.debounceRender(state.applyFilter);
