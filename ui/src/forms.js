@@ -1028,11 +1028,13 @@ disconnect:#unregister
 					font: 'default'
 				},
 				input$focus: { outline: 0 },
+
 				menu: {
 					position: 'absolute',
 					left: -12,
 					right: -12,
 					top: 32,
+					background: 'surface',
 					overflowY: 'auto',
 					elevation: 1
 				}

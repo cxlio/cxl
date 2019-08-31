@@ -306,7 +306,7 @@
 				lineHeight: 48,
 				fontSize: 24,
 				textAlign: 'center',
-				backgroundColor: 'onSurface12',
+				backgroundColor: 'primary',
 				color: '#fff',
 				marginRight: 16
 			}

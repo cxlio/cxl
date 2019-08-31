@@ -115,7 +115,8 @@
 			tags: ['navigation']
 		},
 		'cxl-autocomplete': {
-			beta: true
+			beta: true,
+			icon: 'edit'
 		},
 		'cxl-avatar': {
 			icon: 'user-circle',
@@ -130,6 +131,7 @@
 		},
 		'cxl-badge': {
 			tags: ['indicator'],
+			icon: 'exclamation-circle',
 			added: '2.0.2',
 			beta: true
 		},
@@ -286,6 +288,7 @@
 		'cxl-ripple': {
 			added: '1.6.0',
 			beta: true,
+			icon: 'water',
 			tags: ['interaction']
 		},
 		'cxl-ripple-container': {

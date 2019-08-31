@@ -1832,9 +1832,9 @@ See <a href="react.html">Demo</a>.</p>
 
 				this.icon = meta.icon;
 
-				const tags = meta.tags ? meta.tags.slice(0) : [];
+				const tags = (this.tags = meta.tags ? meta.tags.slice(0) : []);
 
-				if (meta.added) tags.push(meta.added);
+				if (meta.added) tags.push('since ' + meta.added);
 				if (meta.beta) tags.push('beta');
 			}
 		}
@@ -2096,7 +2096,7 @@ See <a href="react.html">Demo</a>.</p>
 					name + (meta && meta.tags ? meta.tags.join(' ') : '');
 			},
 			match(val, el) {
-				return !val || el.dataset.key.indexOf(val) !== -1;
+				return !val || el.dataset.key.indexOf(val.toLowerCase()) !== -1;
 			},
 
 			components: COMPONENTS
