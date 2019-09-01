@@ -1,5 +1,7 @@
 # @cxl/ui
 
+[![npm version](https://badge.fury.io/js/%40cxl%2Fui.svg)](https://badge.fury.io/js/%40cxl%2Fui)
+
 ## Features
 
 -   Lightweight and Fast

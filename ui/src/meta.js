@@ -11,6 +11,11 @@
 			error: { label: 'Error state color.', type: 'color' },
 			headerText: { label: 'Table header text', type: 'color' },
 			font: { label: 'Default Font', type: 'string' },
+			fontSize: { label: 'Default Font Size', type: 'size' },
+			fontMonospace: {
+				label: 'Default Monospace Font',
+				type: 'string'
+			},
 			link: { label: 'Color for <a> links', type: 'color' },
 			primary: { label: 'Primary Color', type: 'color' },
 			onPrimary: {

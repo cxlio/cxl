@@ -1034,7 +1034,7 @@ disconnect:#unregister
 					left: -12,
 					right: -12,
 					top: 32,
-					background: 'surface',
+					backgroundColor: 'surface',
 					overflowY: 'auto',
 					elevation: 1
 				}
