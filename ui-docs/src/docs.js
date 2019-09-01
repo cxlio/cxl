@@ -1795,13 +1795,7 @@ See <a href="react.html">Demo</a>.</p>
 		},
 		{
 			initialize(name) {
-				const meta = META[name];
-				if (!meta) return;
-
-				const tags = (this.tags = meta.tags ? meta.tags.slice(0) : []);
-
-				if (meta.added) tags.push(meta.added);
-				if (meta.beta) tags.push('beta');
+				this.tags = getComponentTags(name);
 			}
 		}
 	);
@@ -1819,7 +1813,22 @@ See <a href="react.html">Demo</a>.</p>
 	`
 	});
 
-	cxl.component(
+	function getComponentTags(name) {
+		const meta = META[name];
+		if (meta) {
+			const tags = meta.tags ? meta.tags.slice(0) : [];
+			const deprecated =
+				cxl.componentFactory.components[name].meta.deprecated;
+
+			if (meta.added) tags.push('since ' + meta.added);
+			if (meta.beta) tags.push('beta');
+			if (deprecated) tags.push('deprecated');
+
+			return tags;
+		}
+	}
+
+	component(
 		{
 			name: 'uid-component-card',
 			extend: 'docs-component-card',
@@ -1831,11 +1840,7 @@ See <a href="react.html">Demo</a>.</p>
 				if (!meta) return;
 
 				this.icon = meta.icon;
-
-				const tags = (this.tags = meta.tags ? meta.tags.slice(0) : []);
-
-				if (meta.added) tags.push('since ' + meta.added);
-				if (meta.beta) tags.push('beta');
+				this.tags = getComponentTags(name);
 			}
 		}
 	);

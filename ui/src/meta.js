@@ -193,15 +193,12 @@
 			tags: ['popup']
 		},
 		'cxl-drag': {
-			icon: 'arrows-alt',
-			beta: true
+			icon: 'arrows-alt'
 		},
 		'cxl-drag-region': {
-			icon: 'vector-square',
-			beta: true
+			icon: 'vector-square'
 		},
 		'cxl-drag-slot': {
-			beta: true,
 			icon: 'grip-horizontal'
 		},
 		'cxl-drawer': {
@@ -267,7 +264,6 @@
 		},
 		'cxl-multiselect': {
 			icon: 'caret-square-down',
-			beta: true,
 			tags: ['forms', 'multiple']
 		},
 		'cxl-navbar': {
@@ -292,7 +288,6 @@
 		},
 		'cxl-ripple': {
 			added: '1.6.0',
-			beta: true,
 			icon: 'water',
 			tags: ['interaction']
 		},
