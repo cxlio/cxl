@@ -1010,7 +1010,7 @@ disconnect:#unregister
 			methods: ['focus'],
 			extend: InputBase,
 			template: `
-	<input autocomplete="off" &="id(input) focusable.events .input value::=value keypress:#onKey on(blur):delay(100):#deselect" />
+	<input autocomplete="off" &="id(input) focusable.events .input value::=value keypress:#onKey on(blur):delay(150):#deselect" />
 	<div &="=showMenu:#show content .menu"></div>
 			`,
 			styles: {
