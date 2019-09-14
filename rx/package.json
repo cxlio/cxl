@@ -1,5 +1,14 @@
 {
 	"name": "@cxl/rx",
-	"version": "0.0.3",
-	"files": [ "index.js" ]
+	"version": "0.1.0",
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"scripts": {
+		"build": "node build"
+	},
+	"devDependencies": {
+		"typescript": "^3.6.2"
+	}
 }

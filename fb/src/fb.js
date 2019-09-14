@@ -1,311 +1,309 @@
 ((cxl, firebase) => {
-"use strict";
+	'use strict';
 
-const
-	fb = cxl.fb = path => new fb.Reference(path),
-	rx = cxl.rx,
-	map = rx.operators.map,
-	directive = cxl.directive,
-
-	Observable = rx.Observable,
-	CollectionEvent = rx.CollectionEvent
-;
-
-function getPath(path, state)
-{
-	return cxl.replaceParameters(path, state);
-}
-
-class Snapshot
-{
-	constructor(snap)
-	{
-		this.$snap = snap;
-		this.key = snap.key;
+	const fb = (cxl.fb = path => new fb.Reference(path)),
+		rx = cxl.rx,
+		map = rx.operators.map,
+		directive = cxl.directive,
+		Observable = rx.Observable,
+		CollectionEvent = rx.CollectionEvent;
+	function getPath(path, state) {
+		return cxl.replaceParameters(path, state);
 	}
 
-	get reference()
-	{
-		return this.$ref || (this.$ref = new FireReference(this.$snap.ref));
+	class Snapshot {
+		constructor(snap) {
+			this.$snap = snap;
+			this.key = snap.key;
+		}
+
+		get reference() {
+			return this.$ref || (this.$ref = new FireReference(this.$snap.ref));
+		}
+
+		get value() {
+			return this.$value === undefined
+				? (this.$value = this.$snap.val())
+				: this.$value;
+		}
+
+		get length() {
+			return this.$snap.numChildren();
+		}
+		get exists() {
+			return this.$snap.exists();
+		}
 	}
 
-	get value()
-	{
-		return this.$value===undefined ? (this.$value = this.$snap.val()) : this.$value;
-	}
+	function defineSchema(model, prop, def) {
+		const $ref = model.reference;
 
-	get length() { return this.$snap.numChildren(); }
-	get exists() { return this.$snap.exists(); }
-}
+		if (!(def instanceof cxl.rx.Observable))
+			def = $ref.reference(def.name || prop);
 
-function defineSchema(model, prop, def)
-{
-	const $ref = model.reference;
-
-	if (!(def instanceof cxl.rx.Observable))
-		def = $ref.reference(def.name || prop);
-
-	return def;
-}
-
-/**
- * A FireModel helps build and validate Firebase data models
- */
-class FireModel
-{
-	/**
-	 * @param refPath {FireReference|string} A reference or a path to a reference.
-	 * @param schema {Object|Function(ref)} Object or function that defines the schema
-	 */
-	constructor(refPath, schema)
-	{
-		this.reference = refPath instanceof fb.Reference ? refPath : fb(refPath);
-
-		const props = typeof(schema)==='function' ? schema(this.reference) : schema;
-
-		for (var i in props)
-			this[i] = defineSchema(this, i, props[i]);
-	}
-
-}
-
-class FireMeta extends Observable
-{
-	constructor(ref)
-	{
-		ref = ref.limitToFirst(1);
-
-		super(subscriber => {
-			function onValue(snap)
-			{
-				subscriber.next(new Snapshot(snap));
-				subscriber.complete();
-			}
-
-			ref.once('child_added', onValue);
-
-			return () => ref.off('child_added', onValue);
-		});
-	}
-}
-
-class FireReference extends Observable
-{
-	static of(EntityClass)
-	{
-		return class extends this {
-			$createRef(ref) { return new EntityClass(new FireReference(ref)); }
-			$getItem(snap) { return new EntityClass(snap.val()); }
-		};
-	}
-
-	constructor(path)
-	{
-		super();
-		this.$ref = (!path || typeof(path)==='string') ? fb.database.ref(path) : path;
-	}
-
-	$getItem(snap)
-	{
-		return snap.val();
-	}
-
-	$onValue(subscriber, snap)
-	{
-		subscriber.next(this.$getItem(snap));
-	}
-
-	__subscribe(subscriber)
-	{
-		const onValue = this.$onValue.bind(this, subscriber);
-		this.$ref.on('value', onValue);
-		return this.$ref.off.bind(this.$ref, 'value', onValue);
+		return def;
 	}
 
 	/**
-	 * Generates a new Reference from a firebase reference
+	 * A FireModel helps build and validate Firebase data models
 	 */
-	query(fn)
-	{
-		const ref = fn(this.$ref);
-		return new this.constructor(ref);
+	class FireModel {
+		/**
+		 * @param refPath {FireReference|string} A reference or a path to a reference.
+		 * @param schema {Object|Function(ref)} Object or function that defines the schema
+		 */
+		constructor(refPath, schema) {
+			this.reference =
+				refPath instanceof fb.Reference ? refPath : fb(refPath);
+
+			const props =
+				typeof schema === 'function' ? schema(this.reference) : schema;
+
+			for (var i in props) this[i] = defineSchema(this, i, props[i]);
+		}
 	}
 
-	get key() { return this.$ref.key; }
-	get path() { return this.$ref.path.toString(); }
+	class FireMeta extends Observable {
+		constructor(ref) {
+			ref = ref.limitToFirst(1);
 
-	set(value) { return this.$ref.set(value).then(() => this); }
+			super(subscriber => {
+				function onValue(snap) {
+					subscriber.next(new Snapshot(snap));
+					subscriber.complete();
+				}
 
-	push(value)
-	{
-		return this.$ref.push(value).then(ref => new FireReference(ref));
-	}
+				ref.once('child_added', onValue);
 
-	get parent() { return new FireReference(this.$ref.parent); }
-
-	reference(path)
-	{
-		return new FireReference(this.$ref.child(path));
-	}
-
-	collection(path)
-	{
-		return new fb.Collection(this.$ref.child(path));
-	}
-
-	meta()
-	{
-		return new FireMeta(this.$ref);
-	}
-
-	// TODO should this be complete()
-	destroy()
-	{
-		this.$ref.off();
-	}
-}
-
-class FireCollection extends FireReference
-{
-	static map(path, EntityClass)
-	{
-		return class Collection extends this {
-			$createRef(ref) { return new EntityClass(new FireReference(ref)); }
-			$getItem(snap) {
-				return new EntityClass(fb(path).reference(snap.val()));
-			}
-		};
-	}
-
-	static mapKey(path, EntityClass)
-	{
-		return class Collection extends this {
-			$getItem(snap) {
-				return new EntityClass(fb(path).reference(snap.key));
-			}
-		};
-	}
-
-	__subscribe(subscriber)
-	{
-		subscriber.next(new CollectionEvent(this, 'empty'));
-		this.$ref.on('child_added', this.$onSnapshot.bind(this, 'added', subscriber));
-		this.$ref.on('child_removed', this.$onSnapshot.bind(this, 'removed', subscriber));
-		// this.$ref.limitToFirst(1).once('value', this.$onSnapshot.bind(this, 'meta', subscriber));
-
-		return this.destroy.bind(this);
-	}
-
-	$createRef(ref)
-	{
-		return new FireReference(ref);
-	}
-
-	push(value)
-	{
-		return this.$ref.push(value).then(this.$createRef);
-	}
-
-	$getItem(snap)
-	{
-		return new Snapshot(snap);
-	}
-
-	$onSnapshot(type, subscriber, snap)
-	{
-		let item = (type==='added' || type==='removed') ? this.$getItem(snap) : new Snapshot(snap);
-		subscriber.next(new CollectionEvent(this, type, item));
-	}
-}
-
-directive('fb.snap', {
-	update(ref)
-	{
-		return ref && ref.limitToFirst(1).once('value', snap => new Snapshot(snap)).catch(() => {});
-	}
-});
-
-directive('fb.len', {
-	update(ref)
-	{
-		return ref && ref.limitToFirst(1).once('value', snap => snap.numChildren()).catch(() => {});
-	}
-});
-
-directive('fb', {
-
-	connect(state)
-	{
-		const path = getPath(this.parameter, state);
-
-		this.bindings = [ this.fb = new FireReference(path, state.$fb) ];
-	},
-
-	update(url)
-	{
-		if (!this.fb)
-			this.connect(this.owner.state);
-
-		this.fb.path = url;
-		return this.fb;
-	},
-
-	digest()
-	{
-		return this.fb || this.value;
-	}
-
-});
-
-directive('fb.user', {
-
-	initialize()
-	{
-		this.bindings = [
-			{ destroy: firebase.auth().onAuthStateChanged(this.owner.digest.bind(this.owner)) }
-		];
-	},
-
-	digest()
-	{
-		return firebase.auth().currentUser;
-	}
-
-});
-
-Object.assign(fb, {
-
-	Collection: FireCollection,
-	Reference: FireReference,
-	Model: FireModel,
-	Snapshot: Snapshot,
-
-	database: null,
-	started: false,
-
-	operators: {
-		constructEvent(Constructor, field, extraArg)
-		{
-			return map(ev => {
-				if (ev.type==='added' || ev.type==='removed')
-					ev.value = new Constructor(field ? ev.value[field] : ev.value, extraArg);
-				return ev;
+				return () => ref.off('child_added', onValue);
 			});
 		}
-	},
-
-	start(config)
-	{
-		if (fb.started)
-			throw new Error("fb module already started");
-
-		firebase.initializeApp(config);
-
-		fb.started = true;
-		fb.database = firebase.database();
-		fb.auth = firebase.auth();
 	}
 
-});
+	class FireReference extends Observable {
+		static of(EntityClass) {
+			return class extends this {
+				$createRef(ref) {
+					return new EntityClass(new FireReference(ref));
+				}
+				$getItem(snap) {
+					return new EntityClass(snap.val());
+				}
+			};
+		}
 
+		constructor(path) {
+			super();
+			this.$ref =
+				!path || typeof path === 'string'
+					? fb.database.ref(path)
+					: path;
+		}
+
+		$getItem(snap) {
+			return snap.val();
+		}
+
+		$onValue(subscriber, snap) {
+			subscriber.next(this.$getItem(snap));
+		}
+
+		__subscribe(subscriber) {
+			const onValue = this.$onValue.bind(this, subscriber);
+			this.$ref.on('value', onValue);
+			return this.$ref.off.bind(this.$ref, 'value', onValue);
+		}
+
+		/**
+		 * Generates a new Reference from a firebase reference
+		 */
+		query(fn) {
+			const ref = fn(this.$ref);
+			return new this.constructor(ref);
+		}
+
+		get key() {
+			return this.$ref.key;
+		}
+		get path() {
+			return this.$ref.path.toString();
+		}
+
+		set(value) {
+			return this.$ref.set(value).then(() => this);
+		}
+
+		push(value) {
+			return this.$ref.push(value).then(ref => new FireReference(ref));
+		}
+
+		get parent() {
+			return new FireReference(this.$ref.parent);
+		}
+
+		reference(path) {
+			return new FireReference(this.$ref.child(path));
+		}
+
+		collection(path) {
+			return new fb.Collection(this.$ref.child(path));
+		}
+
+		meta() {
+			return new FireMeta(this.$ref);
+		}
+
+		// TODO should this be complete()
+		destroy() {
+			this.$ref.off();
+		}
+	}
+
+	class FireCollection extends FireReference {
+		static map(path, EntityClass) {
+			return class Collection extends this {
+				$createRef(ref) {
+					return new EntityClass(new FireReference(ref));
+				}
+				$getItem(snap) {
+					return new EntityClass(fb(path).reference(snap.val()));
+				}
+			};
+		}
+
+		static mapKey(path, EntityClass) {
+			return class Collection extends this {
+				$getItem(snap) {
+					return new EntityClass(fb(path).reference(snap.key));
+				}
+			};
+		}
+
+		__subscribe(subscriber) {
+			subscriber.next(new CollectionEvent(this, 'empty'));
+			this.$ref.on(
+				'child_added',
+				this.$onSnapshot.bind(this, 'added', subscriber)
+			);
+			this.$ref.on(
+				'child_removed',
+				this.$onSnapshot.bind(this, 'removed', subscriber)
+			);
+			// this.$ref.limitToFirst(1).once('value', this.$onSnapshot.bind(this, 'meta', subscriber));
+
+			return this.destroy.bind(this);
+		}
+
+		$createRef(ref) {
+			return new FireReference(ref);
+		}
+
+		push(value) {
+			return this.$ref.push(value).then(this.$createRef);
+		}
+
+		$getItem(snap) {
+			return new Snapshot(snap);
+		}
+
+		$onSnapshot(type, subscriber, snap) {
+			let item =
+				type === 'added' || type === 'removed'
+					? this.$getItem(snap)
+					: new Snapshot(snap);
+			subscriber.next(new CollectionEvent(this, type, item));
+		}
+	}
+
+	directive('fb.snap', {
+		update(ref) {
+			return (
+				ref &&
+				ref
+					.limitToFirst(1)
+					.once('value', snap => new Snapshot(snap))
+					.catch(() => {})
+			);
+		}
+	});
+
+	directive('fb.len', {
+		update(ref) {
+			return (
+				ref &&
+				ref
+					.limitToFirst(1)
+					.once('value', snap => snap.numChildren())
+					.catch(() => {})
+			);
+		}
+	});
+
+	directive('fb', {
+		connect(state) {
+			const path = getPath(this.parameter, state);
+
+			this.bindings = [(this.fb = new FireReference(path, state.$fb))];
+		},
+
+		update(url) {
+			if (!this.fb) this.connect(this.owner.state);
+
+			this.fb.path = url;
+			return this.fb;
+		},
+
+		digest() {
+			return this.fb || this.value;
+		}
+	});
+
+	directive('fb.user', {
+		initialize() {
+			this.bindings = [
+				{
+					destroy: firebase
+						.auth()
+						.onAuthStateChanged(this.owner.digest.bind(this.owner))
+				}
+			];
+		},
+
+		digest() {
+			return firebase.auth().currentUser;
+		}
+	});
+
+	Object.assign(fb, {
+		Collection: FireCollection,
+		Reference: FireReference,
+		Model: FireModel,
+		Snapshot: Snapshot,
+
+		database: null,
+		started: false,
+
+		operators: {
+			constructEvent(Constructor, field, extraArg) {
+				return map(ev => {
+					if (ev.type === 'added' || ev.type === 'removed')
+						ev.value = new Constructor(
+							field ? ev.value[field] : ev.value,
+							extraArg
+						);
+					return ev;
+				});
+			}
+		},
+
+		start(config) {
+			if (fb.started) throw new Error('fb module already started');
+
+			firebase.initializeApp(config);
+
+			fb.started = true;
+			fb.database = firebase.database();
+			fb.auth = firebase.auth();
+		}
+	});
 })(this.cxl, this.firebase);

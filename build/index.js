@@ -84,6 +84,11 @@ function stat(file) {
 	return $stat(file).catch(() => ({ size: 0 }));
 }
 
+function fatalError(msg) {
+	console.error(colors.red(msg));
+	process.exit(1);
+}
+
 class Operation {
 	constructor(msg, fn) {
 		this.start = () => {
@@ -127,6 +132,7 @@ class Builder {
 
 	error(msg) {
 		console.error(colors.red(`${this.prefix} ${msg}`));
+		console.error(msg);
 		process.exit(1);
 	}
 
@@ -238,6 +244,98 @@ class Builder {
 	}
 }
 
+function readSync(file) {
+	return fs.readFileSync(file, 'utf8');
+}
+
+function tscError(d, line, ch, msg) {
+	if (typeof msg === 'string')
+		console.error(`[${d.file ? d.file.fileName : ''}:${line}] ${msg}`);
+	else {
+		do {
+			console.error(
+				`[${d.file ? d.file.fileName : ''}:${line}] ${msg.messageText}`
+			);
+		} while ((msg = msg.next && msg.next[0]));
+	}
+}
+
+function tsc(fileName, options) {
+	let ts;
+	try {
+		ts = require('typescript');
+	} catch (e) {
+		fatalError('Typescript not found');
+	}
+
+	if (!options)
+		options = JSON.parse(readSync('tsconfig.json')).compilerOptions;
+
+	const diagnostics = [];
+	const defaultOptions = ts.getDefaultCompilerOptions();
+
+	// mix in default options
+	options = ts.fixupCompilerOptions(
+		Object.assign({}, defaultOptions, options),
+		diagnostics
+	);
+
+	const input = readSync(fileName);
+	const inputFileName = 'out.ts';
+	const sourceFile = ts.createSourceFile(inputFileName, input);
+
+	let output = {};
+
+	// Create a compilerHost object to allow the compiler to read and write files
+	const compilerHost = {
+		getSourceFile: fileName => {
+			console.log('SOURCE ' + fileName);
+			return fileName === ts.normalizePath(inputFileName)
+				? sourceFile
+				: ts.createSourceFile(fileName, readSync(fileName));
+		},
+
+		writeFile: (name, text) => {
+			console.log(`WRITE ${name}`);
+			output[name] = text;
+		},
+		getDefaultLibFileName: () => ts.getDefaultLibFilePath(options),
+		useCaseSensitiveFileNames: () => true,
+		getCanonicalFileName: fileName => fileName,
+		getCurrentDirectory: () => process.cwd(),
+		getNewLine: () => '\n',
+		fileExists: fileName => (
+			console.log(`EXISTS? ${fileName}`), fs.existsSync(fileName)
+		),
+		readFile: name => (console.log(`READ ${name}`), 'name'),
+		directoryExists: () => true,
+		getDirectories: () => []
+	};
+	const program = ts.createProgram([inputFileName], options, compilerHost);
+
+	diagnostics.push(
+		...program.getSyntacticDiagnostics(sourceFile),
+		...program.getSemanticDiagnostics(sourceFile),
+		...program.getOptionsDiagnostics()
+	);
+	if (diagnostics.length) {
+		diagnostics.forEach(d => {
+			if (d.file) {
+				const { line, character } = ts.getLineAndCharacterOfPosition(
+					d.file,
+					d.start
+				);
+				tscError(d, line, character, d.messageText);
+			} else console.error(`${d.messageText}`);
+		});
+		fatalError('Typescript compilation failed');
+	}
+	// Emit
+	program.emit();
+
+	return output;
+}
+
 Object.assign(Builder, {
 	AMD: () => AMD,
 	exec: cmd => cp.execSync(cmd),
@@ -245,6 +343,8 @@ Object.assign(Builder, {
 	read: read,
 	stat: $stat,
 	write: write,
+	readSync: readSync,
+	tsc: tsc,
 
 	copy(src, dest) {
 		if (Array.isArray(src))

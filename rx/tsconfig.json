@@ -1,7 +1,9 @@
 {
 	"compilerOptions": {
-		"target": "es6",
 		"strict": true,
+		"target": "es6",
+		"experimentalDecorators": true,
+		"moduleResolution": "Node",
 		"removeComments": true,
 		"declaration": true,
 		"module": "commonjs"

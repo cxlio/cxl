@@ -1,6 +1,22 @@
 {
 	"watch": {
 		"rules": {
+			"ajax": {
+				"files": ["ajax/index.ts"],
+				"tasks": "cd ajax && npm run build"
+			},
+			"build": {
+				"files": ["build/index.ts", "build/tsconfig.json"],
+				"tasks": "cd build && node build"
+			},
+			"dom": {
+				"files": ["dom/index.ts"],
+				"tasks": "cd dom && node build"
+			},
+			"rx": {
+				"files": ["rx/index.ts", "rx/tsconfig.json"],
+				"tasks": "cd rx && npm run build"
+			},
 			"template": {
 				"files": ["template/src/*", "template/build.js"],
 				"tasks": "cd template && npm run build"

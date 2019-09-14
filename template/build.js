@@ -1,5 +1,7 @@
-const SRC = ['src/core.js', '../rx/index.js', 'src/dom.js', 'src/template.js'];
-require('../build').build({
+const build = require('../build'),
+	output = build.tsc('index.ts'),
+	SRC = ['src/core.js', '../rx/index.js', 'src/dom.js', 'src/template.js'];
+build.build({
 	outputDir: 'dist',
 	targets: [
 		{
@@ -10,6 +12,10 @@ require('../build').build({
 		{
 			output: 'cxl-template.dbg.js',
 			src: [...SRC, 'src/debug.js', 'src/template-debug.js']
+		},
+		{
+			output: '../index.js',
+			src: [() => output['out.ts']]
 		}
 	]
 });

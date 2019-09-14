@@ -1,11 +1,16 @@
-const build = require('./build');
+const build = require('../build'),
+	output = build.tsc('index.ts');
 
 build.build({
-	outputDir: 'dist',
+	outputDir: '.',
 	targets: [
 		{
-			output: 'test.js',
-			src: [build.AMD, build.exec('npm run build-test')]
+			output: 'store.js',
+			src: [() => output['out.js']]
+		},
+		{
+			output: 'store.d.ts',
+			src: [() => output['out.d.ts']]
 		}
 	]
 });

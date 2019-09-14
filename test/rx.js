@@ -37,15 +37,15 @@ QUnit.module('rx');
 		var obs = new cxl.rx.Observable(function(o) {
 				o.next(0);
 				o.next(0);
-				o.next(0);
-				o.next(0);
 				o.complete();
+				o.next(0);
+				o.next(0);
 			}),
 			complete,
 			times = 0;
 		obs.subscribe({
 			next: function() {
-				if (times++ === 1) this.complete();
+				times++;
 			},
 			complete: function() {
 				complete = true;

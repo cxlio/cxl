@@ -2,6 +2,9 @@
 	"name": "@cxl/build",
 	"version": "0.0.2",
 	"main": "src/build.js",
+	"scripts": {
+		"build": "node build"
+	},
 	"dependencies": {
 		"uglify-es": "*",
 		"colors": "*"

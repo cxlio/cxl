@@ -1,4 +1,7 @@
 {
 	"name": "@cxl/ajax",
-	"version": "0.0.1"
+	"version": "0.0.1",
+	"scripts": {
+		"build": "node build"
+	}
 }
