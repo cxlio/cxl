@@ -18,10 +18,9 @@
 				"tasks": "cd rx && npm run build"
 			},
 			"template": {
-				"files": ["template/src/*", "template/build.js"],
-				"tasks": "cd template && npm run build"
+				"files": ["template/index.ts", "template/build.js"],
+				"tasks": "cd template && npm run build test"
 			},
-
 			"store": {
 				"files": ["store/index.ts", "store/tsconfig.json"],
 				"tasks": "cd store && npm run build"
@@ -66,6 +65,10 @@
 			"ui-docs": {
 				"files": ["ui-docs/src/*", "ui-docs/build.js"],
 				"tasks": "node ui-docs/build"
+			},
+			"tester": {
+				"files": ["tester/index.ts", "tester/build.js"],
+				"tasks": "node tester/build"
 			}
 		}
 	}

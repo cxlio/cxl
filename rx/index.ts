@@ -7,7 +7,8 @@ type SubscribeFunction<T> = (
 	subscription: Subscription<T>
 ) => UnsubscribeFunction;
 type EventCallback = (...args: any) => void;
-type Operator<T> = (observable: Observable<T>) => Observable<T>;
+
+export type Operator<T> = (observable: Observable<T>) => Observable<T>;
 
 interface Observer<T> {
 	next: NextFunction<T>;
@@ -15,7 +16,7 @@ interface Observer<T> {
 	complete: CompleteFunction;
 }
 
-type NextObserver<T> = NextFunction<T> | Observer<T>;
+type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
 
 class Subscriber<T> {
 	public next: NextFunction<T>;
@@ -23,7 +24,7 @@ class Subscriber<T> {
 	public complete: CompleteFunction | undefined;
 
 	constructor(
-		observer: NextObserver<T>,
+		observer: NextObserver<T> = () => {},
 		error?: ErrorFunction,
 		complete?: CompleteFunction
 	) {
@@ -39,7 +40,7 @@ class Subscriber<T> {
 	}
 }
 
-class Subscription<T> {
+export class Subscription<T> {
 	isUnsubscribed = false;
 	onUnsubscribe: UnsubscribeFunction;
 
@@ -92,14 +93,13 @@ class Observable<T> {
 	}
 
 	pipe(operator: Operator<T>, ...extra: Operator<T>[]): Observable<T> {
-		const result = extra
+		return extra
 			? extra.reduce((prev, fn) => fn(prev), operator(this))
 			: operator(this);
-		return result;
 	}
 
 	subscribe(
-		observer: NextObserver<T>,
+		observer?: NextObserver<T>,
 		error?: ErrorFunction,
 		complete?: CompleteFunction
 	): Subscription<T> {
@@ -250,7 +250,7 @@ function toPromise<T>(observable: Observable<T>) {
 	});
 }
 
-function operator<T>(
+export function operator<T>(
 	fn: (subs: Subscription<T>) => NextObserver<T>
 ): Operator<T> {
 	return (source: Observable<T>) =>
@@ -281,6 +281,7 @@ function filter<T>(fn: (val: T) => boolean): Operator<T> {
 function distinctUntilChanged<T>(): Operator<T> {
 	let lastValue: T;
 	return operator((subscriber: Subscription<T>) => (val: T) => {
+		console.log(val);
 		if (val !== lastValue) {
 			lastValue = val;
 			subscriber.next(val);

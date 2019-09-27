@@ -5,20 +5,20 @@ declare type CompleteFunction = () => void;
 declare type UnsubscribeFunction = () => void;
 declare type SubscribeFunction<T> = (subscription: Subscription<T>) => UnsubscribeFunction;
 declare type EventCallback = (...args: any) => void;
-declare type Operator<T> = (observable: Observable<T>) => Observable<T>;
+export declare type Operator<T> = (observable: Observable<T>) => Observable<T>;
 interface Observer<T> {
     next: NextFunction<T>;
     error: ErrorFunction;
     complete: CompleteFunction;
 }
-declare type NextObserver<T> = NextFunction<T> | Observer<T>;
+declare type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
 declare class Subscriber<T> {
     next: NextFunction<T>;
     error: ErrorFunction | undefined;
     complete: CompleteFunction | undefined;
-    constructor(observer: NextObserver<T>, error?: ErrorFunction, complete?: CompleteFunction);
+    constructor(observer?: NextObserver<T>, error?: ErrorFunction, complete?: CompleteFunction);
 }
-declare class Subscription<T> {
+export declare class Subscription<T> {
     private subscriber;
     isUnsubscribed: boolean;
     onUnsubscribe: UnsubscribeFunction;
@@ -33,7 +33,7 @@ declare class Observable<T> {
     protected __subscribe(subscription?: Subscription<T>): UnsubscribeFunction;
     constructor(subscribe?: SubscribeFunction<T>);
     pipe(operator: Operator<T>, ...extra: Operator<T>[]): Observable<T>;
-    subscribe(observer: NextObserver<T>, error?: ErrorFunction, complete?: CompleteFunction): Subscription<T>;
+    subscribe(observer?: NextObserver<T>, error?: ErrorFunction, complete?: CompleteFunction): Subscription<T>;
 }
 declare class Subject<T> extends Observable<T> {
     protected subscriptions: Set<Subscription<T>>;
@@ -85,6 +85,7 @@ declare class EventEmitter {
     once(type: string, callback: EventCallback, scope: any): void;
 }
 declare function toPromise<T>(observable: Observable<T>): Promise<T>;
+export declare function operator<T>(fn: (subs: Subscription<T>) => NextObserver<T>): Operator<T>;
 declare function map<T, T2>(mapFn: (val: T) => T2): (source: Observable<T>) => Observable<T2>;
 declare function filter<T>(fn: (val: T) => boolean): Operator<T>;
 declare function distinctUntilChanged<T>(): Operator<T>;

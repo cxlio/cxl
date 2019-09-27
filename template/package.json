@@ -1,10 +1,13 @@
 {
 	"name": "@cxl/template",
 	"version": "1.0.0",
-	"files": [ "dist/*.js" ],
+	"files": [
+		"dist/*.js"
+	],
 	"main": "dist/cxl-template.min.js",
 	"scripts": {
 		"build": "node build",
-		"prepublish": "node build test minify"
+		"prepublish": "node build test minify",
+		"test": "node test/build && node test/index.js"
 	}
 }

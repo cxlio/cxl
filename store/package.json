@@ -1,24 +1,21 @@
 {
 	"name": "@cxl/store",
 	"version": "0.0.1",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "index.js",
+	"types": "index.d.ts",
 	"files": [
-		"dist/index.js",
-		"dist/index.d.ts",
-		"dist/index.js.map"
+		"index.js",
+		"index.d.ts",
+		"index.js.map"
 	],
 	"type": "module",
 	"scripts": {
 		"build": "tsc",
 		"test": "tsc -b tsconfig.test.json && cd dist && node test",
-		"prepublish": "tsc --sourceMap"
+		"prepublish": "node build"
 	},
 	"devDependencies": {
 		"typescript": "^3.5",
 		"@cxl/rx": "*"
-	},
-	"dependencies": {
-		"@types/node": "^12.7.1"
 	}
 }

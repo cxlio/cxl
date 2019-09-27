@@ -21,9 +21,10 @@ const fs = require('fs'),
 function define(name, injects, module) {
 	const modules = define.modules || (define.modules = {}),
 		exports = {},
-		arguments = [null, exports];
-	injects.forEach(i => arguments.push(modules[i]));
-	module.apply(null, arguments);
+		args = [null, exports];
+	for (let i=2;i<injects.length;i++)
+		args.push(modules[injects[i]]);
+	module.apply(null, args);
 	modules[name] = exports;
 }
 	`;
@@ -160,6 +161,11 @@ class Builder {
 		this.config = config;
 		this.reportOutput = { targets: {} };
 
+		if (config.chdir) {
+			this.log(`chdir ${config.chdir}`);
+			process.chdir(config.chdir);
+		}
+
 		try {
 			fs.mkdirSync(this.outputDir);
 		} catch (e) {}
@@ -260,7 +266,7 @@ function tscError(d, line, ch, msg) {
 	}
 }
 
-function tsc(fileName, options) {
+function tsc(inputFileName, options) {
 	let ts;
 	try {
 		ts = require('typescript');
@@ -280,8 +286,7 @@ function tsc(fileName, options) {
 		diagnostics
 	);
 
-	const input = readSync(fileName);
-	const inputFileName = 'out.ts';
+	const input = readSync(inputFileName);
 	const sourceFile = ts.createSourceFile(inputFileName, input);
 
 	let output = {};
@@ -307,9 +312,7 @@ function tsc(fileName, options) {
 		fileExists: fileName => (
 			console.log(`EXISTS? ${fileName}`), fs.existsSync(fileName)
 		),
-		readFile: name => (console.log(`READ ${name}`), 'name'),
-		directoryExists: () => true,
-		getDirectories: () => []
+		readFile: name => (console.log(`READ ${name}`), read(name))
 	};
 	const program = ts.createProgram([inputFileName], options, compilerHost);
 
@@ -334,6 +337,36 @@ function tsc(fileName, options) {
 	program.emit();
 
 	return output;
+}
+
+class Packager {
+	constructor(source) {
+		this.source = source;
+	}
+
+	package() {
+		const moduleMap = {
+				require: true,
+				exports: true
+			},
+			dependencies = [];
+
+		function define(name, deps) {
+			moduleMap[name] = true;
+			dependencies.push(...deps);
+		}
+
+		function getDependency(dep) {
+			return moduleMap[dep] ? [] : read(require.resolve(dep));
+		}
+
+		const src = this.source;
+		const outFn = new Function('define', src);
+		outFn(define);
+		return Promise.all(dependencies.flatMap(getDependency)).then(
+			dep => dep.join('\n') + src
+		);
+	}
 }
 
 Object.assign(Builder, {

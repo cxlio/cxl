@@ -1,9 +1,4 @@
-import {
-	BehaviorSubject,
-	Observable,
-	map,
-	distinctUntilChanged
-} from '@cxl/rx';
+import { BehaviorSubject, Observable, map, distinctUntilChanged } from '../rx';
 
 export interface Action {
 	type: string;
@@ -33,7 +28,10 @@ export class StoreBase<State> {
 		return this.subject.pipe(
 			map(
 				(state: State): any =>
-					keys.reduce((result, key) => result && result[key], state)
+					keys.reduce(
+						(result: any, key) => result && result[key],
+						state
+					)
 			),
 			distinctUntilChanged()
 		);

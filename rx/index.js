@@ -2,7 +2,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Subscriber {
-    constructor(observer, error, complete) {
+    constructor(observer = () => { }, error, complete) {
         if (observer && typeof observer !== 'function') {
             error = observer.error;
             complete = observer.complete;
@@ -48,6 +48,7 @@ class Subscription {
             this.onUnsubscribe();
     }
 }
+exports.Subscription = Subscription;
 class Observable {
     static create(A) {
         return new this(A);
@@ -60,10 +61,9 @@ class Observable {
             this.__subscribe = subscribe;
     }
     pipe(operator, ...extra) {
-        const result = extra
+        return extra
             ? extra.reduce((prev, fn) => fn(prev), operator(this))
             : operator(this);
-        return result;
     }
     subscribe(observer, error, complete) {
         const subscriber = new Subscriber(observer, error, complete);
@@ -203,6 +203,7 @@ function operator(fn) {
         return subscription.unsubscribe.bind(subscription);
     });
 }
+exports.operator = operator;
 function map(mapFn) {
     return (source) => new Observable(subscriber => {
         const subscription = source.subscribe(val => subscriber.next(mapFn(val)), subscriber.error.bind(subscriber), subscriber.complete.bind(subscriber));

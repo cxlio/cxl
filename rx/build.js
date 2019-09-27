@@ -11,11 +11,11 @@ build.build({
 	targets: [
 		{
 			output: 'index.js',
-			src: [HEADER, () => output['out.js'], FOOTER]
+			src: [HEADER, () => output['index.js'], FOOTER]
 		},
 		{
 			output: 'index.d.ts',
-			src: [() => output['out.d.ts']]
+			src: [() => output['index.d.ts']]
 		}
 	]
 });

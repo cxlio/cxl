@@ -15,7 +15,11 @@ build.build({
 		},
 		{
 			output: '../index.js',
-			src: [() => output['out.ts']]
+			src: [() => output['out.js']]
+		},
+		{
+			output: '../index.d.ts',
+			src: [() => output['out.d.ts']]
 		}
 	]
 });
