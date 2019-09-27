@@ -1,0 +1,11 @@
+{
+	"name": "@cxl/tester",
+	"version": "0.0.1",
+	"dependencies": {
+		"puppeteer": "*",
+		"istanbul-lib-instrument": "*"
+	},
+	"devDependencies": {
+		"@types/puppeteer": "*"
+	}
+}
