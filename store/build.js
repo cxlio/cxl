@@ -5,12 +5,12 @@ build.build({
 	outputDir: '.',
 	targets: [
 		{
-			output: 'store.js',
-			src: [() => output['out.js']]
+			output: 'index.js',
+			src: [() => output['index.js']]
 		},
 		{
-			output: 'store.d.ts',
-			src: [() => output['out.d.ts']]
+			output: 'index.d.ts',
+			src: [() => output['index.d.ts']]
 		}
 	]
 });

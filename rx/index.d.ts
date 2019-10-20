@@ -3,7 +3,7 @@ declare type NextFunction<T> = (val: T) => void;
 declare type ErrorFunction = (err: ObservableError) => void;
 declare type CompleteFunction = () => void;
 declare type UnsubscribeFunction = () => void;
-declare type SubscribeFunction<T> = (subscription: Subscription<T>) => UnsubscribeFunction;
+declare type SubscribeFunction<T> = (subscription: Subscription<T>) => UnsubscribeFunction | void;
 declare type EventCallback = (...args: any) => void;
 export declare type Operator<T> = (observable: Observable<T>) => Observable<T>;
 interface Observer<T> {
@@ -21,7 +21,7 @@ declare class Subscriber<T> {
 export declare class Subscription<T> {
     private subscriber;
     isUnsubscribed: boolean;
-    onUnsubscribe: UnsubscribeFunction;
+    onUnsubscribe: UnsubscribeFunction | void;
     constructor(subscriber: Subscriber<T>, subscribe: SubscribeFunction<T>);
     next(val: T): void;
     error(e: ObservableError): void;
@@ -30,7 +30,7 @@ export declare class Subscription<T> {
 }
 declare class Observable<T> {
     static create<T2>(A: any): Observable<T2>;
-    protected __subscribe(subscription?: Subscription<T>): UnsubscribeFunction;
+    protected __subscribe(_subscription?: Subscription<T>): UnsubscribeFunction | void;
     constructor(subscribe?: SubscribeFunction<T>);
     pipe(operator: Operator<T>, ...extra: Operator<T>[]): Observable<T>;
     subscribe(observer?: NextObserver<T>, error?: ErrorFunction, complete?: CompleteFunction): Subscription<T>;
@@ -88,10 +88,14 @@ declare function toPromise<T>(observable: Observable<T>): Promise<T>;
 export declare function operator<T>(fn: (subs: Subscription<T>) => NextObserver<T>): Operator<T>;
 declare function map<T, T2>(mapFn: (val: T) => T2): (source: Observable<T>) => Observable<T2>;
 declare function filter<T>(fn: (val: T) => boolean): Operator<T>;
+declare function tap<T>(fn: (val: T) => any): Operator<T>;
 declare function distinctUntilChanged<T>(): Operator<T>;
+declare function concat(...observables: Observable<any>[]): Observable<any>;
+declare function of<T>(...values: T[]): Observable<T>;
 declare const operators: {
     map: typeof map;
+    tap: typeof tap;
     filter: typeof filter;
     distinctUntilChanged: typeof distinctUntilChanged;
 };
-export { Observable, BehaviorSubject, CollectionEvent, Event, EventEmitter, Item, Subject, Subscriber, toPromise, operators, map, filter, distinctUntilChanged };
+export { Observable, BehaviorSubject, CollectionEvent, Event, EventEmitter, Item, Subject, Subscriber, toPromise, operators, map, tap, filter, distinctUntilChanged, concat, of };

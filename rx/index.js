@@ -53,7 +53,7 @@ class Observable {
     static create(A) {
         return new this(A);
     }
-    __subscribe(subscription) {
+    __subscribe(_subscription) {
         return () => { };
     }
     constructor(subscribe) {
@@ -218,6 +218,13 @@ function filter(fn) {
     });
 }
 exports.filter = filter;
+function tap(fn) {
+    return operator((subscriber) => (val) => {
+        fn(val);
+        subscriber.next(val);
+    });
+}
+exports.tap = tap;
 function distinctUntilChanged() {
     let lastValue;
     return operator((subscriber) => (val) => {
@@ -228,8 +235,42 @@ function distinctUntilChanged() {
     });
 }
 exports.distinctUntilChanged = distinctUntilChanged;
+function concat(...observables) {
+    return new Observable(subscriber => {
+        let subscription;
+        function onComplete() {
+            const next = observables.shift();
+            if (next)
+                subscription = next.subscribe({
+                    next(val) {
+                        subscriber.next(val);
+                    },
+                    error(err) {
+                        subscriber.error(err);
+                    },
+                    complete: onComplete
+                });
+            else
+                subscriber.complete();
+        }
+        onComplete();
+        return () => {
+            if (subscription)
+                subscription.unsubscribe();
+        };
+    });
+}
+exports.concat = concat;
+function of(...values) {
+    return new Observable(subscriber => {
+        values.forEach(val => subscriber.next(val));
+        subscriber.complete();
+    });
+}
+exports.of = of;
 const operators = {
     map,
+    tap,
     filter,
     distinctUntilChanged
 };

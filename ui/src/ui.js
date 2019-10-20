@@ -1503,7 +1503,8 @@ root.on(load):#update
 					backgroundColor: 'secondary',
 					height: 4,
 					width: 100,
-					transform: 'scaleX(0)'
+					transform: 'scaleX(0)',
+					display: 'none'
 				},
 				content: { display: 'flex' },
 				content$small: { display: 'block' }
@@ -1523,6 +1524,7 @@ root.on(load):#update
 					bar.style.transform = `translate(${
 						tab.offsetLeft
 					}px, 0) scaleX(${scaleX})`;
+					bar.style.display = 'block';
 				});
 			},
 

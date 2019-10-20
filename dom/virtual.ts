@@ -51,12 +51,26 @@ function insert(host: VirtualElement, el: VirtualNode) {
 	el.parentNode = host;
 }
 
+class VirtualMutationObserver {
+	constructor(private callback: any) {}
+
+	$trigger(event: any) {
+		this.callback([event]);
+	}
+
+	observe(element: VirtualElement, _options?: any) {
+		element.$observer = this;
+	}
+}
+
 class VirtualElement extends VirtualNode {
 	private $attributes: { [name: string]: string } = {};
 
 	readonly tagName: string;
 	readonly nodeType = VirtualNode.ELEMENT_NODE;
+
 	childNodes: VirtualNode[] = [];
+	$observer?: VirtualMutationObserver;
 
 	constructor(tagName: string) {
 		super();
@@ -84,11 +98,14 @@ class VirtualElement extends VirtualNode {
 		return this.childNodes[this.childNodes.length - 1];
 	}
 
-	addEventListener(event, handler, options) {}
+	addEventListener(_event: string, _handler, _options) {}
 
-	removeEventListener(event, handler, options) {}
+	removeEventListener(_event: string, _handler, _options) {}
 
 	setAttribute(attr: string, value: any) {
+		if (this.$observer)
+			this.$observer.$trigger({ type: 'attribute', attributeName: attr });
+
 		this.$attributes[attr] = String(value);
 	}
 
@@ -173,6 +190,7 @@ global.DocumentFragment = VirtualFragment;
 global.Element = VirtualElement;
 global.Node = VirtualNode;
 global.TextNode = VirtualTextNode;
+global.MutationObserver = VirtualMutationObserver;
 
 global.document = {
 	createElement(tagName: string): Element {

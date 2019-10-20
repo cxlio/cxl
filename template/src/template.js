@@ -548,11 +548,12 @@
 			element.$$childrenObserver = this;
 		}
 
-		onSubscribe() {
+		onSubscribe(subscription) {
 			if (!this.observer) {
 				this.observer = new MutationObserver(this.$onEvents.bind(this));
 				this.observer.observe(this.element, { childList: true });
 			}
+			super.onSubscribe(subscription);
 		}
 
 		unsubscribe(s) {

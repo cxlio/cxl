@@ -21,6 +21,10 @@
 				"files": ["template/index.ts", "template/build.js"],
 				"tasks": "cd template && npm run build test"
 			},
+			"router": {
+				"files": ["router/index.ts", "router/tsconfig.json"],
+				"tasks": "cd router && npm run build"
+			},
 			"store": {
 				"files": ["store/index.ts", "store/tsconfig.json"],
 				"tasks": "cd store && npm run build"

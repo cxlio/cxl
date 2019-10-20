@@ -5,7 +5,7 @@ type CompleteFunction = () => void;
 type UnsubscribeFunction = () => void;
 type SubscribeFunction<T> = (
 	subscription: Subscription<T>
-) => UnsubscribeFunction;
+) => UnsubscribeFunction | void;
 type EventCallback = (...args: any) => void;
 
 export type Operator<T> = (observable: Observable<T>) => Observable<T>;
@@ -42,7 +42,7 @@ class Subscriber<T> {
 
 export class Subscription<T> {
 	isUnsubscribed = false;
-	onUnsubscribe: UnsubscribeFunction;
+	onUnsubscribe: UnsubscribeFunction | void;
 
 	constructor(
 		private subscriber: Subscriber<T>,
@@ -84,7 +84,9 @@ class Observable<T> {
 		return new this(A);
 	}
 
-	protected __subscribe(subscription?: Subscription<T>): UnsubscribeFunction {
+	protected __subscribe(
+		_subscription?: Subscription<T>
+	): UnsubscribeFunction | void {
 		return () => {};
 	}
 
@@ -278,10 +280,16 @@ function filter<T>(fn: (val: T) => boolean): Operator<T> {
 	});
 }
 
+function tap<T>(fn: (val: T) => any): Operator<T> {
+	return operator((subscriber: Subscription<T>) => (val: T) => {
+		fn(val);
+		subscriber.next(val);
+	});
+}
+
 function distinctUntilChanged<T>(): Operator<T> {
 	let lastValue: T;
 	return operator((subscriber: Subscription<T>) => (val: T) => {
-		console.log(val);
 		if (val !== lastValue) {
 			lastValue = val;
 			subscriber.next(val);
@@ -289,8 +297,43 @@ function distinctUntilChanged<T>(): Operator<T> {
 	});
 }
 
+function concat(...observables: Observable<any>[]) {
+	return new Observable<any>(subscriber => {
+		let subscription: Subscription<any>;
+
+		function onComplete() {
+			const next = observables.shift();
+			if (next)
+				subscription = next.subscribe({
+					next(val) {
+						subscriber.next(val);
+					},
+					error(err) {
+						subscriber.error(err);
+					},
+					complete: onComplete
+				});
+			else subscriber.complete();
+		}
+
+		onComplete();
+
+		return () => {
+			if (subscription) subscription.unsubscribe();
+		};
+	});
+}
+
+function of<T>(...values: T[]): Observable<T> {
+	return new Observable<T>(subscriber => {
+		values.forEach(val => subscriber.next(val));
+		subscriber.complete();
+	});
+}
+
 const operators = {
 	map,
+	tap,
 	filter,
 	distinctUntilChanged
 };
@@ -307,6 +350,9 @@ export {
 	toPromise,
 	operators,
 	map,
+	tap,
 	filter,
-	distinctUntilChanged
+	distinctUntilChanged,
+	concat,
+	of
 };

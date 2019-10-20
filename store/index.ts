@@ -11,7 +11,7 @@ export class SetAction implements Action {
 }
 
 export class StoreBase<State> {
-	protected subject = new BehaviorSubject();
+	protected subject = new BehaviorSubject(this.state);
 	constructor(public state: State) {}
 
 	select<K extends keyof State>(key: K): Observable<State[K]>;
@@ -24,7 +24,7 @@ export class StoreBase<State> {
 		K2 extends keyof State[K],
 		K3 extends keyof State[K][K2]
 	>(key: K, key2: K2, key3: K3): Observable<State[K][K2][K3]>;
-	select(...keys: string[]) {
+	select(...keys: string[]): Observable<any> {
 		return this.subject.pipe(
 			map(
 				(state: State): any =>
@@ -35,6 +35,11 @@ export class StoreBase<State> {
 			),
 			distinctUntilChanged()
 		);
+	}
+
+	set<K extends keyof State>(key: K, value: State[K]) {
+		this.state[key] = value;
+		this.subject.next(this.state);
 	}
 }
 

@@ -4,6 +4,9 @@ import {
 	Observable,
 	filter,
 	map,
+	tap,
+	of,
+	concat,
 	Subscription
 } from '../rx';
 import {
@@ -74,7 +77,7 @@ export class View<StateT> {
 		this.subscriptions.push(binding);
 	}
 
-	constructor(public element: Element, state: StateT) {
+	constructor(public element: Element, public readonly state: StateT) {
 		this.store = new StoreBase(state);
 	}
 }
@@ -98,14 +101,16 @@ class ParsedMatch {
  */
 class Compiler {
 	directives: { [key: string]: Directive<any> } = {
-		'@': set,
-		set: set
+		'@': setAttribute,
+		'=': setState,
+		setAttribute,
+		log
 	};
 	sources: { [key: string]: Source<any> } = {
-		'@': get,
+		'@': getAttribute,
 		'=': select,
-		select: select,
-		get: get
+		select,
+		getAttribute
 	};
 
 	directiveNotFound(directive: string) {
@@ -188,26 +193,39 @@ class Compiler {
 
 const compiler = new Compiler();
 
-export function compile<T>(template: VirtualElement, state: T) {
-	const host = document.createElement('div'),
-		view = new View(host, state);
-	return compiler.compile(template, view);
+export function compile<T>(template: VirtualElement, state: T): View<T> {
+	const host = document.createElement('DIV'),
+		view = new View(host, state),
+		nodes = compiler.compile(template, view);
+	host.appendChild(nodes);
+	return view;
 }
 
-function select<T>(element: Element, selector: keyof T, view: View<T>) {
+function select<T>(_element: Element, selector: keyof T, view: View<T>) {
 	return view.store.select(selector);
 }
 
-function get(element: Element, property: string) {
+function setState<T>(_element: Element, selector: keyof T, view: View<T>) {
+	return tap(value => view.store.set(selector, value));
+}
+
+function getAttribute(element: Element, property: string) {
 	const observer = new AttributeObserver(element);
-	return observer.pipe(
-		filter(event => event.type === 'attribute' && event.value === property),
-		map(event => event.value)
+	return concat(
+		of((element as any)[property]),
+		observer.pipe(
+			filter(
+				event => event.type === 'attribute' && event.value === property
+			),
+			map(event => event.value)
+		)
 	);
 }
 
-function set<T>(element: Element, property: string): Operator<T> {
+function setAttribute<T>(element: Element, property: string): Operator<T> {
 	return map(value => ((element as any)[property] = value));
 }
 
-// function set<T>(element: Element, property: keyof T, view: View<T>) {}
+function log<T>(): Operator<T> {
+	return tap(value => console.log(value));
+}
