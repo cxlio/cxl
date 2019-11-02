@@ -2,7 +2,7 @@ const build = require('../build'),
 	src = build.tsc('index.ts');
 
 build.build({
-	outputDir: '.',
+	outputDir: '../dist/dom',
 	targets: [
 		{
 			output: 'index.js',
@@ -12,7 +12,7 @@ build.build({
 			output: 'dom.js',
 			src: [
 				() => `(exports=>{`,
-				() => src['out.js'],
+				() => src['index.js'],
 				() => `})(this.cxl||(this.cxl={}));`
 			],
 			minify: 'dom.min.js'
@@ -20,6 +20,14 @@ build.build({
 		{
 			output: 'index.d.ts',
 			src: [() => src['index.d.ts']]
+		},
+		{
+			output: 'package.json',
+			src: [build.package()]
+		},
+		{
+			output: 'LICENSE',
+			src: ['../LICENSE']
 		}
 	]
 });

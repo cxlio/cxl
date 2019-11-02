@@ -166,9 +166,7 @@ class Builder {
 			process.chdir(config.chdir);
 		}
 
-		try {
-			fs.mkdirSync(this.outputDir);
-		} catch (e) {}
+		cp.execSync(`mkdir -p ${this.outputDir}`);
 
 		Promise.all(
 			config.targets.map(target =>
@@ -378,6 +376,25 @@ Object.assign(Builder, {
 	write: write,
 	readSync: readSync,
 	tsc: tsc,
+
+	package(pkg) {
+		return c =>
+			JSON.stringify(
+				Object.assign(
+					{
+						name: c.package.name,
+						version: c.package.version,
+						license: c.package.license,
+						files: ['*.js', 'index.d.ts', 'LICENSE'],
+						main: 'index.js',
+						homepage: c.package.homepage,
+						bugs: c.package.bugs,
+						repository: c.package.repository
+					},
+					pkg
+				)
+			);
+	},
 
 	copy(src, dest) {
 		if (Array.isArray(src))

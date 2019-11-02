@@ -1,4 +1,5 @@
-// import * as puppeteer from 'puppeteer';
+type TestFn = (test: Test) => void;
+type SuiteFn = (suiteFn: (name: string, testFn: TestFn) => void) => void;
 
 class Result {
 	constructor(
@@ -7,10 +8,21 @@ class Result {
 	) {}
 }
 
-export class TestContext {
-	results: Result[] = [];
+interface TestConfig {
+	name: string;
+}
 
-	constructor(public name: string) {}
+class Test {
+	name: string;
+	promise?: Promise<any>;
+	results: Result[] = [];
+	tests: Test[] = [];
+	timeout = 5 * 1000;
+
+	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
+		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
+		else this.name = nameOrConfig.name;
+	}
 
 	ok(condition: any, msg: string = '') {
 		this.results.push(new Result(!!condition, msg));
@@ -19,28 +31,45 @@ export class TestContext {
 	equal<T>(a: T, b: T) {
 		return this.ok(a === b, `${a} should equal ${b}`);
 	}
-}
 
-class Suite {
-	tests: TestContext[] = [];
-	constructor(public name: string) {}
+	async() {
+		let result: () => void, timeout: number;
 
-	addTest(test: TestContext) {
-		this.tests.push(test);
+		this.promise = new Promise<void>((resolve, reject) => {
+			result = resolve;
+			timeout = setTimeout(reject, this.timeout);
+		});
+		return () => {
+			result();
+			clearTimeout(timeout);
+		};
+	}
+
+	test(name: string, testFn: TestFn) {
+		this.tests.push(new Test(name, testFn));
+	}
+
+	async run(): Promise<Result[]> {
+		this.testFn(this);
+		return Promise.all(this.tests.map(test => test.run())).then(
+			() => this.results
+		);
 	}
 }
 
 class TestReport {
-	constructor(private suite: Suite) {}
+	constructor(private suite: Test) {}
 
-	printTest(test: TestContext) {
+	printTest(test: Test) {
 		let out = '',
 			failures = test.results.filter(result => {
 				out += result.success ? '.' : 'X';
 				return result.success === false;
 			});
-		console.log(`   ${test.name} ${out}`);
+		console.group(`${test.name} ${out}`);
 		failures.forEach(fail => this.printError(fail));
+		test.tests.forEach((test: Test) => this.printTest(test));
+		console.groupEnd();
 	}
 
 	printError(fail: Result) {
@@ -48,24 +77,19 @@ class TestReport {
 	}
 
 	print() {
-		console.log(this.suite.name);
-		this.suite.tests.forEach(test => this.printTest(test));
+		this.printTest(this.suite);
 	}
 }
 
-type TestFn = (context: TestContext) => void;
-type SuiteFn = (test: (name: string, testFn: TestFn) => void) => void;
+export async function suite(
+	nameOrConfig: string | TestConfig,
+	suiteFn: SuiteFn
+) {
+	const suite = new Test(nameOrConfig, context => {
+		suiteFn(context.test.bind(context));
+	});
 
-export function suite(name: string, suiteFn: SuiteFn) {
-	const suite = new Suite(name);
-
-	function test(name: string, testFn: TestFn) {
-		const test = new TestContext(name);
-		suite.addTest(test);
-		testFn(test);
-	}
-
-	suiteFn(test);
+	await suite.run();
 	const report = new TestReport(suite);
 	report.print();
 }

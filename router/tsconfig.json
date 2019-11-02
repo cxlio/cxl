@@ -1,12 +1,13 @@
 {
 	"compilerOptions": {
 		"strict": true,
+		"lib": ["lib.es2015.d.ts"],
 		"target": "es6",
-		"module": "es6",
 		"experimentalDecorators": true,
 		"moduleResolution": "Node",
 		"removeComments": true,
-		"jsx": "react",
-		"jsxFactory": "dom"
-	}
+		"declaration": true,
+		"module": "commonjs"
+	},
+	"include": ["index.ts"]
 }

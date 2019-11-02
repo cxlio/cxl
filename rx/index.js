@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Subscriber {
     constructor(observer = () => { }, error, complete) {
         if (observer && typeof observer !== 'function') {
-            error = observer.error;
-            complete = observer.complete;
-            observer = observer.next;
+            error = observer.error && observer.error.bind(observer);
+            complete = observer.complete && observer.complete.bind(observer);
+            observer = observer.next && observer.next.bind(observer);
         }
         this.next = observer;
         this.error = error;
@@ -18,7 +18,12 @@ class Subscription {
     constructor(subscriber, subscribe) {
         this.subscriber = subscriber;
         this.isUnsubscribed = false;
-        this.onUnsubscribe = subscribe(this);
+        try {
+            this.onUnsubscribe = subscribe(this);
+        }
+        catch (e) {
+            this.error(e);
+        }
     }
     next(val) {
         const subscriber = this.subscriber;
@@ -190,51 +195,6 @@ class EventEmitter {
     }
 }
 exports.EventEmitter = EventEmitter;
-function toPromise(observable) {
-    return new Promise((resolve, reject) => {
-        let value;
-        observable.subscribe((val) => (value = val), (e) => reject(e), () => resolve(value));
-    });
-}
-exports.toPromise = toPromise;
-function operator(fn) {
-    return (source) => new Observable(subscriber => {
-        const subscription = source.subscribe(fn(subscriber));
-        return subscription.unsubscribe.bind(subscription);
-    });
-}
-exports.operator = operator;
-function map(mapFn) {
-    return (source) => new Observable(subscriber => {
-        const subscription = source.subscribe(val => subscriber.next(mapFn(val)), subscriber.error.bind(subscriber), subscriber.complete.bind(subscriber));
-        return subscription.unsubscribe.bind(subscription);
-    });
-}
-exports.map = map;
-function filter(fn) {
-    return operator((subscriber) => (val) => {
-        if (fn(val))
-            subscriber.next(val);
-    });
-}
-exports.filter = filter;
-function tap(fn) {
-    return operator((subscriber) => (val) => {
-        fn(val);
-        subscriber.next(val);
-    });
-}
-exports.tap = tap;
-function distinctUntilChanged() {
-    let lastValue;
-    return operator((subscriber) => (val) => {
-        if (val !== lastValue) {
-            lastValue = val;
-            subscriber.next(val);
-        }
-    });
-}
-exports.distinctUntilChanged = distinctUntilChanged;
 function concat(...observables) {
     return new Observable(subscriber => {
         let subscription;
@@ -268,6 +228,60 @@ function of(...values) {
     });
 }
 exports.of = of;
+function toPromise(observable) {
+    return new Promise((resolve, reject) => {
+        let value;
+        observable.subscribe((val) => (value = val), (e) => reject(e), () => resolve(value));
+    });
+}
+exports.toPromise = toPromise;
+function operator(fn) {
+    return (source) => new Observable(subscriber => {
+        const subscription = source.subscribe(fn(subscriber));
+        return subscription.unsubscribe.bind(subscription);
+    });
+}
+exports.operator = operator;
+function map(mapFn) {
+    return operator(subscriber => (val) => {
+        subscriber.next(mapFn(val));
+    });
+}
+exports.map = map;
+function mergeMap(project) {
+    let lastSubscription;
+    return operator(subscriber => (val) => {
+        if (lastSubscription)
+            lastSubscription.unsubscribe();
+        const newObservable = project(val);
+        lastSubscription = newObservable.subscribe(val => subscriber.next(val));
+    });
+}
+exports.mergeMap = mergeMap;
+function filter(fn) {
+    return operator((subscriber) => (val) => {
+        if (fn(val))
+            subscriber.next(val);
+    });
+}
+exports.filter = filter;
+function tap(fn) {
+    return operator((subscriber) => (val) => {
+        fn(val);
+        subscriber.next(val);
+    });
+}
+exports.tap = tap;
+function distinctUntilChanged() {
+    let lastValue;
+    return operator((subscriber) => (val) => {
+        if (val !== lastValue) {
+            lastValue = val;
+            subscriber.next(val);
+        }
+    });
+}
+exports.distinctUntilChanged = distinctUntilChanged;
 const operators = {
     map,
     tap,

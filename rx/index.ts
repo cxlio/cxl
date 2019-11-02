@@ -8,12 +8,12 @@ type SubscribeFunction<T> = (
 ) => UnsubscribeFunction | void;
 type EventCallback = (...args: any) => void;
 
-export type Operator<T> = (observable: Observable<T>) => Observable<T>;
+export type Operator<T, T2 = T> = (observable: Observable<T>) => Observable<T2>;
 
 interface Observer<T> {
-	next: NextFunction<T>;
-	error: ErrorFunction;
-	complete: CompleteFunction;
+	next?: NextFunction<T>;
+	error?: ErrorFunction;
+	complete?: CompleteFunction;
 }
 
 type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
@@ -29,9 +29,9 @@ class Subscriber<T> {
 		complete?: CompleteFunction
 	) {
 		if (observer && typeof observer !== 'function') {
-			error = observer.error;
-			complete = observer.complete;
-			observer = observer.next;
+			error = observer.error && observer.error.bind(observer);
+			complete = observer.complete && observer.complete.bind(observer);
+			observer = observer.next && observer.next.bind(observer);
 		}
 
 		this.next = observer as NextFunction<T>;
@@ -48,7 +48,11 @@ export class Subscription<T> {
 		private subscriber: Subscriber<T>,
 		subscribe: SubscribeFunction<T>
 	) {
-		this.onUnsubscribe = subscribe(this);
+		try {
+			this.onUnsubscribe = subscribe(this);
+		} catch (e) {
+			this.error(e);
+		}
 	}
 
 	next(val: T) {
@@ -94,7 +98,10 @@ class Observable<T> {
 		if (subscribe) this.__subscribe = subscribe;
 	}
 
-	pipe(operator: Operator<T>, ...extra: Operator<T>[]): Observable<T> {
+	pipe<T2>(
+		operator: Operator<T, T2>,
+		...extra: Operator<any, any>[]
+	): Observable<any> {
 		return extra
 			? extra.reduce((prev, fn) => fn(prev), operator(this))
 			: operator(this);
@@ -241,62 +248,6 @@ class EventEmitter {
 	}
 }
 
-function toPromise<T>(observable: Observable<T>) {
-	return new Promise<T>((resolve, reject) => {
-		let value: T;
-		observable.subscribe(
-			(val: T) => (value = val),
-			(e: ObservableError) => reject(e),
-			() => resolve(value)
-		);
-	});
-}
-
-export function operator<T>(
-	fn: (subs: Subscription<T>) => NextObserver<T>
-): Operator<T> {
-	return (source: Observable<T>) =>
-		new Observable<T>(subscriber => {
-			const subscription = source.subscribe(fn(subscriber));
-			return subscription.unsubscribe.bind(subscription);
-		});
-}
-
-function map<T, T2>(mapFn: (val: T) => T2) {
-	return (source: Observable<T>) =>
-		new Observable<T2>(subscriber => {
-			const subscription = source.subscribe(
-				val => subscriber.next(mapFn(val)),
-				subscriber.error.bind(subscriber),
-				subscriber.complete.bind(subscriber)
-			);
-			return subscription.unsubscribe.bind(subscription);
-		});
-}
-
-function filter<T>(fn: (val: T) => boolean): Operator<T> {
-	return operator((subscriber: Subscription<T>) => (val: T) => {
-		if (fn(val)) subscriber.next(val);
-	});
-}
-
-function tap<T>(fn: (val: T) => any): Operator<T> {
-	return operator((subscriber: Subscription<T>) => (val: T) => {
-		fn(val);
-		subscriber.next(val);
-	});
-}
-
-function distinctUntilChanged<T>(): Operator<T> {
-	let lastValue: T;
-	return operator((subscriber: Subscription<T>) => (val: T) => {
-		if (val !== lastValue) {
-			lastValue = val;
-			subscriber.next(val);
-		}
-	});
-}
-
 function concat(...observables: Observable<any>[]) {
 	return new Observable<any>(subscriber => {
 		let subscription: Subscription<any>;
@@ -328,6 +279,70 @@ function of<T>(...values: T[]): Observable<T> {
 	return new Observable<T>(subscriber => {
 		values.forEach(val => subscriber.next(val));
 		subscriber.complete();
+	});
+}
+
+function toPromise<T>(observable: Observable<T>) {
+	return new Promise<T>((resolve, reject) => {
+		let value: T;
+		observable.subscribe(
+			(val: T) => (value = val),
+			(e: ObservableError) => reject(e),
+			() => resolve(value)
+		);
+	});
+}
+
+/*
+ * Operators
+ */
+export function operator<T, T2 = T>(
+	fn: (subs: Subscription<T2>) => NextObserver<T>
+): Operator<T, T2> {
+	return (source: Observable<T>) =>
+		new Observable<T2>(subscriber => {
+			const subscription = source.subscribe(fn(subscriber));
+			return subscription.unsubscribe.bind(subscription);
+		});
+}
+
+function map<T, T2>(mapFn: (val: T) => T2) {
+	return operator(subscriber => (val: T) => {
+		subscriber.next(mapFn(val));
+	});
+}
+
+export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
+	let lastSubscription: Subscription<T2>;
+
+	return operator(subscriber => (val: T) => {
+		if (lastSubscription) lastSubscription.unsubscribe();
+
+		const newObservable = project(val);
+		lastSubscription = newObservable.subscribe(val => subscriber.next(val));
+	});
+}
+
+function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
+	return operator((subscriber: Subscription<T>) => (val: T) => {
+		if (fn(val)) subscriber.next(val);
+	});
+}
+
+function tap<T>(fn: (val: T) => any): Operator<T, T> {
+	return operator((subscriber: Subscription<T>) => (val: T) => {
+		fn(val);
+		subscriber.next(val);
+	});
+}
+
+function distinctUntilChanged<T>(): Operator<T, T> {
+	let lastValue: T;
+	return operator((subscriber: Subscription<T>) => (val: T) => {
+		if (val !== lastValue) {
+			lastValue = val;
+			subscriber.next(val);
+		}
 	});
 }
 

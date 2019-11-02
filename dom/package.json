@@ -2,6 +2,7 @@
 	"name": "@cxl/dom",
 	"version": "0.0.1",
 	"scripts": {
-		"test": "node build-test && node test"
+		"build": "node build",
+		"test": "node build-test && cd ../dist/dom && node test"
 	}
 }

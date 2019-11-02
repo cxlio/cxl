@@ -1,6 +1,6 @@
 import { suite } from '../tester';
 import './virtual';
-import { dom, render, empty, setContent, setAttribute, Fragment } from '../dom';
+import { dom, render, empty, setContent, setAttribute } from './index';
 
 suite('dom', test => {
 	test('dom() - tsx', a => {
@@ -75,7 +75,7 @@ suite('dom', test => {
 		a.equal(el.childNodes[2].parentNode, el);
 		a.equal(first, el.childNodes[0]);
 		a.equal(last, el.childNodes[2]);
-		a.equal(first.nextSibling, el.childNodes[1]);
-		a.equal(last.previousSibling, el.childNodes[1]);
+		a.equal(first && first.nextSibling, el.childNodes[1]);
+		a.equal(last && last.previousSibling, el.childNodes[1]);
 	});
 });

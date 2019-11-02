@@ -1,13 +1,12 @@
 {
-	"name": "@cxl/rx",
+	"name": "@cxl/router",
 	"version": "0.1.0",
 	"files": [
 		"index.js",
 		"index.d.ts"
 	],
 	"scripts": {
-		"build": "node build",
-		"test": "node build-test && cd ../dist/test && node rx"
+		"build": "node build"
 	},
 	"devDependencies": {
 		"typescript": "^3.6.2"

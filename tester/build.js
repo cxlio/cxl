@@ -2,7 +2,7 @@ const build = require('../build'),
 	output = build.tsc('index.ts');
 
 build.build({
-	outputDir: '.',
+	outputDir: '../dist/tester',
 	targets: [
 		{
 			output: 'index.js',

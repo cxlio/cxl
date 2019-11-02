@@ -5,6 +5,14 @@ export type Attributes = { [key: string]: string };
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
 export type VirtualChildren = (string | VirtualElement)[];
 
+declare global {
+	namespace JSX {
+		export interface IntrinsicElements {
+			[tag: string]: Attributes;
+		}
+	}
+}
+
 export class VirtualElement {
 	bindings?: [];
 

@@ -30,6 +30,7 @@ type Source<T> = (
 ) => Observable<T>;
 
 type Binding = ParsedMatch[];
+type MapFn<T, T2> = (value: T, element: Element) => T2;
 
 const BINDING_REGEX = /\s*([:|])?([^\w])?([^\(:\s>"'=\|]+)(?:\(([^\)]+)\))?(:|\|)?/g;
 
@@ -103,6 +104,8 @@ class Compiler {
 	directives: { [key: string]: Directive<any> } = {
 		'@': setAttribute,
 		'=': setState,
+		'#': mapDirective,
+		map: mapDirective,
 		setAttribute,
 		log
 	};
@@ -205,8 +208,12 @@ function select<T>(_element: Element, selector: keyof T, view: View<T>) {
 	return view.store.select(selector);
 }
 
-function setState<T>(_element: Element, selector: keyof T, view: View<T>) {
-	return tap(value => view.store.set(selector, value));
+function setState<T, T2 extends keyof T>(
+	_element: Element,
+	selector: T2,
+	view: View<T>
+) {
+	return tap((value: T[T2]) => view.store.set(selector, value));
 }
 
 function getAttribute(element: Element, property: string) {
@@ -223,9 +230,24 @@ function getAttribute(element: Element, property: string) {
 }
 
 function setAttribute<T>(element: Element, property: string): Operator<T> {
-	return map(value => ((element as any)[property] = value));
+	return map((value: T) => ((element as any)[property] = value));
 }
 
 function log<T>(): Operator<T> {
 	return tap(value => console.log(value));
 }
+
+function mapDirective<T, K extends keyof T, T2>(
+	element: Element,
+	property: K,
+	view: View<T>
+): Operator<T, T2> {
+	return map((value: T) => {
+		const fn = (view.store.state[property] as any) as MapFn<T, T2>;
+		return fn(value, element);
+	});
+}
+
+/*function observe<T>(_element: Element, property: keyof T, view: View<T>) {
+	return view.store.select(property).pipe(mergeMap((value: any) => value));
+}*/
