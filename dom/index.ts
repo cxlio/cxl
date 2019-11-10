@@ -18,8 +18,8 @@ export class VirtualElement {
 
 	constructor(
 		public readonly tagName: string,
-		public readonly attributes: Attributes,
-		public readonly children: VirtualChildren
+		public readonly attributes?: Attributes,
+		public readonly children?: VirtualChildren
 	) {}
 }
 
@@ -29,20 +29,21 @@ export function render(element: VirtualElement): Element {
 	for (let attr in element.attributes)
 		(result as any)[attr] = element.attributes[attr];
 
-	element.children.forEach((child: any) => {
-		child =
-			typeof child === 'string'
-				? document.createTextNode(child)
-				: render(child);
-		result.appendChild(child);
-	});
+	if (element.children)
+		element.children.forEach((child: any) => {
+			child =
+				typeof child === 'string'
+					? document.createTextNode(child)
+					: render(child);
+			result.appendChild(child);
+		});
 
 	return result;
 }
 
 export function dom(
 	tagName: string,
-	attributes: Attributes,
+	attributes?: Attributes,
 	...childNodes: VirtualChildren
 ): VirtualElement {
 	return new VirtualElement(tagName, attributes, childNodes);

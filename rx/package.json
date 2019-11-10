@@ -7,7 +7,7 @@
 	],
 	"scripts": {
 		"build": "node build",
-		"test": "node build-test && cd ../dist/test && node rx"
+		"test": "node build && cd ../dist/test && node rx"
 	},
 	"devDependencies": {
 		"typescript": "^3.6.2"

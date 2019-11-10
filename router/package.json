@@ -6,7 +6,8 @@
 		"index.d.ts"
 	],
 	"scripts": {
-		"build": "node build"
+		"build": "node build",
+		"test": "npm run build && cd ../dist/router && node ../tester/runner"
 	},
 	"devDependencies": {
 		"typescript": "^3.6.2"

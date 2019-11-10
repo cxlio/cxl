@@ -3,6 +3,9 @@
 		"target": "es6",
 		"removeComments": true,
 		"declaration": true,
-		"module": "commonjs"
+		"module": "commonjs",
+		"moduleResolution": "Node",
+		"jsx": "react",
+		"jsxFactory": "dom"
 	}
 }

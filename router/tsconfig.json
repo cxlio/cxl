@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
 		"strict": true,
-		"lib": ["lib.es2015.d.ts"],
 		"target": "es6",
 		"experimentalDecorators": true,
 		"moduleResolution": "Node",

@@ -1,17 +1,18 @@
-const build = require('../build'),
-	output = build.tsc('index.ts'),
-	SRC = ['src/core.js', '../rx/index.js', 'src/dom.js', 'src/template.js'];
+const build = require('../build');
 
 build.build({
 	outputDir: '../dist/template',
 	targets: [
-		{
-			output: '../index.js',
-			src: [() => output['index.js']]
-		},
-		{
-			output: '../index.d.ts',
-			src: [() => output['index.d.ts']]
-		}
+		...build.targets.typescript(),
+		...build.targets.typescript({
+			input: 'test.tsx',
+			output: 'test.js',
+			compilerOptions: {
+				declaration: false,
+				moduleResolution: 'node',
+				module: 'CommonJS'
+			}
+		}),
+		...build.targets.package()
 	]
 });

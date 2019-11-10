@@ -3,7 +3,7 @@ const header = () => `(cxl=>{"use strict";`,
 		`})(exports?exports.cxl||(exports.cxl={}):window.cxl||(window.cxl={}))`,
 	template = [
 		'../template/src/core.js',
-		'../rx/index.js',
+		'../dist/rx/index.js',
 		'../template/src/dom.js',
 		'../template/src/template.js'
 	],

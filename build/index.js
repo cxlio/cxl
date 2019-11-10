@@ -28,6 +28,7 @@ function define(name, injects, module) {
 	modules[name] = exports;
 }
 	`;
+
 console.log(`Running in ${BASEDIR}`);
 process.chdir(BASEDIR);
 
@@ -280,9 +281,22 @@ function tsc(inputFileName, options) {
 
 	// mix in default options
 	options = ts.fixupCompilerOptions(
-		Object.assign({}, defaultOptions, options),
+		Object.assign(
+			{},
+			defaultOptions,
+			{
+				target: 'es6',
+				moduleResolution: 'node',
+				jsx: 'react',
+				jsxFactory: 'dom'
+			},
+			options
+		),
 		diagnostics
 	);
+
+	console.log(`Typescript ${ts.version}`);
+	console.log(options);
 
 	const input = readSync(inputFileName);
 	const sourceFile = ts.createSourceFile(inputFileName, input);
@@ -394,6 +408,54 @@ Object.assign(Builder, {
 					pkg
 				)
 			);
+	},
+
+	targets: {
+		typescript(options) {
+			options = {
+				input: 'index.ts',
+				output: 'index.js',
+				declaration: 'index.d.ts',
+				compilerOptions: null,
+				...options
+			};
+
+			const output = tsc(options.input, options.compilerOptions);
+			const result = [
+				{
+					output: options.output,
+					src: [() => output[options.output]]
+				}
+			];
+
+			if (output[options.declaration])
+				result.push({
+					output: options.declaration,
+					src: [() => output[options.declaration]]
+				});
+
+			return result;
+		},
+
+		package(pkg) {
+			return [
+				{
+					output: 'package.json',
+					src: [Builder.package(pkg)]
+				}
+			];
+		},
+
+		test(inputFile, outputFile) {
+			const output = tsc(inputFile || 'test.ts');
+			outputFile = outputFile || 'test.js';
+			return [
+				{
+					output: outputFile,
+					src: [() => output[outputFile]]
+				}
+			];
+		}
 	},
 
 	copy(src, dest) {

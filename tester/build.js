@@ -1,16 +1,16 @@
-const build = require('../build'),
-	output = build.tsc('index.ts');
+const build = require('../build');
 
 build.build({
 	outputDir: '../dist/tester',
 	targets: [
-		{
-			output: 'index.js',
-			src: [() => output['index.js']]
-		},
-		{
-			output: 'index.d.ts',
-			src: [() => output['index.d.ts']]
-		}
+		...build.targets.typescript(),
+		...build.targets.typescript({
+			input: 'runner.ts',
+			output: 'runner.js',
+			compilerOptions: {
+				outFile: 'runner.js'
+			}
+		}),
+		...build.targets.package()
 	]
 });

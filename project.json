@@ -9,6 +9,10 @@
 				"files": ["build/index.ts", "build/tsconfig.json"],
 				"tasks": "cd build && node build"
 			},
+			"css": {
+				"files": ["css/index.ts"],
+				"tasks": "cd css && node build"
+			},
 			"dom": {
 				"files": ["dom/index.ts"],
 				"tasks": "cd dom && node build"
@@ -71,7 +75,11 @@
 				"tasks": "node ui-docs/build"
 			},
 			"tester": {
-				"files": ["tester/index.ts", "tester/build.js"],
+				"files": [
+					"tester/index.ts",
+					"tester/runner.ts",
+					"tester/build.js"
+				],
 				"tasks": "node tester/build"
 			}
 		}

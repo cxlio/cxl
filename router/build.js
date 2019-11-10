@@ -3,19 +3,26 @@ const ts = require('typescript'),
 	HEADER = () => `(exports=>{`,
 	FOOTER = () => `})(typeof exports==='undefined' ?
 		(this.cxl || (this.cxl={})).router = {} :
-		exports);`,
-	output = build.tsc('index.ts');
+		exports);`;
 
 build.build({
 	outputDir: '../dist/router',
 	targets: [
-		{
-			output: 'index.js',
-			src: [HEADER, () => output['index.js'], FOOTER]
-		},
-		{
-			output: 'index.d.ts',
-			src: [() => output['index.d.ts']]
-		}
+		/*{
+			output: 'router.js',
+			src: [HEADER, () => output['index.js'], FOOTER],
+			minify: 'router.min.js'
+		},*/
+		...build.targets.typescript(),
+		...build.targets.typescript({
+			input: 'test.tsx',
+			output: 'test.js',
+			compilerOptions: {
+				declaration: false,
+				moduleResolution: 'node',
+				module: 'CommonJS'
+			}
+		}),
+		...build.targets.package()
 	]
 });

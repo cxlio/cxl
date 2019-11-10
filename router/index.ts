@@ -1,4 +1,5 @@
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
+	PARAM_REGEX = /\:([\w_\$]+)/g,
 	optionalParam = /\((.*?)\)/g,
 	namedParam = /(\(\?)?:\w+/g,
 	splatParam = /\*\w+/g,
@@ -8,7 +9,22 @@ interface Dictionary {
 	[key: string]: string | null;
 }
 
+interface RouteInstances {
+	[key: string]: Element;
+}
+
 type RouteArguments = { [key: string]: any };
+
+interface RouteDefinition {
+	id?: string;
+	title?: string;
+	path: string;
+	isDefault?: boolean;
+	resolve?: (args: any) => boolean;
+	parent?: string;
+	redirectTo?: string;
+	routeElement: Element | ((args: RouteArguments) => Element) | string;
+}
 
 function routeToRegExp(route: string): [RegExp, string[]] {
 	const names: string[] = [],
@@ -79,28 +95,19 @@ class Fragment {
 	}
 }
 
-interface RouteDefinition {
-	id: string;
-	title: string;
-	path: string;
-	isDefault: boolean;
-	resolve: (args: any) => boolean;
-	parent: string;
-	redirectTo: string;
-	routeElement: Element | ((args: RouteArguments) => Element) | string;
-}
-
 export class Route {
 	id: string;
 	path?: Fragment;
 	definition: RouteDefinition;
 	isDefault: boolean;
+	parent?: string;
 
 	constructor(def: RouteDefinition) {
 		if (def.path !== undefined) this.path = new Fragment(def.path);
 
 		this.id = def.id || def.path;
 		this.isDefault = def.isDefault || false;
+		this.parent = def.parent;
 		this.definition = def;
 	}
 
@@ -116,7 +123,7 @@ export class Route {
 		return result;
 	}
 
-	create(args: any) {
+	create(args: Dictionary) {
 		const def = this.definition,
 			resolve = def.resolve;
 
@@ -151,28 +158,35 @@ class RouteManager {
 
 export class Router {
 	routes = new RouteManager();
-	instances: { [id: string]: Element } = {};
+	root?: Element;
+	instances: RouteInstances = {};
+	current?: Element;
 
 	currentRoute?: Route;
 	defaultRoute?: Route;
 
-	findRoute(id: string, args: string[]) {
+	findRoute(id: string, args: Dictionary) {
 		const route = this.instances[id];
+		let i: string;
 
 		if (route) {
-			for (let i in args) route[i] = args[i];
+			for (i in args) (route as any)[i] = args[i];
 		}
 
 		return route;
 	}
 
-	executeRoute(route: Route, args, instances) {
+	executeRoute(
+		route: Route,
+		args: RouteArguments,
+		instances: RouteInstances
+	) {
 		const parentId = route.parent,
-			Parent = parentId && this.routes[parentId],
+			Parent = parentId && this.routes.get(parentId),
 			id = route.id,
 			parent = Parent
 				? this.executeRoute(Parent, args, instances)
-				: cxl.router.root,
+				: router.root || document.body,
 			instance = this.findRoute(id, args) || route.create(args);
 
 		if (instance && parent && instance.parentNode !== parent) {
@@ -184,51 +198,54 @@ export class Router {
 		return instance;
 	}
 
-	discardOldRoutes(newInstances) {
+	discardOldRoutes(newInstances: RouteInstances) {
 		const oldInstances = this.instances;
 
 		for (let i in oldInstances)
 			if (newInstances[i] !== oldInstances[i]) delete oldInstances[i];
 	}
 
-	execute(Route, args) {
-		const instances = {},
-			current = (this.current = this.executeRoute(
-				Route,
-				args || {},
-				instances
-			));
+	execute(Route: Route, args?: RouteArguments) {
+		const instances = {};
+
+		this.current = this.executeRoute(Route, args || {}, instances);
+
 		this.currentRoute = Route;
 		this.discardOldRoutes(instances);
 		this.instances = instances;
 	}
 
-	getPath(routeId, params) {
-		const path = this.routes[routeId].path;
+	getPath(routeId: string, params: RouteArguments) {
+		const route = this.routes.get(routeId);
+		const path = route && route.path;
 
-		params = params || cxl.router.current;
+		params = params || this.current;
 
-		return path && cxl.replaceParameters(path.toString(), params);
+		return path && replaceParameters(path.toString(), params);
 	}
 
-	/**
-	 * Normalizes path.
-	 */
-	path(path) {
-		return path;
+	goPath(path: string) {
+		window.location.hash = path;
 	}
 
-	goPath(path) {
-		if (path[0] === '#') window.location.hash = this.path(path.slice(1));
-		else window.location = path;
-	}
-
-	go(routeId, params) {
+	go(routeId: string, params: RouteArguments) {
 		this.goPath('#' + this.getPath(routeId, params));
+	}
+
+	setRoot(el: Element) {
+		this.root = el;
 	}
 }
 
 export const router = new Router();
+
+export function replaceParameters(path: string, params: Dictionary) {
+	if (params === null || params === undefined) return path;
+
+	if (typeof params !== 'object') params = { $: params };
+
+	return path.replace(PARAM_REGEX, (_match, key) => params[key] || '');
+}
 
 export function route(def: RouteDefinition) {
 	const result = new Route(def);

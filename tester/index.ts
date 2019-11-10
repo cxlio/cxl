@@ -1,7 +1,7 @@
 type TestFn = (test: Test) => void;
 type SuiteFn = (suiteFn: (name: string, testFn: TestFn) => void) => void;
 
-class Result {
+export class Result {
 	constructor(
 		public success: boolean,
 		public message: (() => string) | string
@@ -12,7 +12,7 @@ interface TestConfig {
 	name: string;
 }
 
-class Test {
+export class Test {
 	name: string;
 	promise?: Promise<any>;
 	results: Result[] = [];
@@ -57,30 +57,6 @@ class Test {
 	}
 }
 
-class TestReport {
-	constructor(private suite: Test) {}
-
-	printTest(test: Test) {
-		let out = '',
-			failures = test.results.filter(result => {
-				out += result.success ? '.' : 'X';
-				return result.success === false;
-			});
-		console.group(`${test.name} ${out}`);
-		failures.forEach(fail => this.printError(fail));
-		test.tests.forEach((test: Test) => this.printTest(test));
-		console.groupEnd();
-	}
-
-	printError(fail: Result) {
-		console.error(`    FAIL ${fail.message}`);
-	}
-
-	print() {
-		this.printTest(this.suite);
-	}
-}
-
 export async function suite(
 	nameOrConfig: string | TestConfig,
 	suiteFn: SuiteFn
@@ -89,7 +65,5 @@ export async function suite(
 		suiteFn(context.test.bind(context));
 	});
 
-	await suite.run();
-	const report = new TestReport(suite);
-	report.print();
+	return suite;
 }
