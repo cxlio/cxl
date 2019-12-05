@@ -7,8 +7,12 @@ build.build({
 		...build.targets.typescript({
 			input: 'runner.ts',
 			output: 'runner.js',
+			amd: true,
 			compilerOptions: {
-				outFile: 'runner.js'
+				declaration: false,
+				lib: ['lib.es2015.d.ts'],
+				outFile: 'runner.js',
+				module: 'amd'
 			}
 		}),
 		...build.targets.package()

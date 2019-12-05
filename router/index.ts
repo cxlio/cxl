@@ -136,7 +136,7 @@ export class Route {
 }
 
 class RouteManager {
-	routes: Route[] = [];
+	private routes: Route[] = [];
 	defaultRoute?: Route;
 
 	findRouteDefinition(hash: string) {
@@ -249,6 +249,6 @@ export function replaceParameters(path: string, params: Dictionary) {
 
 export function route(def: RouteDefinition) {
 	const result = new Route(def);
-
+	router.routes.register(result);
 	return result;
 }

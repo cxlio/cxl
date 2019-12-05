@@ -1384,6 +1384,14 @@
 			});
 		},
 
+		'dom.loaded'(el, param, view, subs) {
+			if (document.readyState === 'complete') subs.next();
+
+			return new EventListener(window, 'load', () => {
+				subs.next();
+			});
+		},
+
 		'host.mutation'(el, param, view, subs) {
 			const observer = new ChildrenObserver(view.host);
 			return observer.subscribe(subs.next.bind(subs));

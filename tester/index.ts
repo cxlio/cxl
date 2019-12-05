@@ -1,11 +1,11 @@
 type TestFn = (test: Test) => void;
 type SuiteFn = (suiteFn: (name: string, testFn: TestFn) => void) => void;
 
+declare function setTimeout(fn: () => any, n?: number): number;
+declare function clearTimeout(n: number): void;
+
 export class Result {
-	constructor(
-		public success: boolean,
-		public message: (() => string) | string
-	) {}
+	constructor(public success: boolean, public message: string | Error) {}
 }
 
 interface TestConfig {
@@ -32,12 +32,22 @@ export class Test {
 		return this.ok(a === b, `${a} should equal ${b}`);
 	}
 
+	ran(n: number) {
+		return this.ok(
+			n === this.results.length,
+			`Expected ${n} assertions, instead got ${this.results.length}`
+		);
+	}
+
 	async() {
 		let result: () => void, timeout: number;
 
 		this.promise = new Promise<void>((resolve, reject) => {
 			result = resolve;
-			timeout = setTimeout(reject, this.timeout);
+			timeout = setTimeout(() => {
+				this.results.push(new Result(false, 'Async test timed out'));
+				reject();
+			}, this.timeout);
 		});
 		return () => {
 			result();
@@ -49,21 +59,33 @@ export class Test {
 		this.tests.push(new Test(name, testFn));
 	}
 
+	addTest(test: Test) {
+		this.tests.push(test);
+	}
+
 	async run(): Promise<Result[]> {
-		this.testFn(this);
-		return Promise.all(this.tests.map(test => test.run())).then(
-			() => this.results
-		);
+		try {
+			this.testFn(this);
+			await this.promise;
+			await Promise.all(this.tests.map(test => test.run())).then(
+				() => this.results
+			);
+		} catch (e) {
+			this.results.push(new Result(false, e));
+		}
+
+		return this.results;
 	}
 }
 
-export async function suite(
+export function suite(
 	nameOrConfig: string | TestConfig,
-	suiteFn: SuiteFn
+	suiteFn: SuiteFn | any[]
 ) {
 	const suite = new Test(nameOrConfig, context => {
-		suiteFn(context.test.bind(context));
+		if (Array.isArray(suiteFn))
+			suiteFn.forEach(test => context.addTest(test));
+		else suiteFn(context.test.bind(context));
 	});
-
 	return suite;
 }

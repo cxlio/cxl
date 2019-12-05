@@ -1,9 +1,18 @@
 import { Observable, Subscription, Subject } from '../rx';
 
 type ElementContent = string | Node;
-export type Attributes = { [key: string]: string };
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
 export type VirtualChildren = (string | VirtualElement)[];
+
+interface Callable {
+	call(...arg: any): Observable<any>;
+}
+export type BindingFunction = Callable | ((el: Element) => Observable<any>);
+
+interface Attributes {
+	$?: BindingFunction | BindingFunction[];
+	[k: string]: any;
+}
 
 declare global {
 	namespace JSX {
@@ -44,9 +53,32 @@ export function render(element: VirtualElement): Element {
 export function dom(
 	tagName: string,
 	attributes?: Attributes,
-	...childNodes: VirtualChildren
-): VirtualElement {
-	return new VirtualElement(tagName, attributes, childNodes);
+	...children: (string | Element)[]
+): Element {
+	const result = document.createElement(tagName);
+
+	for (let i in attributes)
+		if (i === '$') {
+			const bind: any = attributes.$;
+
+			if (bind.call)
+				bind.call((dom as any).context, result, (dom as any).context);
+			else
+				bind.forEach((b: any) =>
+					b.call((dom as any).context, result, (dom as any).context)
+				);
+		} else (result as any)[i] = attributes[i];
+
+	if (children.length)
+		children.forEach((child: any) => {
+			child =
+				typeof child === 'string'
+					? document.createTextNode(child)
+					: child;
+			result.appendChild(child);
+		});
+
+	return result;
 }
 
 export function empty(el: Element) {
@@ -60,7 +92,7 @@ export function setContent(el: Element, content: ElementContent) {
 }
 
 export function on(
-	element: Element,
+	element: Element | Window,
 	event: string,
 	options?: AddEventListenerOptions
 ) {
@@ -308,21 +340,6 @@ export class ElementChildren {
 	}
 	get last() {
 		return this.element.lastElementChild;
-	}
-}
-
-export type Slot = any;
-
-export class SlotManager {
-	private slots?: Slot[];
-	defaultSlot?: Slot;
-
-	register(slot: Slot) {
-		if (!slot.parameter) this.defaultSlot = slot;
-
-		if (!this.slots) this.slots = [];
-
-		this.slots.push(slot);
 	}
 }
 

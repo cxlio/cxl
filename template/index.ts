@@ -1,253 +1,137 @@
 import {
-	Operator,
-	Subject,
-	Observable,
-	filter,
-	map,
+	merge,
 	tap,
-	of,
-	concat,
-	Subscription
+	map,
+	filter,
+	Subscription,
+	Observable,
+	operator
 } from '../rx';
-import {
-	VirtualElement,
-	SlotManager,
-	AttributeObserver,
-	ChildrenObserver
-} from '../dom';
-import { StoreBase } from '../store';
+import { setContent as domSetContent, on, AttributeObserver } from '../dom';
 
-type Directive<T> = (
-	element: Element,
-	parameter: string,
-	owner: View<T>
-) => Operator<T>;
+export type RenderFunction = (view?: View) => Element;
+export type Binding = Observable<any>;
 
-type Source<T> = (
-	element: Element,
-	parameter: string,
-	owner: View<T>
-) => Observable<T>;
+export class View {
+	private bindings: Observable<any>[] = [];
+	private subscriptions?: Subscription<any>[];
+	private connected = false;
 
-type Binding = ParsedMatch[];
-type MapFn<T, T2> = (value: T, element: Element) => T2;
+	protected subscriber: any;
 
-const BINDING_REGEX = /\s*([:|])?([^\w])?([^\(:\s>"'=\|]+)(?:\(([^\)]+)\))?(:|\|)?/g;
+	addBinding(binding: Observable<any> | Observable<any>[]) {
+		if (Array.isArray(binding)) binding.forEach(b => this.addBinding(b));
+		else {
+			this.bindings.push(binding);
 
-export class ComponentConstructor<T> {
-	constructor(private view: View<T>) {}
-
-	connectedCallback() {
-		this.view.connected.next(true);
-	}
-
-	disconnectedCallback() {
-		this.view.connected.next(false);
-	}
-}
-
-export class View<StateT> {
-	private $slots?: SlotManager;
-	private $attributes?: AttributeObserver;
-	private $children?: ChildrenObserver;
-	private subscriptions: Subscription<any>[] = [];
-
-	connected = new Subject<boolean>();
-
-	get attributes() {
-		return (
-			this.$attributes ||
-			(this.$attributes = new AttributeObserver(this.element))
-		);
-	}
-
-	get children() {
-		return (
-			this.$children ||
-			(this.$children = new ChildrenObserver(this.element))
-		);
-	}
-
-	get slots() {
-		return this.$slots || (this.$slots = new SlotManager());
-	}
-
-	store: StoreBase<StateT>;
-
-	addSubscription(binding: Subscription<any>) {
-		this.subscriptions.push(binding);
-	}
-
-	constructor(public element: Element, public readonly state: StateT) {
-		this.store = new StoreBase(state);
-	}
-}
-
-class ParsedMatch {
-	twoWay: boolean;
-	once: boolean;
-	name: string;
-	parameter: string;
-
-	constructor([, twoWayOrOnce, shortcut, name, parameter]: string[]) {
-		this.twoWay = twoWayOrOnce === ':';
-		this.once = twoWayOrOnce === '|';
-		this.name = shortcut || name;
-		this.parameter = shortcut ? name : parameter;
-	}
-}
-
-/**
- * Creates References and Bindings.
- */
-class Compiler {
-	directives: { [key: string]: Directive<any> } = {
-		'@': setAttribute,
-		'=': setState,
-		'#': mapDirective,
-		map: mapDirective,
-		setAttribute,
-		log
-	};
-	sources: { [key: string]: Source<any> } = {
-		'@': getAttribute,
-		'=': select,
-		select,
-		getAttribute
-	};
-
-	directiveNotFound(directive: string) {
-		throw new Error('Directive "' + directive + '" not found.');
-	}
-
-	getDirective(parsed: ParsedMatch, element: Element, owner: View<any>) {
-		return this.directives[parsed.name](element, parsed.parameter, owner);
-	}
-
-	getSource(parsed: ParsedMatch, element: Element, owner: View<any>) {
-		return this.sources[parsed.name](element, parsed.parameter, owner);
-	}
-
-	parseBinding(element: VirtualElement) {
-		let match,
-			index,
-			bindingText = element.attributes.$,
-			binding: Binding = [],
-			result: Binding[] = (element.bindings = []);
-
-		BINDING_REGEX.lastIndex = 0;
-
-		while ((match = BINDING_REGEX.exec(bindingText))) {
-			index = BINDING_REGEX.lastIndex;
-			const parsed = new ParsedMatch(match);
-			binding.push(parsed);
-
-			if (!match[5]) {
-				result.push(binding);
-				binding = [];
-			}
-
-			BINDING_REGEX.lastIndex = index;
+			if (this.connected && this.subscriptions)
+				this.subscriptions.push(binding.subscribe(this.subscriber));
 		}
-		return result;
 	}
 
-	createBindings<T>(node: Element, binding: ParsedMatch[], owner: View<T>) {
-		let source = this.getSource(binding[0], node, owner);
-
-		for (let i = 1; i < binding.length; i++)
-			source = source.pipe(this.getDirective(binding[i], node, owner));
-
-		owner.addSubscription(source.subscribe());
+	connect() {
+		if (this.connected) return;
+		this.connected = true;
+		this.subscriptions = this.bindings.map(b =>
+			b.subscribe(this.subscriber)
+		);
 	}
 
-	createNode(element: VirtualElement): HTMLElement {
-		const result = document.createElement(element.tagName);
-
-		for (const i in element.attributes)
-			(result as any)[i] = element.attributes[i];
-
-		return result;
-	}
-
-	compile<T>(element: VirtualElement, owner: View<T>): HTMLElement {
-		const bindings =
-				element.bindings ||
-				(element.attributes &&
-					element.attributes.$ &&
-					this.parseBinding(element)),
-			node = this.createNode(element);
-
-		if (bindings)
-			for (const binding of bindings)
-				this.createBindings(node, binding, owner);
-
-		if (element.children)
-			for (const child of element.children)
-				node.appendChild(
-					child instanceof VirtualElement
-						? this.compile(child, owner)
-						: document.createTextNode(child)
-				);
-
-		return node;
+	disconnect() {
+		if (!this.connected) return;
+		if (this.subscriptions)
+			this.subscriptions.forEach(b => b.unsubscribe());
+		this.subscriptions = undefined;
+		this.connected = false;
 	}
 }
 
-const compiler = new Compiler();
-
-export function compile<T>(template: VirtualElement, state: T): View<T> {
-	const host = document.createElement('DIV'),
-		view = new View(host, state),
-		nodes = compiler.compile(template, view);
-	host.appendChild(nodes);
-	return view;
-}
-
-function select<T>(_element: Element, selector: keyof T, view: View<T>) {
-	return view.store.select(selector);
-}
-
-function setState<T, T2 extends keyof T>(
-	_element: Element,
-	selector: T2,
-	view: View<T>
-) {
-	return tap((value: T[T2]) => view.store.set(selector, value));
-}
-
-function getAttribute(element: Element, property: string) {
-	const observer = new AttributeObserver(element);
-	return concat(
-		of((element as any)[property]),
-		observer.pipe(
-			filter(
-				event => event.type === 'attribute' && event.value === property
-			),
-			map(event => event.value)
-		)
+export function getAttribute(attribute: string, el: Element) {
+	const observer = new AttributeObserver(el);
+	return observer.pipe(
+		filter(ev => ev.value === attribute),
+		map(() => (el as any)[attribute])
 	);
 }
 
-function setAttribute<T>(element: Element, property: string): Operator<T> {
-	return map((value: T) => ((element as any)[property] = value));
+export function keypress(el: Element, key?: string) {
+	return on(el, 'keypress').pipe(
+		filter((ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key)
+	);
 }
 
-function log<T>(): Operator<T> {
-	return tap(value => console.log(value));
+export function onAction(el: Element) {
+	return merge(on(el, 'click'));
 }
 
-function mapDirective<T, K extends keyof T, T2>(
-	element: Element,
-	property: K,
-	view: View<T>
-): Operator<T, T2> {
-	return map((value: T) => {
-		const fn = (view.store.state[property] as any) as MapFn<T, T2>;
-		return fn(value, element);
+export function value(el: Element) {
+	return on(el, 'input').pipe(map(ev => ev.target.value));
+}
+
+export function location() {
+	return on(window, 'hashchange').pipe(map(() => window.location.hash));
+}
+
+export type BindingFunction = (el?: Element) => Observable<any>;
+
+interface Attributes {
+	$?: BindingFunction;
+	[k: string]: any;
+}
+
+export function setContent(el: Element = domElement) {
+	return operator(
+		(subscriber: Subscription<string | Node>) => (val: string | Node) => {
+			domSetContent(el, val);
+			subscriber.next(val);
+		}
+	);
+}
+
+export function log() {
+	return tap(val => console.log(val));
+}
+
+let domContext: View, domElement: Element;
+
+function createBinding(el: Element, fn: BindingFunction) {
+	domContext.addBinding(typeof fn === 'function' ? fn(el) : fn);
+}
+
+export function dom(
+	tagName: string,
+	attributes?: Attributes,
+	...children: (string | Element)[]
+): Element {
+	const result = (domElement = document.createElement(tagName));
+
+	for (let i in attributes)
+		if (i === '$') {
+			createBinding(result, attributes.$ as any);
+		} else (result as any)[i] = attributes[i];
+
+	if (children.length)
+		children.forEach((child: any) => {
+			child =
+				typeof child === 'string'
+					? document.createTextNode(child)
+					: child;
+			result.appendChild(child);
+		});
+
+	return result;
+}
+
+export function render(renderFn: RenderFunction) {
+	const view = new View(),
+		oldContext = domContext;
+	domContext = view;
+	const el = renderFn(view);
+	domContext = oldContext;
+
+	return new Observable<Element>(subs => {
+		view.connect();
+		subs.next(el);
+		return view.disconnect();
 	});
 }
-
-/*function observe<T>(_element: Element, property: keyof T, view: View<T>) {
-	return view.store.select(property).pipe(mergeMap((value: any) => value));
-}*/

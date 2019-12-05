@@ -1,37 +1,54 @@
-function isJSON(xhr) {
+function isJSON(xhr: XMLHttpRequest) {
 	var contentType = xhr.getResponseHeader('Content-Type');
 	return contentType && contentType.indexOf('application/json') !== -1;
 }
 
-function parse(xhr) {
+function parse(xhr: XMLHttpRequest) {
 	return isJSON(xhr) ? JSON.parse(xhr.responseText) : xhr.responseText;
 }
 
+type DataType = 'json' | 'text' | 'arraybuffer';
+
+interface AjaxOptions {
+	baseURL: string;
+	url: string;
+	method: string;
+	contentType: string;
+	dataType: DataType;
+
+	data?: string | Object;
+	setup?: (xhr: XMLHttpRequest) => void;
+	responseType?: XMLHttpRequestResponseType;
+	progress?: () => void;
+	// URL prefix
+	resolve?: (xhr: XMLHttpRequest) => any;
+}
+
+const AjaxDefaults = {
+	url: '',
+	method: 'GET',
+	contentType: 'application/json',
+	dataType: 'json' as DataType,
+	baseURL: ''
+};
+
 class Ajax {
-	constructor(defaults) {
-		this.defaults = Object.assign(
-			{},
-			{
-				method: 'GET',
-				contentType: 'application/json',
-				// 'json', 'text' or 'arraybuffer'
-				dataType: 'json',
-				// function(xhr)
-				setup: null,
-				// URL prefix
-				baseURL: '',
-				// Resolve before sending request
-				resolve: null
-			},
-			defaults
-		);
+	defaults: AjaxOptions;
+
+	constructor(defaults: Partial<AjaxOptions> = {}) {
+		this.defaults = {
+			...AjaxDefaults,
+			...defaults
+		};
 	}
 
-	xhr(def) {
-		return new Promise((resolve, reject) => {
-			var xhr = new XMLHttpRequest(),
-				options = Object.assign({}, this.defaults, def),
-				data;
+	xhr(def: Partial<AjaxOptions>) {
+		return new Promise<XMLHttpRequest>((resolve, reject) => {
+			const xhr = new XMLHttpRequest(),
+				options = { ...this.defaults, ...def };
+
+			let data: any;
+
 			if (options.setup) options.setup(xhr);
 
 			xhr.open(options.method, options.baseURL + options.url);
@@ -48,7 +65,7 @@ class Ajax {
 						options.dataType === 'json' &&
 						typeof options.data !== 'string'
 							? JSON.stringify(options.data)
-							: options.data;
+							: options.data || '';
 				}
 
 				if (options.responseType)
@@ -74,13 +91,11 @@ class Ajax {
 		});
 	}
 
-	request(def) {
-		return this.xhr(def).then(parse, function(xhr) {
-			return Promise.reject(parse(xhr));
-		});
+	request(def: Partial<AjaxOptions>) {
+		return this.xhr(def).then(parse, xhr => Promise.reject(parse(xhr)));
 	}
 
-	get(url, params) {
+	get(url: string, params?: any) {
 		var q, i;
 
 		if (params) {
@@ -94,7 +109,7 @@ class Ajax {
 		return this.request({ url: url });
 	}
 
-	post(url, params) {
+	post(url: string, params?: any) {
 		return this.request({ method: 'POST', url: url, data: params });
 	}
 }

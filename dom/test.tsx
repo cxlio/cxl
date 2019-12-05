@@ -1,21 +1,18 @@
 import { suite } from '../tester';
-import './virtual';
-import { dom, render, empty, setContent, setAttribute } from './index';
+import { dom, empty, setContent, setAttribute } from './index';
 
-suite('dom', test => {
+export = suite('dom', test => {
 	test('dom() - tsx', a => {
-		const el = render(
-			<div $="=style:@styleText =title:@title">content</div>
-		);
+		const el = <div title="=style:@styleText =title:@title">content</div>;
 
 		a.ok(el, 'Element was created');
 		a.equal(el.tagName, 'DIV');
-		a.equal((el as any).$, '=style:@styleText =title:@title');
+		a.equal((el as any).title, '=style:@styleText =title:@title');
 		a.equal(el.textContent, 'content');
 	});
 
 	test('empty(Element)', a => {
-		const el = render(
+		const el = (
 			<div>
 				content
 				<span />
@@ -28,7 +25,7 @@ suite('dom', test => {
 	});
 
 	test('setContent(Element, Element|TextNode)', a => {
-		const el = render(<div />);
+		const el = <div />;
 
 		a.equal(el.childNodes.length, 0);
 		setContent(el, document.createElement('span'));
@@ -40,7 +37,7 @@ suite('dom', test => {
 	});
 
 	test('setAttribute(Element, string, any)', a => {
-		const el = render(<div />);
+		const el = <div />;
 
 		setAttribute(el, 'test-attribute', 'value');
 		a.equal(el.getAttribute('test-attribute'), 'value');
@@ -56,7 +53,7 @@ suite('dom', test => {
 	});
 
 	test('dom() - siblings', a => {
-		const el = render(
+		const el = (
 				<div>
 					<a>1</a>
 					<b>2</b>

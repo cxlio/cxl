@@ -1,287 +1,114 @@
-const path = require('path'),
-	fs = require('fs'),
-	cp = require('child_process'),
-	express = require('express'),
-	colors = require('colors/safe'),
-	protocols = {
-		http: require('http'),
-		https: require('https')
-	};
+import { colors } from './colors';
+import { Observable, from, map } from '../rx';
 
-class Route {
-	constructor(method, path, handle) {
-		this.method = method;
-		this.path = path;
-		this.handle = handle;
-	}
+declare const process: any;
+declare const console: any;
 
-	load(server) {
-		server.server[this.method](
-			this.path,
-			this.request.bind(server, this.handle)
-		);
-	}
-
-	request(handle, req, res) {
-		function onError(e) {
-			res.sendStatus(500);
-			return Promise.reject(e);
-		}
-
-		try {
-			const result = handle(req, res);
-
-			return Promise.resolve(result).then(response => {
-				if (response !== undefined) res.send(response);
-			}, onError);
-		} catch (e) {
-			return onError(e);
-		}
-	}
-}
-
-function hrtime() {
+function hrtime(): bigint {
 	return process.hrtime.bigint();
 }
 
-function operation(fn) {
-	const t = hrtime(),
-		result = typeof fn === 'function' ? fn() : fn;
-	return Promise.resolve(result).then(res => ({
-		start: t,
-		end: hrtime() - t,
-		result: res
-	}));
+interface OperationResult {
+	start: bigint;
+	time: bigint;
+	tasks: number;
+	result: any;
 }
 
-function formatTime(time) {
+type OperationFunction = (() => Promise<any>) | Promise<any> | Observable<any>;
+type Operation = Observable<OperationResult>;
+type LogMessage<T = any> = string | ((p: T) => string) | Error;
+
+function operation(fn: OperationFunction): Operation {
+	let start = hrtime();
+	let result = from(typeof fn === 'function' ? fn() : fn);
+	let tasks = 0;
+
+	return result.pipe(
+		map(item => {
+			let end = hrtime();
+			const result = {
+				start,
+				tasks: ++tasks,
+				time: end - start,
+				result: item
+			};
+			start = end;
+			return result;
+		})
+	);
+}
+
+function formatTime(time: bigint) {
 	const s = Number(time) / 1e9,
 		str = s.toFixed(4) + 's';
 	// Color code based on time,
 	return s > 0.1 ? (s > 0.5 ? colors.red(str) : colors.yellow(str)) : str;
 }
 
-class Logger {
-	constructor(prefix, color = 'green') {
-		const coloredPrefix = colors[color](prefix);
+/*export class Environment {
+	private environment: any;
 
-		function log(msg) {
-			console.log(`${coloredPrefix} ${msg}`);
-		}
+	constructor() {
+		let env;
 
-		log.dbg = this.dbg;
-		log.error = msg => console.error(colors.red(`${prefix} ${msg}`));
-		log.operation = (msg, fn, scope) => {
-			return operation(scope ? fn.bind(scope) : fn).then(result => {
-				log(msg + ` ${formatTime(result.end)}`);
-				return result.result;
-			});
-		};
-
-		return log;
-	}
-}
-
-class ServerOptions {
-	constructor(p) {
-		this.port = p.port;
-		this.host = p.host;
-		this.cors = p.cors;
-
-		if (p.secure) this.loadCertificates(p.secure);
-	}
-
-	loadCertificates(p) {
-		if (p.pfx) p.pfx = fs.readFileSync(p.pfx);
-		else {
-			p.key = fs.readFileSync(p.key);
-			p.cert = fs.readFileSync(p.cert);
-		}
-
-		this.secure = p;
-	}
-}
-
-function parseBody(req) {
-	return new Promise((resolve, reject) => {
-		const body = [];
-		req.on('data', chunk => body.push(chunk));
-		req.on('end', () => {
-			try {
-				const raw = Buffer.concat(body).toString();
-
-				if (req.is('application/json')) resolve(JSON.parse(raw));
-				else resolve(raw);
-			} catch (e) {
-				reject(e);
-			}
-		});
-	});
-}
-
-class Server {
-	constructor(p) {
-		this.options = new ServerOptions(p);
-
-		if (this.options.cors) this.cors(this.options.cors);
-	}
-
-	$createServer() {
-		const server = express();
-		server.set('env', 'production');
-
-		// body parser
-		server.use((req, res, next) => {
-			parseBody(req).then(body => {
-				req.body = body;
-				next();
-			});
-		});
-
-		return server;
-	}
-
-	get server() {
-		return this.$server || (this.$server = this.$createServer());
-	}
-
-	get port() {
-		return this.__listener.address().port;
-	}
-
-	get host() {
-		return this.__listener.address().address;
-	}
-
-	onServerError(e) {
-		if (e.code === 'EACCES')
-			throw new Error(
-				'Could not start server in ' +
-					this.host +
-					':' +
-					this.port +
-					'. Make sure the host and port are not already in use.'
-			);
-		else throw new Error(e);
-	}
-
-	cors(hosts) {
-		this.server.use((req, res, next) => {
-			res.header('Access-Control-Allow-Origin', hosts || '*');
-			res.header(
-				'Access-Control-Allow-Headers',
-				'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-			);
-			if (req.method === 'OPTIONS') res.end();
-			else next();
-		});
-
-		return this;
-	}
-
-	use(middleware) {
-		this.server.use(middleware);
-		return this;
-	}
-
-	static(a, b) {
-		if (typeof a === 'string') a = path.normalize(a);
-
-		return express.static.call(this, a, b);
-	}
-
-	/**
-	 * Add new route. Order matters.
-	 */
-	route(method, path, fn) {
-		const route = new Route(method.toLowerCase(), path, fn);
-		route.load(this);
-		return this;
-	}
-
-	start() {
-		const p = this.options,
-			l = (this.__listener = p.secure
-				? protocols.https.createServer(p.secure, this.server)
-				: protocols.http.createServer(this.server));
-		l.listen(p.port, p.host);
-
-		l.on('error', this.onServerError.bind(this));
-	}
-}
-
-class Application {
-	constructor(env) {
-		this.$loadPackage();
-		this.$loadEnvironment(env);
-		this.log = new Logger(this.name);
-	}
-
-	$loadPackage() {
-		const SCRIPTDIR = path.dirname(process.argv[1]),
-			BASEDIR = cp
-				.execSync(`npm prefix`, { cwd: SCRIPTDIR })
-				.toString()
-				.trim(),
-			pkg = (this.package = require(BASEDIR + '/package.json'));
-		this.name = pkg.name;
-		this.version = pkg.version;
-		this.plugins = [];
-	}
-
-	$loadEnvironment(environment) {
 		try {
-			environment =
-				environment || require(process.cwd() + '/environment.json');
+			env = require(process.cwd() + '/environment.json');
 		} catch (e) {}
 
-		this.environment = environment || {};
-
-		if (this.environment.debug) exports.enableDebug();
+		this.environment = env || {};
 	}
+}*/
 
-	start(fn) {
-		fn(this, this.environment);
-		return this;
-	}
+function logOperation(prefix: string, msg: LogMessage, op: Operation) {
+	return op.subscribe(
+		({ tasks, time, result }) => {
+			const formattedTime =
+				(tasks > 1 ? tasks + ' tasks' : '') + formatTime(time);
+			const message = typeof msg === 'function' ? msg(result) : msg;
+			console.log(`${prefix} ${message} (${formattedTime})`);
+		},
+		(error: any) => {
+			console.log(`${prefix} Error`);
+			console.error(error);
+		}
+	);
 }
 
-Object.assign(
-	exports,
-	(global.cxl = {
-		debug: false,
+function logError(prefix: string, error: Error) {
+	console.log(prefix + ' ' + colors.red(error.message));
+	console.error(error);
+}
 
-		Application: Application,
-		Logger: Logger,
-		Route: Route,
-		Server: Server,
+export abstract class Application {
+	abstract name: string;
 
-		serverModule() {
-			return env => new Server(env.server);
-		},
+	color: keyof typeof colors = 'green';
+	version?: string;
 
-		application(env) {
-			return new Application(env);
-		},
+	private coloredPrefix?: string;
 
-		extend(A, B, C, D) {
-			for (var i in B)
-				if (B.hasOwnProperty(i))
-					Object.defineProperty(
-						A,
-						i,
-						Object.getOwnPropertyDescriptor(B, i)
-					);
-			if (C || D) cxl.extend(A, C, D);
+	log(msg: LogMessage, op?: OperationFunction) {
+		const pre = this.coloredPrefix || '';
 
-			return A;
-		},
+		if (msg instanceof Error) return logError(pre, msg);
 
-		/**
-		 * Enable debug module
-		 */
-		enableDebug() {
-			this.debug = require('./debug')(this);
+		if (op) return logOperation(pre, msg, operation(op));
+
+		console.log(`${pre} ${msg}`);
+	}
+
+	async start() {
+		this.coloredPrefix = colors[this.color](this.name);
+
+		if (this.version) this.log(this.version);
+
+		try {
+			return await this.run();
+		} catch (e) {
+			this.log(e);
 		}
-	})
-);
+	}
+
+	abstract run(): Promise<any> | void;
+}

@@ -1,56 +1,35 @@
 import { suite } from '../tester';
-import '../dom/virtual';
-import { compile, View } from './index';
-import { dom } from '../dom';
+import { render, dom, setContent, log } from './index';
+import { of } from '../rx';
+import { on } from '../dom';
 
 export default suite('template', test => {
-	test('View', a => {
-		const view = new View(document.createElement('div'), {
-			title: 'Title',
-			name: 'View'
-		});
+	test('render', a => {
+		const binding = () => of('hello').pipe(setContent());
 
-		view.store
-			.select('title')
-			.subscribe((title: string) => a.equal(title, 'Title'))
+		render(() => <div $={binding} />)
+			.subscribe(el => {
+				a.ok(el);
+				a.equal(el && el.childNodes.length, 1);
+				a.equal(el && el.childNodes[0].textContent, 'hello');
+			})
 			.unsubscribe();
 	});
 
-	test('compile()', a => {
-		const view = compile(
-				<div $="=name:@className =title:@title @tagName:=tagName">
-					<a>1</a>
-					<b>2</b>
-					<c>3</c>
-				</div>,
-				{
-					title: 'Title',
-					name: 'color',
-					tagName: ''
-				}
-			),
-			el = view.element.firstChild as HTMLElement;
-		a.equal(el.tagName, 'DIV');
-		a.equal(el.childNodes.length, 3);
-		a.equal(el.className, 'color');
-		a.equal(el.title, 'Title');
-		a.equal(view.state.tagName, 'DIV');
-	});
+	test('render - multiple bindings', a => {
+		const bindings = (el: Element) => [
+			of('hello').pipe(setContent(el)),
+			on(el, 'click').pipe(log())
+		];
 
-	test('sources', test => {
-		test.test('getAttribute', a => {
-			const view = compile(<a href="test" $="@href:=tagName" />, {
-				tagName: ''
-			});
-			a.equal(view.state.tagName, 'test');
-		});
+		render(() => <div $={bindings} />)
+			.subscribe(el => {
+				a.ok(el);
+				a.equal(el && el.childNodes.length, 1);
+				a.equal(el && el.childNodes[0].textContent, 'hello');
+			})
+			.unsubscribe();
 
-		test.test('setAttribute', a => {
-			const view = compile(<a $="=href:@href @href:=tagName" />, {
-				href: 'test',
-				tagName: ''
-			});
-			a.equal(view.state.tagName, 'test');
-		});
+		a.ran(3);
 	});
 });

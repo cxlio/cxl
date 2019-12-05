@@ -433,7 +433,7 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component({
+	/*component({
 		name: 'cxl-badge',
 		attributes: ['secondary', 'error', 'over', 'top'],
 		styles: {
@@ -463,7 +463,7 @@ on(selectable.action):#onAction
 				marginLeft: -8
 			}
 		}
-	});
+	});*/
 
 	component({
 		name: 'cxl-button',
@@ -583,7 +583,7 @@ on(selectable.action):#onAction
 		])
 	});
 
-	component({
+	/*component({
 		name: 'cxl-card',
 		styles: {
 			$: {
@@ -595,7 +595,7 @@ on(selectable.action):#onAction
 			$pad8: { padding: 8 },
 			$pad16: { padding: 16 }
 		}
-	});
+	});*/
 
 	component(
 		{
@@ -1521,9 +1521,7 @@ root.on(load):#update
 				// Add delay so styles finish rendering...
 				requestAnimationFrame(() => {
 					const scaleX = tab.clientWidth / 100;
-					bar.style.transform = `translate(${
-						tab.offsetLeft
-					}px, 0) scaleX(${scaleX})`;
+					bar.style.transform = `translate(${tab.offsetLeft}px, 0) scaleX(${scaleX})`;
 					bar.style.display = 'block';
 				});
 			},

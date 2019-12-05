@@ -9,7 +9,7 @@ export = suite('router', test => {
 				routeElement: 'div'
 			}),
 			current;
-
+			
 		router.setRoot(document.createElement('div'));
 		router.execute(routeDef);
 
@@ -22,7 +22,7 @@ export = suite('router', test => {
 			routeElement: 'div'
 		});
 
-		router.execute(routeDef, { id: 10 });
+		router.execute(routeDef, { id: '10' });
 
 		current = router.currentRoute;
 

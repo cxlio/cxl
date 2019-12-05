@@ -8,6 +8,6 @@
 	"scripts": {
 		"build": "node build",
 		"prepublish": "node build test minify",
-		"test": "node test/build && node test/index.js"
+		"test": "node build && cd ../dist/template && node ../tester/runner"
 	}
 }

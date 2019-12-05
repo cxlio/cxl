@@ -17,27 +17,13 @@ build.build({
 			output: 'index.d.ts',
 			src: [() => output['index.d.ts']]
 		},
-		{
-			output: 'package.json',
-			src: [build.package()]
-		}
-	]
-});
-
-const test = build.tsc('test.ts', {
-	target: 'es6',
-	removeComments: true,
-	moduleResolution: 'node',
-	module: 'amd',
-	outFile: 'test.js'
-});
-
-build.build({
-	outputDir: '../dist/test',
-	targets: [
-		{
-			output: 'rx.js',
-			src: [build.AMD, () => test['test.js']]
-		}
+		...build.targets.typescript({
+			input: 'test.ts',
+			output: 'test.js',
+			compilerOptions: {
+				lib: ['lib.es5.d.ts']
+			}
+		}),
+		...build.targets.package()
 	]
 });

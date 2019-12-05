@@ -2,8 +2,9 @@
 	"name": "@cxl/tester",
 	"version": "0.0.1",
 	"dependencies": {
-		"puppeteer": "*",
-		"istanbul-lib-instrument": "*"
+		"colors": "^1.4.0",
+		"istanbul-lib-instrument": "*",
+		"puppeteer": "*"
 	},
 	"devDependencies": {
 		"@types/puppeteer": "*"

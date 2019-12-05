@@ -43,11 +43,10 @@ class Subscriber<T> {
 export class Subscription<T> {
 	isUnsubscribed = false;
 	onUnsubscribe: UnsubscribeFunction | void;
+	subscriber: Subscriber<T>;
 
-	constructor(
-		private subscriber: Subscriber<T>,
-		subscribe: SubscribeFunction<T>
-	) {
+	constructor(subscriber: Subscriber<T>, subscribe: SubscribeFunction<T>) {
+		this.subscriber = subscriber;
 		try {
 			this.onUnsubscribe = subscribe(this);
 		} catch (e) {
@@ -98,13 +97,8 @@ class Observable<T> {
 		if (subscribe) this.__subscribe = subscribe;
 	}
 
-	pipe<T2>(
-		operator: Operator<T, T2>,
-		...extra: Operator<any, any>[]
-	): Observable<any> {
-		return extra
-			? extra.reduce((prev, fn) => fn(prev), operator(this))
-			: operator(this);
+	pipe(...extra: Operator<any, any>[]): Observable<any> {
+		return extra.reduce((prev, fn) => fn(prev), this as Observable<any>);
 	}
 
 	subscribe(
@@ -275,6 +269,25 @@ function concat(...observables: Observable<any>[]) {
 	});
 }
 
+function from<T>(input: Array<T> | Promise<T> | Observable<T>): Observable<T> {
+	if (input instanceof Observable) return input;
+
+	return new Observable<T>(subs => {
+		if (Array.isArray(input)) {
+			input.forEach(item => subs.next(item));
+			subs.complete();
+		} else {
+			input.then(
+				result => {
+					subs.next(result);
+					subs.complete();
+				},
+				err => subs.error(err)
+			);
+		}
+	});
+}
+
 function of<T>(...values: T[]): Observable<T> {
 	return new Observable<T>(subscriber => {
 		values.forEach(val => subscriber.next(val));
@@ -301,7 +314,11 @@ export function operator<T, T2 = T>(
 ): Operator<T, T2> {
 	return (source: Observable<T>) =>
 		new Observable<T2>(subscriber => {
-			const subscription = source.subscribe(fn(subscriber));
+			const subscription = source.subscribe(
+				fn(subscriber),
+				subscriber.error.bind(subscriber),
+				subscriber.complete.bind(subscriber)
+			);
 			return subscription.unsubscribe.bind(subscription);
 		});
 }
@@ -310,6 +327,21 @@ function map<T, T2>(mapFn: (val: T) => T2) {
 	return operator(subscriber => (val: T) => {
 		subscriber.next(mapFn(val));
 	});
+}
+
+function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
+	let to: number;
+
+	return function(this: any, ...args: A[]) {
+		if (to) clearTimeout(to);
+		to = setTimeout(() => {
+			fn.apply(this, args);
+		}, delay);
+	};
+}
+
+function debounceTime(time?: number) {
+	return operator(subscriber => debounceFunction(subscriber.next, time));
 }
 
 export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
@@ -346,11 +378,33 @@ function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
+function merge<R>(...observables: Observable<any>[]): Observable<R> {
+	return new Observable<R>(subs => {
+		let refCount = observables.length;
+		const subscriptions = observables.map(o =>
+			o.subscribe({
+				next(val) {
+					subs.next(val);
+				},
+				error(e) {
+					subs.error(e);
+				},
+				complete() {
+					if (refCount-- === 0) subs.complete();
+				}
+			})
+		);
+
+		return () => subscriptions.forEach(s => s.unsubscribe());
+	});
+}
+
 const operators = {
+	debounceTime,
+	distinctUntilChanged,
 	map,
 	tap,
-	filter,
-	distinctUntilChanged
+	filter
 };
 
 export {
@@ -362,12 +416,15 @@ export {
 	Item,
 	Subject,
 	Subscriber,
+	from,
 	toPromise,
 	operators,
 	map,
 	tap,
 	filter,
+	debounceTime,
 	distinctUntilChanged,
 	concat,
+	merge,
 	of
 };

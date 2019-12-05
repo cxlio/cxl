@@ -1,30 +1,18 @@
-const build = require('../build'),
-	src = build.tsc('index.ts');
+const build = require('../build');
 
 build.build({
 	outputDir: '../dist/dom',
 	targets: [
-		{
-			output: 'index.js',
-			src: [() => src['index.js']]
-		},
-		{
-			output: 'dom.js',
-			src: [
-				() => `(exports=>{`,
-				() => src['index.js'],
-				() => `})(this.cxl||(this.cxl={}));`
-			],
-			minify: 'dom.min.js'
-		},
-		{
-			output: 'index.d.ts',
-			src: [() => src['index.d.ts']]
-		},
-		{
-			output: 'package.json',
-			src: [build.package()]
-		},
+		...build.targets.typescript(),
+		...build.targets.typescript({
+			input: 'virtual.ts',
+			output: 'virtual.js'
+		}),
+		...build.targets.typescript({
+			input: 'test.tsx',
+			output: 'test.js'
+		}),
+		...build.targets.package(),
 		{
 			output: 'LICENSE',
 			src: ['../LICENSE']

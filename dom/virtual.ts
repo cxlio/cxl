@@ -32,8 +32,8 @@ abstract class VirtualNode {
 		);
 	}
 
-	cloneNode() {
-		return new this.constructor();
+	cloneNode(_deep = true) {
+		return new (this.constructor as any)();
 	}
 }
 
@@ -71,6 +71,7 @@ class VirtualElement extends VirtualNode {
 
 	childNodes: VirtualNode[] = [];
 	$observer?: VirtualMutationObserver;
+	shadowRoot?: VirtualFragment;
 
 	constructor(tagName: string) {
 		super();
@@ -98,9 +99,13 @@ class VirtualElement extends VirtualNode {
 		return this.childNodes[this.childNodes.length - 1];
 	}
 
-	addEventListener(_event: string, _handler, _options) {}
+	attachShadow(_options?: any) {
+		return (this.shadowRoot = new VirtualFragment());
+	}
 
-	removeEventListener(_event: string, _handler, _options) {}
+	addEventListener(_event: string, _handler: any, _options: any) {}
+
+	removeEventListener(_event: string, _handler: any, _options: any) {}
 
 	setAttribute(attr: string, value: any) {
 		if (this.$observer)
@@ -165,10 +170,10 @@ class VirtualTextNode extends VirtualNode {
 }
 
 class VirtualFragment extends VirtualElement {
-	nodeType = VirtualNode.DOCUMENT_FRAGMENT_NODE;
 	constructor() {
 		super('IGNORE');
 		(this as any).tagName = undefined;
+		(this as any).nodeType = VirtualNode.DOCUMENT_FRAGMENT_NODE;
 	}
 }
 
@@ -184,6 +189,8 @@ const TAG_MAP = {
 	TEMPLATE: VirtualTemplateElement
 };
 
+declare const global: any;
+
 global.HTMLTemplateElement = VirtualTemplateElement;
 global.HTMLElement = VirtualElement;
 global.DocumentFragment = VirtualFragment;
@@ -195,15 +202,13 @@ global.MutationObserver = VirtualMutationObserver;
 global.document = {
 	createElement(tagName: string): Element {
 		tagName = tagName.toUpperCase();
-		const Cls = TAG_MAP[tagName] || VirtualElement,
+		const Cls = (TAG_MAP as any)[tagName] || VirtualElement,
 			instance = new Cls();
 		instance.tagName = tagName;
 		return instance;
 	},
-	createTextNode(data): Text {
-		const result: any = new VirtualTextNode();
-		result.textContent = data;
-		return result as Text;
+	createTextNode(data: string): Text {
+		return (new VirtualTextNode(data) as any) as Text;
 	},
 	createDocumentFragment(): VirtualFragment {
 		return new VirtualFragment();

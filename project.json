@@ -9,6 +9,10 @@
 				"files": ["build/index.ts", "build/tsconfig.json"],
 				"tasks": "cd build && node build"
 			},
+			"component": {
+				"files": ["component/index.ts"],
+				"tasks": "cd component && node build"
+			},
 			"css": {
 				"files": ["css/index.ts"],
 				"tasks": "cd css && node build"

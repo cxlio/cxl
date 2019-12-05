@@ -13,24 +13,22 @@ const fs = require('fs'),
 		acc[cur] = true;
 		return acc;
 	}, {}),
-	PACKAGE = require(BASEDIR + '/package.json'),
-	CONFIG = {
-		package: PACKAGE
-	},
-	AMD = `
-function define(name, injects, module) {
-	const modules = define.modules || (define.modules = {}),
-		exports = {},
-		args = [null, exports];
-	for (let i=2;i<injects.length;i++)
-		args.push(modules[injects[i]]);
-	module.apply(null, args);
-	modules[name] = exports;
-}
-	`;
+	CONFIG = {},
+	AMD = fs.readFileSync(__dirname + '/amd.js', 'utf8');
 
-console.log(`Running in ${BASEDIR}`);
-process.chdir(BASEDIR);
+let PACKAGE;
+try {
+	PACKAGE = require(BASEDIR + '/package.json');
+} catch (e) {
+	PACKAGE = {};
+}
+
+CONFIG.package = PACKAGE;
+
+if (BASEDIR) {
+	console.log(`Running in ${BASEDIR}`);
+	process.chdir(BASEDIR);
+}
 
 function hrtime() {
 	var time = process.hrtime();
@@ -173,7 +171,10 @@ class Builder {
 			config.targets.map(target =>
 				this.operation(`Building ${target.output}`, this.build(target))
 			)
-		).then(() => {}, err => this.error(err));
+		).then(
+			() => {},
+			err => this.error(err)
+		);
 	}
 
 	report(old, config) {
@@ -265,6 +266,8 @@ function tscError(d, line, ch, msg) {
 	}
 }
 
+const FILE_CACHE = {};
+
 function tsc(inputFileName, options) {
 	let ts;
 	try {
@@ -274,7 +277,11 @@ function tsc(inputFileName, options) {
 	}
 
 	if (!options)
-		options = JSON.parse(readSync('tsconfig.json')).compilerOptions;
+		try {
+			options = JSON.parse(readSync('tsconfig.json')).compilerOptions;
+		} catch (e) {
+			options = {};
+		}
 
 	const diagnostics = [];
 	const defaultOptions = ts.getDefaultCompilerOptions();
@@ -285,8 +292,10 @@ function tsc(inputFileName, options) {
 			{},
 			defaultOptions,
 			{
-				target: 'es6',
+				target: 'es2017',
 				moduleResolution: 'node',
+				module: 'commonjs',
+				experimentalDecorators: true,
 				jsx: 'react',
 				jsxFactory: 'dom'
 			},
@@ -303,16 +312,21 @@ function tsc(inputFileName, options) {
 
 	let output = {};
 
+	const normalizedFileName = ts.normalizePath(inputFileName);
 	// Create a compilerHost object to allow the compiler to read and write files
 	const compilerHost = {
-		getSourceFile: fileName => {
+		getSourceFile(fileName) {
 			console.log('SOURCE ' + fileName);
-			return fileName === ts.normalizePath(inputFileName)
+			return fileName === normalizedFileName
 				? sourceFile
-				: ts.createSourceFile(fileName, readSync(fileName));
+				: FILE_CACHE[fileName] ||
+						(FILE_CACHE[fileName] = ts.createSourceFile(
+							fileName,
+							readSync(fileName)
+						));
 		},
 
-		writeFile: (name, text) => {
+		writeFile(name, text) {
 			console.log(`WRITE ${name}`);
 			output[name] = text;
 		},
@@ -403,7 +417,9 @@ Object.assign(Builder, {
 						main: 'index.js',
 						homepage: c.package.homepage,
 						bugs: c.package.bugs,
-						repository: c.package.repository
+						repository: c.package.repository,
+						dependencies: c.package.dependencies,
+						peerDependencies: c.package.peerDependencies
 					},
 					pkg
 				)
@@ -416,6 +432,7 @@ Object.assign(Builder, {
 				input: 'index.ts',
 				output: 'index.js',
 				declaration: 'index.d.ts',
+				amd: false,
 				compilerOptions: null,
 				...options
 			};
@@ -424,7 +441,9 @@ Object.assign(Builder, {
 			const result = [
 				{
 					output: options.output,
-					src: [() => output[options.output]]
+					src: [
+						() => (options.amd ? AMD : '') + output[options.output]
+					]
 				}
 			];
 
@@ -432,6 +451,12 @@ Object.assign(Builder, {
 				result.push({
 					output: options.declaration,
 					src: [() => output[options.declaration]]
+				});
+
+			if (output['.tsbuildinfo'])
+				result.push({
+					output: '.tsbuildinfo',
+					src: [() => output['.tsbuildinfo']]
 				});
 
 			return result;

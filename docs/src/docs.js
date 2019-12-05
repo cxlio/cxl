@@ -146,7 +146,7 @@
 		{
 			name: 'docs-demo',
 			attributes: ['label', 'owner'],
-			bindings: 'connect:#connect',
+			bindings: 'dom.loaded:#connect',
 			template: `
 <cxl-t h6><span &="=label:show:text"></span></cxl-t>
 <div &="content"></div>
@@ -218,22 +218,23 @@
 					wordBreak: 'break-all'
 				}
 			},
-
-			initialize(state) {
-				if (this['source-id'])
-					state.source = document.getElementById(
-						this['source-id']
-					).innerHTML;
-				else if (
-					this.firstChild &&
-					this.firstChild.nodeType === document.COMMENT_NODE
-				)
-					state.source = this.firstChild.data.trim();
-				else if (this.innerHTML) state.source = this.innerHTML.trim();
-			}
+			bindings: 'dom.loaded:#onReady'
 		},
 		{
 			type: 'html',
+			onReady(val, el) {
+				const state = this;
+				if (el['source-id'])
+					state.source = document.getElementById(
+						el['source-id']
+					).innerHTML;
+				else if (
+					el.firstChild &&
+					el.firstChild.nodeType === document.COMMENT_NODE
+				)
+					state.source = el.firstChild.data.trim();
+				else if (el.innerHTML) state.source = el.innerHTML.trim();
+			},
 			highlight(text, el) {
 				hljs.highlightBlock(el);
 			}
