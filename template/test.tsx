@@ -5,7 +5,7 @@ import { on } from '../dom';
 
 export default suite('template', test => {
 	test('render', a => {
-		const binding = () => of('hello').pipe(setContent());
+		const binding = (el: Element) => of('hello').pipe(setContent(el));
 
 		render(() => <div $={binding} />)
 			.subscribe(el => {

@@ -327,7 +327,7 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component({
+	/*component({
 		name: 'cxl-appbar',
 		attributes: ['extended', 'center'],
 		bindings: 'role(heading) aria.level(1)',
@@ -374,7 +374,7 @@ on(selectable.action):#onAction
 				marginRight: 'auto'
 			}
 		}
-	});
+	});*/
 
 	component({
 		name: 'cxl-appbar-title',
@@ -432,38 +432,6 @@ on(selectable.action):#onAction
 			}
 		}
 	});
-
-	/*component({
-		name: 'cxl-badge',
-		attributes: ['secondary', 'error', 'over', 'top'],
-		styles: {
-			$: {
-				display: 'inline-block',
-				position: 'relative',
-				width: 22,
-				height: 22,
-				lineHeight: 22,
-				font: 'caption',
-				borderRadius: '50%',
-				color: 'onPrimary',
-				backgroundColor: 'primary'
-			},
-			$secondary: {
-				color: 'onSecondary',
-				backgroundColor: 'secondary'
-			},
-			$error: {
-				color: 'onError',
-				backgroundColor: 'error'
-			},
-			$top: {
-				translateY: -11
-			},
-			$over: {
-				marginLeft: -8
-			}
-		}
-	});*/
 
 	component({
 		name: 'cxl-button',
@@ -582,20 +550,6 @@ on(selectable.action):#onAction
 			}
 		])
 	});
-
-	/*component({
-		name: 'cxl-card',
-		styles: {
-			$: {
-				elevation: 1,
-				borderRadius: 2,
-				backgroundColor: 'surface',
-				color: 'onSurface'
-			},
-			$pad8: { padding: 8 },
-			$pad16: { padding: 16 }
-		}
-	});*/
 
 	component(
 		{

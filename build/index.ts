@@ -1,11 +1,10 @@
 import { execSync } from 'child_process';
 import { dirname } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
-// import * as UglifyJS from 'uglify-es';
-import { of, from, map, Observable } from '../rx';
+import { of, map, tap, Observable } from '../rx';
 import { Application } from '../server';
 
-type Task = (builder: Builder) => Observable<Output>;
+type Task = Observable<Output>;
 
 declare const process: any;
 declare function require(path: string): any;
@@ -23,15 +22,8 @@ interface Output {
 	source: string;
 }
 
-type Targets = { [name: string]: (...p: any) => Task };
-
 function kb(bytes: number) {
 	return (bytes / 1000).toFixed(2) + 'kb';
-}
-
-let AMD: string;
-function getAMD() {
-	return AMD || (AMD = readFileSync('amd.js', 'utf8'));
 }
 
 interface TypescriptConfig {
@@ -42,12 +34,22 @@ interface TypescriptConfig {
 	compilerOptions: any;
 }
 
-/*export function amd() {
-	const AMD = getAMD();
-}*/
+const SCRIPTDIR = dirname(process.argv[1]);
+const BASEDIR = execSync(`npm prefix`, { cwd: SCRIPTDIR })
+	.toString()
+	.trim();
 
-export const targets: Targets = {
-	typescript(config: Partial<TypescriptConfig>) {
+let AMD: string;
+export function amd() {
+	return tap((out: Output) => {
+		out.source =
+			(AMD || (AMD = readFileSync(__dirname + '/amd.js', 'utf8'))) +
+			out.source;
+	});
+}
+
+export function typescript(config: Partial<TypescriptConfig>) {
+	return new Observable<Output>(subs => {
 		const tsc = require('./tsc').tsc;
 		const options = {
 			input: 'index.ts',
@@ -58,54 +60,57 @@ export const targets: Targets = {
 			...config
 		};
 
-		return () => {
-			const output = tsc(options.input, options.compilerOptions);
-			const result = [
-				{
-					path: options.output,
-					source: output[options.output]
-				}
-			];
+		const output = tsc(options.input, options.compilerOptions);
 
-			if (output[options.declaration])
-				result.push({
-					path: options.declaration,
-					source: output[options.declaration]
-				});
+		subs.next({
+			path: options.output,
+			source: output[options.output]
+		});
 
-			if (output['.tsbuildinfo'])
-				result.push({
-					path: '.tsbuildinfo',
-					source: output['.tsbuildinfo']
-				});
-
-			return from(result);
-		};
-	},
-
-	package(config: PackageTask) {
-		return b => {
-			const pkg = b.package;
-
-			return of({
-				path: 'package.json',
-				source: JSON.stringify({
-					name: pkg.name,
-					version: pkg.version,
-					license: pkg.license,
-					files: ['*.js', 'index.d.ts', '*.js.map', 'LICENSE'],
-					main: 'index.js',
-					homepage: pkg.homepage,
-					bugs: pkg.bugs,
-					repository: pkg.repository,
-					dependencies: pkg.dependencies,
-					peerDependencies: pkg.peerDependencies,
-					...config
-				})
+		if (output[options.declaration])
+			subs.next({
+				path: options.declaration,
+				source: output[options.declaration]
 			});
-		};
+
+		if (output['.tsbuildinfo'])
+			subs.next({
+				path: '.tsbuildinfo',
+				source: output['.tsbuildinfo']
+			});
+
+		subs.complete();
+	});
+}
+
+function readPackage(base: string) {
+	try {
+		return require(base + '/package.json');
+	} catch (e) {
+		return {};
 	}
-};
+}
+
+export function pkg(config: PackageTask) {
+	const p = readPackage(BASEDIR);
+
+	return of({
+		path: 'package.json',
+		source: JSON.stringify({
+			name: p.name,
+			version: p.version,
+			license: p.license,
+			files: ['*.js', 'index.d.ts', '*.js.map', 'LICENSE'],
+			main: 'index.js',
+			homepage: p.homepage,
+			bugs: p.bugs,
+			repository: p.repository,
+			dependencies: p.dependencies,
+			peerDependencies: p.peerDependencies,
+			...config
+		})
+	});
+}
 
 export class Builder extends Application {
 	name = '@cxl/builder';
@@ -129,7 +134,7 @@ export class Builder extends Application {
 		this.log(
 			(output: Output) =>
 				`${this.outputDir}/${output.path} ${kb(output.source.length)}`,
-			task(this).pipe(
+			task.pipe(
 				map(result => {
 					this.writeFile(result);
 					return result;
@@ -138,24 +143,9 @@ export class Builder extends Application {
 		);
 	}
 
-	private findBase() {
-		const SCRIPTDIR = dirname(process.argv[1]);
-		return execSync(`npm prefix`, { cwd: SCRIPTDIR })
-			.toString()
-			.trim();
-	}
-
-	private readPackage(base: string) {
-		try {
-			return require(base + '/package.json');
-		} catch (e) {
-			return {};
-		}
-	}
-
 	private parseConfig(config: BuildConfiguration) {
-		const baseDir = (this.baseDir = config.baseDir || this.findBase());
-		const pkg = (this.package = this.readPackage(baseDir));
+		const baseDir = config.baseDir || BASEDIR;
+		const pkg = readPackage(baseDir);
 		this.outputDir = config.outputDir || '.';
 
 		if (pkg.name) {

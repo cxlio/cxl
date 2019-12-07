@@ -5,12 +5,38 @@ import {
 	filter,
 	Subscription,
 	Observable,
+	Subject,
 	operator
 } from '../rx';
-import { setContent as domSetContent, on, AttributeObserver } from '../dom';
+import {
+	setContent as domSetContent,
+	on,
+	AttributeObserver,
+	MutationEvent
+} from '../dom';
 
 export type RenderFunction = (view?: View) => Element;
 export type Binding = Observable<any>;
+
+type TemplateElement<T> = {
+	[P in keyof T]?: T[P];
+} & {
+	$?: BindingFunction<T>;
+};
+
+type ElementMap = {
+	[P in keyof HTMLElementTagNameMap]: TemplateElement<
+		HTMLElementTagNameMap[P]
+	>;
+};
+
+declare global {
+	namespace JSX {
+		type IntrinsicElements = ElementMap & {
+			[tagName: string]: TemplateElement<HTMLElement>;
+		};
+	}
+}
 
 export class View {
 	private bindings: Observable<any>[] = [];
@@ -54,10 +80,20 @@ export function getAttribute(attribute: string, el: Element) {
 	);
 }
 
+export function setAttribute(attribute: string, el: Element) {
+	return tap(val => ((el as any)[attribute] = val));
+}
+
 export function keypress(el: Element, key?: string) {
 	return on(el, 'keypress').pipe(
 		filter((ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key)
 	);
+}
+
+export function appendChild<T extends Element>(el: T) {
+	return tap<Element>(node => {
+		el.appendChild(node);
+	});
 }
 
 export function onAction(el: Element) {
@@ -72,14 +108,33 @@ export function location() {
 	return on(window, 'hashchange').pipe(map(() => window.location.hash));
 }
 
-export type BindingFunction = (el?: Element) => Observable<any>;
-
-interface Attributes {
-	$?: BindingFunction;
-	[k: string]: any;
+interface AnchorEvent {
+	anchorName: string;
+	element: Element;
 }
 
-export function setContent(el: Element = domElement) {
+const anchorSubject = new Subject<AnchorEvent>();
+
+export function anchor(name: string) {
+	return anchorSubject.pipe(filter(ev => ev.anchorName === name));
+}
+
+export function sendToAnchor(anchorName: string, element: Element) {
+	anchorSubject.next({ anchorName, element });
+}
+
+export function content(selector: string, el: HTMLSlotElement) {
+	el.name = selector;
+	return tap<MutationEvent>(({ type, value }) => {
+		if (type === 'added' && value.matches && value.matches(selector)) {
+			value.slot = selector;
+		}
+	});
+}
+
+export type BindingFunction<T> = (el: T) => Observable<any> | Observable<any>[];
+
+export function setContent(el: Element) {
 	return operator(
 		(subscriber: Subscription<string | Node>) => (val: string | Node) => {
 			domSetContent(el, val);
@@ -92,22 +147,25 @@ export function log() {
 	return tap(val => console.log(val));
 }
 
-let domContext: View, domElement: Element;
+let domContext: View;
 
-function createBinding(el: Element, fn: BindingFunction) {
+function createBinding<T>(el: T, fn: BindingFunction<T>) {
 	domContext.addBinding(typeof fn === 'function' ? fn(el) : fn);
 }
 
-export function dom(
-	tagName: string,
-	attributes?: Attributes,
+export function dom<T extends keyof ElementMap>(
+	tagName: T,
+	attributes?: Partial<ElementMap[T]>,
 	...children: (string | Element)[]
-): Element {
-	const result = (domElement = document.createElement(tagName));
+): ElementMap[T] {
+	const result = document.createElement(tagName);
 
 	for (let i in attributes)
 		if (i === '$') {
-			createBinding(result, attributes.$ as any);
+			createBinding(
+				result,
+				attributes.$ as BindingFunction<ElementMap[T]>
+			);
 		} else (result as any)[i] = attributes[i];
 
 	if (children.length)

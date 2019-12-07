@@ -1,7 +1,8 @@
 import { Binding, render, View } from '../template';
 import { Observable, tap } from '../rx';
 import { StoreBase } from '../store';
-import { StyleSheet, Styles } from '../css';
+import { StyleSheet, Styles, Media, globalStyles } from '../css';
+import { ChildrenObserver } from '../dom';
 
 export type Slot = any;
 
@@ -10,15 +11,14 @@ type RenderFunction<T> = (view: ComponentView<T>) => Element;
 
 export interface Controller<T> {
 	meta?: ComponentDefinition<T>;
-	render?: (view: ComponentView<T>) => void;
-	attributes?: string[];
 	new (): T;
 }
 
 interface ComponentDefinition<T> {
 	name?: string;
+	attributes?: string[];
 	controller: Controller<T>;
-	render?: RenderFunction<T>;
+	render?: (view: ComponentView<T>) => void;
 	methods?: string[];
 	events?: string[];
 }
@@ -26,33 +26,6 @@ interface ComponentDefinition<T> {
 interface ComponentMeta {
 	name?: string;
 }
-
-/*class SlotManager {
-	private slots?: Slot[];
-	defaultSlot?: Slot;
-
-	register(slot: Slot) {
-		if (!slot.parameter) this.defaultSlot = slot;
-
-		if (!this.slots) this.slots = [];
-
-		this.slots.push(slot);
-	}
-}*/
-
-/*
-export class ComponentConstructor<T> {
-	constructor(private view: View<T>) {}
-
-	connectedCallback() {
-		this.view.connected.next(true);
-	}
-
-	disconnectedCallback() {
-		this.view.connected.next(false);
-	}
-}
-*/
 
 class ComponentStore<T> extends StoreBase<T> {
 	raf?: number;
@@ -67,6 +40,7 @@ class ComponentStore<T> extends StoreBase<T> {
 }
 
 class ComponentView<T> extends View {
+	hasTemplate = false;
 	private _store?: ComponentStore<T>;
 
 	get store() {
@@ -77,8 +51,10 @@ class ComponentView<T> extends View {
 		return this.store.select.bind(this.store);
 	}
 
-	get bind() {
-		return this.addBinding.bind(this);
+	bind = this.addBinding.bind(this);
+
+	get children() {
+		return new ChildrenObserver(this.element);
 	}
 
 	set = (key: keyof T) => {
@@ -101,10 +77,8 @@ class ComponentFactory {
 
 	registerCustomElement<T>(
 		name: string,
-		{ controller }: ComponentDefinition<T>
+		{ controller, attributes }: ComponentDefinition<T>
 	) {
-		const attributes = controller.attributes;
-
 		class Constructor extends HTMLElement {
 			static observedAttributes = attributes;
 			private component = createComponent(controller, this);
@@ -139,13 +113,25 @@ class ComponentFactory {
 		const state: T = new def.controller(),
 			view = new ComponentView(state, node);
 
-		if (def.controller.render) def.controller.render(view);
+		if (def.render) def.render(view);
+
+		if (!view.hasTemplate && node.shadowRoot)
+			node.shadowRoot.appendChild(document.createElement('slot'));
 
 		return view;
 	}
 }
 
 const factory = new ComponentFactory();
+
+function getComponentDefinition<T>(constructor: T) {
+	return (
+		(constructor as any).meta ||
+		((constructor as any).meta = {
+			controller: constructor
+		})
+	);
+}
 
 export function createComponent<T>(
 	nameOrClass: string | Controller<T>,
@@ -171,20 +157,20 @@ export function createComponent<T>(
 export function Component(meta?: string | ComponentMeta) {
 	const name = meta && (typeof meta === 'string' ? meta : meta.name);
 
-	return function<T>(constructor: Controller<T>) {
-		factory.registerComponent({
-			name: name,
-			controller: constructor
-		});
+	return function<T>(constructor: T) {
+		const def = getComponentDefinition(constructor);
+		def.name = name;
+		factory.registerComponent(def);
 	};
 }
 
 export function decorateComponent<T>(fn: (view: ComponentView<T>) => void) {
 	return function(constructor: Controller<T>) {
-		const oldRender = constructor.render;
-		constructor.render = view => {
-			if (oldRender) oldRender(view);
+		const meta = getComponentDefinition(constructor);
+		const oldRender = meta.render;
+		meta.render = (view: ComponentView<T>) => {
 			fn(view);
+			if (oldRender) oldRender(view);
 		};
 	};
 }
@@ -201,7 +187,7 @@ export function Method() {}
 
 export function Event() {}
 
-export function Bind<T = any>(bindFn: BindingFunction<T>) {
+export function Bind<T>(bindFn: BindingFunction<T>) {
 	return decorateComponent((view: ComponentView<T>) =>
 		view.addBinding(bindFn(view))
 	);
@@ -218,6 +204,7 @@ function getShadow(el: Element) {
 
 export function Template<T = any>(renderFn: RenderFunction<T>) {
 	return decorateComponent((view: ComponentView<T>) => {
+		view.hasTemplate = true;
 		view.addBinding(
 			render(renderFn.bind(null, view)).pipe(
 				tap(el => getShadow(view.element).appendChild(el))
@@ -226,17 +213,28 @@ export function Template<T = any>(renderFn: RenderFunction<T>) {
 	});
 }
 
-// export function Styles(stylesOrSelector: Styles | string | string[], styles?: Styles) {
-export function Styles(styles: Styles) {
+export function Styles(stylesOrMedia: Styles | Media, opStyles?: Styles) {
+	let media: any;
+	let styles: any = stylesOrMedia;
+
+	if (typeof stylesOrMedia === 'string' && opStyles) {
+		media = stylesOrMedia;
+		styles = opStyles;
+	}
+
 	return decorateComponent(({ element }) => {
+		const shadow = getShadow(element);
+		if (!(element as any).cxlCssHasGlobal) {
+			globalStyles.cloneTo(shadow);
+			(element as any).cxlCssHasGlobal = true;
+		}
+
 		const stylesheet = new StyleSheet({
 			tagName: element.tagName,
+			media,
 			styles
 		});
 
-		if (!element.shadowRoot)
-			getShadow(element).appendChild(document.createElement('slot'));
-
-		stylesheet.cloneTo(getShadow(element));
+		stylesheet.cloneTo(shadow);
 	});
 }

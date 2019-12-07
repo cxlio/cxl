@@ -1,14 +1,20 @@
-const build = require('../dist/build');
+const { build, typescript, pkg, amd } = require('../dist/build');
 
-build.build({
+build({
 	outputDir: '../dist/ui',
 	tasks: [
-		build.targets.typescript({
+		typescript({
+			input: 'index.tsx',
 			compilerOptions: {
 				outFile: 'index.js',
+				lib: [
+					'lib.es2015.d.ts',
+					'lib.dom.d.ts',
+					'lib.dom.iterable.d.ts'
+				],
 				module: 'amd'
 			}
-		}),
-		build.targets.package()
+		}).pipe(amd()),
+		pkg()
 	]
 });

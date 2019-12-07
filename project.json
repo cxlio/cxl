@@ -27,7 +27,7 @@
 			},
 			"template": {
 				"files": ["template/index.ts", "template/build.js"],
-				"tasks": "cd template && npm run build test"
+				"tasks": "cd template && npm run test"
 			},
 			"router": {
 				"files": ["router/index.ts", "router/tsconfig.json"],

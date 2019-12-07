@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
 		"target": "es6",
-		"lib": ["lib.es2015.d.ts", "lib.dom.d.ts"],
 		"removeComments": true,
 		"declaration": true,
 		"module": "commonjs",

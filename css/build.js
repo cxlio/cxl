@@ -1,6 +1,6 @@
-const build = require('../dist/build');
+const { typescript, pkg, build } = require('../dist/build');
 
-build.build({
+build({
 	outputDir: '../dist/css',
-	targets: [build.targets.typescript(), build.targets.package()]
+	targets: [typescript(), pkg()]
 });

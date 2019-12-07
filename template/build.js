@@ -1,16 +1,16 @@
-const build = require('../dist/build');
+const { build, typescript, pkg } = require('../dist/build');
 
-build.build({
+build({
 	outputDir: '../dist/template',
 	tasks: [
-		build.targets.typescript(),
-		build.targets.typescript({
+		typescript(),
+		typescript({
 			input: 'test.tsx',
 			output: 'test.js',
 			compilerOptions: {
 				declaration: false
 			}
 		}),
-		build.targets.package()
+		pkg()
 	]
 });

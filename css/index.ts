@@ -3,6 +3,7 @@ type CSSStyle = Partial<CSSStyleDeclaration>;
 type BaseColor = RGBA;
 type Color = keyof Colors | string | BaseColor;
 type StyleValue = string | number | undefined;
+export type Media = 'medium' | 'large' | 'xlarge';
 
 interface Typography {
 	default: Style;
@@ -50,20 +51,38 @@ export interface Styles {
 }
 
 export interface StyleSheetConfiguration {
-	tagName: string;
+	tagName?: string;
 	global?: boolean;
 	styles: Styles;
+	media?: Media;
+}
+
+export interface Breakpoints {
+	small: number;
+	large: number;
+	medium: number;
+	xlarge: number;
 }
 
 export interface Theme {
 	colors: Colors;
 	typography: Typography;
 	variables: Variables;
+	breakpoints: Breakpoints;
 }
 
 export interface Style {
 	[prop: string]: any;
 }
+
+const PSEUDO = {
+	focus: ':focus',
+	hover: ':hover',
+	empty: ':empty',
+	active: ':active',
+	firstChild: ':first-child',
+	lastChild: ':last-child'
+};
 
 class RGBA {
 	r: number;
@@ -135,6 +154,7 @@ const SNAKE_CSS: Record<string, string> = {
 	SNAKE_REGEX = /[A-Z]/g;
 
 const defaultTheme: Theme = {
+	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
 	variables: {
 		// Animation speed
 		speed: '0.2s',
@@ -308,11 +328,13 @@ function renderStyle(def: Style) {
 }
 
 function parseRuleName(selector: string, name: string) {
-	if (name === '$') return `${selector}`;
+	if (name === '$') return selector;
+	if (name === '*') return `${selector},${selector} *`;
 	const [className, ...states] = name.split('$');
-	const sel =
-		(className ? `.${className}` : '') + states.map(s => `[${s}]`).join('');
-	return `${selector}(${sel})`;
+	const sel = states.length
+		? '(' + states.map(s => (PSEUDO as any)[s] || `[${s}]`).join('') + ')'
+		: '';
+	return `${selector}${sel}${className ? ` .${className}` : ''}`;
 }
 
 function renderRule(selector: string, name: string, style: Style) {
@@ -333,9 +355,10 @@ function applyTheme({ variables, colors }: Theme) {
 applyTheme(defaultTheme);
 
 export class StyleSheet {
-	tagName: string;
+	tagName?: string;
 	styles: Styles;
 	global: boolean;
+	media?: Media;
 
 	private native?: Element;
 
@@ -343,6 +366,7 @@ export class StyleSheet {
 		this.tagName = config.tagName;
 		this.styles = config.styles;
 		this.global = config.global || false;
+		this.media = config.media;
 	}
 
 	cloneTo(parent: DocumentFragment | Element) {
@@ -350,17 +374,38 @@ export class StyleSheet {
 		parent.appendChild(native.cloneNode(true));
 	}
 
-	render() {
+	private render() {
 		const native = (this.native = document.createElement('style'));
-		const selector = this.global ? this.tagName : ':host';
+		const selector = this.global ? this.tagName || 'body' : ':host';
 
 		let css = '';
 
 		for (let i in this.styles)
 			css += renderRule(selector, i, this.styles[i]);
 
+		if (this.media)
+			css = `@media(min-width:${toUnit(
+				theme.breakpoints[this.media]
+			)}){${css}}`;
+
 		native.innerHTML = css;
 
 		return native;
 	}
 }
+
+export const globalStyles = new StyleSheet({
+	styles: {
+		$: {
+			// reset: '-webkit-tap-highlight-color:transparent;',
+			fontFamily: 'var(--cxl-font)',
+			fontSize: 'var(--cxl-fontSize)',
+			verticalAlign: 'middle'
+		},
+		'*': {
+			boxSizing: 'border-box',
+			transition:
+				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)'
+		}
+	}
+});

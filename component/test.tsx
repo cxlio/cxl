@@ -1,8 +1,7 @@
 import { suite } from '../tester';
 import { Bind, Component, Template, createComponent } from './index';
-import { dom } from '../dom';
 import { of, tap } from '../rx';
-import { setContent, onAction } from '../template';
+import { setContent, onAction, dom } from '../template';
 
 export default suite('component', test => {
 	test('@Component - empty', a => {
@@ -48,7 +47,7 @@ export default suite('component', test => {
 
 	test('@Bind', a => {
 		@Component()
-		@Bind(({ state, element }) => {
+		@Bind<TestComponent>(({ state, element }) => {
 			a.equal(state.text, 'hello');
 			a.ok(element);
 			return of(state.text).pipe(
