@@ -198,6 +198,9 @@ global.Element = VirtualElement;
 global.Node = VirtualNode;
 global.TextNode = VirtualTextNode;
 global.MutationObserver = VirtualMutationObserver;
+global.customElements = {
+	define(_name: string, _constructor: any) {}
+};
 
 global.document = {
 	createElement(tagName: string): VirtualElement {

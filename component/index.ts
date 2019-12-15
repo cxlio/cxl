@@ -1,4 +1,4 @@
-import { Binding, render, View } from '../template';
+import { render, View } from '../template';
 import { Observable, tap } from '../rx';
 import { StoreBase } from '../store';
 import { StyleSheet, Styles, Media, globalStyles } from '../css';
@@ -6,6 +6,7 @@ import { ChildrenObserver } from '../dom';
 
 export type Slot = any;
 
+type Binding = Observable<any>;
 type BindingFunction<T> = (view: ComponentView<T>) => Binding | Binding[];
 type RenderFunction<T> = (view: ComponentView<T>) => Element;
 
