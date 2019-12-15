@@ -4,7 +4,7 @@ type ElementContent = string | Node;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
 
 export function empty(el: Element) {
-	let c;
+	let c: Node;
 	while ((c = el.childNodes[0])) el.removeChild(c);
 }
 

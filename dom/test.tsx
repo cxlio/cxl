@@ -1,7 +1,8 @@
 import { suite } from '../tester';
 import { empty, setContent, setAttribute } from './index';
+import { dom } from '../template';
 
-export = suite('dom', test => {
+export default suite('dom', test => {
 	test('dom() - tsx', a => {
 		const el = <div title="=style:@styleText =title:@title">content</div>;
 

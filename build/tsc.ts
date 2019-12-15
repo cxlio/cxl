@@ -26,7 +26,7 @@ class CustomCompilerHost implements CompilerHost {
 	constructor(public options: CompilerOptions) {}
 
 	getSourceFile(fileName: string) {
-		console.log('SOURCE ' + fileName);
+		// console.log('SOURCE ' + fileName);
 		return (
 			SOURCE_CACHE[fileName] ||
 			(SOURCE_CACHE[fileName] = createSourceFile(
@@ -43,7 +43,7 @@ class CustomCompilerHost implements CompilerHost {
 	}
 
 	writeFile(name: string, text: string) {
-		console.log(`WRITE ${name}`);
+		// console.log(`WRITE ${name}`);
 		this.output[name] = text;
 	}
 
@@ -64,12 +64,12 @@ class CustomCompilerHost implements CompilerHost {
 	}
 
 	fileExists(fileName: string) {
-		console.log(`EXISTS? ${fileName}`);
+		// console.log(`EXISTS? ${fileName}`);
 		return existsSync(fileName);
 	}
 
 	readFile(name: string) {
-		console.log(`READ ${name}`);
+		// console.log(`READ ${name}`);
 		const cache = FILE_CACHE[name];
 		return cache ? cache : (FILE_CACHE[name] = readFileSync(name, 'utf8'));
 	}
@@ -123,7 +123,7 @@ export function tsc(inputFileName: string, options: CompilerOptions) {
 			lib.endsWith('d.ts') ? lib : `lib.${lib}.d.ts`
 		);
 
-	console.log(options);
+	// console.log(options);
 
 	const compilerHost = new CustomCompilerHost(options);
 	const program = createProgram([inputFileName], options, compilerHost);

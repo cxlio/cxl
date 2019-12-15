@@ -2,8 +2,6 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"module": "amd",
-		// "outDir": "dist",
-		"outFile": "/dev/stdout",
 		"types": ["node"]
 	},
 	"include": ["test.ts"]
