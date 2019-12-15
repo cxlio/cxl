@@ -136,23 +136,18 @@ function createBinding<T>(el: T, fn: BindingFunction<T>) {
 	domContext.addBinding(typeof fn === 'function' ? fn(el) : fn);
 }
 
-export function dom<T extends keyof HTMLElementTagNameMap>(
+export function dom<T>(
 	tagName: T,
-	attributes?: Partial<HTMLElementTagNameMap[T]>,
+	attributes?: Partial<ElementMap<T>>,
 	...children: (string | Element)[]
-): HTMLElementTagNameMap[T];
-export function dom<T extends HTMLElement>(
-	tagName: string,
-	attributes?: Partial<TemplateElement<T>>,
-	...children: (string | Element)[]
-): T {
+): ElementMap<T> {
 	const result = document.createElement(tagName as any);
 
 	for (let i in attributes)
 		if (i === '$') {
 			createBinding(
 				result,
-				attributes.$ as BindingFunction<ElementMap[T]>
+				(attributes as any).$ as BindingFunction<ElementMap<T>>
 			);
 		} else (result as any)[i] = (attributes as any)[i];
 

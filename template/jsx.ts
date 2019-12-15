@@ -9,13 +9,9 @@ type TemplateElement<T> = {
 	$?: BindingFunction<T>;
 };
 
-/*export type ElementMap = {
-	[P in string]: TemplateElement<
-		P extends keyof HTMLElementTagNameMap
-			? HTMLElementTagNameMap[P]
-			: HTMLElement
-	>;
-};*/
+export type ElementMap<T> = T extends keyof HTMLElementTagNameMap
+	? HTMLElementTagNameMap[T]
+	: HTMLElement;
 
 declare global {
 	namespace JSX {
