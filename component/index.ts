@@ -39,7 +39,7 @@ class ComponentStore<T> extends StoreBase<T> {
 	}
 }
 
-class ComponentView<T> extends View {
+export class ComponentView<T> extends View {
 	hasTemplate = false;
 	private _store?: ComponentStore<T>;
 
@@ -236,5 +236,13 @@ export function Styles(stylesOrMedia: Styles | Media, opStyles?: Styles) {
 		});
 
 		stylesheet.cloneTo(shadow);
+	});
+}
+
+type BehaviorFunction = (el: Element) => Binding | Binding[];
+
+export function Behavior(behavior: BehaviorFunction) {
+	return decorateComponent(view => {
+		view.addBinding(behavior(view.element));
 	});
 }

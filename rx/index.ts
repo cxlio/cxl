@@ -10,6 +10,9 @@ type EventCallback = (...args: any) => void;
 
 export type Operator<T, T2 = T> = (observable: Observable<T>) => Observable<T2>;
 
+declare function setTimeout(fn: () => any, n?: number): number;
+declare function clearTimeout(n: number): void;
+
 interface Observer<T> {
 	next?: NextFunction<T>;
 	error?: ErrorFunction;
@@ -172,13 +175,9 @@ class CollectionEvent {
 class EventEmitter {
 	private __handlers: { [key: string]: any[] } | undefined;
 
-	on(type: string, callback: EventCallback, scope?: any) {
-		return this.addEventListener(type, callback, scope);
-	}
-
-	off(type: string, callback: EventCallback, scope?: any) {
-		return this.removeEventListener(type, callback, scope);
-	}
+	on = this.addEventListener;
+	off = this.removeEventListener;
+	trigger = this.emit;
 
 	addEventListener(type: string, callback: EventCallback, scope?: any) {
 		if (!this.__handlers) this.__handlers = {};
@@ -204,7 +203,7 @@ class EventEmitter {
 
 	$eachHandler(type: string, fn: (handler: any) => void) {
 		if (this.__handlers && this.__handlers[type])
-			this.__handlers[type].forEach(handler => {
+			this.__handlers[type].slice().forEach(handler => {
 				try {
 					fn(handler);
 				} catch (e) {
@@ -228,10 +227,6 @@ class EventEmitter {
 		);
 
 		return result;
-	}
-
-	trigger(type: string, ...args: any) {
-		return this.emit(type, ...args);
 	}
 
 	once(type: string, callback: EventCallback, scope: any) {
@@ -368,6 +363,30 @@ function tap<T>(fn: (val: T) => any): Operator<T, T> {
 	});
 }
 
+function catchError<T, T2>(
+	selector: (err: any, source: Observable<T>) => Observable<T2> | void
+) {
+	function subscribe(source: Observable<T>, subscriber: Subscription<T>) {
+		const subscription = source.subscribe(
+			subscriber.next.bind(subscriber),
+			(err: any) => {
+				let result: any;
+				try {
+					result = selector(err, source);
+				} catch (err2) {
+					return subscriber.error(err2);
+				}
+				subscribe(result, subscriber);
+			},
+			subscriber.complete.bind(subscriber)
+		);
+		return subscription.unsubscribe.bind(subscription);
+	}
+
+	return (source: Observable<T>) =>
+		new Observable<T>(subscriber => subscribe(source, subscriber));
+}
+
 function distinctUntilChanged<T>(): Operator<T, T> {
 	let lastValue: T;
 	return operator((subscriber: Subscription<T>) => (val: T) => {
@@ -399,7 +418,44 @@ function merge<R>(...observables: Observable<any>[]): Observable<R> {
 	});
 }
 
+function combineLatest(...observables: any[]): Observable<any[]> {
+	return new Observable<any[]>(subs => {
+		const latest: any[] = [],
+			len = observables.length;
+		let count = 0,
+			isReady = false;
+
+		const subscriptions = observables.map((o, i) =>
+			o.subscribe({
+				next(val: any) {
+					latest[i] = val;
+					if (isReady || count + 1 === len) {
+						const clone = latest.slice(0);
+						isReady = true;
+						subs.next(clone);
+					} else count++;
+				},
+				error(e: any) {
+					subs.error(e);
+				},
+				complete() {
+					if (isReady && --count === 0) subs.complete();
+				}
+			})
+		);
+
+		return () => subscriptions.forEach(s => s.unsubscribe());
+	});
+}
+
+function throwError(error: any) {
+	return new Observable(subs => subs.error(error));
+}
+
+export const EMPTY = new Observable<void>(subs => subs.complete());
+
 const operators = {
+	catchError,
 	debounceTime,
 	distinctUntilChanged,
 	map,
@@ -418,7 +474,9 @@ export {
 	Subscriber,
 	from,
 	toPromise,
+	throwError,
 	operators,
+	catchError,
 	map,
 	tap,
 	filter,
@@ -426,5 +484,6 @@ export {
 	distinctUntilChanged,
 	concat,
 	merge,
+	combineLatest,
 	of
 };

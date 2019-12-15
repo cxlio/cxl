@@ -19,6 +19,8 @@ export class Test {
 	tests: Test[] = [];
 	timeout = 5 * 1000;
 
+	private completed = false;
+
 	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
 		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
 		else this.name = nameOrConfig.name;
@@ -50,6 +52,8 @@ export class Test {
 			}, this.timeout);
 		});
 		return () => {
+			if (this.completed) throw new Error('Test was already completed.');
+			this.completed = true;
 			result();
 			clearTimeout(timeout);
 		};
@@ -67,9 +71,9 @@ export class Test {
 		try {
 			this.testFn(this);
 			await this.promise;
-			await Promise.all(this.tests.map(test => test.run())).then(
-				() => this.results
-			);
+			if (this.promise && this.completed === false)
+				throw new Error('Never completed');
+			await Promise.all(this.tests.map(test => test.run()));
 		} catch (e) {
 			this.results.push(new Result(false, e));
 		}

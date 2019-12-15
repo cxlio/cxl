@@ -200,15 +200,15 @@ global.TextNode = VirtualTextNode;
 global.MutationObserver = VirtualMutationObserver;
 
 global.document = {
-	createElement(tagName: string): Element {
+	createElement(tagName: string): VirtualElement {
 		tagName = tagName.toUpperCase();
 		const Cls = (TAG_MAP as any)[tagName] || VirtualElement,
 			instance = new Cls();
 		instance.tagName = tagName;
 		return instance;
 	},
-	createTextNode(data: string): Text {
-		return (new VirtualTextNode(data) as any) as Text;
+	createTextNode(data: string): VirtualTextNode {
+		return new VirtualTextNode(data); // as any) as Text;
 	},
 	createDocumentFragment(): VirtualFragment {
 		return new VirtualFragment();

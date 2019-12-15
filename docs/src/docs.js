@@ -205,7 +205,7 @@
 			attributes: ['source', 'type', 'source-id'],
 			template: `
 <style>${hljs.$STYLE} .hljs { overflow: visible !important; }</style>
-<div &="=type:style =source:text:#highlight .code"></div>
+<div &="=source:text:#highlight .code"></div>
 	`,
 
 			styles: {
@@ -234,6 +234,8 @@
 				)
 					state.source = el.firstChild.data.trim();
 				else if (el.innerHTML) state.source = el.innerHTML.trim();
+
+				el.classList.toggle(this.type, true);
 			},
 			highlight(text, el) {
 				hljs.highlightBlock(el);

@@ -92,10 +92,14 @@ export abstract class Application {
 		const pre = this.coloredPrefix || '';
 
 		if (msg instanceof Error) return logError(pre, msg);
-
 		if (op) return logOperation(pre, msg, operation(op));
 
 		console.log(`${pre} ${msg}`);
+	}
+
+	handleError(e?: any) {
+		this.log(e);
+		process.exit(1);
 	}
 
 	async start() {
@@ -106,7 +110,7 @@ export abstract class Application {
 		try {
 			return await this.run();
 		} catch (e) {
-			this.log(e);
+			this.handleError(e);
 		}
 	}
 

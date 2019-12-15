@@ -2,7 +2,7 @@ const { typescript, build } = require('../dist/build');
 
 build({
 	baseDir: '.',
-	outputDir: '.',
+	outputDir: '../dist/test',
 	tasks: [
 		typescript({
 			compilerOptions: {

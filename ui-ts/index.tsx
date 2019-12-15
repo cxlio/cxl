@@ -1,10 +1,10 @@
 import {
 	Attribute,
 	Component,
+	ComponentView,
 	Template,
 	Bind,
 	Styles,
-	createComponent,
 	decorateComponent
 } from '../component';
 import {
@@ -14,30 +14,46 @@ import {
 	anchor,
 	appendChild,
 	setAttribute,
+	triggerEvent,
 	dom
 } from '../template';
-import { tap, of, debounceTime } from '../rx';
+import { on } from '../dom';
+import { tap, of, merge, debounceTime } from '../rx';
 
 import '../ui/dist/index';
 
-@Bind<RippleBehavior>(({ element, state }) => [
-	getAttribute('disabled', element),
-	onAction(element).pipe(
+declare const cxl: any;
+
+export function ripple({ element }: any) {
+	return onAction(element).pipe(
 		debounceTime(),
-		tap(ev => state.onAction(ev))
-	)
-])
-@Component({})
-class RippleBehavior {
-	onAction(ev: Event) {
-		ev.preventDefault();
-	}
+		tap(ev => {
+			ev.preventDefault();
+			// cxl.ui.ripple(element, ev);
+		})
+	);
 }
 
-export function Ripple() {
-	return decorateComponent(view => {
-		view.addBinding(createComponent(RippleBehavior, view.element));
-	});
+export function focusableEvents(element: any) {
+	function update() {
+		element.focused = !element.disabled;
+	}
+
+	return merge(
+		on(element, 'focus').pipe(
+			tap(update),
+			triggerEvent(element, 'focusable.focus')
+		),
+		on(element, 'blur').pipe(triggerEvent(element, 'focusable.blur'))
+	);
+}
+
+export function focusable({ element }: ComponentView<any>) {
+	return merge(
+		getAttribute('disabled', element),
+		focusableEvents(element)
+		// .pipe(setAttribute('aria-disabled'))
+	);
 }
 
 export function Role(ariaRole: string) {
@@ -46,15 +62,6 @@ export function Role(ariaRole: string) {
 	});
 }
 
-/*@Component('cxl-appbar-title')
-@Styles({
-	$: { flexGrow: 1, font: 'title' },
-	$extended: { font: 'h5', alignSelf: 'flex-end' }
-})
-export class AppbarTitle {
-	@Attribute()
-	extended = false;
-}*/
 @Template(({ children }) => (
 	<div>
 		<div className="flex">
@@ -135,6 +142,7 @@ export class Appbar {
 @Component('cxl-card')
 export class Card {}
 
+@Component('cxl-badge')
 @Styles({
 	$: {
 		display: 'inline-block',
@@ -152,7 +160,6 @@ export class Card {}
 	$top: { translateY: -11 },
 	$over: { marginLeft: -8 }
 })
-@Component('cxl-badge')
 export class Badge {
 	@Attribute()
 	secondary = false;
@@ -166,3 +173,111 @@ export class Badge {
 	@Attribute()
 	top = false;
 }
+
+@Component('cxl-button')
+@Styles(
+	{
+		$: {
+			elevation: 1,
+			paddingTop: 8,
+			paddingBottom: 8,
+			paddingRight: 16,
+			paddingLeft: 16,
+			cursor: 'pointer',
+			display: 'inline-block',
+			position: 'relative',
+			font: 'button',
+			borderRadius: 2,
+			userSelect: 'none',
+			backgroundColor: 'surface',
+			color: 'onSurface',
+			textAlign: 'center',
+			height: 36
+		},
+
+		$big: { padding: 16, font: 'h5', height: 52 },
+		$flat: {
+			backgroundColor: 'inherit',
+			elevation: 0,
+			fontWeight: 500,
+			paddingRight: 8,
+			paddingLeft: 8,
+			color: 'inherit'
+		},
+
+		$primary: {
+			backgroundColor: 'primary',
+			color: 'onPrimary'
+		},
+		$secondary: {
+			backgroundColor: 'secondary',
+			color: 'onSecondary'
+		},
+		$round: { borderRadius: '50%' },
+
+		$active: { elevation: 3 },
+		$active$disabled: { elevation: 1 },
+		$active$flat$disabled: { elevation: 0 }
+	}
+	// FocusCSS,
+	// DisabledCSS
+)
+@Styles('large', {
+	$flat: { paddingLeft: 12, paddingRight: 12 }
+})
+@Bind(ripple)
+@Bind(focusable)
+@Role('button')
+export class Button {
+	@Attribute()
+	disabled = false;
+	@Attribute()
+	primary = false;
+	@Attribute()
+	flat = false;
+	@Attribute()
+	secondary = false;
+	@Attribute()
+	touched = false;
+	@Attribute()
+	big = false;
+	@Attribute()
+	outline = false;
+}
+
+@Component('cxl-submit')
+@Template<SubmitButton>(({ select }) => {
+	const b = (el: Element) => [
+		select('disabled').pipe(show(el)),
+		select('icon').pipe(setAttribute(el, 'icon'))
+	];
+
+	return (
+		<div>
+			<div className="icon" $={b}></div>
+			<slot></slot>
+		</div>
+	);
+})
+@Bind(({ element }) => [
+	onAction(element).pipe(triggerEvent(element, 'form.submit'))
+])
+@Styles({
+	icon: { animation: 'spin', marginRight: 8 }
+})
+export class SubmitButton extends Button {
+	icon = 'spinner';
+	primary = true;
+}
+
+//			events: ['cxl-form.submit'],
+/*			bindings: 'action:host.trigger(cxl-form.submit)'
+		},
+		{
+			primary: true,
+			icon: 'spinner',
+			submit() {
+				this.input.click();
+			}
+		}
+	);*/

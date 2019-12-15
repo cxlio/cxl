@@ -1,5 +1,5 @@
 import { suite } from '../tester';
-import { dom, empty, setContent, setAttribute } from './index';
+import { empty, setContent, setAttribute } from './index';
 
 export = suite('dom', test => {
 	test('dom() - tsx', a => {

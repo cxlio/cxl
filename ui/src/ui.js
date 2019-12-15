@@ -327,55 +327,6 @@ on(selectable.action):#onAction
 		}
 	});
 
-	/*component({
-		name: 'cxl-appbar',
-		attributes: ['extended', 'center'],
-		bindings: 'role(heading) aria.level(1)',
-		template: `
-<div &=".flex content anchor(cxl-appbar-actions)"></div>
-<div &=".tabs content(cxl-tabs) anchor(cxl-appbar-tabs)"></div>
-	`,
-		styles: {
-			flex: {
-				display: 'flex',
-				alignItems: 'center',
-				height: 56,
-				paddingLeft: 16,
-				paddingRight: 16,
-				paddingTop: 4,
-				paddingBottom: 4
-			},
-			$: {
-				backgroundColor: 'primary',
-				flexShrink: 0,
-				fontSize: 18,
-				color: 'onPrimary',
-				elevation: 2
-			},
-			$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
-			flex$extended: {
-				alignItems: 'start',
-				height: 128,
-				paddingBottom: 24
-			},
-			flex$medium: { paddingTop: 8, paddingBottom: 8 },
-
-			flex$extended$medium: { paddingLeft: 64, paddingRight: 64 },
-			flex$xlarge$center: {
-				width: 1200,
-				marginLeft: 'auto',
-				marginRight: 'auto',
-				paddingRight: 0,
-				paddingLeft: 0
-			},
-			tabs$xlarge$center: {
-				width: 1200,
-				marginLeft: 'auto',
-				marginRight: 'auto'
-			}
-		}
-	});*/
-
 	component({
 		name: 'cxl-appbar-title',
 		attributes: ['extended'],
@@ -431,67 +382,6 @@ on(selectable.action):#onAction
 				elevation: 5
 			}
 		}
-	});
-
-	component({
-		name: 'cxl-button',
-		attributes: [
-			'disabled',
-			'primary',
-			'flat',
-			'secondary',
-			'touched',
-			'big'
-		],
-		bindings: 'focusable ripple role(button)',
-		styles: [
-			FocusCSS,
-			{
-				$: {
-					elevation: 1,
-					paddingTop: 8,
-					paddingBottom: 8,
-					paddingRight: 16,
-					paddingLeft: 16,
-					cursor: 'pointer',
-					display: 'inline-block',
-					position: 'relative',
-					font: 'button',
-					borderRadius: 2,
-					userSelect: 'none',
-					backgroundColor: 'surface',
-					color: 'onSurface',
-					textAlign: 'center',
-					height: 36
-				},
-
-				$big: { padding: 16, font: 'h5', height: 52 },
-				$flat: {
-					backgroundColor: 'inherit',
-					elevation: 0,
-					fontWeight: 500,
-					paddingRight: 8,
-					paddingLeft: 8,
-					color: 'inherit'
-				},
-				$flat$large: { paddingLeft: 12, paddingRight: 12 },
-
-				$primary: {
-					backgroundColor: 'primary',
-					color: 'onPrimary'
-				},
-				$secondary: {
-					backgroundColor: 'secondary',
-					color: 'onSecondary'
-				},
-				$round: { borderRadius: '50%' },
-
-				$active: { elevation: 3 },
-				$active$disabled: { elevation: 1 },
-				$active$flat$disabled: { elevation: 0 }
-			},
-			DisabledCSS
-		]
 	});
 
 	component({

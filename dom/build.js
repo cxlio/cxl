@@ -1,21 +1,21 @@
-const build = require('../build');
+const { build, typescript, pkg } = require('../dist/build');
 
-build.build({
+build({
 	outputDir: '../dist/dom',
-	targets: [
-		...build.targets.typescript(),
-		...build.targets.typescript({
+	tasks: [
+		typescript(),
+		typescript({
 			input: 'virtual.ts',
 			output: 'virtual.js'
 		}),
-		...build.targets.typescript({
+		typescript({
 			input: 'test.tsx',
 			output: 'test.js'
 		}),
-		...build.targets.package(),
-		{
+		pkg()
+		/*typescript({
 			output: 'LICENSE',
 			src: ['../LICENSE']
-		}
+		})*/
 	]
 });

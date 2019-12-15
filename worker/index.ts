@@ -63,9 +63,9 @@ export class WorkerManager {
 
 	private id = 0;
 	private subject = new Subject<InternalMessage<any>>();
-	private onMessage = (ev: any) => {
-		this.subject.next(IS_NODE ? ev : ev.data);
-	};
+	private onMessage = IS_NODE
+		? (ev: any) => this.subject.next(ev)
+		: (ev: any) => this.subject.next(ev.data);
 	private refCount = 0;
 
 	constructor(public worker: Worker) {}

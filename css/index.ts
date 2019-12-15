@@ -1,8 +1,7 @@
 type StyleDefinition = Partial<StrictStyleDefinition>;
 type CSSStyle = Partial<CSSStyleDeclaration>;
 type BaseColor = RGBA;
-type Color = keyof Colors | string | BaseColor;
-type StyleValue = string | number | undefined;
+type Color = keyof Colors | BaseColor | 'inherit';
 export type Media = 'medium' | 'large' | 'xlarge';
 
 interface Typography {
@@ -43,7 +42,11 @@ interface StrictStyleDefinition {
 	scaleX: number;
 	scaleY: number;
 	font: keyof Typography;
-	[name: string]: StyleValue;
+	color: Color;
+	backgroundColor: Color;
+	borderColor: Color;
+
+	[name: string]: any;
 }
 
 export interface Styles {

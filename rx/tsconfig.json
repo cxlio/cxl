@@ -1,18 +1,11 @@
 {
 	"compilerOptions": {
 		"strict": true,
-		"lib": [
-			"lib.es5.d.ts",
-			"lib.es2015.core.d.ts",
-			"lib.es2015.promise.d.ts",
-			"lib.es2015.collection.d.ts"
-		],
+		"lib": ["lib.es2015.d.ts"],
 		"target": "es6",
-		"experimentalDecorators": true,
 		"moduleResolution": "Node",
 		"removeComments": true,
 		"declaration": true,
 		"module": "commonjs"
-	},
-	"include": ["index.ts"]
+	}
 }

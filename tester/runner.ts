@@ -49,16 +49,13 @@ class TestReport {
 
 class TestRunner extends Application {
 	version = '0.0.1';
-
-	constructor() {
-		super('@cxl/tester');
-	}
+	name = '@cxl/tester';
 
 	async run() {
 		const cwd = process.cwd();
 
 		const suite = (await import(cwd + '/test')).default;
-		await this.log('Running tests', suite.run());
+		await suite.run();
 		const report = new TestReport(suite);
 		const failures = report.print();
 

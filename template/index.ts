@@ -11,31 +11,17 @@ import {
 import {
 	setContent as domSetContent,
 	on,
+	trigger,
 	AttributeObserver,
 	MutationEvent
 } from '../dom';
+import { ElementMap, BindingFunction } from './jsx';
 
 export type RenderFunction = (view?: View) => Element;
-export type Binding = Observable<any>;
 
-type TemplateElement<T> = {
-	[P in keyof T]?: T[P];
-} & {
-	$?: BindingFunction<T>;
-};
-
-type ElementMap = {
-	[P in keyof HTMLElementTagNameMap]: TemplateElement<
-		HTMLElementTagNameMap[P]
-	>;
-};
-
-declare global {
-	namespace JSX {
-		type IntrinsicElements = ElementMap & {
-			[tagName: string]: TemplateElement<HTMLElement>;
-		};
-	}
+interface AnchorEvent {
+	anchorName: string;
+	element: Element;
 }
 
 export class View {
@@ -80,6 +66,10 @@ export function getAttribute(attribute: string, el: Element) {
 	);
 }
 
+export function triggerEvent(element: Element, event: string) {
+	return tap(val => trigger(element, event, val));
+}
+
 export function setAttribute(attribute: string, el: Element) {
 	return tap(val => ((el as any)[attribute] = val));
 }
@@ -108,11 +98,6 @@ export function location() {
 	return on(window, 'hashchange').pipe(map(() => window.location.hash));
 }
 
-interface AnchorEvent {
-	anchorName: string;
-	element: Element;
-}
-
 const anchorSubject = new Subject<AnchorEvent>();
 
 export function anchor(name: string) {
@@ -131,8 +116,6 @@ export function content(selector: string, el: HTMLSlotElement) {
 		}
 	});
 }
-
-export type BindingFunction<T> = (el: T) => Observable<any> | Observable<any>[];
 
 export function setContent(el: Element) {
 	return operator(
@@ -153,12 +136,17 @@ function createBinding<T>(el: T, fn: BindingFunction<T>) {
 	domContext.addBinding(typeof fn === 'function' ? fn(el) : fn);
 }
 
-export function dom<T extends keyof ElementMap>(
+export function dom<T extends keyof HTMLElementTagNameMap>(
 	tagName: T,
-	attributes?: Partial<ElementMap[T]>,
+	attributes?: Partial<HTMLElementTagNameMap[T]>,
 	...children: (string | Element)[]
-): ElementMap[T] {
-	const result = document.createElement(tagName);
+): HTMLElementTagNameMap[T];
+export function dom<T extends HTMLElement>(
+	tagName: string,
+	attributes?: Partial<TemplateElement<T>>,
+	...children: (string | Element)[]
+): T {
+	const result = document.createElement(tagName as any);
 
 	for (let i in attributes)
 		if (i === '$') {
@@ -166,7 +154,7 @@ export function dom<T extends keyof ElementMap>(
 				result,
 				attributes.$ as BindingFunction<ElementMap[T]>
 			);
-		} else (result as any)[i] = attributes[i];
+		} else (result as any)[i] = (attributes as any)[i];
 
 	if (children.length)
 		children.forEach((child: any) => {

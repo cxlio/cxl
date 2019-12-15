@@ -1,20 +1,19 @@
-const build = require('../build');
+const { build, typescript, pkg, amd } = require('../dist/build');
 
-build.build({
+build({
 	outputDir: '../dist/tester',
-	targets: [
-		...build.targets.typescript(),
-		...build.targets.typescript({
+	tasks: [
+		typescript(),
+		typescript({
 			input: 'runner.ts',
 			output: 'runner.js',
-			amd: true,
 			compilerOptions: {
 				declaration: false,
-				lib: ['lib.es2015.d.ts'],
+				lib: ['es2015'],
 				outFile: 'runner.js',
 				module: 'amd'
 			}
-		}),
-		...build.targets.package()
+		}).pipe(amd()),
+		pkg()
 	]
 });
