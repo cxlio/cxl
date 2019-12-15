@@ -6,9 +6,12 @@ import {
 	SourceFile,
 	createProgram,
 	getDefaultCompilerOptions,
+	getEffectiveTypeRoots,
 	fixupCompilerOptions,
 	createSourceFile,
 	normalizePath,
+	ResolvedProjectReference,
+	resolveModuleName,
 	getLineAndCharacterOfPosition,
 	getDefaultLibFilePath
 } from 'typescript';
@@ -68,11 +71,7 @@ class CustomCompilerHost implements CompilerHost {
 	readFile(name: string) {
 		console.log(`READ ${name}`);
 		const cache = FILE_CACHE[name];
-		return cache
-			? Promise.resolve(cache)
-			: promises
-					.readFile(name, 'utf8')
-					.then((content: string) => (FILE_CACHE[name] = content));
+		return cache ? cache : (FILE_CACHE[name] = readFileSync(name, 'utf8'));
 	}
 }
 
@@ -119,9 +118,15 @@ export function tsc(inputFileName: string, options: CompilerOptions) {
 		diagnostics
 	);
 
+	if (options.lib)
+		options.lib = options.lib.map(lib =>
+			lib.endsWith('d.ts') ? lib : `lib.${lib}.d.ts`
+		);
+
+	console.log(options);
+
 	const compilerHost = new CustomCompilerHost(options);
 	const program = createProgram([inputFileName], options, compilerHost);
-	// const sourceFile = compilerHost.getSourceFile(inputFileName);
 
 	diagnostics.push(
 		...program.getSyntacticDiagnostics(),
@@ -136,7 +141,7 @@ export function tsc(inputFileName: string, options: CompilerOptions) {
 					d.file,
 					d.start
 				);
-				tscError(d, line, character, d.messageText);
+				tscError(d, line + 1, character, d.messageText);
 			} else console.error(`${d.messageText}`);
 		});
 

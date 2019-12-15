@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
-import { dirname } from 'path';
-import { readFileSync, writeFileSync } from 'fs';
-import { of, map, tap, Observable } from '../rx';
+import { dirname, basename as pathBasename } from 'path';
+import { readFileSync, writeFileSync, promises } from 'fs';
+import { catchError, of, map, tap, Observable, Operator } from '../rx';
 import { Application } from '../server';
 
 type Task = Observable<Output>;
@@ -62,6 +62,12 @@ export function typescript(config: Partial<TypescriptConfig>) {
 
 		const output = tsc(options.input, options.compilerOptions);
 
+		/*for (let i in output)
+			subs.next({
+				path: i,
+				source: output[i]
+			});*/
+
 		subs.next({
 			path: options.output,
 			source: output[options.output]
@@ -91,6 +97,23 @@ function readPackage(base: string) {
 	}
 }
 
+export function file(source: string | string[], out?: string) {
+	return new Observable(subs => {
+		function emit(filename: string): Promise<void> {
+			return promises.readFile(filename, 'utf8').then((content: string) =>
+				subs.next({
+					path: out || pathBasename(filename),
+					source: content
+				})
+			);
+		}
+
+		if (typeof source === 'string')
+			emit(source).then(() => subs.complete());
+		else Promise.all<void>(source.map(emit)).then(() => subs.complete());
+	});
+}
+
 export function pkg(config: PackageTask) {
 	const p = readPackage(BASEDIR);
 
@@ -112,18 +135,52 @@ export function pkg(config: PackageTask) {
 	});
 }
 
+export function basename(replace?: string) {
+	return tap<Output>(
+		out => (out.path = (replace || '') + pathBasename(out.path))
+	);
+}
+
+export function prepend(str: string) {
+	return tap((val: Output) => (val.source = str + val.source));
+}
+
+type TaskList = {
+	[name: string]: (...args: any) => Task;
+};
+type OperatorList = {
+	[name: string]: (...args: any) => Operator<Output>;
+};
+
+export const tasks: TaskList = {
+	pkg,
+	typescript,
+	file
+};
+
+export const operators: OperatorList = {
+	amd,
+	basename,
+	prepend
+};
+
 export class Builder extends Application {
 	name = '@cxl/builder';
 	baseDir?: string;
 	outputDir?: string;
 	package: any;
+	hasErrors = false;
 
 	constructor(public config: BuildConfiguration) {
 		super();
 	}
 
 	run() {
-		return this.parseConfig(this.config);
+		const result = this.parseConfig(this.config);
+
+		if (this.hasErrors) throw 'Build finished with errors';
+
+		return result;
 	}
 
 	writeFile(result: Output) {
@@ -133,11 +190,17 @@ export class Builder extends Application {
 	runTask(task: Task) {
 		this.log(
 			(output: Output) =>
-				`${this.outputDir}/${output.path} ${kb(output.source.length)}`,
+				`${this.outputDir}/${output.path} ${kb(
+					(output.source || '').length
+				)}`,
 			task.pipe(
 				map(result => {
 					this.writeFile(result);
 					return result;
+				}),
+				catchError(error => {
+					this.hasErrors = true;
+					throw error;
 				})
 			)
 		);
