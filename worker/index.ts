@@ -1,4 +1,4 @@
-import { Observable, Subject, operator, throwError, Subscription } from '../rx';
+import { Observable, Subject, operator, Subscription } from '../rx';
 
 declare const process: any;
 
@@ -53,7 +53,7 @@ export function compile(workerFn: WorkerFunction) {
 interface InternalMessage<T> {
 	id: number;
 	type: 'next' | 'error' | 'complete';
-	payload: any;
+	payload: T;
 }
 
 export class WorkerManager {

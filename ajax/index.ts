@@ -20,7 +20,6 @@ interface AjaxOptions {
 	setup?: (xhr: XMLHttpRequest) => void;
 	responseType?: XMLHttpRequestResponseType;
 	progress?: () => void;
-	// URL prefix
 	resolve?: (xhr: XMLHttpRequest) => any;
 }
 

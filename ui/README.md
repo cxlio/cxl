@@ -1,7 +1,6 @@
 # @cxl/ui
 
 [![npm version](https://badge.fury.io/js/%40cxl%2Fui.svg)](https://badge.fury.io/js/%40cxl%2Fui)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/owner/my-element)
 
 ## Features
 

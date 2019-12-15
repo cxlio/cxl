@@ -1,6 +1,13 @@
-const build = require('../build');
+const { build, typescript, pkg } = require('../dist/build');
 
-build.build({
+build({
 	outputDir: '../dist/ajax',
-	targets: [...build.targets.typescript()]
+	tasks: [
+		typescript({
+			compilerOptions: {
+				declaration: true
+			}
+		}),
+		pkg()
+	]
 });

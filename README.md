@@ -1,36 +1,14 @@
-
-cxl
-===
+# cxl
 
 Collection of Libraries and Tools
 
-Libraries
----------
+## Libraries
 
-### @cxl/ui
-
-Lightweight UI Web Components.
-
-[Documentation](https://coaxialhost.com/ui-docs)
-
-### @cxl/build
-
-JS Build Tool
-
-### @cxl/diff
-
-Text Diff library
-
-### @cxl/filewatch
-
-File Watch tool
-
-### @cxl/template
-
-Reactive Template System.
-
-### @cxl/rx
-
-Lightweight ReactiveX Implementation
-
-
+| Package Name   | Description                          | Links                                   |
+| -------------- | ------------------------------------ | --------------------------------------- |
+| @cxl/ui        | Lightweight UI Web Components.       | [Docs](https://coaxialhost.com/ui-docs) |
+| @cxl/diff      | Quick text diff library              |                                         |
+| @cxl/filewatch | File watch tool                      |                                         |
+| @cxl/template  | Reactive Template Framework          |                                         |
+| @cxl/rx        | Lightweight reactiveX implementation |                                         |
+| @cxl/build     | Build Tool                           |                                         |

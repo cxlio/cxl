@@ -1,4 +1,4 @@
-import { compile, WorkerManager } from './index';
+import { compile } from './index';
 import { combineLatest, Subscription } from '../rx';
 import { suite } from '../tester';
 
