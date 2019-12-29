@@ -37,19 +37,6 @@ declare const require: any;
 
 type WorkerFunction = (payload: any, subscriber: Subscription<any>) => void;
 
-export function compile(workerFn: WorkerFunction) {
-	const NativeWorker = IS_NODE ? require('worker_threads').Worker : Worker;
-	const source = `const worker=${workerFn.toString()};${RUNTIME};`,
-		blob = IS_NODE
-			? source
-			: URL.createObjectURL(
-					new Blob([source], { type: 'text/javascript' })
-			  );
-	const worker = new NativeWorker(blob, { eval: true } as any);
-
-	return new WorkerManager(worker);
-}
-
 interface InternalMessage<T> {
 	id: number;
 	type: 'next' | 'error' | 'complete';
@@ -117,4 +104,17 @@ export class WorkerManager {
 		});
 		return id;
 	}
+}
+
+export function compile(workerFn: WorkerFunction) {
+	const NativeWorker = IS_NODE ? require('worker_threads').Worker : Worker;
+	const source = `const worker=${workerFn.toString()};${RUNTIME};`,
+		blob = IS_NODE
+			? source
+			: URL.createObjectURL(
+					new Blob([source], { type: 'text/javascript' })
+			  );
+	const worker = new NativeWorker(blob, { eval: true } as any);
+
+	return new WorkerManager(worker);
 }

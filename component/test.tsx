@@ -102,7 +102,7 @@ export default suite('component', test => {
 		@Component('cxl-radio1')
 		@Bind<RadioButton>(({ state, element, select }) => [
 			onAction(element).pipe(tap(() => state.toggle())),
-			select('value').pipe(tap(() => state.onValue())),
+			select('value').pipe(tap(val => state.onValue(val))),
 			select('name').pipe(tap(() => state.toggle()))
 		])
 		@Template(() => {
@@ -118,10 +118,15 @@ export default suite('component', test => {
 		})
 		class RadioButton {
 			name = '';
-			value = '';
+			value = 'test';
+			visible = false;
 
-			toggle() {}
-			onValue() {}
+			toggle() {
+				this.visible = true;
+			}
+			onValue(val: string) {
+				a.equal(val, 'test');
+			}
 		}
 
 		createComponent(RadioButton)

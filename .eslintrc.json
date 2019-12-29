@@ -2,12 +2,16 @@
 	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
 	"env": {
 		"browser": true,
-		"node": true
+		"node": true,
+		"es2020": true
 	},
 	"parserOptions": {
 		"ecmaVersion": 2017,
 		"sourceType": "module"
 	},
 	"plugins": ["@typescript-eslint/eslint-plugin"],
-	"parser": "@typescript-eslint/parser"
+	"parser": "@typescript-eslint/parser",
+	"rules": {
+		"no-mixed-spaces-and-tabs": "off"
+	}
 }
