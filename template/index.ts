@@ -144,7 +144,7 @@ export function dom<T>(
 ): ElementMap<T> {
 	const result = document.createElement(tagName as any);
 
-	for (let i in attributes)
+	for (const i in attributes)
 		if (i === '$') {
 			createBinding(
 				result,

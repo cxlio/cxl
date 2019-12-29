@@ -10,7 +10,7 @@ class FileEvent {
 	}
 
 	trigger(subscriber) {
-		var ev = this.type;
+		const ev = this.type;
 
 		fs.stat(this.path, (err, s) => {
 			if (err) {

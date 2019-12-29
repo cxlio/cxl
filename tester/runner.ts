@@ -55,7 +55,7 @@ class TestReport {
 function generateCoverageReport([js]: any, { path, source }: Output) {
 	const report: any = {};
 
-	for (let entry of js) {
+	for (const entry of js) {
 		const total = entry.text.length;
 		const url = entry.text === source ? path : entry.url;
 		let used = 0;

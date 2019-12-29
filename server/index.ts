@@ -19,12 +19,12 @@ type LogMessage<T = any> = string | ((p: T) => string) | Error;
 
 function operation(fn: OperationFunction): Operation {
 	let start = hrtime();
-	let result = from(typeof fn === 'function' ? fn() : fn);
+	const result = from(typeof fn === 'function' ? fn() : fn);
 	let tasks = 0;
 
 	return result.pipe(
 		map(item => {
-			let end = hrtime();
+			const end = hrtime();
 			const result = {
 				start,
 				tasks: ++tasks,

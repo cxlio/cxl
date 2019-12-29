@@ -53,7 +53,7 @@ class Fragment {
 	}
 
 	_extractQuery(frag: string, result: Dictionary) {
-		var pos = frag.indexOf('?'),
+		let pos = frag.indexOf('?'),
 			query = pos !== -1 ? frag.slice(pos + 1) : null,
 			m;
 		while (query && (m = PARAM_QUERY_REGEX.exec(query)))
@@ -71,7 +71,7 @@ class Fragment {
 		if (!params) return;
 
 		params.forEach(function(param, i) {
-			var p;
+			let p;
 			// Don't decode the search params.
 			p =
 				i === params.length - 1
@@ -118,7 +118,7 @@ export class Route {
 
 		const result = el instanceof Element ? el : document.createElement(el);
 
-		for (let i in args) (result as any)[i] = args[i];
+		for (const i in args) (result as any)[i] = args[i];
 
 		return result;
 	}
@@ -201,7 +201,7 @@ export class Router {
 	discardOldRoutes(newInstances: RouteInstances) {
 		const oldInstances = this.instances;
 
-		for (let i in oldInstances)
+		for (const i in oldInstances)
 			if (newInstances[i] !== oldInstances[i]) delete oldInstances[i];
 	}
 

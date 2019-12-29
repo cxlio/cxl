@@ -396,11 +396,11 @@ function toSnake(name: string) {
 }
 
 function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
-	for (let i in def) style[i] = def[i];
+	for (const i in def) style[i] = def[i];
 }
 
 function applyStyle(style: CSSStyle, def: StyleDefinition) {
-	for (let i in def) {
+	for (const i in def) {
 		const fn = renderMap[i],
 			val = (def as any)[i];
 		if (fn) fn(def, style, i, val);
@@ -413,7 +413,7 @@ function renderStyle(def: StyleDefinition) {
 	applyStyle(style, def);
 	let result = '';
 
-	for (let i in style) result += `${toSnake(i)}:${style[i]};`;
+	for (const i in style) result += `${toSnake(i)}:${style[i]};`;
 
 	return result;
 }
@@ -438,8 +438,8 @@ export function applyTheme(newTheme: Theme) {
 	const variableStyle = document.createElement('STYLE');
 
 	let result = ':root{';
-	for (let i in colors) result += `--cxl-${i}:${(colors as any)[i]};`;
-	for (let i in variables) result += `--cxl-${i}:${variables[i]};`;
+	for (const i in colors) result += `--cxl-${i}:${(colors as any)[i]};`;
+	for (const i in variables) result += `--cxl-${i}:${variables[i]};`;
 
 	variableStyle.innerHTML = result + '}';
 	document.head.appendChild(variableStyle);
@@ -472,7 +472,7 @@ export class StyleSheet {
 
 		let css = '';
 
-		for (let i in this.styles) {
+		for (const i in this.styles) {
 			const style = this.styles[i];
 			css += renderRule(selector, i, style);
 

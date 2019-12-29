@@ -1,5 +1,5 @@
 function isJSON(xhr: XMLHttpRequest) {
-	var contentType = xhr.getResponseHeader('Content-Type');
+	const contentType = xhr.getResponseHeader('Content-Type');
 	return contentType && contentType.indexOf('application/json') !== -1;
 }
 
@@ -16,7 +16,7 @@ interface AjaxOptions {
 	contentType: string;
 	dataType: DataType;
 
-	data?: string | Object;
+	data?: string | Record<string, any>;
 	setup?: (xhr: XMLHttpRequest) => void;
 	responseType?: XMLHttpRequestResponseType;
 	progress?: () => void;
@@ -95,7 +95,7 @@ class Ajax {
 	}
 
 	get(url: string, params?: any) {
-		var q, i;
+		let q, i;
 
 		if (params) {
 			q = [];

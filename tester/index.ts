@@ -27,7 +27,7 @@ export class Test {
 		else this.name = nameOrConfig.name;
 	}
 
-	ok(condition: any, message: string = '') {
+	ok(condition: any, message = '') {
 		this.results.push({ success: !!condition, message });
 	}
 

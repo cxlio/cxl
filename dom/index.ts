@@ -69,7 +69,7 @@ export function setStyle(el: Element, className: string, enable: boolean) {
 }
 
 export function trigger(el: Element, event: string, detail: any) {
-	var ev = new CustomEvent(event, { detail: detail, bubbles: true });
+	const ev = new CustomEvent(event, { detail: detail, bubbles: true });
 	el.dispatchEvent(ev);
 }
 
@@ -241,7 +241,7 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 		}
 
 		if (el)
-			for (let node of el.childNodes)
+			for (const node of el.childNodes)
 				subscription.next({ type: 'added', target: el, value: node });
 
 		return super.onSubscribe(subscription);

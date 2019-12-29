@@ -256,7 +256,7 @@ export function Events<T>(eventFunction: EventFunction<T>) {
 	return decorateComponent((view: ComponentView<T>) => {
 		const events = eventFunction(view),
 			el = view.element;
-		for (let ev in events) {
+		for (const ev in events) {
 			view.addBinding(events[ev].pipe(triggerEvent(el, ev)));
 		}
 	});

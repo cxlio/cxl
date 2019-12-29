@@ -78,7 +78,7 @@ export function typescript(config: Partial<TypescriptConfig>) {
 
 		const output = tsc(options.input, options.compilerOptions);
 
-		for (let i in output)
+		for (const i in output)
 			if (!i.startsWith('/'))
 				subs.next({
 					path: i,
@@ -142,7 +142,7 @@ export function bundle(outFile: string) {
 				output[outFile].source += out.source + '\n';
 		},
 		complete() {
-			for (let i in output) subs.next(output[i]);
+			for (const i in output) subs.next(output[i]);
 		}
 	}));
 }

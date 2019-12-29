@@ -24,7 +24,7 @@ function throwError(msg: string) {
 export default suite('rx', [
 	suite('Observable', test => {
 		test('constructor', a => {
-			var observable = new Observable(function subscribe(observer) {
+			let observable = new Observable(function subscribe(observer) {
 					observer.next(1);
 					observer.next(2);
 					observer.next(3);
@@ -264,7 +264,7 @@ export default suite('rx', [
 				};
 			});
 
-			let observer = {
+			const observer = {
 				next() {}
 			};
 
@@ -323,7 +323,7 @@ export default suite('rx', [
 
 	suite('Observable#unsubscribe()', test => {
 		test('Observable#subscribe - unsubscribe', function(a) {
-			var obs = new Observable(function(o) {
+			let obs = new Observable(function(o) {
 					o.next(0);
 					o.next(0);
 					o.complete();
@@ -358,7 +358,7 @@ export default suite('rx', [
 
 	suite('toPromise', test => {
 		test('rx#toPromise', a => {
-			var done = a.async(),
+			const done = a.async(),
 				A = new Observable(s => s.next('hello')),
 				B = new Observable(s => s.error(true)),
 				promise = toPromise(A);
@@ -371,7 +371,7 @@ export default suite('rx', [
 
 	suite('Subject', test => {
 		test('Subject#constructor', function(a) {
-			var subject = new Subject(),
+			let subject = new Subject(),
 				c = 1;
 			subject.subscribe(function(b) {
 				a.equal(b, c);
@@ -386,7 +386,7 @@ export default suite('rx', [
 		});
 
 		test('error', function(a) {
-			var subject = new Subject(),
+			let subject = new Subject(),
 				c = 1;
 			subject.subscribe(
 				b => a.equal(b, c),
@@ -400,7 +400,7 @@ export default suite('rx', [
 		});
 
 		test('complete', function(a) {
-			var subject = new Subject(),
+			let subject = new Subject(),
 				done = a.async(),
 				c = 1;
 			subject.subscribe(b => a.equal(b, c));
@@ -416,7 +416,7 @@ export default suite('rx', [
 
 	suite('BehaviorSubject', test => {
 		test('BehaviorSubject#constructor', function(a) {
-			var c = 1,
+			let c = 1,
 				A = new BehaviorSubject(c);
 			A.subscribe(val => a.equal(val, c));
 			c++;
@@ -427,7 +427,7 @@ export default suite('rx', [
 
 	suite('filter', test => {
 		test('filter', a => {
-			var A = new Observable(s => {
+			let A = new Observable(s => {
 					[1, 2, 3, 4, 5, 6].forEach(s.next, s);
 				}),
 				filterFn = (v: number) => v < 4,

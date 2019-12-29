@@ -12,7 +12,7 @@ export default suite('dom', test => {
 		}
 
 		class State {
-			key: number = 0;
+			key = 0;
 
 			@Persist()
 			key2?: string;
