@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"declaration": true,
+		"outFile": "../dist/build/amd.js",
+		"composite": true
+	},
+	"files": ["amd.js"]
+}

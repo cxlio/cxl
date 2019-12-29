@@ -1,11 +1,13 @@
 {
 	"name": "@cxl/build",
 	"version": "0.0.2",
-	"main": "src/build.js",
+	"main": "index.js",
 	"scripts": {
+		"build-index": "tsc -b",
 		"build": "node build"
 	},
 	"dependencies": {
+		"typescript": "^3.7.4",
 		"uglify-es": "*"
 	}
 }

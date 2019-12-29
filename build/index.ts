@@ -1,14 +1,19 @@
 import { execSync } from 'child_process';
 import { dirname, basename as pathBasename } from 'path';
-import { readFileSync, writeFileSync, promises } from 'fs';
-import { catchError, of, map, tap, Observable, Operator } from '../rx';
-import { Application } from '../server';
+import { readFileSync, writeFileSync, promises, existsSync } from 'fs';
+import {
+	catchError,
+	of,
+	map,
+	tap,
+	Observable,
+	Operator,
+	operator
+} from '../rx/index.js';
+import { Application } from '../server/index.js';
+import { tsc, tsbuild } from './tsc.js';
 
 type Task = Observable<Output>;
-
-declare const process: any;
-declare function require(path: string): any;
-
 type PackageTask = object;
 
 interface BuildConfiguration {
@@ -17,7 +22,7 @@ interface BuildConfiguration {
 	baseDir?: string;
 }
 
-interface Output {
+export interface Output {
 	path: string;
 	source: string;
 }
@@ -48,9 +53,20 @@ export function amd() {
 	});
 }
 
+export function tsconfig(tsconfig = 'tsconfig.json') {
+	return new Observable<Output>(subs => {
+		const output = tsbuild(tsconfig);
+
+		output.forEach(out => {
+			subs.next(out);
+		});
+
+		subs.complete();
+	});
+}
+
 export function typescript(config: Partial<TypescriptConfig>) {
 	return new Observable<Output>(subs => {
-		const tsc = require('./tsc').tsc;
 		const options = {
 			input: 'index.ts',
 			output: 'index.js',
@@ -62,39 +78,20 @@ export function typescript(config: Partial<TypescriptConfig>) {
 
 		const output = tsc(options.input, options.compilerOptions);
 
-		/*for (let i in output)
-			subs.next({
-				path: i,
-				source: output[i]
-			});*/
-
-		subs.next({
-			path: options.output,
-			source: output[options.output]
-		});
-
-		if (output[options.declaration])
-			subs.next({
-				path: options.declaration,
-				source: output[options.declaration]
-			});
-
-		if (output['.tsbuildinfo'])
-			subs.next({
-				path: '.tsbuildinfo',
-				source: output['.tsbuildinfo']
-			});
+		for (let i in output)
+			if (!i.startsWith('/'))
+				subs.next({
+					path: i,
+					source: output[i]
+				});
 
 		subs.complete();
 	});
 }
 
 function readPackage(base: string) {
-	try {
-		return require(base + '/package.json');
-	} catch (e) {
-		return {};
-	}
+	const pkg = base + '/package.json';
+	return existsSync(pkg) && JSON.parse(readFileSync(pkg, 'utf8'));
 }
 
 export function file(source: string | string[], out?: string) {
@@ -123,16 +120,31 @@ export function pkg(config: PackageTask) {
 			name: p.name,
 			version: p.version,
 			license: p.license,
-			files: ['*.js', 'index.d.ts', '*.js.map', 'LICENSE'],
+			files: ['*.js', '*.d.ts', '*.js.map', 'LICENSE'],
 			main: 'index.js',
 			homepage: p.homepage,
 			bugs: p.bugs,
 			repository: p.repository,
 			dependencies: p.dependencies,
 			peerDependencies: p.peerDependencies,
+			type: p.type,
 			...config
 		})
 	});
+}
+
+export function bundle(outFile: string) {
+	const output = { [outFile]: { path: outFile, source: '' } };
+
+	return operator<Output>(subs => ({
+		next(out) {
+			if (/.js$/.test(out.path))
+				output[outFile].source += out.source + '\n';
+		},
+		complete() {
+			for (let i in output) subs.next(output[i]);
+		}
+	}));
 }
 
 export function basename(replace?: string) {

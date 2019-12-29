@@ -1,9 +1,14 @@
 {
+	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"strict": true,
-		"lib": ["es2015"],
-		"target": "es2019",
-		"removeComments": true,
-		"declaration": true
-	}
+		"outDir": "../dist/tester",
+		"types": ["node"],
+		"typeRoots": ["../node_modules/@types"]
+	},
+	"files": ["index.ts", "runner.ts"],
+	"references": [
+		{ "path": "../rx" },
+		{ "path": "../server" },
+		{ "path": "../dom" }
+	]
 }

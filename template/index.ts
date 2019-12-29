@@ -7,15 +7,16 @@ import {
 	Observable,
 	Subject,
 	operator
-} from '../rx';
+} from '../rx/index.js';
 import {
 	setContent as domSetContent,
 	on,
 	trigger,
 	AttributeObserver,
 	MutationEvent
-} from '../dom';
-import { ElementMap, BindingFunction } from './jsx';
+} from '../dom/index.js';
+
+import { ElementMap, BindingFunction } from './jsx.js';
 
 export type RenderFunction = (view?: View) => Element;
 
@@ -70,7 +71,7 @@ export function triggerEvent(element: Element, event: string) {
 	return tap(val => trigger(element, event, val));
 }
 
-export function setAttribute(attribute: string, el: Element) {
+export function setAttribute(el: Element, attribute: string) {
 	return tap(val => ((el as any)[attribute] = val));
 }
 
@@ -149,7 +150,13 @@ export function dom<T>(
 				result,
 				(attributes as any).$ as BindingFunction<ElementMap<T>>
 			);
-		} else (result as any)[i] = (attributes as any)[i];
+		} else {
+			const value = (attributes as any)[i];
+
+			if (value instanceof Observable)
+				domContext.addBinding(value.pipe(setAttribute(result, i)));
+			else (result as any)[i] = value;
+		}
 
 	if (children.length)
 		children.forEach((child: any) => {
@@ -175,4 +182,8 @@ export function render(renderFn: RenderFunction) {
 		subs.next(el);
 		return view.disconnect();
 	});
+}
+
+export function $anchor(anchorName: string) {
+	return (el: Element) => anchor(anchorName).pipe(appendChild(el));
 }

@@ -1,13 +1,14 @@
-import { render, View } from '../template';
+import { render, View, content, triggerEvent } from '../template';
 import { Observable, tap } from '../rx';
 import { StoreBase } from '../store';
 import { StyleSheet, Styles, Media, globalStyles } from '../css';
-import { ChildrenObserver } from '../dom';
-
-export type Slot = any;
+import { ChildrenObserver, setAttribute } from '../dom';
 
 type Binding = Observable<any>;
 type BindingFunction<T> = (view: ComponentView<T>) => Binding | Binding[];
+type DecorateFunction<T> = (view: ComponentView<T>) => void;
+type EventsDefinition = { [ev: string]: Observable<any> };
+type EventFunction<T> = (view: ComponentView<T>) => EventsDefinition;
 type RenderFunction<T> = (view: ComponentView<T>) => Element;
 
 export interface Controller<T> {
@@ -18,6 +19,7 @@ export interface Controller<T> {
 interface ComponentDefinition<T> {
 	name?: string;
 	attributes?: string[];
+	attributeDefinition?: PropertyDescriptorMap;
 	controller: Controller<T>;
 	render?: (view: ComponentView<T>) => void;
 	methods?: string[];
@@ -52,11 +54,14 @@ export class ComponentView<T> extends View {
 		return this.store.select.bind(this.store);
 	}
 
-	bind = this.addBinding.bind(this);
-
 	get children() {
 		return new ChildrenObserver(this.element);
 	}
+
+	$content = (selector: string) => {
+		return (el: HTMLSlotElement) =>
+			this.children.pipe(content(selector, el));
+	};
 
 	set = (key: keyof T) => {
 		return tap<T[keyof T]>(val => this.store.set(key, val));
@@ -76,27 +81,38 @@ export class ComponentView<T> extends View {
 class ComponentFactory {
 	components = new Map<string | Function, ComponentDefinition<any>>();
 
-	registerCustomElement<T>(
-		name: string,
-		{ controller, attributes }: ComponentDefinition<T>
-	) {
+	registerCustomElement<T>(name: string, meta: ComponentDefinition<T>) {
 		class Constructor extends HTMLElement {
-			static observedAttributes = attributes;
-			private component = createComponent(controller, this);
-			private subscription?: any;
+			static observedAttributes = meta.attributes;
+			private __cxlView = factory.create(meta, this);
+
+			constructor() {
+				super();
+			}
 
 			connectedCallback() {
-				this.subscription = this.component.subscribe();
+				this.__cxlView.connect();
 			}
 
 			disconnectedCallback() {
-				this.subscription.unsubscribe();
+				this.__cxlView.disconnect();
 			}
 
-			attributeChangedCallback(name: string) {
-				console.log(name);
+			attributeChangedCallback(
+				name: keyof T,
+				_oldValue: any,
+				newValue: any
+			) {
+				this.__cxlView.store.set(
+					name,
+					newValue === '' ? true : newValue
+				);
 			}
 		}
+		const attributeDefinition = meta.attributeDefinition;
+
+		if (attributeDefinition)
+			Object.defineProperties(Constructor.prototype, attributeDefinition);
 
 		customElements.define(name, Constructor);
 	}
@@ -112,7 +128,7 @@ class ComponentFactory {
 
 	create<T>(def: ComponentDefinition<T>, node: Element): ComponentView<T> {
 		const state: T = new def.controller(),
-			view = new ComponentView(state, node);
+			view = ((node as any).cxlView = new ComponentView(state, node));
 
 		if (def.render) def.render(view);
 
@@ -125,14 +141,32 @@ class ComponentFactory {
 
 const factory = new ComponentFactory();
 
-function getComponentDefinition<T>(constructor: T) {
-	return (
-		(constructor as any).meta ||
-		((constructor as any).meta = {
-			controller: constructor
-		})
-	);
+function getComponentDefinition<T>(constructor: T): ComponentDefinition<T> {
+	const controller: Controller<T> = constructor as any;
+	let result: ComponentDefinition<T>;
+
+	if (controller.meta) {
+		if (!controller.hasOwnProperty('meta')) {
+			function Meta() {}
+			Meta.prototype = controller.meta;
+			result = new (Meta as any)();
+			result.constructor = Meta;
+			result.controller = controller;
+		} else return controller.meta;
+	} else result = { controller };
+
+	return (controller.meta = result);
 }
+
+/*function getComponentMeta<T, K extends keyof ComponentDefinition<T>>(meta: ComponentDefinition<T>, property: K, defaultValue: ComponentDefinition<T>[K]) {
+	const value = meta[property];
+	
+	return meta.hasOwnProperty(property)
+		? value
+		: (meta[property] = value
+				? Array.isArray(value) ? value.slice(0) : Object.assign({}, value )
+				: defaultValue);
+}*/
 
 export function createComponent<T>(
 	nameOrClass: string | Controller<T>,
@@ -165,28 +199,68 @@ export function Component(meta?: string | ComponentMeta) {
 	};
 }
 
-export function decorateComponent<T>(fn: (view: ComponentView<T>) => void) {
-	return function(constructor: Controller<T>) {
+function pushRender<T>(meta: ComponentDefinition<T>, fn: DecorateFunction<T>) {
+	const oldRender = meta.render;
+	meta.render = view => {
+		fn(view);
+		if (oldRender) oldRender(view);
+	};
+}
+
+export function decorateComponent<T>(fn: DecorateFunction<T>) {
+	return (constructor: any) => {
 		const meta = getComponentDefinition(constructor);
-		const oldRender = meta.render;
-		meta.render = (view: ComponentView<T>) => {
-			fn(view);
-			if (oldRender) oldRender(view);
-		};
+		pushRender(meta, fn);
 	};
 }
 
 export function Attribute() {
 	return (proto: any, name: string) => {
-		const constructor = proto.constructor;
-		const attrs = constructor.attributes || (constructor.attributes = []);
-		attrs.push(name);
+		const meta = getComponentDefinition(proto.constructor);
+		const attrs = meta.hasOwnProperty('attributes')
+			? meta.attributes
+			: (meta.attributes = meta.attributes
+					? meta.attributes.slice(0)
+					: []);
+		const attrDef = meta.hasOwnProperty('attributeDefinition')
+			? meta.attributeDefinition
+			: (meta.attributeDefinition = meta.attributeDefinition
+					? { ...meta.attributeDefinition }
+					: {});
+
+		if (attrDef)
+			attrDef[name] = {
+				get() {
+					return (this as any).cxlView.state[name];
+				},
+				set(value) {
+					(this as any).cxlView.store.set(name, value);
+					return value;
+				}
+			};
+
+		attrs?.push(name);
+		pushRender(meta, view =>
+			view.addBinding(
+				view.store
+					.select(name)
+					.pipe(tap(value => setAttribute(view.element, name, value)))
+			)
+		);
 	};
 }
 
 export function Method() {}
 
-export function Event() {}
+export function Events<T>(eventFunction: EventFunction<T>) {
+	return decorateComponent((view: ComponentView<T>) => {
+		const events = eventFunction(view),
+			el = view.element;
+		for (let ev in events) {
+			view.addBinding(events[ev].pipe(triggerEvent(el, ev)));
+		}
+	});
+}
 
 export function Bind<T>(bindFn: BindingFunction<T>) {
 	return decorateComponent((view: ComponentView<T>) =>
@@ -237,13 +311,5 @@ export function Styles(stylesOrMedia: Styles | Media, opStyles?: Styles) {
 		});
 
 		stylesheet.cloneTo(shadow);
-	});
-}
-
-type BehaviorFunction = (el: Element) => Binding | Binding[];
-
-export function Behavior(behavior: BehaviorFunction) {
-	return decorateComponent(view => {
-		view.addBinding(behavior(view.element));
 	});
 }

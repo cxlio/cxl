@@ -189,34 +189,46 @@ const TAG_MAP = {
 	TEMPLATE: VirtualTemplateElement
 };
 
-declare const global: any;
+/*declare namspace NodeJS {
+	interface global { global: any };
+}*/
 
-global.HTMLTemplateElement = VirtualTemplateElement;
-global.HTMLElement = VirtualElement;
-global.DocumentFragment = VirtualFragment;
-global.Element = VirtualElement;
-global.Node = VirtualNode;
-global.TextNode = VirtualTextNode;
-global.MutationObserver = VirtualMutationObserver;
-global.customElements = {
-	define(_name: string, _constructor: any) {}
-};
+const CUSTOM_ELEMENT_REGISTRY: Record<string, any> = {};
 
-global.document = {
-	createElement(tagName: string): VirtualElement {
-		tagName = tagName.toUpperCase();
-		const Cls = (TAG_MAP as any)[tagName] || VirtualElement,
-			instance = new Cls();
-		instance.tagName = tagName;
-		return instance;
+Object.assign(global, {
+	HTMLTemplateElement: VirtualTemplateElement,
+	HTMLElement: VirtualElement,
+	DocumentFragment: VirtualFragment,
+	Element: VirtualElement,
+	Node: VirtualNode,
+	TextNode: VirtualTextNode,
+	MutationObserver: VirtualMutationObserver,
+	customElements: {
+		define(name: string, constructor: any) {
+			if (name in CUSTOM_ELEMENT_REGISTRY)
+				throw new Error(`Element ${name} already defined`);
+			CUSTOM_ELEMENT_REGISTRY[name] = constructor;
+		}
 	},
-	createTextNode(data: string): VirtualTextNode {
-		return new VirtualTextNode(data); // as any) as Text;
-	},
-	createDocumentFragment(): VirtualFragment {
-		return new VirtualFragment();
-	},
-	importNode(node: VirtualNode, deep: boolean) {
-		return node.cloneNode(deep);
+
+	document: {
+		head: new VirtualElement('head'),
+
+		createElement(tagName: string): VirtualElement {
+			tagName = tagName.toUpperCase();
+			const Cls = (TAG_MAP as any)[tagName] || VirtualElement,
+				instance = new Cls();
+			instance.tagName = tagName;
+			return instance;
+		},
+		createTextNode(data: string): VirtualTextNode {
+			return new VirtualTextNode(data); // as any) as Text;
+		},
+		createDocumentFragment(): VirtualFragment {
+			return new VirtualFragment();
+		},
+		importNode(node: VirtualNode, deep: boolean) {
+			return node.cloneNode(deep);
+		}
 	}
-};
+});

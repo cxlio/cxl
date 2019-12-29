@@ -2,11 +2,15 @@
 	"name": "@cxl/tester",
 	"version": "0.0.1",
 	"dependencies": {
-		"colors": "^1.4.0",
-		"istanbul-lib-instrument": "*",
-		"puppeteer": "*"
+		"puppeteer": "^2",
+		"source-map-support": "*"
 	},
 	"devDependencies": {
-		"@types/puppeteer": "*"
+		"@types/puppeteer": "^2.0.0"
+	},
+	"peerDependencies": {
+		"@cxl/server": "*",
+		"@cxl/rx": "*",
+		"@cxl/dom": "*"
 	}
 }

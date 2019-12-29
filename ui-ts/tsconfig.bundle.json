@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/ui",
+		"outFile": "../dist/ui/index.bundle.js",
+		"composite": false
+	},
+	"files": ["bundle.ts"],
+	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
+}

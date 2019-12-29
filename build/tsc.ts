@@ -1,41 +1,68 @@
-import { readFileSync, existsSync, promises } from 'fs';
+import { readFileSync, existsSync } from 'fs';
+import { relative } from 'path';
 import {
+	BuilderProgram,
 	CompilerOptions,
 	CompilerHost,
 	ScriptTarget,
 	SourceFile,
+	Diagnostic,
+	Program,
+	IncrementalProgramOptions,
 	createProgram,
 	getDefaultCompilerOptions,
-	getEffectiveTypeRoots,
-	fixupCompilerOptions,
 	createSourceFile,
-	normalizePath,
-	ResolvedProjectReference,
-	resolveModuleName,
 	getLineAndCharacterOfPosition,
-	getDefaultLibFilePath
+	getDefaultLibFilePath,
+	convertCompilerOptionsFromJson,
+	ModuleKind,
+	InvalidatedProjectKind,
+	createIncrementalProgram,
+	CreateProgramOptions,
+	getParsedCommandLineOfConfigFile,
+	createSolutionBuilder,
+	createSolutionBuilderHost,
+	BuildOptions,
+	sys
 } from 'typescript';
 
 const DEFAULT_TARGET = ScriptTarget.ES2015;
 const SOURCE_CACHE: Record<string, SourceFile> = {};
 const FILE_CACHE: Record<string, string> = {};
 
+interface Output {
+	path: string;
+	source: string;
+}
+
 class CustomCompilerHost implements CompilerHost {
 	output: Record<string, string> = {};
 
 	constructor(public options: CompilerOptions) {}
 
-	getSourceFile(fileName: string) {
-		// console.log('SOURCE ' + fileName);
+	private createSourceFile(fileName: string, languageVersion: ScriptTarget) {
+		const result = createSourceFile(
+			fileName,
+			FILE_CACHE[fileName] ||
+				(FILE_CACHE[fileName] = readFileSync(fileName, 'utf8')),
+			languageVersion || DEFAULT_TARGET
+		);
+		(result as any).version = 0;
+		return result;
+	}
+
+	getSourceFile(fileName: string, languageVersion: ScriptTarget) {
 		return (
 			SOURCE_CACHE[fileName] ||
-			(SOURCE_CACHE[fileName] = createSourceFile(
+			(SOURCE_CACHE[fileName] = this.createSourceFile(
 				fileName,
-				FILE_CACHE[fileName] ||
-					(FILE_CACHE[fileName] = readFileSync(fileName, 'utf8')),
-				this.options.target || DEFAULT_TARGET
+				languageVersion
 			))
 		);
+	}
+
+	trace(s: string) {
+		console.log(s);
 	}
 
 	getDefaultLibFileName() {
@@ -44,6 +71,9 @@ class CustomCompilerHost implements CompilerHost {
 
 	writeFile(name: string, text: string) {
 		// console.log(`WRITE ${name}`);
+		const relativePath = this.options.outDir || process.cwd();
+		name = relative(relativePath, name);
+
 		this.output[name] = text;
 	}
 
@@ -75,6 +105,15 @@ class CustomCompilerHost implements CompilerHost {
 	}
 }
 
+const parseConfigHost = {
+	useCaseSensitiveFileNames: true,
+	getCurrentDirectory: sys.getCurrentDirectory,
+	readDirectory: sys.readDirectory,
+	fileExists: sys.fileExists,
+	readFile: sys.readFile,
+	onUnRecoverableConfigFileDiagnostic() {}
+};
+
 function tscError(d: any, line: number, _ch: number, msg: any) {
 	if (typeof msg === 'string')
 		console.error(`[${d.file ? d.file.fileName : ''}:${line}] ${msg}`);
@@ -87,26 +126,32 @@ function tscError(d: any, line: number, _ch: number, msg: any) {
 	}
 }
 
-export function tsc(inputFileName: string, options: CompilerOptions) {
-	if (!options)
-		try {
-			options = JSON.parse(readFileSync('tsconfig.json')).compilerOptions;
-		} catch (e) {
-			options = {};
-		}
+function createCustomProgram(programOptions: CreateProgramOptions) {
+	const options = programOptions.options;
 
-	const diagnostics: any[] = [];
+	if (options.module === ModuleKind.AMD && options.outFile)
+		programOptions.projectReferences = [
+			{
+				path: __dirname + '/tsconfig.amd.json',
+				prepend: true
+			}
+		];
+
+	return createProgram(programOptions);
+}
+
+function normalizeCompilerOptions(options: CompilerOptions) {
 	const defaultOptions = getDefaultCompilerOptions();
 
-	// mix in default options
-	options = fixupCompilerOptions(
+	return convertCompilerOptionsFromJson(
 		{
 			...defaultOptions,
 			...{
 				target: 'es2015',
 				strict: true,
+				sourceMap: true,
 				moduleResolution: 'node',
-				module: 'commonjs',
+				module: 'es6',
 				allowJs: true,
 				skipLibCheck: true,
 				experimentalDecorators: true,
@@ -115,38 +160,117 @@ export function tsc(inputFileName: string, options: CompilerOptions) {
 			},
 			...options
 		},
-		diagnostics
-	);
+		'.'
+	).options;
+}
 
-	if (options.lib)
-		options.lib = options.lib.map(lib =>
-			lib.endsWith('d.ts') ? lib : `lib.${lib}.d.ts`
-		);
-
-	// console.log(options);
-
-	const compilerHost = new CustomCompilerHost(options);
-	const program = createProgram([inputFileName], options, compilerHost);
-
-	diagnostics.push(
+function buildDiagnostics(program: Program | BuilderProgram) {
+	return [
+		...program.getConfigFileParsingDiagnostics(),
+		//...program.getDeclarationDiagnostics(),
 		...program.getSyntacticDiagnostics(),
 		...program.getSemanticDiagnostics(),
+		//		...program.getGlobalDiagnostics(),
 		...program.getOptionsDiagnostics()
+	];
+}
+
+function printDiagnostics(diagnostics: Diagnostic[]) {
+	diagnostics.forEach(d => {
+		if (d.file) {
+			const { line, character } = getLineAndCharacterOfPosition(
+				d.file,
+				d.start || 0
+			);
+			tscError(d, line + 1, character, d.messageText);
+		} else console.error(`${d.messageText}`);
+	});
+
+	throw new Error('Typescript compilation failed');
+}
+
+function parseTsConfig(tsconfig: string) {
+	const parsed = getParsedCommandLineOfConfigFile(
+		tsconfig,
+		{},
+		parseConfigHost
 	);
+	if (!parsed) throw new Error(`Could not parse config file "${tsconfig}"`);
+	return parsed;
+}
 
-	if (diagnostics.length) {
-		diagnostics.forEach(d => {
-			if (d.file) {
-				const { line, character } = getLineAndCharacterOfPosition(
-					d.file,
-					d.start
-				);
-				tscError(d, line + 1, character, d.messageText);
-			} else console.error(`${d.messageText}`);
-		});
+export function tsbuild(
+	tsconfig = 'tsconfig.json',
+	options: BuildOptions = {}
+): Output[] {
+	const parsed = parseTsConfig(tsconfig);
+	const host = createSolutionBuilderHost();
+	const builder = createSolutionBuilder(host, [tsconfig], options);
+	const output: Output[] = [];
+	let program: any;
 
-		throw new Error('Typescript compilation failed');
+	function writeFile(name: string, source: string) {
+		const relativePath = parsed.options.outDir || process.cwd();
+		name = relative(relativePath, name);
+		output.push({ path: name, source });
 	}
+
+	while ((program = builder.getNextInvalidatedProject())) {
+		console.log(program);
+		if (program.kind === InvalidatedProjectKind.Build)
+			program.emit(undefined, writeFile);
+		else if (program.kind === InvalidatedProjectKind.UpdateBundle)
+			program.emit(writeFile);
+
+		program.done();
+	}
+	return output;
+}
+
+export function tsIncremental(tsconfig: string) {
+	const parsed = parseTsConfig(tsconfig);
+	const compilerHost = new CustomCompilerHost(parsed.options);
+	const programOptions: IncrementalProgramOptions<BuilderProgram> = {
+		rootNames: parsed.fileNames,
+		projectReferences: parsed.projectReferences,
+		host: compilerHost,
+		options: parsed.options
+	};
+
+	const program = createIncrementalProgram(programOptions);
+	const diagnostics = buildDiagnostics(program);
+
+	if (diagnostics.length) printDiagnostics(diagnostics);
+
+	program.emit();
+
+	return compilerHost.output;
+}
+
+export function tsc(inputFileName: string, options: CompilerOptions) {
+	let tsConfigOptions: CompilerOptions;
+	try {
+		tsConfigOptions =
+			existsSync('tsconfig.json') &&
+			JSON.parse(readFileSync('tsconfig.json', 'utf8')).compilerOptions;
+	} catch (e) {
+		tsConfigOptions = {};
+		console.error(e);
+	}
+
+	options = normalizeCompilerOptions({ ...tsConfigOptions, ...options });
+
+	const compilerHost = new CustomCompilerHost(options);
+	const programOptions: CreateProgramOptions = {
+		rootNames: [inputFileName],
+		host: compilerHost,
+		options
+	};
+
+	const program = createCustomProgram(programOptions);
+	const diagnostics = buildDiagnostics(program);
+
+	if (diagnostics.length) printDiagnostics(diagnostics);
 
 	program.emit();
 

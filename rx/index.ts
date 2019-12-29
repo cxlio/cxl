@@ -23,8 +23,8 @@ type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
 
 class Subscriber<T> {
 	public next: NextFunction<T>;
-	public error: ErrorFunction | undefined;
-	public complete: CompleteFunction | undefined;
+	public error?: ErrorFunction;
+	public complete?: CompleteFunction;
 
 	constructor(
 		observer: NextObserver<T> = () => {},
@@ -336,7 +336,9 @@ function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
 }
 
 function debounceTime(time?: number) {
-	return operator(subscriber => debounceFunction(subscriber.next, time));
+	return operator(subscriber =>
+		debounceFunction(subscriber.next.bind(subscriber), time)
+	);
 }
 
 export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {

@@ -1,0 +1,10 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/server",
+		"lib": ["es2015"],
+		"types": ["node"]
+	},
+	"files": ["index.ts", "colors.ts"],
+	"references": [{ "path": "../rx" }]
+}

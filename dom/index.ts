@@ -19,7 +19,7 @@ export function on(
 	options?: AddEventListenerOptions
 ) {
 	return new Observable<Event>(subscriber => {
-		const handler = subscriber.next;
+		const handler = subscriber.next.bind(subscriber);
 		element.addEventListener(event, handler, options);
 		return element.removeEventListener.bind(
 			element,
@@ -231,13 +231,19 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 	}
 
 	protected onSubscribe(subscription: any) {
+		const el = this.element;
+
 		if (!this.observer) {
 			this.observer = new MutationObserver(events =>
 				events.forEach(this.$handleEvent, this)
 			);
-			if (this.element)
-				this.observer.observe(this.element, { childList: true });
+			if (el) this.observer.observe(el, { childList: true });
 		}
+
+		if (el)
+			for (let node of el.childNodes)
+				subscription.next({ type: 'added', target: el, value: node });
+
 		return super.onSubscribe(subscription);
 	}
 

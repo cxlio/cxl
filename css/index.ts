@@ -1,12 +1,14 @@
 type StyleDefinition = Partial<StrictStyleDefinition>;
-type CSSStyle = Partial<CSSStyleDeclaration>;
+type CSSStyle = {
+	[P in keyof CSSStyleDeclaration]?: string | number;
+};
 type BaseColor = RGBA;
 type Color = keyof Colors | BaseColor | 'inherit';
 export type Media = 'medium' | 'large' | 'xlarge';
 
 interface Typography {
-	default: Style;
-	[name: string]: Style;
+	default: CSSStyle;
+	[name: string]: CSSStyle;
 }
 
 interface Variables {
@@ -33,11 +35,12 @@ interface Colors {
 }
 
 interface StrictStyleDefinition {
-	// animation: AnimationKey;
+	animation: string;
 	elevation: number;
 	translateX: number;
 	translateY: number;
 	translateZ: number;
+	prepend: string;
 	rotate: number;
 	scaleX: number;
 	scaleY: number;
@@ -45,8 +48,34 @@ interface StrictStyleDefinition {
 	color: Color;
 	backgroundColor: Color;
 	borderColor: Color;
-
-	[name: string]: any;
+	borderRadius: number;
+	paddingLeft: number;
+	paddingRight: number;
+	paddingTop: number;
+	paddingBottom: number;
+	marginLeft: number | 'auto';
+	marginRight: number | 'auto';
+	marginTop: number | 'auto';
+	marginBottom: number | 'auto';
+	opacity: number;
+	width: number;
+	filter: string;
+	pointerEvents: string;
+	cursor: string;
+	display: string;
+	position: string;
+	userSelect: string;
+	textAlign: string;
+	height: number;
+	verticalAlign:
+		| 'top'
+		| 'middle'
+		| 'bottom'
+		| 'super'
+		| 'sub'
+		| 'text-top'
+		| 'text-bottom'
+		| 'baseline';
 }
 
 export interface Styles {
@@ -67,15 +96,21 @@ export interface Breakpoints {
 	xlarge: number;
 }
 
+interface AnimationDefinition {
+	keyframes: string;
+	value: string;
+}
+
+interface Animation {
+	[name: string]: AnimationDefinition;
+}
+
 export interface Theme {
+	animation: Animation;
 	colors: Colors;
 	typography: Typography;
 	variables: Variables;
 	breakpoints: Breakpoints;
-}
-
-export interface Style {
-	[prop: string]: any;
 }
 
 const PSEUDO = {
@@ -157,6 +192,37 @@ const SNAKE_CSS: Record<string, string> = {
 	SNAKE_REGEX = /[A-Z]/g;
 
 const defaultTheme: Theme = {
+	animation: {
+		spin: {
+			keyframes:
+				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
+			value: 'cxl-spin 2s infinite linear'
+		},
+		pulse: {
+			keyframes:
+				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
+			value: 'cxl-pulse 1s infinite steps(8)'
+		},
+		expand: {
+			keyframes:
+				'0% { transform: scale(0,0); } 100% { transform: scale(1,1); }',
+			value: 'cxl-expand var(--cxl-speed) 1 ease-in'
+		},
+		fadeIn: {
+			keyframes:
+				'0% { display: block; opacity: 0; } 100% { opacity: 1; }',
+			value: 'cxl-fadeIn var(--cxl-speed) linear'
+		},
+		wait: {
+			keyframes: `
+0% { transform: translateX(0) scaleX(0) }
+33% { transform: translateX(0) scaleX(0.75)}
+66% { transform: translateX(75%) scaleX(0.25)}
+100%{ transform:translateX(100%) scaleX(0) }
+			`,
+			value: 'cxl-wait 1s infinite linear'
+		}
+	},
 	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
 	variables: {
 		// Animation speed
@@ -171,19 +237,19 @@ const defaultTheme: Theme = {
 			fontSize: 'var(--cxl-fontSize)',
 			letterSpacing: 'normal'
 		},
-		caption: { fontSize: 12, letterSpacing: 0.4 },
-		h1: { fontWeight: 300, fontSize: 96, letterSpacing: -1.5 },
-		h2: { fontWeight: 300, fontSize: 60, letterSpacing: -0.5 },
-		h3: { fontSize: 48 },
-		h4: { fontSize: 34, letterSpacing: 0.25 },
-		h5: { fontSize: 24 },
-		h6: { fontSize: 20, fontWeight: 400, letterSpacing: 0.15 },
-		title: { fontSize: 18, lineHeight: 24 },
-		subtitle: { fontSize: 16, lineHeight: 22, letterSpacing: 0.15 },
-		subtitle2: { fontSize: 14, lineHeight: 18, letterSpacing: 0.1 },
+		caption: { fontSize: '12px', letterSpacing: 0.4 },
+		h1: { fontWeight: 300, fontSize: '96px', letterSpacing: -1.5 },
+		h2: { fontWeight: 300, fontSize: '60px', letterSpacing: -0.5 },
+		h3: { fontSize: '48px' },
+		h4: { fontSize: '34px', letterSpacing: 0.25 },
+		h5: { fontSize: '24px' },
+		h6: { fontSize: '20px', fontWeight: 400, letterSpacing: 0.15 },
+		title: { fontSize: '18px', lineHeight: '24px' },
+		subtitle: { fontSize: '16px', lineHeight: 1.375, letterSpacing: 0.15 },
+		subtitle2: { fontSize: '14px', lineHeight: '18px', letterSpacing: 0.1 },
 		button: {
-			fontSize: 14,
-			lineHeight: 20,
+			fontSize: '14px',
+			lineHeight: '20px',
 			letterSpacing: 1.25,
 			textTransform: 'uppercase'
 		},
@@ -242,7 +308,7 @@ function toUnit(n: number) {
 }
 
 const UNIT = 'px';
-const theme = defaultTheme;
+export let theme: Theme;
 
 function renderColor(
 	_def: StyleDefinition,
@@ -255,7 +321,7 @@ function renderColor(
 }
 
 function renderDefault(style: CSSStyle, prop: any, value: string | number) {
-	style[prop] = typeof value === 'number' ? `${value}px` : value;
+	style[prop] = typeof value === 'number' ? toUnit(value) : value;
 }
 
 function renderTransform(v: StyleDefinition, style: CSSStyle) {
@@ -279,7 +345,21 @@ function renderTransform(v: StyleDefinition, style: CSSStyle) {
 			(v.rotate !== undefined ? 'rotate(' + v.rotate + ')' : '');
 }
 
+function renderNumber(_def: any, style: CSSStyle, prop: any, value: number) {
+	style[prop] = value.toString();
+}
+
 const renderMap: StyleMap = {
+	animation(def: any, style: CSSStyle, _prop: any, value: string) {
+		const animation = theme.animation[value];
+
+		if (animation) {
+			style.animation = animation.value;
+			def.prepend =
+				(def.prepend || '') +
+				`@keyframes cxl-${value}{${animation.keyframes}}`;
+		}
+	},
 	backgroundColor: renderColor,
 	borderColor: renderColor,
 	color: renderColor,
@@ -294,9 +374,9 @@ const renderMap: StyleMap = {
 		_p: any,
 		value: keyof Typography
 	) {
-		const font = theme.typography[value];
-		for (let i in font) style[i as any] = font[i];
+		applyCSSStyle(style, theme.typography[value]);
 	},
+	opacity: renderNumber,
 	translateX: renderTransform,
 	translateY: renderTransform,
 	translateZ: renderTransform,
@@ -315,15 +395,23 @@ function toSnake(name: string) {
 	);
 }
 
-function renderStyle(def: Style) {
-	const style: CSSStyle = {};
-	let result = '';
+function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
+	for (let i in def) style[i] = def[i];
+}
 
+function applyStyle(style: CSSStyle, def: StyleDefinition) {
 	for (let i in def) {
-		const fn = renderMap[i];
-		if (fn) fn(def, style, i, def[i]);
-		else renderDefault(style, i, def[i]);
+		const fn = renderMap[i],
+			val = (def as any)[i];
+		if (fn) fn(def, style, i, val);
+		else renderDefault(style, i, val);
 	}
+}
+
+function renderStyle(def: StyleDefinition) {
+	const style: CSSStyle = {};
+	applyStyle(style, def);
+	let result = '';
 
 	for (let i in style) result += `${toSnake(i)}:${style[i]};`;
 
@@ -340,22 +428,22 @@ function parseRuleName(selector: string, name: string) {
 	return `${selector}${sel}${className ? ` .${className}` : ''}`;
 }
 
-function renderRule(selector: string, name: string, style: Style) {
+function renderRule(selector: string, name: string, style: StyleDefinition) {
 	return `${parseRuleName(selector, name)}{${renderStyle(style)}}`;
 }
 
-const variableStyle = document.createElement('STYLE');
+export function applyTheme(newTheme: Theme) {
+	theme = newTheme;
+	const { variables, colors } = theme;
+	const variableStyle = document.createElement('STYLE');
 
-function applyTheme({ variables, colors }: Theme) {
-	let result = '';
-
-	for (let i in colors) result += `--cxl-${i}:${(colors as any)[i]}`;
+	let result = ':root{';
+	for (let i in colors) result += `--cxl-${i}:${(colors as any)[i]};`;
 	for (let i in variables) result += `--cxl-${i}:${variables[i]};`;
 
-	variableStyle.innerHTML = result;
+	variableStyle.innerHTML = result + '}';
+	document.head.appendChild(variableStyle);
 }
-
-applyTheme(defaultTheme);
 
 export class StyleSheet {
 	tagName?: string;
@@ -373,6 +461,7 @@ export class StyleSheet {
 	}
 
 	cloneTo(parent: DocumentFragment | Element) {
+		if (!theme) applyTheme(defaultTheme);
 		const native = this.native || this.render();
 		parent.appendChild(native.cloneNode(true));
 	}
@@ -383,8 +472,12 @@ export class StyleSheet {
 
 		let css = '';
 
-		for (let i in this.styles)
-			css += renderRule(selector, i, this.styles[i]);
+		for (let i in this.styles) {
+			const style = this.styles[i];
+			css += renderRule(selector, i, style);
+
+			if (style.prepend) css = style.prepend + css;
+		}
 
 		if (this.media)
 			css = `@media(min-width:${toUnit(
@@ -401,14 +494,13 @@ export const globalStyles = new StyleSheet({
 	styles: {
 		$: {
 			// reset: '-webkit-tap-highlight-color:transparent;',
-			fontFamily: 'var(--cxl-font)',
-			fontSize: 'var(--cxl-fontSize)',
+			font: 'default',
 			verticalAlign: 'middle'
 		},
 		'*': {
 			boxSizing: 'border-box',
 			transition:
 				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)'
-		}
+		} as any
 	}
 });

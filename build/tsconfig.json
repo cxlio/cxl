@@ -1,7 +1,15 @@
 {
+	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"strict": true,
+		"outDir": "../dist/build",
+		"baseUrl": "../dist/build",
 		"types": ["node"],
 		"typeRoots": ["../node_modules/@types"]
-	}
+	},
+	"references": [
+		{ "path": "./tsconfig.amd.json", "prepend": true },
+		{ "path": "../rx" },
+		{ "path": "../server" }
+	],
+	"files": ["index.ts", "tsc.ts"]
 }

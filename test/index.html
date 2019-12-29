@@ -3,12 +3,19 @@
 		<title>cxl - Test Suite</title>
 	</head>
 	<body>
-		<cxl-meta></cxl-meta>
-		<cxl-appbar>
-			<cxl-appbar-title>@cxl/test</cxl-appbar-title>
-		</cxl-appbar>
-		<script src="../dist/ui/index.js"></script>
-		<script src="../ui/dist/icons.js"></script>
+		<script src="../ui/index.bundle.js"></script>
 		<script src="index.js"></script>
+		<script type="module">
+			import browserRunner from '../tester/browser-runner.js';
+
+			define('@tester', ['exports', 'require', 'index'], (
+				exports,
+				require,
+				index
+			) => {
+				let suite = index.default;
+				browserRunner.run([suite]);
+			});
+		</script>
 	</body>
 </html>

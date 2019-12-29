@@ -1,17 +1,6 @@
-const { typescript, build } = require('../dist/build');
+const { tsconfig, build, file, pkg } = require('../dist/build');
 
 build({
-	baseDir: '.',
 	outputDir: '../dist/test',
-	tasks: [
-		typescript({
-			compilerOptions: {
-				declaration: false,
-				esModuleInterop: true,
-				// lib: ['lib.es2015.d.ts'],
-				outFile: 'index.js',
-				module: 'amd'
-			}
-		})
-	]
+	tasks: [tsconfig(), file('index.html'), pkg()]
 });

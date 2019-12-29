@@ -2247,9 +2247,11 @@ See <a href="react.html">Demo</a>.</p>
 		{
 			initialize(name, host) {
 				const state = this,
-					component = cxl.componentFactory.components[name],
-					meta = (component && component.meta) || {},
 					instance = (state.instance = cxl.dom(name)),
+					component =
+						cxl.componentFactory.components[name] ||
+						state.instance.__cxlView.state.constructor,
+					meta = (component && component.meta) || {},
 					view = instance.$view;
 
 				state.instance = instance;

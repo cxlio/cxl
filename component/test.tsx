@@ -60,21 +60,18 @@ export default suite('component', test => {
 		}
 
 		createComponent(TestComponent)
-			.subscribe(el => {
-				a.equal(el.childNodes[0].textContent, 'hello');
-			})
+			.subscribe(el => a.equal(el.childNodes[0].textContent, 'hello'))
 			.unsubscribe();
 	});
 
 	test('@Template - Bind to host element', a => {
-		@Component('cxl-radio')
-		@Template(({ bind, state, element, select }) => {
-			bind([
-				onAction(element).pipe(tap(() => state.toggle())),
-				select('value').pipe(tap(() => state.onValue())),
-				select('name').pipe(tap(() => state.toggle()))
-			]);
-
+		@Component('cxl-radio2')
+		@Bind<RadioButton>(({ element, state, select }) => [
+			onAction(element).pipe(tap(() => state.toggle())),
+			select('value').pipe(tap(() => state.onValue())),
+			select('name').pipe(tap(() => state.toggle()))
+		])
+		@Template(() => {
 			return (
 				<x>
 					<x className="focusCircle focusCirclePrimary"></x>
@@ -96,13 +93,13 @@ export default suite('component', test => {
 		createComponent(RadioButton)
 			.subscribe(el => {
 				a.ok(el);
-				a.equal(el.tagName, 'CXL-RADIO');
+				a.equal(el.tagName, 'CXL-RADIO2');
 			})
 			.unsubscribe();
 	});
 
 	test('@Template - Bind to host element', a => {
-		@Component('cxl-radio')
+		@Component('cxl-radio1')
 		@Bind<RadioButton>(({ state, element, select }) => [
 			onAction(element).pipe(tap(() => state.toggle())),
 			select('value').pipe(tap(() => state.onValue())),
@@ -130,7 +127,7 @@ export default suite('component', test => {
 		createComponent(RadioButton)
 			.subscribe(el => {
 				a.ok(el);
-				a.equal(el.tagName, 'CXL-RADIO');
+				a.equal(el.tagName, 'CXL-RADIO1');
 			})
 			.unsubscribe();
 	});

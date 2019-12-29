@@ -1,8 +1,10 @@
 {
 	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"module": "amd",
-		"types": ["node"]
-	},
+	"compilerOptions": {},
+	"references": [
+		{ "path": "tsconfig.json" },
+		{ "path": "../rx" },
+		{ "path": "../tester" }
+	],
 	"include": ["test.ts"]
 }

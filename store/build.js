@@ -1,6 +1,6 @@
-const { build, typescript, pkg } = require('../dist/build');
+const { build, tsconfig, pkg } = require('../dist/build');
 
 build({
 	outputDir: '../dist/store',
-	tasks: [typescript(), pkg()]
+	tasks: [tsconfig(), tsconfig('tsconfig.test.json'), pkg()]
 });

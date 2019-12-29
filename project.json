@@ -7,7 +7,7 @@
 			},
 			"build": {
 				"files": ["build/index.ts", "build/tsc.ts"],
-				"tasks": "cd build && node build"
+				"tasks": "cd build && npm run build"
 			},
 			"component": {
 				"files": ["component/index.ts"],
@@ -87,11 +87,7 @@
 				"tasks": "cd server && node build"
 			},
 			"tester": {
-				"files": [
-					"tester/index.ts",
-					"tester/runner.ts",
-					"tester/build.js"
-				],
+				"files": ["tester/index.ts", "tester/runner.ts", "tester/*.js"],
 				"tasks": "node tester/build"
 			}
 		}

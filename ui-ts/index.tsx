@@ -4,32 +4,44 @@ import {
 	ComponentView,
 	Template,
 	Bind,
+	Events,
 	Styles,
 	decorateComponent
-} from '../component';
+} from '../component/index.js';
 import {
 	getAttribute,
 	onAction,
-	content,
-	anchor,
-	appendChild,
+	$anchor,
 	setAttribute,
 	triggerEvent,
 	dom
-} from '../template';
-import { on } from '../dom';
-import { tap, of, merge, debounceTime } from '../rx';
-
-import '../ui/dist/index';
+} from '../template/index.js';
+import { on } from '../dom/index.js';
+import { tap, of, merge, debounceTime } from '../rx/index.js';
 
 declare const cxl: any;
+
+const StateStyles = {
+	$active: { filter: 'invert(0.2)' },
+	$focus: {
+		outline: 0,
+		filter: 'invert(0.2) saturate(2) brightness(1.1)'
+	},
+	$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
+	$disabled: {
+		cursor: 'default',
+		filter: 'saturate(0)',
+		opacity: 0.38,
+		pointerEvents: 'none'
+	}
+};
 
 export function ripple({ element }: any) {
 	return onAction(element).pipe(
 		debounceTime(),
 		tap(ev => {
 			ev.preventDefault();
-			// cxl.ui.ripple(element, ev);
+			if (!element.disabled) cxl.ui.ripple(element, ev);
 		})
 	);
 }
@@ -58,23 +70,19 @@ export function focusable({ element }: ComponentView<any>) {
 
 export function Role(ariaRole: string) {
 	return decorateComponent(view => {
-		view.addBinding(of(ariaRole).pipe(setAttribute('role', view.element)));
+		view.addBinding(of(ariaRole).pipe(setAttribute(view.element, 'role')));
 	});
 }
 
-@Template(({ children }) => (
+@Template(({ $content }) => (
 	<div>
 		<div className="flex">
 			<slot></slot>
-			<div
-				$={el => anchor('cxl-appbar-actions').pipe(appendChild(el))}
-			></div>
+			<div $={$anchor('cxl-appbar-actions')}></div>
 		</div>
 		<div className="tabs">
-			<slot $={el => children.pipe(content('cxl-tabs', el))}></slot>
-			<div
-				$={el => anchor('cxl-appbar-tabs').pipe(appendChild(el))}
-			></div>
+			<slot $={$content('cxl-tabs')}></slot>
+			<div $={$anchor('cxl-appbar-tabs')}></div>
 		</div>
 	</div>
 ))
@@ -151,7 +159,7 @@ export class Card {}
 		height: 22,
 		lineHeight: 22,
 		font: 'caption',
-		borderRadius: '50%',
+		borderRadius: 11,
 		color: 'onPrimary',
 		backgroundColor: 'primary'
 	},
@@ -199,7 +207,6 @@ export class Badge {
 		$flat: {
 			backgroundColor: 'inherit',
 			elevation: 0,
-			fontWeight: 500,
 			paddingRight: 8,
 			paddingLeft: 8,
 			color: 'inherit'
@@ -213,7 +220,7 @@ export class Badge {
 			backgroundColor: 'secondary',
 			color: 'onSecondary'
 		},
-		$round: { borderRadius: '50%' },
+		$round: { borderRadius: 52 },
 
 		$active: { elevation: 3 },
 		$active$disabled: { elevation: 1 },
@@ -225,6 +232,7 @@ export class Badge {
 @Styles('large', {
 	$flat: { paddingLeft: 12, paddingRight: 12 }
 })
+@Styles(StateStyles)
 @Bind(ripple)
 @Bind(focusable)
 @Role('button')
@@ -246,38 +254,20 @@ export class Button {
 }
 
 @Component('cxl-submit')
-@Template<SubmitButton>(({ select }) => {
-	const b = (el: Element) => [
-		select('disabled').pipe(show(el)),
-		select('icon').pipe(setAttribute(el, 'icon'))
-	];
-
-	return (
-		<div>
-			<div className="icon" $={b}></div>
-			<slot></slot>
-		</div>
-	);
-})
-@Bind(({ element }) => [
-	onAction(element).pipe(triggerEvent(element, 'form.submit'))
-])
+@Template<SubmitButton>(({ select }) => (
+	<div>
+		<cxl-icon className="icon" icon={select('icon')}></cxl-icon>
+		<slot></slot>
+	</div>
+))
 @Styles({
-	icon: { animation: 'spin', marginRight: 8 }
+	icon: { animation: 'spin', marginRight: 8, display: 'none' },
+	icon$disabled: { display: 'inline-block' }
 })
+@Events(({ element }) => ({
+	'form.submit': onAction(element)
+}))
 export class SubmitButton extends Button {
 	icon = 'spinner';
 	primary = true;
 }
-
-//			events: ['cxl-form.submit'],
-/*			bindings: 'action:host.trigger(cxl-form.submit)'
-		},
-		{
-			primary: true,
-			icon: 'spinner',
-			submit() {
-				this.input.click();
-			}
-		}
-	);*/

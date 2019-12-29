@@ -29,7 +29,7 @@ function failure(): string {
 
 class TestReport {
 	failures: Result[] = [];
-	constructor(private suite: Test) {}
+	constructor(public suite: Test) {}
 
 	printTest(test: Test) {
 		let out = '';
@@ -41,7 +41,7 @@ class TestReport {
 
 		if (test.results.length === 0 && test.tests.length === 0) {
 			out = failure();
-			failures.push(new Result(false, 'No assertions found'));
+			failures.push({ success: false, message: 'No assertions found' });
 		}
 
 		group(`${test.name} ${out}`);
@@ -64,7 +64,7 @@ class TestReport {
 	}
 }
 
-export const browserRunner = {
+const browserRunner = {
 	async runSuite(suite: Test) {
 		await suite.run();
 		new TestReport(suite).print();
@@ -77,3 +77,5 @@ export const browserRunner = {
 		document.body.appendChild(container);
 	}
 };
+
+export default browserRunner;

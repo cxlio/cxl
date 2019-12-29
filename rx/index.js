@@ -1,4 +1,3 @@
-(exports=>{
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Subscriber {
@@ -16,8 +15,8 @@ class Subscriber {
 exports.Subscriber = Subscriber;
 class Subscription {
     constructor(subscriber, subscribe) {
-        this.subscriber = subscriber;
         this.isUnsubscribed = false;
+        this.subscriber = subscriber;
         try {
             this.onUnsubscribe = subscribe(this);
         }
@@ -55,20 +54,18 @@ class Subscription {
 }
 exports.Subscription = Subscription;
 class Observable {
+    constructor(subscribe) {
+        if (subscribe)
+            this.__subscribe = subscribe;
+    }
     static create(A) {
         return new this(A);
     }
     __subscribe(_subscription) {
         return () => { };
     }
-    constructor(subscribe) {
-        if (subscribe)
-            this.__subscribe = subscribe;
-    }
-    pipe(operator, ...extra) {
-        return extra
-            ? extra.reduce((prev, fn) => fn(prev), operator(this))
-            : operator(this);
+    pipe(...extra) {
+        return extra.reduce((prev, fn) => fn(prev), this);
     }
     subscribe(observer, error, complete) {
         const subscriber = new Subscriber(observer, error, complete);
@@ -138,11 +135,10 @@ class CollectionEvent {
 }
 exports.CollectionEvent = CollectionEvent;
 class EventEmitter {
-    on(type, callback, scope) {
-        return this.addEventListener(type, callback, scope);
-    }
-    off(type, callback, scope) {
-        return this.removeEventListener(type, callback, scope);
+    constructor() {
+        this.on = this.addEventListener;
+        this.off = this.removeEventListener;
+        this.trigger = this.emit;
     }
     addEventListener(type, callback, scope) {
         if (!this.__handlers)
@@ -164,7 +160,7 @@ class EventEmitter {
     }
     $eachHandler(type, fn) {
         if (this.__handlers && this.__handlers[type])
-            this.__handlers[type].forEach(handler => {
+            this.__handlers[type].slice().forEach(handler => {
                 try {
                     fn(handler);
                 }
@@ -183,9 +179,6 @@ class EventEmitter {
         const result = [];
         this.$eachHandler(type, handler => result.push(handler.fn.call(handler.scope, ...args)));
         return result;
-    }
-    trigger(type, ...args) {
-        return this.emit(type, ...args);
     }
     once(type, callback, scope) {
         const subscriber = this.on(type, (...args) => {
@@ -221,6 +214,23 @@ function concat(...observables) {
     });
 }
 exports.concat = concat;
+function from(input) {
+    if (input instanceof Observable)
+        return input;
+    return new Observable(subs => {
+        if (Array.isArray(input)) {
+            input.forEach(item => subs.next(item));
+            subs.complete();
+        }
+        else {
+            input.then(result => {
+                subs.next(result);
+                subs.complete();
+            }, err => subs.error(err));
+        }
+    });
+}
+exports.from = from;
 function of(...values) {
     return new Observable(subscriber => {
         values.forEach(val => subscriber.next(val));
@@ -237,7 +247,7 @@ function toPromise(observable) {
 exports.toPromise = toPromise;
 function operator(fn) {
     return (source) => new Observable(subscriber => {
-        const subscription = source.subscribe(fn(subscriber));
+        const subscription = source.subscribe(fn(subscriber), subscriber.error.bind(subscriber), subscriber.complete.bind(subscriber));
         return subscription.unsubscribe.bind(subscription);
     });
 }
@@ -248,6 +258,20 @@ function map(mapFn) {
     });
 }
 exports.map = map;
+function debounceFunction(fn, delay) {
+    let to;
+    return function (...args) {
+        if (to)
+            clearTimeout(to);
+        to = setTimeout(() => {
+            fn.apply(this, args);
+        }, delay);
+    };
+}
+function debounceTime(time) {
+    return operator(subscriber => debounceFunction(subscriber.next.bind(subscriber), time));
+}
+exports.debounceTime = debounceTime;
 function mergeMap(project) {
     let lastSubscription;
     return operator(subscriber => (val) => {
@@ -272,6 +296,23 @@ function tap(fn) {
     });
 }
 exports.tap = tap;
+function catchError(selector) {
+    function subscribe(source, subscriber) {
+        const subscription = source.subscribe(subscriber.next.bind(subscriber), (err) => {
+            let result;
+            try {
+                result = selector(err, source);
+            }
+            catch (err2) {
+                return subscriber.error(err2);
+            }
+            subscribe(result, subscriber);
+        }, subscriber.complete.bind(subscriber));
+        return subscription.unsubscribe.bind(subscription);
+    }
+    return (source) => new Observable(subscriber => subscribe(source, subscriber));
+}
+exports.catchError = catchError;
 function distinctUntilChanged() {
     let lastValue;
     return operator((subscriber) => (val) => {
@@ -282,14 +323,63 @@ function distinctUntilChanged() {
     });
 }
 exports.distinctUntilChanged = distinctUntilChanged;
+function merge(...observables) {
+    return new Observable(subs => {
+        let refCount = observables.length;
+        const subscriptions = observables.map(o => o.subscribe({
+            next(val) {
+                subs.next(val);
+            },
+            error(e) {
+                subs.error(e);
+            },
+            complete() {
+                if (refCount-- === 0)
+                    subs.complete();
+            }
+        }));
+        return () => subscriptions.forEach(s => s.unsubscribe());
+    });
+}
+exports.merge = merge;
+function combineLatest(...observables) {
+    return new Observable(subs => {
+        const latest = [], len = observables.length;
+        let count = 0, isReady = false;
+        const subscriptions = observables.map((o, i) => o.subscribe({
+            next(val) {
+                latest[i] = val;
+                if (isReady || count + 1 === len) {
+                    const clone = latest.slice(0);
+                    isReady = true;
+                    subs.next(clone);
+                }
+                else
+                    count++;
+            },
+            error(e) {
+                subs.error(e);
+            },
+            complete() {
+                if (isReady && --count === 0)
+                    subs.complete();
+            }
+        }));
+        return () => subscriptions.forEach(s => s.unsubscribe());
+    });
+}
+exports.combineLatest = combineLatest;
+function throwError(error) {
+    return new Observable(subs => subs.error(error));
+}
+exports.throwError = throwError;
+exports.EMPTY = new Observable(subs => subs.complete());
 const operators = {
+    catchError,
+    debounceTime,
+    distinctUntilChanged,
     map,
     tap,
-    filter,
-    distinctUntilChanged
+    filter
 };
 exports.operators = operators;
-
-})(typeof exports==='undefined' ?
-		(this.cxl || (this.cxl={})).rx = {} :
-		exports);

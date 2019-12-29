@@ -1,4 +1,4 @@
-import { suite } from '../tester';
+import { suite } from '../tester/index.js';
 import {
 	BehaviorSubject,
 	Observable,
@@ -8,7 +8,7 @@ import {
 	of,
 	map,
 	tap
-} from './index';
+} from './index.js';
 
 declare function setInterval(fn: () => void, interval?: number): number;
 declare function clearInterval(intervalId: number): void;

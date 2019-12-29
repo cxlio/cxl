@@ -9,8 +9,8 @@
 		"index.js.map"
 	],
 	"scripts": {
-		"build": "tsc",
-		"test": "tsc -b tsconfig.test.json && cd dist && node test",
+		"build": "node build",
+		"test": "node build && cd ../dist/store && node ../tester/runner",
 		"prepublish": "node build"
 	},
 	"devDependencies": {

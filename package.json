@@ -1,0 +1,17 @@
+{
+	"private": true,
+	"name": "@cxl/cxl",
+	"version": "0.0.0",
+	"devDependencies": {
+		"@types/node": "*",
+		"@typescript-eslint/eslint-plugin": "^2.13.0",
+		"@typescript-eslint/parser": "^2.13.0",
+		"eslint": "^6.8.0",
+		"source-map-support": "*",
+		"typescript": "^3.7.4"
+	},
+	"scripts": {
+		"lint": "eslint --cache --ignore-path .gitignore **/*.ts **/*.tsx",
+		"build-all": "tsc -b tsconfig.all.json"
+	}
+}

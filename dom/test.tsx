@@ -3,15 +3,6 @@ import { empty, setContent, setAttribute } from './index';
 import { dom } from '../template';
 
 export default suite('dom', test => {
-	test('dom() - tsx', a => {
-		const el = <div title="=style:@styleText =title:@title">content</div>;
-
-		a.ok(el, 'Element was created');
-		a.equal(el.tagName, 'DIV');
-		a.equal((el as any).title, '=style:@styleText =title:@title');
-		a.equal(el.textContent, 'content');
-	});
-
 	test('empty(Element)', a => {
 		const el = (
 			<div>
@@ -51,29 +42,5 @@ export default suite('dom', test => {
 
 		setAttribute(el, 'test-attribute', false);
 		a.equal(el.hasAttribute('test-attribute'), false);
-	});
-
-	test('dom() - siblings', a => {
-		const el = (
-				<div>
-					<a>1</a>
-					<b>2</b>
-					<c>3</c>
-				</div>
-			),
-			first = el.firstChild,
-			last = el.lastChild;
-
-		a.equal(el.childNodes.length, 3);
-		a.equal((el.childNodes[0] as Element).tagName, 'A');
-		a.equal((el.childNodes[1] as Element).tagName, 'B');
-		a.equal((el.childNodes[2] as Element).tagName, 'C');
-		a.equal(el.childNodes[0].parentNode, el);
-		a.equal(el.childNodes[1].parentNode, el);
-		a.equal(el.childNodes[2].parentNode, el);
-		a.equal(first, el.childNodes[0]);
-		a.equal(last, el.childNodes[2]);
-		a.equal(first && first.nextSibling, el.childNodes[1]);
-		a.equal(last && last.previousSibling, el.childNodes[1]);
 	});
 });

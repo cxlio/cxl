@@ -4,8 +4,9 @@ type SuiteFn = (suiteFn: (name: string, testFn: TestFn) => void) => void;
 declare function setTimeout(fn: () => any, n?: number): number;
 declare function clearTimeout(n: number): void;
 
-export class Result {
-	constructor(public success: boolean, public message: string | Error) {}
+export interface Result {
+	success: boolean;
+	message: string | Error;
 }
 
 interface TestConfig {
@@ -26,8 +27,8 @@ export class Test {
 		else this.name = nameOrConfig.name;
 	}
 
-	ok(condition: any, msg: string = '') {
-		this.results.push(new Result(!!condition, msg));
+	ok(condition: any, message: string = '') {
+		this.results.push({ success: !!condition, message });
 	}
 
 	equal<T>(a: T, b: T) {
@@ -47,7 +48,10 @@ export class Test {
 		this.promise = new Promise<void>((resolve, reject) => {
 			result = resolve;
 			timeout = setTimeout(() => {
-				this.results.push(new Result(false, 'Async test timed out'));
+				this.results.push({
+					success: false,
+					message: 'Async test timed out'
+				});
 				reject();
 			}, this.timeout);
 		});
@@ -74,8 +78,8 @@ export class Test {
 			if (this.promise && this.completed === false)
 				throw new Error('Never completed');
 			await Promise.all(this.tests.map(test => test.run()));
-		} catch (e) {
-			this.results.push(new Result(false, e));
+		} catch (message) {
+			this.results.push({ success: false, message });
 		}
 
 		return this.results;

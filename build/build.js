@@ -1,29 +1,11 @@
+/*import ts from 'typescript';
+import fs from 'fs';
+import cp from 'child_process';*/
 const ts = require('typescript'),
 	fs = require('fs'),
-	cp = require('child_process'),
-	AMD = fs.readFileSync('amd.js', 'utf8'),
-	index = ts.transpileModule(fs.readFileSync('index.ts', 'utf8'), {
-		compilerOptions: {
-			strict: true,
-			target: 'es6',
-			moduleResolution: 'Node',
-			removeComments: true,
-			declaration: true,
-			sourceMap: true,
-			module: 'commonjs'
-		}
-	}),
-	tsc = ts.transpileModule(fs.readFileSync('tsc.ts', 'utf8'), {
-		compilerOptions: {
-			strict: true,
-			target: 'es6',
-			moduleResolution: 'Node',
-			removeComments: true,
-			declaration: true,
-			sourceMap: false,
-			module: 'commonjs'
-		}
-	});
+	cp = require('child_process');
+
+const AMD = fs.readFileSync('amd.js', 'utf8');
 
 function write(path, source) {
 	console.log(`Writing ${path}`);
@@ -31,7 +13,10 @@ function write(path, source) {
 }
 
 cp.execSync('mkdir -p ../dist/build');
-write('../dist/build/amd.js', AMD);
-write('../dist/build/index.js', index.outputText);
-write('../dist/build/module.js.map', index.sourceMapText);
-write('../dist/build/tsc.js', tsc.outputText);
+cp.execSync('npm run build-index');
+
+const amdConfig = JSON.parse(fs.readFileSync('./tsconfig.amd.json'));
+amdConfig.compilerOptions.outFile = 'amd.js';
+
+write('../dist/build/tsconfig.amd.json', JSON.stringify(amdConfig));
+write('../dist/build/package.json', fs.readFileSync('package.json'));

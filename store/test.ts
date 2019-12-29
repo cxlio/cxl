@@ -1,32 +1,38 @@
 import { Store } from './index';
-import * as assert from 'assert';
+import { suite } from '../tester';
 
-assert.ok(Store);
+export default suite('dom', test => {
+	test('store', assert => {
+		assert.ok(Store);
 
-function Persist() {
-	return (target: any, prop: any) => {
-		target[prop] = 'persist';
-	};
-}
+		function Persist() {
+			return (target: any, prop: any) => {
+				target[prop] = 'persist';
+			};
+		}
 
-class State {
-	key: number = 0;
+		class State {
+			key: number = 0;
 
-	@Persist()
-	key2?: string;
-}
+			@Persist()
+			key2?: string;
+		}
 
-const initialState = new State();
-const store = new Store(initialState);
+		const initialState = new State();
+		const store = new Store(initialState);
 
-assert.equal(store.state.key2, 'persist');
-assert.equal(store.state.key, 0);
+		assert.equal(store.state.key2, 'persist');
+		assert.equal(store.state.key, 0);
 
-store.set('key', 2);
-store.set('key2', 'hello');
+		store.set('key', 2);
+		store.set('key2', 'hello');
 
-assert.equal(store.state.key, 2);
-assert.equal(store.state.key2, 'hello');
+		assert.equal(store.state.key, 2);
+		assert.equal(store.state.key2, 'hello');
 
-store.select('key').subscribe((val: number) => assert.equal(val, 2));
-store.select('key2').subscribe((val?: string) => assert.equal(val, 'hello'));
+		store.select('key').subscribe((val: number) => assert.equal(val, 2));
+		store
+			.select('key2')
+			.subscribe((val?: string) => assert.equal(val, 'hello'));
+	});
+});

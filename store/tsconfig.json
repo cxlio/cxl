@@ -1,10 +1,9 @@
 {
+	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"target": "es6",
-		"strict": true,
-		"removeComments": true,
-		"declaration": true,
-		"module": "commonjs"
+		"outDir": "../dist/store",
+		"lib": ["es2015"]
 	},
-	"include": ["index.ts"]
+	"references": [{ "path": "../rx" }],
+	"files": ["index.ts"]
 }

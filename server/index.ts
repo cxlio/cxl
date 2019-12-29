@@ -1,8 +1,5 @@
-import { colors } from './colors';
+import { colors } from './colors.js';
 import { Observable, from, map } from '../rx';
-
-declare const process: any;
-declare const console: any;
 
 function hrtime(): bigint {
 	return process.hrtime.bigint();
@@ -15,6 +12,7 @@ interface OperationResult {
 	result: any;
 }
 
+export type ApplicationArguments = { [key: string]: any };
 type OperationFunction = (() => Promise<any>) | Promise<any> | Observable<any>;
 type Operation = Observable<OperationResult>;
 type LogMessage<T = any> = string | ((p: T) => string) | Error;
@@ -61,10 +59,13 @@ function formatTime(time: bigint) {
 }*/
 
 function logOperation(prefix: string, msg: LogMessage, op: Operation) {
+	let totalTime = BigInt(0);
 	return op.subscribe(
 		({ tasks, time, result }) => {
+			totalTime += time;
 			const formattedTime =
-				(tasks > 1 ? tasks + ' tasks' : '') + formatTime(time);
+				formatTime(time) +
+				(tasks > 1 ? `, ${formatTime(totalTime)} total` : '');
 			const message = typeof msg === 'function' ? msg(result) : msg;
 			console.log(`${prefix} ${message} (${formattedTime})`);
 		},
@@ -84,6 +85,7 @@ export abstract class Application {
 	abstract name: string;
 
 	color: keyof typeof colors = 'green';
+	arguments?: ApplicationArguments;
 	version?: string;
 
 	private coloredPrefix?: string;
@@ -102,7 +104,21 @@ export abstract class Application {
 		process.exit(1);
 	}
 
+	private parseArguments() {
+		const args: string[] = process.argv.slice(2);
+		return args.reduce(
+			(result, arg: string) => {
+				const match = /-{1,2}([\w\d-]+)/.exec(arg);
+				if (match) result[match[1]] = true;
+				else result.files.push(arg);
+				return result;
+			},
+			{ files: [] } as ApplicationArguments
+		);
+	}
+
 	async start() {
+		this.arguments = this.parseArguments();
 		this.coloredPrefix = colors[this.color](this.name);
 
 		if (this.version) this.log(this.version);

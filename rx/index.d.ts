@@ -14,14 +14,14 @@ interface Observer<T> {
 declare type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
 declare class Subscriber<T> {
     next: NextFunction<T>;
-    error: ErrorFunction | undefined;
-    complete: CompleteFunction | undefined;
+    error?: ErrorFunction;
+    complete?: CompleteFunction;
     constructor(observer?: NextObserver<T>, error?: ErrorFunction, complete?: CompleteFunction);
 }
 export declare class Subscription<T> {
-    private subscriber;
     isUnsubscribed: boolean;
     onUnsubscribe: UnsubscribeFunction | void;
+    subscriber: Subscriber<T>;
     constructor(subscriber: Subscriber<T>, subscribe: SubscribeFunction<T>);
     next(val: T): void;
     error(e: ObservableError): void;
@@ -32,7 +32,7 @@ declare class Observable<T> {
     static create<T2>(A: any): Observable<T2>;
     protected __subscribe(_subscription?: Subscription<T>): UnsubscribeFunction | void;
     constructor(subscribe?: SubscribeFunction<T>);
-    pipe<T2>(operator: Operator<T, T2>, ...extra: Operator<any, any>[]): Observable<any>;
+    pipe(...extra: Operator<any, any>[]): Observable<any>;
     subscribe(observer?: NextObserver<T>, error?: ErrorFunction, complete?: CompleteFunction): Subscription<T>;
 }
 declare class Subject<T> extends Observable<T> {
@@ -70,10 +70,11 @@ declare class CollectionEvent {
 }
 declare class EventEmitter {
     private __handlers;
-    on(type: string, callback: EventCallback, scope?: any): {
+    on: (type: string, callback: EventCallback, scope?: any) => {
         unsubscribe: () => void;
     };
-    off(type: string, callback: EventCallback, scope?: any): void;
+    off: (type: string, callback: EventCallback, scope?: any) => void;
+    trigger: (type: string, ...args: any) => void;
     addEventListener(type: string, callback: EventCallback, scope?: any): {
         unsubscribe: () => void;
     };
@@ -81,22 +82,30 @@ declare class EventEmitter {
     $eachHandler(type: string, fn: (handler: any) => void): void;
     emit(type: string, ...args: any): void;
     emitAndCollect(type: string, ...args: any): any[];
-    trigger(type: string, ...args: any): void;
     once(type: string, callback: EventCallback, scope: any): void;
 }
 declare function concat(...observables: Observable<any>[]): Observable<any>;
+declare function from<T>(input: Array<T> | Promise<T> | Observable<T>): Observable<T>;
 declare function of<T>(...values: T[]): Observable<T>;
 declare function toPromise<T>(observable: Observable<T>): Promise<T>;
 export declare function operator<T, T2 = T>(fn: (subs: Subscription<T2>) => NextObserver<T>): Operator<T, T2>;
 declare function map<T, T2>(mapFn: (val: T) => T2): Operator<T, unknown>;
+declare function debounceTime(time?: number): Operator<unknown, unknown>;
 export declare function mergeMap<T, T2>(project: (val: T) => Observable<T2>): Operator<T, unknown>;
 declare function filter<T>(fn: (val: T) => boolean): Operator<T, T>;
 declare function tap<T>(fn: (val: T) => any): Operator<T, T>;
+declare function catchError<T, T2>(selector: (err: any, source: Observable<T>) => Observable<T2> | void): (source: Observable<T>) => Observable<T>;
 declare function distinctUntilChanged<T>(): Operator<T, T>;
+declare function merge<R>(...observables: Observable<any>[]): Observable<R>;
+declare function combineLatest(...observables: any[]): Observable<any[]>;
+declare function throwError(error: any): Observable<unknown>;
+export declare const EMPTY: Observable<void>;
 declare const operators: {
+    catchError: typeof catchError;
+    debounceTime: typeof debounceTime;
+    distinctUntilChanged: typeof distinctUntilChanged;
     map: typeof map;
     tap: typeof tap;
     filter: typeof filter;
-    distinctUntilChanged: typeof distinctUntilChanged;
 };
-export { Observable, BehaviorSubject, CollectionEvent, Event, EventEmitter, Item, Subject, Subscriber, toPromise, operators, map, tap, filter, distinctUntilChanged, concat, of };
+export { Observable, BehaviorSubject, CollectionEvent, Event, EventEmitter, Item, Subject, Subscriber, from, toPromise, throwError, operators, catchError, map, tap, filter, debounceTime, distinctUntilChanged, concat, merge, combineLatest, of };
