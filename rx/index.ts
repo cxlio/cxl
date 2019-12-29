@@ -27,7 +27,7 @@ class Subscriber<T> {
 	public complete?: CompleteFunction;
 
 	constructor(
-		observer: NextObserver<T> = () => {},
+		observer?: NextObserver<T>,
 		error?: ErrorFunction,
 		complete?: CompleteFunction
 	) {
@@ -48,10 +48,10 @@ export class Subscription<T> {
 	onUnsubscribe: UnsubscribeFunction | void;
 	subscriber: Subscriber<T>;
 
-	constructor(subscriber: Subscriber<T>, subscribe: SubscribeFunction<T>) {
+	constructor(subscriber: Subscriber<T>, subscribe?: SubscribeFunction<T>) {
 		this.subscriber = subscriber;
 		try {
-			this.onUnsubscribe = subscribe(this);
+			if (subscribe) this.onUnsubscribe = subscribe(this);
 		} catch (e) {
 			this.error(e);
 		}
@@ -90,11 +90,12 @@ class Observable<T> {
 		return new this(A);
 	}
 
-	protected __subscribe(
+	protected __subscribe?: SubscribeFunction<T>;
+	/*(
 		_subscription?: Subscription<T>
 	): UnsubscribeFunction | void {
 		return () => {};
-	}
+	}*/
 
 	constructor(subscribe?: SubscribeFunction<T>) {
 		if (subscribe) this.__subscribe = subscribe;
@@ -110,7 +111,10 @@ class Observable<T> {
 		complete?: CompleteFunction
 	): Subscription<T> {
 		const subscriber = new Subscriber(observer, error, complete);
-		return new Subscription(subscriber, this.__subscribe.bind(this));
+		return new Subscription(
+			subscriber,
+			this.__subscribe && this.__subscribe.bind(this)
+		);
 	}
 }
 

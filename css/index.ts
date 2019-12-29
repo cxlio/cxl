@@ -303,11 +303,12 @@ type StyleMap = {
 	) => void;
 };
 
+const UNIT = 'px';
+
 function toUnit(n: number) {
 	return `${n}${UNIT}`;
 }
 
-const UNIT = 'px';
 export let theme: Theme;
 
 function renderColor(
@@ -347,6 +348,10 @@ function renderTransform(v: StyleDefinition, style: CSSStyle) {
 
 function renderNumber(_def: any, style: CSSStyle, prop: any, value: number) {
 	style[prop] = value.toString();
+}
+
+function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
+	for (const i in def) style[i] = def[i];
 }
 
 const renderMap: StyleMap = {
@@ -393,10 +398,6 @@ function toSnake(name: string) {
 			m => '-' + m.toLowerCase()
 		))
 	);
-}
-
-function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
-	for (const i in def) style[i] = def[i];
 }
 
 function applyStyle(style: CSSStyle, def: StyleDefinition) {

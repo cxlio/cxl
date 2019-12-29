@@ -1,7 +1,7 @@
 import { render, View, content, triggerEvent } from '../template';
 import { Observable, tap } from '../rx';
 import { StoreBase } from '../store';
-import { StyleSheet, Styles, Media, globalStyles } from '../css';
+import { StyleSheet, Styles as CSSStyles, Media, globalStyles } from '../css';
 import { ChildrenObserver, setAttribute } from '../dom';
 
 type Binding = Observable<any>;
@@ -78,13 +78,28 @@ export class ComponentView<T> extends View {
 	}
 }
 
+function createView<T>(
+	def: ComponentDefinition<T>,
+	node: Element
+): ComponentView<T> {
+	const state: T = new def.controller(),
+		view = ((node as any).cxlView = new ComponentView(state, node));
+
+	if (def.render) def.render(view);
+
+	if (!view.hasTemplate && node.shadowRoot)
+		node.shadowRoot.appendChild(document.createElement('slot'));
+
+	return view;
+}
+
 class ComponentFactory {
 	components = new Map<string | Function, ComponentDefinition<any>>();
 
 	registerCustomElement<T>(name: string, meta: ComponentDefinition<T>) {
 		class Constructor extends HTMLElement {
 			static observedAttributes = meta.attributes;
-			private __cxlView = factory.create(meta, this);
+			private __cxlView = createView(meta, this);
 
 			constructor() {
 				super();
@@ -125,18 +140,6 @@ class ComponentFactory {
 		this.components.set(meta.controller, meta);
 		meta.controller.meta = meta;
 	}
-
-	create<T>(def: ComponentDefinition<T>, node: Element): ComponentView<T> {
-		const state: T = new def.controller(),
-			view = ((node as any).cxlView = new ComponentView(state, node));
-
-		if (def.render) def.render(view);
-
-		if (!view.hasTemplate && node.shadowRoot)
-			node.shadowRoot.appendChild(document.createElement('slot'));
-
-		return view;
-	}
 }
 
 const factory = new ComponentFactory();
@@ -147,7 +150,9 @@ function getComponentDefinition<T>(constructor: T): ComponentDefinition<T> {
 
 	if (controller.meta) {
 		if (!controller.hasOwnProperty('meta')) {
-			function Meta() {}
+			const Meta = function Meta() {
+				/* noop */
+			};
 			Meta.prototype = controller.meta;
 			result = new (Meta as any)();
 			result.constructor = Meta;
@@ -180,7 +185,7 @@ export function createComponent<T>(
 	if (!def) throw new Error('Invalid component');
 
 	element = element || document.createElement(def.name || 'div');
-	const view = factory.create(def, element);
+	const view = createView(def, element);
 
 	return new Observable<Element>(subs => {
 		view.connect();
@@ -250,7 +255,9 @@ export function Attribute() {
 	};
 }
 
-export function Method() {}
+export function Method() {
+	// TODO
+}
 
 export function Events<T>(eventFunction: EventFunction<T>) {
 	return decorateComponent((view: ComponentView<T>) => {
@@ -288,7 +295,7 @@ export function Template<T = any>(renderFn: RenderFunction<T>) {
 	});
 }
 
-export function Styles(stylesOrMedia: Styles | Media, opStyles?: Styles) {
+export function Styles(stylesOrMedia: CSSStyles | Media, opStyles?: CSSStyles) {
 	let media: any;
 	let styles: any = stylesOrMedia;
 

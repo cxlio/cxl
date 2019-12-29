@@ -1,9 +1,9 @@
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
-	PARAM_REGEX = /\:([\w_\$]+)/g,
+	PARAM_REGEX = /:([\w_$]+)/g,
 	optionalParam = /\((.*?)\)/g,
 	namedParam = /(\(\?)?:\w+/g,
 	splatParam = /\*\w+/g,
-	escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+	escapeRegExp = /[-{}[\]+?.,\\^$|#\s]/g;
 
 interface Dictionary {
 	[key: string]: string | null;
@@ -44,6 +44,14 @@ function routeToRegExp(route: string): [RegExp, string[]] {
 	return [result, names];
 }
 
+export function replaceParameters(path: string, params: Dictionary) {
+	if (params === null || params === undefined) return path;
+
+	if (typeof params !== 'object') params = { $: params };
+
+	return path.replace(PARAM_REGEX, (_match, key) => params[key] || '');
+}
+
 class Fragment {
 	regex: RegExp;
 	parameters: string[];
@@ -53,9 +61,10 @@ class Fragment {
 	}
 
 	_extractQuery(frag: string, result: Dictionary) {
-		let pos = frag.indexOf('?'),
-			query = pos !== -1 ? frag.slice(pos + 1) : null,
-			m;
+		const pos = frag.indexOf('?'),
+			query = pos !== -1 ? frag.slice(pos + 1) : null;
+		let m;
+
 		while (query && (m = PARAM_QUERY_REGEX.exec(query)))
 			result[m[1]] = decodeURIComponent(m[2]);
 
@@ -65,22 +74,20 @@ class Fragment {
 	getArguments(fragment: string) {
 		const match = this.regex.exec(fragment),
 			params = match && match.slice(1),
-			result: Dictionary = {},
-			me = this;
+			result: Dictionary = {};
 
 		if (!params) return;
 
-		params.forEach(function(param, i) {
-			let p;
+		params.forEach((param, i) => {
 			// Don't decode the search params.
-			p =
+			const p =
 				i === params.length - 1
 					? param || null
 					: param
 					? decodeURIComponent(param)
 					: null;
 
-			result[me.parameters[i]] = p;
+			result[this.parameters[i]] = p;
 		});
 
 		return this._extractQuery(fragment, result);
@@ -186,7 +193,7 @@ export class Router {
 			id = route.id,
 			parent = Parent
 				? this.executeRoute(Parent, args, instances)
-				: router.root || document.body,
+				: this.root || document.body,
 			instance = this.findRoute(id, args) || route.create(args);
 
 		if (instance && parent && instance.parentNode !== parent) {
@@ -238,14 +245,6 @@ export class Router {
 }
 
 export const router = new Router();
-
-export function replaceParameters(path: string, params: Dictionary) {
-	if (params === null || params === undefined) return path;
-
-	if (typeof params !== 'object') params = { $: params };
-
-	return path.replace(PARAM_REGEX, (_match, key) => params[key] || '');
-}
 
 export function route(def: RouteDefinition) {
 	const result = new Route(def);

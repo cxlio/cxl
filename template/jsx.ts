@@ -19,9 +19,8 @@ type TagNameMap = {
 
 type Elements = TagNameMap;
 
+/* eslint @typescript-eslint/no-namespace: 'off' */
 declare global {
-	interface HTMLElement {}
-
 	namespace JSX {
 		interface IntrinsicElements extends Elements {
 			[key: string]: any;

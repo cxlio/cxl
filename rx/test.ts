@@ -24,14 +24,14 @@ function throwError(msg: string) {
 export default suite('rx', [
 	suite('Observable', test => {
 		test('constructor', a => {
-			let observable = new Observable(function subscribe(observer) {
+			const observable = new Observable(function subscribe(observer) {
 					observer.next(1);
 					observer.next(2);
 					observer.next(3);
 					observer.complete();
 				}),
-				i = 1,
 				done = a.async();
+			let i = 1;
 			observable.subscribe({
 				next(b) {
 					a.equal(b, i++);
@@ -264,9 +264,7 @@ export default suite('rx', [
 				};
 			});
 
-			const observer = {
-				next() {}
-			};
+			const observer = {};
 
 			source.subscribe(observer);
 
@@ -323,14 +321,14 @@ export default suite('rx', [
 
 	suite('Observable#unsubscribe()', test => {
 		test('Observable#subscribe - unsubscribe', function(a) {
-			let obs = new Observable(function(o) {
-					o.next(0);
-					o.next(0);
-					o.complete();
-					o.next(0);
-					o.next(0);
-				}),
-				complete,
+			const obs = new Observable(function(o) {
+				o.next(0);
+				o.next(0);
+				o.complete();
+				o.next(0);
+				o.next(0);
+			});
+			let complete,
 				times = 0;
 			obs.subscribe({
 				next: function() {
@@ -371,8 +369,8 @@ export default suite('rx', [
 
 	suite('Subject', test => {
 		test('Subject#constructor', function(a) {
-			let subject = new Subject(),
-				c = 1;
+			const subject = new Subject();
+			let c = 1;
 			subject.subscribe(function(b) {
 				a.equal(b, c);
 			});
@@ -386,12 +384,9 @@ export default suite('rx', [
 		});
 
 		test('error', function(a) {
-			let subject = new Subject(),
-				c = 1;
-			subject.subscribe(
-				b => a.equal(b, c),
-				() => {}
-			);
+			const subject = new Subject();
+			let c = 1;
+			subject.subscribe(b => a.equal(b, c));
 			subject.subscribe(undefined, b => a.equal(b, c));
 
 			subject.next(c);
@@ -400,9 +395,9 @@ export default suite('rx', [
 		});
 
 		test('complete', function(a) {
-			let subject = new Subject(),
-				done = a.async(),
-				c = 1;
+			const subject = new Subject(),
+				done = a.async();
+			let c = 1;
 			subject.subscribe(b => a.equal(b, c));
 			subject.subscribe(b => a.equal(b, c));
 			subject.subscribe(undefined, undefined, done);
@@ -416,8 +411,8 @@ export default suite('rx', [
 
 	suite('BehaviorSubject', test => {
 		test('BehaviorSubject#constructor', function(a) {
-			let c = 1,
-				A = new BehaviorSubject(c);
+			let c = 1;
+			const A = new BehaviorSubject(c);
 			A.subscribe(val => a.equal(val, c));
 			c++;
 			A.next(c);
@@ -427,10 +422,10 @@ export default suite('rx', [
 
 	suite('filter', test => {
 		test('filter', a => {
-			let A = new Observable(s => {
-					[1, 2, 3, 4, 5, 6].forEach(s.next, s);
-				}),
-				filterFn = (v: number) => v < 4,
+			const A = new Observable(s => {
+				[1, 2, 3, 4, 5, 6].forEach(s.next, s);
+			});
+			let filterFn = (v: number) => v < 4,
 				B = A.pipe(filter(filterFn)),
 				b = B.subscribe(v => {
 					a.ok(filter(v));

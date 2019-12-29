@@ -9,6 +9,7 @@ import {
 	Diagnostic,
 	Program,
 	IncrementalProgramOptions,
+	ParseConfigFileHost,
 	createProgram,
 	getDefaultCompilerOptions,
 	createSourceFile,
@@ -105,13 +106,15 @@ class CustomCompilerHost implements CompilerHost {
 	}
 }
 
-const parseConfigHost = {
+const parseConfigHost: ParseConfigFileHost = {
 	useCaseSensitiveFileNames: true,
-	getCurrentDirectory: sys.getCurrentDirectory,
 	readDirectory: sys.readDirectory,
+	getCurrentDirectory: sys.getCurrentDirectory,
 	fileExists: sys.fileExists,
 	readFile: sys.readFile,
-	onUnRecoverableConfigFileDiagnostic() {}
+	onUnRecoverableConfigFileDiagnostic(e) {
+		throw e;
+	}
 };
 
 function tscError(d: any, line: number, _ch: number, msg: any) {

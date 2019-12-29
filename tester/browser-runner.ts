@@ -6,7 +6,9 @@ function group(title: string) {
 	output += `<cxl-item>${title}</cxl-item>`;
 }
 
-function groupEnd() {}
+function groupEnd() {
+	output += '';
+}
 
 function error(msg: string | Error) {
 	output += '<cxl-item style="background-color:#ffcdd2">';

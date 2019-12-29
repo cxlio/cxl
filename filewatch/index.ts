@@ -1,7 +1,8 @@
-const path = require('path').posix,
-	fs = require('fs'),
-	rx = require('../rx'),
-	WATCHERS = {};
+import { posix as path } from 'path';
+import fs from 'fs';
+import rx from '../rx';
+
+const WATCHERS = {};
 
 class FileEvent {
 	constructor(type, path) {

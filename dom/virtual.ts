@@ -37,14 +37,14 @@ abstract class VirtualNode {
 	}
 }
 
-function empty(el: VirtualElement) {
-	el.childNodes.forEach(node => remove(node));
-	el.childNodes.length = 0;
-}
-
 function remove(el: VirtualNode) {
 	el.parentNode = null;
 	el.isConnected = false;
+}
+
+function empty(el: VirtualElement) {
+	el.childNodes.forEach(node => remove(node));
+	el.childNodes.length = 0;
 }
 
 function insert(host: VirtualElement, el: VirtualNode) {
@@ -60,6 +60,24 @@ class VirtualMutationObserver {
 
 	observe(element: VirtualElement, _options?: any) {
 		element.$observer = this;
+	}
+}
+
+class VirtualTextNode extends VirtualNode {
+	textContent: string;
+	nodeType = 3;
+
+	constructor(content: string) {
+		super();
+		this.textContent = content;
+	}
+}
+
+class VirtualFragment extends VirtualElement {
+	constructor() {
+		super('IGNORE');
+		(this as any).tagName = undefined;
+		(this as any).nodeType = VirtualNode.DOCUMENT_FRAGMENT_NODE;
 	}
 }
 
@@ -103,9 +121,13 @@ class VirtualElement extends VirtualNode {
 		return (this.shadowRoot = new VirtualFragment());
 	}
 
-	addEventListener(_event: string, _handler: any, _options: any) {}
+	addEventListener(_event: string, _handler: any, _options: any) {
+		// TODO
+	}
 
-	removeEventListener(_event: string, _handler: any, _options: any) {}
+	removeEventListener(_event: string, _handler: any, _options: any) {
+		// TODO
+	}
 
 	setAttribute(attr: string, value: any) {
 		if (this.$observer)
@@ -156,24 +178,6 @@ class VirtualElement extends VirtualNode {
 			);
 		}
 		return result;
-	}
-}
-
-class VirtualTextNode extends VirtualNode {
-	textContent: string;
-	nodeType = 3;
-
-	constructor(content: string) {
-		super();
-		this.textContent = content;
-	}
-}
-
-class VirtualFragment extends VirtualElement {
-	constructor() {
-		super('IGNORE');
-		(this as any).tagName = undefined;
-		(this as any).nodeType = VirtualNode.DOCUMENT_FRAGMENT_NODE;
 	}
 }
 

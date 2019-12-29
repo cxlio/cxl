@@ -86,8 +86,12 @@ export default suite('component', test => {
 			name = '';
 			value = '';
 
-			toggle() {}
-			onValue() {}
+			toggle() {
+				this.name = 'yes';
+			}
+			onValue() {
+				this.name = 'no';
+			}
 		}
 
 		createComponent(RadioButton)

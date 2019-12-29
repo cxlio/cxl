@@ -8,11 +8,6 @@ export function empty(el: Element) {
 	while ((c = el.childNodes[0])) el.removeChild(c);
 }
 
-export function setContent(el: Element, content: ElementContent) {
-	empty(el);
-	insert(el, content);
-}
-
 export function on(
 	element: Element | Window,
 	event: string,
@@ -47,6 +42,11 @@ function insert(el: Element, content: ElementContent) {
 	if (!(content instanceof Node)) content = document.createTextNode(content);
 
 	el.appendChild(content);
+}
+
+export function setContent(el: Element, content: ElementContent) {
+	empty(el);
+	insert(el, content);
 }
 
 export function isEmpty(el: Element) {
