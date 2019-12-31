@@ -4,8 +4,8 @@ build({
 	outputDir: '../dist/ui',
 	tasks: [
 		tsconfig(),
+		tsconfig('tsconfig.test.json'),
 		tsconfig('tsconfig.bundle.json'),
-		//		tsconfig('tsconfig.bundle.json').pipe(bundle('index.bundle.js')),
 		pkg()
 	]
 });

@@ -5,6 +5,7 @@ import componentSuite from '../component/test';
 import domSuite from '../dom/test';
 import workerSuite from '../worker/test';
 import storeSuite from '../store/test';
+import uiSuite from '../ui-ts/test';
 import { suite } from '../tester';
 
 //export default suite('@cxl', [rxSuite, templateSuite, workerSuite]);
@@ -14,5 +15,6 @@ export default suite('@cxl', [
 	workerSuite,
 	componentSuite,
 	domSuite,
-	storeSuite
+	storeSuite,
+	uiSuite
 ]);

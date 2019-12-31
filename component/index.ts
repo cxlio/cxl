@@ -16,7 +16,7 @@ export interface Controller<T> {
 	new (): T;
 }
 
-interface ComponentDefinition<T> {
+export interface ComponentDefinition<T> {
 	name?: string;
 	attributes?: string[];
 	attributeDefinition?: PropertyDescriptorMap;
@@ -101,10 +101,6 @@ class ComponentFactory {
 			static observedAttributes = meta.attributes;
 			private __cxlView = createView(meta, this);
 
-			constructor() {
-				super();
-			}
-
 			connectedCallback() {
 				this.__cxlView.connect();
 			}
@@ -143,6 +139,10 @@ class ComponentFactory {
 }
 
 const factory = new ComponentFactory();
+
+export function getRegisteredComponents() {
+	return new Map(factory.components);
+}
 
 function getComponentDefinition<T>(constructor: T): ComponentDefinition<T> {
 	const controller: Controller<T> = constructor as any;

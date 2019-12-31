@@ -95,7 +95,7 @@ function readPackage(base: string) {
 }
 
 export function file(source: string | string[], out?: string) {
-	return new Observable(subs => {
+	return new Observable<Output>(subs => {
 		function emit(filename: string): Promise<void> {
 			return promises.readFile(filename, 'utf8').then((content: string) =>
 				subs.next({

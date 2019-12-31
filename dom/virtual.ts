@@ -73,14 +73,6 @@ class VirtualTextNode extends VirtualNode {
 	}
 }
 
-class VirtualFragment extends VirtualElement {
-	constructor() {
-		super('IGNORE');
-		(this as any).tagName = undefined;
-		(this as any).nodeType = VirtualNode.DOCUMENT_FRAGMENT_NODE;
-	}
-}
-
 class VirtualElement extends VirtualNode {
 	private $attributes: { [name: string]: string } = {};
 
@@ -178,6 +170,14 @@ class VirtualElement extends VirtualNode {
 			);
 		}
 		return result;
+	}
+}
+
+class VirtualFragment extends VirtualElement {
+	constructor() {
+		super('IGNORE');
+		(this as any).tagName = undefined;
+		(this as any).nodeType = VirtualNode.DOCUMENT_FRAGMENT_NODE;
 	}
 }
 

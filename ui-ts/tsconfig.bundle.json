@@ -6,6 +6,23 @@
 		"outFile": "../dist/ui/index.bundle.js",
 		"composite": false
 	},
-	"files": ["bundle.ts"],
-	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
+	"files": [
+		"bundle.ts"
+		/*"../template/index.ts",
+		"../rx/index.ts",
+		"../store/index.ts",
+		"../css/index.ts",
+		"../dom/index.ts",
+		"../template/jsx.ts",
+		"../template/index.ts",
+		"./index.tsx",
+		"../component/index.ts"*/
+	],
+	"references": [
+		{ "path": "../build/tsconfig.amd.json", "prepend": true }
+		/*{
+			"path": "tsconfig.legacy.json",
+			"prepend": true
+		}*/
+	]
 }

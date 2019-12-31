@@ -62,16 +62,11 @@ class CustomCompilerHost implements CompilerHost {
 		);
 	}
 
-	trace(s: string) {
-		console.log(s);
-	}
-
 	getDefaultLibFileName() {
 		return getDefaultLibFilePath(this.options);
 	}
 
 	writeFile(name: string, text: string) {
-		// console.log(`WRITE ${name}`);
 		const relativePath = this.options.outDir || process.cwd();
 		name = relative(relativePath, name);
 
@@ -95,12 +90,10 @@ class CustomCompilerHost implements CompilerHost {
 	}
 
 	fileExists(fileName: string) {
-		// console.log(`EXISTS? ${fileName}`);
 		return existsSync(fileName);
 	}
 
 	readFile(name: string) {
-		// console.log(`READ ${name}`);
 		const cache = FILE_CACHE[name];
 		return cache ? cache : (FILE_CACHE[name] = readFileSync(name, 'utf8'));
 	}
@@ -219,7 +212,6 @@ export function tsbuild(
 	}
 
 	while ((program = builder.getNextInvalidatedProject())) {
-		console.log(program);
 		if (program.kind === InvalidatedProjectKind.Build)
 			program.emit(undefined, writeFile);
 		else if (program.kind === InvalidatedProjectKind.UpdateBundle)

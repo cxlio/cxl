@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/ui",
+		"outFile": "../dist/ui/test.js",
+		"composite": false
+	},
+	"files": ["test.tsx"],
+	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
+}

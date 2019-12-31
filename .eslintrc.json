@@ -15,6 +15,7 @@
 		"no-mixed-spaces-and-tabs": "off",
 		"no-prototype-builtins": "off",
 		"no-dupe-class-members": "off",
+		"@typescript-eslint/no-useless-constructor": "error",
 		"@typescript-eslint/no-explicit-any": "off",
 		"@typescript-eslint/no-unused-vars": "off",
 		"@typescript-eslint/explicit-function-return-type": "off",
