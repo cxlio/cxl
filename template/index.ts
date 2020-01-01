@@ -3,6 +3,8 @@ import {
 	tap,
 	map,
 	filter,
+	concat,
+	of,
 	Subscription,
 	Observable,
 	Subject,
@@ -59,11 +61,14 @@ export class View {
 	}
 }
 
-export function getAttribute(attribute: string, el: Element) {
+export function getAttribute<E extends Element>(el: E, attribute: keyof E) {
 	const observer = new AttributeObserver(el);
-	return observer.pipe(
-		filter(ev => ev.value === attribute),
-		map(() => (el as any)[attribute])
+	return concat(
+		of(el[attribute]),
+		observer.pipe(
+			filter(ev => ev.value === attribute),
+			map(() => (el as any)[attribute])
+		)
 	);
 }
 

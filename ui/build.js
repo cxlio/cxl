@@ -23,7 +23,7 @@ const header = () => `(cxl=>{"use strict";`,
 		c => `cxl.ui.version="${c.package.version}";})(this.cxl);`
 	];
 
-require('../build').build({
+require('../dist/build').build({
 	outputDir: 'dist',
 	targets: [
 		{

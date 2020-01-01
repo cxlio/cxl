@@ -7,8 +7,8 @@
 		"composite": false
 	},
 	"files": [
-		"bundle.ts"
-		/*"../template/index.ts",
+		"bundle.ts",
+		"../template/index.ts",
 		"../rx/index.ts",
 		"../store/index.ts",
 		"../css/index.ts",
@@ -16,7 +16,7 @@
 		"../template/jsx.ts",
 		"../template/index.ts",
 		"./index.tsx",
-		"../component/index.ts"*/
+		"../component/index.ts"
 	],
 	"references": [
 		{ "path": "../build/tsconfig.amd.json", "prepend": true }

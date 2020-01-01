@@ -6,6 +6,6 @@
 		"outFile": "../dist/ui/test.js",
 		"composite": false
 	},
-	"files": ["test.tsx"],
+	"files": ["test.tsx", "index.tsx"],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

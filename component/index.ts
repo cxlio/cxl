@@ -45,6 +45,7 @@ class ComponentStore<T> extends StoreBase<T> {
 export class ComponentView<T> extends View {
 	hasTemplate = false;
 	private _store?: ComponentStore<T>;
+	public element: HTMLElement & T;
 
 	get store() {
 		return this._store || (this._store = new ComponentStore(this.state));
@@ -73,14 +74,15 @@ export class ComponentView<T> extends View {
 		}
 	};
 
-	constructor(public state: T, public element: Element) {
+	constructor(public state: T, element: HTMLElement) {
 		super();
+		this.element = element as any;
 	}
 }
 
 function createView<T>(
 	def: ComponentDefinition<T>,
-	node: Element
+	node: HTMLElement
 ): ComponentView<T> {
 	const state: T = new def.controller(),
 		view = ((node as any).cxlView = new ComponentView(state, node));
@@ -144,7 +146,9 @@ export function getRegisteredComponents() {
 	return new Map(factory.components);
 }
 
-function getComponentDefinition<T>(constructor: T): ComponentDefinition<T> {
+function getComponentDefinition<T>(
+	constructor: new () => T
+): ComponentDefinition<T> {
 	const controller: Controller<T> = constructor as any;
 	let result: ComponentDefinition<T>;
 
@@ -163,19 +167,9 @@ function getComponentDefinition<T>(constructor: T): ComponentDefinition<T> {
 	return (controller.meta = result);
 }
 
-/*function getComponentMeta<T, K extends keyof ComponentDefinition<T>>(meta: ComponentDefinition<T>, property: K, defaultValue: ComponentDefinition<T>[K]) {
-	const value = meta[property];
-	
-	return meta.hasOwnProperty(property)
-		? value
-		: (meta[property] = value
-				? Array.isArray(value) ? value.slice(0) : Object.assign({}, value )
-				: defaultValue);
-}*/
-
 export function createComponent<T>(
 	nameOrClass: string | Controller<T>,
-	element?: Element
+	element?: HTMLElement
 ) {
 	const def =
 		typeof nameOrClass === 'string'
@@ -197,7 +191,7 @@ export function createComponent<T>(
 export function Component(meta?: string | ComponentMeta) {
 	const name = meta && (typeof meta === 'string' ? meta : meta.name);
 
-	return function<T>(constructor: T) {
+	return function<T>(constructor: new () => T) {
 		const def = getComponentDefinition(constructor);
 		def.name = name;
 		factory.registerComponent(def);
@@ -213,15 +207,17 @@ function pushRender<T>(meta: ComponentDefinition<T>, fn: DecorateFunction<T>) {
 }
 
 export function decorateComponent<T>(fn: DecorateFunction<T>) {
-	return (constructor: any) => {
-		const meta = getComponentDefinition(constructor);
+	return (constructor: new () => T) => {
+		const meta = getComponentDefinition<T>(constructor);
 		pushRender(meta, fn);
 	};
 }
 
-export function Attribute() {
-	return (proto: any, name: string) => {
-		const meta = getComponentDefinition(proto.constructor);
+export function Attribute<T extends {}>() {
+	return (proto: T, name: string) => {
+		const meta = getComponentDefinition<T>(
+			proto.constructor as new () => T
+		);
 		const attrs = meta.hasOwnProperty('attributes')
 			? meta.attributes
 			: (meta.attributes = meta.attributes
@@ -248,7 +244,7 @@ export function Attribute() {
 		pushRender(meta, view =>
 			view.addBinding(
 				view.store
-					.select(name)
+					.select(name as any)
 					.pipe(tap(value => setAttribute(view.element, name, value)))
 			)
 		);

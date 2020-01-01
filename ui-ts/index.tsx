@@ -9,7 +9,6 @@ import {
 	decorateComponent
 } from '../component/index.js';
 import {
-	getAttribute,
 	onAction,
 	$anchor,
 	setAttribute,
@@ -60,11 +59,23 @@ export function focusableEvents(element: any) {
 	);
 }
 
-export function focusable({ element }: ComponentView<any>) {
+interface FocusableComponent {
+	disabled: boolean;
+}
+
+export function focusable<T extends FocusableComponent>({
+	element,
+	select
+}: ComponentView<T>) {
 	return merge(
-		getAttribute('disabled', element),
+		select('disabled').pipe(
+			tap(value => {
+				element.setAttribute('aria-disabled', value ? 'true' : 'false');
+				if (value) element.removeAttribute('tabindex');
+				else element.tabIndex = 0;
+			})
+		),
 		focusableEvents(element)
-		// .pipe(setAttribute('aria-disabled'))
 	);
 }
 
@@ -137,6 +148,13 @@ export class Appbar {
 	@Attribute()
 	center = false;
 }
+
+@Component('cxl-appbar-title')
+@Styles({
+	$: { flexGrow: 1, font: 'title' }
+	// $extended: { font: 'h5', alignSelf: 'flex-end' }
+})
+export class AppbarTitle {}
 
 @Styles({
 	$: {

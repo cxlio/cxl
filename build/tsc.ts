@@ -212,9 +212,11 @@ export function tsbuild(
 	}
 
 	while ((program = builder.getNextInvalidatedProject())) {
-		if (program.kind === InvalidatedProjectKind.Build)
+		if (program.kind === InvalidatedProjectKind.Build) {
 			program.emit(undefined, writeFile);
-		else if (program.kind === InvalidatedProjectKind.UpdateBundle)
+			const diagnostics = buildDiagnostics(program);
+			if (diagnostics.length) printDiagnostics(diagnostics);
+		} else if (program.kind === InvalidatedProjectKind.UpdateBundle)
 			program.emit(writeFile);
 
 		program.done();

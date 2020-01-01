@@ -1,11 +1,12 @@
-if (typeof define === 'undefined')
+window.define =
+	window.define ||
 	function define(name, injects, module) {
 		function _require(path, resolve, reject) {
 			if (Array.isArray(path)) {
 				path = path[0];
 				/*return typeof require === 'undefined'
-				? import(path).then(resolve, reject)
-				: resolve(require(path));*/
+			? import(path).then(resolve, reject)
+			: resolve(require(path));*/
 				return import(path).then(resolve, reject);
 			} else return typeof require !== 'undefined' && require(path);
 		}
@@ -17,6 +18,6 @@ if (typeof define === 'undefined')
 			args = [_require, name === 'index' ? globalExports : moduleExports];
 		for (let i = 2; i < injects.length; i++)
 			args.push(modules[injects[i]] || _require(injects[i]));
-		module.apply(null, args);
+		module(...args);
 		modules[name] = moduleExports;
-	}
+	};

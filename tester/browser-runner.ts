@@ -3,22 +3,22 @@ import { Result, Test } from './index';
 let output = '';
 
 function group(title: string) {
-	output += `<cxl-item>${title}</cxl-item>`;
+	output += `<dl><dt>${title}</dt><dd><ul>`;
 }
 
 function groupEnd() {
-	output += '';
+	output += '</ul></dd></dl>';
 }
 
 function error(msg: string | Error) {
-	output += '<cxl-item style="background-color:#ffcdd2">';
+	output += '<li style="background-color:#ffcdd2">';
 	if (msg instanceof Error) {
 		output += `
 			<cxl-t subtitle>${msg.message}</cxl-t>
 			<pre>${msg.stack}</pre>
 		`;
 	} else output += `<cxl-t subtitle>${msg}</cxl-t>`;
-	output += '</cxl-item>';
+	output += '</li>';
 }
 
 function success(): string {
@@ -26,7 +26,7 @@ function success(): string {
 }
 
 function failure(): string {
-	return '<cxl-icon icon="close"></cxl-icon>';
+	return '<cxl-icon icon="times"></cxl-icon>';
 }
 
 class TestReport {

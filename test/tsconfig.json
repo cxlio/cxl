@@ -6,6 +6,23 @@
 		"outFile": "../dist/test/index.js",
 		"composite": false
 	},
-	"files": ["index.ts"],
+	"files": [
+		"index.ts",
+		"../template/index.ts",
+		"../rx/index.ts",
+		"../store/index.ts",
+		"../css/index.ts",
+		"../dom/index.ts",
+		"../template/jsx.ts",
+		"../component/index.ts",
+		"../ui-ts/index.tsx",
+
+		"../template/test.tsx",
+		"../rx/test.ts",
+		"../store/test.ts",
+		"../dom/test.tsx",
+		"../component/test.tsx",
+		"../ui-ts/test.tsx"
+	],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

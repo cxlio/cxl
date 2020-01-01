@@ -327,15 +327,6 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component({
-		name: 'cxl-appbar-title',
-		attributes: ['extended'],
-		styles: {
-			$: { flexGrow: 1, font: 'title' },
-			$extended: { font: 'h5', alignSelf: 'flex-end' }
-		}
-	});
-
 	component(
 		{
 			name: 'cxl-avatar',

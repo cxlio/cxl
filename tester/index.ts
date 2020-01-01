@@ -19,6 +19,7 @@ export class Test {
 	results: Result[] = [];
 	tests: Test[] = [];
 	timeout = 5 * 1000;
+	private domElement?: Element;
 
 	private completed = false;
 
@@ -27,12 +28,20 @@ export class Test {
 		else this.name = nameOrConfig.name;
 	}
 
+	get dom() {
+		if (this.domElement) return this.domElement;
+
+		const el = (this.domElement = document.createElement('DIV'));
+		document.body.appendChild(el);
+		return el;
+	}
+
 	ok(condition: any, message = '') {
 		this.results.push({ success: !!condition, message });
 	}
 
-	equal<T>(a: T, b: T) {
-		return this.ok(a === b, `${a} should equal ${b}`);
+	equal<T>(a: T, b: T, desc?: string) {
+		return this.ok(a === b, desc || `${a} should equal ${b}`);
 	}
 
 	ran(n: number) {
@@ -78,6 +87,9 @@ export class Test {
 			if (this.promise && this.completed === false)
 				throw new Error('Never completed');
 			await Promise.all(this.tests.map(test => test.run()));
+
+			if (this.domElement && this.domElement.parentNode)
+				this.domElement.parentNode.removeChild(this.domElement);
 		} catch (message) {
 			this.results.push({ success: false, message });
 		}

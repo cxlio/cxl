@@ -1,5 +1,5 @@
 import { suite } from '../tester';
-import { render, dom, setContent, log } from './index';
+import { render, dom, setContent, log, getAttribute } from './index';
 import { of } from '../rx';
 import { on } from '../dom';
 
@@ -64,5 +64,15 @@ export default suite('template', test => {
 			.unsubscribe();
 
 		a.ran(3);
+	});
+
+	test('getAttribute - html element', a => {
+		const el = document.createElement('button');
+		// const done = a.async();
+		getAttribute(el, 'disabled')
+			.subscribe(val => {
+				a.equal(val, false);
+			})
+			.unsubscribe();
 	});
 });
