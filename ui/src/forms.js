@@ -492,7 +492,7 @@ on(click):#focus
 		}
 	});
 
-	component({
+	/*component({
 		name: 'cxl-field-icon',
 		extend: 'cxl-icon',
 		styles: {
@@ -504,7 +504,7 @@ on(click):#focus
 			},
 			$trailing: { paddingRight: 0, paddingLeft: 8 }
 		}
-	});
+	});*/
 
 	component(
 		{

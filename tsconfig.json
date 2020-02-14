@@ -2,10 +2,11 @@
 	"compilerOptions": {
 		"incremental": true,
 		"strict": true,
-		"target": "es2019",
+		"target": "es2017",
 		"module": "commonjs",
 		"allowJs": true,
 		"experimentalDecorators": true,
+		"sourceMap": true,
 		"moduleResolution": "Node",
 		"removeComments": true,
 		"noUnusedLocals": true,

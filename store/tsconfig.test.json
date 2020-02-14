@@ -1,10 +1,12 @@
 {
 	"extends": "../tsconfig.json",
-	"compilerOptions": {},
+	"compilerOptions": {
+		"lib": ["es2015"]
+	},
+	"files": ["test.ts"],
 	"references": [
 		{ "path": "tsconfig.json" },
 		{ "path": "../rx" },
 		{ "path": "../tester" }
-	],
-	"include": ["test.ts"]
+	]
 }

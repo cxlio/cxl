@@ -4,7 +4,6 @@ type CSSStyle = {
 };
 type BaseColor = RGBA;
 type Color = keyof Colors | BaseColor | 'inherit';
-export type Media = 'medium' | 'large' | 'xlarge';
 
 interface Typography {
 	default: CSSStyle;
@@ -48,7 +47,9 @@ interface StrictStyleDefinition {
 	color: Color;
 	backgroundColor: Color;
 	borderColor: Color;
+	borderWidth: number;
 	borderRadius: number;
+	padding: number;
 	paddingLeft: number;
 	paddingRight: number;
 	paddingTop: number;
@@ -79,14 +80,13 @@ interface StrictStyleDefinition {
 }
 
 export interface Styles {
-	[key: string]: StyleDefinition;
+	[key: string]: StyleDefinition | Styles;
 }
 
 export interface StyleSheetConfiguration {
 	tagName?: string;
 	global?: boolean;
 	styles: Styles;
-	media?: Media;
 }
 
 export interface Breakpoints {
@@ -111,6 +111,7 @@ export interface Theme {
 	typography: Typography;
 	variables: Variables;
 	breakpoints: Breakpoints;
+	globalStyles: Styles;
 }
 
 const PSEUDO = {
@@ -291,6 +292,18 @@ const defaultTheme: Theme = {
 		get divider() {
 			return this.onSurface.alpha(0.16);
 		}
+	},
+	globalStyles: {
+		$: {
+			// reset: '-webkit-tap-highlight-color:transparent;',
+			font: 'default',
+			verticalAlign: 'middle'
+		},
+		'*': {
+			boxSizing: 'border-box',
+			transition:
+				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)'
+		} as any
 	}
 };
 
@@ -381,6 +394,7 @@ const renderMap: StyleMap = {
 	) {
 		applyCSSStyle(style, theme.typography[value]);
 	},
+	flexShrink: renderNumber,
 	opacity: renderNumber,
 	translateX: renderTransform,
 	translateY: renderTransform,
@@ -429,10 +443,6 @@ function parseRuleName(selector: string, name: string) {
 	return `${selector}${sel}${className ? ` .${className}` : ''}`;
 }
 
-function renderRule(selector: string, name: string, style: StyleDefinition) {
-	return `${parseRuleName(selector, name)}{${renderStyle(style)}}`;
-}
-
 export function applyTheme(newTheme: Theme) {
 	theme = newTheme;
 	const { variables, colors } = theme;
@@ -446,62 +456,79 @@ export function applyTheme(newTheme: Theme) {
 	document.head.appendChild(variableStyle);
 }
 
+function renderStyles(styles: Styles, selector = 'body') {
+	let css = '';
+
+	for (const i in styles) {
+		const style = styles[i];
+		css += renderRule(selector, i, style);
+
+		if (style.prepend) css = style.prepend + css;
+	}
+
+	return css;
+}
+
+function renderMedia(media: number, style: Styles, selector: string) {
+	return `@media(min-width:${toUnit(media)}){${renderStyles(
+		style,
+		selector
+	)}}`;
+}
+
+function renderRule(
+	selector: string,
+	name: string,
+	style: StyleDefinition | Styles
+) {
+	if (name === '@xlarge')
+		return renderMedia(theme.breakpoints.xlarge, style as Styles, selector);
+	if (name === '@medium')
+		return renderMedia(theme.breakpoints.medium, style as Styles, selector);
+	if (name === '@large')
+		return renderMedia(theme.breakpoints.large, style as Styles, selector);
+
+	return `${parseRuleName(selector, name)}{${renderStyle(style)}}`;
+}
+
 export class StyleSheet {
-	tagName?: string;
+	selector: string;
 	styles: Styles;
 	global: boolean;
-	media?: Media;
 
 	private native?: Element;
 
 	constructor(config: StyleSheetConfiguration) {
-		this.tagName = config.tagName;
 		this.styles = config.styles;
 		this.global = config.global || false;
-		this.media = config.media;
+		this.selector = config.tagName || (config.global ? 'body' : ':host');
+	}
+
+	clone() {
+		const native = this.native || this.render();
+		return native.cloneNode(true);
 	}
 
 	cloneTo(parent: DocumentFragment | Element) {
-		if (!theme) applyTheme(defaultTheme);
-		const native = this.native || this.render();
-		parent.appendChild(native.cloneNode(true));
+		parent.appendChild(this.clone());
 	}
 
 	private render() {
+		if (!theme) applyTheme(defaultTheme);
+
 		const native = (this.native = document.createElement('style'));
-		const selector = this.global ? this.tagName || 'body' : ':host';
 
-		let css = '';
-
-		for (const i in this.styles) {
-			const style = this.styles[i];
-			css += renderRule(selector, i, style);
-
-			if (style.prepend) css = style.prepend + css;
-		}
-
-		if (this.media)
-			css = `@media(min-width:${toUnit(
-				theme.breakpoints[this.media]
-			)}){${css}}`;
-
-		native.innerHTML = css;
+		native.innerHTML =
+			renderStyles(this.styles, this.selector) +
+			(this.global
+				? ''
+				: renderStyles(theme.globalStyles, this.selector));
 
 		return native;
 	}
 }
 
-export const globalStyles = new StyleSheet({
-	styles: {
-		$: {
-			// reset: '-webkit-tap-highlight-color:transparent;',
-			font: 'default',
-			verticalAlign: 'middle'
-		},
-		'*': {
-			boxSizing: 'border-box',
-			transition:
-				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)'
-		} as any
-	}
-});
+export function css(styles: Styles, global = false) {
+	const stylesheet = new StyleSheet({ styles, global });
+	return () => stylesheet.clone();
+}

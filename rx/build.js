@@ -1,4 +1,3 @@
-// import { build, tsconfig, typescript, pkg } from '../dist/build/index.js';
 const { build, tsconfig, typescript, pkg } = require('../dist/build/index.js');
 
 build({

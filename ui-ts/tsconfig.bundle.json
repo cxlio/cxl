@@ -8,15 +8,15 @@
 	},
 	"files": [
 		"bundle.ts",
-		"../template/index.ts",
 		"../rx/index.ts",
+		"../xdom/index.ts",
+		"../template/index.ts",
 		"../store/index.ts",
 		"../css/index.ts",
 		"../dom/index.ts",
-		"../template/jsx.ts",
 		"../template/index.ts",
 		"./index.tsx",
-		"../component/index.ts"
+		"../ui/dist/index.js"
 	],
 	"references": [
 		{ "path": "../build/tsconfig.amd.json", "prepend": true }

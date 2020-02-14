@@ -8,8 +8,5 @@
 	"scripts": {
 		"build": "node build",
 		"test": "node build && cd ../dist/rx && node ../tester/runner"
-	},
-	"devDependencies": {
-		"typescript": "^3.6.2"
 	}
 }

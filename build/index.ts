@@ -1,6 +1,12 @@
 import { execSync } from 'child_process';
 import { dirname, basename as pathBasename } from 'path';
-import { readFileSync, writeFileSync, promises, existsSync } from 'fs';
+import {
+	mkdirSync,
+	readFileSync,
+	writeFileSync,
+	promises,
+	existsSync
+} from 'fs';
 import {
 	catchError,
 	of,
@@ -12,6 +18,8 @@ import {
 } from '../rx/index.js';
 import { Application } from '../server/index.js';
 import { tsc, tsbuild } from './tsc.js';
+
+export { concat } from '../rx/index.js';
 
 type Task = Observable<Output>;
 type PackageTask = object;
@@ -94,6 +102,13 @@ function readPackage(base: string) {
 	return existsSync(pkg) && JSON.parse(readFileSync(pkg, 'utf8'));
 }
 
+function readSource(source: string): Promise<Output> {
+	return promises.readFile(source, 'utf8').then(content => ({
+		path: source,
+		source: content
+	}));
+}
+
 export function file(source: string | string[], out?: string) {
 	return new Observable<Output>(subs => {
 		function emit(filename: string): Promise<void> {
@@ -107,7 +122,11 @@ export function file(source: string | string[], out?: string) {
 
 		if (typeof source === 'string')
 			emit(source).then(() => subs.complete());
-		else Promise.all<void>(source.map(emit)).then(() => subs.complete());
+		else
+			Promise.all<Output>(source.map(readSource)).then(all => {
+				all.forEach(out => subs.next(out));
+				subs.complete();
+			});
 	});
 }
 
@@ -133,15 +152,31 @@ export function pkg(config: PackageTask) {
 	});
 }
 
-export function bundle(outFile: string) {
-	const output = { [outFile]: { path: outFile, source: '' } };
+export function umd(namespace = 'this') {
+	return map((outFile: Output) => {
+		outFile.source = `(exports=>{${outFile.source}\n})(typeof(exports)==='undefined'?${namespace}:exports);`;
+		return outFile;
+	});
+}
 
+interface BundleOptions {
+	header?: string;
+	footer?: string;
+}
+
+export function bundle(outFile: string, options?: BundleOptions) {
+	const output = {
+		[outFile]: { path: outFile, source: (options && options.header) || '' }
+	};
 	return operator<Output>(subs => ({
 		next(out) {
 			if (/.js$/.test(out.path))
 				output[outFile].source += out.source + '\n';
 		},
 		complete() {
+			if (options && options.footer)
+				output[outFile].source += options.footer;
+
 			for (const i in output) subs.next(output[i]);
 		}
 	}));
@@ -196,6 +231,11 @@ export class Builder extends Application {
 	}
 
 	writeFile(result: Output) {
+		const outFile = this.outputDir + '/' + result.path;
+		const outputDir = dirname(outFile);
+
+		if (!existsSync(outputDir)) mkdirSync(outputDir);
+
 		writeFileSync(this.outputDir + '/' + result.path, result.source);
 	}
 

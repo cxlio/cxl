@@ -8,7 +8,6 @@ import storeSuite from '../store/test';
 import uiSuite from '../ui-ts/test';
 import { suite } from '../tester';
 
-//export default suite('@cxl', [rxSuite, templateSuite, workerSuite]);
 export default suite('@cxl', [
 	rxSuite,
 	templateSuite,

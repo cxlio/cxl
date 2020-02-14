@@ -5,10 +5,8 @@
 	},
 	"files": ["index.tsx"],
 	"references": [
-		{ "path": "../rx" },
+		{ "path": "../xdom" },
 		{ "path": "../template" },
-		{ "path": "../store" },
-		{ "path": "../css" },
-		{ "path": "../component" }
+		{ "path": "../css" }
 	]
 }

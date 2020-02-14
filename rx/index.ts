@@ -85,17 +85,17 @@ export class Subscription<T> {
 	}
 }
 
+export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
+	return (source: Observable<T>) =>
+		operators.reduce((prev, fn) => fn(prev), source);
+}
+
 class Observable<T> {
 	static create<T2>(A: any): Observable<T2> {
 		return new this(A);
 	}
 
 	protected __subscribe?: SubscribeFunction<T>;
-	/*(
-		_subscription?: Subscription<T>
-	): UnsubscribeFunction | void {
-		return () => {};
-	}*/
 
 	constructor(subscribe?: SubscribeFunction<T>) {
 		if (subscribe) this.__subscribe = subscribe;
@@ -296,9 +296,9 @@ function of<T>(...values: T[]): Observable<T> {
 
 function toPromise<T>(observable: Observable<T>) {
 	return new Promise<T>((resolve, reject) => {
-		let value: T;
+		let value: T | undefined;
 		observable.subscribe(
-			(val: T) => (value = val),
+			(val?: T) => (value = val),
 			(e: ObservableError) => reject(e),
 			() => resolve(value)
 		);
@@ -308,16 +308,38 @@ function toPromise<T>(observable: Observable<T>) {
 /*
  * Operators
  */
+function cleanUpSubscriber<T>(
+	next: NextFunction<T>,
+	subscriber: Subscription<T>,
+	cleanup: () => void
+): NextObserver<T> {
+	return {
+		next,
+		error(e) {
+			cleanup();
+			subscriber.error(e);
+		},
+		complete() {
+			cleanup();
+			subscriber.complete();
+		}
+	};
+}
+
 export function operator<T, T2 = T>(
 	fn: (subs: Subscription<T2>) => NextObserver<T>
 ): Operator<T, T2> {
 	return (source: Observable<T>) =>
 		new Observable<T2>(subscriber => {
-			const subscription = source.subscribe(
-				fn(subscriber),
-				subscriber.error.bind(subscriber),
-				subscriber.complete.bind(subscriber)
-			);
+			let next = fn(subscriber);
+			if (typeof next === 'function')
+				next = {
+					next,
+					error: subscriber.error.bind(subscriber),
+					complete: subscriber.complete.bind(subscriber)
+				};
+
+			const subscription = source.subscribe(next);
 			return subscription.unsubscribe.bind(subscription);
 		});
 }
@@ -339,13 +361,30 @@ function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
 	};
 }
 
+export function collect<T>(source: Observable<T>, gate: Observable<any>) {
+	const collected: T[] = [];
+
+	return new Observable(subs => {
+		const s1 = source.subscribe(val => collected.push(val));
+		const s2 = gate.subscribe(() => {
+			collected.forEach(c => subs.next(c));
+			collected.length = 0;
+		});
+
+		return () => {
+			s1.unsubscribe();
+			s2.unsubscribe();
+		};
+	});
+}
+
 function debounceTime(time?: number) {
 	return operator(subscriber =>
 		debounceFunction(subscriber.next.bind(subscriber), time)
 	);
 }
 
-export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
+export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 	let lastSubscription: Subscription<T2>;
 
 	return operator(subscriber => (val: T) => {
@@ -354,6 +393,51 @@ export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
 		const newObservable = project(val);
 		lastSubscription = newObservable.subscribe(val => subscriber.next(val));
 	});
+}
+
+export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
+	let subscriptions: Subscription<T2>[];
+
+	return operator(subscriber =>
+		cleanUpSubscriber(
+			(val: T) => {
+				const newObservable = project(val);
+				subscriptions.push(
+					newObservable.subscribe(val => subscriber.next(val))
+				);
+			},
+			subscriber,
+			() => subscriptions.forEach(s => s.unsubscribe())
+		)
+	);
+}
+
+export function exhaustMap<T, T2>(project: (value?: T) => Observable<T2>) {
+	let lastSubscription: Subscription<T2> | null;
+
+	function cleanup() {
+		if (lastSubscription) {
+			lastSubscription.unsubscribe();
+			lastSubscription = null;
+		}
+	}
+
+	return operator(subscriber =>
+		cleanUpSubscriber(
+			(val: T) => {
+				if (!lastSubscription)
+					lastSubscription = project(val).subscribe(
+						cleanUpSubscriber(
+							val => subscriber.next(val),
+							subscriber,
+							cleanup
+						)
+					);
+			},
+			subscriber,
+			cleanup
+		)
+	);
 }
 
 function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
@@ -393,8 +477,10 @@ function catchError<T, T2>(
 		new Observable<T>(subscriber => subscribe(source, subscriber));
 }
 
+const initialDistinct = {};
+
 function distinctUntilChanged<T>(): Operator<T, T> {
-	let lastValue: T;
+	let lastValue: T | typeof initialDistinct = initialDistinct;
 	return operator((subscriber: Subscription<T>) => (val: T) => {
 		if (val !== lastValue) {
 			lastValue = val;
@@ -459,6 +545,12 @@ function throwError(error: any) {
 }
 
 export const EMPTY = new Observable<void>(subs => subs.complete());
+
+type Hook<T> = [Observable<T>, (val: T) => void];
+export function hook<T>(initialValue?: T): Hook<T> {
+	const obs = new BehaviorSubject(initialValue);
+	return [obs, obs.next.bind(obs)];
+}
 
 const operators = {
 	catchError,

@@ -1,318 +1,372 @@
-import { render, View, content, triggerEvent } from '../template';
-import { Observable, tap } from '../rx';
-import { StoreBase } from '../store';
-import { StyleSheet, Styles as CSSStyles, Media, globalStyles } from '../css';
-import { ChildrenObserver, setAttribute } from '../dom';
+import { Subscription, Observable, Operator, of } from '../rx';
 
-type Binding = Observable<any>;
-type BindingFunction<T> = (view: ComponentView<T>) => Binding | Binding[];
-type DecorateFunction<T> = (view: ComponentView<T>) => void;
-type EventsDefinition = { [ev: string]: Observable<any> };
-type EventFunction<T> = (view: ComponentView<T>) => EventsDefinition;
-type RenderFunction<T> = (view: ComponentView<T>) => Element;
+type AttributeType<T> = {
+	[P in keyof T]?: T[P] | Observable<T[P]> | Operator<T, any>;
+} & {
+	$?: (el: T) => Observable<any>;
+};
+type RenderFunction<T> = (node: T) => void;
+type DecoratorResult<T extends JSXComponent> =
+	| JSXElement<T>
+	| T
+	| RenderFunction<T>;
+type Decorator<T extends JSXComponent> = (
+	constructor: new () => T
+) => DecoratorResult<T> | void;
+type Augmentation<T extends JSXComponent> = JSXElement<T> | Decorator<T> | T;
 
-export interface Controller<T> {
-	meta?: ComponentDefinition<T>;
-	new (): T;
-}
+class ComponentView<T extends Component> {
+	bindings?: Binding<T, any>[];
+	subscription?: Subscription<T>;
+	compiledBindings?: Observable<T>;
 
-export interface ComponentDefinition<T> {
-	name?: string;
-	attributes?: string[];
-	attributeDefinition?: PropertyDescriptorMap;
-	controller: Controller<T>;
-	render?: (view: ComponentView<T>) => void;
-	methods?: string[];
-	events?: string[];
-}
+	constructor(private node: T) {}
 
-interface ComponentMeta {
-	name?: string;
-}
-
-class ComponentStore<T> extends StoreBase<T> {
-	raf?: number;
-	digest() {
-		if (this.raf) return;
-
-		this.raf = requestAnimationFrame(() => {
-			this.subject.next(this.state);
-			this.raf = undefined;
-		});
-	}
-}
-
-export class ComponentView<T> extends View {
-	hasTemplate = false;
-	private _store?: ComponentStore<T>;
-	public element: HTMLElement & T;
-
-	get store() {
-		return this._store || (this._store = new ComponentStore(this.state));
+	addBinding(binding: Binding<T>) {
+		if (!this.bindings) this.bindings = [];
+		this.bindings.push(binding);
 	}
 
-	get select() {
-		return this.store.select.bind(this.store);
-	}
-
-	get children() {
-		return new ChildrenObserver(this.element);
-	}
-
-	$content = (selector: string) => {
-		return (el: HTMLSlotElement) =>
-			this.children.pipe(content(selector, el));
-	};
-
-	set = (key: keyof T) => {
-		return tap<T[keyof T]>(val => this.store.set(key, val));
-	};
-
-	protected subscriber = {
-		next: () => {
-			if (this.store) this.store.digest();
+	connect() {
+		if (this.bindings) {
+			if (!this.compiledBindings) {
+				this.compiledBindings = of(this.node).pipe(...this.bindings);
+			}
+			this.subscription = this.compiledBindings.subscribe();
 		}
-	};
+	}
 
-	constructor(public state: T, element: HTMLElement) {
+	disconnect() {
+		if (this.subscription) this.subscription.unsubscribe();
+	}
+}
+
+export class Component extends HTMLElement {
+	static observedAttributes: string[];
+
+	view = new ComponentView(this);
+	jsxAttributes?: AttributeType<this>;
+	attributes$ = new Subject<AttributeEvent<this>>();
+
+	constructor() {
 		super();
-		this.element = element as any;
+		this.render(this);
+	}
+
+	protected connectedCallback() {
+		if (this.view) this.view.connect();
+	}
+
+	protected disconnectedCallback() {
+		if (this.view) this.view.disconnect();
+	}
+
+	render(_el: this) {
+		// TODO
+	}
+
+	get host(): Element | null {
+		const root = this.getRootNode();
+		return root instanceof ShadowRoot ? root.host : null;
+	}
+
+	attributeChangedCallback(name: keyof this, oldValue: any, value: any) {
+		if (oldValue !== value) this[name] = value;
 	}
 }
 
-function createView<T>(
-	def: ComponentDefinition<T>,
-	node: HTMLElement
-): ComponentView<T> {
-	const state: T = new def.controller(),
-		view = ((node as any).cxlView = new ComponentView(state, node));
-
-	if (def.render) def.render(view);
-
-	if (!view.hasTemplate && node.shadowRoot)
-		node.shadowRoot.appendChild(document.createElement('slot'));
-
-	return view;
+function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
+	const oldRender = (proto as any).render;
+	(proto as any).render = function(el: any) {
+		oldRender(el);
+		renderFn(el);
+	};
 }
 
-class ComponentFactory {
-	components = new Map<string | Function, ComponentDefinition<any>>();
+function getShadow(el: HTMLElement) {
+	return el.shadowRoot || el.attachShadow({ mode: 'open' });
+}
 
-	registerCustomElement<T>(name: string, meta: ComponentDefinition<T>) {
-		class Constructor extends HTMLElement {
-			static observedAttributes = meta.attributes;
-			private __cxlView = createView(meta, this);
+export function Augment<T>(...decorators: Augmentation<T>[]) {
+	return (constructor: new () => T) => decorate(constructor, decorators);
+}
 
-			connectedCallback() {
-				this.__cxlView.connect();
+interface AttributeOptions {
+	persist: boolean;
+	observe: boolean;
+}
+
+function getObservedAttributes(target: typeof Component) {
+	let result = target.observedAttributes;
+
+	if (result && !target.hasOwnProperty('observedAttributes'))
+		result = target.observedAttributes.slice(0);
+
+	return (target.observedAttributes = result || []);
+}
+
+interface AttributeEvent<T> {
+	type: 'changed';
+	target: T;
+	attribute: string;
+	value: any;
+}
+
+function attributeOperator(source: Observable<AttributeEvent<HTMLElement>>) {
+	return new Observable(() => {
+		const subscription = source.subscribe(
+			({ value, target, attribute }) => {
+				if (value === false && target.hasAttribute(attribute))
+					target.removeAttribute(name);
+				else if (typeof value === 'string')
+					target.setAttribute(attribute, value);
+				else if (value === true) target.setAttribute(attribute, '');
 			}
+		);
 
-			disconnectedCallback() {
-				this.__cxlView.disconnect();
-			}
+		return () => subscription.unsubscribe();
+	});
+}
 
-			attributeChangedCallback(
-				name: keyof T,
-				_oldValue: any,
-				newValue: any
-			) {
-				this.__cxlView.store.set(
-					name,
-					newValue === '' ? true : newValue
-				);
+export function Attribute<T extends Component>(
+	options?: Partial<AttributeOptions>
+) {
+	return (target: T, attribute: string, descriptor?: PropertyDescriptor) => {
+		const ctor = target.constructor as typeof Component;
+		const prop = '$$' + name;
+		const attributes = getObservedAttributes(ctor);
+
+		attributes.push(name);
+
+		if (descriptor) Object.defineProperty(target, prop, descriptor);
+
+		if (options?.persist)
+			bind(node => node.attributes$.pipe(attributeOperator));
+
+		if (options?.observe)
+			Object.defineProperty(target, attribute, {
+				get() {
+					return this[prop];
+				},
+				set(value: any) {
+					this.attributes$.next({ attribute, value });
+					return (this[prop] = value);
+				}
+			});
+	};
+}
+
+export function StyleAttribute() {
+	return (target: any, name: string, descriptor?: PropertyDescriptor) => {
+		const prop = '$$' + name;
+		const ctor = target.constructor;
+		const attributes =
+			ctor.observedAttributes || (ctor.observedAttributes = []);
+		attributes.push(name);
+
+		if (descriptor) Object.defineProperty(target, prop, descriptor);
+
+		Object.defineProperty(target, name, {
+			get() {
+				return this[prop];
+			},
+			set(newValue: any) {
+				const has = this.hasAttribute(name);
+				if (newValue === '' || newValue === true) {
+					if (!has) this.setAttribute(name, '');
+				} else if (has) this.removeAttribute(name);
+				return (this[prop] = newValue);
 			}
+		});
+	};
+}
+export function mixin<A, B, C, D, E, F>(
+	a: new () => A,
+	b?: new () => B,
+	c?: new () => C,
+	d?: new () => D,
+	e?: new () => E,
+	f?: new () => F
+): new () => A & B & C & D & E & F & Component;
+export function mixin(...mixins: any[]) {
+	const init: any[] = [];
+
+	class Result extends Component {
+		constructor() {
+			super();
+			for (const i of init) Object.assign(this, i);
 		}
-		const attributeDefinition = meta.attributeDefinition;
-
-		if (attributeDefinition)
-			Object.defineProperties(Constructor.prototype, attributeDefinition);
-
-		customElements.define(name, Constructor);
 	}
 
-	registerComponent<T>(meta: ComponentDefinition<T>) {
-		if (meta.name) {
-			this.components.set(meta.name, meta);
-			this.registerCustomElement(meta.name, meta);
-		}
-		this.components.set(meta.controller, meta);
-		meta.controller.meta = meta;
+	for (const m of mixins) {
+		const properties = Object.getOwnPropertyDescriptors(m.prototype);
+		delete properties.constructor;
+		init.push(new m());
+		Object.defineProperties(Result.prototype, properties);
 	}
+
+	return Result;
 }
 
-const factory = new ComponentFactory();
+const registeredComponents: Record<string, typeof Component> = {};
 
 export function getRegisteredComponents() {
-	return new Map(factory.components);
+	return { ...registeredComponents };
 }
 
-function getComponentDefinition<T>(
-	constructor: new () => T
-): ComponentDefinition<T> {
-	const controller: Controller<T> = constructor as any;
-	let result: ComponentDefinition<T>;
-
-	if (controller.meta) {
-		if (!controller.hasOwnProperty('meta')) {
-			const Meta = function Meta() {
-				/* noop */
-			};
-			Meta.prototype = controller.meta;
-			result = new (Meta as any)();
-			result.constructor = Meta;
-			result.controller = controller;
-		} else return controller.meta;
-	} else result = { controller };
-
-	return (controller.meta = result);
-}
-
-export function createComponent<T>(
-	nameOrClass: string | Controller<T>,
-	element?: HTMLElement
-) {
-	const def =
-		typeof nameOrClass === 'string'
-			? factory.components.get(nameOrClass)
-			: nameOrClass.meta;
-
-	if (!def) throw new Error('Invalid component');
-
-	element = element || document.createElement(def.name || 'div');
-	const view = createView(def, element);
-
-	return new Observable<Element>(subs => {
-		view.connect();
-		subs.next(view.element);
-		return () => view.disconnect();
-	});
-}
-
-export function Component(meta?: string | ComponentMeta) {
-	const name = meta && (typeof meta === 'string' ? meta : meta.name);
-
-	return function<T>(constructor: new () => T) {
-		const def = getComponentDefinition(constructor);
-		def.name = name;
-		factory.registerComponent(def);
+export function register(tagName: string) {
+	return (constructor: any) => {
+		registeredComponents[tagName] = constructor;
+		(constructor as any).tagName = tagName;
+		customElements.define(tagName, constructor as any);
 	};
 }
 
-function pushRender<T>(meta: ComponentDefinition<T>, fn: DecorateFunction<T>) {
-	const oldRender = meta.render;
-	meta.render = view => {
-		fn(view);
-		if (oldRender) oldRender(view);
-	};
+interface MutationEvent<T, ValueT> {
+	type: 'added' | 'removed' | 'changed';
+	target: T;
+	value: ValueT;
 }
 
-export function decorateComponent<T>(fn: DecorateFunction<T>) {
-	return (constructor: new () => T) => {
-		const meta = getComponentDefinition<T>(constructor);
-		pushRender(meta, fn);
-	};
-}
+export class ChildrenObserver<T extends HTMLElement> extends Subject<
+	MutationEvent<T, Node>
+> {
+	private observer?: MutationObserver;
 
-export function Attribute<T extends {}>() {
-	return (proto: T, name: string) => {
-		const meta = getComponentDefinition<T>(
-			proto.constructor as new () => T
-		);
-		const attrs = meta.hasOwnProperty('attributes')
-			? meta.attributes
-			: (meta.attributes = meta.attributes
-					? meta.attributes.slice(0)
-					: []);
-		const attrDef = meta.hasOwnProperty('attributeDefinition')
-			? meta.attributeDefinition
-			: (meta.attributeDefinition = meta.attributeDefinition
-					? { ...meta.attributeDefinition }
-					: {});
-
-		if (attrDef)
-			attrDef[name] = {
-				get() {
-					return (this as any).cxlView.state[name];
-				},
-				set(value) {
-					(this as any).cxlView.store.set(name, value);
-					return value;
-				}
-			};
-
-		attrs?.push(name);
-		pushRender(meta, view =>
-			view.addBinding(
-				view.store
-					.select(name as any)
-					.pipe(tap(value => setAttribute(view.element, name, value)))
-			)
-		);
-	};
-}
-
-export function Method() {
-	// TODO
-}
-
-export function Events<T>(eventFunction: EventFunction<T>) {
-	return decorateComponent((view: ComponentView<T>) => {
-		const events = eventFunction(view),
-			el = view.element;
-		for (const ev in events) {
-			view.addBinding(events[ev].pipe(triggerEvent(el, ev)));
-		}
-	});
-}
-
-export function Bind<T>(bindFn: BindingFunction<T>) {
-	return decorateComponent((view: ComponentView<T>) =>
-		view.addBinding(bindFn(view))
-	);
-}
-
-function getShadow(el: Element) {
-	return (
-		el.shadowRoot ||
-		el.attachShadow({
-			mode: 'open'
-		})
-	);
-}
-
-export function Template<T = any>(renderFn: RenderFunction<T>) {
-	return decorateComponent((view: ComponentView<T>) => {
-		view.hasTemplate = true;
-		view.addBinding(
-			render(renderFn.bind(null, view)).pipe(
-				tap(el => getShadow(view.element).appendChild(el))
-			)
-		);
-	});
-}
-
-export function Styles(stylesOrMedia: CSSStyles | Media, opStyles?: CSSStyles) {
-	let media: any;
-	let styles: any = stylesOrMedia;
-
-	if (typeof stylesOrMedia === 'string' && opStyles) {
-		media = stylesOrMedia;
-		styles = opStyles;
+	constructor(private element: T) {
+		super();
 	}
 
-	return decorateComponent(({ element }) => {
-		const shadow = getShadow(element);
-		if (!(element as any).cxlCssHasGlobal) {
-			globalStyles.cloneTo(shadow);
-			(element as any).cxlCssHasGlobal = true;
+	$handleEvent(ev: MutationRecord) {
+		const target = this.element;
+
+		for (const value of ev.addedNodes)
+			this.next({ type: 'added', target, value });
+		for (const value of ev.removedNodes)
+			this.next({ type: 'removed', target, value });
+	}
+
+	protected onSubscribe(subscription: any) {
+		const el = this.element;
+
+		if (!this.observer) {
+			this.observer = new MutationObserver(events =>
+				events.forEach(this.$handleEvent, this)
+			);
+			if (el) this.observer.observe(el, { childList: true });
 		}
 
-		const stylesheet = new StyleSheet({
-			tagName: element.tagName,
-			media,
-			styles
-		});
+		if (el)
+			for (const node of el.childNodes)
+				subscription.next({ type: 'added', target: el, value: node });
 
-		stylesheet.cloneTo(shadow);
-	});
+		return super.onSubscribe(subscription);
+	}
+
+	unsubscribe() {
+		if (this.subscriptions.size === 0 && this.observer)
+			this.observer.disconnect();
+	}
+
+	destroy() {
+		if (this.observer) this.observer.disconnect();
+	}
+}
+@Augment(register('cxl-div'))
+export class Div extends Component {}
+
+@Augment(register('cxl-span'))
+export class Span extends Component {}
+
+@Augment(register('cxl-slot'))
+export class Slot extends Component {
+	static observedAttributes = ['selector'];
+	managedSlot?: HTMLSlotElement;
+	$selector = '';
+
+	get selector() {
+		return this.$selector;
+	}
+
+	set selector(val: string) {
+		this.$selector = val;
+		this.updateSlot();
+	}
+
+	private getSlot() {
+		return (
+			this.managedSlot ||
+			(this.managedSlot = document.createElement('slot'))
+		);
+	}
+
+	private updateSlot() {
+		const selector = this.$selector;
+		const slot = this.getSlot();
+		const host = this.host;
+
+		slot.name = selector;
+
+		if (selector && host) {
+			const observer = new ChildrenObserver(this);
+			this.view.addBinding(
+				switchMap(() => observer.pipe(tap(ev => this.handleEvent(ev))))
+			);
+
+			for (const node of host.children)
+				if (node.matches(selector)) node.slot = selector;
+		}
+
+		return slot;
+	}
+
+	private handleEvent(ev: MutationEvent<HTMLElement, Node>) {
+		const node = ev.value,
+			selector = this.$selector;
+		if (
+			ev.type === 'added' &&
+			node instanceof HTMLElement &&
+			node.matches(selector)
+		)
+			node.slot = selector;
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		const slot = this.updateSlot();
+		if (!slot.parentNode) {
+			this.appendChild(slot);
+		}
+	}
+}
+
+function cloneElement(proto: any, el: Node) {
+	pushRender(proto, node => getShadow(node).appendChild(el.cloneNode(true)));
+}
+
+function renderTemplate(proto: any, tpl: JSXElement) {
+	pushRender(proto, node => getShadow(node).appendChild(render(tpl)));
+}
+
+export function template(templateFn: (node: any) => JSXElement) {
+	return () => (node: any) => {
+		getShadow(node).appendChild(render(templateFn(node)));
+	};
+}
+function doRender(proto: any, renderFn: DecoratorResult<any>) {
+	if (renderFn instanceof JSXElement) return renderTemplate(proto, renderFn);
+	if (renderFn instanceof Node) return cloneElement(proto, renderFn);
+
+	pushRender(proto, renderFn);
+}
+
+export function decorate<T>(
+	constructor: new () => T,
+	decorators: Augmentation<T>[]
+) {
+	const proto = constructor.prototype;
+	for (const d of decorators) {
+		const renderFn = typeof d === 'function' ? d(constructor) : d;
+		if (renderFn) doRender(proto, renderFn);
+	}
 }

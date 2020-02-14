@@ -5,10 +5,8 @@ import {
 	filter,
 	concat,
 	of,
-	Subscription,
-	Observable,
-	Subject,
-	operator
+	Operator,
+	Observable
 } from '../rx/index.js';
 import {
 	setContent as domSetContent,
@@ -18,56 +16,126 @@ import {
 	MutationEvent
 } from '../dom/index.js';
 
-import { ElementMap, BindingFunction } from './jsx.js';
-
-export type RenderFunction = (view?: View) => Element;
-
-interface AnchorEvent {
-	anchorName: string;
-	element: Element;
+export type Template = () => Element;
+export type Binding<ElementT, DataT = any> = Operator<ElementT, DataT>;
+// export type Binding = Operator<HTMLElement>;
+export interface Event {
+	element: HTMLElement;
+	data: any;
 }
 
-export class View {
-	private bindings: Observable<any>[] = [];
-	private subscriptions?: Subscription<any>[];
-	private connected = false;
+/*export function render<T extends JSXComponent>(tpl: JSXElement<T>): T {
+	return tpl.render();
+}*/
 
-	protected subscriber: any;
+/*export function bind(bindingFn: (node: any) => Observable<any>) {
+	return () => (node: any) => {
+		node.view.addBinding(switchMap(bindingFn));
+	};
+}*/
+/*
+export class JSXElement<T extends JSXComponent = any> {
+	// bindings?: Binding<T>;
 
-	addBinding(binding: Observable<any> | Observable<any>[]) {
-		if (Array.isArray(binding)) binding.forEach(b => this.addBinding(b));
-		else {
-			this.bindings.push(binding);
+	protected native?: T;
+	protected otherAttributes?: T['jsxAttributes'];
 
-			if (this.connected && this.subscriptions)
-				this.subscriptions.push(binding.subscribe(this.subscriber));
+	constructor(
+		public Component: string | (new () => T),
+		protected jsxAttributes?: T['jsxAttributes'],
+		public children?: ElementChildren[]
+	) {}
+
+	protected renderElement(): T {
+		const tagName =
+			typeof this.Component === 'string'
+				? this.Component
+				: (this.Component as any).tagName;
+		return document.createElement(tagName) as T;
+	}
+
+	protected compileAttributes(attributes: T['jsxAttributes'], result: T) {
+		const bindings: Binding<T>[] = [];
+		let other: any;
+
+		for (const i in attributes) {
+			const value = (attributes as any)[i];
+
+			if (value instanceof Observable)
+				bindings.push(
+					switchMap((el: any) =>
+						value.pipe(tap(val => (el[i] = val)))
+					)
+				);
+			else if (typeof value === 'function')
+				bindings.push(
+					switchMap<T, T['jsxAttributes']>(el => value(el))
+				);
+			else {
+				(result as any)[i] = value;
+				if (!other) other = this.otherAttributes = {};
+				other[i] = value;
+			}
 		}
+
+		if (bindings.length) this.bindings = pipe(...bindings);
 	}
 
-	connect() {
-		if (this.connected) return;
-		this.connected = true;
-		this.subscriptions = this.bindings.map(b =>
-			b.subscribe(this.subscriber)
-		);
+	protected compileChildren(_children: (VirtualNode | string)[], _result: T) {
+		// TODO
 	}
 
-	disconnect() {
-		if (!this.connected) return;
-		if (this.subscriptions)
-			this.subscriptions.forEach(b => b.unsubscribe());
-		this.subscriptions = undefined;
-		this.connected = false;
+	protected compileFragment() {
+		return (this.native = document.createDocumentFragment() as any);
+	}
+
+	protected compile() {
+		if ((this.Component as any) === DocumentFragment)
+			return this.compileFragment();
+
+		const result = (this.native = this.renderElement());
+
+		if (this.jsxAttributes)
+			this.compileAttributes(this.jsxAttributes, result);
+
+		return result;
+	}
+
+	protected renderChildren(children: ElementChildren[], result: T) {
+		children.forEach(child => {
+			if (typeof child === 'string')
+				result.appendChild(document.createTextNode(child));
+			else {
+				const childNode = child.render();
+				result.appendChild(childNode);
+			}
+		});
+	}
+
+	protected cloneNode() {
+		return (this.native || (this.native = this.compile())).cloneNode() as T;
+	}
+
+	render(): T {
+		const result = this.cloneNode();
+		const other = this.otherAttributes;
+
+		if (other) for (const a in other) result[a] = (other as any)[a];
+
+		if (this.bindings) (result as any).view.addBinding(this.bindings);
+		if (this.children) this.renderChildren(this.children, result);
+
+		return result;
 	}
 }
-
-export function getAttribute<E extends Element>(el: E, attribute: keyof E) {
+*/
+export function getAttribute<T extends HTMLElement>(el: T, name: keyof T) {
 	const observer = new AttributeObserver(el);
 	return concat(
-		of(el[attribute]),
+		of(el[name]),
 		observer.pipe(
-			filter(ev => ev.value === attribute),
-			map(() => (el as any)[attribute])
+			filter(ev => ev.value === name),
+			map(() => el[name])
 		)
 	);
 }
@@ -104,16 +172,6 @@ export function location() {
 	return on(window, 'hashchange').pipe(map(() => window.location.hash));
 }
 
-const anchorSubject = new Subject<AnchorEvent>();
-
-export function anchor(name: string) {
-	return anchorSubject.pipe(filter(ev => ev.anchorName === name));
-}
-
-export function sendToAnchor(anchorName: string, element: Element) {
-	anchorSubject.next({ anchorName, element });
-}
-
 export function content(selector: string, el: HTMLSlotElement) {
 	el.name = selector;
 	return tap<MutationEvent>(({ type, value }) => {
@@ -124,71 +182,25 @@ export function content(selector: string, el: HTMLSlotElement) {
 }
 
 export function setContent(el: Element) {
-	return operator(
-		(subscriber: Subscription<string | Node>) => (val: string | Node) => {
-			domSetContent(el, val);
-			subscriber.next(val);
-		}
-	);
+	return tap((val: any) => domSetContent(el, val));
 }
 
 export function log() {
 	return tap(val => console.log(val));
 }
 
-let domContext: View;
+/*
+ * Portal
+ */
+const portals = new Map<string, HTMLElement>();
 
-function createBinding<T>(el: T, fn: BindingFunction<T>) {
-	domContext.addBinding(typeof fn === 'function' ? fn(el) : fn);
+export function portal(id: string) {
+	return (el: HTMLElement) => {
+		portals.set(id, el);
+		return new Observable(() => () => portals.delete(id));
+	};
 }
 
-export function dom<T>(
-	tagName: T,
-	attributes?: Partial<ElementMap<T>>,
-	...children: (string | Element)[]
-): ElementMap<T> {
-	const result = document.createElement(tagName as any);
-
-	for (const i in attributes)
-		if (i === '$') {
-			createBinding(
-				result,
-				(attributes as any).$ as BindingFunction<ElementMap<T>>
-			);
-		} else {
-			const value = (attributes as any)[i];
-
-			if (value instanceof Observable)
-				domContext.addBinding(value.pipe(setAttribute(result, i)));
-			else (result as any)[i] = value;
-		}
-
-	if (children.length)
-		children.forEach((child: any) => {
-			child =
-				typeof child === 'string'
-					? document.createTextNode(child)
-					: child;
-			result.appendChild(child);
-		});
-
-	return result;
-}
-
-export function render(renderFn: RenderFunction) {
-	const view = new View(),
-		oldContext = domContext;
-	domContext = view;
-	const el = renderFn(view);
-	domContext = oldContext;
-
-	return new Observable<Element>(subs => {
-		view.connect();
-		subs.next(el);
-		return view.disconnect();
-	});
-}
-
-export function $anchor(anchorName: string) {
-	return (el: Element) => anchor(anchorName).pipe(appendChild(el));
+export function teleport(el: HTMLElement, portalName: string) {
+	portals.get(portalName)?.appendChild(el);
 }

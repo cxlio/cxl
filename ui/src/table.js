@@ -2,14 +2,14 @@
 	'use strict';
 	const component = cxl.component;
 
-	component({
+	/*component({
 		name: 'cxl-table',
 		bindings: 'role(table)',
 		styles: {
 			$: { display: 'block', width: '100%', overflowX: 'auto' },
 			$small: { display: 'table' }
 		}
-	});
+	});*/
 
 	component(
 		{

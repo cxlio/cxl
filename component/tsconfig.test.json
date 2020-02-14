@@ -1,8 +1,16 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
+		"module": "amd",
+		"outFile": "../dist/component/test.js",
+		"composite": false,
 		"outDir": "../dist/component"
 	},
-	"files": ["test.tsx"],
-	"references": [{ "path": "tsconfig.json" }, { "path": "../tester" }]
+	"files": [
+		"test.tsx",
+		"index.ts",
+		"../template/jsx.ts",
+		"../tester/index.ts"
+	],
+	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

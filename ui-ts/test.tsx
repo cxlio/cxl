@@ -1,13 +1,18 @@
 /// <amd-module name="index" />
 import { suite, Test } from '../tester/index.js';
+import { on } from '../dom/index.js';
 import {
+	dom,
 	getRegisteredComponents,
-	ComponentDefinition
-} from '../component/index.js';
+	Component,
+	render,
+	Div
+} from '../xdom/index.js';
+import { tap } from '../rx/index.js';
 import './index.js';
 
 function testValue(c: HTMLInputElement, a: Test) {
-	a.test('@value', a2 => {
+	a.test('[value]', a2 => {
 		const resolve = a.async();
 		function handler() {
 			a2.equal(c.value, 'Hello World', '"change" event fired');
@@ -35,7 +40,7 @@ function testFocus(c: HTMLInputElement & { touched: boolean }, test: Test) {
 }
 
 function testDisabled(el: HTMLInputElement, test: Test) {
-	test.test('@disabled', a => {
+	test.test('[disabled]', a => {
 		a.equal(
 			el.disabled,
 			false,
@@ -62,8 +67,8 @@ function testButton(el: HTMLButtonElement, test: Test) {
 	});
 }
 
-function testComponent(name: string, def: ComponentDefinition<any>, a: Test) {
-	const { attributes } = def;
+function testComponent(name: string, def: typeof Component, a: Test) {
+	const attributes = def.observedAttributes;
 	const el: any = document.createElement(name);
 
 	a.equal(el.tagName, name.toUpperCase());
@@ -82,10 +87,25 @@ function testComponent(name: string, def: ComponentDefinition<any>, a: Test) {
 
 export default suite('ui', test => {
 	const components = getRegisteredComponents();
-	components.forEach((def, tagName) => {
-		if (typeof tagName === 'string')
-			test(tagName, a => {
-				testComponent(tagName, def, a);
-			});
+	for (const tagName in components) {
+		test(tagName, a => {
+			testComponent(tagName, components[tagName], a);
+		});
+	}
+
+	test('ripple', a => {
+		let clickHandled = false;
+
+		function ripple(el: HTMLElement) {
+			el.title = 'hello';
+			return on(el, 'click').pipe(tap(() => (clickHandled = true)));
+		}
+
+		const el = render(<Div $={ripple}>Container</Div>);
+		a.dom.appendChild(el);
+		a.ok(el);
+		el.click();
+		a.equal(el.title, 'hello');
+		a.ok(clickHandled);
 	});
 });

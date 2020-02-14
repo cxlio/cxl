@@ -40,10 +40,8 @@ class TestReport {
 	printError(fail: Result) {
 		this.failures.push(fail);
 		const msg = fail.message;
-		if (msg instanceof Error) {
-			console.error(colors.red(msg.message));
-			console.error(msg.stack);
-		} else console.error(colors.red((msg as any).message || msg));
+		console.error(colors.red(msg));
+		if (fail.stack) console.error(fail.stack);
 	}
 
 	print() {
@@ -91,6 +89,60 @@ function printReport(suite: Test) {
 	if (failures.length) process.exit(1);
 }
 
+/*private async handleRequire(page) {
+			page.setRequestInterception(true);
+				let url = req.url().slice(7);
+
+				if (!existsSync(url)) url = url.replace(/\.js$/, '/index.js');
+
+				if (existsSync(url)) {
+					this.log(`Loading "${url}"`);
+					const content = readFileSync(url, 'utf8');
+					req.respond({
+						headers: {
+							'Access-Control-Allow-Origin': '*'
+						},
+						status: 200,
+						contentType: 'application/javascript',
+						body: content
+					});
+				} else req.continue();
+	}*/
+
+/*async function moduleRunner(page: Page, sources: Output[]) {
+
+	for (const src of sources) {
+		await page.addScriptTag({
+			type: 'module',
+			content: src.source
+		});
+	}
+	
+	return page.evaluate(`
+		let suite;
+		define('@tester', ['exports', 'require', 'index'], (exports, require, index) => {
+			suite = index.default;
+		})
+		suite.run().then(() => suite);
+	`);
+}*/
+
+async function amdRunner(page: Page, sources: Output[]) {
+	for (const source of sources) {
+		await page.addScriptTag({
+			content: source.source
+		});
+	}
+
+	return page.evaluate(`
+		let suite;
+		define('@tester', ['exports', 'require', 'index'], (exports, require, index) => {
+			suite = index.default;
+		})
+		suite.run().then(() => suite);
+	`);
+}
+
 class TestRunner extends Application {
 	version = '0.0.1';
 	name = '@cxl/tester';
@@ -112,25 +164,20 @@ class TestRunner extends Application {
 		return result.length ? Promise.all(result) : this.runVirtualDom();
 	}
 
-	/*private async handleRequire(page) {
-			page.setRequestInterception(true);
-				let url = req.url().slice(7);
-
-				if (!existsSync(url)) url = url.replace(/\.js$/, '/index.js');
-
-				if (existsSync(url)) {
-					this.log(`Loading "${url}"`);
-					const content = readFileSync(url, 'utf8');
-					req.respond({
-						headers: {
-							'Access-Control-Allow-Origin': '*'
-						},
-						status: 200,
-						contentType: 'application/javascript',
-						body: content
-					});
-				} else req.continue();
-	}*/
+	private handleConsole(msg: any) {
+		const type = msg.type();
+		const { url, lineNumber } = msg.location();
+		this.log(`Console: ${url}:${lineNumber}`);
+		Promise.all(
+			msg
+				.args()
+				.map((arg: any) =>
+					typeof arg === 'string' ? arg : arg.toString()
+				)
+		).then(out => {
+			out.forEach(arg => (console as any)[type](arg));
+		});
+	}
 
 	private async runPuppeteer() {
 		const browser = await launch();
@@ -143,23 +190,17 @@ class TestRunner extends Application {
 				}),
 				page.coverage.startCSSCoverage()
 			]);
-			page.on('console', msg => {
-				this.log('LOG: ' + msg.text());
-			});
+			page.on('console', msg => this.handleConsole(msg));
 			page.on('pageerror', msg => {
 				this.log(msg);
 			});
+
 			const source = readFileSync(this.entryFile, 'utf8');
-			await page.addScriptTag({
-				content: source
-			});
-			const suite = await page.evaluate(`
-				let suite;
-				define('@tester', ['exports', 'require', 'index'], (exports, require, index) => {
-					suite = index.default;
-				})
-				suite.run().then(() => suite);
-			`);
+			const sources = [{ path: this.entryFile, source }];
+
+			page.tracing.start({ path: 'trace.json' });
+			const suite = await amdRunner(page, sources);
+			await page.tracing.stop();
 
 			this.log('Generating report.json');
 			await generateReport(page, { path: this.entryFile, source });

@@ -1,71 +1,47 @@
+/// <amd-module name="index" />
 import { suite } from '../tester';
-import { render, dom, setContent, log, getAttribute } from './index';
-import { of } from '../rx';
-import { on } from '../dom';
+import { tap, map, hook } from '../rx';
+import { on, setAttribute } from '../dom';
+import { dom, render, Div, Span } from '../xdom';
+import { portal, teleport } from './index.js';
 
 export default suite('template', test => {
-	test('dom() - tsx', a => {
-		const el = <div title="=style:@styleText =title:@title">content</div>;
-
-		a.ok(el, 'Element was created');
-		a.equal(el.tagName, 'DIV');
-		a.equal((el as any).title, '=style:@styleText =title:@title');
-		a.equal(el.textContent, 'content');
+	test('bindings', a => {
+		function touchable(el: HTMLElement) {
+			return on(el, 'blur').pipe(
+				tap(val => setAttribute(el, 'touched', val))
+			);
+		}
+		a.ok(touchable);
+		//render(() => $(<div />, touchable)).subscribe(el => a.ok(el));
 	});
 
-	test('dom() - siblings', a => {
-		const el = (
-				<div>
-					<a>1</a>
-					<b>2</b>
-					<c>3</c>
-				</div>
-			),
-			first = el.firstChild,
-			last = el.lastChild;
-
-		a.equal(el.childNodes.length, 3);
-		a.equal((el.childNodes[0] as Element).tagName, 'A');
-		a.equal((el.childNodes[1] as Element).tagName, 'B');
-		a.equal((el.childNodes[2] as Element).tagName, 'C');
-		a.equal(el.childNodes[0].parentNode, el);
-		a.equal(el.childNodes[1].parentNode, el);
-		a.equal(el.childNodes[2].parentNode, el);
-		a.equal(first, el.childNodes[0]);
-		a.equal(last, el.childNodes[2]);
-		a.equal(first && first.nextSibling, el.childNodes[1]);
-		a.equal(last && last.previousSibling, el.childNodes[1]);
+	test('attribute bindings', a => {
+		const [checked, setChecked] = hook(true);
+		const el = render(
+			<Div
+				className="box"
+				title={checked.pipe(map(val => (val ? 'minus' : 'check')))}
+			/>
+		);
+		a.dom.appendChild(el);
+		a.ok(el);
+		a.equal(el.className, 'box');
+		a.equal(el.title, 'minus');
+		setChecked(false);
+		a.equal(el.title, 'check');
 	});
 
-	test('render', a => {
-		const binding = (el: Element) => of('hello').pipe(setContent(el));
-
-		render(() => <div $={binding} />)
-			.subscribe(el => {
-				a.ok(el);
-				a.equal(el && el.childNodes.length, 1);
-				a.equal(el && el.childNodes[0].textContent, 'hello');
-			})
-			.unsubscribe();
+	test('portal', a => {
+		const id = 'cxl-test' + a.id;
+		const el = render(<Div $={portal(id)} />);
+		a.dom.appendChild(el);
+		teleport(render(<Span>Hello</Span>), id);
+		a.ok(el);
+		a.equal(el.childNodes.length, 1);
+		a.equal(el.childNodes[0]?.textContent, 'Hello');
 	});
-
-	test('render - multiple bindings', a => {
-		const bindings = (el: Element) => [
-			of('hello').pipe(setContent(el)),
-			on(el, 'click').pipe(log())
-		];
-
-		render(() => <div $={bindings} />)
-			.subscribe(el => {
-				a.ok(el);
-				a.equal(el && el.childNodes.length, 1);
-				a.equal(el && el.childNodes[0].textContent, 'hello');
-			})
-			.unsubscribe();
-
-		a.ran(3);
-	});
-
+	/*
 	test('getAttribute - html element', a => {
 		const el = document.createElement('button');
 		// const done = a.async();
@@ -74,5 +50,5 @@ export default suite('template', test => {
 				a.equal(val, false);
 			})
 			.unsubscribe();
-	});
+	});*/
 });

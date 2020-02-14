@@ -1,4 +1,5 @@
 import { suite } from '../tester/index.js';
+import exhaustMapSuite from './test/exhaustMap';
 import {
 	BehaviorSubject,
 	Observable,
@@ -22,6 +23,7 @@ function throwError(msg: string) {
 }
 
 export default suite('rx', [
+	exhaustMapSuite,
 	suite('Observable', test => {
 		test('constructor', a => {
 			const observable = new Observable(function subscribe(observer) {

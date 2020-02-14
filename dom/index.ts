@@ -25,6 +25,15 @@ export function on(
 	});
 }
 
+export function getShadow(el: Element) {
+	return (
+		el.shadowRoot ||
+		el.attachShadow({
+			mode: 'open'
+		})
+	);
+}
+
 export function setAttribute(el: Element, attr: string, val: any) {
 	if (val === false || val === null || val === undefined) val = null;
 	else if (val === true) val = '';
@@ -36,12 +45,24 @@ export function setAttribute(el: Element, attr: string, val: any) {
 	return val;
 }
 
-function insert(el: Element, content: ElementContent) {
+function insertContent(el: Element, content: ElementContent) {
 	if (content === undefined || content === null) return;
-
 	if (!(content instanceof Node)) content = document.createTextNode(content);
-
 	el.appendChild(content);
+}
+
+export function insertArray(el: Element, content: ElementContent[]) {
+	for (const child of content) insertContent(el, child);
+}
+
+export function insert(
+	el: Element,
+	content: ElementContent | ElementContent[]
+) {
+	if (Array.isArray(content)) {
+		insertArray(el, content);
+		return;
+	} else insertContent(el, content);
 }
 
 export function setContent(el: Element, content: ElementContent) {
@@ -68,7 +89,7 @@ export function setStyle(el: Element, className: string, enable: boolean) {
 	el.classList[enable || enable === undefined ? 'add' : 'remove'](className);
 }
 
-export function trigger(el: Element, event: string, detail: any) {
+export function trigger(el: Element, event: string, detail?: any) {
 	const ev = new CustomEvent(event, { detail: detail, bubbles: true });
 	el.dispatchEvent(ev);
 }

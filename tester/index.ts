@@ -6,14 +6,30 @@ declare function clearTimeout(n: number): void;
 
 export interface Result {
 	success: boolean;
-	message: string | Error;
+	message: string;
+	stack?: any;
 }
 
 interface TestConfig {
 	name: string;
 }
 
+interface Element {
+	parentNode: Element | null;
+	removeChild(child: any): void;
+	appendChild(child: any): void;
+}
+
+let lastTestId = 1;
+
+function inspect(val: any) {
+	if (typeof val === 'string') return '"' + val + '"';
+
+	return val;
+}
+
 export class Test {
+	readonly id = lastTestId++;
 	name: string;
 	promise?: Promise<any>;
 	results: Result[] = [];
@@ -28,6 +44,9 @@ export class Test {
 		else this.name = nameOrConfig.name;
 	}
 
+	/**
+	 * Returns a connected dom element. Cleaned up after test completion.
+	 */
 	get dom() {
 		if (this.domElement) return this.domElement;
 
@@ -36,18 +55,33 @@ export class Test {
 		return el;
 	}
 
-	ok(condition: any, message = '') {
+	log(...args: any[]) {
+		console.log(...args);
+	}
+
+	ok(condition: any, message = 'Assertion failed') {
 		this.results.push({ success: !!condition, message });
 	}
 
 	equal<T>(a: T, b: T, desc?: string) {
-		return this.ok(a === b, desc || `${a} should equal ${b}`);
+		return this.ok(
+			a === b,
+			desc || `${inspect(a)} should equal ${inspect(b)}`
+		);
 	}
 
 	ran(n: number) {
 		return this.ok(
 			n === this.results.length,
 			`Expected ${n} assertions, instead got ${this.results.length}`
+		);
+	}
+
+	protected pushError(e: Error | string) {
+		this.results.push(
+			e instanceof Error
+				? { success: false, message: e.message, stack: e.stack }
+				: { success: false, message: e }
 		);
 	}
 
@@ -90,8 +124,8 @@ export class Test {
 
 			if (this.domElement && this.domElement.parentNode)
 				this.domElement.parentNode.removeChild(this.domElement);
-		} catch (message) {
-			this.results.push({ success: false, message });
+		} catch (e) {
+			this.pushError(e);
 		}
 
 		return this.results;

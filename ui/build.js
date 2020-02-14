@@ -1,60 +1,44 @@
-const header = () => `(cxl=>{"use strict";`,
-	footer = () =>
-		`})(exports?exports.cxl||(exports.cxl={}):window.cxl||(window.cxl={}))`,
-	template = [
-		'../template/src/core.js',
-		'../dist/rx/index.js',
-		'../template/src/dom.js',
-		'../template/src/template.js'
-	],
+const { build, concat, file, bundle, umd, pkg } = require('../dist/build'),
+	header = `(function(){"use strict";`,
+	//footer = `})(exports?exports.cxl||(exports.cxl={}):window.cxl||(window.cxl={}))`,
+	package = require('./package.json'),
+	footer = `cxl.ui.version="${package.version}";}).apply(this);`,
+	template = concat(
+		file('../template/src/core.js'),
+		file('../dist/rx/index.js').pipe(umd('cxl.rx={}')),
+		file(['../template/src/dom.js', '../template/src/template.js'])
+	),
 	core = [
-		header,
 		'src/component.js',
 		'src/css.js',
 		'src/shady.js',
 		'src/a11y.js',
 		'src/drag.js'
 	],
-	ui = [
-		'src/ui.js',
-		'src/table.js',
-		'src/forms.js',
-		'src/time.js',
-		c => `cxl.ui.version="${c.package.version}";})(this.cxl);`
-	];
+	ui = ['src/ui.js', 'src/table.js', 'src/forms.js', 'src/time.js'];
 
 require('../dist/build').build({
 	outputDir: 'dist',
-	targets: [
-		{
-			output: 'core.js',
-			src: [
-				...template,
-				'src/component.js',
-				'src/css.js',
-				'src/shady.js',
-				'src/a11y.js',
-				'src/drag.js'
-			]
-		},
-		{
-			output: 'index.js',
-			src: [...template, ...core, ...ui],
-			minify: 'index.min.js'
-		},
-
-		{
-			output: 'debug.js',
-			src: [
-				...template,
+	tasks: [
+		concat(template, file([...core, ...ui])).pipe(
+			bundle('index.js', {
+				header: header,
+				footer: footer
+			})
+		),
+		/*concat(
+			template,
+			file([
 				'../template/src/debug.js',
 				'../template/src/template-debug.js',
 				...core,
 				'src/ui-debug.js',
 				...ui,
 				'src/meta.js'
-			]
-		},
+			])
+		).pipe(bundle('debug.js')),*/
+		pkg()
+		/*
 		{
 			output: 'theme-legacy.js',
 			src: ['src/theme-legacy.js'],
@@ -97,6 +81,6 @@ require('../dist/build').build({
 						repository: c.package.repository
 					})
 			]
-		}
+		}*/
 	]
 });

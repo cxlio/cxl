@@ -3,6 +3,6 @@
 	"compilerOptions": {
 		"outDir": "../dist/template"
 	},
-	"files": ["index.ts", "jsx.ts"],
+	"files": ["index.ts"],
 	"references": [{ "path": "../rx" }, { "path": "../dom" }]
 }

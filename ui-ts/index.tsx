@@ -1,22 +1,24 @@
 import {
 	Attribute,
 	Component,
-	ComponentView,
-	Template,
-	Bind,
-	Events,
-	Styles,
-	decorateComponent
-} from '../component/index.js';
+	Augment,
+	Slot,
+	Div,
+	bind,
+	dom,
+	register,
+	template,
+	StyleAttribute
+} from '../xdom/index.js';
 import {
 	onAction,
-	$anchor,
-	setAttribute,
 	triggerEvent,
-	dom
+	getAttribute,
+	portal
 } from '../template/index.js';
-import { on } from '../dom/index.js';
-import { tap, of, merge, debounceTime } from '../rx/index.js';
+import { on, getShadow } from '../dom/index.js';
+import { tap, merge, debounceTime } from '../rx/index.js';
+import { css } from '../css/index.js';
 
 declare const cxl: any;
 
@@ -35,7 +37,7 @@ const StateStyles = {
 	}
 };
 
-export function ripple({ element }: any) {
+export function ripple(element: any) {
 	return onAction(element).pipe(
 		debounceTime(),
 		tap(ev => {
@@ -59,16 +61,13 @@ export function focusableEvents(element: any) {
 	);
 }
 
-interface FocusableComponent {
+interface Focusable extends Component {
 	disabled: boolean;
 }
 
-export function focusable<T extends FocusableComponent>({
-	element,
-	select
-}: ComponentView<T>) {
+export function focusable<T extends Focusable>(element: T) {
 	return merge(
-		select('disabled').pipe(
+		getAttribute(element, 'disabled').pipe(
 			tap(value => {
 				element.setAttribute('aria-disabled', value ? 'true' : 'false');
 				if (value) element.removeAttribute('tabindex');
@@ -79,114 +78,157 @@ export function focusable<T extends FocusableComponent>({
 	);
 }
 
-export function Role(ariaRole: string) {
-	return decorateComponent(view => {
-		view.addBinding(of(ariaRole).pipe(setAttribute(view.element, 'role')));
-	});
-}
+@Augment<Appbar>(
+	register('cxl-appbar'),
+	css({
+		$: {
+			display: 'block',
+			backgroundColor: 'primary',
+			flexShrink: 0,
+			fontSize: 18,
+			color: 'onPrimary',
+			elevation: 2
+		},
+		flex: {
+			display: 'flex',
+			alignItems: 'center',
+			height: 56,
+			paddingLeft: 16,
+			paddingRight: 16,
+			paddingTop: 4,
+			paddingBottom: 4
+		},
 
-@Template(({ $content }) => (
-	<div>
-		<div className="flex">
-			<slot></slot>
-			<div $={$anchor('cxl-appbar-actions')}></div>
-		</div>
-		<div className="tabs">
-			<slot $={$content('cxl-tabs')}></slot>
-			<div $={$anchor('cxl-appbar-tabs')}></div>
-		</div>
+		flex$extended: {
+			alignItems: 'start',
+			height: 128,
+			paddingBottom: 24
+		},
+		$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
+		'@medium': {
+			flex$extended: { paddingLeft: 64, paddingRight: 64 }
+		},
+		'@xlarge': {
+			flex$center: {
+				width: 1200,
+				marginLeft: 'auto',
+				marginRight: 'auto',
+				paddingRight: 0,
+				paddingLeft: 0
+			},
+			tabs$center: {
+				width: 1200,
+				marginLeft: 'auto',
+				marginRight: 'auto'
+			}
+		}
+	}),
+	<div className="flex">
+		<slot></slot>
+		<Div $={portal('cxl-appbar-actions')} />
+	</div>,
+	<div className="tabs">
+		<Slot selector="cxl-tabs"></Slot>
+		<Div $={portal('cxl-appbar-tabs')} />
 	</div>
-))
-@Styles({
-	$: {
-		display: 'block',
-		backgroundColor: 'primary',
-		flexShrink: 0,
-		fontSize: 18,
-		color: 'onPrimary',
-		elevation: 2
-	},
-	flex: {
-		display: 'flex',
-		alignItems: 'center',
-		height: 56,
-		paddingLeft: 16,
-		paddingRight: 16,
-		paddingTop: 4,
-		paddingBottom: 4
-	},
-
-	flex$extended: {
-		alignItems: 'start',
-		height: 128,
-		paddingBottom: 24
-	},
-	$fixed: { position: 'fixed', top: 0, right: 0, left: 0 }
-})
-@Styles('medium', {
-	flex$extended: { paddingLeft: 64, paddingRight: 64 }
-})
-@Styles('xlarge', {
-	flex$center: {
-		width: 1200,
-		marginLeft: 'auto',
-		marginRight: 'auto',
-		paddingRight: 0,
-		paddingLeft: 0
-	},
-	tabs$center: {
-		width: 1200,
-		marginLeft: 'auto',
-		marginRight: 'auto'
-	}
-})
-@Role('heading')
-@Component('cxl-appbar')
-export class Appbar {
+)
+export class Appbar extends Component {
 	@Attribute()
 	extended = false;
+
+	@Attribute()
+	role = 'heading';
+
 	@Attribute()
 	center = false;
 }
 
-@Component('cxl-appbar-title')
-@Styles({
-	$: { flexGrow: 1, font: 'title' }
-	// $extended: { font: 'h5', alignSelf: 'flex-end' }
-})
-export class AppbarTitle {}
+@Augment(
+	register('cxl-card'),
+	css({
+		$: {
+			backgroundColor: 'surface',
+			borderRadius: 2,
+			color: 'onSurface',
+			display: 'block',
+			elevation: 1
+		}
+	}),
+	<slot></slot>
+)
+export class Card extends Component {}
 
-@Styles({
-	$: {
-		backgroundColor: 'surface',
-		borderRadius: 2,
-		color: 'onSurface',
-		display: 'block',
-		elevation: 1
-	}
-})
-@Component('cxl-card')
-export class Card {}
+@Augment(
+	register('cxl-backdrop'),
+	css({
+		$: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			bottom: 0,
+			right: 0,
+			backgroundColor: 'elevation',
+			elevation: 5
+		}
+	}),
+	<slot></slot>
+)
+export class Backdrop extends Component {}
 
-@Component('cxl-badge')
-@Styles({
-	$: {
-		display: 'inline-block',
-		position: 'relative',
-		width: 22,
-		height: 22,
-		lineHeight: 22,
-		font: 'caption',
-		borderRadius: 11,
-		color: 'onPrimary',
-		backgroundColor: 'primary'
-	},
-	$secondary: { color: 'onSecondary', backgroundColor: 'secondary' },
-	$error: { color: 'onError', backgroundColor: 'error' },
-	$top: { translateY: -11 },
-	$over: { marginLeft: -8 }
-})
-export class Badge {
+@Augment(
+	register('cxl-content'),
+	css({
+		$: {
+			padding: 16,
+			position: 'relative',
+			flexGrow: 1,
+			overflowY: 'auto',
+			overflowScrolling: 'touch'
+		},
+		'@medium': {
+			$: { padding: 32 }
+		},
+		'@large': {
+			$: { padding: 64 }
+		},
+		'@xlarge': {
+			content: { width: 1200 },
+			content$center: {
+				padding: 0,
+				marginLeft: 'auto',
+				marginRight: 'auto'
+			}
+		}
+	}),
+	<slot></slot>
+)
+export class Content extends Component {
+	@Attribute()
+	center = false;
+}
+
+@Augment(
+	register('cxl-badge'),
+	css({
+		$: {
+			display: 'inline-block',
+			position: 'relative',
+			width: 22,
+			height: 22,
+			lineHeight: 22,
+			font: 'caption',
+			borderRadius: 11,
+			color: 'onPrimary',
+			backgroundColor: 'primary'
+		},
+		$secondary: { color: 'onSecondary', backgroundColor: 'secondary' },
+		$error: { color: 'onError', backgroundColor: 'error' },
+		$top: { translateY: -11 },
+		$over: { marginLeft: -8 }
+	}),
+	<slot></slot>
+)
+export class Badge extends Component {
 	@Attribute()
 	secondary = false;
 
@@ -200,9 +242,11 @@ export class Badge {
 	top = false;
 }
 
-@Component('cxl-button')
-@Styles(
-	{
+@Augment(
+	register('cxl-button'),
+	bind(ripple),
+	bind(focusable),
+	css({
 		$: {
 			elevation: 1,
 			paddingTop: 8,
@@ -242,50 +286,104 @@ export class Badge {
 
 		$active: { elevation: 3 },
 		$active$disabled: { elevation: 1 },
-		$active$flat$disabled: { elevation: 0 }
-	}
-	// FocusCSS,
-	// DisabledCSS
+		$active$flat$disabled: { elevation: 0 },
+		'@large': {
+			$flat: { paddingLeft: 12, paddingRight: 12 }
+		},
+		...StateStyles
+	}),
+	<slot></slot>
 )
-@Styles('large', {
-	$flat: { paddingLeft: 12, paddingRight: 12 }
-})
-@Styles(StateStyles)
-@Bind(ripple)
-@Bind(focusable)
-@Role('button')
-export class Button {
+export class Button extends Component {
+	role = 'button';
 	@Attribute()
 	disabled = false;
-	@Attribute()
+	@StyleAttribute()
 	primary = false;
-	@Attribute()
+	@StyleAttribute()
 	flat = false;
-	@Attribute()
+	@StyleAttribute()
 	secondary = false;
 	@Attribute()
 	touched = false;
-	@Attribute()
+	@StyleAttribute()
 	big = false;
-	@Attribute()
+	@StyleAttribute()
 	outline = false;
 }
 
-@Component('cxl-submit')
-@Template<SubmitButton>(({ select }) => (
-	<div>
-		<cxl-icon className="icon" icon={select('icon')}></cxl-icon>
-		<slot></slot>
-	</div>
-))
-@Styles({
-	icon: { animation: 'spin', marginRight: 8, display: 'none' },
-	icon$disabled: { display: 'inline-block' }
-})
-@Events(({ element }) => ({
-	'form.submit': onAction(element)
-}))
+@Augment(
+	register('cxl-icon'),
+	css({
+		$: {
+			display: 'inline-block',
+			fontFamily: 'Font Awesome\\ 5 Free',
+			fontSize: 'inherit'
+		},
+		$round: {
+			borderRadius: 1,
+			textAlign: 'center'
+		},
+		$outline: { borderWidth: 1, borderStyle: 'solid' }
+	})
+)
+export class Icon extends Component {
+	protected $icon = '';
+	protected iconNode?: Text;
+
+	role = 'img';
+
+	@Attribute()
+	get icon() {
+		return this.$icon;
+	}
+
+	set icon(iconName: string) {
+		this.$icon = iconName;
+		const icon = iconName && cxl.ui.icons[iconName];
+
+		if (icon) {
+			if (this.iconNode) {
+				this.iconNode.data = icon;
+			} else {
+				this.iconNode = document.createTextNode(icon);
+				getShadow(this).appendChild(this.iconNode);
+			}
+
+			if (!this.hasAttribute('aria-label'))
+				this.setAttribute('aria-label', this.icon);
+		}
+	}
+}
+
+@Augment<SubmitButton>(
+	register('cxl-submit'),
+	css({
+		icon: { animation: 'spin', marginRight: 8, display: 'none' },
+		icon$disabled: { display: 'inline-block' }
+	}),
+	template(el => (
+		<div>
+			<Icon className="icon" icon={getAttribute(el, 'icon')}></Icon>
+			<slot></slot>
+		</div>
+	)),
+	bind(el => onAction(el).pipe(triggerEvent(el, 'form.submit')))
+)
 export class SubmitButton extends Button {
 	icon = 'spinner';
 	primary = true;
 }
+
+@Augment(
+	css({
+		$: {
+			paddingRight: 8,
+			lineHeight: 22,
+			width: 24,
+			textAlign: 'center'
+		},
+		$trailing: { paddingRight: 0, paddingLeft: 8 }
+	})
+)
+export class FieldIcon extends Icon {}

@@ -54,10 +54,9 @@
 			$hover$disabled: { state: 'disabled' }
 		};
 	function prefix(prefix, css) {
-		var result = {},
-			i;
+		const result = {};
 
-		for (i in css) result[prefix + i] = css[i];
+		for (const i in css) result[prefix + i] = css[i];
 
 		return result;
 	}
@@ -88,7 +87,7 @@
 				children = new cxl.ElementChildren(el);
 			if (!focused) return;
 
-			var cols = el.columns,
+			let cols = el.columns,
 				next = focused;
 
 			switch (ev.key) {
@@ -119,6 +118,13 @@
 				key = ev.key;
 			const children = new cxl.ElementChildren(host);
 
+			function findByFirst(item) {
+				return (
+					item.innerText &&
+					item.innerText.charAt(0).toLowerCase() === key
+				);
+			}
+
 			switch (key) {
 				case 'ArrowDown':
 					el = el ? children.nextTo(el) || el : children.first;
@@ -129,12 +135,6 @@
 				default:
 					key = key.toLowerCase();
 
-					function findByFirst(item) {
-						return (
-							item.innerText &&
-							item.innerText.charAt(0).toLowerCase() === key
-						);
-					}
 					// TODO ?
 					if (/^[a-z]$/.test(key))
 						el =
@@ -154,10 +154,10 @@
 		onKey(ev, host) {
 			const children = new cxl.ElementChildren(host),
 				key = ev.key;
-			let el =
-					this.$behavior.value !== cxl.Undefined &&
-					this.$behavior.value,
-				newEl = el;
+			const el =
+				this.$behavior.value !== cxl.Undefined && this.$behavior.value;
+			let newEl = el;
+
 			switch (key) {
 				case 'ArrowDown':
 					newEl = (newEl && children.nextTo(newEl)) || children.first;
@@ -327,6 +327,15 @@ on(selectable.action):#onAction
 		}
 	});
 
+	component({
+		name: 'cxl-appbar-title',
+		attributes: ['extended'],
+		styles: {
+			$: { flexGrow: 1, font: 'title' },
+			$extended: { font: 'h5', alignSelf: 'flex-end' }
+		}
+	});
+
 	component(
 		{
 			name: 'cxl-avatar',
@@ -359,21 +368,6 @@ on(selectable.action):#onAction
 			alt: 'Avatar'
 		}
 	);
-
-	component({
-		name: 'cxl-backdrop',
-		styles: {
-			$: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				bottom: 0,
-				width: '100%',
-				backgroundColor: 'rgba(0,0,0,0.32)',
-				elevation: 5
-			}
-		}
-	});
 
 	component({
 		name: 'cxl-c',
@@ -496,7 +490,7 @@ on(selectable.action):#onAction
 		}
 	);
 
-	component({
+	/*component({
 		name: 'cxl-content',
 		attributes: ['center'],
 		template: `
@@ -519,7 +513,7 @@ on(selectable.action):#onAction
 				marginRight: 'auto'
 			}
 		}
-	});
+	});*/
 
 	component({
 		name: 'cxl-dialog',
@@ -723,7 +717,7 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component(
+	/*component(
 		{
 			name: 'cxl-icon',
 			bindings: 'role(img) =icon:#setIcon',
@@ -761,7 +755,7 @@ on(selectable.action):#onAction
 				}
 			}
 		}
-	);
+	);*/
 
 	component(
 		{
@@ -1386,7 +1380,7 @@ root.on(load):#update
 		confirm(options) {
 			if (typeof options === 'string') options = { message: options };
 
-			var modal = cxl.dom('cxl-dialog-confirm', options);
+			const modal = cxl.dom('cxl-dialog-confirm', options);
 
 			document.body.appendChild(modal);
 
@@ -1394,7 +1388,7 @@ root.on(load):#update
 		},
 
 		notify(options) {
-			var bar = ui.snackbarContainer;
+			let bar = ui.snackbarContainer;
 
 			if (typeof options === 'string') options = { content: options };
 

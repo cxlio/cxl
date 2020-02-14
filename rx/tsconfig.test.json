@@ -2,8 +2,8 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/rx",
-		"lib": ["es2015"]
+		"lib": ["es2017"]
 	},
 	"references": [{ "path": "tsconfig.json" }, { "path": "../tester" }],
-	"files": ["test.ts"]
+	"include": ["test.ts", "test/*.ts"]
 }
