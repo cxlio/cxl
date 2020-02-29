@@ -92,7 +92,11 @@ export class Component extends HTMLElement {
 	}
 
 	attributeChangedCallback(name: keyof this, oldValue: any, value: any) {
-		if (oldValue !== value) this[name] = value;
+		if (oldValue !== value) {
+			const actualValue =
+				value === '' ? true : value === 'null' ? false : value;
+			this[name] = actualValue;
+		}
 	}
 }
 
