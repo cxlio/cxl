@@ -8,6 +8,16 @@ export function empty(el: Element) {
 	while ((c = el.childNodes[0])) el.removeChild(c);
 }
 
+export function on<K extends keyof GlobalEventHandlersEventMap>(
+	element: Element | Window,
+	event: K,
+	options?: AddEventListenerOptions
+): Observable<GlobalEventHandlersEventMap[K]>;
+export function on(
+	element: Element | Window,
+	event: string,
+	options?: AddEventListenerOptions
+): Observable<Event>;
 export function on(
 	element: Element | Window,
 	event: string,

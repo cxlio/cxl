@@ -1,19 +1,90 @@
 /// <amd-module name="index" />
 import { suite } from '../tester';
-import { compose, component, Register, Component, Attribute } from './index';
-import { dom } from '../xdom';
-
-// import { of, tap } from '../rx';
-// import { setContent, onAction, dom } from '../template';
+import {
+	Attribute,
+	Augment,
+	Component,
+	Slot,
+	bind,
+	getAttribute,
+	register,
+	template
+} from './index';
+import { dom, render, connectUntil } from '../xdom';
+import { of, tap } from '../rx';
 
 export default suite('component', test => {
 	test('Component - empty', a => {
-		class TestComponent extends Component {}
-		const instance = dom(TestComponent);
-		a.ok(instance);
+		class TestComponent extends Component {
+			static tagName = 'div';
+		}
+		const jsx = dom(TestComponent);
+		a.ok(jsx);
+		const element = render(jsx).element;
+		a.ok(element);
+		a.ok(element instanceof HTMLDivElement);
 	});
 
-	test('compose', a => {
+	test('Component - register', a => {
+		const id = 'cxl-test' + a.id;
+		@Augment(register(id))
+		class Test extends Component {}
+		const el = render(dom(Test));
+		a.ok(el);
+	});
+
+	test('Component - template', a => {
+		const id = 'cxl-test' + a.id;
+		@Augment(
+			register(id),
+			template(
+				<div>
+					<slot></slot>
+				</div>
+			)
+		)
+		class Test extends Component {}
+
+		const tpl = <Test>Hello World</Test>;
+		const el = tpl() as HTMLDivElement;
+		const el2 = tpl() as HTMLDivElement;
+
+		a.ok(el);
+		a.ok(el.shadowRoot);
+		a.equal(el.shadowRoot?.childNodes.length, 1);
+		a.equal(el.shadowRoot?.children[0].tagName, 'DIV');
+		a.equal(el.childNodes.length, 1);
+		a.ok(el2);
+		a.ok(el2.shadowRoot);
+		a.equal(el2.shadowRoot?.childNodes.length, 1);
+		a.equal(el2.shadowRoot?.children[0].tagName, 'DIV');
+		a.equal(el2.childNodes.length, 1);
+	});
+
+	test('Slot', a => {
+		const el = render(<Slot selector="slot-name"></Slot>).element;
+
+		a.ok(el);
+		a.ok(el instanceof HTMLSlotElement);
+	});
+
+	test('bind', a => {
+		const id = 'cxl-test' + a.id;
+		function bindTest(node: Test) {
+			a.equal(node.tagName, id.toUpperCase());
+			return of('hello').pipe(tap(val => (node.title = val)));
+		}
+
+		@Augment(register(id), bind(bindTest))
+		class Test extends Component {}
+
+		const el = (<Test></Test>)() as Test;
+		a.dom.appendChild(el);
+		a.equal(el.title, 'hello');
+		a.ran(2);
+	});
+
+	/*test('compose', a => {
 		const id = 'cxl-test' + a.id;
 		function Focusable(Parent: any) {
 			class Focusable extends Parent {
@@ -37,15 +108,9 @@ export default suite('component', test => {
 		a.ok(instance.touched);
 		a.equal(instance.name, 'hello');
 		a.ok(Focusable);
-	});
+	});*/
 
-	test('Slot', a => {
-		const el = render<Slot>(<Slot selector="slot-name"></Slot>);
-
-		a.ok(el);
-		a.ok(el instanceof Slot);
-	});
-	test('Component - complex', a => {
+	test('Component - inheritance', a => {
 		const id = 'cxl-test' + a.id;
 
 		class FocusBehavior extends Component {
@@ -69,19 +134,24 @@ export default suite('component', test => {
 		@Augment(register(id))
 		class Input extends InputBase {
 			@Attribute()
-			maxLength = -1;
+			maxlength = -1;
 
 			focus() {}
 		}
 
-		const instance = render<Input>(<Input maxLength={10}></Input>);
+		const instance = render<Input>(<Input maxlength={10}></Input>).element;
 
 		a.ok(instance);
 		a.ok(Input.observedAttributes);
 		a.ok(Input.observedAttributes.includes('invalid'));
+		a.ok(Input.observedAttributes.includes('value'));
+		a.ok(Input.observedAttributes.includes('disabled'));
+		a.ok(Input.observedAttributes.includes('touched'));
+		a.ok(Input.observedAttributes.includes('focused'));
+		a.ok(Input.observedAttributes.includes('maxlength'));
 		a.equal(instance.tagName, id.toUpperCase());
 		a.equal(instance.invalid, false);
-		a.equal(instance.maxLength, 10);
+		a.equal(instance.maxlength, 10);
 		a.equal(instance.name, '');
 	});
 
@@ -94,10 +164,22 @@ export default suite('component', test => {
 			test = true;
 		}
 
-		const el = render<TestComponent>(<TestComponent></TestComponent>);
-		a.equal(el.test, true);
-		// a.ok(el.hasAttribute('test'));
+		connectUntil<TestComponent>(<TestComponent></TestComponent>, el => {
+			a.equal(el.test, true);
+			el.test = false;
+			a.equal(el.test, false);
+		});
+
+		connectUntil<TestComponent>(
+			<TestComponent test={false}></TestComponent>,
+			el => {
+				a.equal(el.test, false);
+				el.test = true;
+				a.equal(el.test, true);
+			}
+		);
 	});
+
 	test('Component - Attributes', a => {
 		const id = 'cxl-test' + a.id;
 
@@ -110,20 +192,21 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		const el = render<Test>(<Test hello="hello"></Test>);
-		a.dom.appendChild(el);
-		a.ok(el);
-		a.equal(el.tagName, id.toUpperCase());
-		a.equal(el.hello, 'hello');
+		connectUntil<Test>(<Test hello="hello"></Test>, el => {
+			a.dom.appendChild(el);
+			a.ok(el);
+			a.equal(el.tagName, id.toUpperCase());
+			a.equal(el.hello, 'hello');
 
-		el.hello = 'hello';
-		a.equal(el.hello, 'hello');
-		a.equal(el.getAttribute('hello'), 'hello');
-		const el3 = document.createElement(id) as Test;
-		a.equal(el.hello, 'hello');
-		a.equal(el3.hello, 'world');
+			el.hello = 'hello';
+			a.equal(el.hello, 'hello');
+			const el3 = document.createElement(id) as Test;
+			a.equal(el.hello, 'hello');
+			a.equal(el3.hello, 'world');
+		});
 	});
 
+	/*
 	test('Bindings - Events', a => {
 		const el = render(
 			<Div
@@ -172,6 +255,7 @@ export default suite('component', test => {
 		setChecked(false);
 		a.equal(el.className, 'check');
 	});
+	*/
 
 	test('Component - Attributes', a => {
 		const id = 'cxl-test' + a.id;
@@ -184,18 +268,20 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		const el = render<Test>(<Test hello="hello"></Test>);
-		a.ok(el);
-		a.equal(el.tagName, id.toUpperCase());
-		a.equal(el.hello, 'hello');
+		connectUntil<Test>(<Test hello="hello"></Test>, el => {
+			a.ok(el);
+			a.equal(el.tagName, id.toUpperCase());
+			a.equal(el.hello, 'hello');
 
-		el.hello = 'hello';
-		a.equal(el.hello, 'hello');
-		const el3 = document.createElement(id) as Test;
-		a.equal(el.hello, 'hello');
-		a.equal(el3.hello, 'world');
+			el.hello = 'hello';
+			a.equal(el.hello, 'hello');
+			const el3 = document.createElement(id) as Test;
+			a.equal(el.hello, 'hello');
+			a.equal(el3.hello, 'world');
+		});
 	});
 
+	/*
 	test('Component - composition', a => {
 		const id = 'cxl-test' + a.id;
 
@@ -240,5 +326,36 @@ export default suite('component', test => {
 		const div = dom(Div);
 		a.equal(div.Component, Div);
 		a.ok(div.render() instanceof Div);
+	});
+	*/
+
+	test('getAttribute', a => {
+		const id = 'cxl-test' + a.id;
+
+		@Augment(register(id))
+		class Test extends Component {
+			@Attribute()
+			hello = 'world';
+		}
+
+		a.ok(Test.observedAttributes.includes('hello'));
+
+		connectUntil<Test>(<Test hello="hello"></Test>, el => {
+			let lastValue = 'hello';
+			a.equal(el.hello, 'hello');
+			const subs = getAttribute(el, 'hello')
+				.pipe(
+					tap(val => {
+						a.equal(val, lastValue);
+					})
+				)
+				.subscribe();
+
+			el.hello = lastValue = 'test';
+
+			subs.unsubscribe();
+		});
+
+		a.ran(4);
 	});
 });

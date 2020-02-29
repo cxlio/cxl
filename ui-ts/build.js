@@ -1,4 +1,4 @@
-const { build, tsconfig, pkg, amd, bundle } = require('../dist/build');
+const { build, tsconfig, pkg, file } = require('../dist/build');
 
 build({
 	outputDir: '../dist/ui',
@@ -6,6 +6,7 @@ build({
 		tsconfig(),
 		tsconfig('tsconfig.test.json'),
 		tsconfig('tsconfig.bundle.json'),
+		file('test.html'),
 		pkg()
 	]
 });

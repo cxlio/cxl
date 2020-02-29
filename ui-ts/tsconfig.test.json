@@ -13,7 +13,8 @@
 		"../rx/index.ts",
 		"../css/index.ts",
 		"../dom/index.ts",
-		"../xdom/index.ts"
+		"../xdom/index.ts",
+		"../component/index.ts"
 	],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

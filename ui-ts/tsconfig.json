@@ -6,6 +6,7 @@
 	"files": ["index.tsx"],
 	"references": [
 		{ "path": "../xdom" },
+		{ "path": "../component" },
 		{ "path": "../template" },
 		{ "path": "../css" }
 	]

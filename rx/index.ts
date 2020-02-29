@@ -80,8 +80,10 @@ export class Subscription<T> {
 	}
 
 	unsubscribe() {
-		this.isUnsubscribed = true;
-		if (this.onUnsubscribe) this.onUnsubscribe();
+		if (!this.isUnsubscribed) {
+			this.isUnsubscribed = true;
+			if (this.onUnsubscribe) this.onUnsubscribe();
+		}
 	}
 }
 
@@ -90,17 +92,33 @@ export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
 		operators.reduce((prev, fn) => fn(prev), source);
 }
 
-class Observable<T> {
-	static create<T2>(A: any): Observable<T2> {
-		return new this(A);
-	}
-
+class Observable<T = any> {
 	protected __subscribe?: SubscribeFunction<T>;
 
 	constructor(subscribe?: SubscribeFunction<T>) {
 		if (subscribe) this.__subscribe = subscribe;
 	}
 
+	pipe<A>(a: Operator<T, A>): Observable<A>;
+	pipe<A, B>(a: Operator<T, A>, b: Operator<A, B>): Observable<B>;
+	pipe<A, B, C>(
+		a: Operator<T, A>,
+		b: Operator<A, B>,
+		c: Operator<B, C>
+	): Observable<C>;
+	pipe<A, B, C, D>(
+		a: Operator<T, A>,
+		b: Operator<A, B>,
+		c: Operator<B, C>,
+		d: Operator<C, D>
+	): Observable<D>;
+	pipe<A, B, C, D, E>(
+		a: Operator<T, A>,
+		b: Operator<A, B>,
+		c: Operator<B, C>,
+		d: Operator<C, D>,
+		e: Operator<D, E>
+	): Observable<E>;
 	pipe(...extra: Operator<any, any>[]): Observable<any> {
 		return extra.reduce((prev, fn) => fn(prev), this as Observable<any>);
 	}
@@ -268,6 +286,14 @@ function concat(...observables: Observable<any>[]) {
 	});
 }
 
+export function defer<T>(fn: () => Observable<T>) {
+	return new Observable(subs => {
+		const newObs = fn();
+		const innerSubs = newObs.subscribe(subs);
+		return () => innerSubs.unsubscribe();
+	});
+}
+
 function from<T>(input: Array<T> | Promise<T> | Observable<T>): Observable<T> {
 	if (input instanceof Observable) return input;
 
@@ -345,7 +371,7 @@ export function operator<T, T2 = T>(
 }
 
 function map<T, T2>(mapFn: (val: T) => T2) {
-	return operator(subscriber => (val: T) => {
+	return operator<T, T2>(subscriber => (val: T) => {
 		subscriber.next(mapFn(val));
 	});
 }
@@ -378,8 +404,8 @@ export function collect<T>(source: Observable<T>, gate: Observable<any>) {
 	});
 }
 
-function debounceTime(time?: number) {
-	return operator(subscriber =>
+function debounceTime<T>(time?: number) {
+	return operator<T>(subscriber =>
 		debounceFunction(subscriber.next.bind(subscriber), time)
 	);
 }
@@ -446,7 +472,7 @@ function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
 	});
 }
 
-function tap<T>(fn: (val: T) => any): Operator<T, T> {
+function tap<T>(fn: (val: T) => void): Operator<T, T> {
 	return operator((subscriber: Subscription<T>) => (val: T) => {
 		fn(val);
 		subscriber.next(val);
@@ -489,8 +515,31 @@ function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
-function merge<R>(...observables: Observable<any>[]): Observable<R> {
-	return new Observable<R>(subs => {
+function merge<A>(a: Observable<A>): Observable<A>;
+function merge<A, B>(a: Observable<A>, b: Observable<B>): Observable<A | B>;
+function merge<A, B, C>(
+	a: Observable<A>,
+	b: Observable<B>,
+	c: Observable<C>
+): Observable<A | B | C>;
+function merge<A, B, C, D>(
+	a: Observable<A>,
+	b: Observable<B>,
+	c: Observable<C>,
+	d: Observable<D>
+): Observable<A | B | C | D>;
+function merge<A, B, C, D, E>(
+	a: Observable<A>,
+	b: Observable<B>,
+	c: Observable<C>,
+	d: Observable<D>,
+	e: Observable<E>
+): Observable<A | B | C | D | E>;
+function merge<R>(...observables: Observable<R>[]): Observable<R>;
+function merge(...observables: Observable<any>[]) {
+	if (observables.length === 1) return observables[0];
+
+	return new Observable(subs => {
 		let refCount = observables.length;
 		const subscriptions = observables.map(o =>
 			o.subscribe({
@@ -501,7 +550,7 @@ function merge<R>(...observables: Observable<any>[]): Observable<R> {
 					subs.error(e);
 				},
 				complete() {
-					if (refCount-- === 0) subs.complete();
+					if (refCount-- === 1) subs.complete();
 				}
 			})
 		);

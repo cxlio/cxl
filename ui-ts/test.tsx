@@ -1,13 +1,9 @@
 /// <amd-module name="index" />
+import '../ui/dist/index.js';
 import { suite, Test } from '../tester/index.js';
 import { on } from '../dom/index.js';
-import {
-	dom,
-	getRegisteredComponents,
-	Component,
-	render,
-	Div
-} from '../xdom/index.js';
+import { dom, connectUntil } from '../xdom/index.js';
+import { getRegisteredComponents, Component } from '../component/index.js';
 import { tap } from '../rx/index.js';
 import './index.js';
 
@@ -44,7 +40,12 @@ function testDisabled(el: HTMLInputElement, test: Test) {
 		a.equal(
 			el.disabled,
 			false,
-			'Component should never be disabled by default'
+			'Component should not be disabled by default'
+		);
+		a.equal(
+			el.getAttribute('aria-disabled'),
+			'false',
+			'aria-disabled must be set to false by default'
 		);
 		a.equal(el.tabIndex, 0);
 		el.disabled = true;
@@ -101,11 +102,12 @@ export default suite('ui', test => {
 			return on(el, 'click').pipe(tap(() => (clickHandled = true)));
 		}
 
-		const el = render(<Div $={ripple}>Container</Div>);
-		a.dom.appendChild(el);
-		a.ok(el);
-		el.click();
-		a.equal(el.title, 'hello');
-		a.ok(clickHandled);
+		connectUntil(<div $={ripple}>Container</div>, el => {
+			a.dom.appendChild(el);
+			a.ok(el);
+			el.click();
+			a.equal(el.title, 'hello');
+			a.ok(clickHandled);
+		});
 	});
 });

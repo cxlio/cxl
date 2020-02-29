@@ -30,10 +30,8 @@ export default suite('store', test => {
 		assert.equal(store.state.key, 2);
 		assert.equal(store.state.key2, 'hello');
 
-		store.select('key').subscribe((val: number) => assert.equal(val, 2));
-		store
-			.select('key2')
-			.subscribe((val?: string) => assert.equal(val, 'hello'));
+		store.select('key').subscribe(val => assert.equal(val, 2));
+		store.select('key2').subscribe(val => assert.equal(val, 'hello'));
 	});
 
 	/*test('BaseStore.selectOrLoad', a => {

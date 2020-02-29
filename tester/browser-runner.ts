@@ -55,6 +55,7 @@ class TestReport {
 	}
 
 	printError(fail: Result) {
+		console.error(fail.message, fail.stack);
 		this.failures.push(fail);
 		const msg = fail.message;
 		error(msg);

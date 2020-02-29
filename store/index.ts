@@ -1,66 +1,66 @@
 import { BehaviorSubject, Observable, map, distinctUntilChanged } from '../rx';
 
-export interface Action {
-	type: string;
-}
-
-export class SetAction implements Action {
+/*export class SetAction implements Action {
 	type = 'set';
-
 	constructor(public key: string, public value: any) {}
-}
+}*/
 
-export class StoreBase<State> {
+export class Store<State, K extends keyof State = keyof State> {
+	public state = { ...this.initialState };
+
 	protected subject = new BehaviorSubject(this.state);
-	protected initialState = { ...this.state };
-	constructor(public state: State) {}
+	protected stores: any = {};
+	protected selectors: any = {};
 
-	select<K extends keyof State>(key: K): Observable<State[K]>;
-	select<K extends keyof State, K2 extends keyof State[K]>(
-		key: K,
-		key2: K2
-	): Observable<State[K][K2]>;
-	select<
-		K extends keyof State,
-		K2 extends keyof State[K],
-		K3 extends keyof State[K][K2]
-	>(key: K, key2: K2, key3: K3): Observable<State[K][K2][K3]>;
-	select(...keys: string[]): Observable<any> {
-		return this.subject.pipe(
-			map((state: State): any =>
-				keys.reduce((result: any, key) => result && result[key], state)
-			),
-			distinctUntilChanged()
+	constructor(protected initialState: State) {}
+
+	forFeature(featureKey: K, initialState: State[K] = this.state[featureKey]) {
+		return (
+			this.stores[featureKey] ||
+			(this.stores[featureKey] = new Store(initialState))
 		);
 	}
 
-	reset(key?: keyof State) {
+	select(key: K): Observable<State[K]> {
+		return (
+			this.selectors[key] ||
+			(this.selectors[key] = this.subject.pipe(
+				map(state => state[key]),
+				distinctUntilChanged()
+			))
+		);
+	}
+
+	reset(key?: K) {
 		if (key) this.set(key, this.initialState[key]);
 		else this.subject.next(this.initialState);
 	}
 
-	set<K extends keyof State>(key: K, value: State[K]) {
+	set(key: K, value: State[K]) {
 		this.state[key] = value;
 		this.subject.next(this.state);
 	}
 }
 
-export class Store<State> extends StoreBase<State> {
-	reducers: [(state: State, action: any) => State];
+/*export type Reducer<T> = (state: T, action: any) => T;
+export type Action<T> = (state: T) => T;
 
-	constructor(public state: State) {
-		super(state);
-		this.reducers = [
-			function<K extends keyof State>(state: State, action: SetAction) {
-				if (action.type === 'set') {
-					state[action.key as K] = action.value;
-				}
-				return state;
+export class Store<State, K extends keyof State = keyof State> {
+
+	protected subject = new BehaviorSubject(this.state);
+	protected initialState = { ...this.state };
+	constructor(public state: State) {}
+	
+	reducers: Reducer<State>[] = [
+		(state: State, action: SetAction) => {
+			if (action.type === 'set') {
+				state[action.key as K] = action.value;
 			}
-		];
-	}
-
-	set<K extends keyof State>(key: K, value: State[K]) {
+			return state;
+		}
+	];
+	
+	set(key: K, value: State[K]) {
 		this.dispatch(new SetAction(key as string, value));
 	}
 
@@ -72,3 +72,4 @@ export class Store<State> extends StoreBase<State> {
 		this.subject.next(newState);
 	}
 }
+*/

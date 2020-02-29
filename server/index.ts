@@ -13,11 +13,11 @@ interface OperationResult {
 }
 
 export type ApplicationArguments = { [key: string]: any };
-type OperationFunction = (() => Promise<any>) | Promise<any> | Observable<any>;
+type OperationFunction<T> = (() => Promise<T>) | Promise<T> | Observable<T>;
 type Operation = Observable<OperationResult>;
 type LogMessage<T = any> = string | ((p: T) => string) | Error;
 
-function operation(fn: OperationFunction): Operation {
+function operation<T>(fn: OperationFunction<T>): Operation {
 	let start = hrtime();
 	const result = from(typeof fn === 'function' ? fn() : fn);
 	let tasks = 0;
@@ -90,7 +90,7 @@ export abstract class Application {
 
 	private coloredPrefix?: string;
 
-	log(msg: LogMessage, op?: OperationFunction) {
+	log(msg: LogMessage, op?: OperationFunction<any>) {
 		const pre = this.coloredPrefix || '';
 
 		if (msg instanceof Error) return logError(pre, msg);

@@ -5,5 +5,5 @@
 		"lib": ["es2017"]
 	},
 	"references": [{ "path": "tsconfig.json" }, { "path": "../tester" }],
-	"include": ["test.ts", "test/*.ts"]
+	"include": ["index.ts", "test.ts", "test/*.ts"]
 }

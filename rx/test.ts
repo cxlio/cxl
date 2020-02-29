@@ -1,5 +1,7 @@
 import { suite } from '../tester/index.js';
 import exhaustMapSuite from './test/exhaustMap';
+import mergeSuite from './test/merge';
+import concatSuite from './test/concat';
 import {
 	BehaviorSubject,
 	Observable,
@@ -24,6 +26,8 @@ function throwError(msg: string) {
 
 export default suite('rx', [
 	exhaustMapSuite,
+	mergeSuite,
+	concatSuite,
 	suite('Observable', test => {
 		test('constructor', a => {
 			const observable = new Observable(function subscribe(observer) {
@@ -430,7 +434,7 @@ export default suite('rx', [
 			let filterFn = (v: number) => v < 4,
 				B = A.pipe(filter(filterFn)),
 				b = B.subscribe(v => {
-					a.ok(filter(v));
+					a.ok(v);
 				}),
 				i = 1;
 			b.unsubscribe();
@@ -438,7 +442,7 @@ export default suite('rx', [
 			filterFn = v => v % 2 === 0;
 			B = A.pipe(filter(filterFn));
 			b = B.subscribe(v => {
-				a.ok(filter(v));
+				a.ok(v);
 			});
 			b.unsubscribe();
 
