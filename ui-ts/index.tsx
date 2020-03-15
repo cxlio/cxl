@@ -649,6 +649,34 @@ export class SubmitButton extends ButtonBase {
 }
 
 @Augment(
+	register('cxl-t'),
+	template(
+		<Host>
+			<Style>
+				{{
+					$: { font: 'default', marginBottom: 8 },
+					$lastChild: { marginBottom: 0 },
+					$inline: { display: 'inline' },
+
+					$caption: { font: 'caption' },
+					$h1: { font: 'h1', marginBottom: 64 },
+					$h2: { font: 'h2', marginBottom: 48 },
+					$h3: { font: 'h3', marginBottom: 32 },
+					$h4: { font: 'h4', marginBottom: 24 },
+					$h5: { font: 'h5', marginBottom: 16 },
+					$h6: { font: 'h6', marginBottom: 16 },
+					$button: { font: 'button' },
+					$subtitle: { font: 'subtitle', marginBottom: 0 },
+					$subtitle2: { font: 'subtitle2', opacity: 0.73 }
+				}}
+			</Style>
+			<slot></slot>
+		</Host>
+	)
+)
+export class TextComponent extends Component {}
+
+@Augment(
 	template(
 		<Style>
 			{{

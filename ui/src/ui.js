@@ -868,39 +868,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 		}
 	);
 
-	/*component(
-		{
-			name: 'cxl-progress',
-			events: ['change'],
-			attributes: ['value'],
-			bindings: 'role(progressbar)',
-			template: `
-<div &=".indicator =value:host.trigger(change):#setValue:.indeterminate"></div>
-	`,
-			styles: {
-				$: { backgroundColor: 'primaryLight', height: 4 },
-				indicator: {
-					backgroundColor: 'primary',
-					height: 4,
-					transformOrigin: 'left'
-				},
-				indeterminate: { animation: 'wait' }
-			}
-		},
-		{
-			value: null,
-
-			setValue(val, el) {
-				if (val !== null) {
-					el.style.transform = 'scaleX(' + val + ')';
-					return cxl.Skip;
-				}
-
-				return true;
-			}
-		}
-	);*/
-
 	component(
 		{
 			name: 'cxl-ripple',
@@ -1077,28 +1044,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 		styles: {
 			$: { animation: 'spin', display: 'inline-block' },
 			circle: { animation: 'spinnerstroke' }
-		}
-	});
-
-	component({
-		name: 'cxl-t',
-		attributes: ['font'],
-		bindings: '=font:gate:attribute',
-		styles: {
-			$: { font: 'default', marginBottom: 8 },
-			$lastChild: { marginBottom: 0 },
-			$inline: { display: 'inline' },
-
-			$caption: { font: 'caption' },
-			$h1: { font: 'h1', marginBottom: 64 },
-			$h2: { font: 'h2', marginBottom: 48 },
-			$h3: { font: 'h3', marginBottom: 32 },
-			$h4: { font: 'h4', marginBottom: 24 },
-			$h5: { font: 'h5', marginBottom: 16 },
-			$h6: { font: 'h6', marginBottom: 16 },
-			$button: { font: 'button' },
-			$subtitle: { font: 'subtitle', marginBottom: 0 },
-			$subtitle2: { font: 'subtitle2', opacity: 0.73 }
 		}
 	});
 
