@@ -1,21 +1,22 @@
-import { dom } from '../xdom/index.js';
+import { dom, Host } from '../xdom/index.js';
 import {
 	Attribute,
 	Augment,
+	Augment2,
 	Component,
-	Host,
 	Slot,
 	StyleAttribute,
+	RenderContext,
 	bind,
-	getAttribute,
+	get,
 	register,
 	template,
 	render
 } from '../component/index.js';
 import { onAction, triggerEvent, portal } from '../template/index.js';
-import { on, getShadow } from '../dom/index.js';
-import { tap, merge, debounceTime } from '../rx/index.js';
-import { Styles, StyleSheet } from '../css/index.js';
+import { on, setAttribute, getShadow, trigger } from '../dom/index.js';
+import { tap, defer, merge, debounceTime } from '../rx/index.js';
+import { Styles, StyleSheet, pct, theme } from '../css/index.js';
 
 declare const cxl: any;
 
@@ -49,22 +50,32 @@ export function ripple(element: any) {
 	);
 }
 
-interface Focusable extends Component {
+interface FocusableComponent extends Component {
 	disabled: boolean;
 }
 
-export function focusableEvents<T extends Focusable>(element: T) {
+export function role(roleName: string) {
+	return () => (el: any) =>
+		el.view.bind(
+			defer(() => {
+				!el.hasAttribute('role') && el.setAttribute('role', roleName);
+			})
+		);
+}
+
+export function focusableEvents<T extends FocusableComponent>(element: T) {
 	return merge(
 		on(element, 'focus').pipe(triggerEvent(element, 'focusable.focus')),
 		on(element, 'blur').pipe(triggerEvent(element, 'focusable.blur'))
 	);
 }
 
-export function focusable<T extends Focusable>(element: T) {
+export function focusable<T extends FocusableComponent>(element: T) {
 	return merge(
-		getAttribute(element, 'disabled').pipe(
+		get(element, 'disabled').pipe(
 			tap(value => {
 				element.setAttribute('aria-disabled', value ? 'true' : 'false');
+				setAttribute(element, 'disabled', value);
 				if (value) element.removeAttribute('tabindex');
 				else element.tabIndex = 0;
 			})
@@ -73,8 +84,18 @@ export function focusable<T extends Focusable>(element: T) {
 	);
 }
 
+const stateStyles = new StyleSheet({ styles: StateStyles });
+
+export function Focusable() {
+	return (view: RenderContext) => {
+		view.bind(focusable(view.host as FocusableComponent));
+		return stateStyles.clone();
+	};
+}
+
 @Augment<Appbar>(
 	register('cxl-appbar'),
+	role('heading'),
 	template(
 		<Host>
 			<Style>
@@ -83,7 +104,7 @@ export function focusable<T extends Focusable>(element: T) {
 						display: 'block',
 						backgroundColor: 'primary',
 						flexShrink: 0,
-						fontSize: 18,
+						font: 'title',
 						color: 'onPrimary',
 						elevation: 2
 					},
@@ -138,32 +159,92 @@ export class Appbar extends Component {
 	extended = false;
 
 	@Attribute()
-	role = 'heading';
-
-	@Attribute()
 	center = false;
 }
 
-@Augment(
-	register('cxl-card'),
+@Augment<Avatar>(
+	register('cxl-avatar'),
+	role('img'),
 	template(
 		<Host>
 			<Style>
 				{{
 					$: {
+						borderRadius: 32,
 						backgroundColor: 'surface',
-						borderRadius: 2,
-						color: 'onSurface',
-						display: 'block',
-						elevation: 1
+						width: 40,
+						height: 40,
+						display: 'inline-block',
+						font: 'title',
+						lineHeight: 38,
+						textAlign: 'center',
+						overflowY: 'hidden'
+					},
+					$little: {
+						width: 32,
+						height: 32,
+						font: 'default',
+						lineHeight: 30
+					},
+					$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
+					image: {
+						width: Infinity,
+						height: Infinity,
+						borderRadius: 32
 					}
 				}}
 			</Style>
-			<slot></slot>
 		</Host>
-	)
+	),
+	render(node => (
+		<Host>
+			<img
+				$={img =>
+					get(node, 'src').pipe(
+						tap(src => {
+							img.src = src;
+							img.style.display = src ? 'block' : 'none';
+						})
+					)
+				}
+				className="image"
+				alt="avatar"
+			/>
+			{get(node, 'text')}
+		</Host>
+	))
 )
-export class Card extends Component {}
+export class Avatar extends Component {
+	@StyleAttribute()
+	big = false;
+	@StyleAttribute()
+	little = false;
+	@Attribute()
+	src = '';
+	@Attribute()
+	text = '';
+	//bindings: 'role(img) =alt:aria.prop(label)"',
+}
+
+@Augment2(
+	<Host>
+		<Style>
+			{{
+				$: {
+					backgroundColor: 'surface',
+					borderRadius: 2,
+					color: 'onSurface',
+					display: 'block',
+					elevation: 1
+				}
+			}}
+		</Style>
+		<slot></slot>
+	</Host>
+)
+export class Card extends Component {
+	static tagName = 'cxl-card';
+}
 
 @Augment(
 	register('cxl-backdrop'),
@@ -222,7 +303,7 @@ export class Backdrop extends Component {}
 	)
 )
 export class Content extends Component {
-	@Attribute()
+	@StyleAttribute()
 	center = false;
 }
 
@@ -271,11 +352,10 @@ export class Badge extends Component {
 }
 
 @Augment(
-	register('cxl-button'),
-	bind(focusable),
-	bind(ripple),
+	role('button'),
 	template(
 		<Host>
+			<Focusable />
 			<Style>
 				{{
 					$: {
@@ -320,16 +400,14 @@ export class Badge extends Component {
 					$active$flat$disabled: { elevation: 0 },
 					'@large': {
 						$flat: { paddingLeft: 12, paddingRight: 12 }
-					},
-					...StateStyles
+					}
 				}}
 			</Style>
-			<slot></slot>
 		</Host>
-	)
+	),
+	bind(ripple)
 )
-export class Button extends Component {
-	role = 'button';
+class ButtonBase extends Component {
 	@Attribute()
 	disabled = false;
 	@StyleAttribute()
@@ -346,22 +424,69 @@ export class Button extends Component {
 	outline = false;
 }
 
+@Augment(register('cxl-button'), template(<slot></slot>))
+export class Button extends ButtonBase {}
+
+@Augment(
+	register('cxl-dialog'),
+	role('dialog'),
+	template(
+		<Host>
+			<Style>
+				{{
+					content: {
+						backgroundColor: 'surface',
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						color: 'onSurface'
+					},
+					'@small': {
+						content: {
+							elevation: 12,
+							translateY: pct(-50),
+							top: pct(50),
+							bottom: 'auto',
+							width: pct(80),
+							marginLeft: 'auto',
+							marginRight: 'auto'
+						}
+					}
+				}}
+			</Style>
+			<Backdrop>
+				<div className="content">
+					<slot></slot>
+				</div>
+			</Backdrop>
+		</Host>
+	)
+)
+export class Dialog extends Component {}
+
+theme.typography['icon'] = {
+	fontFamily: 'Font Awesome\\ 5 Free',
+	fontSize: 'inherit'
+};
+
 @Augment(
 	register('cxl-icon'),
+	role('icon'),
 	template(
 		<Host>
 			<Style>
 				{{
 					$: {
 						display: 'inline-block',
-						fontFamily: 'Font Awesome\\ 5 Free',
-						fontSize: 'inherit'
+						font: 'icon'
 					},
 					$round: {
 						borderRadius: 1,
 						textAlign: 'center'
 					},
-					$outline: { borderWidth: 1, borderStyle: 'solid' }
+					$outline: { borderWidth: 1 }
 				}}
 			</Style>
 		</Host>
@@ -370,8 +495,6 @@ export class Button extends Component {
 export class Icon extends Component {
 	protected $icon = '';
 	protected iconNode?: Text;
-
-	role = 'img';
 
 	@Attribute()
 	get icon() {
@@ -396,6 +519,44 @@ export class Icon extends Component {
 	}
 }
 
+@Augment<Progress>(
+	register('cxl-progress'),
+	template(
+		<Style>
+			{{
+				$: { backgroundColor: 'primaryLight', height: 4 },
+				indicator: {
+					backgroundColor: 'primary',
+					height: 4,
+					transformOrigin: 'left'
+				},
+				indeterminate: { animation: 'wait' }
+			}}
+		</Style>
+	),
+	render(host => (
+		<div
+			className="indicator"
+			$={el =>
+				get(host, 'value').pipe(
+					tap(val => {
+						el.classList.toggle('indeterminate', val === Infinity);
+						if (val !== Infinity)
+							el.style.transform = 'scaleX(' + val + ')';
+						trigger(host, 'change');
+					})
+				)
+			}
+		></div>
+	)),
+	role('progressbar')
+)
+export class Progress extends Component {
+	// events?: 'change';
+	@Attribute()
+	value = Infinity;
+}
+
 @Augment<SubmitButton>(
 	register('cxl-submit'),
 	template(
@@ -413,14 +574,15 @@ export class Icon extends Component {
 		</Host>
 	),
 	render(host => (
-		<div>
-			<Icon className="icon" icon={getAttribute(host, 'icon')}></Icon>
+		<Host>
+			<Icon className="icon" icon={get(host, 'icon')}></Icon>
 			<slot></slot>
-		</div>
+		</Host>
 	)),
 	bind(el => onAction(el).pipe(triggerEvent(el, 'form.submit')))
 )
-export class SubmitButton extends Button {
+export class SubmitButton extends ButtonBase {
+	@Attribute()
 	icon = 'spinner';
 	primary = true;
 }

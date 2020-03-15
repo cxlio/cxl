@@ -1,9 +1,10 @@
 import { Result, Test } from './index.js';
 import { colors } from '../server/colors.js';
 import { Application, ApplicationArguments } from '../server/index.js';
-import { writeFileSync, readFileSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync } from 'fs';
+import * as path from 'path';
 
-import { launch, Page } from 'puppeteer';
+import { launch, Page, Request } from 'puppeteer';
 require('source-map-support').install();
 
 interface Output {
@@ -24,23 +25,22 @@ class TestReport {
 		});
 
 		if (test.results.length === 0 && test.tests.length === 0) {
-			console.log(test);
 			out = colors.red('X');
 			failures.push({ success: false, message: 'No assertions found' });
 		}
 
 		console.group(`${test.name} ${out}`);
-		failures.forEach(fail => this.printError(fail));
+		failures.forEach(fail => this.printError(test, fail));
 		test.tests.forEach((test: Test) => this.printTest(test));
 		console.groupEnd();
 
 		return failures;
 	}
 
-	printError(fail: Result) {
+	printError(test: Test, fail: Result) {
 		this.failures.push(fail);
 		const msg = fail.message;
-		console.error(colors.red(msg));
+		console.error(test.name, colors.red(msg));
 		if (fail.stack) console.error(fail.stack);
 	}
 
@@ -50,12 +50,16 @@ class TestReport {
 	}
 }
 
-function generateCoverageReport([js]: any, { path, source }: Output) {
+function generateCoverageReport([js]: any, sources: Output[]) {
 	const report: any = {};
 
 	for (const entry of js) {
 		const total = entry.text.length;
-		const url = entry.text === source ? path : entry.url;
+		const sourceFile = sources.find(src => entry.text.includes(src.source));
+
+		if (!sourceFile) continue;
+
+		const url = sourceFile ? sourceFile.path : entry.url;
 		let used = 0;
 
 		report[url] = entry.ranges;
@@ -68,7 +72,7 @@ function generateCoverageReport([js]: any, { path, source }: Output) {
 	return report;
 }
 
-async function generateReport(page: Page, entrySource: Output) {
+async function generateReport(page: Page, sources: Output[]) {
 	const report = {
 		metrics: await page.metrics(),
 		coverage: generateCoverageReport(
@@ -76,7 +80,7 @@ async function generateReport(page: Page, entrySource: Output) {
 				page.coverage.stopJSCoverage(),
 				page.coverage.stopCSSCoverage()
 			]),
-			entrySource
+			sources
 		)
 	};
 
@@ -90,23 +94,7 @@ function printReport(suite: Test) {
 }
 
 /*private async handleRequire(page) {
-			page.setRequestInterception(true);
-				let url = req.url().slice(7);
 
-				if (!existsSync(url)) url = url.replace(/\.js$/, '/index.js');
-
-				if (existsSync(url)) {
-					this.log(`Loading "${url}"`);
-					const content = readFileSync(url, 'utf8');
-					req.respond({
-						headers: {
-							'Access-Control-Allow-Origin': '*'
-						},
-						status: 200,
-						contentType: 'application/javascript',
-						body: content
-					});
-				} else req.continue();
 	}*/
 
 /*async function moduleRunner(page: Page, sources: Output[]) {
@@ -126,6 +114,57 @@ function printReport(suite: Test) {
 		suite.run().then(() => suite);
 	`);
 }*/
+
+/*async function doRequire(page: Page, path: string) {
+	await page.evaluate(`
+		require('${path}');
+	`);
+}*/
+
+function handleRequest(sources: Output[], req: Request) {
+	if (req.method() !== 'POST') req.continue;
+
+	const { base, scriptPath } = JSON.parse(req.postData() || '');
+	let url = path.resolve(base, scriptPath);
+
+	if (!url.endsWith('.js')) url += '.js';
+
+	if (!existsSync(url)) url = url.replace(/\.js$/, '/index.js');
+
+	// console.log(`BASE: ${base}\nSRC: ${scriptPath}\nRESOLVED: ${url}`);
+
+	if (existsSync(url)) {
+		const content = readFileSync(url, 'utf8');
+
+		sources.push({
+			path: path.relative(process.cwd(), url),
+			source: content
+		});
+
+		req.respond({
+			headers: {
+				'Access-Control-Allow-Origin': '*'
+			},
+			status: 200,
+			contentType: 'application/javascript',
+			body: JSON.stringify({ content, url, base: path.dirname(url) })
+		});
+	} else req.continue();
+}
+
+async function cjsRunner(page: Page, sources: Output[]) {
+	// TODO
+	const entry = sources[0].path;
+	await page.addScriptTag({ path: __dirname + '/require.js' });
+
+	page.setRequestInterception(true);
+	page.on('request', handleRequest.bind(null, sources));
+
+	return page.evaluate(`
+		const suite = require('${entry}').default;
+		suite.run().then(() => suite);
+	`);
+}
 
 async function amdRunner(page: Page, sources: Output[]) {
 	for (const source of sources) {
@@ -157,7 +196,7 @@ class TestRunner extends Application {
 		if (args.virtual) {
 			result.push(this.runVirtualDom());
 		}
-		if (args.browser) result.push(this.runPuppeteer());
+		if (args.browser) result.push(this.runPuppeteer(args));
 
 		if (args.files.length) this.entryFile = args.files[0];
 
@@ -179,7 +218,7 @@ class TestRunner extends Application {
 		});
 	}
 
-	private async runPuppeteer() {
+	private async runPuppeteer(args: ApplicationArguments) {
 		const browser = await launch();
 		this.log(`Puppeteer enabled. ${await browser.version()}`);
 		const page = await browser.newPage();
@@ -191,19 +230,19 @@ class TestRunner extends Application {
 				page.coverage.startCSSCoverage()
 			]);
 			page.on('console', msg => this.handleConsole(msg));
-			page.on('pageerror', msg => {
-				this.log(msg);
-			});
+			page.on('pageerror', msg => this.log(msg));
 
 			const source = readFileSync(this.entryFile, 'utf8');
 			const sources = [{ path: this.entryFile, source }];
 
 			page.tracing.start({ path: 'trace.json' });
-			const suite = await amdRunner(page, sources);
+			const suite = args.amd
+				? await amdRunner(page, sources)
+				: await cjsRunner(page, sources);
 			await page.tracing.stop();
 
 			this.log('Generating report.json');
-			await generateReport(page, { path: this.entryFile, source });
+			await generateReport(page, sources);
 			printReport(suite as Test);
 		} catch (e) {
 			this.log(e);

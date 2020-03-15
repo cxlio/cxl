@@ -1,20 +1,8 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"module": "amd",
-		"outDir": "../dist/ui",
-		"outFile": "../dist/ui/test.js",
-		"composite": false
+		"outDir": "../dist/ui-ts"
 	},
-	"files": [
-		"test.tsx",
-		"index.tsx",
-		"../template/index.ts",
-		"../rx/index.ts",
-		"../css/index.ts",
-		"../dom/index.ts",
-		"../xdom/index.ts",
-		"../component/index.ts"
-	],
-	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
+	"files": ["test.tsx"],
+	"references": [{ "path": "." }, { "path": "../tester" }]
 }

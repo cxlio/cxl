@@ -286,11 +286,15 @@ function concat(...observables: Observable<any>[]) {
 	});
 }
 
-export function defer<T>(fn: () => Observable<T>) {
+export function defer<T>(fn: () => Observable<T> | void) {
 	return new Observable(subs => {
 		const newObs = fn();
-		const innerSubs = newObs.subscribe(subs);
-		return () => innerSubs.unsubscribe();
+		if (newObs) {
+			const innerSubs = newObs.subscribe(subs);
+			return () => innerSubs.unsubscribe();
+		}
+
+		subs.complete();
 	});
 }
 

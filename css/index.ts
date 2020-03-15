@@ -4,6 +4,7 @@ type CSSStyle = {
 };
 type BaseColor = RGBA;
 type Color = keyof Colors | BaseColor | 'inherit';
+type Length = number | Percentage | 'auto';
 
 interface Typography {
 	default: CSSStyle;
@@ -34,11 +35,12 @@ interface Colors {
 }
 
 interface StrictStyleDefinition {
+	alignItems: string;
 	animation: string;
 	elevation: number;
-	translateX: number;
-	translateY: number;
-	translateZ: number;
+	translateX: Length;
+	translateY: Length;
+	translateZ: Length;
 	prepend: string;
 	rotate: number;
 	scaleX: number;
@@ -59,8 +61,19 @@ interface StrictStyleDefinition {
 	marginTop: number | 'auto';
 	marginBottom: number | 'auto';
 	opacity: number;
-	width: number;
+	overflowY: string;
+	overflowX: string;
+	transformOrigin: string;
+	overflowScrolling: string;
+	lineHeight: number;
+	width: Length;
+	top: Length;
+	left: Length;
+	right: Length;
+	bottom: Length;
 	filter: string;
+	flexGrow: number;
+	flexShrink: number;
 	pointerEvents: string;
 	cursor: string;
 	display: string;
@@ -79,9 +92,16 @@ interface StrictStyleDefinition {
 		| 'baseline';
 }
 
-export interface Styles {
-	[key: string]: StyleDefinition | Styles;
-}
+export type Styles =
+	| {
+			[key: string]: StyleDefinition;
+	  }
+	| {
+			'@small'?: Styles;
+			'@medium'?: Styles;
+			'@large'?: Styles;
+			'@xlarge'?: Styles;
+	  };
 
 export interface StyleSheetConfiguration {
 	tagName?: string;
@@ -122,6 +142,16 @@ const PSEUDO = {
 	firstChild: ':first-child',
 	lastChild: ':last-child'
 };
+
+class Percentage {
+	constructor(n: number) {
+		this.toString = () => n + '%';
+	}
+}
+
+export function pct(n: number) {
+	return new Percentage(n);
+}
 
 class RGBA {
 	r: number;
@@ -192,7 +222,7 @@ const SNAKE_CSS: Record<string, string> = {
 	},
 	SNAKE_REGEX = /[A-Z]/g;
 
-const defaultTheme: Theme = {
+export const theme: Theme = {
 	animation: {
 		spin: {
 			keyframes:
@@ -318,11 +348,9 @@ type StyleMap = {
 
 const UNIT = 'px';
 
-function toUnit(n: number) {
-	return `${n}${UNIT}`;
+function toUnit(n: Length) {
+	return `${n}${typeof n === 'number' ? UNIT : ''}`;
 }
-
-export let theme: Theme;
 
 function renderColor(
 	_def: StyleDefinition,
@@ -335,7 +363,7 @@ function renderColor(
 }
 
 function renderDefault(style: CSSStyle, prop: any, value: string | number) {
-	style[prop] = typeof value === 'number' ? toUnit(value) : value;
+	style[prop] = toUnit(value);
 }
 
 function renderTransform(v: StyleDefinition, style: CSSStyle) {
@@ -433,6 +461,10 @@ function renderStyle(def: StyleDefinition) {
 	return result;
 }
 
+export function style(def: StyleDefinition) {
+	return renderStyle(def);
+}
+
 function parseRuleName(selector: string, name: string) {
 	if (name === '$') return selector;
 	if (name === '*') return `${selector},${selector} *`;
@@ -443,8 +475,7 @@ function parseRuleName(selector: string, name: string) {
 	return `${selector}${sel}${className ? ` .${className}` : ''}`;
 }
 
-export function applyTheme(newTheme: Theme) {
-	theme = newTheme;
+export function applyTheme() {
 	const { variables, colors } = theme;
 	const variableStyle = document.createElement('STYLE');
 
@@ -460,7 +491,7 @@ function renderStyles(styles: Styles, selector = 'body') {
 	let css = '';
 
 	for (const i in styles) {
-		const style = styles[i];
+		const style = (styles as any)[i];
 		css += renderRule(selector, i, style);
 
 		if (style.prepend) css = style.prepend + css;
@@ -481,6 +512,8 @@ function renderRule(
 	name: string,
 	style: StyleDefinition | Styles
 ) {
+	if (name === '@small')
+		return renderMedia(theme.breakpoints.small, style as Styles, selector);
 	if (name === '@xlarge')
 		return renderMedia(theme.breakpoints.xlarge, style as Styles, selector);
 	if (name === '@medium')
@@ -488,7 +521,9 @@ function renderRule(
 	if (name === '@large')
 		return renderMedia(theme.breakpoints.large, style as Styles, selector);
 
-	return `${parseRuleName(selector, name)}{${renderStyle(style)}}`;
+	return `${parseRuleName(selector, name)}{${renderStyle(
+		style as StyleDefinition
+	)}}`;
 }
 
 export class StyleSheet {
@@ -514,8 +549,6 @@ export class StyleSheet {
 	}
 
 	private render() {
-		if (!theme) applyTheme(defaultTheme);
-
 		const native = (this.native = document.createElement('style'));
 
 		native.innerHTML =
@@ -531,4 +564,22 @@ export class StyleSheet {
 export function css(styles: Styles, global = false) {
 	const stylesheet = new StyleSheet({ styles, global });
 	return () => stylesheet.clone();
+}
+
+export interface FontDefinition {
+	family: string;
+	url: string;
+	weight?: string;
+}
+
+export function registerFont(def: FontDefinition) {
+	const style = document.createElement('STYLE');
+
+	style.innerHTML = `@font-face{font-family:"${def.family}"${
+		def.weight ? ';font-weight:' + def.weight : ''
+	}';src:url("${def.url}");}`;
+
+	document.head.appendChild(style);
+
+	return style;
 }

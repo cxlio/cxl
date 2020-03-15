@@ -336,39 +336,6 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component(
-		{
-			name: 'cxl-avatar',
-			attributes: ['big', 'src', 'text', 'little', 'alt'],
-			bindings: 'role(img) =alt:aria.prop(label)"',
-			template: `<img &=".image =src:show:attribute(src) =alt:attribute(alt)" /><div &="=text:show:text =src:hide"></div><cxl-icon icon="user" &=".image"></cxl-icon>`,
-			styles: {
-				$: {
-					borderRadius: 32,
-					backgroundColor: 'surface',
-					width: 40,
-					height: 40,
-					display: 'inline-block',
-					fontSize: 18,
-					lineHeight: 38,
-					textAlign: 'center',
-					overflowY: 'hidden'
-				},
-				$little: {
-					width: 32,
-					height: 32,
-					font: 'default',
-					lineHeight: 30
-				},
-				$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
-				image: { width: '100%', height: '100%', borderRadius: 32 }
-			}
-		},
-		{
-			alt: 'Avatar'
-		}
-	);
-
 	component({
 		name: 'cxl-c',
 		styles: (r => {
@@ -489,58 +456,6 @@ on(selectable.action):#onAction
 			}
 		}
 	);
-
-	/*component({
-		name: 'cxl-content',
-		attributes: ['center'],
-		template: `
-<div &=".content content"></div>
-	`,
-		styles: {
-			$: {
-				padding: 16,
-				position: 'relative',
-				flexGrow: 1,
-				overflowY: 'auto',
-				overflowScrolling: 'touch'
-			},
-			$medium: { padding: 32 },
-			$large: { padding: 64 },
-			content$xlarge: { width: 1200 },
-			content$xlarge$center: {
-				padding: 0,
-				marginLeft: 'auto',
-				marginRight: 'auto'
-			}
-		}
-	});*/
-
-	component({
-		name: 'cxl-dialog',
-		template:
-			'<cxl-backdrop><div &=".content content"></div></cxl-backdrop>',
-		bindings: 'role(dialog)',
-		styles: {
-			content: {
-				backgroundColor: 'surface',
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				right: 0,
-				bottom: 0,
-				color: 'onSurface'
-			},
-			content$small: {
-				elevation: 12,
-				translateY: '-50%',
-				top: '50%',
-				bottom: 'auto',
-				width: '80%',
-				marginLeft: 'auto',
-				marginRight: 'auto'
-			}
-		}
-	});
 
 	component(
 		{
@@ -716,46 +631,6 @@ on(selectable.action):#onAction
 			}
 		}
 	});
-
-	/*component(
-		{
-			name: 'cxl-icon',
-			bindings: 'role(img) =icon:#setIcon',
-			attributes: ['icon'],
-			styles: {
-				$: {
-					display: 'inline-block',
-					fontFamily: 'Font Awesome\\ 5 Free',
-					fontSize: 'inherit'
-				},
-				$round: {
-					borderRadius: '50%',
-					width: '1.375em',
-					height: '1.375em',
-					lineHeight: '1.375em',
-					textAlign: 'center'
-				},
-				$outline: { borderWidth: 1, borderStyle: 'solid' }
-			}
-		},
-		{
-			setIcon(val, el) {
-				const icon = ui.icons[this.icon];
-
-				if (icon) {
-					if (this.iconNode) {
-						this.iconNode.data = icon;
-					} else {
-						this.iconNode = document.createTextNode(icon);
-						el.appendChild(this.iconNode);
-					}
-
-					if (!el.hasAttribute('aria-label'))
-						cxl.dom.setAttribute(el, 'aria-label', this.icon);
-				}
-			}
-		}
-	);*/
 
 	component(
 		{
@@ -1038,7 +913,7 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 		}
 	);
 
-	component(
+	/*component(
 		{
 			name: 'cxl-progress',
 			events: ['change'],
@@ -1069,7 +944,7 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 				return true;
 			}
 		}
-	);
+	);*/
 
 	component(
 		{

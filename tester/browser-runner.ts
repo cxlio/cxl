@@ -22,11 +22,11 @@ function error(msg: string | Error) {
 }
 
 function success(): string {
-	return '<cxl-icon icon="check"></cxl-icon>';
+	return '&check;';
 }
 
 function failure(): string {
-	return '<cxl-icon icon="times"></cxl-icon>';
+	return '&times;';
 }
 
 class TestReport {

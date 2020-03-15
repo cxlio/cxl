@@ -13,12 +13,12 @@ import {
 } from '../rx';
 import { ChildrenObserver, MutationEvent } from '../dom';
 
-interface RenderContext {
-	host: HTMLElement;
+export interface RenderContext<T = HTMLElement> {
+	host: T;
 	bind(binding: Binding<any>): void;
 }
 type Binding<T> = Observable<T>;
-type Renderable = (ctx?: RenderContext) => Node;
+type Renderable<T = HTMLElement> = (ctx: RenderContext<T>) => Node;
 type RenderFunction<T> = (node: T) => void;
 type Decorator<T> = (constructor: new () => T) => RenderFunction<T> | void;
 type Augmentation<T> = Decorator<T>;
@@ -32,7 +32,7 @@ type AttributeType<T> =
 			children?: any;
 	  };
 
-class ComponentView<T extends Component> {
+export class ComponentView<T extends Component> {
 	private bindings?: Binding<any>[];
 	private subscription?: Subscription<any>;
 	attributes$ = new Subject<AttributeEvent<T>>();
@@ -94,7 +94,7 @@ export class Component extends HTMLElement {
 	attributeChangedCallback(name: keyof this, oldValue: any, value: any) {
 		if (oldValue !== value) {
 			const actualValue =
-				value === '' ? true : value === 'null' ? false : value;
+				value === '' ? true : value === null ? false : value;
 			this[name] = actualValue;
 		}
 	}
@@ -129,13 +129,16 @@ export function Augment<T>(...augmentations: Augmentation<T>[]) {
 
 export function template(template: Renderable) {
 	return () => (node: any) => {
-		getShadow(node).appendChild(template(node.view));
+		const child = template(node.view);
+		// Support for Host
+		if (child !== node) getShadow(node).appendChild(child);
 	};
 }
 
 export function render<T extends Component>(renderFn: (node: T) => Renderable) {
 	return () => (node: T) => {
-		getShadow(node).appendChild(renderFn(node)(node.view));
+		const child = renderFn(node)(node.view);
+		if (child !== node) getShadow(node).appendChild(child);
 	};
 }
 
@@ -174,6 +177,19 @@ export function Slot({ selector }: { selector?: string }) {
 	};
 }
 
+export function get<T extends Component, K extends keyof T>(
+	element: T,
+	attribute: K
+): Observable<T[K]> {
+	return concat(
+		defer(() => of(element[attribute])),
+		element.view.attributes$.pipe(
+			filter(ev => ev.attribute === attribute),
+			map(() => element[attribute])
+		)
+	);
+}
+
 interface AttributeOptions {
 	persist: boolean;
 	persistOperator: Operator<any, any>;
@@ -195,19 +211,15 @@ interface AttributeEvent<T, K extends keyof T = keyof T> {
 	value: T[K];
 }
 
-function attributeOperator<T extends HTMLElement>() {
-	return tap<AttributeEvent<T>>(({ value, target, attribute }) => {
-		if (
-			(value as any) === false &&
-			target.hasAttribute(attribute as string)
-		)
-			target.removeAttribute(name);
+const attributeOperator = tap<AttributeEvent<any>>(
+	({ value, target, attribute }) => {
+		if (value === false && target.hasAttribute(attribute))
+			target.removeAttribute(attribute);
 		else if (typeof value === 'string')
-			target.setAttribute(attribute as string, value);
-		else if ((value as any) === true)
-			target.setAttribute(attribute as string, '');
-	});
-}
+			target.setAttribute(attribute, value);
+		else if (value === true) target.setAttribute(attribute, '');
+	}
+);
 
 export function Attribute(options?: Partial<AttributeOptions>) {
 	return (
@@ -217,20 +229,27 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 	) => {
 		const ctor = target.constructor as typeof Component;
 		const prop = '$$' + attribute;
-		const attributes = getObservedAttributes(ctor);
 
-		attributes.push(attribute);
+		getObservedAttributes(ctor).push(attribute);
 
 		if (descriptor) Object.defineProperty(target, prop, descriptor);
 
 		if (options?.persist)
-			pushRender(
-				target,
-				bind(node =>
-					node.view.attributes$.pipe(
-						options.persistOperator || attributeOperator()
-					)
-				)()
+			pushRender(target, (node: Component) =>
+				node.view.bind(
+					concat(
+						defer(() =>
+							of({
+								attribute,
+								target: node,
+								value: (node as any)[attribute]
+							})
+						),
+						node.view.attributes$.pipe(
+							filter(ev => ev.attribute === attribute)
+						)
+					).pipe(options.persistOperator || attributeOperator)
+				)
 			);
 
 		Object.defineProperty(target, attribute, {
@@ -283,24 +302,33 @@ export function mixin(...mixins: any[]) {
 
 const registeredComponents: Record<string, typeof Component> = {};
 
-export function register(tagName: string) {
+function registerComponent(tagName: string, ctor: any) {
+	if (!ctor.tagName) ctor.tagName = tagName;
+	registeredComponents[tagName] = ctor;
+	customElements.define(tagName, ctor);
+}
+
+export function Augment2<T extends Component>(tpl: Renderable<T>) {
 	return (ctor: any) => {
-		if (!ctor.tagName) ctor.tagName = tagName;
-		registeredComponents[tagName] = ctor;
-		customElements.define(tagName, ctor);
+		if (ctor.tagName) registerComponent(ctor.tagName, ctor);
+		pushRender(ctor.prototype, (node: any) => tpl(node.view));
 	};
+}
+
+export function register(tagName: string) {
+	return (ctor: any) => registerComponent(tagName, ctor);
 }
 
 export function getRegisteredComponents() {
 	return { ...registeredComponents };
 }
 
-export function Host({
+export function Fragment({
 	children
 }: {
 	children: Renderable | Renderable[];
 }): Renderable {
-	return (ctx?: RenderContext) => {
+	return (ctx: RenderContext) => {
 		if (Array.isArray(children)) {
 			const fragment = document.createDocumentFragment();
 			children.forEach(c => fragment.appendChild(c(ctx)));
@@ -308,17 +336,4 @@ export function Host({
 		}
 		return children(ctx);
 	};
-}
-
-export function getAttribute<T extends Component, K extends keyof T>(
-	element: T,
-	attribute: K
-): Observable<T[K]> {
-	return concat(
-		defer(() => of(element[attribute])),
-		element.view.attributes$.pipe(
-			filter(ev => ev.attribute === attribute),
-			map(() => element[attribute])
-		)
-	);
 }

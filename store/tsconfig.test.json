@@ -1,12 +1,9 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig.test.json",
 	"compilerOptions": {
+		"outDir": "../dist/store",
 		"lib": ["es2015"]
 	},
 	"files": ["test.ts"],
-	"references": [
-		{ "path": "tsconfig.json" },
-		{ "path": "../rx" },
-		{ "path": "../tester" }
-	]
+	"references": [{ "path": "." }, { "path": "../tester" }]
 }

@@ -1,22 +1,20 @@
-/// <amd-module name="index" />
-import '../ui/dist/index.js';
 import { suite, Test } from '../tester/index.js';
 import { on } from '../dom/index.js';
-import { dom, connectUntil } from '../xdom/index.js';
+import { dom, connect } from '../xdom/index.js';
 import { getRegisteredComponents, Component } from '../component/index.js';
 import { tap } from '../rx/index.js';
 import './index.js';
 
 function testValue(c: HTMLInputElement, a: Test) {
 	a.test('[value]', a2 => {
-		const resolve = a.async();
+		const resolve = a2.async();
 		function handler() {
 			a2.equal(c.value, 'Hello World', '"change" event fired');
 			c.removeEventListener('change', handler);
+			resolve();
 		}
 		c.addEventListener('change', handler);
 		c.value = 'Hello World';
-		resolve();
 	});
 }
 
@@ -50,6 +48,10 @@ function testDisabled(el: HTMLInputElement, test: Test) {
 		a.equal(el.tabIndex, 0);
 		el.disabled = true;
 		a.ok(el.tabIndex === -1, 'Disabled Element is not focusable');
+		a.ok(
+			el.hasAttribute('disabled'),
+			'Disabled attribute must be reflected'
+		);
 		a.equal(
 			el.getAttribute('aria-disabled'),
 			'true',
@@ -76,7 +78,7 @@ function testComponent(name: string, def: typeof Component, a: Test) {
 	a.dom.appendChild(el);
 	a.equal(el.isConnected, true, 'Component element is connected');
 
-	if (el.role === 'button') testButton(el, a);
+	if (el.getAttribute('role') === 'button') testButton(el, a);
 
 	if (attributes) {
 		if (attributes.includes('disabled')) testDisabled(el, a);
@@ -102,7 +104,7 @@ export default suite('ui', test => {
 			return on(el, 'click').pipe(tap(() => (clickHandled = true)));
 		}
 
-		connectUntil(<div $={ripple}>Container</div>, el => {
+		connect(<div $={ripple}>Container</div>, el => {
 			a.dom.appendChild(el);
 			a.ok(el);
 			el.click();

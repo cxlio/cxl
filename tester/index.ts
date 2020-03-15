@@ -91,11 +91,7 @@ export class Test {
 		this.promise = new Promise<void>((resolve, reject) => {
 			result = resolve;
 			timeout = setTimeout(() => {
-				this.results.push({
-					success: false,
-					message: 'Async test timed out'
-				});
-				reject();
+				reject('Async test timed out');
 			}, this.timeout);
 		});
 		return () => {
@@ -120,13 +116,14 @@ export class Test {
 			await this.promise;
 			if (this.promise && this.completed === false)
 				throw new Error('Never completed');
-			await Promise.all(this.tests.map(test => test.run()));
-
-			if (this.domElement && this.domElement.parentNode)
-				this.domElement.parentNode.removeChild(this.domElement);
+			if (this.tests.length)
+				await Promise.all(this.tests.map(test => test.run()));
 		} catch (e) {
 			this.pushError(e);
 		}
+
+		if (this.domElement && this.domElement.parentNode)
+			this.domElement.parentNode.removeChild(this.domElement);
 
 		return this.results;
 	}

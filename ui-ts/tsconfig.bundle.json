@@ -2,7 +2,7 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"module": "amd",
-		"outDir": "../dist/ui",
+		"outDir": "../dist/ui-ts",
 		"outFile": "../dist/ui/index.bundle.js",
 		"composite": false
 	},

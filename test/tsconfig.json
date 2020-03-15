@@ -1,28 +1,19 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig.test.json",
 	"compilerOptions": {
-		"module": "amd",
-		"outDir": "../dist/test",
-		"outFile": "../dist/test/index.js",
-		"composite": false
+		"outDir": "../dist/test"
 	},
-	"files": [
-		"index.ts",
-		"../template/index.ts",
-		"../rx/index.ts",
-		"../store/index.ts",
-		"../css/index.ts",
-		"../dom/index.ts",
-		"../template/jsx.ts",
-		"../component/index.ts",
-		"../ui-ts/index.tsx",
+	"files": ["index.ts"],
+	"references": [
+		{ "path": "../store" },
+		{ "path": "../ui-ts" },
 
-		"../template/test.tsx",
-		"../rx/test.ts",
-		"../store/test.ts",
-		"../dom/test.tsx",
-		"../component/test.tsx",
-		"../ui-ts/test.tsx"
-	],
-	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
+		{ "path": "../template/tsconfig.test.json" },
+		{ "path": "../rx/tsconfig.test.json" },
+		{ "path": "../store/tsconfig.test.json" },
+		{ "path": "../dom/tsconfig.test.json" },
+		{ "path": "../component/tsconfig.test.json" },
+		{ "path": "../worker/tsconfig.test.json" },
+		{ "path": "../ui-ts/tsconfig.test.json" }
+	]
 }

@@ -4,5 +4,9 @@
 		"outDir": "../dist/component"
 	},
 	"files": ["index.ts"],
-	"references": [{ "path": "../rx" }, { "path": "../dom" }]
+	"references": [
+		{ "path": "../rx" },
+		{ "path": "../dom" },
+		{ "path": "../xdom" }
+	]
 }

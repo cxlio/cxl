@@ -1,17 +1,7 @@
-/// <amd-module name="index" />
 import { suite } from '../tester';
 import { tap, merge, hook } from '../rx';
-import { dom, connect } from '../xdom';
+import { dom, connectUntil } from '../xdom';
 import { $on, portal, teleport, getAttribute } from './index.js';
-
-function renderTest<T extends HTMLElement>(
-	tpl: any,
-	callback: (el: T) => void
-) {
-	connect<T>(tpl)
-		.subscribe(callback)
-		.unsubscribe();
-}
 
 export default suite('template', test => {
 	test('bindings - get', a => {
@@ -36,7 +26,7 @@ export default suite('template', test => {
 			}
 		}
 
-		renderTest<HTMLInputElement>(
+		connectUntil<HTMLInputElement>(
 			<input
 				title="test"
 				$={el =>
@@ -77,21 +67,19 @@ export default suite('template', test => {
 	test('portal', a => {
 		const id = 'cxl-test' + a.id;
 
-		connect<HTMLDivElement>(<div $={portal(id)} />)
-			.subscribe(el => {
-				teleport((<span>Hello</span>)(), id);
-				a.ok(el);
-				a.equal(el.childNodes.length, 1);
-				a.equal(el.childNodes[0]?.textContent, 'Hello');
-			})
-			.unsubscribe();
+		connectUntil<HTMLDivElement>(<div $={portal(id)} />, el => {
+			teleport((<span>Hello</span>)(), id);
+			a.ok(el);
+			a.equal(el.childNodes.length, 1);
+			a.equal(el.childNodes[0]?.textContent, 'Hello');
+		});
 	});
 
 	test('Events', a => {
 		function onClick(ev: Event) {
 			a.equal(ev.type, 'click');
 		}
-		renderTest(<div $={$on('click', onClick)}>Hello</div>, el => {
+		connectUntil(<div $={$on('click', onClick)}>Hello</div>, el => {
 			el.click();
 		});
 	});

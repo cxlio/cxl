@@ -1,16 +1,16 @@
-/// <amd-module name="index" />
 import { suite } from '../tester';
 import {
 	Attribute,
+	StyleAttribute,
 	Augment,
 	Component,
 	Slot,
 	bind,
-	getAttribute,
+	get,
 	register,
 	template
 } from './index';
-import { dom, render, connectUntil } from '../xdom';
+import { dom, render, connect } from '../xdom';
 import { of, tap } from '../rx';
 
 export default suite('component', test => {
@@ -46,8 +46,8 @@ export default suite('component', test => {
 		class Test extends Component {}
 
 		const tpl = <Test>Hello World</Test>;
-		const el = tpl() as HTMLDivElement;
-		const el2 = tpl() as HTMLDivElement;
+		const el = render(tpl).element as HTMLDivElement;
+		const el2 = render(tpl).element as HTMLDivElement;
 
 		a.ok(el);
 		a.ok(el.shadowRoot);
@@ -78,7 +78,7 @@ export default suite('component', test => {
 		@Augment(register(id), bind(bindTest))
 		class Test extends Component {}
 
-		const el = (<Test></Test>)() as Test;
+		const el = render(<Test></Test>).element as Test;
 		a.dom.appendChild(el);
 		a.equal(el.title, 'hello');
 		a.ran(2);
@@ -164,13 +164,13 @@ export default suite('component', test => {
 			test = true;
 		}
 
-		connectUntil<TestComponent>(<TestComponent></TestComponent>, el => {
+		connect<TestComponent>(<TestComponent></TestComponent>, el => {
 			a.equal(el.test, true);
 			el.test = false;
 			a.equal(el.test, false);
 		});
 
-		connectUntil<TestComponent>(
+		connect<TestComponent>(
 			<TestComponent test={false}></TestComponent>,
 			el => {
 				a.equal(el.test, false);
@@ -192,7 +192,7 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		connectUntil<Test>(<Test hello="hello"></Test>, el => {
+		connect<Test>(<Test hello="hello"></Test>, el => {
 			a.dom.appendChild(el);
 			a.ok(el);
 			a.equal(el.tagName, id.toUpperCase());
@@ -268,7 +268,7 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		connectUntil<Test>(<Test hello="hello"></Test>, el => {
+		connect<Test>(<Test hello="hello"></Test>, el => {
 			a.ok(el);
 			a.equal(el.tagName, id.toUpperCase());
 			a.equal(el.hello, 'hello');
@@ -281,55 +281,23 @@ export default suite('component', test => {
 		});
 	});
 
-	/*
-	test('Component - composition', a => {
+	test('StyleAttribute - default', a => {
 		const id = 'cxl-test' + a.id;
-
-		class Touchable {
-			touched = true;
-		}
-
-		class Focusable {
-			@Attribute()
-			disabled = false;
-			name = 'hello';
-		}
 
 		@Augment(register(id))
-		class Test extends mixin(Touchable, Focusable) {
-			name = 'newname';
+		class Test extends Component {
+			@StyleAttribute()
+			persist = true;
 		}
 
-		const el = render<Test>(<Test />);
-		a.ok(el);
-		a.equal(el.touched, true);
-		a.equal(el.disabled, false);
-		a.equal(el.name, 'newname');
+		connect<Test>(<Test />, el => {
+			a.equal(el.persist, true);
+			a.dom.appendChild(el);
+			a.ok(el.hasAttribute('persist'));
+		});
 	});
 
-	test('Component - Template', a => {
-		const id = 'cxl-test' + a.id;
-
-		@Augment(register(id), <Div title="Custom Component"></Div>)
-		class Test extends Component {}
-
-		const el = render<Test>(<Test />);
-		a.dom.appendChild(el);
-		a.ok(el);
-		a.ok(el.shadowRoot);
-		a.equal(
-			el.shadowRoot?.children[0].getAttribute('title'),
-			'Custom Component'
-		);
-	});
-	test('dom - empty', a => {
-		const div = dom(Div);
-		a.equal(div.Component, Div);
-		a.ok(div.render() instanceof Div);
-	});
-	*/
-
-	test('getAttribute', a => {
+	test('get', a => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment(register(id))
@@ -340,10 +308,10 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		connectUntil<Test>(<Test hello="hello"></Test>, el => {
+		connect<Test>(<Test hello="hello"></Test>, el => {
 			let lastValue = 'hello';
 			a.equal(el.hello, 'hello');
-			const subs = getAttribute(el, 'hello')
+			const subs = get(el, 'hello')
 				.pipe(
 					tap(val => {
 						a.equal(val, lastValue);
