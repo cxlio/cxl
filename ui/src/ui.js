@@ -561,38 +561,6 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component({
-		name: 'cxl-fab',
-		attributes: ['disabled', 'touched', 'static'],
-		bindings: 'focusable',
-		styles: [
-			{
-				$: {
-					elevation: 2,
-					backgroundColor: 'secondary',
-					color: 'onSecondary',
-					position: 'fixed',
-					width: 56,
-					height: 56,
-					bottom: 16,
-					right: 24,
-					borderRadius: 56,
-					textAlign: 'center',
-					paddingTop: 20,
-					cursor: 'pointer',
-					font: 'h6',
-					paddingBottom: 20,
-					lineHeight: 16
-				},
-				$static: { position: 'static' },
-				$focus: { elevation: 4 },
-				$small: { top: 28, bottom: '' }
-			},
-			FocusCSS,
-			DisabledCSS
-		]
-	});
-
 	component(
 		{
 			name: 'cxl-grid',

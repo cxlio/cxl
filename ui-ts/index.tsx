@@ -466,6 +466,48 @@ export class Button extends ButtonBase {}
 )
 export class Dialog extends Component {}
 
+@Augment(
+	register('cxl-fab'),
+	template(
+		<Host>
+			<Focusable />
+			<Style>
+				{{
+					$: {
+						display: 'inline-block',
+						elevation: 2,
+						backgroundColor: 'secondary',
+						color: 'onSecondary',
+						position: 'fixed',
+						width: 56,
+						height: 56,
+						bottom: 16,
+						right: 24,
+						borderRadius: 56,
+						textAlign: 'center',
+						paddingTop: 20,
+						cursor: 'pointer',
+						font: 'h6',
+						paddingBottom: 20,
+						lineHeight: 16
+					},
+					$static: { position: 'static' },
+					$focus: { elevation: 4 },
+					$small: { top: 28, bottom: '' }
+				}}
+			</Style>
+			<slot />
+		</Host>
+	)
+)
+export class Fab extends Component {
+	@StyleAttribute()
+	disabled = false;
+	@StyleAttribute()
+	static = false;
+	touched = false;
+}
+
 theme.typography['icon'] = {
 	fontFamily: 'Font Awesome\\ 5 Free',
 	fontSize: 'inherit'
