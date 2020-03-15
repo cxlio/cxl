@@ -10,8 +10,8 @@ import {
 	map,
 	merge,
 	tap
-} from '../rx';
-import { ChildrenObserver, MutationEvent } from '../dom';
+} from '../rx/index.js';
+import { ChildrenObserver, MutationEvent } from '../dom/index.js';
 
 export interface RenderContext<T = HTMLElement> {
 	host: T;

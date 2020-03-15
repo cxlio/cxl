@@ -1,4 +1,9 @@
 function require(path) {
+	function normalizePath(basePath) {
+		const a = document.createElement('a');
+		a.href = basePath || '';
+		return a.pathname;
+	}
 	const mods = require.modules;
 	const xhr = new XMLHttpRequest();
 	let url = require.base + (path.endsWith('.js') ? path : path + '.js');
@@ -17,11 +22,7 @@ function require(path) {
 
 	const oldBase = require.base;
 	const baseMatch = /(.*\/).*/.exec(url);
-	if (baseMatch) {
-		const a = document.createElement('a');
-		a.href = baseMatch ? baseMatch[1] : '';
-		require.base = a.pathname;
-	} else require.base = '';
+	require.base = baseMatch ? normalizePath(baseMatch[1]) : '';
 
 	const exports = {};
 	new Function('exports', response)(exports);

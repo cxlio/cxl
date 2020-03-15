@@ -587,19 +587,6 @@ on(selectable.action):#onAction
 		}
 	);
 
-	component({
-		name: 'cxl-hr',
-		bindings: 'role(separator)',
-		styles: {
-			$: {
-				border: 0,
-				borderBottom: 1,
-				borderColor: 'divider',
-				borderStyle: 'solid'
-			}
-		}
-	});
-
 	component(
 		{
 			name: 'cxl-list',

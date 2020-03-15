@@ -5,7 +5,7 @@ build({
 	tasks: [
 		tsconfig(),
 		tsconfig('tsconfig.test.json'),
-		tsconfig('tsconfig.bundle.json'),
+		// tsconfig('tsconfig.bundle.json'),
 		file('test.html'),
 		pkg()
 	]

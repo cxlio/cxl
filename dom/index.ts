@@ -1,4 +1,4 @@
-import { Observable, Subscription, Subject } from '../rx';
+import { Observable, Subscription, Subject } from '../rx/index.js';
 
 type ElementContent = string | Node;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;

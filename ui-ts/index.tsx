@@ -188,8 +188,8 @@ export class Appbar extends Component {
 					},
 					$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
 					image: {
-						width: Infinity,
-						height: Infinity,
+						width: pct(100),
+						height: pct(100),
 						borderRadius: 32
 					}
 				}}
@@ -507,6 +507,25 @@ export class Fab extends Component {
 	static = false;
 	touched = false;
 }
+
+@Augment(
+	register('cxl-hr'),
+	role('separator'),
+	template(
+		<Host>
+			<Style>
+				{{
+					$: {
+						display: 'block',
+						height: 1,
+						backgroundColor: 'divider'
+					}
+				}}
+			</Style>
+		</Host>
+	)
+)
+export class Hr extends Component {}
 
 theme.typography['icon'] = {
 	fontFamily: 'Font Awesome\\ 5 Free',
