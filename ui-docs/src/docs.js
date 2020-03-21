@@ -1817,8 +1817,8 @@ See <a href="react.html">Demo</a>.</p>
 		const meta = META[name];
 		if (meta) {
 			const tags = meta.tags ? meta.tags.slice(0) : [];
-			const deprecated =
-				cxl.componentFactory.components[name].meta.deprecated;
+			const def = cxl.componentFactory.components[name];
+			const deprecated = def && def.meta.deprecated;
 
 			if (meta.added) tags.push('since ' + meta.added);
 			if (meta.beta) tags.push('beta');

@@ -11,7 +11,7 @@
 		}
 	});*/
 
-	component(
+	/*component(
 		{
 			name: 'cxl-th',
 			events: ['datatable.sort'],
@@ -67,6 +67,7 @@
 			}
 		}
 	);
+	*/
 
 	component({
 		name: 'cxl-td',

@@ -41,6 +41,7 @@ interface StrictStyleDefinition {
 	translateX: Length;
 	translateY: Length;
 	translateZ: Length;
+	gridColumnEnd: string;
 	prepend: string;
 	rotate: number;
 	scaleX: number;
@@ -74,6 +75,7 @@ interface StrictStyleDefinition {
 	filter: string;
 	flexGrow: number;
 	flexShrink: number;
+	flexDirection: string;
 	pointerEvents: string;
 	cursor: string;
 	display: string;
@@ -384,7 +386,7 @@ function renderTransform(v: StyleDefinition, style: CSSStyle) {
 				  (v.scaleY === undefined ? 1 : v.scaleY) +
 				  ')'
 				: '') +
-			(v.rotate !== undefined ? 'rotate(' + v.rotate + ')' : '');
+			(v.rotate !== undefined ? 'rotate(' + v.rotate + 'deg)' : '');
 }
 
 function renderNumber(_def: any, style: CSSStyle, prop: any, value: number) {
@@ -422,6 +424,7 @@ const renderMap: StyleMap = {
 	) {
 		applyCSSStyle(style, theme.typography[value]);
 	},
+	flexGrow: renderNumber,
 	flexShrink: renderNumber,
 	opacity: renderNumber,
 	translateX: renderTransform,
@@ -582,4 +585,9 @@ export function registerFont(def: FontDefinition) {
 	document.head.appendChild(style);
 
 	return style;
+}
+
+export function Style(p: { children: Styles }) {
+	const ss = new StyleSheet({ styles: p.children });
+	return ss.clone.bind(ss);
 }

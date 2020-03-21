@@ -7,8 +7,7 @@ import {
 	Slot,
 	bind,
 	get,
-	register,
-	template
+	registerComponent
 } from './index';
 import { dom, render, connect } from '../xdom';
 import { of, tap } from '../rx';
@@ -27,8 +26,10 @@ export default suite('component', test => {
 
 	test('Component - register', a => {
 		const id = 'cxl-test' + a.id;
-		@Augment(register(id))
-		class Test extends Component {}
+		@Augment()
+		class Test extends Component {
+			static tagName = id;
+		}
 		const el = render(dom(Test));
 		a.ok(el);
 	});
@@ -36,14 +37,13 @@ export default suite('component', test => {
 	test('Component - template', a => {
 		const id = 'cxl-test' + a.id;
 		@Augment(
-			register(id),
-			template(
-				<div>
-					<slot></slot>
-				</div>
-			)
+			<div>
+				<slot></slot>
+			</div>
 		)
-		class Test extends Component {}
+		class Test extends Component {
+			static tagName = id;
+		}
 
 		const tpl = <Test>Hello World</Test>;
 		const el = render(tpl).element as HTMLDivElement;
@@ -75,40 +75,16 @@ export default suite('component', test => {
 			return of('hello').pipe(tap(val => (node.title = val)));
 		}
 
-		@Augment(register(id), bind(bindTest))
-		class Test extends Component {}
+		@Augment(bind(bindTest))
+		class Test extends Component {
+			static tagName = id;
+		}
 
 		const el = render(<Test></Test>).element as Test;
 		a.dom.appendChild(el);
 		a.equal(el.title, 'hello');
 		a.ran(2);
 	});
-
-	/*test('compose', a => {
-		const id = 'cxl-test' + a.id;
-		function Focusable(Parent: any) {
-			class Focusable extends Parent {
-				@Attribute()
-				disabled = false;
-				name = 'hello';
-			}
-			return Focusable;
-		}
-
-		function Touchable(Parent: any) {
-			return class Touchable extends Parent {
-				touched = true;
-			};
-		}
-
-		const Test = component(id, compose(Focusable, Touchable));
-		const instance: typeof Test = <Test></Test>;
-
-		a.ok(Test);
-		a.ok(instance.touched);
-		a.equal(instance.name, 'hello');
-		a.ok(Focusable);
-	});*/
 
 	test('Component - inheritance', a => {
 		const id = 'cxl-test' + a.id;
@@ -131,8 +107,10 @@ export default suite('component', test => {
 			name = '';
 		}
 
-		@Augment(register(id))
+		@Augment()
 		class Input extends InputBase {
+			static tagName = id;
+
 			@Attribute()
 			maxlength = -1;
 
@@ -158,8 +136,10 @@ export default suite('component', test => {
 	test('Attribute', a => {
 		const id = 'cxl-test' + a.id;
 
-		@Augment(register(id))
+		@Augment()
 		class TestComponent extends Component {
+			static tagName = id;
+
 			@Attribute()
 			test = true;
 		}
@@ -188,7 +168,7 @@ export default suite('component', test => {
 			hello = 'world';
 		}
 
-		register(id)(Test);
+		registerComponent(id, Test);
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
@@ -206,62 +186,13 @@ export default suite('component', test => {
 		});
 	});
 
-	/*
-	test('Bindings - Events', a => {
-		const el = render(
-			<Div
-				$={el => on(el, 'blur').pipe(tap(ev => (el.title = ev.type)))}
-			/>
-		);
-
-		a.ok(el);
-		a.dom.appendChild(el);
-		trigger(el, 'blur');
-		a.equal(el.title, 'blur');
-	});
-
-	test('Bindings - Children', a => {
-		const el = render(
-			<Div>
-				<Div
-					$={el =>
-						on(el, 'blur').pipe(tap(ev => (el.title = ev.type)))
-					}
-				/>
-			</Div>
-		);
-		a.ok(el);
-		const child = el.children[0] as Div;
-		a.ok(child);
-		a.dom.appendChild(el);
-		trigger(child, 'blur');
-		a.equal(child.title, 'blur');
-	});
-
-	test('Bindings - Attribute', a => {
-		const [checked, setChecked] = hook(true);
-
-		const el = render(
-			<Div
-				className={checked.pipe(map(val => (val ? 'minus' : 'check')))}
-				tabIndex={10}
-			/>
-		);
-
-		a.ok(el);
-		a.equal(el.tabIndex, 10);
-		a.dom.appendChild(el);
-		a.equal(el.className, 'minus');
-		setChecked(false);
-		a.equal(el.className, 'check');
-	});
-	*/
-
 	test('Component - Attributes', a => {
 		const id = 'cxl-test' + a.id;
 
-		@Augment(register(id))
+		@Augment()
 		class Test extends Component {
+			static tagName = id;
+
 			@Attribute()
 			hello = 'world';
 		}
@@ -284,8 +215,10 @@ export default suite('component', test => {
 	test('StyleAttribute - default', a => {
 		const id = 'cxl-test' + a.id;
 
-		@Augment(register(id))
+		@Augment()
 		class Test extends Component {
+			static tagName = id;
+
 			@StyleAttribute()
 			persist = true;
 		}
@@ -300,8 +233,10 @@ export default suite('component', test => {
 	test('get', a => {
 		const id = 'cxl-test' + a.id;
 
-		@Augment(register(id))
+		@Augment()
 		class Test extends Component {
+			static tagName = id;
+
 			@Attribute()
 			hello = 'world';
 		}

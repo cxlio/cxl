@@ -336,63 +336,6 @@ on(selectable.action):#onAction
 		}
 	});
 
-	component({
-		name: 'cxl-c',
-		styles: (r => {
-			for (let i = 12; i > 0; i--)
-				r[5]['$xl' + i + '$xlarge'] = r[4]['$lg' + i + '$large'] = r[3][
-					'$md' + i + '$medium'
-				] = r[2]['$sm' + i + '$small'] = r[1]['$xs' + i] = {
-					display: 'block',
-					gridColumnEnd: 'span ' + i
-				};
-			return r;
-		})([
-			{
-				$: { gridColumnEnd: 'span 12', flexShrink: 0 },
-				$grow: { flexGrow: 1, flexShrink: 1 },
-				$small: { gridColumnEnd: 'auto' },
-				$fill: {
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					right: 0,
-					bottom: 0
-				},
-				$xl0$xlarge: { display: 'none' },
-				$lg0$large: { display: 'none' },
-				$md0$medium: { display: 'none' },
-				$sm0$small: { display: 'none' },
-				$xs0: { display: 'none' },
-				// Padding
-				$pad16: { padding: 16 },
-				$pad8: { padding: 8 },
-				$pad24: { padding: 24 },
-				// Colors
-				$surface: { backgroundColor: 'surface', color: 'onSurface' },
-				$error: { backgroundColor: 'error', color: 'onError' },
-				$primary: { backgroundColor: 'primary', color: 'onPrimary' },
-				$primaryLight: {
-					backgroundColor: 'primaryLight',
-					color: 'onPrimaryLight'
-				},
-				$secondary: {
-					backgroundColor: 'secondary',
-					color: 'onSecondary'
-				}
-			},
-			{},
-			{},
-			{},
-			{},
-			{},
-			{
-				$flex: { display: 'flex' },
-				$vflex: { display: 'flex', flexDirection: 'column' }
-			}
-		])
-	});
-
 	component(
 		{
 			name: 'cxl-chip',
@@ -560,32 +503,6 @@ on(selectable.action):#onAction
 			backdrop$visible$permanent$right$xlarge: { width: 0 }
 		}
 	});
-
-	component(
-		{
-			name: 'cxl-grid',
-			attributes: ['rows', 'columns', 'gap'],
-			bindings: `
-=rows:style.inline(gridTemplateRows)
-=columns:#setColumns
-=gap:style.inline(gridGap)
-	`,
-			styles: {
-				$: { display: 'grid' },
-				$pad16: { padding: 16 },
-				$pad8: { padding: 8 },
-				$pad24: { padding: 24 }
-			}
-		},
-		{
-			// TODO
-			columns: 'repeat(12, 1fr)',
-			gap: '16px 16px',
-			setColumns(val, el) {
-				el.style.gridTemplateColumns = val;
-			}
-		}
-	);
 
 	component(
 		{
@@ -1012,40 +929,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 			}
 		}
 	);
-
-	cxl.css.animation.spinnerstroke = {
-		keyframes: `
-0%      { stroke-dashoffset: $start;  transform: rotate(0); }
-12.5%   { stroke-dashoffset: $end;    transform: rotate(0); }
-12.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(72.5deg); }
-25%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(72.5deg); }
-25.0001%   { stroke-dashoffset: $start;  transform: rotate(270deg); }
-37.5%   { stroke-dashoffset: $end;    transform: rotate(270deg); }
-37.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(161.5deg); }
-50%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(161.5deg); }
-50.0001%  { stroke-dashoffset: $start;  transform: rotate(180deg); }
-62.5%   { stroke-dashoffset: $end;    transform: rotate(180deg); }
-62.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(251.5deg); }
-75%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(251.5deg); }
-75.0001%  { stroke-dashoffset: $start;  transform: rotate(90deg); }
-87.5%   { stroke-dashoffset: $end;    transform: rotate(90deg); }
-87.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(341.5deg); }
-100%    { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(341.5deg); }
-		`
-			.replace(/\$start/g, 282.743 * (1 - 0.05))
-			.replace(/\$end/g, 282.743 * (1 - 0.8)),
-		value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)'
-	};
-
-	component({
-		name: 'cxl-spinner',
-		template: `<svg viewBox="0 0 100 100" style="width:100px;height:100px">
-<circle cx="50%" cy="50%" r="45" style="stroke:var(--cxl-primary);fill:transparent;transition:stroke-dashoffset var(--cxl-speed);stroke-width:10%;transform-origin:center;stroke-dasharray:282.743px" &=".circle" /></svg>`,
-		styles: {
-			$: { animation: 'spin', display: 'inline-block' },
-			circle: { animation: 'spinnerstroke' }
-		}
-	});
 
 	component(
 		{

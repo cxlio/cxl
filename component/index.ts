@@ -11,7 +11,7 @@ import {
 	merge,
 	tap
 } from '../rx/index.js';
-import { ChildrenObserver, MutationEvent } from '../dom/index.js';
+import { ChildrenObserver, MutationEvent, getShadow } from '../dom/index.js';
 
 export interface RenderContext<T = HTMLElement> {
 	host: T;
@@ -20,8 +20,7 @@ export interface RenderContext<T = HTMLElement> {
 type Binding<T> = Observable<T>;
 type Renderable<T = HTMLElement> = (ctx: RenderContext<T>) => Node;
 type RenderFunction<T> = (node: T) => void;
-type Decorator<T> = (constructor: new () => T) => RenderFunction<T> | void;
-type Augmentation<T> = Decorator<T>;
+type Augmentation<T> = (view: ComponentView<T>) => Node | void;
 type AttributeType<T> =
 	| ({
 			[P in keyof T]?: T[P] | Observable<T[P]> | Operator<T, any>;
@@ -32,7 +31,9 @@ type AttributeType<T> =
 			children?: any;
 	  };
 
-export class ComponentView<T extends Component> {
+const registeredComponents: Record<string, typeof Component> = {};
+
+export class ComponentView<T> {
 	private bindings?: Binding<any>[];
 	private subscription?: Subscription<any>;
 	attributes$ = new Subject<AttributeEvent<T>>();
@@ -100,13 +101,9 @@ export class Component extends HTMLElement {
 	}
 }
 
-function getShadow(el: HTMLElement) {
-	return el.shadowRoot || el.attachShadow({ mode: 'open' });
-}
-
 function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
 	const oldRender = (proto as any).render;
-	(proto as any).render = function(el: any) {
+	(proto as any).render = function(el: T) {
 		if (oldRender) oldRender(el);
 		renderFn(el);
 	};
@@ -116,28 +113,33 @@ export function augment<T>(
 	constructor: new () => T,
 	decorators: Augmentation<T>[]
 ) {
-	const proto = constructor.prototype;
-	for (const d of decorators) {
-		const renderFn = d(constructor);
-		if (renderFn) pushRender(proto, renderFn);
-	}
+	pushRender(constructor.prototype, node => {
+		for (const d of decorators) {
+			const result = d(node.view);
+			if (result instanceof Node && result !== node)
+				getShadow(node).appendChild(result);
+		}
+	});
+}
+
+export function registerComponent(tagName: string, ctor: any) {
+	if (!ctor.tagName) ctor.tagName = tagName;
+	registeredComponents[tagName] = ctor;
+	customElements.define(tagName, ctor);
 }
 
 export function Augment<T>(...augmentations: Augmentation<T>[]) {
-	return (ctor: new () => T) => augment(ctor, augmentations);
-}
-
-export function template(template: Renderable) {
-	return () => (node: any) => {
-		const child = template(node.view);
-		// Support for Host
-		if (child !== node) getShadow(node).appendChild(child);
+	return (ctor: new () => T) => {
+		const tagName = (ctor as any).tagName;
+		if (tagName) registerComponent(tagName, ctor);
+		augment(ctor, augmentations);
 	};
 }
 
 export function render<T extends Component>(renderFn: (node: T) => Renderable) {
-	return () => (node: T) => {
-		const child = renderFn(node)(node.view);
+	return (view: ComponentView<T>) => {
+		const node = view.host,
+			child = renderFn(node)(view);
 		if (child !== node) getShadow(node).appendChild(child);
 	};
 }
@@ -145,10 +147,7 @@ export function render<T extends Component>(renderFn: (node: T) => Renderable) {
 export function bind<T extends Component>(
 	bindFn: (node: T) => Observable<any>
 ) {
-	return () => (node: T) => {
-		const binding = bindFn(node);
-		node.view.bind(binding);
-	};
+	return (view: ComponentView<T>) => view.bind(bindFn(view.host));
 }
 
 export function Slot({ selector }: { selector?: string }) {
@@ -175,6 +174,18 @@ export function Slot({ selector }: { selector?: string }) {
 
 		return slot;
 	};
+}
+
+/**
+ * Fires when connected and on attribute change
+ */
+export function update<T extends Component>(fn: (node: T) => void) {
+	return (view: ComponentView<T>) =>
+		view.bind(
+			concat(of(view.host), view.attributes$).pipe(
+				tap(() => fn(view.host))
+			)
+		);
 }
 
 export function get<T extends Component, K extends keyof T>(
@@ -272,68 +283,16 @@ export function StyleAttribute() {
 	});
 }
 
-export function mixin<A, B, C, D, E, F>(
-	a: new () => A,
-	b?: new () => B,
-	c?: new () => C,
-	d?: new () => D,
-	e?: new () => E,
-	f?: new () => F
-): new () => A & B & C & D & E & F & Component;
-export function mixin(...mixins: any[]) {
-	const init: any[] = [];
-
-	class Result extends Component {
-		constructor() {
-			super();
-			for (const i of init) Object.assign(this, i);
-		}
-	}
-
-	for (const m of mixins) {
-		const properties = Object.getOwnPropertyDescriptors(m.prototype);
-		delete properties.constructor;
-		init.push(new m());
-		Object.defineProperties(Result.prototype, properties);
-	}
-
-	return Result;
-}
-
-const registeredComponents: Record<string, typeof Component> = {};
-
-function registerComponent(tagName: string, ctor: any) {
-	if (!ctor.tagName) ctor.tagName = tagName;
-	registeredComponents[tagName] = ctor;
-	customElements.define(tagName, ctor);
-}
-
-export function Augment2<T extends Component>(tpl: Renderable<T>) {
-	return (ctor: any) => {
-		if (ctor.tagName) registerComponent(ctor.tagName, ctor);
-		pushRender(ctor.prototype, (node: any) => tpl(node.view));
-	};
-}
-
-export function register(tagName: string) {
-	return (ctor: any) => registerComponent(tagName, ctor);
-}
-
 export function getRegisteredComponents() {
 	return { ...registeredComponents };
 }
 
-export function Fragment({
-	children
-}: {
-	children: Renderable | Renderable[];
-}): Renderable {
-	return (ctx: RenderContext) => {
-		if (Array.isArray(children)) {
-			const fragment = document.createDocumentFragment();
-			children.forEach(c => fragment.appendChild(c(ctx)));
-			return fragment;
-		}
-		return children(ctx);
-	};
+export function role<T>(roleName: string) {
+	return (view: ComponentView<T>) =>
+		view.bind(
+			defer(() => {
+				const el = view.host as any;
+				!el.hasAttribute('role') && el.setAttribute('role', roleName);
+			})
+		);
 }
