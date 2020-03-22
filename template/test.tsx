@@ -1,6 +1,6 @@
 import { suite } from '../tester';
 import { tap, merge, hook } from '../rx';
-import { dom, connectUntil } from '../xdom';
+import { dom, render, connect } from '../xdom';
 import { $on, portal, teleport, getAttribute } from './index.js';
 
 export default suite('template', test => {
@@ -26,7 +26,7 @@ export default suite('template', test => {
 			}
 		}
 
-		connectUntil<HTMLInputElement>(
+		connect<HTMLInputElement>(
 			<input
 				title="test"
 				$={el =>
@@ -39,6 +39,7 @@ export default suite('template', test => {
 			el => {
 				a.ok(!first);
 				el.title = 'title';
+				return a.promise;
 			}
 		);
 	});
@@ -67,8 +68,8 @@ export default suite('template', test => {
 	test('portal', a => {
 		const id = 'cxl-test' + a.id;
 
-		connectUntil<HTMLDivElement>(<div $={portal(id)} />, el => {
-			teleport((<span>Hello</span>)(), id);
+		connect<HTMLDivElement>(<div $={portal(id)} />, el => {
+			teleport(render(<span>Hello</span>).element, id);
 			a.ok(el);
 			a.equal(el.childNodes.length, 1);
 			a.equal(el.childNodes[0]?.textContent, 'Hello');
@@ -79,7 +80,7 @@ export default suite('template', test => {
 		function onClick(ev: Event) {
 			a.equal(ev.type, 'click');
 		}
-		connectUntil(<div $={$on('click', onClick)}>Hello</div>, el => {
+		connect(<div $={$on('click', onClick)}>Hello</div>, el => {
 			el.click();
 		});
 	});
