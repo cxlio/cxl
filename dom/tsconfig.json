@@ -2,7 +2,6 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"types": ["node"],
-		"lib": ["es6"],
 		"outDir": "../dist/dom"
 	},
 	"files": ["index.ts", "virtual.ts"],

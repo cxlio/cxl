@@ -350,15 +350,15 @@ export default suite('rx', [
 		});
 	}),
 
-	/* suite('operators.map', it => {
-		it('should throw an error if not passed a function', a => {
+	suite('Observable - Error Propagation', test => {
+		test('Unhandled Error', a => {
 			try {
-				of(1, 2, 3).pipe(map(<any>'potato'));
+				throwError('error').subscribe();
 			} catch (e) {
-				a.ok(e);
+				a.equal(e, 'error');
 			}
 		});
-	}),*/
+	}),
 
 	suite('toPromise', test => {
 		test('rx#toPromise', a => {
@@ -392,7 +392,12 @@ export default suite('rx', [
 		test('error', function(a) {
 			const subject = new Subject();
 			let c = 1;
-			subject.subscribe(b => a.equal(b, c));
+			subject.subscribe(
+				b => a.equal(b, c),
+				() => {
+					/* noop */
+				}
+			);
 			subject.subscribe(undefined, b => a.equal(b, c));
 
 			subject.next(c);

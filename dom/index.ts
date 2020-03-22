@@ -88,7 +88,7 @@ function removeChild(el: Element, child: Node) {
 	el.removeChild(child);
 }
 
-function remove(child: ChildNode) {
+export function remove(child: ChildNode) {
 	if (Array.isArray(child))
 		return child.forEach(c => removeChild(c.parentNode, c));
 

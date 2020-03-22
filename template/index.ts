@@ -16,6 +16,8 @@ import {
 	MutationEvent
 } from '../dom/index.js';
 
+type Renderable = () => any;
+
 export function $on(event: string, callback: (ev: Event) => void) {
 	return (el: HTMLElement) => on(el, event).pipe(tap(callback));
 }
@@ -93,4 +95,45 @@ export function portal(id: string) {
 
 export function teleport(el: HTMLElement, portalName: string) {
 	portals.get(portalName)?.appendChild(el);
+}
+
+type SourceFn = (el: any, host: any) => Observable<any>;
+
+class Chain<T extends HTMLElement, K extends keyof T = keyof T> {
+	pipes: any[] = [];
+	constructor(public source: SourceFn) {}
+
+	push(op: any) {
+		this.pipes.push(op);
+	}
+
+	set(attr: K) {
+		this.push((el: any) => (el[attr] = el));
+	}
+}
+
+interface Sources<T extends HTMLElement, K extends keyof T = keyof T> {
+	get(attr: K): Chain<T, K>;
+	call(method: K): Chain<T, K>;
+	onAction(method?: K): Chain<T, K>;
+}
+
+const sources: Sources<any> = {
+	get(attr) {
+		return new Chain((_el, host) => getAttribute(host, attr));
+	},
+	call(method) {
+		return new Chain((_el, host) => (host[method] as any)());
+	},
+	onAction(method?) {
+		return new Chain((el, host) =>
+			onAction(el).pipe(tap(ev => method && host[method](ev)))
+		);
+	}
+};
+
+export function tpl<T extends HTMLElement>(
+	fn: (helper: Sources<T>) => Renderable
+) {
+	return fn(sources as Sources<T>);
 }

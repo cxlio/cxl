@@ -17,7 +17,8 @@ import {
 	getDefaultLibFilePath,
 	convertCompilerOptionsFromJson,
 	ModuleKind,
-	InvalidatedProjectKind,
+	//	InvalidatedProjectKind,
+	ExitStatus,
 	createIncrementalProgram,
 	CreateProgramOptions,
 	getParsedCommandLineOfConfigFile,
@@ -26,6 +27,8 @@ import {
 	BuildOptions,
 	sys
 } from 'typescript';
+
+export { version as tscVersion } from 'typescript';
 
 const DEFAULT_TARGET = ScriptTarget.ES2015;
 const SOURCE_CACHE: Record<string, SourceFile> = {};
@@ -44,8 +47,7 @@ class CustomCompilerHost implements CompilerHost {
 	private createSourceFile(fileName: string, languageVersion: ScriptTarget) {
 		const result = createSourceFile(
 			fileName,
-			FILE_CACHE[fileName] ||
-				(FILE_CACHE[fileName] = readFileSync(fileName, 'utf8')),
+			this.readFile(fileName),
 			languageVersion || DEFAULT_TARGET
 		);
 		(result as any).version = 0;
@@ -163,10 +165,8 @@ function normalizeCompilerOptions(options: CompilerOptions) {
 function buildDiagnostics(program: Program | BuilderProgram) {
 	return [
 		...program.getConfigFileParsingDiagnostics(),
-		//...program.getDeclarationDiagnostics(),
 		...program.getSyntacticDiagnostics(),
 		...program.getSemanticDiagnostics(),
-		//		...program.getGlobalDiagnostics(),
 		...program.getOptionsDiagnostics()
 	];
 }
@@ -203,23 +203,26 @@ export function tsbuild(
 	const host = createSolutionBuilderHost();
 	const builder = createSolutionBuilder(host, [tsconfig], options);
 	const output: Output[] = [];
+	const relativePath = parsed.options.outDir || process.cwd();
 	let program: any;
 
 	function writeFile(name: string, source: string) {
-		const relativePath = parsed.options.outDir || process.cwd();
 		name = relative(relativePath, name);
 		output.push({ path: name, source });
 	}
 
 	while ((program = builder.getNextInvalidatedProject())) {
-		if (program.kind === InvalidatedProjectKind.Build) {
-			program.emit(undefined, writeFile);
-			const diagnostics = buildDiagnostics(program);
-			if (diagnostics.length) printDiagnostics(diagnostics);
-		} else if (program.kind === InvalidatedProjectKind.UpdateBundle)
-			program.emit(writeFile);
-
-		program.done();
+		// if (program.kind === InvalidatedProjectKind.Build) {
+		const status = program.done(undefined, writeFile);
+		if (status !== ExitStatus.Success)
+			throw 'Typescript compilation failed';
+		/*const diagnostics = buildDiagnostics(program);
+			if (diagnostics.length) printDiagnostics(diagnostics);*/
+		// } else if (program.kind === InvalidatedProjectKind.UpdateBundle)
+		//	program.done(undefined, writeFile);
+		// else program.updateOutputFileStatmps();
+		//else
+		//	program.done();
 	}
 	return output;
 }

@@ -60,20 +60,14 @@ function formatTime(time: bigint) {
 
 function logOperation(prefix: string, msg: LogMessage, op: Operation) {
 	let totalTime = BigInt(0);
-	return op.subscribe(
-		({ tasks, time, result }) => {
-			totalTime += time;
-			const formattedTime =
-				formatTime(time) +
-				(tasks > 1 ? `, ${formatTime(totalTime)} total` : '');
-			const message = typeof msg === 'function' ? msg(result) : msg;
-			console.log(`${prefix} ${message} (${formattedTime})`);
-		},
-		(error: any) => {
-			console.log(`${prefix} Error`);
-			console.error(error);
-		}
-	);
+	return op.subscribe(({ tasks, time, result }) => {
+		totalTime += time;
+		const formattedTime =
+			formatTime(time) +
+			(tasks > 1 ? `, ${formatTime(totalTime)} total` : '');
+		const message = typeof msg === 'function' ? msg(result) : msg;
+		console.log(`${prefix} ${message} (${formattedTime})`);
+	});
 }
 
 function logError(prefix: string, error: Error) {

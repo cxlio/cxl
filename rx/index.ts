@@ -69,8 +69,11 @@ export class Subscription<T> {
 
 	error(e: ObservableError) {
 		const subscriber = this.subscriber;
-		if (!this.isUnsubscribed && subscriber.error) subscriber.error(e);
-		this.unsubscribe();
+		if (!this.isUnsubscribed) {
+			if (subscriber.error) subscriber.error(e);
+			else throw e;
+			this.unsubscribe();
+		}
 	}
 
 	complete() {

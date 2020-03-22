@@ -21,13 +21,17 @@ type Binding<T> = Observable<T>;
 type Renderable<T = HTMLElement> = (ctx: RenderContext<T>) => Node;
 type RenderFunction<T> = (node: T) => void;
 type Augmentation<T> = (view: ComponentView<T>) => Node | void;
+
+type HTMLAttributes<T> = {
+	[P in Exclude<keyof T, 'children'>]?:
+		| T[P]
+		| Observable<T[P]>
+		| Operator<T, any>;
+};
 type AttributeType<T> =
-	| ({
-			[P in keyof T]?: T[P] | Observable<T[P]> | Operator<T, any>;
-	  } & {
-			$?: (el: T) => Observable<any>;
-	  })
+	| HTMLAttributes<T>
 	| {
+			$?: (el: T) => Observable<any>;
 			children?: any;
 	  };
 
@@ -148,6 +152,15 @@ export function bind<T extends Component>(
 	bindFn: (node: T) => Observable<any>
 ) {
 	return (view: ComponentView<T>) => view.bind(bindFn(view.host));
+}
+
+export function connect<T extends Component>(bindFn: (node: T) => void) {
+	return (view: ComponentView<T>) =>
+		view.bind(
+			defer(() => {
+				bindFn(view.host);
+			})
+		);
 }
 
 export function Slot({ selector }: { selector?: string }) {

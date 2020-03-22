@@ -1,4 +1,3 @@
-/// <amd-module name="index" />
 import { suite } from '../tester';
 import { dom, Fragment, JSXElement, render, connect } from './index.js';
 import { hook, Subject, Observable, tap, map, of } from '../rx/index.js';
@@ -34,7 +33,6 @@ export default suite('component', test => {
 
 		const el = render(div).element;
 		a.ok(el);
-		a.equal(el.children.length, 2);
 		a.equal(el.childNodes.length, 4);
 		a.equal(el.children[0]?.tagName, 'A');
 		a.equal(el.childNodes[0].childNodes[0].textContent, 'Hello');
@@ -70,9 +68,9 @@ export default suite('component', test => {
 			last = el.lastChild;
 
 		a.equal(el.childNodes.length, 3);
-		a.equal((el.childNodes[0] as Element).tagName, 'A');
-		a.equal((el.childNodes[1] as Element).tagName, 'B');
-		a.equal((el.childNodes[2] as Element).tagName, 'I');
+		a.equal((el.childNodes[0] as HTMLElement).tagName, 'A');
+		a.equal((el.childNodes[1] as HTMLElement).tagName, 'B');
+		a.equal((el.childNodes[2] as HTMLElement).tagName, 'I');
 		a.equal(el.childNodes[0].parentNode, el);
 		a.equal(el.childNodes[1].parentNode, el);
 		a.equal(el.childNodes[2].parentNode, el);
@@ -93,8 +91,8 @@ export default suite('component', test => {
 
 		a.ok(frag instanceof DocumentFragment);
 		a.equal(frag.childNodes.length, 3);
-		a.equal(frag.children[0].tagName, 'DIV');
-		a.equal(frag.children[1].tagName, 'SPAN');
+		a.equal((frag.childNodes[0] as HTMLElement).tagName, 'DIV');
+		a.equal((frag.childNodes[1] as HTMLElement).tagName, 'SPAN');
 		a.equal(frag.childNodes[2].textContent, '!');
 	});
 
@@ -143,9 +141,9 @@ export default suite('component', test => {
 		a.equal(el.title, 'hello');
 		a.equal(el.childNodes.length, 1);
 
-		const child = el.children[0];
+		const child = el.childNodes[0] as HTMLElement;
 		a.equal(child.tagName, 'H1');
-		const child2 = child.children[0];
+		const child2 = child.childNodes[0] as HTMLElement;
 		a.equal(child2.tagName, 'SPAN');
 		a.equal(child2.textContent, 'World');
 	});
@@ -196,7 +194,7 @@ export default suite('component', test => {
 			</Div>
 		).element as HTMLElement;
 		a.ok(el);
-		const child = el.children[0] as HTMLDivElement;
+		const child = el.childNodes[0] as HTMLDivElement;
 		a.ok(child);
 	});
 

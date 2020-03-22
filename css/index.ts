@@ -51,7 +51,7 @@ interface StrictStyleDefinition {
 	backgroundColor: Color;
 	borderColor: Color;
 	borderWidth: number;
-	borderRadius: number;
+	borderRadius: Length;
 	padding: number;
 	paddingLeft: number;
 	paddingRight: number;

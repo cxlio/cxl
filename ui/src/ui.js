@@ -400,68 +400,6 @@ on(selectable.action):#onAction
 		}
 	);
 
-	component(
-		{
-			name: 'cxl-dialog-alert',
-			attributes: ['title-text', 'message', 'promise'],
-			bindings:
-				'role(alertdialog) =modal:aria.prop(modal) =title-text:aria.prop(label)',
-			template: `
-<cxl-dialog>
-	<div &=".content">
-		<cxl-t h5 &="=title-text:show:text .title"></cxl-t>
-		<div &="=message:text"></div>
-	</div>
-	<div &=".footer">
-		<cxl-button flat &="=action:text action:#remove:#resolve"></cxl-button>
-	</div>
-</cxl-dialog>
-	`,
-			styles: {
-				content: { padding: 16 },
-				footer: { padding: 8 }
-			},
-			initialize(state) {
-				state.$component = this;
-				state.promise = new Promise(function(resolve, reject) {
-					state.resolve = resolve;
-					state.reject = reject;
-				});
-			}
-		},
-		{
-			action: 'Ok',
-			modal: true,
-			remove() {
-				this.$component.remove();
-			}
-		}
-	);
-
-	component(
-		{
-			name: 'cxl-dialog-confirm',
-			attributes: ['cancel-text'],
-			template: `
-<cxl-dialog>
-	<div &=".content">
-		<cxl-t h5 &="=title-text:show:text =title-text:aria.prop(label)"></cxl-t>
-		<div &="=message:text"></div>
-	</div>
-	<div &=".footer">
-		<cxl-button flat &="=cancel-text:text action:#remove:#reject"></cxl-button>
-		<cxl-button flat &="=action:text action:#remove:#resolve"></cxl-button>
-	</div>
-</cxl-dialog>
-	`,
-			extend: 'cxl-dialog-alert'
-		},
-		{
-			'cancel-text': 'Cancel',
-			action: 'Confirm'
-		}
-	);
-
 	component({
 		name: 'cxl-drawer',
 		events: ['backdrop.click'],
@@ -781,51 +719,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 
 			onRoute() {
 				this.visible = false;
-			}
-		}
-	);
-
-	component(
-		{
-			name: 'cxl-ripple',
-			attributes: ['x', 'y', 'radius'],
-			bindings: 'id(host) connect:#connect',
-			template: `<div &="id(ripple) on(animationend):#end .ripple"></div>`,
-			styles: {
-				$: {
-					position: 'absolute',
-					overflowX: 'hidden',
-					overflowY: 'hidden',
-					top: 0,
-					left: 0,
-					right: 0,
-					bottom: 0,
-					pointerEvents: 'none'
-				},
-				ripple: {
-					position: 'relative',
-					borderRadius: '100%',
-					scaleX: 0,
-					scaleY: 0,
-					backgroundColor: 'onSurface',
-					opacity: 0.16,
-					animation: 'expand',
-					animationDuration: '0.4s'
-				},
-				ripple$primary: { backgroundColor: 'primary' },
-				ripple$secondary: { backgroundColor: 'secondary' }
-			}
-		},
-		{
-			connect() {
-				const style = this.ripple.style;
-				style.left = this.x - this.radius + 'px';
-				style.top = this.y - this.radius + 'px';
-				style.width = style.height = this.radius * 2 + 'px';
-			},
-
-			end() {
-				cxl.dom.remove(this.host);
 			}
 		}
 	);

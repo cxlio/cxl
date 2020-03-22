@@ -3,7 +3,15 @@
 	"compilerOptions": {
 		"outDir": "../dist/ui-ts"
 	},
-	"include": ["index.tsx", "icons.tsx", "layout.tsx", "table.tsx"],
+	"include": [
+		"core.tsx",
+		"form.tsx",
+		"index.tsx",
+		"icons.tsx",
+		"layout.tsx",
+		"table.tsx",
+		"dialog.tsx"
+	],
 	"references": [
 		{ "path": "../xdom" },
 		{ "path": "../component" },

@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { dirname, basename as pathBasename } from 'path';
+import { dirname, basename as pathBasename, join } from 'path';
 import {
 	mkdirSync,
 	readFileSync,
@@ -7,17 +7,9 @@ import {
 	promises,
 	existsSync
 } from 'fs';
-import {
-	catchError,
-	of,
-	map,
-	tap,
-	Observable,
-	Operator,
-	operator
-} from '../rx/index.js';
+import { of, map, tap, Observable, Operator, operator } from '../rx/index.js';
 import { Application } from '../server/index.js';
-import { tsc, tsbuild } from './tsc.js';
+import { tsbuild, tscVersion } from './tsc.js';
 
 export { concat } from '../rx/index.js';
 
@@ -37,14 +29,6 @@ export interface Output {
 
 function kb(bytes: number) {
 	return (bytes / 1000).toFixed(2) + 'kb';
-}
-
-interface TypescriptConfig {
-	input: string;
-	output: string;
-	declaration: string;
-	amd: boolean;
-	compilerOptions: any;
 }
 
 const SCRIPTDIR = dirname(process.argv[1]);
@@ -68,30 +52,6 @@ export function tsconfig(tsconfig = 'tsconfig.json') {
 		output.forEach(out => {
 			subs.next(out);
 		});
-
-		subs.complete();
-	});
-}
-
-export function typescript(config: Partial<TypescriptConfig>) {
-	return new Observable<Output>(subs => {
-		const options = {
-			input: 'index.ts',
-			output: 'index.js',
-			declaration: 'index.d.ts',
-			amd: false,
-			compilerOptions: null,
-			...config
-		};
-
-		const output = tsc(options.input, options.compilerOptions);
-
-		for (const i in output)
-			if (!i.startsWith('/'))
-				subs.next({
-					path: i,
-					source: output[i]
-				});
 
 		subs.complete();
 	});
@@ -201,7 +161,6 @@ type OperatorList = {
 
 export const tasks: TaskList = {
 	pkg,
-	typescript,
 	file
 };
 
@@ -214,7 +173,7 @@ export const operators: OperatorList = {
 export class Builder extends Application {
 	name = '@cxl/builder';
 	baseDir?: string;
-	outputDir?: string;
+	outputDir = '';
 	package: any;
 	hasErrors = false;
 
@@ -223,7 +182,10 @@ export class Builder extends Application {
 	}
 
 	run() {
-		const result = this.parseConfig(this.config);
+		const result = this.parseConfig(this.config).catch(error => {
+			this.hasErrors = true;
+			this.log(error);
+		});
 
 		if (this.hasErrors) throw 'Build finished with errors';
 
@@ -242,17 +204,13 @@ export class Builder extends Application {
 	runTask(task: Task) {
 		this.log(
 			(output: Output) =>
-				`${this.outputDir}/${output.path} ${kb(
+				`${join(this.outputDir, output.path)} ${kb(
 					(output.source || '').length
 				)}`,
 			task.pipe(
 				map(result => {
 					this.writeFile(result);
 					return result;
-				}),
-				catchError(error => {
-					this.hasErrors = true;
-					throw error;
 				})
 			)
 		);
@@ -266,6 +224,7 @@ export class Builder extends Application {
 		if (pkg.name) {
 			this.log(`build ${pkg.name} ${pkg.version}`);
 		}
+		this.log(`typescript ${tscVersion}`);
 
 		if (baseDir !== process.cwd()) {
 			process.chdir(baseDir);

@@ -5,6 +5,10 @@ function require(path) {
 		return a.pathname;
 	}
 	const mods = require.modules;
+
+	// Handle packages
+	if (path[0] !== '.') return mods[path];
+
 	const xhr = new XMLHttpRequest();
 	let url = require.base + (path.endsWith('.js') ? path : path + '.js');
 

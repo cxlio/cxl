@@ -1,6 +1,3 @@
-/*import ts from 'typescript';
-import fs from 'fs';
-import cp from 'child_process';*/
 const ts = require('typescript'),
 	fs = require('fs'),
 	cp = require('child_process');
