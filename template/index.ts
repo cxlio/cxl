@@ -6,7 +6,8 @@ import {
 	filter,
 	concat,
 	debounceTime,
-	of
+	of,
+	defer
 } from '../rx/index.js';
 import {
 	setContent as domSetContent,
@@ -16,20 +17,18 @@ import {
 	MutationEvent
 } from '../dom/index.js';
 
-type Renderable = () => any;
-
 export function $on(event: string, callback: (ev: Event) => void) {
 	return (el: HTMLElement) => on(el, event).pipe(tap(callback));
 }
 
 export function getAttribute<T extends HTMLElement>(el: T, name: keyof T) {
-	const observer = new AttributeObserver(el);
+	const view: any = (el as any).view;
+	const observer = view
+		? view.attributes$.pipe(filter((ev: any) => ev.attribute === name))
+		: new AttributeObserver(el).pipe(filter(ev => ev.value === name));
 	return concat(
-		of(el[name]),
-		observer.pipe(
-			filter(ev => ev.value === name),
-			map(() => el[name])
-		)
+		defer(() => of(el[name])),
+		observer.pipe(map(() => el[name]))
 	);
 }
 
@@ -99,7 +98,7 @@ export function teleport(el: HTMLElement, portalName: string) {
 
 type SourceFn = (el: any, host: any) => Observable<any>;
 
-class Chain<T extends HTMLElement, K extends keyof T = keyof T> {
+class Chain<T extends HTMLElement, ElementT> {
 	pipes: any[] = [];
 	constructor(public source: SourceFn) {}
 
@@ -107,33 +106,43 @@ class Chain<T extends HTMLElement, K extends keyof T = keyof T> {
 		this.pipes.push(op);
 	}
 
-	set(attr: K) {
+	set(attr: keyof T) {
 		this.push((el: any) => (el[attr] = el));
+	}
+
+	toBinding(): (el: ElementT, host: T) => Observable<any> {
+		return this.source;
 	}
 }
 
-interface Sources<T extends HTMLElement, K extends keyof T = keyof T> {
-	get(attr: K): Chain<T, K>;
-	call(method: K): Chain<T, K>;
-	onAction(method?: K): Chain<T, K>;
+interface Sources<T extends HTMLElement, T2> {
+	get(attr: keyof T): Chain<T, T2>;
+	call(method: keyof T): Chain<T, T2>;
+	onAction(method?: keyof T): Chain<T, T2>;
 }
 
-const sources: Sources<any> = {
+const sources: Sources<any, any> = {
 	get(attr) {
-		return new Chain((_el, host) => getAttribute(host, attr));
+		return new Chain((_el, host) => getAttribute(host.host, attr));
 	},
 	call(method) {
-		return new Chain((_el, host) => (host[method] as any)());
+		return new Chain((_el, host) => (host.host[method] as any)());
 	},
 	onAction(method?) {
 		return new Chain((el, host) =>
-			onAction(el).pipe(tap(ev => method && host[method](ev)))
+			onAction(el).pipe(tap(ev => method && host.host[method](ev)))
 		);
 	}
 };
 
-export function tpl<T extends HTMLElement>(
-	fn: (helper: Sources<T>) => Renderable
+interface RenderContext<T> {
+	host: T;
+	bind(binding: Observable<any>): void;
+}
+type Renderable<T> = (ctx: RenderContext<T>) => any;
+
+export function tpl<T extends HTMLElement, T2 = any>(
+	fn: (helper: Sources<T, T2>) => Renderable<T>
 ) {
-	return fn(sources as Sources<T>);
+	return fn(sources as Sources<T, T2>);
 }

@@ -122,16 +122,13 @@ function printReport(suite: Test) {
 }*/
 
 function handleRequest(sources: Output[], req: Request) {
-	if (req.method() !== 'POST') req.continue;
+	if (req.method() !== 'POST') return req.continue();
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
+
 	let url = path.resolve(base, scriptPath);
-
 	if (!url.endsWith('.js')) url += '.js';
-
 	if (!existsSync(url)) url = url.replace(/\.js$/, '/index.js');
-
-	// console.log(`BASE: ${base}\nSRC: ${scriptPath}\nRESOLVED: ${url}`);
 
 	if (existsSync(url)) {
 		const content = readFileSync(url, 'utf8');
@@ -158,7 +155,13 @@ async function cjsRunner(page: Page, sources: Output[]) {
 	await page.addScriptTag({ path: __dirname + '/require.js' });
 
 	page.setRequestInterception(true);
-	page.on('request', handleRequest.bind(null, sources));
+	page.on('request', (req: Request) => {
+		try {
+			handleRequest(sources, req);
+		} catch (e) {
+			app.log(`Error handling request ${req.method()} ${req.url()}`);
+		}
+	});
 
 	return page.evaluate(`
 		const suite = require('${entry}').default;
@@ -265,4 +268,5 @@ class TestRunner extends Application {
 	}
 }
 
-new TestRunner().start();
+const app = new TestRunner();
+app.start();

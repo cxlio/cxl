@@ -22,6 +22,10 @@ type Renderable<T = HTMLElement> = (ctx: RenderContext<T>) => Node;
 type RenderFunction<T> = (node: T) => void;
 type Augmentation<T> = (view: ComponentView<T>) => Node | void;
 
+interface Bindable<T> {
+	toBinding(): (el: T, host: any) => Observable<any>;
+}
+
 type HTMLAttributes<T> = {
 	[P in Exclude<keyof T, 'children'>]?:
 		| T[P]
@@ -31,7 +35,7 @@ type HTMLAttributes<T> = {
 type AttributeType<T> =
 	| HTMLAttributes<T>
 	| {
-			$?: (el: T) => Observable<any>;
+			$?: Bindable<T> | ((el: T, host: any) => Observable<any>);
 			children?: any;
 	  };
 

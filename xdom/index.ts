@@ -5,8 +5,8 @@ type IntrinsicElement<T> =
 			[K in keyof T]?: T[K] | Observable<T[K]>;
 	  }
 	| {
-			$?: Binding<T>;
-			children?: JSXChild | JSXChild[];
+			$?: Binding<T> | Bindable<T>;
+			children?: any;
 	  };
 
 /* eslint @typescript-eslint/no-namespace: 'off' */
@@ -27,18 +27,17 @@ declare global {
 	}
 }
 
+interface Bindable<T> {
+	toBinding(): Binding<T>;
+}
 type Binding<ElementT = HTMLElement, DataT = any> = (
 	el: ElementT,
 	ctx: any
 ) => Observable<DataT>;
-type NativeElementKey = keyof HTMLElementTagNameMap;
-export type ElementChildren = JSXElement[];
-type ViewBinding = Observable<any>;
 type ComponentFunction = (
 	attributes?: any,
-	children?: ElementChildren
+	children?: JSXElement[]
 ) => JSXElement;
-type JSXChild = any;
 
 interface JSXComponent<T> {
 	create(): HTMLElement;
@@ -68,7 +67,7 @@ function expression(binding: Observable<any>) {
 	};
 }
 
-export function normalizeChildren(children: any, result?: ElementChildren) {
+export function normalizeChildren(children: any, result?: JSXElement[]) {
 	result = result || [];
 
 	if (!Array.isArray(children)) children = [children];
@@ -78,13 +77,17 @@ export function normalizeChildren(children: any, result?: ElementChildren) {
 		else if (Array.isArray(child)) normalizeChildren(child, result);
 		else if (child instanceof Observable) result.push(expression(child));
 		else if (typeof child === 'function') result.push(child);
+		else if (child.toBinding)
+			result.push(view =>
+				expression(child.toBinding()(view.host, view))(view)
+			);
 		else result.push(text(child));
 	}
 	return result;
 }
 
 function renderChildren(
-	children: ElementChildren,
+	children: JSXElement[],
 	result: HTMLElement,
 	context: RenderContext
 ) {
@@ -98,7 +101,7 @@ class NativeElement {
 	constructor(
 		protected tagName: any,
 		protected attributes?: any,
-		protected children?: ElementChildren
+		protected children?: JSXElement[]
 	) {}
 
 	protected renderElement() {
@@ -127,6 +130,7 @@ class NativeElement {
 					value.pipe(tap(val => (el[i] = val)))
 				);
 			else if (typeof value === 'function') bindings.push(value);
+			else if (value && value.toBinding) bindings.push(value.toBinding());
 			else {
 				if (!other) other = {};
 				other[i] = value;
@@ -178,7 +182,7 @@ class FunctionElement {
 	constructor(
 		protected Component: ComponentFunction,
 		protected attributes?: any,
-		protected children?: ElementChildren
+		protected children?: JSXElement[]
 	) {}
 
 	compile() {
@@ -197,25 +201,25 @@ class FunctionElement {
 	}
 }
 
-export function dom<T extends NativeElementKey>(
+export function dom<T extends keyof HTMLElementTagNameMap>(
 	name: T,
 	attributes?: Partial<HTMLElementTagNameMap[T]>,
-	...children: ElementChildren
+	...children: JSXElement[]
 ): JSXElement<HTMLElementTagNameMap[T]>;
 export function dom<T extends Component>(
 	elementType: JSXComponent<T>,
 	attributes?: T['jsxAttributes'],
-	...children: ElementChildren
+	...children: JSXElement[]
 ): JSXElement<T>;
 export function dom<T, T2>(
 	elementType: (attributes?: T2) => JSXElement<T>,
 	attributes?: T2,
-	...children: ElementChildren
+	...children: JSXElement[]
 ): JSXElement<T>;
 export function dom(
 	elementType: any,
 	attributes?: any,
-	...children: ElementChildren
+	...children: JSXElement[]
 ) {
 	const element =
 		typeof elementType === 'string'
@@ -236,7 +240,7 @@ export class Fragment {
 
 export class View<T> {
 	private subscriptions?: Subscription<T>[];
-	constructor(public element: T, private bindings: ViewBinding[]) {}
+	constructor(public element: T, private bindings: Observable<any>[]) {}
 	connect() {
 		if (!this.subscriptions)
 			this.subscriptions = this.bindings.map(b => b.subscribe());
@@ -247,7 +251,7 @@ export class View<T> {
 }
 
 export function render<T>(tpl: JSXElement<T>, host?: HTMLElement) {
-	const bindings: ViewBinding[] = [],
+	const bindings: Observable<any>[] = [],
 		context = {
 			host: host || document.body,
 			bind(b: Observable<any>) {
@@ -259,15 +263,6 @@ export function render<T>(tpl: JSXElement<T>, host?: HTMLElement) {
 	if (host) host.appendChild(element as any);
 
 	return new View(element, bindings);
-}
-
-export function observe<T>(tpl: JSXElement<T>) {
-	return new Observable<T>(subs => {
-		const view = render(tpl);
-		view.connect();
-		subs.next(view.element);
-		return () => view.disconnect();
-	});
 }
 
 export function connect<T>(
