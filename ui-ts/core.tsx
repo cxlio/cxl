@@ -10,7 +10,8 @@ import {
 	get,
 	render,
 	role,
-	onUpdate
+	onUpdate,
+	connect
 } from '../component/index.js';
 import { onAction, triggerEvent, portal } from '../template/index.js';
 import { on, remove, setAttribute, trigger } from '../dom/index.js';
@@ -706,26 +707,38 @@ export class Button extends ButtonBase {
 	static tagName = 'cxl-button';
 }
 
-/*component(
-		{
-			name: 'cxl-tab',
-			template: '<a &=".link =href:attribute(href) content"></a>',
-			bindings:
-				'role(tab) focusable ripple =selected:filter:host.trigger(cxl-tab.selected)',
-			attributes: ['href', 'selected', 'disabled', 'touched'],
-			styles: [
-				{
+@Augment<Snackbar>(
+	<Style>
+		{{
+			$: {
+				display: 'block',
+				opacity: 0,
+				scaleX: 0.5,
+				scaleY: 0.5,
+				padding: 16,
+				elevation: 3,
+				backgroundColor: 'onSurface87',
+				color: 'surface',
+				marginBottom: 16
+			},
 
-				},
-				FocusCSS,
-				DisabledCSS
-			]
-		},
-		{
-			href: null,
-			selected: false
-		}
-	);*/
+			'@small': { $: { display: 'inline-block' } }
+		}}
+	</Style>,
+	<slot />,
+	connect(host => {
+		requestAnimationFrame(() => {
+			host.style.opacity = '1';
+			host.style.transform = 'scale(1,1)';
+		});
+	})
+)
+export class Snackbar extends Component {
+	static tagName = 'cxl-snackbar';
+	@Attribute()
+	delay = 4000;
+}
+
 @Augment<Tab>(
 	role('tab'),
 	<Focusable />,

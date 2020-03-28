@@ -632,40 +632,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 
 	component(
 		{
-			name: 'cxl-snackbar',
-			attributes: ['delay'],
-			styles: {
-				$: {
-					display: 'block',
-					opacity: 0,
-					scaleX: 0.5,
-					scaleY: 0.5,
-					padding: 16,
-					elevation: 3,
-					backgroundColor: '#333',
-					color: '#eee',
-					marginBottom: 16
-				},
-
-				$small: { display: 'inline-block' }
-			},
-			bindings: 'connect:#connect'
-		},
-		{
-			connect(val, host) {
-				// TODO better way to animate?
-				setTimeout(() => {
-					host.style.opacity = 1;
-					host.style.transform = 'scale(1,1)';
-				}, 50);
-			},
-
-			delay: 4000
-		}
-	);
-
-	component(
-		{
 			name: 'cxl-snackbar-container',
 			bindings: 'connect:#connect',
 

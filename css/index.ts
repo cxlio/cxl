@@ -27,6 +27,7 @@ interface Colors {
 	onSecondary: BaseColor;
 	onSurface: BaseColor;
 	onSurface12: BaseColor;
+	onSurface87: BaseColor;
 	onError: BaseColor;
 	background: BaseColor;
 	link: BaseColor;
@@ -312,6 +313,9 @@ export const theme: Theme = {
 		get onSurface12() {
 			return this.onSurface.alpha(0.12);
 		},
+		get onSurface87() {
+			return this.onSurface.alpha(0.87);
+		},
 		onError: rgba(0xff, 0xff, 0xff),
 
 		get background() {
@@ -480,16 +484,17 @@ function parseRuleName(selector: string, name: string) {
 	return `${selector}${sel}${className ? ` .${className}` : ''}`;
 }
 
+const rootStyles = document.createElement('STYLE');
+
 export function applyTheme() {
 	const { variables, colors } = theme;
-	const variableStyle = document.createElement('STYLE');
 
 	let result = ':root{';
 	for (const i in colors) result += `--cxl-${i}:${(colors as any)[i]};`;
 	for (const i in variables) result += `--cxl-${i}:${variables[i]};`;
 
-	variableStyle.innerHTML = result + '}';
-	document.head.appendChild(variableStyle);
+	rootStyles.innerHTML = result + '}';
+	document.head.appendChild(rootStyles);
 }
 
 function renderStyles(styles: Styles, selector = 'body') {
@@ -593,3 +598,5 @@ export function Style(p: { children: Styles }) {
 	const ss = new StyleSheet({ styles: p.children });
 	return ss.clone.bind(ss);
 }
+
+applyTheme();
