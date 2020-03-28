@@ -1,7 +1,15 @@
-import { Attribute, Augment, Component, role } from '../component/index.js';
+import {
+	Attribute,
+	StyleAttribute,
+	Augment,
+	Component,
+	role
+} from '../component/index.js';
 import { Style, pct } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
 import { tpl } from '../template/index.js';
+import { on, trigger } from '../dom/index.js';
+import { tap } from '../rx/index.js';
 import { T, Button } from './core.js';
 
 @Augment(
@@ -153,4 +161,79 @@ export class DialogConfirm extends Component {
 		this.resolve = resolve;
 		this.reject = reject;
 	});
+}
+
+@Augment(
+	<Host>
+		<Style>
+			{{
+				drawer: {
+					backgroundColor: 'surface',
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					width: '85%',
+					bottom: 0,
+					opacity: 0,
+					color: 'onSurface',
+					overflowY: 'auto',
+					elevation: 5,
+					translateX: '-105%'
+				},
+				drawer$right: { left: '100%', width: 0, translateX: 0 },
+				drawer$right$visible: { translateX: '-100%', width: 320 },
+				drawer$visible: { translateX: 0, opacity: 1 },
+
+				backdrop: {
+					width: 0,
+					opacity: 0,
+					position: 'fixed'
+				},
+				backdrop$visible: { width: '100%', opacity: 1 },
+
+				'@small': {
+					drawer: { width: 288 }
+				},
+				'@large': {
+					drawer$permanent: { translateX: 0, opacity: 1 },
+					backdrop$visible$permanent: { width: 0 },
+					backdrop$visible$right: { width: '100%' }
+				},
+				'@xlarge': {
+					drawer$right$permanent: {
+						translateX: '-100%',
+						width: 320
+					},
+					backdrop$visible$permanent$right: { width: 0 }
+				}
+			}}
+		</Style>
+		<Backdrop
+			className="backdrop"
+			$={(el, view) =>
+				on(el, 'click').pipe(
+					tap(() => trigger(view.host, 'backdrop.click'))
+				)
+			}
+		/>
+		<div
+			$={el => on(el, 'click').pipe(tap(ev => ev.stopPropagation()))}
+			className="drawer"
+		>
+			<slot />
+		</div>
+	</Host>
+)
+export class Drawer extends Component {
+	// events: ['backdrop.click'],
+	static tagName = 'cxl-drawer';
+
+	@StyleAttribute()
+	visible = false;
+
+	@StyleAttribute()
+	right = false;
+
+	@StyleAttribute()
+	permanent = false;
 }
