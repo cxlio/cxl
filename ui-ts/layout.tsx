@@ -1,4 +1,10 @@
-import { Augment, Component, Attribute, update } from '../component/index.js';
+import {
+	Augment,
+	Component,
+	Attribute,
+	StyleAttribute,
+	update
+} from '../component/index.js';
 import { Style } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
 
@@ -62,11 +68,7 @@ const colStyles = ((r: any) => {
 				$secondary: {
 					backgroundColor: 'secondary',
 					color: 'onSecondary'
-				}
-			}}
-		</Style>
-		<Style>
-			{{
+				},
 				$flex: { display: 'flex' },
 				$vflex: { display: 'flex', flexDirection: 'column' }
 			}}
@@ -76,6 +78,42 @@ const colStyles = ((r: any) => {
 )
 export class C extends Component {
 	static tagName = 'cxl-c';
+}
+
+@Augment(
+	<Host>
+		<Style>
+			{{
+				$: {
+					padding: 16,
+					position: 'relative',
+					flexGrow: 1,
+					overflowY: 'auto',
+					overflowScrolling: 'touch'
+				},
+				'@medium': {
+					$: { padding: 32 }
+				},
+				'@large': {
+					$: { padding: 64 }
+				},
+				'@xlarge': {
+					content: { width: 1200 },
+					content$center: {
+						padding: 0,
+						marginLeft: 'auto',
+						marginRight: 'auto'
+					}
+				}
+			}}
+		</Style>
+		<slot />
+	</Host>
+)
+export class Content extends Component {
+	static tagName = 'cxl-content';
+	@StyleAttribute()
+	center = false;
 }
 
 @Augment<Grid>(

@@ -193,16 +193,15 @@ export function Slot({ selector }: { selector?: string }) {
 	};
 }
 
+export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
+	return concat(of(host), host.view.attributes$).pipe(tap(() => fn(host)));
+}
+
 /**
  * Fires when connected and on attribute change
  */
 export function update<T extends Component>(fn: (node: T) => void) {
-	return (view: ComponentView<T>) =>
-		view.bind(
-			concat(of(view.host), view.attributes$).pipe(
-				tap(() => fn(view.host))
-			)
-		);
+	return (view: ComponentView<T>) => view.bind(onUpdate(view.host, fn));
 }
 
 export function get<T extends Component, K extends keyof T>(

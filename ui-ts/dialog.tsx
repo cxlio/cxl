@@ -1,16 +1,7 @@
-import {
-	Attribute,
-	Augment,
-	Component,
-	get,
-	role,
-	render
-} from '../component/index.js';
+import { Attribute, Augment, Component, role } from '../component/index.js';
 import { Style, pct } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
-import { tpl, onAction } from '../template/index.js';
-import { tap } from '../rx/index.js';
-
+import { tpl } from '../template/index.js';
 import { T, Button } from './core.js';
 
 @Augment(
@@ -73,45 +64,37 @@ export class Dialog extends Component {
 	static tagName = 'cxl-dialog';
 }
 
-@Augment<DialogAlert>(
-	role('alertdialog'),
+const DialogStyles = (
 	<Style>
 		{{
 			content: { padding: 16 },
 			footer: { padding: 8 }
 		}}
-	</Style>,
-	render(host => (
-		<Host>
-			<Dialog>
-				<div className="content">
-					<T h5 className="title">
-						{get(host, 'title-text')}
-					</T>
-					<div>{get(host, 'message')}</div>
-				</div>
-				<div className="footer">
-					<Button
-						flat
-						$={el =>
-							onAction(el).pipe(
-								tap(() => host.resolve && host.resolve())
-							)
-						}
-					>
-						{get(host, 'action')}
-					</Button>
-				</div>
-			</Dialog>
-		</Host>
+	</Style>
+);
+
+@Augment<DialogAlert>(
+	role('alertdialog'),
+	DialogStyles,
+	tpl(({ onAction, get }) => (
+		<Dialog>
+			<div className="content">
+				<T h5>{get('title-text')}</T>
+				{get('message')}
+			</div>
+			<div className="footer">
+				<Button flat $={onAction('resolve')}>
+					{get('action')}
+				</Button>
+			</div>
+		</Dialog>
 	))
 )
 export class DialogAlert extends Component {
 	//				'role(alertdialog) =modal:aria.prop(modal) =title-text:aria.prop(label)',
 	static tagName = 'cxl-dialog-alert';
 
-	protected resolve?: () => void;
-	protected reject?: () => void;
+	resolve?: () => void;
 
 	@Attribute()
 	'title-text' = '';
@@ -122,20 +105,14 @@ export class DialogAlert extends Component {
 	@Attribute()
 	action = 'Ok';
 
-	readonly promise = new Promise((resolve, reject) => {
+	readonly promise = new Promise(resolve => {
 		this.resolve = resolve;
-		this.reject = reject;
 	});
 }
 
 @Augment<DialogConfirm>(
 	role('alertdialog'),
-	<Style>
-		{{
-			content: { padding: 16 },
-			footer: { padding: 8 }
-		}}
-	</Style>,
+	DialogStyles,
 	tpl(({ onAction, get }) => (
 		<Dialog>
 			<div className="content">

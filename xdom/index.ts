@@ -39,7 +39,7 @@ type ComponentFunction = (
 	children?: JSXElement[]
 ) => JSXElement;
 
-interface JSXComponent<T> {
+interface ComponentType<T> {
 	create(): HTMLElement;
 	new (): T;
 }
@@ -55,12 +55,8 @@ interface RenderContext {
 
 export type JSXElement<T = any> = (context: RenderContext) => T;
 
-function text(text: string) {
-	return () => document.createTextNode(text);
-}
-
 function expression(binding: Observable<any>) {
-	return (ctx?: RenderContext) => {
+	return (ctx: RenderContext) => {
 		const result = document.createTextNode('');
 		if (ctx) ctx.bind(binding.pipe(tap(val => (result.textContent = val))));
 		return result;
@@ -81,7 +77,7 @@ export function normalizeChildren(children: any, result?: JSXElement[]) {
 			result.push(view =>
 				expression(child.toBinding()(view.host, view))(view)
 			);
-		else result.push(text(child));
+		else result.push(() => document.createTextNode(child));
 	}
 	return result;
 }
@@ -207,7 +203,7 @@ export function dom<T extends keyof HTMLElementTagNameMap>(
 	...children: JSXElement[]
 ): JSXElement<HTMLElementTagNameMap[T]>;
 export function dom<T extends Component>(
-	elementType: JSXComponent<T>,
+	elementType: ComponentType<T>,
 	attributes?: T['jsxAttributes'],
 	...children: JSXElement[]
 ): JSXElement<T>;

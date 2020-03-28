@@ -119,6 +119,7 @@ interface Sources<T extends HTMLElement, T2> {
 	get(attr: keyof T): Chain<T, T2>;
 	call(method: keyof T): Chain<T, T2>;
 	onAction(method?: keyof T): Chain<T, T2>;
+	on(ev: string): Chain<T, T2>;
 }
 
 const sources: Sources<any, any> = {
@@ -132,7 +133,8 @@ const sources: Sources<any, any> = {
 		return new Chain((el, host) =>
 			onAction(el).pipe(tap(ev => method && host.host[method](ev)))
 		);
-	}
+	},
+	on: ev => new Chain(el => on(el, ev))
 };
 
 interface RenderContext<T> {

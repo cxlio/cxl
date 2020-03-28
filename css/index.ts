@@ -37,6 +37,7 @@ interface Colors {
 interface StrictStyleDefinition {
 	alignItems: string;
 	animation: string;
+	animationDuration: string;
 	elevation: number;
 	translateX: Length;
 	translateY: Length;

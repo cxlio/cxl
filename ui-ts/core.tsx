@@ -7,10 +7,10 @@ import {
 	StyleAttribute,
 	RenderContext,
 	bind,
-	connect,
 	get,
 	render,
-	role
+	role,
+	onUpdate
 } from '../component/index.js';
 import { onAction, triggerEvent, portal } from '../template/index.js';
 import { on, remove, setAttribute, trigger } from '../dom/index.js';
@@ -96,6 +96,7 @@ export function Focusable() {
 		<Style>
 			{{
 				$: {
+					display: 'block',
 					position: 'absolute',
 					overflowX: 'hidden',
 					overflowY: 'hidden',
@@ -112,28 +113,30 @@ export function Focusable() {
 					scaleY: 0,
 					backgroundColor: 'onSurface',
 					opacity: 0.16,
-					animation: 'expand'
-					//					animationDuration: '0.4s'
+					animation: 'expand',
+					animationDuration: '0.4s'
 				},
 				ripple$primary: { backgroundColor: 'primary' },
 				ripple$secondary: { backgroundColor: 'secondary' }
 			}}
 		</Style>
-	</Host>,
-	render(host => (
 		<div
-			$={el => on(el, 'animationend').pipe(tap(() => remove(host)))}
+			$={(el, view: Ripple['view']) => {
+				return merge(
+					onUpdate(view.host, host => {
+						const style = el.style;
+						style.left = host.x - host.radius + 'px';
+						style.top = host.y - host.radius + 'px';
+						style.width = style.height = host.radius * 2 + 'px';
+					}),
+					on(el, 'animationend').pipe(tap(() => remove(view.host)))
+				);
+			}}
 			className="ripple"
 		></div>
-	)),
-	connect(host => {
-		const style = host.style;
-		style.left = host.x - host.radius + 'px';
-		style.top = host.y - host.radius + 'px';
-		style.width = style.height = host.radius * 2 + 'px';
-	})
+	</Host>
 )
-class Ripple extends Component {
+export class Ripple extends Component {
 	static tagName = 'cxl-ripple';
 
 	@Attribute()
@@ -143,6 +146,14 @@ class Ripple extends Component {
 	@Attribute()
 	radius = 0;
 }
+
+@Augment(
+	<Host>
+		<Style>{{}}</Style>
+		<slot />
+	</Host>
+)
+export class RippleContainer extends Component {}
 
 @Augment<Appbar>(
 	role('heading'),
@@ -292,42 +303,6 @@ export class Avatar extends Component {
 )
 export class Card extends Component {
 	static tagName = 'cxl-card';
-}
-
-@Augment(
-	<Host>
-		<Style>
-			{{
-				$: {
-					padding: 16,
-					position: 'relative',
-					flexGrow: 1,
-					overflowY: 'auto',
-					overflowScrolling: 'touch'
-				},
-				'@medium': {
-					$: { padding: 32 }
-				},
-				'@large': {
-					$: { padding: 64 }
-				},
-				'@xlarge': {
-					content: { width: 1200 },
-					content$center: {
-						padding: 0,
-						marginLeft: 'auto',
-						marginRight: 'auto'
-					}
-				}
-			}}
-		</Style>
-		<slot></slot>
-	</Host>
-)
-export class Content extends Component {
-	static tagName = 'cxl-content';
-	@StyleAttribute()
-	center = false;
 }
 
 @Augment(

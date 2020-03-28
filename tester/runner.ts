@@ -150,7 +150,6 @@ function handleRequest(sources: Output[], req: Request) {
 }
 
 async function cjsRunner(page: Page, sources: Output[]) {
-	// TODO
 	const entry = sources[0].path;
 	await page.addScriptTag({ path: __dirname + '/require.js' });
 
