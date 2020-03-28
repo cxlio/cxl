@@ -674,31 +674,6 @@ disconnect:#unregister
 		}
 	});
 
-	component({
-		name: 'cxl-select-menu',
-		attributes: ['visible', 'inline'],
-		styles: {
-			$: {
-				position: 'absolute',
-				elevation: 0,
-				right: -16,
-				left: -16,
-				overflowY: 'hidden',
-				transformOrigin: 'top'
-			},
-			$inline: {
-				position: 'static',
-				marginLeft: -16,
-				marginRight: -16
-			},
-			$visible: {
-				elevation: 3,
-				overflowY: 'auto',
-				backgroundColor: 'surface'
-			}
-		}
-	});
-
 	component(
 		{
 			name: 'cxl-select',

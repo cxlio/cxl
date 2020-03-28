@@ -91,3 +91,38 @@ export class FocusLine extends Component {
 	@StyleAttribute()
 	touched = false;
 }
+
+@Augment(
+	<Style>
+		{{
+			$: {
+				position: 'absolute',
+				elevation: 0,
+				right: -16,
+				left: -16,
+				overflowY: 'hidden',
+				transformOrigin: 'top'
+			},
+			$inline: {
+				position: 'static',
+				marginLeft: -16,
+				marginRight: -16
+			},
+			$visible: {
+				elevation: 3,
+				overflowY: 'auto',
+				backgroundColor: 'surface'
+			}
+		}}
+	</Style>,
+	<slot />
+)
+export class SelectMenu extends Component {
+	static tagName = 'cxl-select-menu';
+
+	@StyleAttribute()
+	visible = false;
+
+	@StyleAttribute()
+	inline = false;
+}
