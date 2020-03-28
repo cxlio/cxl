@@ -719,40 +719,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 
 	component(
 		{
-			name: 'cxl-tab',
-			template: '<a &=".link =href:attribute(href) content"></a>',
-			bindings:
-				'role(tab) focusable ripple =selected:filter:host.trigger(cxl-tab.selected)',
-			attributes: ['href', 'selected', 'disabled', 'touched'],
-			styles: [
-				{
-					$: { flexShrink: 0 },
-					$small: { display: 'inline-block' },
-					link: {
-						padding: 16,
-						paddingBottom: 12,
-						border: 0,
-						backgroundColor: 'primary',
-						font: 'button',
-						color: 'onPrimary',
-						lineHeight: 20,
-						textDecoration: 'none',
-						textAlign: 'center',
-						display: 'block'
-					}
-				},
-				FocusCSS,
-				DisabledCSS
-			]
-		},
-		{
-			href: null,
-			selected: false
-		}
-	);
-
-	component(
-		{
 			name: 'cxl-tabs',
 			template: `<div &=".content content"></div><div &="id(indicator) .selected"></div>`,
 			bindings: `

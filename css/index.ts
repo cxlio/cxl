@@ -83,6 +83,7 @@ interface StrictStyleDefinition {
 	position: string;
 	userSelect: string;
 	textAlign: string;
+	textDecoration: string;
 	height: Length;
 	verticalAlign:
 		| 'top'

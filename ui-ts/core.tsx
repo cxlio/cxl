@@ -14,7 +14,7 @@ import {
 } from '../component/index.js';
 import { onAction, triggerEvent, portal } from '../template/index.js';
 import { on, remove, setAttribute, trigger } from '../dom/index.js';
-import { tap, merge, debounceTime } from '../rx/index.js';
+import { map, tap, merge, debounceTime } from '../rx/index.js';
 import { Style, StyleSheet, pct, theme } from '../css/index.js';
 
 const StateStyles = {
@@ -704,4 +704,73 @@ export class ButtonBase extends Component {
 @Augment(<slot></slot>)
 export class Button extends ButtonBase {
 	static tagName = 'cxl-button';
+}
+
+/*component(
+		{
+			name: 'cxl-tab',
+			template: '<a &=".link =href:attribute(href) content"></a>',
+			bindings:
+				'role(tab) focusable ripple =selected:filter:host.trigger(cxl-tab.selected)',
+			attributes: ['href', 'selected', 'disabled', 'touched'],
+			styles: [
+				{
+
+				},
+				FocusCSS,
+				DisabledCSS
+			]
+		},
+		{
+			href: null,
+			selected: false
+		}
+	);*/
+@Augment<Tab>(
+	role('tab'),
+	<Focusable />,
+	<Style>
+		{{
+			$: { flexShrink: 0 },
+			'@small': {
+				$: { display: 'inline-block' }
+			},
+			link: {
+				padding: 16,
+				paddingBottom: 12,
+				backgroundColor: 'primary',
+				font: 'button',
+				color: 'onPrimary',
+				lineHeight: 20,
+				textDecoration: 'none',
+				textAlign: 'center',
+				display: 'block'
+			}
+		}}
+	</Style>,
+	render(host => (
+		<a
+			className="link"
+			href={get(host, 'href').pipe(map(val => val || 'javascript:'))}
+		>
+			<slot />
+		</a>
+	)),
+	bind(ripple),
+	bind(host =>
+		get(host, 'selected').pipe(
+			tap(val => {
+				if (val) trigger(host, 'cxl-tab.selected');
+			})
+		)
+	)
+)
+export class Tab extends Component {
+	static tagName = 'cxl-tab';
+
+	@Attribute()
+	href?: string;
+
+	@Attribute()
+	selected = false;
 }
