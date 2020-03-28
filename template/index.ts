@@ -17,10 +17,6 @@ import {
 	MutationEvent
 } from '../dom/index.js';
 
-export function $on(event: string, callback: (ev: Event) => void) {
-	return (el: HTMLElement) => on(el, event).pipe(tap(callback));
-}
-
 export function getAttribute<T extends HTMLElement>(el: T, name: keyof T) {
 	const view: any = (el as any).view;
 	const observer = view
@@ -117,7 +113,6 @@ class Chain<T extends HTMLElement, ElementT> {
 
 interface Sources<T extends HTMLElement, T2> {
 	get(attr: keyof T): Chain<T, T2>;
-	call(method: keyof T): Chain<T, T2>;
 	onAction(method?: keyof T): Chain<T, T2>;
 	on(ev: string): Chain<T, T2>;
 }
@@ -125,9 +120,6 @@ interface Sources<T extends HTMLElement, T2> {
 const sources: Sources<any, any> = {
 	get(attr) {
 		return new Chain((_el, host) => getAttribute(host.host, attr));
-	},
-	call(method) {
-		return new Chain((_el, host) => (host.host[method] as any)());
 	},
 	onAction(method?) {
 		return new Chain((el, host) =>

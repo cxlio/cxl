@@ -305,6 +305,95 @@ export class Card extends Component {
 	static tagName = 'cxl-card';
 }
 
+@Augment<Chip>(
+	<Host>
+		<Focusable />
+		<Style>
+			{{
+				$: {
+					borderRadius: 16,
+					font: 'subtitle2',
+					backgroundColor: 'onSurface12',
+					display: 'inline-flex',
+					color: 'onSurface',
+					lineHeight: 32,
+					height: 32,
+					verticalAlign: 'top'
+				},
+				$primary: {
+					color: 'onPrimary',
+					backgroundColor: 'primary'
+				},
+				$secondary: {
+					color: 'onSecondary',
+					backgroundColor: 'secondary'
+				},
+				$little: { font: 'caption', lineHeight: 20, height: 20 },
+				content: {
+					display: 'inline-block',
+					marginLeft: 12,
+					paddingRight: 12
+				},
+				avatar: { display: 'inline-block' },
+				remove: {
+					display: 'none',
+					marginRight: 12,
+					cursor: 'pointer'
+				},
+				remove$removable: {
+					display: 'inline-block'
+				}
+			}}
+		</Style>
+		<span className="avatar">
+			<Slot selector="cxl-avatar" />
+		</span>
+		<span className="content">
+			<slot></slot>
+		</span>
+		<span
+			$={(el, view) =>
+				on(el, 'click').pipe(tap(() => view.host.remove()))
+			}
+			className="remove"
+		>
+			x
+		</span>
+	</Host>,
+	bind(host =>
+		on(host, 'keydown').pipe(
+			tap(ev => {
+				if (
+					host.removable &&
+					(ev.key === 'Delete' || ev.key === 'Backspace')
+				)
+					host.remove();
+			})
+		)
+	)
+)
+export class Chip extends Component {
+	static tagName = 'cxl-chip';
+
+	@StyleAttribute()
+	removable = false;
+	@StyleAttribute()
+	disabled = false;
+	@Attribute()
+	touched = false;
+	@StyleAttribute()
+	primary = false;
+	@StyleAttribute()
+	secondary = false;
+	@StyleAttribute()
+	little = false;
+
+	remove() {
+		remove(this);
+		trigger(this, 'cxl-chip.remove');
+	}
+}
+
 @Augment(
 	<Host>
 		<Style>
