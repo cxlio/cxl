@@ -1,4 +1,9 @@
-import { Augment, bind } from '../component/index.js';
+import {
+	StyleAttribute,
+	Augment,
+	Component,
+	bind
+} from '../component/index.js';
 import { ButtonBase, Spinner } from './core.js';
 import { dom, Host } from '../xdom/index.js';
 import { onAction, triggerEvent } from '../template/index.js';
@@ -26,4 +31,63 @@ import { Style } from '../css/index.js';
 export class SubmitButton extends ButtonBase {
 	static tagName = 'cxl-submit';
 	primary = true;
+}
+
+@Augment(
+	<Style>
+		{{
+			$: {
+				display: 'block',
+				lineHeight: 12,
+				font: 'caption',
+				verticalAlign: 'bottom',
+				paddingTop: 8
+			},
+			$invalid: { color: 'error' }
+		}}
+	</Style>,
+	<slot />
+)
+export class FieldHelp extends Component {
+	static tagName = 'cxl-field-help';
+	@StyleAttribute()
+	invalid = false;
+}
+
+@Augment(
+	<Style>
+		{{
+			$: {
+				position: 'absolute',
+				left: 0,
+				right: 0,
+				height: 2,
+				borderWidth: 0,
+				borderBottom: 1,
+				borderStyle: 'solid',
+				borderColor: 'onSurface'
+			},
+			$invalid: { borderColor: 'error' },
+			line: {
+				backgroundColor: 'primary',
+				scaleX: 0,
+				height: 2
+			},
+			line$focused: { scaleX: 1 },
+			line$invalid: { backgroundColor: 'error' }
+		}}
+	</Style>,
+	<div className="line" />
+)
+export class FocusLine extends Component {
+	static tagName = 'cxl-focus-line';
+
+	@StyleAttribute()
+	focused = false;
+
+	@StyleAttribute()
+	invalid = false;
+
+	@StyleAttribute()
+	touched = false;
 }

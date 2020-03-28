@@ -39,6 +39,12 @@ interface StrictStyleDefinition {
 	alignItems: string;
 	animation: string;
 	animationDuration: string;
+	backgroundColor: Color;
+	borderBottom: number;
+	borderColor: Color;
+	borderWidth: number;
+	borderRadius: Length;
+	borderStyle: 'solid' | 'none';
 	elevation: number;
 	translateX: Length;
 	translateY: Length;
@@ -50,10 +56,6 @@ interface StrictStyleDefinition {
 	scaleY: number;
 	font: keyof Typography;
 	color: Color;
-	backgroundColor: Color;
-	borderColor: Color;
-	borderWidth: number;
-	borderRadius: Length;
 	padding: number;
 	paddingLeft: number;
 	paddingRight: number;
@@ -562,10 +564,10 @@ export class StyleSheet {
 		const native = (this.native = document.createElement('style'));
 
 		native.innerHTML =
-			renderStyles(this.styles, this.selector) +
 			(this.global
 				? ''
-				: renderStyles(theme.globalStyles, this.selector));
+				: renderStyles(theme.globalStyles, this.selector)) +
+			renderStyles(this.styles, this.selector);
 
 		return native;
 	}

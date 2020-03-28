@@ -182,20 +182,6 @@ action:#toggle
 	);
 
 	component({
-		name: 'cxl-field-help',
-		attributes: ['invalid'],
-		styles: {
-			$: {
-				lineHeight: 12,
-				verticalAlign: 'bottom',
-				font: 'caption',
-				paddingTop: 8
-			},
-			$invalid: { color: 'error' }
-		}
-	});
-
-	component({
 		name: 'cxl-field-base',
 		attributes: [
 			'outline',
@@ -465,32 +451,6 @@ on(click):#focus
 			type: 'password'
 		}
 	);
-
-	component({
-		name: 'cxl-focus-line',
-		attributes: ['focused', 'invalid', 'touched'],
-		template: `<div &=".line"></div`,
-		styles: {
-			$: {
-				position: 'absolute',
-				left: 0,
-				right: 0,
-				height: 2,
-				border: 0,
-				borderBottom: 1,
-				borderStyle: 'solid',
-				borderColor: 'onSurface'
-			},
-			$invalid: { borderColor: 'error' },
-			line: {
-				backgroundColor: 'primary',
-				scaleX: 0,
-				height: 2
-			},
-			line$focused: { scaleX: 1 },
-			line$invalid: { backgroundColor: 'error' }
-		}
-	});
 
 	/*component({
 		name: 'cxl-field-icon',
