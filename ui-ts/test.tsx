@@ -50,6 +50,8 @@ function testFocus(c: HTMLInputElement & { touched: boolean }, test: Test) {
 }
 
 function testDisabled(el: HTMLInputElement, test: Test) {
+	if (el.tabIndex !== 0) return;
+
 	test.test('[disabled]', a => {
 		a.equal(
 			el.disabled,

@@ -3,12 +3,13 @@ import {
 	Augment,
 	Attribute,
 	Component,
+	Slot,
 	attributeChanged,
 	bind,
 	get,
 	role
 } from '../component/index.js';
-import { ButtonBase, Spinner, Focusable, Svg } from './core.js';
+import { ButtonBase, Spinner, Toggle, Focusable, Svg } from './core.js';
 import { dom, Host } from '../xdom/index.js';
 import { onAction, triggerEvent } from '../template/index.js';
 import { setAttribute, trigger } from '../dom/index.js';
@@ -230,6 +231,178 @@ export class FieldHelp extends Component {
 }
 
 @Augment(
+	<Host>
+		<Style>
+			{{
+				$: {
+					position: 'relative',
+					paddingLeft: 12,
+					paddingRight: 12,
+					paddingTop: 28,
+					paddingBottom: 6,
+					backgroundColor: 'surface',
+					color: 'onSurface',
+					display: 'block'
+				},
+				$focused: { borderColor: 'primary', color: 'primary' },
+				$outline: {
+					borderColor: 'onSurface',
+					borderWidth: 1,
+					borderStyle: 'solid',
+					borderRadius: 4,
+					marginTop: 2,
+					paddingTop: 14,
+					paddingBottom: 14
+				},
+				$focused$outline: {
+					// boxShadow: '0 0 0 1px var(--cxl-primary)',
+					borderColor: 'primary'
+				},
+				$invalid: { color: 'error' },
+				$invalid$outline: { borderColor: 'error' },
+				$invalid$outline$focused: {
+					// boxShadow: '0 0 0 1px var(--cxl-error)'
+				},
+				content: { position: 'relative' },
+				mask: {
+					position: 'absolute',
+					top: 0,
+					right: 0,
+					left: 0,
+					bottom: 0,
+					backgroundColor: 'surface'
+				},
+				mask$outline: { borderRadius: 4 },
+				mask$hover$hovered: {
+					// state: 'hover'
+				},
+				// $disabled: { state: 'disabled' },
+				// mask$hover$hovered$disabled: { state: 'none' },
+				label: {
+					position: 'absolute',
+					top: 10,
+					left: 12,
+					font: 'caption',
+					lineHeight: 10,
+					verticalAlign: 'bottom'
+					/*transition:
+					'transform var(--cxl-speed), font-size var(--cxl-speed)'*/
+				},
+				label$focused: { color: 'primary' },
+				label$invalid: { color: 'error' },
+				label$outline: {
+					top: -5,
+					left: 8,
+					paddingLeft: 4,
+					paddingRight: 4,
+					marginBottom: 0,
+					backgroundColor: 'inherit',
+					display: 'inline-block'
+				},
+				label$floating: {
+					font: 'default',
+					translateY: 23,
+					opacity: 0.75
+				},
+				label$leading: { paddingLeft: 24 },
+				label$floating$outline: { translateY: 27 }
+			}}
+		</Style>
+		<div className="mask">
+			<div className="label">
+				<Slot selector="cxl-label-slot" />
+			</div>
+		</div>
+		<div className="content">
+			<Slot selector="cxl-field-content" />
+		</div>
+		<slot />
+	</Host>
+)
+export class FieldBase extends Component {
+	static tagName = 'cxl-field-base';
+
+	@StyleAttribute()
+	outline = false;
+	@StyleAttribute()
+	floating = false;
+	@StyleAttribute()
+	invalid = false;
+	@StyleAttribute()
+	focused = false;
+	@StyleAttribute()
+	leading = false;
+	@StyleAttribute()
+	disabled = false;
+	@StyleAttribute()
+	hovered = false;
+}
+
+/*	component(
+		{
+			update(ev) {
+				var el = ev.target;
+
+				if (el.touched) {
+					this.invalid = el.invalid;
+					this.error = el.$validity && el.$validity.message;
+				}
+			}
+		}
+	);*/
+/*@Augment(
+	<Host>
+		<Style>{{
+				$: { marginBottom: 16 },
+					content: { display: 'block', marginTop: 16 },
+						content$outline: { marginTop: 0 }
+		}}</Style>
+		<FieldBase &="on(invalid):#update =invalid:@invalid =outline:@outline">
+			<LabelSlot><Slot selector="cxl-label" /></LabelSlot>
+			<FieldContent><slot /></FieldContent>
+		</FieldBase>
+		<div className="help">
+			<FieldHelp invalid &="=error:text:show"></FieldHelp>
+			<div &="=error:hide content(cxl-field-help)"></div>
+		</div>
+	</Host>
+)
+export class Fieldset extends Component {
+	static tagName = 'cxl-fieldset';
+	
+	@StyleAttribute()
+	outline = false;
+	
+	invalid = false;
+}*/
+
+@Augment(
+	FocusCircleStyle,
+	<Host>
+		<Style>
+			{{
+				$: {
+					paddingTop: 8,
+					paddingBottom: 8,
+					paddingLeft: 12,
+					paddingRight: 12,
+					cursor: 'pointer',
+					position: 'relative'
+				},
+				focusCircle: { left: -4 }
+			}}
+		</Style>
+		<span className="focusCircle focusCirclePrimary"></span>
+		<Toggle>
+			<slot />
+		</Toggle>
+	</Host>
+)
+export class FieldToggle extends Component {
+	static tagName = 'cxl-field-toggle';
+}
+
+@Augment(
 	<Style>
 		{{
 			$: {
@@ -404,4 +577,91 @@ export class SelectMenu extends Component {
 
 	@StyleAttribute()
 	inline = false;
+}
+
+@Augment<Switch>(
+	role('switch'),
+	FocusCircleStyle,
+	<Host>
+		<Style>
+			{{
+				$: {
+					display: 'flex',
+					cursor: 'pointer',
+					paddingTop: 12,
+					paddingBottom: 12
+				},
+				$inline: { display: 'inline-flex' },
+				content: { flexGrow: 1 },
+				switch: {
+					position: 'relative',
+					width: 46,
+					height: 20,
+					userSelect: 'none'
+				},
+				background: {
+					position: 'absolute',
+					display: 'block',
+					left: 10,
+					top: 2,
+					height: 16,
+					borderRadius: 8,
+					width: 26,
+					backgroundColor: 'divider'
+				},
+
+				knob: {
+					width: 20,
+					height: 20,
+					borderRadius: 10,
+					backgroundColor: 'surface',
+					position: 'absolute',
+					elevation: 1
+				},
+
+				background$checked: { backgroundColor: 'primaryLight' },
+				knob$checked: {
+					translateX: 24,
+					backgroundColor: 'primary'
+				},
+				knob$invalid$touched: { backgroundColor: 'error' },
+				content$invalid$touched: { color: 'error' },
+				focusCircle$checked: { backgroundColor: 'primary' }
+			}}
+		</Style>
+		<slot />
+		<div className="switch">
+			<span className="background =checked:#update"></span>
+			<div className="knob">
+				<span className="focusCircle"></span>
+			</div>
+		</div>
+	</Host>,
+	bind(host => {
+		return merge(
+			onAction(host).pipe(
+				tap(() => {
+					if (host.disabled) return;
+					host.checked = !host.checked;
+				})
+			),
+			get(host, 'checked').pipe(
+				tap(val => {
+					host.setAttribute('aria-checked', val ? 'true' : 'false');
+					host.value = val ? host.trueValue : host.falseValue;
+				})
+			)
+		);
+	})
+)
+export class Switch extends InputBase {
+	static tagName = 'cxl-switch';
+
+	value = false;
+	@StyleAttribute()
+	checked = false;
+	@Attribute()
+	trueValue: any = true;
+	@Attribute()
+	falseValue: any = false;
 }

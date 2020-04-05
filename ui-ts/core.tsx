@@ -635,6 +635,100 @@ export class T extends Component {
 	h6 = false;
 }
 
+/*	component(
+		{
+			bindings: `
+focusable
+root.on(click):#close keypress(escape):#close
+action:#show:event.stop
+role(button)
+	`,
+			styles: {
+				popup: { height: 0, elevation: 5, position: 'absolute' },
+				$disabled: { pointerEvents: 'none' }
+			}
+		},
+		{
+			opened: false,
+			close() {
+				this.opened = false;
+			},
+			show() {
+				if (this.disabled) return;
+
+				if (!this.opened) {
+					this.opened = true;
+					this.popup.style.right = 0; //'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
+				} else this.close();
+			}
+		}
+	);*/
+
+@Augment<Toggle>(
+	<Host>
+		<Focusable />
+		<Style>
+			{{
+				popup: {
+					display: 'none',
+					height: 0,
+					elevation: 5,
+					position: 'absolute'
+				},
+				$disabled: { pointerEvents: 'none' },
+				popup$opened: { display: 'block' }
+			}}
+		</Style>
+		<slot />
+		<div className="popup">
+			<slot />
+		</div>
+	</Host>,
+	bind(el => {
+		return onAction(el).pipe(
+			tap(ev => {
+				if (el.disabled) return;
+				el.opened = !el.opened;
+				ev.stopPropagation();
+			})
+		);
+	})
+)
+export class Toggle extends Component {
+	@StyleAttribute()
+	disabled = false;
+	@Attribute()
+	touched = false;
+	@StyleAttribute()
+	opened = false;
+}
+
+/*
+	component({
+		name: 'cxl-icon-toggle',
+		attributes: ['icon'],
+		extend: 'cxl-toggle',
+		template: `
+<span &="=opened:hide .focusCircle .focusCirclePrimary"></span>
+<cxl-icon &="=icon:@icon"></cxl-icon>
+<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
+	`,
+		styles: [
+			FocusCircleCSS,
+			{
+				$: {
+					paddingTop: 8,
+					paddingBottom: 8,
+					paddingLeft: 12,
+					paddingRight: 12,
+					cursor: 'pointer',
+					position: 'relative'
+				},
+				focusCircle: { left: -4 }
+			}
+		]
+	});*/
+
 @Augment(
 	role('button'),
 	<Host>

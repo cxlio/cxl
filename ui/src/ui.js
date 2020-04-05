@@ -468,66 +468,6 @@ focusable ripple role(listitem)
 
 	component(
 		{
-			name: 'cxl-toggle',
-			attributes: ['disabled', 'touched', 'opened'],
-			template: `
-<div &="content"></div>
-<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
-	`,
-			bindings: `
-focusable
-root.on(click):#close keypress(escape):#close
-action:#show:event.stop
-role(button)
-	`,
-			styles: {
-				popup: { height: 0, elevation: 5, position: 'absolute' },
-				$disabled: { pointerEvents: 'none' }
-			}
-		},
-		{
-			opened: false,
-			close() {
-				this.opened = false;
-			},
-			show() {
-				if (this.disabled) return;
-
-				if (!this.opened) {
-					this.opened = true;
-					this.popup.style.right = 0; //'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
-				} else this.close();
-			}
-		}
-	);
-
-	component({
-		name: 'cxl-icon-toggle',
-		attributes: ['icon'],
-		extend: 'cxl-toggle',
-		template: `
-<span &="=opened:hide .focusCircle .focusCirclePrimary"></span>
-<cxl-icon &="=icon:@icon"></cxl-icon>
-<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
-	`,
-		styles: [
-			FocusCircleCSS,
-			{
-				$: {
-					paddingTop: 8,
-					paddingBottom: 8,
-					paddingLeft: 12,
-					paddingRight: 12,
-					cursor: 'pointer',
-					position: 'relative'
-				},
-				focusCircle: { left: -4 }
-			}
-		]
-	});
-
-	component(
-		{
 			name: 'cxl-menu-toggle',
 			attributes: ['disabled', 'touched', 'icon'],
 			template: `
