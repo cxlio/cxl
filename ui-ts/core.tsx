@@ -999,3 +999,70 @@ export class Tab extends Component {
 	@Attribute()
 	selected = false;
 }
+
+@Augment<Tabs>(
+	role('tablist'),
+	<Host>
+		<Style>
+			{{
+				$: {
+					backgroundColor: 'primary',
+					color: 'onPrimary',
+					display: 'block',
+					flexShrink: 0,
+					position: 'relative',
+					cursor: 'pointer',
+					overflowX: 'auto'
+				},
+				selected: {
+					transformOrigin: 'left',
+					backgroundColor: 'secondary',
+					height: 4,
+					width: 100,
+					scaleX: 0,
+					display: 'none'
+				},
+				content: { display: 'flex' },
+				content$small: { display: 'block' }
+			}}
+		</Style>
+		<div className="content">
+			<slot />
+		</div>
+	</Host>,
+	bind(el => {
+		return merge(
+			on(el, 'cxl-tab.selected').pipe(
+				tap(ev => {
+					if (el.selected) el.selected.selected = false;
+					el.selected = ev.target;
+				})
+			)
+		);
+	}),
+	render(host => (
+		<div
+			className="selected"
+			$={el =>
+				get(host, 'selected').pipe(
+					tap(sel => {
+						if (!sel) return (el.style.transform = 'scaleX(0)');
+
+						// Add delay so styles finish rendering...
+						requestAnimationFrame(() => {
+							const scaleX = sel.clientWidth / 100;
+							el.style.transform = `translate(${sel.offsetLeft}px, 0) scaleX(${scaleX})`;
+							el.style.display = 'block';
+						});
+					})
+				)
+			}
+		/>
+	))
+)
+export class Tabs extends Component {
+	static tagName = 'cxl-tabs';
+
+	@Attribute()
+	selected?: Tab;
+}

@@ -482,63 +482,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 		}
 	);
 
-	component(
-		{
-			name: 'cxl-tabs',
-			template: `<div &=".content content"></div><div &="id(indicator) .selected"></div>`,
-			bindings: `
-role(tablist)
-on(cxl-tab.selected):#onSelected
-=selected:#update
-root.on(load):#update
-	`,
-			attributes: ['selected'],
-			styles: {
-				$: {
-					backgroundColor: 'primary',
-					color: 'onPrimary',
-					display: 'block',
-					flexShrink: 0,
-					position: 'relative',
-					cursor: 'pointer',
-					overflowX: 'auto'
-				},
-				selected: {
-					transformOrigin: 'left',
-					backgroundColor: 'secondary',
-					height: 4,
-					width: 100,
-					transform: 'scaleX(0)',
-					display: 'none'
-				},
-				content: { display: 'flex' },
-				content$small: { display: 'block' }
-			}
-		},
-		{
-			selected: Undefined,
-			update() {
-				const bar = this.indicator,
-					tab = this.selected;
-
-				if (!tab) return (bar.style.transform = 'scaleX(0)');
-
-				// Add delay so styles finish rendering...
-				requestAnimationFrame(() => {
-					const scaleX = tab.clientWidth / 100;
-					bar.style.transform = `translate(${tab.offsetLeft}px, 0) scaleX(${scaleX})`;
-					bar.style.display = 'block';
-				});
-			},
-
-			onSelected(ev) {
-				if (this.selected) this.selected.selected = false;
-
-				this.selected = ev.target;
-			}
-		}
-	);
-
 	Object.assign(ui, {
 		alert(options) {
 			if (typeof options === 'string') options = { message: options };
