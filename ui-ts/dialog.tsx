@@ -3,11 +3,13 @@ import {
 	StyleAttribute,
 	Augment,
 	Component,
-	role
+	role,
+	render,
+	get
 } from '../component/index.js';
 import { Style, pct } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
-import { tpl } from '../template/index.js';
+import { tpl, onAction } from '../template/index.js';
 import { on, trigger } from '../dom/index.js';
 import { tap } from '../rx/index.js';
 import { T, Button } from './core.js';
@@ -236,4 +238,64 @@ export class Drawer extends Component {
 
 	@StyleAttribute()
 	permanent = false;
+}
+
+/*	component(
+		{
+			permanent: false,
+			visible: false,
+			toggle() {
+				this.visible = !this.visible;
+			},
+
+			onRoute() {
+				this.visible = false;
+			}
+		}
+		alt="Open Navigation Bar"
+		role="list" 	
+	);*/
+//" =permanent:@permanent =visible:@visible content location:#onRoute"></Drawer>
+@Augment<Navbar>(
+	role('navigation'),
+	<Style>
+		{{
+			$: {
+				display: 'inline-block',
+				marginTop: 8,
+				marginBottom: 8,
+				overflowScrolling: 'touch'
+			},
+			toggler: {
+				width: 16,
+				marginRight: 32,
+				cursor: 'pointer'
+			},
+			toggler$permanent$large: { display: 'none' }
+		}}
+	</Style>,
+	render(host => (
+		<Host>
+			<Drawer
+				permanent={get(host, 'permanent')}
+				visible={get(host, 'visible')}
+			>
+				<slot />
+			</Drawer>
+			<div
+				$={el =>
+					onAction(el).pipe(tap(() => (host.visible = !host.visible)))
+				}
+				className="toggler"
+			></div>
+		</Host>
+	))
+)
+export class Navbar extends Component {
+	static tagName = 'cxl-navbar';
+
+	@StyleAttribute()
+	permanent = false;
+
+	visible = false;
 }

@@ -416,43 +416,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 		}
 	);
 
-	component(
-		{
-			name: 'cxl-navbar',
-			attributes: ['permanent'],
-			bindings: 'role(navigation)',
-			template: `
-<cxl-drawer &="role(list) action:#onRoute =permanent:@permanent =visible:@visible content location:#onRoute"></cxl-drawer>
-<cxl-icon alt="Open Navigation Bar" &="action:#toggle .toggler" icon="bars"></cxl-icon>
-	`,
-			styles: {
-				$: {
-					display: 'inline-block',
-					marginTop: 8,
-					marginBottom: 8,
-					overflowScrolling: 'touch'
-				},
-				toggler: {
-					width: 16,
-					marginRight: 32,
-					cursor: 'pointer'
-				},
-				toggler$permanent$large: { display: 'none' }
-			}
-		},
-		{
-			permanent: false,
-			visible: false,
-			toggle() {
-				this.visible = !this.visible;
-			},
-
-			onRoute() {
-				this.visible = false;
-			}
-		}
-	);
-
 	component({
 		name: 'cxl-ripple-container',
 		attributes: ['disabled'],
