@@ -1,142 +1,255 @@
-type TestFn = (test: Test) => void;
-type SuiteFn = (suiteFn: (name: string, testFn: TestFn) => void) => void;
+import { Result, Test } from '../spec/index.js';
+import { colors } from '../server/colors.js';
+import { Application, ApplicationArguments } from '../server/index.js';
+import { writeFileSync, readFileSync, existsSync } from 'fs';
+import * as path from 'path';
 
-declare function setTimeout(fn: () => any, n?: number): number;
-declare function clearTimeout(n: number): void;
+import { launch, Page, Request } from 'puppeteer';
+require('source-map-support').install();
 
-export interface Result {
-	success: boolean;
-	message: string;
-	stack?: any;
+interface Output {
+	path: string;
+	source: string;
 }
 
-interface TestConfig {
-	name: string;
-}
+class TestReport {
+	failures: Result[] = [];
+	constructor(private suite: Test) {}
 
-interface Element {
-	parentNode: Element | null;
-	removeChild(child: any): void;
-	appendChild(child: any): void;
-}
+	printTest(test: Test) {
+		let out = '';
 
-let lastTestId = 1;
-
-function inspect(val: any) {
-	if (typeof val === 'string') return '"' + val + '"';
-
-	return val;
-}
-
-export class Test {
-	readonly id = lastTestId++;
-	name: string;
-	promise?: Promise<any>;
-	results: Result[] = [];
-	tests: Test[] = [];
-	timeout = 5 * 1000;
-	private domElement?: Element;
-
-	private completed = false;
-
-	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
-		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
-		else this.name = nameOrConfig.name;
-	}
-
-	/**
-	 * Returns a connected dom element. Cleaned up after test completion.
-	 */
-	get dom() {
-		if (this.domElement) return this.domElement;
-
-		const el = (this.domElement = document.createElement('DIV'));
-		document.body.appendChild(el);
-		return el;
-	}
-
-	log(...args: any[]) {
-		console.log(...args);
-	}
-
-	ok(condition: any, message = 'Assertion failed') {
-		this.results.push({ success: !!condition, message });
-	}
-
-	equal<T>(a: T, b: T, desc?: string) {
-		return this.ok(
-			a === b,
-			desc || `${inspect(a)} should equal ${inspect(b)}`
-		);
-	}
-
-	ran(n: number) {
-		return this.ok(
-			n === this.results.length,
-			`Expected ${n} assertions, instead got ${this.results.length}`
-		);
-	}
-
-	protected pushError(e: Error | string) {
-		this.results.push(
-			e instanceof Error
-				? { success: false, message: e.message, stack: e.stack }
-				: { success: false, message: e }
-		);
-	}
-
-	async() {
-		let result: () => void, timeout: number;
-
-		this.promise = new Promise<void>((resolve, reject) => {
-			result = resolve;
-			timeout = setTimeout(() => {
-				reject('Async test timed out');
-			}, this.timeout);
+		const failures = test.results.filter(result => {
+			out += result.success ? colors.green('.') : colors.red('X');
+			return result.success === false;
 		});
-		return () => {
-			if (this.completed) throw new Error('Test was already completed.');
-			this.completed = true;
-			result();
-			clearTimeout(timeout);
-		};
-	}
 
-	test(name: string, testFn: TestFn) {
-		this.tests.push(new Test(name, testFn));
-	}
-
-	addTest(test: Test) {
-		this.tests.push(test);
-	}
-
-	async run(): Promise<Result[]> {
-		try {
-			this.testFn(this);
-			await this.promise;
-			if (this.promise && this.completed === false)
-				throw new Error('Never completed');
-			if (this.tests.length)
-				await Promise.all(this.tests.map(test => test.run()));
-		} catch (e) {
-			this.pushError(e);
+		if (test.results.length === 0 && test.tests.length === 0) {
+			out = colors.red('X');
+			failures.push({ success: false, message: 'No assertions found' });
 		}
 
-		if (this.domElement && this.domElement.parentNode)
-			this.domElement.parentNode.removeChild(this.domElement);
+		console.group(`${test.name} ${out}`);
+		failures.forEach(fail => this.printError(test, fail));
+		test.tests.forEach((test: Test) => this.printTest(test));
+		console.groupEnd();
 
-		return this.results;
+		return failures;
+	}
+
+	printError(test: Test, fail: Result) {
+		this.failures.push(fail);
+		const msg = fail.message;
+		console.error(test.name, colors.red(msg));
+		if (fail.stack) console.error(fail.stack);
+	}
+
+	print() {
+		this.printTest(this.suite);
+		return this.failures;
 	}
 }
 
-export function suite(
-	nameOrConfig: string | TestConfig,
-	suiteFn: SuiteFn | any[]
-) {
-	const suite = new Test(nameOrConfig, context => {
-		if (Array.isArray(suiteFn))
-			suiteFn.forEach(test => context.addTest(test));
-		else suiteFn(context.test.bind(context));
-	});
-	return suite;
+function generateCoverageReport([js]: any, sources: Output[]) {
+	const report: any = {};
+
+	for (const entry of js) {
+		const total = entry.text.length;
+		const sourceFile = sources.find(src => entry.text.includes(src.source));
+
+		if (!sourceFile) continue;
+
+		const url = sourceFile ? sourceFile.path : entry.url;
+		let used = 0;
+
+		report[url] = entry.ranges;
+
+		for (const range of entry.ranges) used += range.end - range.start - 1;
+
+		console.log(`${url}: ${((used / total) * 100).toFixed(2)}%`);
+	}
+
+	return report;
 }
+
+async function generateReport(page: Page, sources: Output[]) {
+	const report = {
+		metrics: await page.metrics(),
+		coverage: generateCoverageReport(
+			await Promise.all([
+				page.coverage.stopJSCoverage(),
+				page.coverage.stopCSSCoverage()
+			]),
+			sources
+		)
+	};
+
+	writeFileSync('report.json', JSON.stringify(report), 'utf8');
+}
+
+function printReport(suite: Test) {
+	const report = new TestReport(suite);
+	const failures = report.print();
+	if (failures.length) process.exit(1);
+}
+
+/*private async handleRequire(page) {
+
+	}*/
+
+/*async function moduleRunner(page: Page, sources: Output[]) {
+
+	for (const src of sources) {
+		await page.addScriptTag({
+			type: 'module',
+			content: src.source
+		});
+	}
+	
+	return page.evaluate(`
+		let suite;
+		define('@tester', ['exports', 'require', 'index'], (exports, require, index) => {
+			suite = index.default;
+		})
+		suite.run().then(() => suite);
+	`);
+}*/
+
+/*async function doRequire(page: Page, path: string) {
+	await page.evaluate(`
+		require('${path}');
+	`);
+}*/
+
+function handleRequest(sources: Output[], req: Request) {
+	if (req.method() !== 'POST') return req.continue();
+
+	const { base, scriptPath } = JSON.parse(req.postData() || '');
+
+	let url = path.resolve(base, scriptPath);
+	if (!url.endsWith('.js')) url += '.js';
+	if (!existsSync(url)) url = url.replace(/\.js$/, '/index.js');
+
+	if (existsSync(url)) {
+		const content = readFileSync(url, 'utf8');
+
+		sources.push({
+			path: path.relative(process.cwd(), url),
+			source: content
+		});
+
+		req.respond({
+			headers: {
+				'Access-Control-Allow-Origin': '*'
+			},
+			status: 200,
+			contentType: 'application/javascript',
+			body: JSON.stringify({ content, url, base: path.dirname(url) })
+		});
+	} else req.continue();
+}
+
+async function cjsRunner(page: Page, sources: Output[]) {
+	const entry = sources[0].path;
+	await page.addScriptTag({ path: __dirname + '/require.js' });
+
+	page.setRequestInterception(true);
+	page.on('request', (req: Request) => {
+		try {
+			handleRequest(sources, req);
+		} catch (e) {
+			app.log(`Error handling request ${req.method()} ${req.url()}`);
+		}
+	});
+
+	return page.evaluate(`
+		const suite = require('${entry}').default;
+		suite.run().then(() => suite);
+	`);
+}
+
+async function amdRunner(page: Page, sources: Output[]) {
+	for (const source of sources) {
+		await page.addScriptTag({
+			content: source.source
+		});
+	}
+
+	return page.evaluate(`
+		let suite;
+		define('@tester', ['exports', 'require', 'index'], (exports, require, index) => {
+			suite = index.default;
+		})
+		suite.run().then(() => suite);
+	`);
+}
+
+class TestRunner extends Application {
+	version = '0.0.1';
+	name = '@cxl/tester';
+
+	entryFile = 'test.js';
+
+	private handleArguments(args: ApplicationArguments) {
+		const result = [this.runPuppeteer(args)];
+
+		if (args.files.length) this.entryFile = args.files[0];
+
+		return Promise.all(result);
+	}
+
+	private handleConsole(msg: any) {
+		const type = msg.type();
+		const { url, lineNumber } = msg.location();
+		this.log(`Console: ${url}:${lineNumber}`);
+		Promise.all(
+			msg
+				.args()
+				.map((arg: any) =>
+					typeof arg === 'string' ? arg : arg.toString()
+				)
+		).then(out => {
+			out.forEach(arg => (console as any)[type](arg));
+		});
+	}
+
+	private async runPuppeteer(args: ApplicationArguments) {
+		const browser = await launch();
+		this.log(`Puppeteer enabled. ${await browser.version()}`);
+		const page = await browser.newPage();
+		try {
+			await Promise.all([
+				page.coverage.startJSCoverage({
+					reportAnonymousScripts: true
+				}),
+				page.coverage.startCSSCoverage()
+			]);
+			page.on('console', msg => this.handleConsole(msg));
+			page.on('pageerror', msg => this.log(msg));
+
+			const source = readFileSync(this.entryFile, 'utf8');
+			const sources = [{ path: this.entryFile, source }];
+
+			page.tracing.start({ path: 'trace.json' });
+			const suite = args.amd
+				? await amdRunner(page, sources)
+				: await cjsRunner(page, sources);
+			await page.tracing.stop();
+
+			this.log('Generating report.json');
+			await generateReport(page, sources);
+			printReport(suite as Test);
+		} catch (e) {
+			this.log(e);
+			process.exit(1);
+		}
+		await browser.close();
+	}
+
+	async run() {
+		await this.handleArguments(this.arguments || {});
+	}
+}
+
+const app = new TestRunner();
+app.start();

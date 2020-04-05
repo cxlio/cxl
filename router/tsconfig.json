@@ -1,12 +1,8 @@
 {
+	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"strict": true,
-		"target": "es6",
-		"experimentalDecorators": true,
-		"moduleResolution": "Node",
-		"removeComments": true,
-		"declaration": true,
-		"module": "commonjs"
+		"outDir": "../dist/router",
+		"lib": ["es2015"]
 	},
 	"include": ["index.ts"]
 }

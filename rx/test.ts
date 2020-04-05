@@ -1,4 +1,4 @@
-import { suite } from '../tester/index.js';
+import { suite } from '../spec/index.js';
 import exhaustMapSuite from './test/exhaustMap';
 import mergeSuite from './test/merge';
 import concatSuite from './test/concat';
@@ -433,7 +433,7 @@ export default suite('rx', [
 
 	suite('filter', test => {
 		test('filter', a => {
-			const A = new Observable(s => {
+			const A = new Observable<number>(s => {
 				[1, 2, 3, 4, 5, 6].forEach(s.next, s);
 			});
 			let filterFn = (v: number) => v < 4,

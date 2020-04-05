@@ -95,7 +95,7 @@ export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
 		operators.reduce((prev, fn) => fn(prev), source);
 }
 
-class Observable<T = any> {
+class Observable<T> {
 	protected __subscribe?: SubscribeFunction<T>;
 
 	constructor(subscribe?: SubscribeFunction<T>) {

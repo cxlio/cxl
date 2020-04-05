@@ -25,6 +25,7 @@ import {
 	createSolutionBuilder,
 	createSolutionBuilderHost,
 	BuildOptions,
+	ParsedCommandLine,
 	sys
 } from 'typescript';
 
@@ -186,11 +187,17 @@ function printDiagnostics(diagnostics: Diagnostic[]) {
 }
 
 function parseTsConfig(tsconfig: string) {
-	const parsed = getParsedCommandLineOfConfigFile(
-		tsconfig,
-		{},
-		parseConfigHost
-	);
+	let parsed: ParsedCommandLine | undefined;
+	try {
+		parsed = getParsedCommandLineOfConfigFile(
+			tsconfig,
+			{},
+			parseConfigHost
+		);
+	} catch (e) {
+		throw new Error(e.messageText);
+	}
+
 	if (!parsed) throw new Error(`Could not parse config file "${tsconfig}"`);
 	return parsed;
 }
@@ -212,17 +219,9 @@ export function tsbuild(
 	}
 
 	while ((program = builder.getNextInvalidatedProject())) {
-		// if (program.kind === InvalidatedProjectKind.Build) {
 		const status = program.done(undefined, writeFile);
 		if (status !== ExitStatus.Success)
 			throw 'Typescript compilation failed';
-		/*const diagnostics = buildDiagnostics(program);
-			if (diagnostics.length) printDiagnostics(diagnostics);*/
-		// } else if (program.kind === InvalidatedProjectKind.UpdateBundle)
-		//	program.done(undefined, writeFile);
-		// else program.updateOutputFileStatmps();
-		//else
-		//	program.done();
 	}
 	return output;
 }

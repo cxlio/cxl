@@ -5,10 +5,10 @@
 		"types": ["node"],
 		"typeRoots": ["../node_modules/@types"]
 	},
-	"files": ["index.ts", "runner.ts"],
+	"files": ["index.ts"],
 	"references": [
 		{ "path": "../rx" },
 		{ "path": "../server" },
-		{ "path": "../dom" }
+		{ "path": "../spec" }
 	]
 }

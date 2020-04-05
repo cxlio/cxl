@@ -1,13 +1,188 @@
 import {
 	StyleAttribute,
 	Augment,
+	Attribute,
 	Component,
-	bind
+	attributeChanged,
+	bind,
+	get,
+	role
 } from '../component/index.js';
-import { ButtonBase, Spinner } from './core.js';
+import { ButtonBase, Spinner, Focusable, Svg } from './core.js';
 import { dom, Host } from '../xdom/index.js';
 import { onAction, triggerEvent } from '../template/index.js';
+import { setAttribute } from '../dom/index.js';
 import { Style } from '../css/index.js';
+import { merge, tap } from '../rx/index.js';
+
+const FocusCircleStyle = (
+	<Style>
+		{{
+			focusCircle: {
+				position: 'absolute',
+				width: 48,
+				height: 48,
+				backgroundColor: 'elevation',
+				borderRadius: 24,
+				opacity: 0,
+				scaleX: 0,
+				scaleY: 0,
+				display: 'inline-block',
+				translateX: -14,
+				translateY: -14
+			},
+			focusCirclePrimary: { backgroundColor: 'primary' },
+			focusCircle$invalid$touched: { backgroundColor: 'error' },
+			focusCircle$hover: {
+				scaleX: 1,
+				scaleY: 1,
+				translateX: -14,
+				translateY: -14,
+				opacity: 0.14
+			},
+			focusCircle$focus: {
+				scaleX: 1,
+				scaleY: 1,
+				translateX: -14,
+				translateY: -14,
+				opacity: 0.25
+			},
+			focusCircle$disabled: { scaleX: 0, scaleY: 0 }
+		}}
+	</Style>
+);
+
+@Augment<InputBase>(
+	<Focusable />,
+	bind(host => get(host, 'value').pipe(triggerEvent(host, 'change')))
+)
+class InputBase extends Component {
+	@Attribute()
+	value?: any;
+	@StyleAttribute()
+	invalid = false;
+	@StyleAttribute()
+	disabled = false;
+	@StyleAttribute()
+	touched = false;
+	@StyleAttribute()
+	focused = false;
+	@Attribute()
+	name?: string;
+}
+
+@Augment<Checkbox>(
+	role('checkbox'),
+	bind(host => {
+		const update = tap<any>(
+			() => (host.value = host.checked ? host.trueValue : host.falseValue)
+		);
+		return merge(
+			onAction(host).pipe(
+				tap(ev => {
+					if (host.disabled) return;
+					if (host.indeterminate) {
+						host.checked = false;
+						host.indeterminate = false;
+					} else host.checked = !host.checked;
+
+					ev.preventDefault();
+				})
+			),
+			attributeChanged(host, 'value').pipe(
+				tap(val => (host.checked = val === host.trueValue))
+			),
+			get(host, 'checked').pipe(
+				tap(val =>
+					setAttribute(
+						host,
+						'aria-checked',
+						host.indeterminate ? 'mixed' : val ? 'true' : 'false'
+					)
+				),
+				update
+			),
+			get(host, 'trueValue').pipe(update),
+			get(host, 'falseValue').pipe(update)
+		);
+	}),
+	FocusCircleStyle,
+	<Host>
+		<Style>
+			{{
+				$: {
+					marginRight: 16,
+					marginLeft: 0,
+					position: 'relative',
+					cursor: 'pointer',
+					paddingTop: 12,
+					paddingBottom: 12,
+					display: 'block',
+					paddingLeft: 28,
+					lineHeight: 20
+				},
+				$inline: { display: 'inline-block' },
+				$invalid$touched: { color: 'error' },
+				box: {
+					display: 'inline-block',
+					width: 20,
+					height: 20,
+					borderWidth: 2,
+					borderColor: 'onSurface',
+					borderStyle: 'solid',
+					top: 11,
+					left: 0,
+					position: 'absolute',
+					color: 'transparent'
+				},
+				check: { display: 'none' },
+				minus: { display: 'none' },
+				check$checked: { display: 'initial' },
+				check$indeterminate: { display: 'none' },
+				minus$indeterminate: { display: 'initial' },
+				box$checked: {
+					borderColor: 'primary',
+					backgroundColor: 'primary',
+					color: 'onPrimary'
+				},
+				box$indeterminate: {
+					borderColor: 'primary',
+					backgroundColor: 'primary',
+					color: 'onPrimary'
+				},
+				box$invalid$touched: { borderColor: 'error' },
+				focusCircle: { top: -2, left: -2 }
+			}}
+		</Style>
+		<div className="box">
+			<span className="focusCircle focusCirclePrimary" />
+			<Svg
+				className="check"
+				viewBox="0 0 24 24"
+			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
+			<Svg
+				className="minus"
+				viewBox="0 0 24 24"
+			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M19 13H5v-2h14v2z" />`}</Svg>
+		</div>
+		<slot />
+	</Host>
+)
+export class Checkbox extends InputBase {
+	static tagName = 'cxl-checkbox';
+
+	@StyleAttribute()
+	checked = false;
+	@StyleAttribute()
+	indeterminate = false;
+	@StyleAttribute()
+	inline = false;
+
+	@Attribute()
+	trueValue: any = true;
+	@Attribute()
+	falseValue: any = false;
+}
 
 @Augment<SubmitButton>(
 	<Host>

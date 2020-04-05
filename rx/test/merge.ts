@@ -1,4 +1,4 @@
-import { suite } from '../../tester';
+import { suite } from '../../spec';
 import { cold, expectLog } from './util';
 import { merge, of } from '../index';
 

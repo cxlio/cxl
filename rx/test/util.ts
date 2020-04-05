@@ -1,5 +1,5 @@
 import { Subject, Observable, operator, toPromise } from '../index.js';
-import { Test } from '../../tester';
+import { Test } from '../../spec/index.js';
 
 interface Log {
 	events: string;

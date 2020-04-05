@@ -204,16 +204,23 @@ export function update<T extends Component>(fn: (node: T) => void) {
 	return (view: ComponentView<T>) => view.bind(onUpdate(view.host, fn));
 }
 
+export function attributeChanged<T extends Component, K extends keyof T>(
+	element: T,
+	attribute: K
+): Observable<T[K]> {
+	return element.view.attributes$.pipe(
+		filter(ev => ev.attribute === attribute),
+		map(() => element[attribute])
+	);
+}
+
 export function get<T extends Component, K extends keyof T>(
 	element: T,
 	attribute: K
 ): Observable<T[K]> {
 	return concat(
 		defer(() => of(element[attribute])),
-		element.view.attributes$.pipe(
-			filter(ev => ev.attribute === attribute),
-			map(() => element[attribute])
-		)
+		attributeChanged(element, attribute)
 	);
 }
 
@@ -284,8 +291,14 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 				return this[prop];
 			},
 			set(value: any) {
-				this[prop] = value;
-				this.view.attributes$.next({ target: this, attribute, value });
+				if (this[prop] !== value) {
+					this[prop] = value;
+					this.view.attributes$.next({
+						target: this,
+						attribute,
+						value
+					});
+				}
 				return value;
 			}
 		});

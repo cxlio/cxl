@@ -532,7 +532,11 @@ export class Progress extends Component {
 	value = Infinity;
 }
 
-function Svg(p: { viewBox: string; className?: string; children: string }) {
+export function Svg(p: {
+	viewBox: string;
+	className?: string;
+	children: string;
+}) {
 	return () => {
 		const el = document.createElementNS(
 			'http://www.w3.org/2000/svg',
@@ -702,7 +706,7 @@ export class ButtonBase extends Component {
 	outline = false;
 }
 
-@Augment(<slot></slot>)
+@Augment(<slot />)
 export class Button extends ButtonBase {
 	static tagName = 'cxl-button';
 }

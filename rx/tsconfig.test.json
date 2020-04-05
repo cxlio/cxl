@@ -4,6 +4,6 @@
 		"outDir": "../dist/rx",
 		"lib": ["es2017"]
 	},
-	"references": [{ "path": "tsconfig.json" }, { "path": "../tester" }],
-	"include": ["index.ts", "test.ts", "test/*.ts"]
+	"references": [{ "path": "tsconfig.json" }, { "path": "../spec" }],
+	"include": ["test.ts", "test/*.ts"]
 }

@@ -7,6 +7,6 @@
 	],
 	"scripts": {
 		"build": "node build",
-		"test": "node build && cd ../dist/rx && node ../tester/runner"
+		"test": "node build && cd ../dist/rx && node ../tester"
 	}
 }

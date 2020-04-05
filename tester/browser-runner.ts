@@ -1,4 +1,4 @@
-import { Result, Test } from './index';
+import { Result, Test } from '../spec/index.js';
 
 let output = '';
 

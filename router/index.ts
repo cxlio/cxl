@@ -13,6 +13,11 @@ interface RouteInstances {
 	[key: string]: Element;
 }
 
+interface Element {
+	parentNode: Element;
+	appendChild(el: Element): void;
+}
+
 type RouteArguments = { [key: string]: any };
 
 interface RouteDefinition {
@@ -23,7 +28,7 @@ interface RouteDefinition {
 	resolve?: (args: any) => boolean;
 	parent?: string;
 	redirectTo?: string;
-	routeElement: Element | ((args: RouteArguments) => Element) | string;
+	create: (args: RouteArguments) => Element;
 }
 
 function routeToRegExp(route: string): [RegExp, string[]] {
@@ -119,15 +124,7 @@ export class Route {
 	}
 
 	createElement(args: RouteArguments) {
-		const el = this.definition.routeElement;
-
-		if (typeof el === 'function') return el(args);
-
-		const result = el instanceof Element ? el : document.createElement(el);
-
-		for (const i in args) (result as any)[i] = args[i];
-
-		return result;
+		return this.definition.create(args);
 	}
 
 	create(args: Dictionary) {
@@ -147,9 +144,7 @@ class RouteManager {
 	defaultRoute?: Route;
 
 	findRouteDefinition(hash: string) {
-		return this.routes.find(r => {
-			return r.path && r.path.test(hash);
-		});
+		return this.routes.find(r => r.path && r.path.test(hash));
 	}
 
 	get(id: string) {
@@ -165,14 +160,15 @@ class RouteManager {
 
 export class Router {
 	routes = new RouteManager();
-	root?: Element;
 	instances: RouteInstances = {};
 	current?: Element;
 
 	currentRoute?: Route;
 	defaultRoute?: Route;
 
-	findRoute(id: string, args: Dictionary) {
+	constructor(public readonly root: Element) {}
+
+	private findRoute(id: string, args: Dictionary) {
 		const route = this.instances[id];
 		let i: string;
 
@@ -183,7 +179,7 @@ export class Router {
 		return route;
 	}
 
-	executeRoute(
+	private executeRoute(
 		route: Route,
 		args: RouteArguments,
 		instances: RouteInstances
@@ -193,7 +189,7 @@ export class Router {
 			id = route.id,
 			parent = Parent
 				? this.executeRoute(Parent, args, instances)
-				: this.root || document.body,
+				: this.root,
 			instance = this.findRoute(id, args) || route.create(args);
 
 		if (instance && parent && instance.parentNode !== parent) {
@@ -205,7 +201,7 @@ export class Router {
 		return instance;
 	}
 
-	discardOldRoutes(newInstances: RouteInstances) {
+	private discardOldRoutes(newInstances: RouteInstances) {
 		const oldInstances = this.instances;
 
 		for (const i in oldInstances)
@@ -230,24 +226,4 @@ export class Router {
 
 		return path && replaceParameters(path.toString(), params);
 	}
-
-	goPath(path: string) {
-		window.location.hash = path;
-	}
-
-	go(routeId: string, params: RouteArguments) {
-		this.goPath('#' + this.getPath(routeId, params));
-	}
-
-	setRoot(el: Element) {
-		this.root = el;
-	}
-}
-
-export const router = new Router();
-
-export function route(def: RouteDefinition) {
-	const result = new Route(def);
-	router.routes.register(result);
-	return result;
 }

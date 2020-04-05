@@ -3,7 +3,7 @@ type CSSStyle = {
 	[P in keyof CSSStyleDeclaration]?: string | number;
 };
 type BaseColor = RGBA;
-type Color = keyof Colors | BaseColor | 'inherit';
+type Color = keyof Colors | BaseColor | 'inherit' | 'transparent';
 type Length = number | Percentage | 'auto';
 
 interface Typography {

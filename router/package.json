@@ -7,7 +7,7 @@
 	],
 	"scripts": {
 		"build": "node build",
-		"test": "npm run build && cd ../dist/router && node ../tester/runner"
+		"test": "node build && cd ../dist/router && node ../tester"
 	},
 	"devDependencies": {
 		"typescript": "^3.6.2"

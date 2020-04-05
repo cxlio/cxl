@@ -1,4 +1,4 @@
-import { suite } from '../../tester';
+import { suite } from '../../spec';
 import { cold, logEvents } from './util';
 import { exhaustMap } from '../index';
 

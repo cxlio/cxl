@@ -1,5 +1,5 @@
-import { suite } from '../tester';
-import { router, route } from './index';
+import { suite } from '../spec';
+import { Router } from './index';
 
 export = suite('router', test => {
 	test('Router#execute', a => {
@@ -8,7 +8,9 @@ export = suite('router', test => {
 			routeElement: 'div'
 		});
 
-		router.setRoot(document.createElement('div'));
+		const root = document.createElement('div');
+		const router = new Router(root);
+
 		router.execute(routeDef);
 
 		a.ok(router.instances.test);

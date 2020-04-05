@@ -1,4 +1,4 @@
-import { suite, Test } from '../tester/index.js';
+import { suite, Test } from '../spec/index.js';
 import { on } from '../dom/index.js';
 import { dom, connect } from '../xdom/index.js';
 import { getRegisteredComponents, Component } from '../component/index.js';
@@ -15,6 +15,22 @@ function testValue(c: HTMLInputElement, a: Test) {
 		}
 		c.addEventListener('change', handler);
 		c.value = 'Hello World';
+	});
+}
+
+function testChecked(c: HTMLInputElement, test: Test) {
+	test.test('[checked]', a => {
+		const resolve = a.async();
+		a.equal(c.checked, false, 'Should be false by default');
+		a.equal(c.getAttribute('aria-checked'), 'false');
+		function handler() {
+			a.equal(c.checked, true, '"change" event fired');
+			a.equal(c.getAttribute('aria-checked'), 'true');
+			c.removeEventListener('change', handler);
+			resolve();
+		}
+		c.addEventListener('change', handler);
+		c.checked = true;
 	});
 }
 
@@ -83,6 +99,7 @@ function testComponent(name: string, def: typeof Component, a: Test) {
 	if (attributes) {
 		if (attributes.includes('disabled')) testDisabled(el, a);
 		if (attributes.includes('value')) testValue(el, a);
+		if (attributes.includes('checked')) testChecked(el, a);
 	}
 
 	if (el.tabIndex && el.tabIndex !== -1) testFocus(el, a);
