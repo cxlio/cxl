@@ -11,9 +11,9 @@ import {
 import { ButtonBase, Spinner, Focusable, Svg } from './core.js';
 import { dom, Host } from '../xdom/index.js';
 import { onAction, triggerEvent } from '../template/index.js';
-import { setAttribute } from '../dom/index.js';
+import { setAttribute, trigger } from '../dom/index.js';
 import { Style } from '../css/index.js';
-import { merge, tap } from '../rx/index.js';
+import { Observable, merge, tap } from '../rx/index.js';
 
 const FocusCircleStyle = (
 	<Style>
@@ -265,6 +265,110 @@ export class FocusLine extends Component {
 
 	@StyleAttribute()
 	touched = false;
+}
+
+const radioElements = new Set<Radio>();
+
+@Augment<Radio>(
+	role('radio'),
+	FocusCircleStyle,
+	<Host>
+		<Style>
+			{{
+				$: {
+					position: 'relative',
+					cursor: 'pointer',
+					marginRight: 16,
+					marginLeft: 0,
+					paddingTop: 12,
+					paddingBottom: 12,
+					display: 'block'
+				},
+				$inline: { display: 'inline-block' },
+				$invalid$touched: { color: 'error' },
+				content: { lineHeight: 20 },
+				circle: {
+					borderRadius: 10,
+					width: 10,
+					height: 10,
+					display: 'inline-block',
+					backgroundColor: 'primary',
+					scaleX: 0,
+					scaleY: 0,
+					marginTop: 3
+				},
+				circle$checked: { scaleX: 1, scaleY: 1 },
+				circle$invalid$touched: { backgroundColor: 'error' },
+				box: {
+					borderWidth: 2,
+					width: 20,
+					height: 20,
+					display: 'inline-block',
+					borderColor: 'onSurface',
+					marginRight: 8,
+					borderRadius: 10,
+					borderStyle: 'solid',
+					color: 'primary',
+					lineHeight: 16,
+					textAlign: 'center'
+				},
+				box$checked: { borderColor: 'primary' },
+				box$invalid$touched: { borderColor: 'error' },
+				box$checked$invalid$touched: { color: 'error' }
+			}}
+		</Style>
+		<div className="focusCircle focusCirclePrimary" />
+		<div className="box">
+			<span className="circle"></span>
+		</div>
+		<slot />
+	</Host>,
+	bind(host => {
+		let registered = false;
+
+		function unregister() {
+			radioElements.delete(host);
+			registered = false;
+		}
+
+		function register(name?: string) {
+			if (registered) unregister();
+			if (name) {
+				radioElements.add(host);
+				registered = true;
+			}
+		}
+
+		return merge(
+			new Observable(() => unregister),
+			onAction(host).pipe(
+				tap(() => {
+					if (host.disabled) return;
+					if (!host.checked) host.checked = host.touched = true;
+				})
+			),
+			get(host, 'name').pipe(tap(register)),
+			get(host, 'checked').pipe(
+				tap(val => {
+					host.setAttribute('aria-checked', val ? 'true' : 'false');
+					if (val) {
+						trigger(host, 'change');
+						radioElements.forEach(r => {
+							if (r.name === host.name && r !== host) {
+								r.checked = false;
+								r.touched = true;
+							}
+						});
+					}
+				})
+			)
+		);
+	})
+)
+export class Radio extends InputBase {
+	static tagName = 'cxl-radio';
+	@StyleAttribute()
+	checked = false;
 }
 
 @Augment(
