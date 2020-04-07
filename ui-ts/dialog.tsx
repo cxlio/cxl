@@ -11,7 +11,7 @@ import { Style, pct } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
 import { tpl, onAction } from '../template/index.js';
 import { on, trigger } from '../dom/index.js';
-import { tap } from '../rx/index.js';
+import { tap, of } from '../rx/index.js';
 import { T, Button, Svg } from './core.js';
 
 @Augment(
@@ -284,14 +284,19 @@ const MenuIcon = (
 	render(host => (
 		<Host>
 			<Drawer
+				$={el => ((host.drawer = el), of(true))}
 				permanent={get(host, 'permanent')}
-				visible={get(host, 'visible')}
 			>
 				<slot />
 			</Drawer>
 			<div
 				$={el =>
-					onAction(el).pipe(tap(() => (host.visible = !host.visible)))
+					onAction(el).pipe(
+						tap(() => {
+							if (host.drawer)
+								host.drawer.visible = !host.drawer.visible;
+						})
+					)
 				}
 				className="toggler"
 			>
@@ -307,5 +312,5 @@ export class Navbar extends Component {
 	permanent = false;
 
 	@Attribute()
-	visible = false;
+	drawer?: Drawer;
 }
