@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/router",
+		"lib": ["es6"]
+	},
+	"references": [{ "path": "tsconfig.json" }, { "path": "../spec" }],
+	"include": ["test.tsx"]
+}
