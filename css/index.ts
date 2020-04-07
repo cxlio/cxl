@@ -66,6 +66,7 @@ interface StrictStyleDefinition {
 	marginTop: number | 'auto';
 	marginBottom: number | 'auto';
 	opacity: number;
+	outline: number | string;
 	overflowY: string;
 	overflowX: string;
 	transformOrigin: string;

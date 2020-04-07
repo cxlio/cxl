@@ -12,7 +12,7 @@ import { dom, Host } from '../xdom/index.js';
 import { tpl, onAction } from '../template/index.js';
 import { on, trigger } from '../dom/index.js';
 import { tap } from '../rx/index.js';
-import { T, Button } from './core.js';
+import { T, Button, Svg } from './core.js';
 
 @Augment(
 	<Host>
@@ -188,8 +188,7 @@ export class DialogConfirm extends Component {
 
 				backdrop: {
 					width: 0,
-					opacity: 0,
-					position: 'fixed'
+					opacity: 0
 				},
 				backdrop$visible: { width: '100%', opacity: 1 },
 
@@ -214,7 +213,10 @@ export class DialogConfirm extends Component {
 			className="backdrop"
 			$={(el, view) =>
 				on(el, 'click').pipe(
-					tap(() => trigger(view.host, 'backdrop.click'))
+					tap(() => {
+						trigger(view.host, 'backdrop.click');
+						view.host.visible = false;
+					})
 				)
 			}
 		/>
@@ -256,6 +258,11 @@ export class Drawer extends Component {
 		role="list" 	
 	);*/
 //" =permanent:@permanent =visible:@visible content location:#onRoute"></Drawer>
+
+const MenuIcon = (
+	<Svg viewBox="0 0 24 24">{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
+);
+
 @Augment<Navbar>(
 	role('navigation'),
 	<Style>
@@ -287,7 +294,9 @@ export class Drawer extends Component {
 					onAction(el).pipe(tap(() => (host.visible = !host.visible)))
 				}
 				className="toggler"
-			></div>
+			>
+				{MenuIcon}
+			</div>
 		</Host>
 	))
 )
@@ -297,5 +306,6 @@ export class Navbar extends Component {
 	@StyleAttribute()
 	permanent = false;
 
+	@Attribute()
 	visible = false;
 }

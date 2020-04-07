@@ -512,6 +512,7 @@ export class Hr extends Component {
 			// 'link:focus': { outline: 0 },
 			link: {
 				color: 'onSurface',
+				outline: 0,
 				lineHeight: 24,
 				paddingRight: 16,
 				paddingLeft: 16,
@@ -553,10 +554,10 @@ export class Item extends Component {
 	@Attribute()
 	href = '';
 
-	@Attribute()
+	@StyleAttribute()
 	selected = false;
 
-	@Attribute()
+	@StyleAttribute()
 	disabled = false;
 
 	@Attribute()
