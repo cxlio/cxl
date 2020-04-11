@@ -22,8 +22,8 @@ function onHeaderAction(el: Th) {
 	return merge(
 		onAction(el).pipe(
 			tap(() => {
-				const sort = el.sortOrder;
-				el.sortOrder =
+				const sort = el['sort-order'];
+				el['sort-order'] =
 					sort === 'asc' ? 'desc' : sort === 'desc' ? 'none' : 'asc';
 			})
 		)
@@ -32,7 +32,7 @@ function onHeaderAction(el: Th) {
 
 function onSort(el: HTMLElement, view: ComponentView<Th>) {
 	let lastClass: string;
-	return get(view.host, 'sortOrder').pipe(
+	return get(view.host, 'sort-order').pipe(
 		tap(sortOrder => {
 			if (lastClass) el.classList.remove(lastClass);
 			lastClass = sortOrder;
@@ -57,8 +57,8 @@ function onSort(el: HTMLElement, view: ComponentView<Th>) {
 					paddingRight: 8,
 					// borderBottom: '1px solid',
 					borderColor: 'divider',
-					lineHeight: 24
-					// whiteSpace: 'nowrap'
+					lineHeight: 24,
+					whiteSpace: 'nowrap'
 				},
 				sortIcon: {
 					display: 'none',
@@ -96,7 +96,7 @@ export class Th extends Component {
 	sortable = false;
 
 	@Attribute()
-	sortOrder: 'asc' | 'desc' | 'none' = 'none';
+	'sort-order': 'asc' | 'desc' | 'none' = 'none';
 }
 
 @Augment(

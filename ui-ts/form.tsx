@@ -94,8 +94,8 @@ class InputBase extends Component {
 				(host.value = host.indeterminate
 					? undefined
 					: host.checked
-					? host.trueValue
-					: host.falseValue)
+					? host['true-value']
+					: host['false-value'])
 		);
 		return merge(
 			onAction(host).pipe(
@@ -110,12 +110,12 @@ class InputBase extends Component {
 				})
 			),
 			attributeChanged(host, 'value').pipe(
-				tap(val => (host.checked = val === host.trueValue))
+				tap(val => (host.checked = val === host['true-value']))
 			),
 			get(host, 'checked').pipe(ariaChecked(host), update),
 			get(host, 'indeterminate').pipe(update),
-			get(host, 'trueValue').pipe(update),
-			get(host, 'falseValue').pipe(update)
+			get(host, 'true-value').pipe(update),
+			get(host, 'false-value').pipe(update)
 		);
 	}),
 	FocusCircleStyle,
@@ -193,9 +193,9 @@ export class Checkbox extends InputBase {
 	inline = false;
 
 	@Attribute()
-	trueValue: any = true;
+	'true-value': any = true;
 	@Attribute()
-	falseValue: any = false;
+	'false-value': any = false;
 }
 
 @Augment<SubmitButton>(
@@ -589,7 +589,7 @@ export class Form extends Component {
 			className="input"
 			value={get(host, 'value')}
 			maxLength={
-				get(host, 'maxLength').pipe(
+				get(host, 'maxlength').pipe(
 					filter(val => val !== undefined)
 				) as Observable<number>
 			}
@@ -601,7 +601,7 @@ export class Input extends InputBase {
 	static tagName = 'cxl-input';
 	readonly type: string = 'text';
 	@Attribute()
-	maxLength?: number;
+	'maxlength'?: number;
 }
 
 @Augment<Option>(
@@ -892,7 +892,7 @@ export class SelectMenu extends Component {
 			get(host, 'checked').pipe(
 				tap(val => {
 					host.setAttribute('aria-checked', val ? 'true' : 'false');
-					host.value = val ? host.trueValue : host.falseValue;
+					host.value = val ? host['true-value'] : host['false-value'];
 				})
 			)
 		);
@@ -905,9 +905,9 @@ export class Switch extends InputBase {
 	@StyleAttribute()
 	checked = false;
 	@Attribute()
-	trueValue: any = true;
+	'true-value': any = true;
 	@Attribute()
-	falseValue: any = false;
+	'false-value': any = false;
 }
 
 @Augment<TextArea>(

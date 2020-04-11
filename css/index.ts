@@ -102,7 +102,7 @@ interface StrictStyleDefinition {
 		| 'text-top'
 		| 'text-bottom'
 		| 'baseline';
-	whiteSpace: 'pre-wrap';
+	whiteSpace: 'nowrap' | 'pre-wrap';
 }
 
 export type Styles =
