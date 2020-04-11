@@ -10,12 +10,24 @@ import {
 	get,
 	role
 } from '../component/index.js';
-import { ButtonBase, Spinner, Toggle, Focusable, Svg } from './core.js';
+import {
+	ButtonBase,
+	Spinner,
+	Toggle,
+	Focusable,
+	Svg,
+	selectable
+} from './core.js';
 import { dom, Host } from '../xdom/index.js';
-import { onAction, triggerEvent } from '../template/index.js';
+import {
+	onAction,
+	onValue,
+	triggerEvent,
+	keypress
+} from '../template/index.js';
 import { setAttribute, trigger, on } from '../dom/index.js';
 import { Style } from '../css/index.js';
-import { Observable, merge, tap } from '../rx/index.js';
+import { Observable, filter, merge, tap } from '../rx/index.js';
 
 const FocusCircleStyle = (
 	<Style>
@@ -60,7 +72,7 @@ const FocusCircleStyle = (
 )
 class InputBase extends Component {
 	@Attribute()
-	value?: any;
+	value: any;
 	@StyleAttribute()
 	invalid = false;
 	@StyleAttribute()
@@ -510,6 +522,168 @@ export class FocusLine extends Component {
 	touched = false;
 }
 
+@Augment<Form>(
+	role('form'),
+	bind(host =>
+		merge(
+			keypress(host, 'enter').pipe(
+				tap(ev => {
+					host.submit();
+					ev.preventDefault();
+				})
+			)
+		)
+	),
+	<slot />
+)
+export class Form extends Component {
+	static tagName = 'cxl-form';
+
+	@Attribute()
+	autocomplete = 'off';
+
+	readonly elements?: InputBase[];
+
+	submit() {
+		if (this.elements) {
+			let focus: InputBase | undefined;
+
+			this.elements.forEach(el => {
+				if (el.invalid) focus = focus || el;
+
+				el.touched = true;
+			});
+
+			if (focus) focus.focus();
+		}
+	}
+}
+
+@Augment<Input>(
+	role('textbox'),
+	<Host>
+		<Style>
+			{{
+				$: { flexGrow: 1, height: 22 },
+				input: {
+					font: 'default',
+					borderWidth: 0,
+					padding: 0,
+					backgroundColor: 'transparent',
+					marginTop: 0,
+					color: 'onSurface',
+					width: '100%',
+					lineHeight: 22,
+					textAlign: 'inherit',
+					borderRadius: 0,
+					outline: 0
+				},
+				input$focus: { outline: 0 }
+			}}
+		</Style>
+	</Host>,
+	render(host => (
+		<input
+			$={el => onValue(el).pipe(tap(val => (host.value = val)))}
+			type={host.type}
+			className="input"
+			value={get(host, 'value')}
+			maxLength={
+				get(host, 'maxLength').pipe(
+					filter(val => val !== undefined)
+				) as Observable<number>
+			}
+			disabled={get(host, 'disabled')}
+		/>
+	))
+)
+export class Input extends InputBase {
+	static tagName = 'cxl-input';
+	readonly type: string = 'text';
+	@Attribute()
+	maxLength?: number;
+}
+
+@Augment<Option>(
+	role('option'),
+	bind(selectable),
+	bind(host => get(host, 'value').pipe(triggerEvent(host, 'change'))),
+	<Host>
+		<Style>
+			{{
+				$: {
+					cursor: 'pointer',
+					color: 'onSurface',
+					lineHeight: 20,
+					paddingRight: 16,
+					display: 'flex',
+					backgroundColor: 'surface',
+					paddingLeft: 16,
+					font: 'default',
+					paddingTop: 14,
+					paddingBottom: 14
+				},
+				box: {
+					display: 'inline-block',
+					width: 20,
+					height: 20,
+					borderWidth: 2,
+					borderColor: 'onSurface',
+					marginRight: 12,
+					lineHeight: 16,
+					borderStyle: 'solid',
+					color: 'transparent'
+				},
+				box$selected: {
+					borderColor: 'primary',
+					backgroundColor: 'primary',
+					color: 'onPrimary'
+				},
+				checkbox: { marginBottom: 0, marginRight: 8 },
+				content: { flexGrow: 1 },
+				// $hover: { state: 'hover' },
+				// $focused: { state: 'focus' },
+				$selected: {
+					backgroundColor: 'primaryLight',
+					color: 'onPrimaryLight'
+				},
+				// $disabled: { state: 'disabled' },
+				$inactive: {
+					backgroundColor: 'transparent',
+					color: 'onSurface'
+				}
+			}}
+		</Style>
+		<div className="content">
+			<slot />
+		</div>
+	</Host>
+)
+export class Option extends Component {
+	static tagName = 'cxl-option';
+
+	@Attribute()
+	value?: any;
+
+	@StyleAttribute()
+	selected = false;
+
+	@StyleAttribute()
+	focused = false;
+
+	@StyleAttribute()
+	disabled = false;
+
+	@StyleAttribute()
+	inactive = false;
+}
+
+@Augment()
+export class PasswordInput extends Input {
+	static tagName = 'cxl-password';
+	readonly type = 'password';
+}
+
 const radioElements = new Set<Radio>();
 
 @Augment<Radio>(
@@ -734,4 +908,60 @@ export class Switch extends InputBase {
 	trueValue: any = true;
 	@Attribute()
 	falseValue: any = false;
+}
+
+@Augment<TextArea>(
+	role('textarea'),
+	<Host>
+		<Style>
+			{{
+				$: { position: 'relative', flexGrow: 1 },
+				input: {
+					font: 'default',
+					backgroundColor: 'transparent',
+					lineHeight: 20,
+					borderWidth: 0,
+					paddingLeft: 0,
+					paddingRight: 0,
+					paddingTop: 1,
+					color: 'onSurface',
+					paddingBottom: 1
+				},
+				textarea: {
+					width: '100%',
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					right: 0,
+					bottom: 0,
+					height: '100%',
+					outline: 0,
+					borderRadius: 0,
+					marginTop: 0
+				},
+				measure: { opacity: 0, whiteSpace: 'pre-wrap' }
+			}}
+		</Style>
+		<div className="input measure"></div>
+	</Host>,
+	render(host => (
+		<textarea
+			className="input textarea"
+			$={el =>
+				onValue(el).pipe(
+					tap(val => {
+						host.value = val;
+						// calculateHeight
+						// =aria-label:attribute(aria-label)
+					})
+				)
+			}
+			value={get(host, 'value')}
+			disabled={get(host, 'disabled')}
+		/>
+	))
+)
+export class TextArea extends InputBase {
+	static tagName = 'cxl-textarea';
+	value: string = '';
 }

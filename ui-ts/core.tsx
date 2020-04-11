@@ -15,7 +15,7 @@ import {
 } from '../component/index.js';
 import { onAction, triggerEvent, portal } from '../template/index.js';
 import { on, remove, setAttribute, trigger } from '../dom/index.js';
-import { map, tap, merge, debounceTime } from '../rx/index.js';
+import { Observable, map, tap, merge, debounceTime } from '../rx/index.js';
 import { Style, StyleSheet, pct, theme } from '../css/index.js';
 
 const StateStyles = {
@@ -90,6 +90,48 @@ export function Focusable() {
 		view.bind(focusable(view.host as FocusableComponent));
 		return stateStyles.clone();
 	};
+}
+
+export function registable<T extends Component>(host: T, id: string) {
+	return new Observable(() => {
+		trigger(host, id + '.register');
+		return () => trigger(host, id + '.unregister');
+	});
+}
+
+export function registableHost(host: Element, id: string) {
+	const elements = new Set<Element>();
+
+	function register(ev: Event) {
+		if (ev.target) elements.add(ev.target as Element);
+	}
+
+	function unregister(ev: Event) {
+		if (ev.target) elements.delete(ev.target as Element);
+	}
+
+	return merge(
+		on(host, id + '.register').pipe(tap(register)),
+		on(host, id + '.unregister').pipe(tap(unregister))
+	).pipe(map(() => elements));
+}
+
+interface SelectableComponent extends Component {
+	selected: boolean;
+}
+
+export function ariaProp(host: Element, prop: string) {
+	return tap<boolean>(val =>
+		host.setAttribute('aria-' + prop, val ? 'true' : 'false')
+	);
+}
+
+export function selectable<T extends SelectableComponent>(host: T) {
+	registable(host, 'selectable');
+	return merge(
+		onAction(host).pipe(triggerEvent(host, 'selectable.action')),
+		get(host, 'selected').pipe(ariaProp(host, 'selected'))
+	);
 }
 
 @Augment<Ripple>(

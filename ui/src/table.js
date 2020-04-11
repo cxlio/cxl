@@ -69,28 +69,7 @@
 	);
 	*/
 
-	component({
-		name: 'cxl-td',
-		bindings: 'role(cell)',
-		styles: {
-			$: {
-				display: 'table-cell',
-				paddingTop: 12,
-				paddingBottom: 12,
-				paddingLeft: 8,
-				paddingRight: 8,
-				flexGrow: 1,
-				borderBottom: '1px solid',
-				borderColor: 'divider'
-			},
-			$firstChild: { paddingLeft: 16 },
-			$lastChild: { paddingRight: 16 },
-			$primary: { backgroundColor: 'primary', color: 'onPrimary' },
-			$secondary: { backgroundColor: 'secondary', color: 'onSecondary' }
-		}
-	});
-
-	component({
+	/*component({
 		name: 'cxl-td-checkbox',
 		extend: 'cxl-td',
 		attributes: ['data', 'checked'],
@@ -101,9 +80,9 @@
 			checkbox: { paddingTop: 0, paddingBottom: 0 }
 		},
 		template: `<cxl-checkbox &=".checkbox =checked::@checked"></cxl-checkbox>`
-	});
+	});*/
 
-	component(
+	/*component(
 		{
 			name: 'cxl-th-checkbox',
 			extend: 'cxl-td',
@@ -127,9 +106,9 @@
 				if (val !== null) el.checked = val;
 			}
 		}
-	);
+	);*/
 
-	component(
+	/*component(
 		{
 			name: 'cxl-tr',
 			attributes: ['selected'],
@@ -144,23 +123,9 @@
 				this.selected = ev.target.checked;
 			}
 		}
-	);
+	);*/
 
-	component({
-		name: 'cxl-table-header',
-		styles: {
-			$: {
-				font: 'h6',
-				lineHeight: 36,
-				paddingTop: 16,
-				paddingBottom: 16,
-				paddingLeft: 16,
-				paddingRight: 16
-			}
-		}
-	});
-
-	component({
+	/*component({
 		name: 'cxl-table-selected',
 		extend: 'cxl-table-header',
 		attributes: ['selected'],
@@ -168,16 +133,9 @@
 		<cxl-c grow><x &="=selected:len:text"></x> selected</cxl-c><div &="content"></div>
 		`,
 		styles: {
-			$: {
-				font: 'subtitle',
-				lineHeight: 36,
-				height: 68,
-				backgroundColor: 'primaryLight',
-				color: 'onPrimaryLight',
-				display: 'flex'
-			}
+
 		}
-	});
+	});*/
 
 	component(
 		{

@@ -22,10 +22,18 @@ function testChecked(c: HTMLInputElement, test: Test) {
 	test.test('[checked]', a => {
 		const resolve = a.async();
 		a.equal(c.checked, false, 'Should be false by default');
-		a.equal(c.getAttribute('aria-checked'), 'false');
+		a.equal(
+			c.getAttribute('aria-checked'),
+			'false',
+			'[aria-checked] must be set to "false" if [checked] is false.'
+		);
 		function handler() {
 			a.equal(c.checked, true, '"change" event fired');
-			a.equal(c.getAttribute('aria-checked'), 'true');
+			a.equal(
+				c.getAttribute('aria-checked'),
+				'true',
+				'[aria-checked] must be set to "true" if [checked] is true.'
+			);
 			c.removeEventListener('change', handler);
 			resolve();
 		}

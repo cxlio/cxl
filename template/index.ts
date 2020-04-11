@@ -51,7 +51,7 @@ interface ElementWithValue<T> extends HTMLElement {
 	value: T;
 }
 
-export function value<R, T extends ElementWithValue<R>>(el: T) {
+export function onValue<R, T extends ElementWithValue<R>>(el: T) {
 	return merge(on(el, 'input'), on(el, 'change')).pipe(
 		debounceTime(),
 		map(ev => (ev.target as T).value)

@@ -99,6 +99,7 @@ interface StrictStyleDefinition {
 		| 'text-top'
 		| 'text-bottom'
 		| 'baseline';
+	whiteSpace: 'pre-wrap';
 }
 
 export type Styles =

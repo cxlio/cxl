@@ -154,7 +154,7 @@ on(click):#focus
 	});
 	*/
 
-	component(
+	/*	component(
 		{
 			name: 'cxl-input',
 			extend: InputBase,
@@ -168,24 +168,7 @@ on(click):#focus
 	=autocomplete:attribute(autocomplete)
 	on(blur):host.trigger(blur) on(focus):host.trigger(focus)" />`,
 			bindings: `role(textbox) focusable.events`,
-			styles: {
-				$: { flexGrow: 1, height: 22 },
-				input: {
-					font: 'default',
-					border: 0,
-					padding: 0,
-					backgroundColor: 'transparent',
-					margin: 0,
-					color: 'onSurface',
-					width: '100%',
-					lineHeight: 22,
-					textAlign: 'inherit',
-					borderRadius: 0,
-					outline: 0,
-					fontFamily: 'inherit'
-				},
-				input$focus: { outline: 0 }
-			}
+			styles: {}
 		},
 		{
 			value: '',
@@ -203,6 +186,7 @@ on(click):#focus
 		}
 	);
 
+
 	component(
 		{
 			name: 'cxl-password',
@@ -212,8 +196,9 @@ on(click):#focus
 			type: 'password'
 		}
 	);
+	*/
 
-	component(
+	/*	component(
 		{
 			name: 'cxl-option',
 			attributes: [
@@ -234,48 +219,7 @@ role(option) selectable
 =value:host.trigger(change)
 	`,
 			styles: {
-				$: {
-					cursor: 'pointer',
-					color: 'onSurface',
-					lineHeight: 20,
-					paddingRight: 16,
-					display: 'flex',
-					backgroundColor: 'surface',
-					paddingLeft: 16,
-					font: 'default',
-					paddingTop: 14,
-					paddingBottom: 14
-				},
-				box: {
-					display: 'inline-block',
-					width: 20,
-					height: 20,
-					border: 2,
-					borderColor: 'onSurface',
-					marginRight: 12,
-					lineHeight: 16,
-					borderStyle: 'solid',
-					color: 'rgba(0,0,0,0)',
-					fontSize: 'var(--cxl-fontSize)'
-				},
-				box$selected: {
-					borderColor: 'primary',
-					backgroundColor: 'primary',
-					color: 'onPrimary'
-				},
-				checkbox: { marginBottom: 0, marginRight: 8 },
-				content: { flexGrow: 1 },
-				$hover: { state: 'hover' },
-				$focused: { state: 'focus' },
-				$selected: {
-					backgroundColor: 'primaryLight',
-					color: 'onPrimaryLight'
-				},
-				$disabled: { state: 'disabled' },
-				$inactive: {
-					backgroundColor: 'transparent',
-					color: 'onSurface'
-				}
+
 			},
 			initialize(state) {
 				if (!state.value) state.value = this.innerText;
@@ -284,7 +228,7 @@ role(option) selectable
 		{
 			value: null
 		}
-	);
+	);*/
 
 	component({
 		name: 'cxl-search-input',
@@ -774,7 +718,7 @@ role(option) selectable
 		}
 	);
 
-	component(
+	/*component(
 		{
 			name: 'cxl-textarea',
 			methods: ['focus'],
@@ -795,32 +739,7 @@ role(textbox) aria.prop(multiline) keypress(enter):event.stop focusable.events
 	`,
 			attributes: ['aria-label'],
 			styles: {
-				$: { position: 'relative', flexGrow: 1 },
-				input: {
-					font: 'default',
-					backgroundColor: 'transparent',
-					lineHeight: 20,
-					fontFamily: 'inherit',
-					border: 0,
-					paddingLeft: 0,
-					paddingRight: 0,
-					paddingTop: 1,
-					color: 'onSurface',
-					paddingBottom: 1
-				},
-				textarea: {
-					width: '100%',
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					right: 0,
-					bottom: 0,
-					height: '100%',
-					outline: 0,
-					borderRadius: 0,
-					margin: 0
-				},
-				measure: { opacity: 0, whiteSpace: 'pre-wrap' }
+
 			}
 		},
 		{
@@ -834,7 +753,7 @@ role(textbox) aria.prop(multiline) keypress(enter):event.stop focusable.events
 				this.span.innerHTML = val + '&nbsp;';
 			}
 		}
-	);
+	);*/
 
 	component({
 		name: 'cxl-field-control',
@@ -900,7 +819,7 @@ role(textbox) aria.prop(multiline) keypress(enter):event.stop focusable.events
 		}
 	);
 
-	component(
+	/*	component(
 		{
 			name: 'cxl-form',
 			events: ['submit'],
@@ -972,5 +891,5 @@ keypress(enter):#onSubmit
 				ev.stopPropagation();
 			}
 		}
-	);
+	);*/
 })();
