@@ -96,6 +96,22 @@ function testButton(el: HTMLButtonElement, test: Test) {
 	});
 }
 
+function testAttributes<T extends Component>(
+	el: T,
+	attributes: string[],
+	a: Test
+) {
+	if (attributes) {
+		attributes.forEach(attr =>
+			a.ok(attr.toLowerCase() === attr, `${attr} should be lowercase`)
+		);
+
+		if (attributes.includes('disabled')) testDisabled(el as any, a);
+		if (attributes.includes('value')) testValue(el as any, a);
+		if (attributes.includes('checked')) testChecked(el as any, a);
+	}
+}
+
 function testComponent(name: string, def: typeof Component, a: Test) {
 	const attributes = def.observedAttributes;
 	const el: any = document.createElement(name);
@@ -106,11 +122,7 @@ function testComponent(name: string, def: typeof Component, a: Test) {
 
 	if (el.getAttribute('role') === 'button') testButton(el, a);
 
-	if (attributes) {
-		if (attributes.includes('disabled')) testDisabled(el, a);
-		if (attributes.includes('value')) testValue(el, a);
-		if (attributes.includes('checked')) testChecked(el, a);
-	}
+	testAttributes(el, attributes, a);
 
 	if (el.tabIndex && el.tabIndex !== -1) testFocus(el, a);
 }

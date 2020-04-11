@@ -1,7 +1,7 @@
-import { suite } from '../tester';
+import { suite } from '../spec/index.js';
 import { tap, merge, hook } from '../rx';
 import { dom, render, connect } from '../xdom';
-import { $on, portal, teleport, getAttribute } from './index.js';
+import { portal, teleport, getAttribute } from './index.js';
 
 export default suite('template', test => {
 	test('bindings - get', a => {
@@ -73,15 +73,6 @@ export default suite('template', test => {
 			a.ok(el);
 			a.equal(el.childNodes.length, 1);
 			a.equal(el.childNodes[0]?.textContent, 'Hello');
-		});
-	});
-
-	test('Events', a => {
-		function onClick(ev: Event) {
-			a.equal(ev.type, 'click');
-		}
-		connect(<div $={$on('click', onClick)}>Hello</div>, el => {
-			el.click();
 		});
 	});
 });

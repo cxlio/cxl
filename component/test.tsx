@@ -1,12 +1,12 @@
-import { suite } from '../tester';
+import { suite } from '../spec/index.js';
 import {
 	Attribute,
 	StyleAttribute,
 	Augment,
 	Component,
 	Slot,
-	bind,
 	get,
+	bind,
 	registerComponent
 } from './index';
 import { dom, render, connect } from '../xdom';
@@ -158,6 +158,33 @@ export default suite('component', test => {
 				a.equal(el.test, true);
 			}
 		);
+	});
+
+	test('Attribute - multi word', a => {
+		const id = 'cxl-test' + a.id;
+
+		@Augment()
+		class TestComponent extends Component {
+			static tagName = id;
+			@Attribute()
+			'test-boolean' = false;
+			@Attribute()
+			'test-string' = 'string';
+		}
+
+		connect<TestComponent>(<TestComponent test-boolean={true} />, el => {
+			a.equal(el['test-boolean'], true);
+			el['test-boolean'] = false;
+			a.equal(el['test-boolean'], false);
+			el.setAttribute('test-boolean', '');
+			a.equal(el['test-boolean'], true);
+			el.removeAttribute('test-boolean');
+			a.equal(el['test-boolean'], false);
+
+			a.equal(el['test-string'], 'string');
+			el.setAttribute('test-string', 'value');
+			a.equal(el['test-string'], 'value');
+		});
 	});
 
 	test('Component - Attributes', a => {
