@@ -37,6 +37,7 @@ interface Colors {
 
 interface StrictStyleDefinition {
 	alignItems: string;
+	alignSelf: string;
 	animation: string;
 	animationDuration: string;
 	backgroundColor: Color;

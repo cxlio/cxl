@@ -344,7 +344,6 @@
 	component(
 		{
 			name: 'cxl-router-title',
-			extend: 'cxl-appbar-title',
 			bindings: 'route.change:#render',
 			template: `
 <x &=".responsive">
@@ -356,7 +355,7 @@
 <a &=".link =href0:attribute(href) =title0:text"></a>
 	`,
 			styles: {
-				$: { lineHeight: 22, flexGrow: 1 },
+				$: { lineHeight: 22, flexGrow: 1, font: 'title' },
 				link: {
 					display: 'inline-block',
 					textDecoration: 'none',

@@ -11,7 +11,7 @@ import { Style, pct } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
 import { tpl, onAction } from '../template/index.js';
 import { on, trigger } from '../dom/index.js';
-import { tap, of } from '../rx/index.js';
+import { tap, of, merge } from '../rx/index.js';
 import { T, Button, Svg } from './core.js';
 
 @Augment(
@@ -221,7 +221,14 @@ export class DialogConfirm extends Component {
 			}
 		/>
 		<div
-			$={el => on(el, 'click').pipe(tap(ev => ev.stopPropagation()))}
+			$={(el, view) =>
+				merge(
+					on(el, 'drawer.close').pipe(
+						tap(() => (view.host.visible = false))
+					),
+					on(el, 'click').pipe(tap(ev => ev.stopPropagation()))
+				)
+			}
 			className="drawer"
 		>
 			<slot />
@@ -241,23 +248,6 @@ export class Drawer extends Component {
 	@StyleAttribute()
 	permanent = false;
 }
-
-/*	component(
-		{
-			permanent: false,
-			visible: false,
-			toggle() {
-				this.visible = !this.visible;
-			},
-
-			onRoute() {
-				this.visible = false;
-			}
-		}
-		alt="Open Navigation Bar"
-		role="list" 	
-	);*/
-//" =permanent:@permanent =visible:@visible content location:#onRoute"></Drawer>
 
 const MenuIcon = (
 	<Svg viewBox="0 0 24 24">{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>

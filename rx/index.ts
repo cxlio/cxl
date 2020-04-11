@@ -8,6 +8,12 @@ type SubscribeFunction<T> = (
 ) => UnsubscribeFunction | void;
 type EventCallback = (...args: any) => void;
 
+type Merge<T> = T extends Observable<infer U> ? U : never;
+type ObservableT<T> = T extends Observable<infer U> ? U : never;
+type PickObservable<T> = {
+	[P in keyof T]: T[P] extends Observable<any> ? ObservableT<T[P]> : never;
+};
+
 export type Operator<T, T2 = T> = (observable: Observable<T>) => Observable<T2>;
 
 declare function setTimeout(fn: () => any, n?: number): number;
@@ -480,7 +486,7 @@ function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
 }
 
 function tap<T>(fn: (val: T) => void): Operator<T, T> {
-	return operator((subscriber: Subscription<T>) => (val: T) => {
+	return operator<T, T>((subscriber: Subscription<T>) => (val: T) => {
 		fn(val);
 		subscriber.next(val);
 	});
@@ -522,29 +528,10 @@ function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
-function merge<A>(a: Observable<A>): Observable<A>;
-function merge<A, B>(a: Observable<A>, b: Observable<B>): Observable<A | B>;
-function merge<A, B, C>(
-	a: Observable<A>,
-	b: Observable<B>,
-	c: Observable<C>
-): Observable<A | B | C>;
-function merge<A, B, C, D>(
-	a: Observable<A>,
-	b: Observable<B>,
-	c: Observable<C>,
-	d: Observable<D>
-): Observable<A | B | C | D>;
-function merge<A, B, C, D, E>(
-	a: Observable<A>,
-	b: Observable<B>,
-	c: Observable<C>,
-	d: Observable<D>,
-	e: Observable<E>
-): Observable<A | B | C | D | E>;
-function merge<R>(...observables: Observable<R>[]): Observable<R>;
-function merge(...observables: Observable<any>[]) {
-	if (observables.length === 1) return observables[0];
+function merge<R extends Observable<any>[]>(
+	...observables: R
+): R extends (infer U)[] ? Observable<Merge<U>> : never {
+	if (observables.length === 1) return observables[0] as any;
 
 	return new Observable(subs => {
 		let refCount = observables.length;
@@ -563,11 +550,13 @@ function merge(...observables: Observable<any>[]) {
 		);
 
 		return () => subscriptions.forEach(s => s.unsubscribe());
-	});
+	}) as any;
 }
 
-function combineLatest(...observables: any[]): Observable<any[]> {
-	return new Observable<any[]>(subs => {
+function combineLatest<T extends any[]>(
+	...observables: T
+): Observable<PickObservable<T>> {
+	return new Observable<any>(subs => {
 		const latest: any[] = [],
 			len = observables.length;
 		let count = 0,

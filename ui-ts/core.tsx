@@ -149,12 +149,24 @@ export class Ripple extends Component {
 }
 
 @Augment(
+	bind(ripple),
 	<Host>
-		<Style>{{}}</Style>
+		<Style>
+			{{
+				$: {
+					display: 'block',
+					position: 'relative',
+					overflowX: 'hidden',
+					overflowY: 'hidden'
+				}
+			}}
+		</Style>
 		<slot />
 	</Host>
 )
-export class RippleContainer extends Component {}
+export class RippleContainer extends Component {
+	static tagName = 'cxl-ripple-container';
+}
 
 @Augment<Appbar>(
 	role('heading'),
@@ -219,6 +231,24 @@ export class Appbar extends Component {
 
 	@Attribute()
 	center = false;
+}
+
+@Augment(
+	<Host>
+		<Style>
+			{{
+				$: { flexGrow: 1, font: 'title' },
+				$extended: { font: 'h5', alignSelf: 'flex-end' }
+			}}
+		</Style>
+		<slot />
+	</Host>
+)
+export class AppbarTitle extends Component {
+	static tagName = 'cxl-appbar-title';
+
+	@StyleAttribute()
+	extended = false;
 }
 
 const AVATAR_DEFAULT =
@@ -538,15 +568,18 @@ export class Hr extends Component {
 			}
 		}}
 	</Style>,
-	render(el => {
-		return (
-			<a className="link" href={get(el, 'href')} tabIndex={-1}>
-				<div className="content">
-					<slot />
-				</div>
-			</a>
-		);
-	})
+	render(el => (
+		<a
+			$={a => onAction(a).pipe(triggerEvent(el, 'drawer.close'))}
+			className="link"
+			href={get(el, 'href')}
+			tabIndex={-1}
+		>
+			<div className="content">
+				<slot />
+			</div>
+		</a>
+	))
 )
 export class Item extends Component {
 	static tagName = 'cxl-item';
@@ -952,6 +985,49 @@ export class Snackbar extends Component {
 	delay = 4000;
 }
 
+@Augment(
+	<Host>
+		<Style>
+			{{
+				$: {
+					position: 'fixed',
+					left: 16,
+					bottom: 16,
+					right: 16,
+					textAlign: 'center'
+				},
+				$left: { textAlign: 'left' },
+				$right: { textAlign: 'right' }
+			}}
+		</Style>
+	</Host>
+)
+export class SnackbarContainer extends Component {
+	static tagName = 'cxl-snackbar-container';
+
+	queue: Snackbar[] = [];
+
+	private notifyNext() {
+		const next = this.queue[0];
+
+		this.appendChild(next);
+
+		setTimeout(() => {
+			remove(next);
+
+			this.queue.shift();
+
+			if (this.queue.length) this.notifyNext();
+		}, next.delay);
+	}
+
+	notify(snackbar: Snackbar) {
+		this.queue.push(snackbar);
+
+		if (this.queue.length === 1) this.notifyNext();
+	}
+}
+
 @Augment<Tab>(
 	role('tab'),
 	<Focusable />,
@@ -1036,7 +1112,7 @@ export class Tab extends Component {
 			on(el, 'cxl-tab.selected').pipe(
 				tap(ev => {
 					if (el.selected) el.selected.selected = false;
-					el.selected = ev.target;
+					if (ev.target instanceof Tab) el.selected = ev.target;
 				})
 			)
 		);

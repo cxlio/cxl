@@ -328,15 +328,6 @@ on(selectable.action):#onAction
 	});
 
 	component({
-		name: 'cxl-appbar-title',
-		attributes: ['extended'],
-		styles: {
-			$: { flexGrow: 1, font: 'title' },
-			$extended: { font: 'h5', alignSelf: 'flex-end' }
-		}
-	});
-
-	component({
 		name: 'cxl-meta',
 		initialize() {
 			function meta(name, content) {
@@ -375,26 +366,7 @@ on(selectable.action):#onAction
 			bindings: `
 id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show:event.stop role(button)
 	`,
-			styles: [
-				{
-					icon: {
-						cursor: 'pointer',
-						width: 8
-					},
-					menuControl: {
-						position: 'absolute',
-						transformOrigin: 'right top',
-						textAlign: 'left',
-						right: 0
-					},
-					menu: {
-						height: 0,
-						textAlign: 'right',
-						elevation: 5
-					}
-				},
-				DisabledCSS
-			]
+			styles: [{}, DisabledCSS]
 		},
 		{
 			icon: 'ellipsis-v',
@@ -412,72 +384,6 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 				const item = cxl.dom.find(el, this.itemSelector);
 
 				if (item) item.focus();
-			}
-		}
-	);
-
-	component({
-		name: 'cxl-ripple-container',
-		attributes: ['disabled'],
-		styles: {
-			$: {
-				position: 'relative',
-				overflowX: 'hidden',
-				overflowY: 'hidden'
-			}
-		},
-		bindings: 'ripple'
-	});
-
-	component(
-		{
-			name: 'cxl-snackbar-container',
-			bindings: 'connect:#connect',
-
-			styles: {
-				$: {
-					position: 'fixed',
-					left: 16,
-					bottom: 16,
-					right: 16,
-					textAlign: 'center'
-				},
-				$left: { textAlign: 'left' },
-				$right: { textAlign: 'right' }
-			},
-
-			initialize(state) {
-				state.host = this;
-				state.queue = [];
-			},
-
-			methods: ['notify']
-		},
-		{
-			queue: null,
-
-			connect(val, host) {
-				ui.snackbarContainer = host;
-			},
-
-			notifyNext() {
-				const next = this.queue[0];
-
-				cxl.dom.insert(this.host, next);
-
-				setTimeout(() => {
-					cxl.dom.remove(next);
-
-					this.queue.shift();
-
-					if (this.queue.length) this.notifyNext();
-				}, next.delay);
-			},
-
-			notify(snackbar) {
-				this.queue.push(snackbar);
-
-				if (this.queue.length === 1) this.notifyNext();
 			}
 		}
 	);
@@ -512,7 +418,7 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 			if (typeof options === 'string') options = { content: options };
 
 			if (!bar) {
-				bar = cxl.dom('cxl-snackbar-container');
+				bar = ui.snackbarContainer = cxl.dom('cxl-snackbar-container');
 				document.body.appendChild(bar);
 			}
 

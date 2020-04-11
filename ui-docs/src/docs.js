@@ -2324,7 +2324,7 @@ See <a href="react.html">Demo</a>.</p>
 		<cxl-t inline subtitle2>${cxl.ui.version}</cxl-t>
 		</cxl-t>
 	</cxl-c>
-	<cxl-item icon="home" &="route.link(home)">Home</cxl-item>
+	<cxl-item &="route.link(home)"><cxl-icon="home" /> Home</cxl-item>
 	<cxl-item icon="book" &="route.link(getting-started)">Getting Started</cxl-item>
 	<cxl-hr></cxl-hr>
 	<cxl-c pad16><cxl-t subtitle2>Guides</cxl-t></cxl-c>

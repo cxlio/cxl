@@ -10,6 +10,13 @@ export default suite('merge', test => {
 		a.equal(e1, result);
 	});
 
+	test('should merge different types', a => {
+		const e1 = of(1);
+		const e2 = of('2');
+
+		a.ok(merge(e1, e2));
+	});
+
 	test('should merge cold and cold', a => {
 		const e1 = cold('---a-----b-----c----|');
 		const e2 = cold('------x-----y-----z----|');

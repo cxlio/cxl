@@ -1,5 +1,6 @@
 import {
 	Observable,
+	Operator,
 	merge,
 	tap,
 	map,
@@ -74,7 +75,10 @@ export function setContent(el: Element) {
 	return tap((val: any) => domSetContent(el, val));
 }
 
-export const log = tap(val => console.log(val));
+const LOG = tap(val => console.log(val));
+export function log<T>() {
+	return LOG as Operator<T>;
+}
 
 /*
  * Portal

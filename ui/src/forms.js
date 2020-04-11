@@ -61,7 +61,7 @@
 			}
 		));
 
-	component(
+	/*	component(
 		{
 			name: 'cxl-field',
 			attributes: ['floating', 'leading', 'outline', 'counter'],
@@ -152,6 +152,7 @@ on(click):#focus
 		extend: 'cxl-field',
 		deprecated: true
 	});
+	*/
 
 	component(
 		{

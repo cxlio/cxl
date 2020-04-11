@@ -6,13 +6,14 @@ import {
 	Slot,
 	attributeChanged,
 	bind,
+	render,
 	get,
 	role
 } from '../component/index.js';
 import { ButtonBase, Spinner, Toggle, Focusable, Svg } from './core.js';
 import { dom, Host } from '../xdom/index.js';
 import { onAction, triggerEvent } from '../template/index.js';
-import { setAttribute, trigger } from '../dom/index.js';
+import { setAttribute, trigger, on } from '../dom/index.js';
 import { Style } from '../css/index.js';
 import { Observable, merge, tap } from '../rx/index.js';
 
@@ -209,28 +210,7 @@ export class SubmitButton extends ButtonBase {
 	primary = true;
 }
 
-@Augment(
-	<Style>
-		{{
-			$: {
-				display: 'block',
-				lineHeight: 12,
-				font: 'caption',
-				verticalAlign: 'bottom',
-				paddingTop: 8
-			},
-			$invalid: { color: 'error' }
-		}}
-	</Style>,
-	<slot />
-)
-export class FieldHelp extends Component {
-	static tagName = 'cxl-field-help';
-	@StyleAttribute()
-	invalid = false;
-}
-
-@Augment(
+const FieldBase = (
 	<Host>
 		<Style>
 			{{
@@ -299,28 +279,95 @@ export class FieldHelp extends Component {
 					backgroundColor: 'inherit',
 					display: 'inline-block'
 				},
-				label$floating: {
+				label$floating$novalue: {
 					font: 'default',
 					translateY: 23,
 					opacity: 0.75
 				},
 				label$leading: { paddingLeft: 24 },
-				label$floating$outline: { translateY: 27 }
+				label$floating$novalue$outline: { translateY: 27 }
 			}}
 		</Style>
 		<div className="mask">
 			<div className="label">
-				<Slot selector="cxl-label-slot" />
+				<Slot selector="cxl-label" />
 			</div>
 		</div>
 		<div className="content">
-			<Slot selector="cxl-field-content" />
+			<slot />
 		</div>
-		<slot />
 	</Host>
+);
+
+@Augment<Field>(
+	<Style>
+		{{
+			$: { marginBottom: 16 },
+			$outline: { paddingTop: 2 },
+			flex: { display: 'flex', alignItems: 'center', lineHeight: 22 },
+			line: { position: 'absolute', marginTop: 6, left: 0, right: 0 },
+			line$outline: { display: 'none' },
+			help: { paddingLeft: 12, paddingRight: 12, display: 'flex' },
+			grow: { flexGrow: 1 },
+			counter: { textAlign: 'right' },
+			help$leading: { paddingLeft: 38 }
+		}}
+	</Style>,
+	FieldBase,
+	render(host => {
+		let input: InputBase;
+
+		function onRegister(ev: Event) {
+			// if (ev.target instanceof InputBase) input = ev.target;
+			if (ev.target) input = ev.target as InputBase;
+		}
+
+		function update() {
+			if (input) {
+				host.disabled = input.disabled;
+				host.focused = input.focused;
+
+				if (input.touched) {
+					host.invalid = input.invalid;
+					// this.error = el.$validity && el.$validity.message;
+				}
+			}
+		}
+
+		function onChange() {
+			const value = input?.value;
+			host.novalue = !value;
+		}
+
+		const hostBindings = merge(
+			on(host, 'form.register').pipe(tap(onRegister)),
+			on(host, 'focusable.touched').pipe(tap(update)),
+			on(host, 'focusable.focus').pipe(tap(update)),
+			on(host, 'focusable.blur').pipe(tap(update)),
+			on(host, 'invalid').pipe(tap(update)),
+			on(host, 'input').pipe(tap(onChange)),
+			on(host, 'form.disabled').pipe(tap(update)),
+			on(host, 'click').pipe(tap(() => input?.focus()))
+		);
+		return (
+			<Host $={() => hostBindings}>
+				<FocusLine
+					className="line"
+					focused={get(host, 'focused')}
+					invalid={get(host, 'invalid')}
+				/>
+				<div className="help">
+					<div className="grow">
+						<Slot selector="cxl-field-help" />
+						<div title="=error:text:show"></div>
+					</div>
+				</div>
+			</Host>
+		);
+	})
 )
-export class FieldBase extends Component {
-	static tagName = 'cxl-field-base';
+export class Field extends Component {
+	static tagName = 'cxl-field';
 
 	@StyleAttribute()
 	outline = false;
@@ -336,6 +383,29 @@ export class FieldBase extends Component {
 	disabled = false;
 	@StyleAttribute()
 	hovered = false;
+	@StyleAttribute()
+	novalue = true;
+}
+
+@Augment(
+	<Style>
+		{{
+			$: {
+				display: 'block',
+				lineHeight: 12,
+				font: 'caption',
+				verticalAlign: 'bottom',
+				paddingTop: 8
+			},
+			$invalid: { color: 'error' }
+		}}
+	</Style>,
+	<slot />
+)
+export class FieldHelp extends Component {
+	static tagName = 'cxl-field-help';
+	@StyleAttribute()
+	invalid = false;
 }
 
 /*	component(
