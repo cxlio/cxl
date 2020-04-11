@@ -126,6 +126,19 @@ export function ariaProp(host: Element, prop: string) {
 	);
 }
 
+interface ValueElement extends Element {
+	value: boolean | undefined;
+}
+
+export function ariaChecked(host: ValueElement) {
+	return tap<boolean>(val =>
+		host.setAttribute(
+			'aria-checked',
+			host.value === undefined ? 'mixed' : val ? 'true' : 'false'
+		)
+	);
+}
+
 export function selectable<T extends SelectableComponent>(host: T) {
 	registable(host, 'selectable');
 	return merge(

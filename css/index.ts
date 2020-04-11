@@ -42,6 +42,9 @@ interface StrictStyleDefinition {
 	animationDuration: string;
 	backgroundColor: Color;
 	borderBottom: number;
+	borderLeft: number;
+	borderRight: number;
+	borderTop: number;
 	borderColor: Color;
 	borderWidth: number;
 	borderRadius: Length;

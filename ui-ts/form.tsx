@@ -16,6 +16,7 @@ import {
 	Toggle,
 	Focusable,
 	Svg,
+	ariaChecked,
 	selectable
 } from './core.js';
 import { dom, Host } from '../xdom/index.js';
@@ -25,7 +26,7 @@ import {
 	triggerEvent,
 	keypress
 } from '../template/index.js';
-import { setAttribute, trigger, on } from '../dom/index.js';
+import { trigger, on } from '../dom/index.js';
 import { Style } from '../css/index.js';
 import { Observable, filter, merge, tap } from '../rx/index.js';
 
@@ -89,7 +90,12 @@ class InputBase extends Component {
 	role('checkbox'),
 	bind(host => {
 		const update = tap<any>(
-			() => (host.value = host.checked ? host.trueValue : host.falseValue)
+			() =>
+				(host.value = host.indeterminate
+					? undefined
+					: host.checked
+					? host.trueValue
+					: host.falseValue)
 		);
 		return merge(
 			onAction(host).pipe(
@@ -106,16 +112,8 @@ class InputBase extends Component {
 			attributeChanged(host, 'value').pipe(
 				tap(val => (host.checked = val === host.trueValue))
 			),
-			get(host, 'checked').pipe(
-				tap(val =>
-					setAttribute(
-						host,
-						'aria-checked',
-						host.indeterminate ? 'mixed' : val ? 'true' : 'false'
-					)
-				),
-				update
-			),
+			get(host, 'checked').pipe(ariaChecked(host), update),
+			get(host, 'indeterminate').pipe(update),
 			get(host, 'trueValue').pipe(update),
 			get(host, 'falseValue').pipe(update)
 		);
@@ -184,6 +182,8 @@ class InputBase extends Component {
 )
 export class Checkbox extends InputBase {
 	static tagName = 'cxl-checkbox';
+
+	value: boolean | undefined = false;
 
 	@StyleAttribute()
 	checked = false;

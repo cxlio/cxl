@@ -126,6 +126,9 @@ export class Table extends Component {
 				paddingLeft: 8,
 				paddingRight: 8,
 				flexGrow: 1,
+				borderTop: 0,
+				borderLeft: 0,
+				borderRight: 0,
 				borderBottom: 1,
 				borderStyle: 'solid',
 				borderColor: 'divider'
