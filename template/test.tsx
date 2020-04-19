@@ -1,12 +1,12 @@
 import { suite } from '../spec/index.js';
-import { tap, merge, hook } from '../rx';
+import { tap, merge, be } from '../rx';
 import { dom, render, connect } from '../xdom';
 import { portal, teleport, getAttribute } from './index.js';
 
 export default suite('template', test => {
 	test('bindings - get', a => {
 		const done = a.async();
-		const [value, setValue] = hook('');
+		const value = be('');
 		let first = true;
 
 		function onTitle(val: string) {
@@ -15,7 +15,7 @@ export default suite('template', test => {
 				first = false;
 			} else {
 				a.equal(val, 'title');
-				setValue('value');
+				value.next('value');
 			}
 		}
 

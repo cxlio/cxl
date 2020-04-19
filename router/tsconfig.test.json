@@ -1,9 +1,8 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"outDir": "../dist/router",
-		"lib": ["es6"]
+		"outDir": "../dist/router"
 	},
 	"references": [{ "path": "tsconfig.json" }, { "path": "../spec" }],
-	"include": ["test.tsx"]
+	"files": ["test.tsx"]
 }

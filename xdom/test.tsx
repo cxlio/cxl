@@ -1,4 +1,4 @@
-import { suite } from '../spec';
+import { suite } from '../spec/index.js';
 import { dom, Fragment, JSXElement, render, connect } from './index.js';
 import { hook, Subject, Observable, tap, map, of } from '../rx/index.js';
 

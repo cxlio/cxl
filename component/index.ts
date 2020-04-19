@@ -109,7 +109,7 @@ export class Component extends HTMLElement {
 	}
 }
 
-function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
+export function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
 	const oldRender = (proto as any).render;
 	(proto as any).render = function(el: T) {
 		if (oldRender) oldRender(el);
@@ -141,6 +141,27 @@ export function Augment<T>(...augmentations: Augmentation<T>[]) {
 		const tagName = (ctor as any).tagName;
 		if (tagName) registerComponent(tagName, ctor);
 		augment(ctor, augmentations);
+	};
+}
+
+let autoId = 0;
+
+export function Augment2<T>(
+	...augs: [string | Augmentation<T>, ...Augmentation<T>[]]
+) {
+	return (ctor: any) => {
+		let newAugs: any, tagName: string;
+
+		if (augs && typeof augs[0] === 'string') {
+			tagName = augs[0];
+			newAugs = augs.slice(1);
+		} else {
+			newAugs = augs;
+			tagName = `cxl-augment${autoId++}`;
+		}
+
+		if (tagName) registerComponent(tagName, ctor);
+		augment(ctor, newAugs);
 	};
 }
 

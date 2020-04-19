@@ -10,12 +10,14 @@
 		"icons.tsx",
 		"layout.tsx",
 		"table.tsx",
-		"dialog.tsx"
+		"dialog.tsx",
+		"router.ts"
 	],
 	"references": [
 		{ "path": "../xdom" },
 		{ "path": "../component" },
 		{ "path": "../template" },
-		{ "path": "../css" }
+		{ "path": "../css" },
+		{ "path": "../router" }
 	]
 }

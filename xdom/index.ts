@@ -5,7 +5,7 @@ type IntrinsicElement<T> =
 			[K in keyof T]?: T[K] | Observable<T[K]>;
 	  }
 	| {
-			$?: Binding<T> | Bindable<T>;
+			$?: Binding<T>;
 			children?: any;
 	  };
 
@@ -27,9 +27,6 @@ declare global {
 	}
 }
 
-interface Bindable<T> {
-	toBinding(): Binding<T>;
-}
 type Binding<ElementT = HTMLElement, DataT = any> = (
 	el: ElementT,
 	ctx: any
@@ -58,9 +55,13 @@ export type JSXElement<T = any> = (context: RenderContext) => T;
 function expression(binding: Observable<any>) {
 	return (ctx: RenderContext) => {
 		const result = document.createTextNode('');
-		if (ctx) ctx.bind(binding.pipe(tap(val => (result.textContent = val))));
+		ctx.bind(binding.pipe(tap(val => (result.textContent = val))));
 		return result;
 	};
+}
+
+function binding(bindingFn: Binding) {
+	return (ctx: RenderContext) => expression(bindingFn(ctx.host, ctx))(ctx);
 }
 
 export function normalizeChildren(children: any, result?: JSXElement[]) {
@@ -72,13 +73,12 @@ export function normalizeChildren(children: any, result?: JSXElement[]) {
 		if (!child) continue;
 		else if (Array.isArray(child)) normalizeChildren(child, result);
 		else if (child instanceof Observable) result.push(expression(child));
+		// TODO keep this here, use symbol?
+		else if (child['cxlBinding']) result.push(binding(child));
 		else if (typeof child === 'function') result.push(child);
-		else if (child.toBinding)
-			result.push(view =>
-				expression(child.toBinding()(view.host, view))(view)
-			);
 		else result.push(() => document.createTextNode(child));
 	}
+
 	return result;
 }
 
@@ -126,7 +126,6 @@ class NativeElement {
 					value.pipe(tap(val => (el[i] = val)))
 				);
 			else if (typeof value === 'function') bindings.push(value);
-			else if (value && value.toBinding) bindings.push(value.toBinding());
 			else {
 				if (!other) other = {};
 				other[i] = value;

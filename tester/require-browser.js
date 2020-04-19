@@ -6,6 +6,9 @@ function require(path) {
 	}
 	const mods = require.modules;
 
+	if (require.replace)
+		path = path.replace(require.replace.match, require.replace.replace);
+
 	// Handle packages
 	if (path[0] !== '.') return mods[path];
 

@@ -5,30 +5,27 @@ const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	splatParam = /\*\w+/g,
 	escapeRegExp = /[-{}[\]+?.,\\^$|#\s]/g;
 
-interface Dictionary {
-	[key: string]: string | null;
-}
+type Dictionary = Record<string, string>;
+type RouteArguments = { [key: string]: any };
 
 interface RouteInstances {
-	[key: string]: Element;
+	[key: string]: any;
 }
 
 interface Element {
-	parentNode: Element;
+	parentNode: Element | null;
 	appendChild(el: Element): void;
 }
 
-type RouteArguments = { [key: string]: any };
-
-interface RouteDefinition {
+export interface RouteDefinition<T extends Element> {
 	id?: string;
 	title?: string;
 	path: string;
 	isDefault?: boolean;
-	resolve?: (args: any) => boolean;
 	parent?: string;
 	redirectTo?: string;
-	create: (args: RouteArguments) => Element;
+	resolve?: (args: Partial<T>) => boolean;
+	render: (ctx?: any) => T;
 }
 
 function routeToRegExp(route: string): [RegExp, string[]] {
@@ -49,11 +46,11 @@ function routeToRegExp(route: string): [RegExp, string[]] {
 	return [result, names];
 }
 
-export function replaceParameters(path: string, params: Dictionary) {
-	if (params === null || params === undefined) return path;
-
-	if (typeof params !== 'object') params = { $: params };
-
+export function replaceParameters(
+	path: string,
+	params?: Record<string, string>
+) {
+	if (!params) return path;
 	return path.replace(PARAM_REGEX, (_match, key) => params[key] || '');
 }
 
@@ -92,7 +89,7 @@ class Fragment {
 					? decodeURIComponent(param)
 					: null;
 
-			result[this.parameters[i]] = p;
+			if (p) result[this.parameters[i]] = p;
 		});
 
 		return this._extractQuery(fragment, result);
@@ -107,14 +104,14 @@ class Fragment {
 	}
 }
 
-export class Route {
+export class Route<T extends Element> {
 	id: string;
 	path?: Fragment;
-	definition: RouteDefinition;
+	definition: RouteDefinition<T>;
 	isDefault: boolean;
 	parent?: string;
 
-	constructor(def: RouteDefinition) {
+	constructor(def: RouteDefinition<T>) {
 		if (def.path !== undefined) this.path = new Fragment(def.path);
 
 		this.id = def.id || def.path;
@@ -123,37 +120,39 @@ export class Route {
 		this.definition = def;
 	}
 
-	createElement(args: RouteArguments) {
-		return this.definition.create(args);
+	createElement(args: Partial<T>) {
+		const el = this.definition.render();
+		for (const a in args) el[a] = args[a] as any;
+		return el;
 	}
 
-	create(args: Dictionary) {
+	create(args: Partial<T>) {
 		const def = this.definition,
 			resolve = def.resolve;
 
 		if (resolve && resolve(args) === false) return null;
 
-		const el = this.createElement(args);
-
-		return el;
+		return this.createElement(args);
 	}
 }
 
 class RouteManager {
-	private routes: Route[] = [];
-	defaultRoute?: Route;
+	private routes: Route<any>[] = [];
+	defaultRoute?: Route<any>;
 
-	findRouteDefinition(hash: string) {
-		return this.routes.find(r => r.path && r.path.test(hash));
+	findRoute(path: string) {
+		return (
+			this.routes.find(r => r.path && r.path.test(path)) ||
+			this.defaultRoute
+		);
 	}
 
 	get(id: string) {
 		return this.routes.find(r => r.id === id);
 	}
 
-	register(route: Route) {
+	register(route: Route<any>) {
 		if (route.isDefault) this.defaultRoute = route;
-
 		this.routes.unshift(route);
 	}
 }
@@ -162,13 +161,11 @@ export class Router {
 	routes = new RouteManager();
 	instances: RouteInstances = {};
 	current?: Element;
-
-	currentRoute?: Route;
-	defaultRoute?: Route;
+	currentRoute?: Route<any>;
 
 	constructor(public readonly root: Element) {}
 
-	private findRoute(id: string, args: Dictionary) {
+	private findRoute(id: string, args: any) {
 		const route = this.instances[id];
 		let i: string;
 
@@ -179,9 +176,9 @@ export class Router {
 		return route;
 	}
 
-	private executeRoute(
-		route: Route,
-		args: RouteArguments,
+	private executeRoute<T extends Element>(
+		route: Route<T>,
+		args: Partial<T>,
 		instances: RouteInstances
 	) {
 		const parentId = route.parent,
@@ -208,14 +205,26 @@ export class Router {
 			if (newInstances[i] !== oldInstances[i]) delete oldInstances[i];
 	}
 
-	execute(Route: Route, args?: RouteArguments) {
+	route<T extends Element>(def: RouteDefinition<T>) {
+		const route = new Route<T>(def);
+		this.routes.register(route);
+		return route;
+	}
+
+	execute<T extends Element>(Route: Route<T>, args?: Partial<T>) {
 		const instances = {};
-
 		this.current = this.executeRoute(Route, args || {}, instances);
-
 		this.currentRoute = Route;
 		this.discardOldRoutes(instances);
 		this.instances = instances;
+	}
+
+	go(path: string) {
+		const route = this.routes.findRoute(path);
+
+		if (!route) throw new Error(`Path: "${path}" not found`);
+
+		this.execute(route, route.path?.getArguments(path));
 	}
 
 	getPath(routeId: string, params: RouteArguments) {

@@ -311,6 +311,12 @@ const FieldBase = (
 	</Host>
 );
 
+export class Label {
+	static create() {
+		return document.createElement('cxl-label');
+	}
+}
+
 @Augment<Field>(
 	<Style>
 		{{
@@ -600,8 +606,11 @@ export class Form extends Component {
 export class Input extends InputBase {
 	static tagName = 'cxl-input';
 	readonly type: string = 'text';
+
 	@Attribute()
-	'maxlength'?: number;
+	maxlength?: number;
+
+	value: string = '';
 }
 
 @Augment<Option>(

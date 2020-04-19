@@ -1,5 +1,5 @@
-import { Store } from './index';
-import { suite } from '../tester';
+import { Store } from './index.js';
+import { suite } from '../spec/index.js';
 
 export default suite('store', test => {
 	test('BaseStore', assert => {

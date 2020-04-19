@@ -85,6 +85,7 @@ interface StrictStyleDefinition {
 	flexGrow: number;
 	flexShrink: number;
 	flexDirection: string;
+	justifyContent: string;
 	pointerEvents: string;
 	cursor: string;
 	display: string;
@@ -278,23 +279,32 @@ export const theme: Theme = {
 	typography: {
 		default: {
 			fontWeight: 400,
+			fontFamily: 'var(--cxl-font)',
 			fontSize: 'var(--cxl-fontSize)',
 			letterSpacing: 'normal'
 		},
-		caption: { fontSize: '12px', letterSpacing: 0.4 },
-		h1: { fontWeight: 300, fontSize: '96px', letterSpacing: -1.5 },
-		h2: { fontWeight: 300, fontSize: '60px', letterSpacing: -0.5 },
+		caption: { fontSize: '12px', letterSpacing: '0.4px' },
+		h1: { fontWeight: 300, fontSize: '96px', letterSpacing: '-1.5px' },
+		h2: { fontWeight: 300, fontSize: '60px', letterSpacing: '-0.5px' },
 		h3: { fontSize: '48px' },
-		h4: { fontSize: '34px', letterSpacing: 0.25 },
+		h4: { fontSize: '34px', letterSpacing: '0.25px' },
 		h5: { fontSize: '24px' },
-		h6: { fontSize: '20px', fontWeight: 400, letterSpacing: 0.15 },
+		h6: { fontSize: '20px', fontWeight: 400, letterSpacing: '0.15px' },
 		title: { fontSize: '18px', lineHeight: '24px' },
-		subtitle: { fontSize: '16px', lineHeight: 1.375, letterSpacing: 0.15 },
-		subtitle2: { fontSize: '14px', lineHeight: '18px', letterSpacing: 0.1 },
+		subtitle: {
+			fontSize: '16px',
+			lineHeight: 1.375,
+			letterSpacing: '0.15px'
+		},
+		subtitle2: {
+			fontSize: '14px',
+			lineHeight: '18px',
+			letterSpacing: '0.1px'
+		},
 		button: {
 			fontSize: '14px',
 			lineHeight: '20px',
-			letterSpacing: 1.25,
+			letterSpacing: '1.25px',
 			textTransform: 'uppercase'
 		},
 		code: { fontFamily: 'var(--fontMonospace)' }

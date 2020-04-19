@@ -86,14 +86,14 @@ const DialogStyles = (
 @Augment<DialogAlert>(
 	role('alertdialog'),
 	DialogStyles,
-	tpl(({ onAction, get }) => (
+	tpl(({ onAction, get, call }) => (
 		<Dialog>
 			<div className="content">
 				<T h5>{get('title-text')}</T>
 				{get('message')}
 			</div>
 			<div className="footer">
-				<Button flat $={onAction('resolve')}>
+				<Button flat $={onAction(call('resolve'))}>
 					{get('action')}
 				</Button>
 			</div>
@@ -123,17 +123,17 @@ export class DialogAlert extends Component {
 @Augment<DialogConfirm>(
 	role('alertdialog'),
 	DialogStyles,
-	tpl(({ onAction, get }) => (
+	tpl(({ onAction, get, call }) => (
 		<Dialog>
 			<div className="content">
 				<T h5>{get('title-text')}</T>
 				{get('message')}
 			</div>
 			<div className="footer">
-				<Button flat $={onAction('reject')}>
+				<Button flat $={onAction(call('reject'))}>
 					{get('cancel-text')}
 				</Button>
-				<Button flat $={onAction('resolve')}>
+				<Button flat $={onAction(call('resolve'))}>
 					{get('action')}
 				</Button>
 			</div>

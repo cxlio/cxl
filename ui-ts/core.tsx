@@ -1,4 +1,4 @@
-import { dom, Host } from '../xdom/index.js';
+import { dom, Host, normalizeChildren } from '../xdom/index.js';
 import {
 	Attribute,
 	Augment,
@@ -1197,4 +1197,55 @@ export class Tabs extends Component {
 
 	@Attribute()
 	selected?: Tab;
+}
+
+/*@Augment()
+export class Meta extends Component {
+	static tagName = 'cxl-meta';
+
+	render() {
+		function meta(name, content) {
+			document.head.appendChild(
+				dom('meta', { name: name, content: content })({ bind: () => {}})
+			);
+		}
+		document.documentElement.lang = 'en-US';
+
+		meta('viewport', 'width=device-width, initial-scale=1');
+		meta('apple-mobile-web-app-capable', 'yes');
+		meta('mobile-web-app-capable', 'yes');
+
+		const style = document.createElement('STYLE');
+		style.innerHTML = 'body,html{padding:0;margin:0;height:100%}';
+		document.head.appendChild(style);
+		const font = dom('link', {
+			rel: 'stylesheet',
+			href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500'
+		})();
+		document.head.appendChild(font);
+	}
+}*/
+
+function Head(p: { children: any }) {
+	const children = normalizeChildren(p.children);
+	return (ctx: any) => {
+		children.forEach(child => document.head.appendChild(child(ctx)));
+	};
+}
+
+export function Meta() {
+	return (
+		<Head>
+			<meta
+				name="viewport"
+				content="width=device-width, initial-scale=1"
+			/>
+			<meta name="apple-mobile-web-app-capable" content="yes" />
+			<meta name="mobile-web-app-capable" content="yes" />
+			<link
+				rel="stylesheet"
+				href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+			/>
+		</Head>
+	);
 }

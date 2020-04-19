@@ -591,10 +591,8 @@ function throwError(error: any) {
 
 export const EMPTY = new Observable<void>(subs => subs.complete());
 
-type Hook<T> = [Observable<T>, (val: T) => void];
-export function hook<T>(initialValue?: T): Hook<T> {
-	const obs = new BehaviorSubject(initialValue);
-	return [obs, obs.next.bind(obs)];
+export function be<T>(initialValue: T) {
+	return new BehaviorSubject(initialValue);
 }
 
 const operators = {
