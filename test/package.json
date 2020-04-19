@@ -2,6 +2,6 @@
 	"name": "@cxl/test",
 	"version": "0.0.0",
 	"scripts": {
-		"test": "node build && cd ../dist/test && node ../tester/runner index.js --coverage --browser"
+		"test": "node build && cd ../dist/test && node ../tester index.js --coverage"
 	}
 }

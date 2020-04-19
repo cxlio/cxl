@@ -12,10 +12,10 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"composite": true,
+		"skipLibCheck": true,
 		"jsx": "react",
 		"jsxFactory": "dom",
 		"typeRoots": ["node_modules/@types"]
 	},
-	"files": [],
-	"references": []
+	"files": []
 }

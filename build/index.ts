@@ -47,12 +47,7 @@ export function amd() {
 
 export function tsconfig(tsconfig = 'tsconfig.json') {
 	return new Observable<Output>(subs => {
-		const output = tsbuild(tsconfig);
-
-		output.forEach(out => {
-			subs.next(out);
-		});
-
+		tsbuild(tsconfig, subs);
 		subs.complete();
 	});
 }

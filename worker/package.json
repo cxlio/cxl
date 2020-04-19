@@ -2,6 +2,6 @@
 	"name": "@cxl/worker",
 	"version": "0.0.1",
 	"scripts": {
-		"test": "node build && cd ../dist/worker && node ../tester/runner"
+		"test": "node build && cd ../dist/worker && node ../tester"
 	}
 }

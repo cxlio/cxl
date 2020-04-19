@@ -87,7 +87,7 @@
 				"tasks": "cd server && node build"
 			},
 			"tester": {
-				"files": ["tester/index.ts", "tester/runner.ts", "tester/*.js"],
+				"files": ["tester/index.ts", "tester/*.js"],
 				"tasks": "node tester/build"
 			},
 			"test": {

@@ -10,7 +10,7 @@
 	],
 	"scripts": {
 		"build": "node build",
-		"test": "node build && cd ../dist/store && node ../tester/runner",
+		"test": "node build && cd ../dist/store && node ../tester",
 		"prepublish": "node build"
 	},
 	"devDependencies": {

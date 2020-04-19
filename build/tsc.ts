@@ -28,7 +28,7 @@ import {
 	ParsedCommandLine,
 	sys
 } from 'typescript';
-
+import { Subscription } from '../rx';
 export { version as tscVersion } from 'typescript';
 
 const DEFAULT_TARGET = ScriptTarget.ES2015;
@@ -204,18 +204,18 @@ function parseTsConfig(tsconfig: string) {
 
 export function tsbuild(
 	tsconfig = 'tsconfig.json',
+	subs: Subscription<Output>,
 	options: BuildOptions = {}
-): Output[] {
+) {
 	const parsed = parseTsConfig(tsconfig);
 	const host = createSolutionBuilderHost();
 	const builder = createSolutionBuilder(host, [tsconfig], options);
-	const output: Output[] = [];
 	const relativePath = parsed.options.outDir || process.cwd();
 	let program: any;
 
 	function writeFile(name: string, source: string) {
 		name = relative(relativePath, name);
-		output.push({ path: name, source });
+		subs.next({ path: name, source });
 	}
 
 	while ((program = builder.getNextInvalidatedProject())) {
@@ -223,7 +223,6 @@ export function tsbuild(
 		if (status !== ExitStatus.Success)
 			throw 'Typescript compilation failed';
 	}
-	return output;
 }
 
 export function tsIncremental(tsconfig: string) {

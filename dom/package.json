@@ -3,6 +3,6 @@
 	"version": "0.0.1",
 	"scripts": {
 		"build": "node build",
-		"test": "node build && cd ../dist/dom && node ../tester/runner"
+		"test": "node build && cd ../dist/dom && node ../tester"
 	}
 }

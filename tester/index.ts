@@ -214,7 +214,10 @@ class TestRunner extends Application {
 	}
 
 	private async runPuppeteer(args: ApplicationArguments) {
-		const browser = await launch();
+		const browser = await launch({
+			headless: true,
+			args: ['--no-sandbox', '--disable-setuid-sandbox']
+		});
 		this.log(`Puppeteer enabled. ${await browser.version()}`);
 		const page = await browser.newPage();
 		try {
@@ -230,7 +233,7 @@ class TestRunner extends Application {
 			const source = readFileSync(this.entryFile, 'utf8');
 			const sources = [{ path: this.entryFile, source }];
 
-			page.tracing.start({ path: 'trace.json' });
+			await page.tracing.start({ path: 'trace.json' });
 			const suite = args.amd
 				? await amdRunner(page, sources)
 				: await cjsRunner(page, sources);
