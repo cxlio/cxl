@@ -136,19 +136,11 @@ export function registerComponent(tagName: string, ctor: any) {
 	customElements.define(tagName, ctor);
 }
 
-export function Augment<T>(...augmentations: Augmentation<T>[]) {
-	return (ctor: new () => T) => {
-		const tagName = (ctor as any).tagName;
-		if (tagName) registerComponent(tagName, ctor);
-		augment(ctor, augmentations);
-	};
-}
-
-let autoId = 0;
-
-export function Augment2<T>(
+export function Augment<T>(): (ctor: new () => T) => void;
+export function Augment<T>(
 	...augs: [string | Augmentation<T>, ...Augmentation<T>[]]
-) {
+): (ctor: new () => T) => void;
+export function Augment(...augs: any[]) {
 	return (ctor: any) => {
 		let newAugs: any, tagName: string;
 
@@ -157,7 +149,7 @@ export function Augment2<T>(
 			newAugs = augs.slice(1);
 		} else {
 			newAugs = augs;
-			tagName = `cxl-augment${autoId++}`;
+			tagName = (ctor as any).tagName;
 		}
 
 		if (tagName) registerComponent(tagName, ctor);
