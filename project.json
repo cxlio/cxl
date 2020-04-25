@@ -37,17 +37,10 @@
 				"files": ["store/index.ts", "store/tsconfig.json"],
 				"tasks": "cd store && npm run build"
 			},
-
-			"store-test": {
-				"files": ["store/test.ts"],
-				"tasks": "cd store && npm test"
-			},
-
 			"diff": {
 				"files": ["diff/src/*.js"],
 				"tasks": "node diff/build"
 			},
-
 			"icons": {
 				"files": ["ui/build-icons.js"],
 				"tasks": "node ui/build-icons"

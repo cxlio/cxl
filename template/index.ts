@@ -10,13 +10,13 @@ import {
 	of,
 	defer,
 	switchMap,
-	EMPTY
+	EMPTY,
 } from '../rx/index.js';
 import {
 	setContent as domSetContent,
 	on,
 	trigger,
-	AttributeObserver
+	AttributeObserver,
 } from '../dom/index.js';
 
 export function getAttribute<T extends HTMLElement>(el: T, name: keyof T) {
@@ -52,7 +52,7 @@ interface ElementWithValue<T> extends HTMLElement {
 	value: T;
 }
 
-export function onValue<R, T extends ElementWithValue<R>>(el: T) {
+export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
 	return merge(on(el, 'input'), on(el, 'change')).pipe(
 		map(ev => (ev.target as T).value),
 		debounceTime()
@@ -123,7 +123,7 @@ const sources: Sources<any, any> = {
 		chain((_el, ctx) => getAttribute(ctx.host, attr), pipe),
 	onAction: pipe => chain(el => onAction(el), pipe),
 	on: (ev, pipe) => chain(el => on(el, ev), pipe),
-	call: (method, pipe) => chain((_e, ctx) => ctx.host[method](), pipe)
+	call: (method, pipe) => chain((_e, ctx) => ctx.host[method](), pipe),
 };
 
 type Renderable<T> = (ctx: RenderContext<T>) => any;

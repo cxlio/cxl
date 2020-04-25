@@ -7,13 +7,13 @@ import {
 	Slot,
 	get,
 	bind,
-	registerComponent
+	registerComponent,
 } from './index';
 import { dom, render, connect } from '../xdom';
 import { of, tap } from '../rx';
 
-export default suite('component', test => {
-	test('Component - empty', a => {
+export default suite('component', (test) => {
+	test('Component - empty', (a) => {
 		class TestComponent extends Component {
 			static tagName = 'div';
 		}
@@ -24,7 +24,7 @@ export default suite('component', test => {
 		a.ok(element instanceof HTMLDivElement);
 	});
 
-	test('Component - register', a => {
+	test('Component - register', (a) => {
 		const id = 'cxl-test' + a.id;
 		@Augment()
 		class Test extends Component {
@@ -34,7 +34,7 @@ export default suite('component', test => {
 		a.ok(el);
 	});
 
-	test('Component - template', a => {
+	test('Component - template', (a) => {
 		const id = 'cxl-test' + a.id;
 		@Augment(
 			<div>
@@ -46,33 +46,36 @@ export default suite('component', test => {
 		}
 
 		const tpl = <Test>Hello World</Test>;
-		const el = render(tpl).element as HTMLDivElement;
-		const el2 = render(tpl).element as HTMLDivElement;
 
-		a.ok(el);
-		a.ok(el.shadowRoot);
-		a.equal(el.shadowRoot?.childNodes.length, 1);
-		a.equal(el.shadowRoot?.children[0].tagName, 'DIV');
-		a.equal(el.childNodes.length, 1);
-		a.ok(el2);
-		a.ok(el2.shadowRoot);
-		a.equal(el2.shadowRoot?.childNodes.length, 1);
-		a.equal(el2.shadowRoot?.children[0].tagName, 'DIV');
-		a.equal(el2.childNodes.length, 1);
+		connect(tpl, (el: HTMLDivElement) => {
+			a.dom.appendChild(el);
+			a.ok(el.shadowRoot);
+			a.equal(el.shadowRoot?.childNodes.length, 1);
+			a.equal(el.shadowRoot?.children[0].tagName, 'DIV');
+			a.equal(el.childNodes.length, 1);
+		});
+
+		connect(tpl, (el2: HTMLDivElement) => {
+			a.dom.appendChild(el2);
+			a.ok(el2.shadowRoot);
+			a.equal(el2.shadowRoot?.childNodes.length, 1);
+			a.equal(el2.shadowRoot?.children[0].tagName, 'DIV');
+			a.equal(el2.childNodes.length, 1);
+		});
 	});
 
-	test('Slot', a => {
+	test('Slot', (a) => {
 		const el = render(<Slot selector="slot-name"></Slot>).element;
 
 		a.ok(el);
 		a.ok(el instanceof HTMLSlotElement);
 	});
 
-	test('bind', a => {
+	test('bind', (a) => {
 		const id = 'cxl-test' + a.id;
 		function bindTest(node: Test) {
 			a.equal(node.tagName, id.toUpperCase());
-			return of('hello').pipe(tap(val => (node.title = val)));
+			return of('hello').pipe(tap((val) => (node.title = val)));
 		}
 
 		@Augment(bind(bindTest))
@@ -86,7 +89,7 @@ export default suite('component', test => {
 		a.ran(2);
 	});
 
-	test('Component - inheritance', a => {
+	test('Component - inheritance', (a) => {
 		const id = 'cxl-test' + a.id;
 
 		class FocusBehavior extends Component {
@@ -133,7 +136,7 @@ export default suite('component', test => {
 		a.equal(instance.name, '');
 	});
 
-	test('Attribute', a => {
+	test('Attribute', (a) => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -144,7 +147,7 @@ export default suite('component', test => {
 			test = true;
 		}
 
-		connect<TestComponent>(<TestComponent></TestComponent>, el => {
+		connect<TestComponent>(<TestComponent></TestComponent>, (el) => {
 			a.equal(el.test, true);
 			el.test = false;
 			a.equal(el.test, false);
@@ -152,7 +155,7 @@ export default suite('component', test => {
 
 		connect<TestComponent>(
 			<TestComponent test={false}></TestComponent>,
-			el => {
+			(el) => {
 				a.equal(el.test, false);
 				el.test = true;
 				a.equal(el.test, true);
@@ -160,7 +163,7 @@ export default suite('component', test => {
 		);
 	});
 
-	test('Attribute - multi word', a => {
+	test('Attribute - multi word', (a) => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -172,7 +175,7 @@ export default suite('component', test => {
 			'test-string' = 'string';
 		}
 
-		connect<TestComponent>(<TestComponent test-boolean={true} />, el => {
+		connect<TestComponent>(<TestComponent test-boolean={true} />, (el) => {
 			a.equal(el['test-boolean'], true);
 			el['test-boolean'] = false;
 			a.equal(el['test-boolean'], false);
@@ -187,7 +190,7 @@ export default suite('component', test => {
 		});
 	});
 
-	test('Component - Attributes', a => {
+	test('Component - Attributes', (a) => {
 		const id = 'cxl-test' + a.id;
 
 		class Test extends Component {
@@ -199,7 +202,7 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		connect<Test>(<Test hello="hello"></Test>, el => {
+		connect<Test>(<Test hello="hello"></Test>, (el) => {
 			a.dom.appendChild(el);
 			a.ok(el);
 			a.equal(el.tagName, id.toUpperCase());
@@ -213,7 +216,7 @@ export default suite('component', test => {
 		});
 	});
 
-	test('Component - Attributes', a => {
+	test('Component - Attributes', (a) => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -226,7 +229,7 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		connect<Test>(<Test hello="hello"></Test>, el => {
+		connect<Test>(<Test hello="hello"></Test>, (el) => {
 			a.ok(el);
 			a.equal(el.tagName, id.toUpperCase());
 			a.equal(el.hello, 'hello');
@@ -239,7 +242,7 @@ export default suite('component', test => {
 		});
 	});
 
-	test('StyleAttribute - default', a => {
+	test('StyleAttribute - default', (a) => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -250,14 +253,14 @@ export default suite('component', test => {
 			persist = true;
 		}
 
-		connect<Test>(<Test />, el => {
+		connect<Test>(<Test />, (el) => {
 			a.equal(el.persist, true);
 			a.dom.appendChild(el);
 			a.ok(el.hasAttribute('persist'));
 		});
 	});
 
-	test('get', a => {
+	test('get', (a) => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -270,12 +273,12 @@ export default suite('component', test => {
 
 		a.ok(Test.observedAttributes.includes('hello'));
 
-		connect<Test>(<Test hello="hello"></Test>, el => {
+		connect<Test>(<Test hello="hello"></Test>, (el) => {
 			let lastValue = 'hello';
 			a.equal(el.hello, 'hello');
 			const subs = get(el, 'hello')
 				.pipe(
-					tap(val => {
+					tap((val) => {
 						a.equal(val, lastValue);
 					})
 				)

@@ -9,7 +9,7 @@ import {
 	of,
 	map,
 	merge,
-	tap
+	tap,
 } from '../rx/index.js';
 import { ChildrenObserver, MutationEvent, getShadow } from '../dom/index.js';
 
@@ -44,9 +44,10 @@ const registeredComponents: Record<string, typeof Component> = {};
 export class ComponentView<T> {
 	private bindings?: Binding<any>[];
 	private subscription?: Subscription<any>;
+	private rendered = false;
 	attributes$ = new Subject<AttributeEvent<T>>();
 
-	constructor(public host: T) {}
+	constructor(public host: T, private render: (host: T) => void) {}
 
 	bind(binding: Binding<any>) {
 		if (this.subscription)
@@ -57,11 +58,16 @@ export class ComponentView<T> {
 	}
 
 	connect() {
+		if (!this.rendered) {
+			this.render(this.host);
+			this.rendered = true;
+		}
+
 		if (this.bindings && !this.subscription)
 			this.subscription = merge(...this.bindings).subscribe({
 				error(e) {
 					throw e;
-				}
+				},
 			});
 	}
 
@@ -73,7 +79,7 @@ export class ComponentView<T> {
 	}
 }
 
-export class Component extends HTMLElement {
+export abstract class Component extends HTMLElement {
 	static tagName: string;
 	static observedAttributes: string[];
 	static create() {
@@ -81,12 +87,7 @@ export class Component extends HTMLElement {
 	}
 
 	jsxAttributes?: AttributeType<this>;
-	view = new ComponentView(this);
-
-	constructor() {
-		super();
-		this.render(this);
-	}
+	view = new ComponentView(this, this.render);
 
 	render(_node: this) {
 		// TODO
@@ -111,7 +112,7 @@ export class Component extends HTMLElement {
 
 export function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
 	const oldRender = (proto as any).render;
-	(proto as any).render = function(el: T) {
+	(proto as any).render = function (el: T) {
 		if (oldRender) oldRender(el);
 		renderFn(el);
 	};
@@ -121,7 +122,7 @@ export function augment<T>(
 	constructor: new () => T,
 	decorators: Augmentation<T>[]
 ) {
-	pushRender(constructor.prototype, node => {
+	pushRender(constructor.prototype, (node) => {
 		for (const d of decorators) {
 			const result = d(node.view);
 			if (result instanceof Node && result !== node)
@@ -222,7 +223,7 @@ export function attributeChanged<T extends Component, K extends keyof T>(
 	attribute: K
 ): Observable<T[K]> {
 	return element.view.attributes$.pipe(
-		filter(ev => ev.attribute === attribute),
+		filter((ev) => ev.attribute === attribute),
 		map(() => element[attribute])
 	);
 }
@@ -289,11 +290,11 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 							of({
 								attribute,
 								target: node,
-								value: (node as any)[attribute]
+								value: (node as any)[attribute],
 							})
 						),
 						node.view.attributes$.pipe(
-							filter(ev => ev.attribute === attribute)
+							filter((ev) => ev.attribute === attribute)
 						)
 					).pipe(options.persistOperator || attributeOperator)
 				)
@@ -309,11 +310,11 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 					this.view.attributes$.next({
 						target: this,
 						attribute,
-						value
+						value,
 					});
 				}
 				return value;
-			}
+			},
 		});
 	};
 }
@@ -321,7 +322,7 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 export function StyleAttribute() {
 	return Attribute({
 		persist: true,
-		observe: true
+		observe: true,
 	});
 }
 

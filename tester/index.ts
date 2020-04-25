@@ -4,7 +4,7 @@ import { Application, ApplicationArguments } from '../server/index.js';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as path from 'path';
 
-import { launch, Page, Request } from 'puppeteer';
+import { Browser, Page, Request, launch } from 'puppeteer';
 require('source-map-support').install();
 
 interface Output {
@@ -19,7 +19,7 @@ class TestReport {
 	printTest(test: Test) {
 		let out = '';
 
-		const failures = test.results.filter(result => {
+		const failures = test.results.filter((result) => {
 			out += result.success ? colors.green('.') : colors.red('X');
 			return result.success === false;
 		});
@@ -30,7 +30,7 @@ class TestReport {
 		}
 
 		console.group(`${test.name} ${out}`);
-		failures.forEach(fail => this.printError(test, fail));
+		failures.forEach((fail) => this.printError(test, fail));
 		test.tests.forEach((test: Test) => this.printTest(test));
 		console.groupEnd();
 
@@ -55,7 +55,9 @@ function generateCoverageReport([js]: any, sources: Output[]) {
 
 	for (const entry of js) {
 		const total = entry.text.length;
-		const sourceFile = sources.find(src => entry.text.includes(src.source));
+		const sourceFile = sources.find((src) =>
+			entry.text.includes(src.source)
+		);
 
 		if (!sourceFile) continue;
 
@@ -78,10 +80,10 @@ async function generateReport(page: Page, sources: Output[]) {
 		coverage: generateCoverageReport(
 			await Promise.all([
 				page.coverage.stopJSCoverage(),
-				page.coverage.stopCSSCoverage()
+				page.coverage.stopCSSCoverage(),
 			]),
 			sources
-		)
+		),
 	};
 
 	writeFileSync('report.json', JSON.stringify(report), 'utf8');
@@ -135,16 +137,16 @@ function handleRequest(sources: Output[], req: Request) {
 
 		sources.push({
 			path: path.relative(process.cwd(), url),
-			source: content
+			source: content,
 		});
 
 		req.respond({
 			headers: {
-				'Access-Control-Allow-Origin': '*'
+				'Access-Control-Allow-Origin': '*',
 			},
 			status: 200,
 			contentType: 'application/javascript',
-			body: JSON.stringify({ content, url, base: path.dirname(url) })
+			body: JSON.stringify({ content, url, base: path.dirname(url) }),
 		});
 	} else req.continue();
 }
@@ -171,7 +173,7 @@ async function cjsRunner(page: Page, sources: Output[]) {
 async function amdRunner(page: Page, sources: Output[]) {
 	for (const source of sources) {
 		await page.addScriptTag({
-			content: source.source
+			content: source.source,
 		});
 	}
 
@@ -208,27 +210,38 @@ class TestRunner extends Application {
 				.map((arg: any) =>
 					typeof arg === 'string' ? arg : arg.toString()
 				)
-		).then(out => {
-			out.forEach(arg => (console as any)[type](arg));
+		).then((out) => {
+			out.forEach((arg) => (console as any)[type](arg));
 		});
 	}
 
-	private async runPuppeteer(args: ApplicationArguments) {
-		const browser = await launch({
-			headless: true,
-			args: ['--no-sandbox', '--disable-setuid-sandbox']
-		});
-		this.log(`Puppeteer enabled. ${await browser.version()}`);
-		const page = await browser.newPage();
+	private async openPage(browser: Browser) {
 		try {
+			return await browser.newPage();
+		} catch (e) {
+			// Try again
+			return await browser.newPage();
+		}
+	}
+
+	private async runPuppeteer(args: ApplicationArguments) {
+		try {
+			const browser = await launch({
+				headless: true,
+				args: ['--no-sandbox', '--disable-setuid-sandbox'],
+			});
+			this.log(`Puppeteer ${await browser.version()}`);
+
+			const page = await this.openPage(browser);
+
 			await Promise.all([
 				page.coverage.startJSCoverage({
-					reportAnonymousScripts: true
+					reportAnonymousScripts: true,
 				}),
-				page.coverage.startCSSCoverage()
+				page.coverage.startCSSCoverage(),
 			]);
-			page.on('console', msg => this.handleConsole(msg));
-			page.on('pageerror', msg => this.log(msg));
+			page.on('console', (msg) => this.handleConsole(msg));
+			page.on('pageerror', (msg) => this.log(msg));
 
 			const source = readFileSync(this.entryFile, 'utf8');
 			const sources = [{ path: this.entryFile, source }];
@@ -242,11 +255,12 @@ class TestRunner extends Application {
 			this.log('Generating report.json');
 			await generateReport(page, sources);
 			printReport(suite as Test);
+
+			await browser.close();
 		} catch (e) {
 			this.log(e);
 			process.exit(1);
 		}
-		await browser.close();
 	}
 
 	async run() {

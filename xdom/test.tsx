@@ -1,9 +1,9 @@
 import { suite } from '../spec/index.js';
 import { dom, Fragment, JSXElement, render, connect } from './index.js';
-import { hook, Subject, Observable, tap, map, of } from '../rx/index.js';
+import { be, Subject, Observable, tap, map, of } from '../rx/index.js';
 
-export default suite('component', test => {
-	test('NativeElement - empty', a => {
+export default suite('component', (test) => {
+	test('NativeElement - empty', (a) => {
 		const div = render(<div />).element;
 		a.ok(div instanceof HTMLElement);
 		a.equal(div.childNodes.length, 0);
@@ -21,7 +21,7 @@ export default suite('component', test => {
 		a.equal(div4.childNodes.length, 0);
 	});
 
-	test('NativeElement - children', a => {
+	test('NativeElement - children', (a) => {
 		const div = (
 			<div>
 				<a>Hello</a>
@@ -42,7 +42,7 @@ export default suite('component', test => {
 		a.equal(el.childNodes[3].textContent, 'true');
 	});
 
-	test('NativeElement - Attributes', a => {
+	test('NativeElement - Attributes', (a) => {
 		const el = render(
 			<div title="Hello World" tabIndex={10}>
 				content
@@ -56,7 +56,7 @@ export default suite('component', test => {
 		a.equal(el.textContent, 'content');
 	});
 
-	test('NativeELement - siblings', a => {
+	test('NativeELement - siblings', (a) => {
 		const el = render(
 				<div>
 					<a>1</a>
@@ -80,7 +80,7 @@ export default suite('component', test => {
 		a.equal(last && last.previousSibling, el.childNodes[1]);
 	});
 
-	test('Fragment', a => {
+	test('Fragment', (a) => {
 		const tpl = (
 			<Fragment>
 				<div>Hello</div>
@@ -96,7 +96,7 @@ export default suite('component', test => {
 		a.equal(frag.childNodes[2].textContent, '!');
 	});
 
-	test('Component Class', a => {
+	test('Component Class', (a) => {
 		class Test {
 			static create() {
 				return document.createElement('div');
@@ -118,7 +118,7 @@ export default suite('component', test => {
 		a.equal(el.tabIndex, 10);
 	});
 
-	test('Component Function', a => {
+	test('Component Function', (a) => {
 		function TestChild(_props: any, children: any) {
 			return <h1>{children}</h1>;
 		}
@@ -148,7 +148,7 @@ export default suite('component', test => {
 		a.equal(child2.textContent, 'World');
 	});
 
-	test('Component - Bindings', a => {
+	test('Component - Bindings', (a) => {
 		class Div {
 			static create() {
 				return new Div();
@@ -158,7 +158,7 @@ export default suite('component', test => {
 		}
 
 		const view = render<Div>(
-			<Div $={el => of('blur').pipe(tap(ev => (el.title = ev)))} />
+			<Div $={(el) => of('blur').pipe(tap((ev) => (el.title = ev)))} />
 		);
 		const el = view.element;
 		view.connect();
@@ -170,7 +170,7 @@ export default suite('component', test => {
 		view.disconnect();
 	});
 
-	test('Bindings - Children', a => {
+	test('Bindings - Children', (a) => {
 		function Div(props?: {
 			$?: (el: any) => Observable<any>;
 			children?: any;
@@ -179,7 +179,7 @@ export default suite('component', test => {
 				a.ok(props.$ || props.children);
 				const el = { title: '' };
 				if (props.$)
-					props.$(el).subscribe(val => {
+					props.$(el).subscribe((val) => {
 						a.equal(val, 'blur');
 						a.equal(el.title, 'blur');
 					});
@@ -190,7 +190,9 @@ export default suite('component', test => {
 
 		const el = render(
 			<Div>
-				<Div $={el => of('blur').pipe(tap(ev => (el.title = ev)))} />
+				<Div
+					$={(el) => of('blur').pipe(tap((ev) => (el.title = ev)))}
+				/>
 			</Div>
 		).element as HTMLElement;
 		a.ok(el);
@@ -198,8 +200,8 @@ export default suite('component', test => {
 		a.ok(child);
 	});
 
-	test('Bindings - Set Attribute', a => {
-		const [checked, setChecked] = hook(true);
+	test('Bindings - Set Attribute', (a) => {
+		const checked = be(true);
 
 		class Div {
 			static create() {
@@ -212,7 +214,9 @@ export default suite('component', test => {
 
 		const view = render(
 			<Div
-				className={checked.pipe(map(val => (val ? 'minus' : 'check')))}
+				className={checked.pipe(
+					map((val) => (val ? 'minus' : 'check'))
+				)}
 			/>
 		);
 		const el = view.element as HTMLDivElement;
@@ -220,15 +224,15 @@ export default suite('component', test => {
 
 		a.ok(el);
 		a.equal(el.className, 'minus');
-		setChecked(false);
+		checked.next(false);
 		a.equal(el.className, 'check');
-		setChecked(true);
+		checked.next(true);
 		a.equal(el.className, 'minus');
 
 		view.disconnect();
 	});
 
-	test('Bindings - Expression', a => {
+	test('Bindings - Expression', (a) => {
 		const world = of('World');
 		const view = render(<div>Hello {world}</div>);
 		const el = view.element as HTMLDivElement;
@@ -239,8 +243,8 @@ export default suite('component', test => {
 		view.disconnect();
 	});
 
-	test('Empty Attribute', a => {
-		connect(<div draggable />, el => {
+	test('Empty Attribute', (a) => {
+		connect(<div draggable />, (el) => {
 			a.ok(el.draggable, 'Must set attribute to true');
 		});
 	});

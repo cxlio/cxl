@@ -8,7 +8,7 @@ import {
 	bind,
 	render,
 	get,
-	role
+	role,
 } from '../component/index.js';
 import {
 	ButtonBase,
@@ -17,18 +17,19 @@ import {
 	Focusable,
 	Svg,
 	ariaChecked,
-	selectable
+	selectable,
+	registable,
 } from './core.js';
 import { dom, Host } from '../xdom/index.js';
 import {
 	onAction,
 	onValue,
 	triggerEvent,
-	keypress
+	keypress,
 } from '../template/index.js';
 import { trigger, on } from '../dom/index.js';
 import { Style } from '../css/index.js';
-import { Observable, filter, merge, tap } from '../rx/index.js';
+import { Observable, merge, tap } from '../rx/index.js';
 
 const FocusCircleStyle = (
 	<Style>
@@ -44,7 +45,7 @@ const FocusCircleStyle = (
 				scaleY: 0,
 				display: 'inline-block',
 				translateX: -14,
-				translateY: -14
+				translateY: -14,
 			},
 			focusCirclePrimary: { backgroundColor: 'primary' },
 			focusCircle$invalid$touched: { backgroundColor: 'error' },
@@ -53,23 +54,31 @@ const FocusCircleStyle = (
 				scaleY: 1,
 				translateX: -14,
 				translateY: -14,
-				opacity: 0.14
+				opacity: 0.14,
 			},
 			focusCircle$focus: {
 				scaleX: 1,
 				scaleY: 1,
 				translateX: -14,
 				translateY: -14,
-				opacity: 0.25
+				opacity: 0.25,
 			},
-			focusCircle$disabled: { scaleX: 0, scaleY: 0 }
+			focusCircle$disabled: { scaleX: 0, scaleY: 0 },
 		}}
 	</Style>
 );
 
 @Augment<InputBase>(
 	<Focusable />,
-	bind(host => get(host, 'value').pipe(triggerEvent(host, 'change')))
+	bind(host =>
+		merge(
+			registable(host, 'form'),
+			on(host, 'click').pipe(
+				tap(ev => ev.target === host && ev.stopPropagation())
+			),
+			get(host, 'value').pipe(triggerEvent(host, 'change'))
+		)
+	)
 )
 class InputBase extends Component {
 	@Attribute()
@@ -80,8 +89,6 @@ class InputBase extends Component {
 	disabled = false;
 	@StyleAttribute()
 	touched = false;
-	@StyleAttribute()
-	focused = false;
 	@Attribute()
 	name?: string;
 }
@@ -131,7 +138,7 @@ class InputBase extends Component {
 					paddingBottom: 12,
 					display: 'block',
 					paddingLeft: 28,
-					lineHeight: 20
+					lineHeight: 20,
 				},
 				$inline: { display: 'inline-block' },
 				$invalid$touched: { color: 'error' },
@@ -145,7 +152,7 @@ class InputBase extends Component {
 					top: 11,
 					left: 0,
 					position: 'absolute',
-					color: 'transparent'
+					color: 'transparent',
 				},
 				check: { display: 'none' },
 				minus: { display: 'none' },
@@ -155,15 +162,15 @@ class InputBase extends Component {
 				box$checked: {
 					borderColor: 'primary',
 					backgroundColor: 'primary',
-					color: 'onPrimary'
+					color: 'onPrimary',
 				},
 				box$indeterminate: {
 					borderColor: 'primary',
 					backgroundColor: 'primary',
-					color: 'onPrimary'
+					color: 'onPrimary',
 				},
 				box$invalid$touched: { borderColor: 'error' },
-				focusCircle: { top: -2, left: -2 }
+				focusCircle: { top: -2, left: -2 },
 			}}
 		</Style>
 		<div className="box">
@@ -207,9 +214,9 @@ export class Checkbox extends InputBase {
 					marginRight: 8,
 					display: 'none',
 					width: 16,
-					height: 16
+					height: 16,
 				},
-				icon$disabled: { display: 'inline-block' }
+				icon$disabled: { display: 'inline-block' },
 			}}
 		</Style>
 		<Spinner className="icon" />
@@ -234,7 +241,7 @@ const FieldBase = (
 					paddingBottom: 6,
 					backgroundColor: 'surface',
 					color: 'onSurface',
-					display: 'block'
+					display: 'block',
 				},
 				$focused: { borderColor: 'primary', color: 'primary' },
 				$outline: {
@@ -244,11 +251,11 @@ const FieldBase = (
 					borderRadius: 4,
 					marginTop: 2,
 					paddingTop: 14,
-					paddingBottom: 14
+					paddingBottom: 14,
 				},
 				$focused$outline: {
 					// boxShadow: '0 0 0 1px var(--cxl-primary)',
-					borderColor: 'primary'
+					borderColor: 'primary',
 				},
 				$invalid: { color: 'error' },
 				$invalid$outline: { borderColor: 'error' },
@@ -262,7 +269,7 @@ const FieldBase = (
 					right: 0,
 					left: 0,
 					bottom: 0,
-					backgroundColor: 'surface'
+					backgroundColor: 'surface',
 				},
 				mask$outline: { borderRadius: 4 },
 				mask$hover$hovered: {
@@ -276,7 +283,7 @@ const FieldBase = (
 					left: 12,
 					font: 'caption',
 					lineHeight: 10,
-					verticalAlign: 'bottom'
+					verticalAlign: 'bottom',
 					/*transition:
 					'transform var(--cxl-speed), font-size var(--cxl-speed)'*/
 				},
@@ -289,15 +296,15 @@ const FieldBase = (
 					paddingRight: 4,
 					marginBottom: 0,
 					backgroundColor: 'inherit',
-					display: 'inline-block'
+					display: 'inline-block',
 				},
 				label$floating$novalue: {
 					font: 'default',
 					translateY: 23,
-					opacity: 0.75
+					opacity: 0.75,
 				},
 				label$leading: { paddingLeft: 24 },
-				label$floating$novalue$outline: { translateY: 27 }
+				label$floating$novalue$outline: { translateY: 27 },
 			}}
 		</Style>
 		<div className="mask">
@@ -328,7 +335,7 @@ export class Label {
 			help: { paddingLeft: 12, paddingRight: 12, display: 'flex' },
 			grow: { flexGrow: 1 },
 			counter: { textAlign: 'right' },
-			help$leading: { paddingLeft: 38 }
+			help$leading: { paddingLeft: 38 },
 		}}
 	</Style>,
 	FieldBase,
@@ -336,14 +343,15 @@ export class Label {
 		let input: InputBase;
 
 		function onRegister(ev: Event) {
-			// if (ev.target instanceof InputBase) input = ev.target;
 			if (ev.target) input = ev.target as InputBase;
 		}
 
-		function update() {
+		function update(ev: any) {
 			if (input) {
+				console.log(ev);
 				host.disabled = input.disabled;
-				host.focused = input.focused;
+				if (ev.type === 'focusable.focus') host.focused = true;
+				else if (ev.type === 'focusable.blur') host.focused = false;
 
 				if (input.touched) {
 					host.invalid = input.invalid;
@@ -367,6 +375,7 @@ export class Label {
 			on(host, 'form.disabled').pipe(tap(update)),
 			on(host, 'click').pipe(tap(() => input?.focus()))
 		);
+
 		return (
 			<Host $={() => hostBindings}>
 				<FocusLine
@@ -413,9 +422,9 @@ export class Field extends Component {
 				lineHeight: 12,
 				font: 'caption',
 				verticalAlign: 'bottom',
-				paddingTop: 8
+				paddingTop: 8,
 			},
-			$invalid: { color: 'error' }
+			$invalid: { color: 'error' },
 		}}
 	</Style>,
 	<slot />
@@ -475,9 +484,9 @@ export class Fieldset extends Component {
 					paddingLeft: 12,
 					paddingRight: 12,
 					cursor: 'pointer',
-					position: 'relative'
+					position: 'relative',
 				},
-				focusCircle: { left: -4 }
+				focusCircle: { left: -4 },
 			}}
 		</Style>
 		<span className="focusCircle focusCirclePrimary"></span>
@@ -501,16 +510,16 @@ export class FieldToggle extends Component {
 				borderWidth: 0,
 				borderBottom: 1,
 				borderStyle: 'solid',
-				borderColor: 'onSurface'
+				borderColor: 'onSurface',
 			},
 			$invalid: { borderColor: 'error' },
 			line: {
 				backgroundColor: 'primary',
 				scaleX: 0,
-				height: 2
+				height: 2,
 			},
 			line$focused: { scaleX: 1 },
-			line$invalid: { backgroundColor: 'error' }
+			line$invalid: { backgroundColor: 'error' },
 		}}
 	</Style>,
 	<div className="line" />
@@ -570,8 +579,9 @@ export class Form extends Component {
 	<Host>
 		<Style>
 			{{
-				$: { flexGrow: 1, height: 22 },
-				input: {
+				$: {
+					flexGrow: 1,
+					height: 22,
 					font: 'default',
 					borderWidth: 0,
 					padding: 0,
@@ -582,15 +592,35 @@ export class Form extends Component {
 					lineHeight: 22,
 					textAlign: 'inherit',
 					borderRadius: 0,
-					outline: 0
+					outline: 0,
+					display: 'block',
 				},
-				input$focus: { outline: 0 }
 			}}
 		</Style>
+		<slot />
 	</Host>,
-	render(host => (
+	bind(host => {
+		return merge(
+			get(host, 'disabled').pipe(
+				tap(val => (host.contentEditable = val ? 'false' : 'true'))
+			),
+			on(host, 'input').pipe(
+				tap(() => {
+					host.value = host.innerText;
+				})
+			)
+		);
+	})
+	/*render(host => (
 		<input
-			$={el => onValue(el).pipe(tap(val => (host.value = val)))}
+			$={el => {
+				host.inputElement = el;
+				return merge(
+					onValue(el).pipe(tap(val => (host.value = val))),
+					on(el, 'focus').pipe(triggerEvent(host, 'focus')),
+					on(el, 'blur').pipe(triggerEvent(host, 'blur'))
+				);
+			}}
 			type={host.type}
 			className="input"
 			value={get(host, 'value')}
@@ -601,16 +631,22 @@ export class Form extends Component {
 			}
 			disabled={get(host, 'disabled')}
 		/>
-	))
+	))*/
 )
 export class Input extends InputBase {
 	static tagName = 'cxl-input';
 	readonly type: string = 'text';
 
+	inputElement?: HTMLInputElement;
+
 	@Attribute()
 	maxlength?: number;
 
 	value: string = '';
+
+	focus() {
+		this.inputElement?.focus();
+	}
 }
 
 @Augment<Option>(
@@ -630,7 +666,7 @@ export class Input extends InputBase {
 					paddingLeft: 16,
 					font: 'default',
 					paddingTop: 14,
-					paddingBottom: 14
+					paddingBottom: 14,
 				},
 				box: {
 					display: 'inline-block',
@@ -641,12 +677,12 @@ export class Input extends InputBase {
 					marginRight: 12,
 					lineHeight: 16,
 					borderStyle: 'solid',
-					color: 'transparent'
+					color: 'transparent',
 				},
 				box$selected: {
 					borderColor: 'primary',
 					backgroundColor: 'primary',
-					color: 'onPrimary'
+					color: 'onPrimary',
 				},
 				checkbox: { marginBottom: 0, marginRight: 8 },
 				content: { flexGrow: 1 },
@@ -654,13 +690,13 @@ export class Input extends InputBase {
 				// $focused: { state: 'focus' },
 				$selected: {
 					backgroundColor: 'primaryLight',
-					color: 'onPrimaryLight'
+					color: 'onPrimaryLight',
 				},
 				// $disabled: { state: 'disabled' },
 				$inactive: {
 					backgroundColor: 'transparent',
-					color: 'onSurface'
-				}
+					color: 'onSurface',
+				},
 			}}
 		</Style>
 		<div className="content">
@@ -708,7 +744,7 @@ const radioElements = new Set<Radio>();
 					marginLeft: 0,
 					paddingTop: 12,
 					paddingBottom: 12,
-					display: 'block'
+					display: 'block',
 				},
 				$inline: { display: 'inline-block' },
 				$invalid$touched: { color: 'error' },
@@ -721,7 +757,7 @@ const radioElements = new Set<Radio>();
 					backgroundColor: 'primary',
 					scaleX: 0,
 					scaleY: 0,
-					marginTop: 3
+					marginTop: 3,
 				},
 				circle$checked: { scaleX: 1, scaleY: 1 },
 				circle$invalid$touched: { backgroundColor: 'error' },
@@ -736,11 +772,11 @@ const radioElements = new Set<Radio>();
 					borderStyle: 'solid',
 					color: 'primary',
 					lineHeight: 16,
-					textAlign: 'center'
+					textAlign: 'center',
 				},
 				box$checked: { borderColor: 'primary' },
 				box$invalid$touched: { borderColor: 'error' },
-				box$checked$invalid$touched: { color: 'error' }
+				box$checked$invalid$touched: { color: 'error' },
 			}}
 		</Style>
 		<div className="focusCircle focusCirclePrimary" />
@@ -806,18 +842,18 @@ export class Radio extends InputBase {
 				right: -16,
 				left: -16,
 				overflowY: 'hidden',
-				transformOrigin: 'top'
+				transformOrigin: 'top',
 			},
 			$inline: {
 				position: 'static',
 				marginLeft: -16,
-				marginRight: -16
+				marginRight: -16,
 			},
 			$visible: {
 				elevation: 3,
 				overflowY: 'auto',
-				backgroundColor: 'surface'
-			}
+				backgroundColor: 'surface',
+			},
 		}}
 	</Style>,
 	<slot />
@@ -842,7 +878,7 @@ export class SelectMenu extends Component {
 					display: 'flex',
 					cursor: 'pointer',
 					paddingTop: 12,
-					paddingBottom: 12
+					paddingBottom: 12,
 				},
 				$inline: { display: 'inline-flex' },
 				content: { flexGrow: 1 },
@@ -850,7 +886,7 @@ export class SelectMenu extends Component {
 					position: 'relative',
 					width: 46,
 					height: 20,
-					userSelect: 'none'
+					userSelect: 'none',
 				},
 				background: {
 					position: 'absolute',
@@ -860,7 +896,7 @@ export class SelectMenu extends Component {
 					height: 16,
 					borderRadius: 8,
 					width: 26,
-					backgroundColor: 'divider'
+					backgroundColor: 'divider',
 				},
 
 				knob: {
@@ -869,17 +905,17 @@ export class SelectMenu extends Component {
 					borderRadius: 10,
 					backgroundColor: 'surface',
 					position: 'absolute',
-					elevation: 1
+					elevation: 1,
 				},
 
 				background$checked: { backgroundColor: 'primaryLight' },
 				knob$checked: {
 					translateX: 24,
-					backgroundColor: 'primary'
+					backgroundColor: 'primary',
 				},
 				knob$invalid$touched: { backgroundColor: 'error' },
 				content$invalid$touched: { color: 'error' },
-				focusCircle$checked: { backgroundColor: 'primary' }
+				focusCircle$checked: { backgroundColor: 'primary' },
 			}}
 		</Style>
 		<slot />
@@ -934,7 +970,7 @@ export class Switch extends InputBase {
 					paddingRight: 0,
 					paddingTop: 1,
 					color: 'onSurface',
-					paddingBottom: 1
+					paddingBottom: 1,
 				},
 				textarea: {
 					width: '100%',
@@ -946,9 +982,9 @@ export class Switch extends InputBase {
 					height: '100%',
 					outline: 0,
 					borderRadius: 0,
-					marginTop: 0
+					marginTop: 0,
 				},
-				measure: { opacity: 0, whiteSpace: 'pre-wrap' }
+				measure: { opacity: 0, whiteSpace: 'pre-wrap' },
 			}}
 		</Style>
 		<div className="input measure"></div>
