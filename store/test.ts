@@ -2,9 +2,7 @@ import { Store } from './index.js';
 import { suite } from '../spec/index.js';
 
 export default suite('store', test => {
-	test('BaseStore', assert => {
-		assert.ok(Store);
-
+	test('Store', assert => {
 		function Persist() {
 			return (target: any, prop: any) => {
 				target[prop] = 'persist';
@@ -21,14 +19,21 @@ export default suite('store', test => {
 		const initialState = new State();
 		const store = new Store(initialState);
 
-		assert.equal(store.state.key2, 'persist');
-		assert.equal(store.state.key, 0);
+		store
+			.subscribe(state => {
+				assert.equal(state.key2, 'persist');
+				assert.equal(state.key, 0);
+			})
+			.unsubscribe();
 
-		store.set('key', 2);
-		store.set('key2', 'hello');
+		store.next({ key: 2, key2: 'hello' });
 
-		assert.equal(store.state.key, 2);
-		assert.equal(store.state.key2, 'hello');
+		store
+			.subscribe(state => {
+				assert.equal(state.key2, 'hello');
+				assert.equal(state.key, 2);
+			})
+			.unsubscribe();
 
 		store.select('key').subscribe(val => assert.equal(val, 2));
 		store.select('key2').subscribe(val => assert.equal(val, 'hello'));

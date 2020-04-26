@@ -3,7 +3,7 @@ import {
 	Component,
 	Attribute,
 	StyleAttribute,
-	update
+	update,
 } from '../component/index.js';
 import { Style } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
@@ -14,7 +14,7 @@ const colStyles = ((r: any) => {
 			'$sm' + i
 		] = r.xs['$xs' + i] = {
 			display: 'block',
-			gridColumnEnd: 'span ' + i
+			gridColumnEnd: 'span ' + i,
 		};
 	return r;
 })({
@@ -22,7 +22,7 @@ const colStyles = ((r: any) => {
 	lg: {},
 	md: {},
 	sm: {},
-	xs: {}
+	xs: {},
 });
 
 @Augment(
@@ -32,7 +32,7 @@ const colStyles = ((r: any) => {
 				$: {
 					display: 'block',
 					gridColumnEnd: 'span 12',
-					flexShrink: 0
+					flexShrink: 0,
 				},
 				$grow: { flexGrow: 1, flexShrink: 1 },
 				$fill: {
@@ -40,14 +40,14 @@ const colStyles = ((r: any) => {
 					top: 0,
 					left: 0,
 					right: 0,
-					bottom: 0
+					bottom: 0,
 				},
 				...colStyles.xs,
 				$xs0: { display: 'none' },
 				'@small': {
 					$: { gridColumnEnd: 'auto' },
 					...colStyles.sm,
-					$sm0: { display: 'none' }
+					$sm0: { display: 'none' },
 				},
 				'@medium': { ...colStyles.md, $md0: { display: 'none' } },
 				'@large': { ...colStyles.lg, $lg0: { display: 'none' } },
@@ -63,14 +63,14 @@ const colStyles = ((r: any) => {
 				$primary: { backgroundColor: 'primary', color: 'onPrimary' },
 				$primaryLight: {
 					backgroundColor: 'primaryLight',
-					color: 'onPrimaryLight'
+					color: 'onPrimaryLight',
 				},
 				$secondary: {
 					backgroundColor: 'secondary',
-					color: 'onSecondary'
+					color: 'onSecondary',
 				},
 				$flex: { display: 'flex' },
-				$vflex: { display: 'flex', flexDirection: 'column' }
+				$vflex: { display: 'flex', flexDirection: 'column' },
 			}}
 		</Style>
 		<slot />
@@ -78,6 +78,9 @@ const colStyles = ((r: any) => {
 )
 export class C extends Component {
 	static tagName = 'cxl-c';
+
+	@StyleAttribute()
+	pad16 = false;
 }
 
 @Augment(
@@ -89,22 +92,22 @@ export class C extends Component {
 					position: 'relative',
 					flexGrow: 1,
 					overflowY: 'auto',
-					overflowScrolling: 'touch'
+					overflowScrolling: 'touch',
 				},
 				'@medium': {
-					$: { padding: 32 }
+					$: { padding: 32 },
 				},
 				'@large': {
-					$: { padding: 64 }
+					$: { padding: 64 },
 				},
 				'@xlarge': {
 					content: { width: 1200 },
 					content$center: {
 						padding: 0,
 						marginLeft: 'auto',
-						marginRight: 'auto'
-					}
-				}
+						marginRight: 'auto',
+					},
+				},
 			}}
 		</Style>
 		<slot />
@@ -120,7 +123,7 @@ export class Content extends Component {
 	<Host>
 		<Style>
 			{{
-				$: { display: 'grid' }
+				$: { display: 'grid' },
 			}}
 		</Style>
 		<slot />

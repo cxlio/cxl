@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <template id="cxl-animate">
-<docs-component name="cxl-animate">
-	<docs-demo><!--
+	<docs-component name="cxl-animate">
+		<docs-demo
+			><!--
 <cxl-col>
 <cxl-animate spin><cxl-icon icon="sync" style="font-size:48px"></cxl-icon></cxl-animate>
 </cxl-col><cxl-col>
 <cxl-animate pulse><cxl-icon icon="spinner" style="font-size:48px"></cxl-icon></cxl-animate>
 </cxl-col>
-	--></docs-demo>
-</docs-component>
+	--></docs-demo
+		>
+	</docs-component>
 </template>
 
 <template id="cxl-block">
-<docs-component name="cxl-block">
-	<docs-demo><!--
+	<docs-component name="cxl-block">
+		<docs-demo
+			><!--
 <cxl-block inverse>
 	<cxl-block surface flex>
 		<cxl-avatar></cxl-avatar>
@@ -24,34 +27,39 @@
 		<cxl-icon icon="info"></cxl-icon>
 	</cxl-block>
 </cxl-block>
-	--></docs-demo>
-	<docs-attribute name="compact" demo lorem></docs-attribute>
-	<docs-attribute name="inverse" demo lorem></docs-attribute>
-	<docs-attribute name="surface">
-	<docs-demo><!--
+	--></docs-demo
+		>
+		<docs-attribute name="compact" demo lorem></docs-attribute>
+		<docs-attribute name="inverse" demo lorem></docs-attribute>
+		<docs-attribute name="surface">
+			<docs-demo
+				><!--
 <cxl-block inverse>
 	<cxl-block surface>
 Surface Block Text
 	</cxl-block>
 </cxl-block>
-	--></docs-demo>
-	</docs-attribute>
-</docs-component>
+	--></docs-demo
+			>
+		</docs-attribute>
+	</docs-component>
 </template>
 
 <template id="cxl-loading">
-<docs-component name="cxl-loading">
-<docs-demo><!--
+	<docs-component name="cxl-loading">
+		<docs-demo
+			><!--
 <cxl-loading></cxl-loading>
---></docs-demo>
-</docs-component>
+--></docs-demo
+		>
+	</docs-component>
 </template>
 
+<!--
 <template id="cxl-meta">
 <docs-component name="cxl-meta">
 </docs-component>
 </template>
-
 <script>
 	if (location.search==='?shady')
 		window.$$cxlShady = true;
@@ -83,6 +91,15 @@ const
 	});
 	
 </script>
-
+-->
+<script src="../tester/require-browser.js"></script>
+<script>
+	require.replace = {
+		match: /^@cxl\/(.+)/,
+		replace: (str, p1) =>
+			`../${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
+	};
+	require('./index.js');
+	require('@cxl/router/debug.js');
+</script>
 <docs-root></docs-root>
-

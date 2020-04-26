@@ -4,6 +4,6 @@
 		"outDir": "../dist/router",
 		"lib": ["es2015"]
 	},
-	"files": ["index.ts"],
-	"references": [{ "path": "../xdom" }]
+	"files": ["index.ts", "debug.ts"],
+	"references": [{ "path": "../xdom" }, { "path": "../debug" }]
 }

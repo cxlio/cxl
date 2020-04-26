@@ -1,11 +1,56 @@
-import { BehaviorSubject, Observable, map, distinctUntilChanged } from '../rx';
+import {
+	Observable,
+	Subscription,
+	Subject,
+	map,
+	distinctUntilChanged,
+} from '../rx/index.js';
 
-/*export class SetAction implements Action {
-	type = 'set';
-	constructor(public key: string, public value: any) {}
-}*/
+export class Store<StateT, K extends keyof StateT> extends Subject<StateT> {
+	protected selectors: any = {};
 
-export class Store<State, K extends keyof State = keyof State> {
+	constructor(protected state?: StateT) {
+		super();
+	}
+
+	protected onSubscribe(subscription: Subscription<StateT>) {
+		if (this.state !== undefined) subscription.next(this.state);
+		return super.onSubscribe(subscription);
+	}
+
+	next(val: StateT) {
+		this.state = val;
+		super.next(val);
+	}
+
+	select(key: K): Observable<StateT[K]> {
+		return (
+			this.selectors[key] ||
+			(this.selectors[key] = this.pipe(
+				map(state => state[key]),
+				distinctUntilChanged()
+			))
+		);
+	}
+}
+
+interface SelectFn<StateT> {
+	<K extends keyof StateT>(key: K): Observable<StateT[K]>;
+	next(state: StateT): void;
+}
+
+export function select<StateT, K extends keyof StateT>(key: K) {
+	return map<StateT, StateT[K]>(state => state[key]);
+}
+
+export function store<StateT>(state?: StateT) {
+	const store = new Store(state);
+	const select = store.select.bind(store);
+	(select as any).next = store.next.bind(store);
+	return select as SelectFn<StateT>;
+}
+
+/*export class GlobalStore<State, K extends keyof State = keyof State> {
 	public state = { ...this.initialState };
 
 	protected subject = new BehaviorSubject(this.state);

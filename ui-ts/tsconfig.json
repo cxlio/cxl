@@ -11,7 +11,8 @@
 		"layout.tsx",
 		"table.tsx",
 		"dialog.tsx",
-		"router.ts"
+		"router.tsx",
+		"meta.ts"
 	],
 	"references": [
 		{ "path": "../xdom" },

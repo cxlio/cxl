@@ -251,7 +251,7 @@ export function render<T>(tpl: JSXElement<T>, host?: HTMLElement) {
 			host: host || document.body,
 			bind(b: Observable<any>) {
 				bindings.push(b);
-			}
+			},
 		},
 		element = tpl(context) as T;
 
@@ -274,20 +274,21 @@ export function connect<T>(
 
 export function Host({
 	$,
-	children
+	children,
 }: {
 	$?: (node: any) => Observable<any>;
 	children: any;
 }) {
-	children = normalizeChildren(children);
+	const normalizedChildren = normalizeChildren(children);
 	return (ctx: RenderContext) => {
 		if ($) ctx.bind($(ctx.host));
 
 		const shadow =
 			ctx.host.shadowRoot || ctx.host.attachShadow({ mode: 'open' });
-		if (Array.isArray(children))
-			children.forEach(c => shadow.appendChild(c(ctx)));
-		else shadow.appendChild(children(ctx));
+		normalizedChildren.forEach(c => {
+			const el = c(ctx);
+			if (el) shadow.appendChild(el);
+		});
 		return ctx.host;
 	};
 }

@@ -61,8 +61,8 @@ export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
 
 export function onHashChange() {
 	return concat(
-		of(location.hash),
-		on(window, 'hashchange').pipe(map(() => location.hash))
+		of(location.hash.slice(1)),
+		on(window, 'hashchange').pipe(map(() => location.hash.slice(1)))
 	);
 }
 

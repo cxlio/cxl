@@ -11,7 +11,7 @@ import {
 	render,
 	role,
 	onUpdate,
-	connect
+	connect,
 } from '../component/index.js';
 import { onAction, triggerEvent, portal } from '../template/index.js';
 import { on, remove, setAttribute, trigger } from '../dom/index.js';
@@ -22,15 +22,15 @@ const StateStyles = {
 	$active: { filter: 'invert(0.2)' },
 	$focus: {
 		outline: 0,
-		filter: 'invert(0.2) saturate(2) brightness(1.1)'
+		filter: 'invert(0.2) saturate(2) brightness(1.1)',
 	},
 	$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 	$disabled: {
 		cursor: 'default',
 		filter: 'saturate(0)',
 		opacity: 0.38,
-		pointerEvents: 'none'
-	}
+		pointerEvents: 'none',
+	},
 };
 
 function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
@@ -160,7 +160,7 @@ export function selectable<T extends SelectableComponent>(host: T) {
 					left: 0,
 					right: 0,
 					bottom: 0,
-					pointerEvents: 'none'
+					pointerEvents: 'none',
 				},
 				ripple: {
 					position: 'relative',
@@ -170,10 +170,10 @@ export function selectable<T extends SelectableComponent>(host: T) {
 					backgroundColor: 'onSurface',
 					opacity: 0.16,
 					animation: 'expand',
-					animationDuration: '0.4s'
+					animationDuration: '0.4s',
 				},
 				ripple$primary: { backgroundColor: 'primary' },
-				ripple$secondary: { backgroundColor: 'secondary' }
+				ripple$secondary: { backgroundColor: 'secondary' },
 			}}
 		</Style>
 		<div
@@ -212,8 +212,8 @@ export class Ripple extends Component {
 					display: 'block',
 					position: 'relative',
 					overflowX: 'hidden',
-					overflowY: 'hidden'
-				}
+					overflowY: 'hidden',
+				},
 			}}
 		</Style>
 		<slot />
@@ -234,7 +234,7 @@ export class RippleContainer extends Component {
 					flexShrink: 0,
 					font: 'title',
 					color: 'onPrimary',
-					elevation: 2
+					elevation: 2,
 				},
 				flex: {
 					display: 'flex',
@@ -243,13 +243,13 @@ export class RippleContainer extends Component {
 					paddingLeft: 16,
 					paddingRight: 16,
 					paddingTop: 4,
-					paddingBottom: 4
+					paddingBottom: 4,
 				},
 
 				flex$extended: {
 					alignItems: 'start',
 					height: 128,
-					paddingBottom: 24
+					paddingBottom: 24,
 				},
 				$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 				'@xlarge': {
@@ -258,14 +258,14 @@ export class RippleContainer extends Component {
 						marginLeft: 'auto',
 						marginRight: 'auto',
 						paddingRight: 0,
-						paddingLeft: 0
+						paddingLeft: 0,
 					},
 					tabs$center: {
 						width: 1200,
 						marginLeft: 'auto',
-						marginRight: 'auto'
-					}
-				}
+						marginRight: 'auto',
+					},
+				},
 			}}
 		</Style>
 		<div className="flex">
@@ -293,7 +293,7 @@ export class Appbar extends Component {
 		<Style>
 			{{
 				$: { flexGrow: 1, font: 'title' },
-				$extended: { font: 'h5', alignSelf: 'flex-end' }
+				$extended: { font: 'h5', alignSelf: 'flex-end' },
 			}}
 		</Style>
 		<slot />
@@ -323,20 +323,20 @@ const AVATAR_DEFAULT =
 					font: 'title',
 					lineHeight: 38,
 					textAlign: 'center',
-					overflowY: 'hidden'
+					overflowY: 'hidden',
 				},
 				$little: {
 					width: 32,
 					height: 32,
 					font: 'default',
-					lineHeight: 30
+					lineHeight: 30,
 				},
 				$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
 				image: {
 					width: pct(100),
 					height: pct(100),
-					borderRadius: 32
-				}
+					borderRadius: 32,
+				},
 			}}
 		</Style>
 	</Host>,
@@ -380,8 +380,8 @@ export class Avatar extends Component {
 					borderRadius: 2,
 					color: 'onSurface',
 					display: 'block',
-					elevation: 1
-				}
+					elevation: 1,
+				},
 			}}
 		</Style>
 		<slot></slot>
@@ -404,31 +404,31 @@ export class Card extends Component {
 					color: 'onSurface',
 					lineHeight: 32,
 					height: 32,
-					verticalAlign: 'top'
+					verticalAlign: 'top',
 				},
 				$primary: {
 					color: 'onPrimary',
-					backgroundColor: 'primary'
+					backgroundColor: 'primary',
 				},
 				$secondary: {
 					color: 'onSecondary',
-					backgroundColor: 'secondary'
+					backgroundColor: 'secondary',
 				},
 				$little: { font: 'caption', lineHeight: 20, height: 20 },
 				content: {
 					display: 'inline-block',
 					marginLeft: 12,
-					paddingRight: 12
+					paddingRight: 12,
 				},
 				avatar: { display: 'inline-block' },
 				remove: {
 					display: 'none',
 					marginRight: 12,
-					cursor: 'pointer'
+					cursor: 'pointer',
 				},
 				remove$removable: {
-					display: 'inline-block'
-				}
+					display: 'inline-block',
+				},
 			}}
 		</Style>
 		<span className="avatar">
@@ -493,15 +493,15 @@ export class Chip extends Component {
 					font: 'caption',
 					borderRadius: 11,
 					color: 'onPrimary',
-					backgroundColor: 'primary'
+					backgroundColor: 'primary',
 				},
 				$secondary: {
 					color: 'onSecondary',
-					backgroundColor: 'secondary'
+					backgroundColor: 'secondary',
 				},
 				$error: { color: 'onError', backgroundColor: 'error' },
 				$top: { translateY: -11 },
-				$over: { marginLeft: -8 }
+				$over: { marginLeft: -8 },
 			}}
 		</Style>
 		<slot></slot>
@@ -544,11 +544,11 @@ export class Badge extends Component {
 					cursor: 'pointer',
 					font: 'h6',
 					paddingBottom: 20,
-					lineHeight: 16
+					lineHeight: 16,
 				},
 				$static: { position: 'static' },
 				$focus: { elevation: 4 },
-				$small: { top: 28, bottom: '' }
+				$small: { top: 28, bottom: '' },
 			}}
 		</Style>
 		<slot />
@@ -571,8 +571,8 @@ export class Fab extends Component {
 				$: {
 					display: 'block',
 					height: 1,
-					backgroundColor: 'divider'
-				}
+					backgroundColor: 'divider',
+				},
 			}}
 		</Style>
 	</Host>
@@ -591,7 +591,7 @@ export class Hr extends Component {
 			$: {
 				cursor: 'pointer',
 				position: 'relative',
-				display: 'block'
+				display: 'block',
 			},
 			$disabled: { pointerEvents: 'none' },
 			// 'link:focus': { outline: 0 },
@@ -607,20 +607,20 @@ export class Hr extends Component {
 				alignItems: 'center',
 				backgroundColor: 'surface',
 				textDecoration: 'none',
-				display: 'flex'
+				display: 'flex',
 			},
 			content: { flexGrow: 1 },
 			icon: {
 				marginRight: 16,
 				width: 28,
 				color: 'onSurface',
-				opacity: 0.7
+				opacity: 0.7,
 			},
 			icon$selected: { color: 'onPrimaryLight' },
 			link$selected: {
 				backgroundColor: 'primaryLight',
-				color: 'onPrimaryLight'
-			}
+				color: 'onPrimaryLight',
+			},
 		}}
 	</Style>,
 	render(el => (
@@ -660,8 +660,8 @@ export class Item extends Component {
 				paddingTop: 8,
 				paddingBottom: 8,
 				marginLeft: -16,
-				marginRight: -16
-			}
+				marginRight: -16,
+			},
 		}}
 	</Style>
 )
@@ -680,10 +680,10 @@ export class List extends Component {
 					overflowY: 'auto',
 					color: 'onSurface',
 					paddingTop: 8,
-					paddingBottom: 8
+					paddingBottom: 8,
 				},
 				$dense: { paddingTop: 0, paddingBottom: 0 },
-				$closed: { scaleY: 0 }
+				$closed: { scaleY: 0 },
 			}}
 		</Style>
 		<slot />
@@ -706,9 +706,9 @@ export class Menu extends Component {
 			indicator: {
 				backgroundColor: 'primary',
 				height: 4,
-				transformOrigin: 'left'
+				transformOrigin: 'left',
 			},
-			indeterminate: { animation: 'wait' }
+			indeterminate: { animation: 'wait' },
 		}}
 	</Style>,
 	render(host => (
@@ -773,7 +773,7 @@ theme.animation.spinnerstroke = {
 		`
 		.replace(/\$start/g, (282.743 * (1 - 0.05)).toString())
 		.replace(/\$end/g, (282.743 * (1 - 0.8)).toString()),
-	value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)'
+	value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)',
 };
 
 @Augment(
@@ -782,7 +782,7 @@ theme.animation.spinnerstroke = {
 			{{
 				$: { animation: 'spin', display: 'inline-block' },
 				circle: { animation: 'spinnerstroke' },
-				svg: { width: pct(100), height: pct(100) }
+				svg: { width: pct(100), height: pct(100) },
 			}}
 		</Style>
 		<Svg viewBox="0 0 100 100" className="svg">{`<circle
@@ -815,7 +815,7 @@ export class Spinner extends Component {
 				$h6: { font: 'h6', marginBottom: 16 },
 				$button: { font: 'button' },
 				$subtitle: { font: 'subtitle', marginBottom: 0 },
-				$subtitle2: { font: 'subtitle2', opacity: 0.73 }
+				$subtitle2: { font: 'subtitle2', opacity: 0.73 },
 			}}
 		</Style>
 		<slot />
@@ -836,6 +836,11 @@ export class T extends Component {
 	h5 = false;
 	@StyleAttribute()
 	h6 = false;
+
+	@StyleAttribute()
+	subtitle = false;
+	@StyleAttribute()
+	subtitle2 = false;
 }
 
 /*	component(
@@ -876,10 +881,10 @@ role(button)
 					display: 'none',
 					height: 0,
 					elevation: 5,
-					position: 'absolute'
+					position: 'absolute',
 				},
 				$disabled: { pointerEvents: 'none' },
-				popup$opened: { display: 'block' }
+				popup$opened: { display: 'block' },
 			}}
 		</Style>
 		<slot />
@@ -953,7 +958,7 @@ export class Toggle extends Component {
 					backgroundColor: 'surface',
 					color: 'onSurface',
 					textAlign: 'center',
-					height: 36
+					height: 36,
 				},
 
 				$big: { padding: 16, font: 'h5', height: 52 },
@@ -962,16 +967,16 @@ export class Toggle extends Component {
 					elevation: 0,
 					paddingRight: 8,
 					paddingLeft: 8,
-					color: 'inherit'
+					color: 'inherit',
 				},
 
 				$primary: {
 					backgroundColor: 'primary',
-					color: 'onPrimary'
+					color: 'onPrimary',
 				},
 				$secondary: {
 					backgroundColor: 'secondary',
-					color: 'onSecondary'
+					color: 'onSecondary',
 				},
 				$round: { borderRadius: 52 },
 
@@ -979,8 +984,8 @@ export class Toggle extends Component {
 				$active$disabled: { elevation: 1 },
 				$active$flat$disabled: { elevation: 0 },
 				'@large': {
-					$flat: { paddingLeft: 12, paddingRight: 12 }
-				}
+					$flat: { paddingLeft: 12, paddingRight: 12 },
+				},
 			}}
 		</Style>
 	</Host>,
@@ -1020,10 +1025,10 @@ export class Button extends ButtonBase {
 				elevation: 3,
 				backgroundColor: 'onSurface87',
 				color: 'surface',
-				marginBottom: 16
+				marginBottom: 16,
 			},
 
-			'@small': { $: { display: 'inline-block' } }
+			'@small': { $: { display: 'inline-block' } },
 		}}
 	</Style>,
 	<slot />,
@@ -1049,10 +1054,10 @@ export class Snackbar extends Component {
 					left: 16,
 					bottom: 16,
 					right: 16,
-					textAlign: 'center'
+					textAlign: 'center',
 				},
 				$left: { textAlign: 'left' },
-				$right: { textAlign: 'right' }
+				$right: { textAlign: 'right' },
 			}}
 		</Style>
 	</Host>
@@ -1090,7 +1095,7 @@ export class SnackbarContainer extends Component {
 		{{
 			$: { flexShrink: 0 },
 			'@small': {
-				$: { display: 'inline-block' }
+				$: { display: 'inline-block' },
 			},
 			link: {
 				padding: 16,
@@ -1101,8 +1106,8 @@ export class SnackbarContainer extends Component {
 				lineHeight: 20,
 				textDecoration: 'none',
 				textAlign: 'center',
-				display: 'block'
-			}
+				display: 'block',
+			},
 		}}
 	</Style>,
 	render(host => (
@@ -1144,7 +1149,7 @@ export class Tab extends Component {
 					flexShrink: 0,
 					position: 'relative',
 					cursor: 'pointer',
-					overflowX: 'auto'
+					overflowX: 'auto',
 				},
 				selected: {
 					transformOrigin: 'left',
@@ -1152,10 +1157,10 @@ export class Tab extends Component {
 					height: 4,
 					width: 100,
 					scaleX: 0,
-					display: 'none'
+					display: 'none',
 				},
 				content: { display: 'flex' },
-				content$small: { display: 'block' }
+				content$small: { display: 'block' },
 			}}
 		</Style>
 		<div className="content">

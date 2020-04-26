@@ -143,6 +143,10 @@ class Observable<T> {
 			this.__subscribe && this.__subscribe.bind(this)
 		);
 	}
+
+	tap(fn: (val: T) => void) {
+		return this.pipe(tap(fn));
+	}
 }
 
 class Subject<T> extends Observable<T> {
@@ -171,12 +175,12 @@ class Subject<T> extends Observable<T> {
 }
 
 class BehaviorSubject<T> extends Subject<T> {
-	constructor(public value?: T) {
+	constructor(public value: T) {
 		super();
 	}
 
 	protected onSubscribe(subscription: Subscription<T>) {
-		if (this.value !== undefined) subscription.next(this.value);
+		subscription.next(this.value);
 		return super.onSubscribe(subscription);
 	}
 
@@ -282,7 +286,7 @@ function concat(...observables: Observable<any>[]) {
 					error(err) {
 						subscriber.error(err);
 					},
-					complete: onComplete
+					complete: onComplete,
 				});
 			else subscriber.complete();
 		}
@@ -361,7 +365,7 @@ function cleanUpSubscriber<T>(
 		complete() {
 			cleanup();
 			subscriber.complete();
-		}
+		},
 	};
 }
 
@@ -375,7 +379,7 @@ export function operator<T, T2 = T>(
 				next = {
 					next,
 					error: subscriber.error.bind(subscriber),
-					complete: subscriber.complete.bind(subscriber)
+					complete: subscriber.complete.bind(subscriber),
 				};
 
 			const subscription = source.subscribe(next);
@@ -392,7 +396,7 @@ function map<T, T2>(mapFn: (val: T) => T2) {
 function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
 	let to: number;
 
-	return function(this: any, ...args: A[]) {
+	return function (this: any, ...args: A[]) {
 		if (to) clearTimeout(to);
 		to = setTimeout(() => {
 			fn.apply(this, args);
@@ -545,7 +549,7 @@ function merge<R extends Observable<any>[]>(
 				},
 				complete() {
 					if (refCount-- === 1) subs.complete();
-				}
+				},
 			})
 		);
 
@@ -577,7 +581,7 @@ function combineLatest<T extends any[]>(
 				},
 				complete() {
 					if (isReady && --count === 0) subs.complete();
-				}
+				},
 			})
 		);
 
@@ -601,7 +605,7 @@ const operators = {
 	distinctUntilChanged,
 	map,
 	tap,
-	filter
+	filter,
 };
 
 export {
@@ -626,5 +630,5 @@ export {
 	concat,
 	merge,
 	combineLatest,
-	of
+	of,
 };

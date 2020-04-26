@@ -1,4 +1,11 @@
-const ANALYTICS = `<script async src="https://www.googletagmanager.com/gtag/js?id=UA-39089340-3"></script>
+const { build, tsconfig, pkg, file } = require('../dist/build');
+
+build({
+	outputDir: '../dist/ui-docs',
+	tasks: [tsconfig(), pkg(), file('src/debug.html')],
+});
+
+/*const ANALYTICS = `<script async src="https://www.googletagmanager.com/gtag/js?id=UA-39089340-3"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -54,3 +61,4 @@ require('../build').build({
 		}
 	]
 });
+*/

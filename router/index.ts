@@ -1,3 +1,5 @@
+import { Subject } from '../rx/index.js';
+
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	PARAM_REGEX = /:([\w_$]+)/g,
 	optionalParam = /\((.*?)\)/g,
@@ -35,7 +37,7 @@ function routeToRegExp(route: string): [RegExp, string[]] {
 				route
 					.replace(escapeRegExp, '\\$&')
 					.replace(optionalParam, '(?:$1)?')
-					.replace(namedParam, function(match, optional) {
+					.replace(namedParam, function (match, optional) {
 						names.push(match.substr(1));
 						return optional ? match : '([^/?]+)';
 					})
@@ -141,10 +143,7 @@ class RouteManager {
 	defaultRoute?: Route<any>;
 
 	findRoute(path: string) {
-		return (
-			this.routes.find(r => r.path && r.path.test(path)) ||
-			this.defaultRoute
-		);
+		return this.routes.find(r => r.path?.test(path)) || this.defaultRoute;
 	}
 
 	get(id: string) {
@@ -162,6 +161,7 @@ export class Router {
 	instances: RouteInstances = {};
 	current?: Element;
 	currentRoute?: Route<any>;
+	subject = new Subject<Element>();
 
 	constructor(public readonly root: Element) {}
 
@@ -205,18 +205,19 @@ export class Router {
 			if (newInstances[i] !== oldInstances[i]) delete oldInstances[i];
 	}
 
-	route<T extends Element>(def: RouteDefinition<T>) {
-		const route = new Route<T>(def);
-		this.routes.register(route);
-		return route;
-	}
-
-	execute<T extends Element>(Route: Route<T>, args?: Partial<T>) {
+	private execute<T extends Element>(Route: Route<T>, args?: Partial<T>) {
 		const instances = {};
 		this.current = this.executeRoute(Route, args || {}, instances);
 		this.currentRoute = Route;
 		this.discardOldRoutes(instances);
 		this.instances = instances;
+		if (this.current) this.subject.next(this.current);
+	}
+
+	route<T extends Element>(def: RouteDefinition<T>) {
+		const route = new Route<T>(def);
+		this.routes.register(route);
+		return route;
 	}
 
 	go(path: string) {

@@ -122,7 +122,7 @@ export function augment<T>(
 	constructor: new () => T,
 	decorators: Augmentation<T>[]
 ) {
-	pushRender(constructor.prototype, (node) => {
+	pushRender(constructor.prototype, node => {
 		for (const d of decorators) {
 			const result = d(node.view);
 			if (result instanceof Node && result !== node)
@@ -223,7 +223,7 @@ export function attributeChanged<T extends Component, K extends keyof T>(
 	attribute: K
 ): Observable<T[K]> {
 	return element.view.attributes$.pipe(
-		filter((ev) => ev.attribute === attribute),
+		filter(ev => ev.attribute === attribute),
 		map(() => element[attribute])
 	);
 }
@@ -294,7 +294,7 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 							})
 						),
 						node.view.attributes$.pipe(
-							filter((ev) => ev.attribute === attribute)
+							filter(ev => ev.attribute === attribute)
 						)
 					).pipe(options.persistOperator || attributeOperator)
 				)

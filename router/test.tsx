@@ -5,24 +5,11 @@ import { dom } from '../xdom/index.js';
 export default suite('router', test => {
 	const root = document.createElement('div');
 
-	test('Router#execute', a => {
-		const router = new Router(root);
-		let routeDef = router.route({
-			path: 'test',
-			render: <div>Hello World</div>
-		});
-
-		router.execute(routeDef);
-
-		a.ok(router.instances.test);
-		a.equal(router.currentRoute, router.routes.get('test'));
-	});
-
 	test('Router#go - no parameters', a => {
 		const router = new Router(root);
 		router.route({
 			path: 'test',
-			render: <div>Hello World</div>
+			render: <div>Hello World</div>,
 		});
 
 		router.go('test');
@@ -36,7 +23,7 @@ export default suite('router', test => {
 		router.route({
 			id: 'test',
 			path: 'test/:title',
-			render: <div>Hello World</div>
+			render: <div>Hello World</div>,
 		});
 
 		router.go('test/hello');
