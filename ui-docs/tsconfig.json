@@ -1,0 +1,18 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"tsBuildInfoFile": "../dist/ui-docs/tsconfig.tsbuildinfo",
+		"outDir": "../dist/ui-docs",
+		"baseUrl": ".",
+		"paths": {
+			"@cxl/*": ["../*"]
+		}
+	},
+	"files": ["src/index.tsx"],
+	"references": [
+		{ "path": "../rx" },
+		{ "path": "../ui-ts" },
+		{ "path": "../store" }
+	]
+}
