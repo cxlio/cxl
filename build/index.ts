@@ -5,9 +5,17 @@ import {
 	readFileSync,
 	writeFileSync,
 	promises,
-	existsSync
+	existsSync,
 } from 'fs';
-import { of, map, tap, Observable, Operator, operator } from '../rx/index.js';
+import {
+	from,
+	of,
+	map,
+	tap,
+	Observable,
+	Operator,
+	operator,
+} from '../rx/index.js';
 import { Application } from '../server/index.js';
 import { tsbuild, tscVersion } from './tsc.js';
 
@@ -32,9 +40,7 @@ function kb(bytes: number) {
 }
 
 const SCRIPTDIR = dirname(process.argv[1]);
-const BASEDIR = execSync(`npm prefix`, { cwd: SCRIPTDIR })
-	.toString()
-	.trim();
+const BASEDIR = execSync(`npm prefix`, { cwd: SCRIPTDIR }).toString().trim();
 
 let AMD: string;
 export function amd() {
@@ -57,31 +63,32 @@ function readPackage(base: string) {
 	return existsSync(pkg) && JSON.parse(readFileSync(pkg, 'utf8'));
 }
 
-function readSource(source: string): Promise<Output> {
+export function read(source: string): Promise<Output> {
 	return promises.readFile(source, 'utf8').then(content => ({
 		path: source,
-		source: content
+		source: content,
 	}));
 }
 
-export function file(source: string | string[], out?: string) {
-	return new Observable<Output>(subs => {
-		function emit(filename: string): Promise<void> {
-			return promises.readFile(filename, 'utf8').then((content: string) =>
-				subs.next({
-					path: out || pathBasename(filename),
-					source: content
-				})
-			);
-		}
+export function file(source: string, out?: string) {
+	return from(
+		read(source).then(res => ({
+			path: out || pathBasename(source),
+			source: res.source,
+		}))
+	);
+}
 
-		if (typeof source === 'string')
-			emit(source).then(() => subs.complete());
-		else
-			Promise.all<Output>(source.map(readSource)).then(all => {
-				all.forEach(out => subs.next(out));
-				subs.complete();
-			});
+export function files(sources: string[]) {
+	return new Observable<Output>(subs => {
+		Promise.all(
+			sources.map(src =>
+				read(src).then(
+					out => subs.next(out),
+					e => subs.error(e)
+				)
+			)
+		).then(() => subs.complete());
 	});
 }
 
@@ -102,8 +109,8 @@ export function pkg(config: PackageTask) {
 			dependencies: p.dependencies,
 			peerDependencies: p.peerDependencies,
 			type: p.type,
-			...config
-		})
+			...config,
+		}),
 	});
 }
 
@@ -121,7 +128,7 @@ interface BundleOptions {
 
 export function bundle(outFile: string, options?: BundleOptions) {
 	const output = {
-		[outFile]: { path: outFile, source: (options && options.header) || '' }
+		[outFile]: { path: outFile, source: options?.header || '' },
 	};
 	return operator<Output>(subs => ({
 		next(out) {
@@ -133,7 +140,7 @@ export function bundle(outFile: string, options?: BundleOptions) {
 				output[outFile].source += options.footer;
 
 			for (const i in output) subs.next(output[i]);
-		}
+		},
 	}));
 }
 
@@ -156,13 +163,13 @@ type OperatorList = {
 
 export const tasks: TaskList = {
 	pkg,
-	file
+	file,
 };
 
 export const operators: OperatorList = {
 	amd,
 	basename,
-	prepend
+	prepend,
 };
 
 export class Builder extends Application {
@@ -197,17 +204,12 @@ export class Builder extends Application {
 	}
 
 	runTask(task: Task) {
-		this.log(
+		return this.log(
 			(output: Output) =>
 				`${join(this.outputDir, output.path)} ${kb(
 					(output.source || '').length
 				)}`,
-			task.pipe(
-				map(result => {
-					this.writeFile(result);
-					return result;
-				})
-			)
+			task.tap(result => this.writeFile(result))
 		);
 	}
 
@@ -216,9 +218,7 @@ export class Builder extends Application {
 		const pkg = readPackage(baseDir);
 		this.outputDir = config.outputDir || '.';
 
-		if (pkg.name) {
-			this.log(`build ${pkg.name} ${pkg.version}`);
-		}
+		if (pkg.name) this.log(`build ${pkg.name} ${pkg.version}`);
 		this.log(`typescript ${tscVersion}`);
 
 		if (baseDir !== process.cwd()) {

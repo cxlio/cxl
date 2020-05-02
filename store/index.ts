@@ -6,7 +6,10 @@ import {
 	distinctUntilChanged,
 } from '../rx/index.js';
 
-export class Store<StateT, K extends keyof StateT> extends Subject<StateT> {
+export class Store<
+	StateT,
+	K extends keyof StateT = keyof StateT
+> extends Subject<StateT> {
 	protected selectors: any = {};
 
 	constructor(protected state?: StateT) {

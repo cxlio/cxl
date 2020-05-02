@@ -19,7 +19,7 @@ class TestReport {
 	printTest(test: Test) {
 		let out = '';
 
-		const failures = test.results.filter((result) => {
+		const failures = test.results.filter(result => {
 			out += result.success ? colors.green('.') : colors.red('X');
 			return result.success === false;
 		});
@@ -30,7 +30,7 @@ class TestReport {
 		}
 
 		console.group(`${test.name} ${out}`);
-		failures.forEach((fail) => this.printError(test, fail));
+		failures.forEach(fail => this.printError(test, fail));
 		test.tests.forEach((test: Test) => this.printTest(test));
 		console.groupEnd();
 
@@ -55,9 +55,7 @@ function generateCoverageReport([js]: any, sources: Output[]) {
 
 	for (const entry of js) {
 		const total = entry.text.length;
-		const sourceFile = sources.find((src) =>
-			entry.text.includes(src.source)
-		);
+		const sourceFile = sources.find(src => entry.text.includes(src.source));
 
 		if (!sourceFile) continue;
 
@@ -189,16 +187,7 @@ async function amdRunner(page: Page, sources: Output[]) {
 class TestRunner extends Application {
 	version = '0.0.1';
 	name = '@cxl/tester';
-
 	entryFile = 'test.js';
-
-	private handleArguments(args: ApplicationArguments) {
-		const result = [this.runPuppeteer(args)];
-
-		if (args.files.length) this.entryFile = args.files[0];
-
-		return Promise.all(result);
-	}
 
 	private handleConsole(msg: any) {
 		const type = msg.type();
@@ -210,8 +199,8 @@ class TestRunner extends Application {
 				.map((arg: any) =>
 					typeof arg === 'string' ? arg : arg.toString()
 				)
-		).then((out) => {
-			out.forEach((arg) => (console as any)[type](arg));
+		).then(out => {
+			out.forEach(arg => (console as any)[type](arg));
 		});
 	}
 
@@ -224,47 +213,54 @@ class TestRunner extends Application {
 		}
 	}
 
+	private runNode(_args: ApplicationArguments) {
+		this.log(`Node ${process.version}`);
+		const suite = require(path.resolve(this.entryFile)).default as Test;
+		suite.run();
+		return suite;
+	}
+
 	private async runPuppeteer(args: ApplicationArguments) {
-		try {
-			const browser = await launch({
-				headless: true,
-				args: ['--no-sandbox', '--disable-setuid-sandbox'],
-			});
-			this.log(`Puppeteer ${await browser.version()}`);
+		const browser = await launch({
+			headless: true,
+			args: ['--no-sandbox', '--disable-setuid-sandbox'],
+		});
+		this.log(`Puppeteer ${await browser.version()}`);
 
-			const page = await this.openPage(browser);
+		const page = await this.openPage(browser);
 
-			await Promise.all([
-				page.coverage.startJSCoverage({
-					reportAnonymousScripts: true,
-				}),
-				page.coverage.startCSSCoverage(),
-			]);
-			page.on('console', (msg) => this.handleConsole(msg));
-			page.on('pageerror', (msg) => this.log(msg));
+		await Promise.all([
+			page.coverage.startJSCoverage({
+				reportAnonymousScripts: true,
+			}),
+			page.coverage.startCSSCoverage(),
+		]);
+		page.on('console', msg => this.handleConsole(msg));
+		page.on('pageerror', msg => this.log(msg));
 
-			const source = readFileSync(this.entryFile, 'utf8');
-			const sources = [{ path: this.entryFile, source }];
+		const source = readFileSync(this.entryFile, 'utf8');
+		const sources = [{ path: this.entryFile, source }];
 
-			await page.tracing.start({ path: 'trace.json' });
-			const suite = args.amd
-				? await amdRunner(page, sources)
-				: await cjsRunner(page, sources);
-			await page.tracing.stop();
+		await page.tracing.start({ path: 'trace.json' });
+		const suite = args.amd
+			? await amdRunner(page, sources)
+			: await cjsRunner(page, sources);
+		await page.tracing.stop();
 
-			this.log('Generating report.json');
-			await generateReport(page, sources);
-			printReport(suite as Test);
+		this.log('Generating report.json');
+		await generateReport(page, sources);
+		await browser.close();
 
-			await browser.close();
-		} catch (e) {
-			this.log(e);
-			process.exit(1);
-		}
+		return suite;
 	}
 
 	async run() {
-		await this.handleArguments(this.arguments || {});
+		const args = this.arguments || {};
+		if (args.files.length) this.entryFile = args.files[0];
+		const suite = await (args.node
+			? this.runNode(args)
+			: this.runPuppeteer(args));
+		printReport(suite as Test);
 	}
 }
 

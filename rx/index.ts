@@ -319,13 +319,12 @@ function from<T>(input: Array<T> | Promise<T> | Observable<T>): Observable<T> {
 			input.forEach(item => subs.next(item));
 			subs.complete();
 		} else {
-			input.then(
-				result => {
+			input
+				.then(result => {
 					subs.next(result);
 					subs.complete();
-				},
-				err => subs.error(err)
-			);
+				})
+				.catch(err => subs.error(err));
 		}
 	});
 }

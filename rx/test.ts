@@ -1,16 +1,17 @@
 import { suite } from '../spec/index.js';
-import exhaustMapSuite from './test/exhaustMap';
-import mergeSuite from './test/merge';
-import concatSuite from './test/concat';
+import exhaustMapSuite from './test/exhaustMap.js';
+import mergeSuite from './test/merge.js';
+import concatSuite from './test/concat.js';
+import fromSuite from './test/from.js';
 import {
 	BehaviorSubject,
 	Observable,
 	Subject,
-	toPromise,
 	filter,
 	of,
 	map,
-	tap
+	tap,
+	toPromise,
 } from './index.js';
 
 declare function setInterval(fn: () => void, interval?: number): number;
@@ -25,6 +26,7 @@ function throwError(msg: string) {
 }
 
 export default suite('rx', [
+	fromSuite,
 	exhaustMapSuite,
 	mergeSuite,
 	concatSuite,
@@ -42,7 +44,7 @@ export default suite('rx', [
 				next(b) {
 					a.equal(b, i++);
 				},
-				complete: done
+				complete: done,
 			});
 		});
 
@@ -56,7 +58,7 @@ export default suite('rx', [
 					next(x: any) {
 						a.equal(this.myValue, 'foo');
 						a.equal(x, 1);
-					}
+					},
 				};
 
 				of(1).subscribe(o);
@@ -72,7 +74,7 @@ export default suite('rx', [
 					error(err: any) {
 						a.equal(this.myValue, 'foo');
 						a.equal(err, 'bad');
-					}
+					},
 				};
 
 				throwError('bad').subscribe(o);
@@ -88,7 +90,7 @@ export default suite('rx', [
 					myValue: 'foo',
 					complete: function complete() {
 						a.equal(this.myValue, 'foo');
-					}
+					},
 				};
 
 				empty().subscribe(o);
@@ -103,7 +105,7 @@ export default suite('rx', [
 					a.ok(err);
 					a.ok(err instanceof Error);
 					a.equal(err.message, 'this should be handled');
-				}
+				},
 			});
 		});
 	}),
@@ -169,7 +171,7 @@ export default suite('rx', [
 				};
 			})
 				.pipe(tap(() => (times += 1)))
-				.subscribe(function() {
+				.subscribe(function () {
 					if (times === 2) {
 						subscription.unsubscribe();
 					}
@@ -199,12 +201,12 @@ export default suite('rx', [
 			})
 				.pipe(tap(() => (times += 1)))
 				.subscribe(
-					function() {
+					function () {
 						if (times === 2) {
 							subscription.unsubscribe();
 						}
 					},
-					function() {
+					function () {
 						errorCalled = true;
 					}
 				);
@@ -233,13 +235,13 @@ export default suite('rx', [
 			})
 				.pipe(tap(() => (times += 1)))
 				.subscribe(
-					function() {
+					function () {
 						if (times === 2) {
 							subscription.unsubscribe();
 						}
 					},
 					undefined,
-					function() {
+					function () {
 						completeCalled = true;
 					}
 				);
@@ -298,7 +300,7 @@ export default suite('rx', [
 					},
 					complete() {
 						a.ok(nextCalled);
-					}
+					},
 				});
 		});
 
@@ -320,14 +322,14 @@ export default suite('rx', [
 					},
 					complete() {
 						a.ok(errorCalled);
-					}
+					},
 				});
 		});
 	}),
 
 	suite('Observable#unsubscribe()', test => {
-		test('Observable#subscribe - unsubscribe', function(a) {
-			const obs = new Observable(function(o) {
+		test('Observable#subscribe - unsubscribe', function (a) {
+			const obs = new Observable(function (o) {
 				o.next(0);
 				o.next(0);
 				o.complete();
@@ -337,12 +339,12 @@ export default suite('rx', [
 			let complete,
 				times = 0;
 			obs.subscribe({
-				next: function() {
+				next: function () {
 					times++;
 				},
-				complete: function() {
+				complete: function () {
 					complete = true;
-				}
+				},
 			});
 
 			a.equal(times, 2);
@@ -374,13 +376,13 @@ export default suite('rx', [
 	}),
 
 	suite('Subject', test => {
-		test('Subject#constructor', function(a) {
+		test('Subject#constructor', function (a) {
 			const subject = new Subject();
 			let c = 1;
-			subject.subscribe(function(b) {
+			subject.subscribe(function (b) {
 				a.equal(b, c);
 			});
-			subject.subscribe(function(b) {
+			subject.subscribe(function (b) {
 				a.equal(b, c);
 			});
 
@@ -389,7 +391,7 @@ export default suite('rx', [
 			subject.next(c);
 		});
 
-		test('error', function(a) {
+		test('error', function (a) {
 			const subject = new Subject();
 			let c = 1;
 			subject.subscribe(
@@ -405,7 +407,7 @@ export default suite('rx', [
 			subject.error(c);
 		});
 
-		test('complete', function(a) {
+		test('complete', function (a) {
 			const subject = new Subject(),
 				done = a.async();
 			let c = 1;
@@ -421,7 +423,7 @@ export default suite('rx', [
 	}),
 
 	suite('BehaviorSubject', test => {
-		test('BehaviorSubject#constructor', function(a) {
+		test('BehaviorSubject#constructor', function (a) {
 			let c = 1;
 			const A = new BehaviorSubject(c);
 			A.subscribe(val => a.equal(val, c));
@@ -458,5 +460,5 @@ export default suite('rx', [
 			});
 			b.unsubscribe();
 		});
-	})
+	}),
 ]);

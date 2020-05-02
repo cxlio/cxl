@@ -38,7 +38,9 @@ export function override<T, K extends keyof T>(
 	};
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-	const now = performance.now();
-	log(`[debug] Page loaded in ${now - start}ms`);
-});
+if (typeof window !== 'undefined') {
+	window.addEventListener('DOMContentLoaded', () => {
+		const now = performance.now();
+		log(`[debug] Page loaded in ${now - start}ms`);
+	});
+}

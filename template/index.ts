@@ -1,6 +1,8 @@
 import {
+	BehaviorSubject,
 	Observable,
 	Operator,
+	be,
 	merge,
 	tap,
 	map,
@@ -63,6 +65,23 @@ export function onHashChange() {
 	return concat(
 		of(location.hash.slice(1)),
 		on(window, 'hashchange').pipe(map(() => location.hash.slice(1)))
+	);
+}
+
+let pushSubject: BehaviorSubject<any>;
+export function onHistoryChange() {
+	if (!pushSubject) {
+		pushSubject = be(history.state);
+		const old = history.pushState;
+		history.pushState = function (...args: any) {
+			const result = old.apply(this, args);
+			pushSubject.next(history.state);
+			return result;
+		};
+	}
+	return merge(
+		on(window, 'popstate').tap(() => history.state),
+		pushSubject
 	);
 }
 

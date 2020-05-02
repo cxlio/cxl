@@ -17,7 +17,6 @@ import {
 	getDefaultLibFilePath,
 	convertCompilerOptionsFromJson,
 	ModuleKind,
-	//	InvalidatedProjectKind,
 	ExitStatus,
 	createIncrementalProgram,
 	CreateProgramOptions,
@@ -26,7 +25,7 @@ import {
 	createSolutionBuilderHost,
 	BuildOptions,
 	ParsedCommandLine,
-	sys
+	sys,
 } from 'typescript';
 import { Subscription } from '../rx';
 export { version as tscVersion } from 'typescript';
@@ -110,7 +109,7 @@ const parseConfigHost: ParseConfigFileHost = {
 	readFile: sys.readFile,
 	onUnRecoverableConfigFileDiagnostic(e) {
 		throw e;
-	}
+	},
 };
 
 function tscError(d: any, line: number, _ch: number, msg: any) {
@@ -132,8 +131,8 @@ function createCustomProgram(programOptions: CreateProgramOptions) {
 		programOptions.projectReferences = [
 			{
 				path: __dirname + '/tsconfig.amd.json',
-				prepend: true
-			}
+				prepend: true,
+			},
 		];
 
 	return createProgram(programOptions);
@@ -155,9 +154,9 @@ function normalizeCompilerOptions(options: CompilerOptions) {
 				skipLibCheck: true,
 				experimentalDecorators: true,
 				jsx: 'react',
-				jsxFactory: 'dom'
+				jsxFactory: 'dom',
 			},
-			...options
+			...options,
 		},
 		'.'
 	).options;
@@ -168,7 +167,7 @@ function buildDiagnostics(program: Program | BuilderProgram) {
 		...program.getConfigFileParsingDiagnostics(),
 		...program.getSyntacticDiagnostics(),
 		...program.getSemanticDiagnostics(),
-		...program.getOptionsDiagnostics()
+		...program.getOptionsDiagnostics(),
 	];
 }
 
@@ -232,7 +231,7 @@ export function tsIncremental(tsconfig: string) {
 		rootNames: parsed.fileNames,
 		projectReferences: parsed.projectReferences,
 		host: compilerHost,
-		options: parsed.options
+		options: parsed.options,
 	};
 
 	const program = createIncrementalProgram(programOptions);
@@ -262,7 +261,7 @@ export function tsc(inputFileName: string, options: CompilerOptions) {
 	const programOptions: CreateProgramOptions = {
 		rootNames: [inputFileName],
 		host: compilerHost,
-		options
+		options,
 	};
 
 	const program = createCustomProgram(programOptions);

@@ -1,5 +1,5 @@
-import { colors } from './colors.js';
 import { Observable, from, map } from '../rx';
+import { colors } from './colors.js';
 
 function hrtime(): bigint {
 	return process.hrtime.bigint();
@@ -29,7 +29,7 @@ function operation<T>(fn: OperationFunction<T>): Operation {
 				start,
 				tasks: ++tasks,
 				time: end - start,
-				result: item
+				result: item,
 			};
 			start = end;
 			return result;
@@ -44,30 +44,22 @@ function formatTime(time: bigint) {
 	return s > 0.1 ? (s > 0.5 ? colors.red(str) : colors.yellow(str)) : str;
 }
 
-/*export class Environment {
-	private environment: any;
-
-	constructor() {
-		let env;
-
-		try {
-			env = require(process.cwd() + '/environment.json');
-		} catch (e) {}
-
-		this.environment = env || {};
-	}
-}*/
-
 function logOperation(prefix: string, msg: LogMessage, op: Operation) {
 	let totalTime = BigInt(0);
-	return op.subscribe(({ tasks, time, result }) => {
-		totalTime += time;
-		const formattedTime =
-			formatTime(time) +
-			(tasks > 1 ? `, ${formatTime(totalTime)} total` : '');
-		const message = typeof msg === 'function' ? msg(result) : msg;
-		console.log(`${prefix} ${message} (${formattedTime})`);
-	});
+	return new Promise<void>((resolve, reject) =>
+		op.subscribe(
+			({ tasks, time, result }) => {
+				totalTime += time;
+				const formattedTime =
+					formatTime(time) +
+					(tasks > 1 ? `, ${formatTime(totalTime)} total` : '');
+				const message = typeof msg === 'function' ? msg(result) : msg;
+				console.log(`${prefix} ${message} (${formattedTime})`);
+			},
+			reject,
+			resolve
+		)
+	);
 }
 
 function logError(prefix: string, error: Error) {
@@ -87,10 +79,11 @@ export abstract class Application {
 	log(msg: LogMessage, op?: OperationFunction<any>) {
 		const pre = this.coloredPrefix || '';
 
-		if (msg instanceof Error) return logError(pre, msg);
-		if (op) return logOperation(pre, msg, operation(op));
+		if (msg instanceof Error) logError(pre, msg);
+		else if (op) return logOperation(pre, msg, operation(op));
 
 		console.log(`${pre} ${msg}`);
+		return Promise.resolve();
 	}
 
 	handleError(e?: any) {
