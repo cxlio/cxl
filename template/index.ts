@@ -2,11 +2,12 @@ import {
 	BehaviorSubject,
 	Observable,
 	Operator,
+	Subscription,
 	be,
+	filter,
+	map,
 	merge,
 	tap,
-	map,
-	filter,
 	concat,
 	debounceTime,
 	of,
@@ -80,7 +81,7 @@ export function onHistoryChange() {
 		};
 	}
 	return merge(
-		on(window, 'popstate').tap(() => history.state),
+		on(window, 'popstate').pipe(tap(() => history.state)),
 		pushSubject
 	);
 }
@@ -151,4 +152,93 @@ export function tpl<ElementT, HostT extends HTMLElement>(
 	fn: (helper: Sources<HostT, ElementT>) => Renderable<HostT>
 ) {
 	return fn(sources as Sources<HostT, ElementT>);
+}
+
+enum ListOperation {
+	Insert,
+	Empty,
+}
+
+interface InsertEvent<T> {
+	type: ListOperation.Insert;
+	item: T;
+}
+interface EmptyEvent {
+	type: ListOperation.Empty;
+}
+
+export type ListEvent<T> = InsertEvent<T> | EmptyEvent;
+
+class Marker {
+	private children: Node[] = [];
+	node = document.createComment('marker');
+
+	insert(content: Node, nextNode: Node = this.node) {
+		this.children.push(content);
+		this.node.parentNode?.insertBefore(content, nextNode);
+	}
+
+	empty() {
+		const parent = this.node.parentNode;
+
+		if (!parent) return;
+
+		this.children.forEach(snap => parent.removeChild(snap));
+		this.children = [];
+	}
+}
+
+class Context {
+	private bindings: Observable<any>[] = [];
+	private subscriptions?: Subscription<any>[];
+
+	constructor(public host: any) {}
+
+	connect() {
+		if (this.subscriptions) throw new Error('Attempting to connect twice');
+		this.subscriptions = this.bindings.map(b => b.subscribe());
+	}
+
+	disconnect() {
+		this.subscriptions?.forEach(s => s.unsubscribe());
+	}
+
+	bind(b: Observable<any>) {
+		this.bindings.push(b);
+		if (this.subscriptions) this.subscriptions.push(b.subscribe());
+	}
+
+	reset() {
+		this.disconnect();
+		this.subscriptions = undefined;
+		this.bindings.length = 0;
+	}
+}
+
+export function list<T>(
+	source: Observable<T[]>,
+	renderFn: (item: T) => Renderable<any>
+) {
+	return (ctx: RenderContext<any>) => {
+		const marker = new Marker();
+		const context = new Context(ctx.host);
+
+		ctx.bind(
+			new Observable<void>(() => {
+				const unsub = source.subscribe(ary => {
+					marker.empty();
+					context.reset();
+					ary.forEach(item => marker.insert(renderFn(item)(context)));
+					context.connect();
+				});
+
+				return () => {
+					unsub.unsubscribe();
+					context.disconnect();
+				};
+			})
+		);
+
+		return marker.node;
+	};
 }

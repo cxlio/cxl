@@ -6,6 +6,10 @@ export interface ComponentMeta {
 	tags?: string[];
 }
 
+export interface AttributeMeta {
+	summary: string;
+}
+
 export const components: Record<string, ComponentMeta> = {
 	'cxl-appbar': {
 		summary:
@@ -247,6 +251,56 @@ export const components: Record<string, ComponentMeta> = {
 	},
 };
 
+export interface AttributeMeta {
+	summary: string;
+}
+
+const attributes: Record<string, AttributeMeta> = {
+	alt: {
+		summary: 'Alternative text description for the component',
+	},
+	big: { summary: 'Makes the component more prominent' },
+	checked: { summary: 'Whether the component is checked' },
+	disabled: {
+		summary:
+			'Indicates whether or not the element can receive focus and respond to user actions.',
+	},
+	'false-value': {
+		summary:
+			'Value to use when the component is not in the checked status.',
+	},
+	flat: { summary: 'Remove elevation' },
+	focused: { summary: 'Indicates if the component is focused' },
+	little: { summary: 'Use a smaller version of the component' },
+	invalid: {
+		summary: 'Indicates whether or not the component has a valid value',
+	},
+	maxlength: { summary: 'Max value length of the input field' },
+	name: {
+		summary: 'Specifies the name of the compopent inside a form',
+	},
+	placeholder: {
+		summary: 'Text to display when the component has no value set',
+	},
+	primary: {
+		summary:
+			"Changes the component's appereance to match the theme's primary color",
+	},
+	secondary: {
+		summary:
+			"Changes the component's appereance to match the theme's secondary color",
+	},
+	src: { summary: "Source URL for the component' content" },
+	text: { summary: 'Text content' },
+	touched: {
+		summary: 'Indicates whether or not the component has been blurred',
+	},
+	'true-value': {
+		summary: 'Value to use when the component is in the checked status',
+	},
+	value: { summary: 'Specifies the current value of the component' },
+};
+
 export default {
 	'theme-variables': {
 		speed: { label: 'Animation Speed', type: 'time' },
@@ -294,52 +348,7 @@ export default {
 		surface: { label: 'Surface Color', type: 'color' },
 	},
 
-	attributes: {
-		alt: {
-			summary: 'Alternative text description for the component',
-			type: 'string',
-		},
-		big: { summary: 'Makes the component more prominent' },
-		checked: { summary: 'Whether the component is checked' },
-		disabled: {
-			summary:
-				'Indicates whether or not the element can receive focus and respond to user actions.',
-		},
-		'false-value': {
-			summary:
-				'Value to use when the component is not in the checked status.',
-		},
-		flat: { summary: 'Remove elevation' },
-		focused: { summary: 'Indicates if the component is focused' },
-		little: { summary: 'Use a smaller version of the component' },
-		invalid: {
-			summary: 'Indicates whether or not the component has a valid value',
-		},
-		maxlength: { summary: 'Max value length of the input field' },
-		name: {
-			summary: 'Specifies the name of the compopent inside a form',
-		},
-		placeholder: {
-			summary: 'Text to display when the component has no value set',
-		},
-		primary: {
-			summary:
-				"Changes the component's appereance to match the theme's primary color",
-		},
-		secondary: {
-			summary:
-				"Changes the component's appereance to match the theme's secondary color",
-		},
-		src: { summary: "Source URL for the component' content" },
-		text: { summary: 'Text content' },
-		touched: {
-			summary: 'Indicates whether or not the component has been blurred',
-		},
-		'true-value': {
-			summary: 'Value to use when the component is in the checked status',
-		},
-		value: { summary: 'Specifies the current value of the component' },
-	},
+	attributes,
 
 	events: {
 		blur: { summary: 'Fired when the component has lost focus' },

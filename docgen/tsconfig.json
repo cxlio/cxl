@@ -1,0 +1,10 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/docgen",
+		"types": ["node"],
+		"typeRoots": ["../node_modules/@types"]
+	},
+	"references": [{ "path": "../server" }],
+	"files": ["index.tsx"]
+}

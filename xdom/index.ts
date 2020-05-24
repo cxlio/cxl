@@ -1,4 +1,4 @@
-import { Observable, Subscription, tap, from } from '../rx/index.js';
+import { Observable, Subscription, from, tap } from '../rx/index.js';
 
 type IntrinsicElement<T> =
 	| {
@@ -227,12 +227,6 @@ export function dom(
 	return element.render.bind(element);
 }
 
-export class Fragment {
-	static create() {
-		return document.createDocumentFragment();
-	}
-}
-
 export class View<T> {
 	private subscriptions?: Subscription<T>[];
 	constructor(public element: T, private bindings: Observable<any>[]) {}
@@ -242,6 +236,28 @@ export class View<T> {
 	}
 	disconnect() {
 		this.subscriptions?.forEach(s => s.unsubscribe());
+	}
+}
+
+export class View2<T> extends Observable<T> {
+	host: T;
+	constructor(host: T, bindings: Observable<any>[]) {
+		let subscriptions: Subscription<T>[];
+		super(() => {
+			subscriptions = bindings.map(b => b.subscribe());
+			return () => subscriptions.forEach(s => s.unsubscribe());
+		});
+
+		this.host = host;
+	}
+}
+
+export class Context<T> {
+	private bindings?: Observable<any>[];
+	constructor(public host: T) {}
+	bind(b: Observable<any>) {
+		if (!this.bindings) this.bindings = [];
+		this.bindings.push(b);
 	}
 }
 

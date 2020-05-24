@@ -154,7 +154,7 @@ const PSEUDO = {
 	empty: ':empty',
 	active: ':active',
 	firstChild: ':first-child',
-	lastChild: ':last-child'
+	lastChild: ':last-child',
 };
 
 class Percentage {
@@ -232,7 +232,7 @@ function rgba(r: number, g: number, b: number, a?: number) {
 }
 
 const SNAKE_CSS: Record<string, string> = {
-		webkitOverflowScrolling: '-webkit-overflow-scrolling'
+		webkitOverflowScrolling: '-webkit-overflow-scrolling',
 	},
 	SNAKE_REGEX = /[A-Z]/g;
 
@@ -241,22 +241,22 @@ export const theme: Theme = {
 		spin: {
 			keyframes:
 				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-spin 2s infinite linear'
+			value: 'cxl-spin 2s infinite linear',
 		},
 		pulse: {
 			keyframes:
 				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-pulse 1s infinite steps(8)'
+			value: 'cxl-pulse 1s infinite steps(8)',
 		},
 		expand: {
 			keyframes:
 				'0% { transform: scale(0,0); } 100% { transform: scale(1,1); }',
-			value: 'cxl-expand var(--cxl-speed) 1 ease-in'
+			value: 'cxl-expand var(--cxl-speed) 1 ease-in',
 		},
 		fadeIn: {
 			keyframes:
 				'0% { display: block; opacity: 0; } 100% { opacity: 1; }',
-			value: 'cxl-fadeIn var(--cxl-speed) linear'
+			value: 'cxl-fadeIn var(--cxl-speed) linear',
 		},
 		wait: {
 			keyframes: `
@@ -265,8 +265,8 @@ export const theme: Theme = {
 66% { transform: translateX(75%) scaleX(0.25)}
 100%{ transform:translateX(100%) scaleX(0) }
 			`,
-			value: 'cxl-wait 1s infinite linear'
-		}
+			value: 'cxl-wait 1s infinite linear',
+		},
 	},
 	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
 	variables: {
@@ -274,14 +274,14 @@ export const theme: Theme = {
 		speed: '0.2s',
 		font: 'Roboto, sans-serif',
 		fontSize: '16px',
-		fontMonospace: 'monospace'
+		fontMonospace: 'monospace',
 	},
 	typography: {
 		default: {
 			fontWeight: 400,
 			fontFamily: 'var(--cxl-font)',
 			fontSize: 'var(--cxl-fontSize)',
-			letterSpacing: 'normal'
+			letterSpacing: 'normal',
 		},
 		caption: { fontSize: '12px', letterSpacing: '0.4px' },
 		h1: { fontWeight: 300, fontSize: '96px', letterSpacing: '-1.5px' },
@@ -294,20 +294,20 @@ export const theme: Theme = {
 		subtitle: {
 			fontSize: '16px',
 			lineHeight: 1.375,
-			letterSpacing: '0.15px'
+			letterSpacing: '0.15px',
 		},
 		subtitle2: {
 			fontSize: '14px',
 			lineHeight: '18px',
-			letterSpacing: '0.1px'
+			letterSpacing: '0.1px',
 		},
 		button: {
 			fontSize: '14px',
 			lineHeight: '20px',
 			letterSpacing: '1.25px',
-			textTransform: 'uppercase'
+			textTransform: 'uppercase',
 		},
-		code: { fontFamily: 'var(--fontMonospace)' }
+		code: { fontFamily: 'var(--fontMonospace)' },
 	},
 	colors: {
 		elevation: rgba(0, 0, 0, 0.26),
@@ -347,20 +347,20 @@ export const theme: Theme = {
 		},
 		get divider() {
 			return this.onSurface.alpha(0.16);
-		}
+		},
 	},
 	globalStyles: {
 		$: {
 			// reset: '-webkit-tap-highlight-color:transparent;',
 			font: 'default',
-			verticalAlign: 'middle'
+			verticalAlign: 'middle',
 		},
 		'*': {
 			boxSizing: 'border-box',
 			transition:
-				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)'
-		} as any
-	}
+				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)',
+		} as any,
+	},
 };
 
 type StyleMap = {
@@ -456,7 +456,7 @@ const renderMap: StyleMap = {
 	translateZ: renderTransform,
 	scaleX: renderTransform,
 	scaleY: renderTransform,
-	rotate: renderTransform
+	rotate: renderTransform,
 };
 
 function toSnake(name: string) {
@@ -507,7 +507,7 @@ const rootStyles = document.createElement('STYLE');
 export function applyTheme() {
 	const { variables, colors } = theme;
 
-	let result = ':root{';
+	let result = ':root{background-color:var(--cxl-background);';
 	for (const i in colors) result += `--cxl-${i}:${(colors as any)[i]};`;
 	for (const i in variables) result += `--cxl-${i}:${variables[i]};`;
 
@@ -605,7 +605,7 @@ export function registerFont(def: FontDefinition) {
 
 	style.innerHTML = `@font-face{font-family:"${def.family}"${
 		def.weight ? ';font-weight:' + def.weight : ''
-	}';src:url("${def.url}");}`;
+	};src:url("${def.url}");}`;
 
 	document.head.appendChild(style);
 
@@ -615,6 +615,15 @@ export function registerFont(def: FontDefinition) {
 export function Style(p: { children: Styles }) {
 	const ss = new StyleSheet({ styles: p.children });
 	return ss.clone.bind(ss);
+}
+
+export function margin(
+	marginTop: number | 'auto',
+	marginRight = marginTop,
+	marginBottom = marginTop,
+	marginLeft = marginTop
+) {
+	return { marginTop, marginRight, marginBottom, marginLeft };
 }
 
 applyTheme();

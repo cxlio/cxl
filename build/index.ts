@@ -1,4 +1,3 @@
-import { execSync } from 'child_process';
 import { dirname, basename as pathBasename, join } from 'path';
 import {
 	mkdirSync,
@@ -16,8 +15,10 @@ import {
 	Operator,
 	operator,
 } from '../rx/index.js';
-import { Application } from '../server/index.js';
 import { tsbuild, tscVersion } from './tsc.js';
+import { Application } from '../server/index.js';
+import * as Terser from 'terser';
+import { execSync } from 'child_process';
 
 export { concat } from '../rx/index.js';
 
@@ -79,16 +80,18 @@ export function file(source: string, out?: string) {
 	);
 }
 
+/**
+ * Reads multiple files asynchronously and emits them in order
+ */
 export function files(sources: string[]) {
 	return new Observable<Output>(subs => {
-		Promise.all(
-			sources.map(src =>
-				read(src).then(
-					out => subs.next(out),
-					e => subs.error(e)
-				)
-			)
-		).then(() => subs.complete());
+		Promise.all(sources.map(read)).then(
+			out => {
+				out.forEach(o => subs.next(o));
+				subs.complete();
+			},
+			e => subs.error(e)
+		);
 	});
 }
 
@@ -173,7 +176,7 @@ export const operators: OperatorList = {
 };
 
 export class Builder extends Application {
-	name = '@cxl/builder';
+	name = '@cxl/build';
 	baseDir?: string;
 	outputDir = '';
 	package: any;
@@ -183,15 +186,13 @@ export class Builder extends Application {
 		super();
 	}
 
-	run() {
-		const result = this.parseConfig(this.config).catch(error => {
-			this.hasErrors = true;
-			this.log(error);
-		});
-
-		if (this.hasErrors) throw 'Build finished with errors';
-
-		return result;
+	async run() {
+		try {
+			return await this.parseConfig(this.config);
+		} catch (e) {
+			this.log(e);
+			throw 'Build finished with errors';
+		}
 	}
 
 	writeFile(result: Output) {
@@ -209,7 +210,7 @@ export class Builder extends Application {
 				`${join(this.outputDir, output.path)} ${kb(
 					(output.source || '').length
 				)}`,
-			task.tap(result => this.writeFile(result))
+			task.pipe(tap(result => this.writeFile(result)))
 		);
 	}
 
@@ -234,4 +235,12 @@ export class Builder extends Application {
 
 export function build(config: BuildConfiguration) {
 	return new Builder(config).start();
+}
+
+export function minify(config?: any) {
+	return map((out: Output) => {
+		const { code, error } = Terser.minify(out.source, config);
+		if (error) throw error;
+		return { path: out.path, source: code };
+	});
 }

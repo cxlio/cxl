@@ -6,12 +6,12 @@
 		behavior = cxl.behavior,
 		directive = cxl.directive,
 		ui = (cxl.ui = {
-			icons: {}
+			icons: {},
 		}),
 		FocusCSS = {
 			$active: { state: 'active' },
 			$hover: { state: 'hover' },
-			$focus: { state: 'focus' }
+			$focus: { state: 'focus' },
 		},
 		FocusCircleCSS = {
 			$focus: { outline: 0 },
@@ -26,7 +26,7 @@
 				scaleY: 0,
 				display: 'inline-block',
 				translateX: -14,
-				translateY: -14
+				translateY: -14,
 			},
 			focusCirclePrimary: { backgroundColor: 'primary' },
 			focusCircle$invalid$touched: { backgroundColor: 'error' },
@@ -35,23 +35,23 @@
 				scaleY: 1,
 				translateX: -14,
 				translateY: -14,
-				opacity: 0.14
+				opacity: 0.14,
 			},
 			focusCircle$focus: {
 				scaleX: 1,
 				scaleY: 1,
 				translateX: -14,
 				translateY: -14,
-				opacity: 0.25
+				opacity: 0.25,
 			},
-			focusCircle$disabled: { scaleX: 0, scaleY: 0 }
+			focusCircle$disabled: { scaleX: 0, scaleY: 0 },
 		},
 		DisabledCSS = {
 			$disabled: {
-				state: 'disabled'
+				state: 'disabled',
 			},
 			$active$disabled: { state: 'disabled' },
-			$hover$disabled: { state: 'disabled' }
+			$hover$disabled: { state: 'disabled' },
 		};
 	function prefix(prefix, css) {
 		const result = {};
@@ -77,7 +77,7 @@
 				this.event = ev;
 				ev.preventDefault();
 			}
-		}
+		},
 	});
 
 	behavior('navigation.grid', {
@@ -108,7 +108,7 @@
 			}
 
 			if (next) this.$behavior.next(next);
-		}
+		},
 	});
 
 	behavior('navigation.select', {
@@ -145,7 +145,7 @@
 			}
 
 			this.$behavior.next(el);
-		}
+		},
 	});
 
 	behavior('navigation.list', {
@@ -184,7 +184,7 @@
 			}
 
 			if (newEl) this.$behavior.set(newEl);
-		}
+		},
 	});
 
 	behavior(
@@ -210,7 +210,7 @@
 			const host = this.$behavior.owner.host;
 
 			host.focused = !host.disabled && ev.type === 'focus';
-		}
+		},
 	});
 
 	behavior(
@@ -271,7 +271,7 @@ on(selectable.action):#onAction
 
 		onSelected() {
 			this.$behavior.next(this.selected);
-		}
+		},
 	});
 
 	directive('registable', {
@@ -287,7 +287,7 @@ on(selectable.action):#onAction
 				this.owner.host,
 				(this.parameter || 'registable') + '.unregister'
 			);
-		}
+		},
 	});
 
 	directive('registable.host', {
@@ -307,7 +307,7 @@ on(selectable.action):#onAction
 					this.element,
 					prefix + '.unregister',
 					this.unregister.bind(this)
-				)
+				),
 			];
 		},
 
@@ -324,7 +324,7 @@ on(selectable.action):#onAction
 			if (i !== -1) this.value.splice(i, 1);
 
 			this.set(this.value);
-		}
+		},
 	});
 
 	component({
@@ -347,10 +347,10 @@ on(selectable.action):#onAction
 			const font = cxl.dom('link', {
 				rel: 'stylesheet',
 				href:
-					'https://fonts.googleapis.com/css?family=Roboto:300,400,500'
+					'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
 			});
 			document.head.appendChild(font);
-		}
+		},
 	});
 
 	component(
@@ -366,7 +366,7 @@ on(selectable.action):#onAction
 			bindings: `
 id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escape):#close action:#show:event.stop role(button)
 	`,
-			styles: [{}, DisabledCSS]
+			styles: [{}, DisabledCSS],
 		},
 		{
 			icon: 'ellipsis-v',
@@ -384,7 +384,7 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 				const item = cxl.dom.find(el, this.itemSelector);
 
 				if (item) item.focus();
-			}
+			},
 		}
 	);
 
@@ -437,11 +437,11 @@ id(self) focusable root.on(touchend):#close root.on(click):#close keypress(escap
 				ripple = cxl.dom('cxl-ripple', {
 					x: x === undefined ? rect.width / 2 : x - rect.left,
 					y: y === undefined ? rect.height / 2 : y - rect.top,
-					radius: radius
+					radius: radius,
 				}),
 				// Add to shadow root if present to avoid layout changes
 				parent = hostEl.shadowRoot || hostEl;
 			parent.appendChild(ripple);
-		}
+		},
 	});
 })(this.cxl);

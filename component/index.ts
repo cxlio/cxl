@@ -8,7 +8,6 @@ import {
 	filter,
 	of,
 	map,
-	merge,
 	tap,
 } from '../rx/index.js';
 import { ChildrenObserver, MutationEvent, getShadow } from '../dom/index.js';
@@ -40,18 +39,24 @@ type AttributeType<T> =
 	  };
 
 const registeredComponents: Record<string, typeof Component> = {};
+const subscriber = {
+	error(e: any) {
+		throw e;
+	},
+};
 
 export class ComponentView<T> {
 	private bindings?: Binding<any>[];
-	private subscription?: Subscription<any>;
+	private subscriptions?: Subscription<any>[];
 	private rendered = false;
+	private connected = false;
 	attributes$ = new Subject<AttributeEvent<T>>();
 
 	constructor(public host: T, private render: (host: T) => void) {}
 
 	bind(binding: Binding<any>) {
-		if (this.subscription)
-			throw new Error('Cannot bind when view is connected');
+		if (this.connected)
+			throw new Error('Cannot add bindings to a connected view');
 
 		if (!this.bindings) this.bindings = [];
 		this.bindings.push(binding);
@@ -63,19 +68,22 @@ export class ComponentView<T> {
 			this.rendered = true;
 		}
 
-		if (this.bindings && !this.subscription)
-			this.subscription = merge(...this.bindings).subscribe({
-				error(e) {
-					throw e;
-				},
-			});
+		if (!this.connected) {
+			this.connected = true;
+
+			if (this.bindings)
+				this.subscriptions = this.bindings.map(b =>
+					b.subscribe(subscriber)
+				);
+		}
 	}
 
 	disconnect() {
-		if (this.subscription) {
-			this.subscription.unsubscribe();
-			this.subscription = undefined;
+		if (this.subscriptions) {
+			this.subscriptions.forEach(s => s.unsubscribe());
+			this.subscriptions = undefined;
 		}
+		this.connected = false;
 	}
 }
 
@@ -287,7 +295,7 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 				node.view.bind(
 					concat(
 						defer(() =>
-							of({
+							of<AttributeEvent<any>>({
 								attribute,
 								target: node,
 								value: (node as any)[attribute],

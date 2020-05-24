@@ -1,4 +1,4 @@
-import { Subject } from '../rx/index.js';
+import { Reference } from '../rx/index.js';
 
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	PARAM_REGEX = /:([\w_$]+)/g,
@@ -11,12 +11,13 @@ type Dictionary = Record<string, string>;
 type RouteArguments = { [key: string]: any };
 
 interface RouteInstances {
-	[key: string]: any;
+	[key: string]: Element;
 }
 
 interface Element {
 	parentNode: Element | null;
 	appendChild(el: Element): void;
+	removeChild(el: Element): void;
 }
 
 export interface RouteDefinition<T extends Element> {
@@ -109,9 +110,9 @@ class Fragment {
 export class Route<T extends Element> {
 	id: string;
 	path?: Fragment;
+	parent?: string;
 	definition: RouteDefinition<T>;
 	isDefault: boolean;
-	parent?: string;
 
 	constructor(def: RouteDefinition<T>) {
 		if (def.path !== undefined) this.path = new Fragment(def.path);
@@ -161,7 +162,7 @@ export class Router {
 	instances: RouteInstances = {};
 	current?: Element;
 	currentRoute?: Route<any>;
-	subject = new Subject<Element>();
+	subject = new Reference<Element>();
 
 	constructor(public readonly root: Element) {}
 
@@ -201,17 +202,26 @@ export class Router {
 	private discardOldRoutes(newInstances: RouteInstances) {
 		const oldInstances = this.instances;
 
-		for (const i in oldInstances)
-			if (newInstances[i] !== oldInstances[i]) delete oldInstances[i];
+		for (const i in oldInstances) {
+			const old = oldInstances[i];
+			if (newInstances[i] !== old) {
+				old.parentNode?.removeChild(old);
+				delete oldInstances[i];
+			}
+		}
 	}
 
 	private execute<T extends Element>(Route: Route<T>, args?: Partial<T>) {
 		const instances = {};
-		this.current = this.executeRoute(Route, args || {}, instances);
+		const current = (this.current = this.executeRoute(
+			Route,
+			args || {},
+			instances
+		));
 		this.currentRoute = Route;
 		this.discardOldRoutes(instances);
 		this.instances = instances;
-		if (this.current) this.subject.next(this.current);
+		this.subject.next(current);
 	}
 
 	route<T extends Element>(def: RouteDefinition<T>) {

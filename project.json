@@ -17,6 +17,10 @@
 				"files": ["css/index.ts", "css/build.js"],
 				"tasks": "cd css && node build"
 			},
+			"docgen": {
+				"files": ["docgen/index.tsx"],
+				"tasks": "cd docgen && node build"
+			},
 			"dom": {
 				"files": ["dom/index.ts"],
 				"tasks": "cd dom && node build"

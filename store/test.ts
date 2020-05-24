@@ -36,7 +36,9 @@ export default suite('store', test => {
 			.unsubscribe();
 
 		store.select('key').subscribe(val => assert.equal(val, 2));
+		store.select('key').subscribe(val => assert.equal(val, 2));
 		store.select('key2').subscribe(val => assert.equal(val, 'hello'));
+		assert.ran(7);
 	});
 
 	/*test('BaseStore.selectOrLoad', a => {

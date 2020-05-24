@@ -72,8 +72,13 @@ function generateCoverageReport([js]: any, sources: Output[]) {
 	return report;
 }
 
+export interface Report {
+	metrics: any;
+	coverage: any;
+}
+
 async function generateReport(page: Page, sources: Output[]) {
-	const report = {
+	const report: Report = {
 		metrics: await page.metrics(),
 		coverage: generateCoverageReport(
 			await Promise.all([

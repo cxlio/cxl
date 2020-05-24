@@ -1,8 +1,9 @@
 import { Router as MainRouter, RouteDefinition } from '../router/index.js';
-import { Observable, tap } from '../rx/index.js';
+import { Observable, tap, map } from '../rx/index.js';
 import { augment, bind } from '../component/index.js';
 import { dom } from '../xdom/index.js';
 import { AppbarTitle } from './core.js';
+import { list } from '../template/index.js';
 
 const routes: RouteDefinition<any>[] = [];
 let defaultRouter: MainRouter;
@@ -39,7 +40,24 @@ export function Router(strategy: Observable<string>) {
 }
 
 export function RouterTitle() {
-	return <AppbarTitle>Title</AppbarTitle>;
+	const routes = defaultRouter.subject.pipe(
+		map((route: any) => {
+			const result = [];
+			do {
+				if (route.routeTitle) result.push(route);
+			} while ((route = route.parentNode));
+
+			return result;
+		})
+	);
+
+	return (
+		<AppbarTitle>
+			{list(routes, (route: any) => (
+				<span>{route.routeTitle || ''}</span>
+			))}
+		</AppbarTitle>
+	);
 }
 
 /*

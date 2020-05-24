@@ -5,7 +5,7 @@ import {
 	StyleAttribute,
 	update,
 } from '../component/index.js';
-import { Style } from '../css/index.js';
+import { Style, margin } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
 
 const colStyles = ((r: any) => {
@@ -118,6 +118,37 @@ export class Content extends Component {
 	@StyleAttribute()
 	center = false;
 }
+
+@Augment(
+	'cxl-page',
+	<Host>
+		<Style>
+			{{
+				$: {
+					display: 'block',
+					...margin(16),
+					position: 'relative',
+					flexGrow: 1,
+					overflowY: 'auto',
+					overflowScrolling: 'touch',
+					backgroundColor: 'surface',
+					color: 'onSurface',
+				},
+				'@medium': { $: margin(32) },
+				'@large': { $: margin(32, 64, 32, 64) },
+				'@xlarge': {
+					$: {
+						width: 1200,
+						marginLeft: 'auto',
+						marginRight: 'auto',
+					},
+				},
+			}}
+		</Style>
+		<slot />
+	</Host>
+)
+export class Page extends Component {}
 
 @Augment<Grid>(
 	<Host>

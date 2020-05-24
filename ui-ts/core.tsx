@@ -292,7 +292,12 @@ export class Appbar extends Component {
 	<Host>
 		<Style>
 			{{
-				$: { flexGrow: 1, font: 'title' },
+				$: {
+					flexGrow: 1,
+					font: 'title',
+					color: 'onPrimary',
+					textDecoration: 'none',
+				},
 				$extended: { font: 'h5', alignSelf: 'flex-end' },
 			}}
 		</Style>
@@ -738,6 +743,8 @@ export class Progress extends Component {
 export function Svg(p: {
 	viewBox: string;
 	className?: string;
+	width?: number;
+	height?: number;
 	children: string;
 }) {
 	return () => {
@@ -747,6 +754,8 @@ export function Svg(p: {
 		);
 		el.innerHTML = p.children;
 		el.setAttribute('viewBox', p.viewBox);
+		if (p.width) el.setAttribute('width', p.width.toString());
+		if (p.height) el.setAttribute('height', p.height.toString());
 		if (p.className) el.setAttribute('class', p.className);
 		return el;
 	};
@@ -1204,33 +1213,6 @@ export class Tabs extends Component {
 	selected?: Tab;
 }
 
-/*@Augment()
-export class Meta extends Component {
-	static tagName = 'cxl-meta';
-
-	render() {
-		function meta(name, content) {
-			document.head.appendChild(
-				dom('meta', { name: name, content: content })({ bind: () => {}})
-			);
-		}
-		document.documentElement.lang = 'en-US';
-
-		meta('viewport', 'width=device-width, initial-scale=1');
-		meta('apple-mobile-web-app-capable', 'yes');
-		meta('mobile-web-app-capable', 'yes');
-
-		const style = document.createElement('STYLE');
-		style.innerHTML = 'body,html{padding:0;margin:0;height:100%}';
-		document.head.appendChild(style);
-		const font = dom('link', {
-			rel: 'stylesheet',
-			href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500'
-		})();
-		document.head.appendChild(font);
-	}
-}*/
-
 function Head(p: { children: any }) {
 	const children = normalizeChildren(p.children);
 	return (ctx: any) => {
@@ -1238,19 +1220,17 @@ function Head(p: { children: any }) {
 	};
 }
 
-export function Meta() {
-	return (
-		<Head>
-			<meta
-				name="viewport"
-				content="width=device-width, initial-scale=1"
-			/>
-			<meta name="apple-mobile-web-app-capable" content="yes" />
-			<meta name="mobile-web-app-capable" content="yes" />
-			<link
-				rel="stylesheet"
-				href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-			/>
-		</Head>
-	);
-}
+@Augment(
+	'cxl-meta',
+	<Head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+		/>
+		<style>{`body,html{padding:0;margin:0;height:100%}`}</style>
+	</Head>
+)
+export class Meta extends Component {}

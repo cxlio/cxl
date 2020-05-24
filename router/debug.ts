@@ -14,5 +14,6 @@ override(
 				`[router] Path "${path}" not found. Falling back to default route`,
 				this.routes
 			);
+		log(`[router] Navigated to "${path}"`, this.instances);
 	}
 );

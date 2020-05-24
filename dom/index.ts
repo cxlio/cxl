@@ -39,7 +39,7 @@ export function getShadow(el: Element) {
 	return (
 		el.shadowRoot ||
 		el.attachShadow({
-			mode: 'open'
+			mode: 'open',
 		})
 	);
 }
@@ -157,7 +157,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 		this.observer.observe(element, { attributes: true });
 
 		this.bindings = [
-			on(element, 'change').subscribe(this.$onEvent.bind(this))
+			on(element, 'change').subscribe(this.$onEvent.bind(this)),
 		];
 	}
 

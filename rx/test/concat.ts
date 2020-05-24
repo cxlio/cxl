@@ -12,9 +12,14 @@ export default suite('concat', test => {
 		const e3subs = '            ^        !';
 		const expected = '-a-b-c--0-1--w-x-y-z-|';
 
-		expectLog(a, concat(e1, e2, e3), expected);
+		const obs = concat(e1, e2, e3);
+
+		expectLog(a, obs, expected);
 		a.equal(e1.subscriptions, e1subs);
 		a.equal(e2.subscriptions, e2subs);
 		a.equal(e3.subscriptions, e3subs);
+
+		// Run Again
+		expectLog(a, obs, expected);
 	});
 });

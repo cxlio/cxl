@@ -6,8 +6,6 @@ type UnsubscribeFunction = () => void;
 type SubscribeFunction<T> = (
 	subscription: Subscription<T>
 ) => UnsubscribeFunction | void;
-type EventCallback = (...args: any) => void;
-
 type Merge<T> = T extends Observable<infer U> ? U : never;
 type ObservableT<T> = T extends Observable<infer U> ? U : never;
 type PickObservable<T> = {
@@ -26,6 +24,9 @@ interface Observer<T> {
 }
 
 type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
+
+// Used for observable interoperability
+const observableSymbol = (Symbol as any).observable || '@@observable';
 
 class Subscriber<T> {
 	public next: NextFunction<T>;
@@ -102,6 +103,9 @@ export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
 }
 
 class Observable<T> {
+	[observableSymbol]() {
+		return this;
+	}
 	protected __subscribe?: SubscribeFunction<T>;
 
 	constructor(subscribe?: SubscribeFunction<T>) {
@@ -142,10 +146,6 @@ class Observable<T> {
 			subscriber,
 			this.__subscribe && this.__subscribe.bind(this)
 		);
-	}
-
-	tap(fn: (val: T) => void) {
-		return this.pipe(tap(fn));
 	}
 }
 
@@ -190,102 +190,53 @@ class BehaviorSubject<T> extends Subject<T> {
 	}
 }
 
-class Event {
-	constructor(public type: string, public target: any, public value: any) {}
-}
-
-class Item {
-	constructor(public value: any, public key: string, public next: any) {}
-}
-
-class CollectionEvent {
-	constructor(
-		public target: any,
-		public type: string,
-		public value: any,
-		public nextValue: any
-	) {}
-}
-
-class EventEmitter {
-	private __handlers: { [key: string]: any[] } | undefined;
-
-	on = this.addEventListener;
-	off = this.removeEventListener;
-	trigger = this.emit;
-
-	addEventListener(type: string, callback: EventCallback, scope?: any) {
-		if (!this.__handlers) this.__handlers = {};
-		if (!this.__handlers[type]) this.__handlers[type] = [];
-
-		this.__handlers[type].push({ fn: callback, scope: scope });
-		return { unsubscribe: this.off.bind(this, type, callback, scope) };
+export class ReplaySubject<T> extends Subject<T> {
+	private buffer: T[] = [];
+	constructor(public readonly bufferSize: number) {
+		super();
 	}
 
-	removeEventListener(type: string, callback: EventCallback, scope?: any) {
-		const handlers = this.__handlers && this.__handlers[type];
-
-		if (!handlers) throw new Error('Invalid arguments');
-
-		const h =
-				handlers &&
-				handlers.find(h => h.fn === callback && h.scope === scope),
-			i = handlers.indexOf(h);
-		if (i === -1) throw new Error('Invalid listener');
-
-		handlers.splice(i, 1);
+	protected onSubscribe(subscription: Subscription<T>) {
+		this.buffer.forEach(val => subscription.next(val));
+		return super.onSubscribe(subscription);
 	}
 
-	$eachHandler(type: string, fn: (handler: any) => void) {
-		if (this.__handlers && this.__handlers[type])
-			this.__handlers[type].slice().forEach(handler => {
-				try {
-					fn(handler);
-				} catch (e) {
-					if (type !== 'error') this.trigger('error', e);
-					else throw e;
-				}
-			});
-	}
+	next(val: T) {
+		if (this.buffer.length === this.bufferSize) this.buffer.shift();
 
-	emit(type: string, ...args: any) {
-		this.$eachHandler(type, handler =>
-			handler.fn.call(handler.scope, ...args)
-		);
-	}
-
-	emitAndCollect(type: string, ...args: any): any[] {
-		const result: any[] = [];
-
-		this.$eachHandler(type, handler =>
-			result.push(handler.fn.call(handler.scope, ...args))
-		);
-
-		return result;
-	}
-
-	once(type: string, callback: EventCallback, scope: any) {
-		const subscriber = this.on(type, (...args: any) => {
-			subscriber.unsubscribe();
-			return callback.call(scope, ...args);
-		});
+		this.buffer.push(val);
+		return super.next(val);
 	}
 }
 
-function concat(...observables: Observable<any>[]) {
-	return new Observable<any>(subscriber => {
+const Undefined = {};
+
+export class Reference<T> extends Subject<T> {
+	private value: T | typeof Undefined = Undefined;
+	protected onSubscribe(subscription: Subscription<T>) {
+		if (this.value !== Undefined) subscription.next(this.value as T);
+		return super.onSubscribe(subscription);
+	}
+
+	next(val: T) {
+		this.value = val;
+		return super.next(val);
+	}
+}
+
+function concat<R extends Observable<any>[]>(
+	...observables: R
+): R extends (infer U)[] ? Observable<Merge<U>> : never {
+	return new Observable(subscriber => {
 		let subscription: Subscription<any>;
+		let index = 0;
 
 		function onComplete() {
-			const next = observables.shift();
+			const next = observables[index++];
 			if (next)
 				subscription = next.subscribe({
-					next(val) {
-						subscriber.next(val);
-					},
-					error(err) {
-						subscriber.error(err);
-					},
+					next: val => subscriber.next(val),
+					error: err => subscriber.error(err),
 					complete: onComplete,
 				});
 			else subscriber.complete();
@@ -296,11 +247,11 @@ function concat(...observables: Observable<any>[]) {
 		return () => {
 			if (subscription) subscription.unsubscribe();
 		};
-	});
+	}) as any;
 }
 
 export function defer<T>(fn: () => Observable<T> | void) {
-	return new Observable(subs => {
+	return new Observable<T>(subs => {
 		const newObs = fn();
 		if (newObs) {
 			const innerSubs = newObs.subscribe(subs);
@@ -406,7 +357,7 @@ function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
 export function collect<T>(source: Observable<T>, gate: Observable<any>) {
 	const collected: T[] = [];
 
-	return new Observable(subs => {
+	return new Observable<T>(subs => {
 		const s1 = source.subscribe(val => collected.push(val));
 		const s2 = gate.subscribe(() => {
 			collected.forEach(c => subs.next(c));
@@ -488,7 +439,7 @@ function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
 	});
 }
 
-function tap<T>(fn: (val: T) => void): Operator<T, T> {
+export function tap<T>(fn: (val: T) => void): Operator<T, T> {
 	return operator<T, T>((subscriber: Subscription<T>) => (val: T) => {
 		fn(val);
 		subscriber.next(val);
@@ -522,12 +473,14 @@ function catchError<T, T2>(
 const initialDistinct = {};
 
 function distinctUntilChanged<T>(): Operator<T, T> {
-	let lastValue: T | typeof initialDistinct = initialDistinct;
-	return operator((subscriber: Subscription<T>) => (val: T) => {
-		if (val !== lastValue) {
-			lastValue = val;
-			subscriber.next(val);
-		}
+	return operator((subscriber: Subscription<T>) => {
+		let lastValue: T | typeof initialDistinct = initialDistinct;
+		return (val: T) => {
+			if (val !== lastValue) {
+				lastValue = val;
+				subscriber.next(val);
+			}
+		};
 	});
 }
 
@@ -598,31 +551,36 @@ export function be<T>(initialValue: T) {
 	return new BehaviorSubject(initialValue);
 }
 
-const operators = {
-	catchError,
-	debounceTime,
-	distinctUntilChanged,
-	map,
-	tap,
-	filter,
-};
+function to<T, K extends keyof T>(o: Observable<T>, key: K): Observable<T[K]>;
+function to<T, R>(
+	o: Observable<T>,
+	toFn: (val: T) => R | Observable<R>
+): Observable<R>;
+function to<T, R>(o: Observable<T>, toFn: (val: T) => void): Observable<T>;
+function to(o: Observable<any>, key: any) {
+	return o.pipe(
+		typeof key === 'string'
+			? map(val => val[key])
+			: switchMap(val => {
+					const result = key(val);
+					return result instanceof Observable
+						? result
+						: of(result === undefined ? val : result);
+			  })
+	);
+}
 
 export {
+	to,
 	Observable,
 	BehaviorSubject,
-	CollectionEvent,
-	Event,
-	EventEmitter,
-	Item,
 	Subject,
 	Subscriber,
 	from,
 	toPromise,
 	throwError,
-	operators,
 	catchError,
 	map,
-	tap,
 	filter,
 	debounceTime,
 	distinctUntilChanged,

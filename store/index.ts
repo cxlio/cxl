@@ -6,10 +6,57 @@ import {
 	distinctUntilChanged,
 } from '../rx/index.js';
 
-export class Store<
-	StateT,
-	K extends keyof StateT = keyof StateT
-> extends Subject<StateT> {
+export interface CollectionEvent<T> {
+	type: 'start' | 'item' | 'complete';
+	value: T;
+}
+
+export class Entity<T> extends Observable<T> {
+	private selectors: any = {};
+
+	constructor(protected value?: T) {
+		super(subs => {
+			if (value !== undefined) subs.next(value);
+		});
+	}
+
+	select<K extends keyof T>(key: K): Observable<T[K]> {
+		return (
+			this.selectors[key] ||
+			(this.selectors[key] = this.pipe(
+				map(state => state[key]),
+				distinctUntilChanged()
+			))
+		);
+	}
+}
+
+export class Collection<T, EntityT = Entity<T>> extends Observable<EntityT> {}
+
+/*export class Reference<T> extends Subject<T> {
+	protected selectors: any = {};
+
+	constructor(protected state?: T) {
+		super();
+	}
+
+	protected onSubscribe(subscription: Subscription<T>) {
+		if (this.state !== undefined) subscription.next(this.state);
+		return super.onSubscribe(subscription);
+	}
+
+	select<K extends keyof T>(key: K): Observable<T[K]> {
+		return (
+			this.selectors[key] ||
+			(this.selectors[key] = this.pipe(
+				map(state => state[key]),
+				distinctUntilChanged()
+			))
+		);
+	}
+}*/
+
+export class Store<StateT> extends Subject<StateT> {
 	protected selectors: any = {};
 
 	constructor(protected state?: StateT) {
@@ -26,7 +73,7 @@ export class Store<
 		super.next(val);
 	}
 
-	select(key: K): Observable<StateT[K]> {
+	select<K extends keyof StateT>(key: K): Observable<StateT[K]> {
 		return (
 			this.selectors[key] ||
 			(this.selectors[key] = this.pipe(

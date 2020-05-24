@@ -5,7 +5,7 @@ import {
 	Component,
 	role,
 	render,
-	get
+	get,
 } from '../component/index.js';
 import { Style, pct } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
@@ -25,8 +25,8 @@ import { T, Button, Svg } from './core.js';
 					bottom: 0,
 					right: 0,
 					backgroundColor: 'elevation',
-					elevation: 5
-				}
+					elevation: 5,
+				},
 			}}
 		</Style>
 		<slot></slot>
@@ -48,7 +48,7 @@ export class Backdrop extends Component {
 					left: 0,
 					right: 0,
 					bottom: 0,
-					color: 'onSurface'
+					color: 'onSurface',
 				},
 				'@small': {
 					content: {
@@ -58,9 +58,9 @@ export class Backdrop extends Component {
 						bottom: 'auto',
 						width: pct(80),
 						marginLeft: 'auto',
-						marginRight: 'auto'
-					}
-				}
+						marginRight: 'auto',
+					},
+				},
 			}}
 		</Style>
 		<Backdrop>
@@ -78,7 +78,7 @@ const DialogStyles = (
 	<Style>
 		{{
 			content: { padding: 16 },
-			footer: { padding: 8 }
+			footer: { padding: 8 },
 		}}
 	</Style>
 );
@@ -180,7 +180,7 @@ export class DialogConfirm extends Component {
 					color: 'onSurface',
 					overflowY: 'auto',
 					elevation: 5,
-					translateX: '-105%'
+					translateX: '-105%',
 				},
 				drawer$right: { left: '100%', width: 0, translateX: 0 },
 				drawer$right$visible: { translateX: '-100%', width: 320 },
@@ -188,25 +188,25 @@ export class DialogConfirm extends Component {
 
 				backdrop: {
 					width: 0,
-					opacity: 0
+					opacity: 0,
 				},
 				backdrop$visible: { width: '100%', opacity: 1 },
 
 				'@small': {
-					drawer: { width: 288 }
+					drawer: { width: 288 },
 				},
 				'@large': {
 					drawer$permanent: { translateX: 0, opacity: 1 },
 					backdrop$visible$permanent: { width: 0 },
-					backdrop$visible$right: { width: '100%' }
+					backdrop$visible$right: { width: '100%' },
 				},
 				'@xlarge': {
 					drawer$right$permanent: {
 						translateX: '-100%',
-						width: 320
+						width: 320,
 					},
-					backdrop$visible$permanent$right: { width: 0 }
-				}
+					backdrop$visible$permanent$right: { width: 0 },
+				},
 			}}
 		</Style>
 		<Backdrop
@@ -250,7 +250,10 @@ export class Drawer extends Component {
 }
 
 const MenuIcon = (
-	<Svg viewBox="0 0 24 24">{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
+	<Svg
+		viewBox="0 0 24 24"
+		width={24}
+	>{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
 );
 
 @Augment<Navbar>(
@@ -261,14 +264,15 @@ const MenuIcon = (
 				display: 'inline-block',
 				marginTop: 8,
 				marginBottom: 8,
-				overflowScrolling: 'touch'
+				overflowScrolling: 'touch',
 			},
 			toggler: {
 				width: 16,
+				paddingTop: 4,
 				marginRight: 32,
-				cursor: 'pointer'
+				cursor: 'pointer',
 			},
-			toggler$permanent$large: { display: 'none' }
+			toggler$permanent$large: { display: 'none' },
 		}}
 	</Style>,
 	render(host => (
