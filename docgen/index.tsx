@@ -5,6 +5,7 @@ import type { JSONOutput } from 'typedoc';
 const FUNCTION_KIND = 64;
 const CLASS_KIND = 128;
 const CALL_KIND = 4096;
+const TYPE_PARAMETER_KIND = 131072;
 
 type Project = JSONOutput.ProjectReflection;
 type Container = JSONOutput.ContainerReflection;
@@ -25,10 +26,25 @@ function escape(str: string) {
 	return str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e]);
 }
 
-function TypeArguments(types?: { type?: string; name?: string }[]) {
+function TypeArguments(
+	types?: {
+		kind?: number;
+		type?: DeclarationType;
+		name?: string;
+		constraint?: DeclarationType;
+	}[]
+) {
 	return types
 		? '<b>&lt;</b>' +
-				types.map(t => ('name' in t ? t.name : '')).join(', ') +
+				types
+					.map(
+						t =>
+							(t.name ? t.name : '') +
+							(t.type && t.kind === TYPE_PARAMETER_KIND
+								? ` extends ${SignatureType(t.type)}`
+								: '')
+					)
+					.join(', ') +
 				'<b>&gt;</b>'
 		: '';
 }
@@ -38,6 +54,9 @@ function SignatureType(type: DeclarationType): string {
 
 	if (type.signatures) return type.signatures.map(Signature).join(' | ');
 
+	if (type.type === 'typeOperator')
+		return ` keyof ${SignatureType(type.target)}`;
+
 	if (type.type === 'union' && 'types' in type)
 		return type.types.map(SignatureType).join(' | ');
 
@@ -46,13 +65,12 @@ function SignatureType(type: DeclarationType): string {
 
 	if (type.type === 'query') return `typeof ${SignatureType(type.queryType)}`;
 
-	if ('name' in type)
+	if (type.name)
 		return `${Link(type.id, type.name)}${
 			'typeArguments' in type ? TypeArguments(type.typeArguments) : ''
 		}`;
 
-	if ('declaration' in type && type.declaration)
-		return SignatureType(type.declaration);
+	if (type.declaration) return SignatureType(type.declaration);
 
 	console.log(type);
 	throw new Error('Declaration type not supported');
@@ -86,6 +104,18 @@ function Link(id: number, name: string) {
 		: escaped;
 }
 
+function Chip(label: string) {
+	return `<cxl-chip little primary>${label}</cxl-chip> `;
+}
+
+function Flags(flags: JSONOutput.ReflectionFlags) {
+	return (
+		(flags.isConst ? Chip('const') : '') +
+		(flags.isProtected ? Chip('protected') : '') +
+		(flags.isAbstract ? Chip('abstract') : '')
+	);
+}
+
 function Signature({
 	flags,
 	kind,
@@ -96,7 +126,7 @@ function Signature({
 	parameters,
 	typeParameter,
 }: Declaration): string {
-	const prefix = flags.isConst ? 'const ' : '';
+	const prefix = Flags(flags);
 	const parameterString =
 		kind === FUNCTION_KIND || kind === CALL_KIND
 			? SignatureParameters(parameters)
@@ -107,7 +137,7 @@ function Signature({
 
 	return signatures
 		? signatures.map(Signature).join('<br/>')
-		: `<b>${prefix}</b>${actualName}${TypeArguments(
+		: `${prefix}${actualName}${TypeArguments(
 				typeParameter
 		  )}${parameterString}${typeColon}${
 				SignatureType(type) || 'any'
@@ -144,7 +174,7 @@ function Anchor(id: number, name: string = '') {
 	return `<a name="${anchor}">${name}</a>`;
 }
 
-function ModuleBody(json: Container) {
+function ModuleBody(json: Declaration) {
 	const { children, groups } = json;
 	const index: any = {};
 	const groupBody: any = {};
@@ -167,8 +197,17 @@ function ModuleBody(json: Container) {
 		`);
 		});
 
+	const moduleType = json.typeParameter
+		? TypeArguments(json.typeParameter)
+		: '';
+	const extendsName = json.extendedTypes
+		? `<small> extends ${json.extendedTypes
+				.map(SignatureType)
+				.join(', ')}</small>`
+		: '';
+
 	return (
-		`<cxl-page><cxl-t h4>${json.name}</cxl-t>` +
+		`<cxl-page><cxl-t h4>${json.name}${moduleType}${extendsName}</cxl-t>` +
 		groups
 			.map(
 				(group: any) =>
@@ -197,7 +236,7 @@ function Header(p: Project) {
 	return `<!DOCTYPE html>
 	<script src="../../tester/require-browser.js"></script>
 	<script>require('../../ui-ts/index.js');</script>
-	<cxl-root><title>${p.name}</title><cxl-meta></cxl-meta><cxl-appbar>
+	<cxl-application><title>${p.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(p)}
 	<a href="index.html"><cxl-appbar-title>${
 		p.name
@@ -209,7 +248,7 @@ function ModuleHeader(_p: Container) {
 }
 
 function ModuleFooter(_p: Container) {
-	return `</cxl-root>`;
+	return `</cxl-application>`;
 }
 
 function Module(p: Container) {
@@ -274,7 +313,6 @@ export class DocGen extends Application {
 		}
 
 		await this.generateModules(json);
-		console.log(anchors);
 	}
 }
 

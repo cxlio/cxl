@@ -1,5 +1,6 @@
 import { Observable, from, map } from '../rx';
 import { colors } from './colors.js';
+require('source-map-support').install();
 
 function hrtime(): bigint {
 	return process.hrtime.bigint();

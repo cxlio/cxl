@@ -5,7 +5,6 @@ import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as path from 'path';
 
 import { Browser, Page, Request, launch } from 'puppeteer';
-require('source-map-support').install();
 
 interface Output {
 	path: string;

@@ -852,35 +852,6 @@ export class T extends Component {
 	subtitle2 = false;
 }
 
-/*	component(
-		{
-			bindings: `
-focusable
-root.on(click):#close keypress(escape):#close
-action:#show:event.stop
-role(button)
-	`,
-			styles: {
-				popup: { height: 0, elevation: 5, position: 'absolute' },
-				$disabled: { pointerEvents: 'none' }
-			}
-		},
-		{
-			opened: false,
-			close() {
-				this.opened = false;
-			},
-			show() {
-				if (this.disabled) return;
-
-				if (!this.opened) {
-					this.opened = true;
-					this.popup.style.right = 0; //'calc(100% - ' + (el.offsetLeft + el.offsetWidth) + 'px)';
-				} else this.close();
-			}
-		}
-	);*/
-
 @Augment<Toggle>(
 	<Host>
 		<Focusable />
@@ -1228,9 +1199,22 @@ function Head(p: { children: any }) {
 		<meta name="mobile-web-app-capable" content="yes" />
 		<link
 			rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
 		/>
 		<style>{`body,html{padding:0;margin:0;height:100%}`}</style>
 	</Head>
 )
 export class Meta extends Component {}
+
+@Augment(
+	'cxl-application',
+	<Host>
+		<Style>
+			{{
+				$: { display: 'flex', flexDirection: 'column', height: '100%' },
+			}}
+		</Style>
+		<slot />
+	</Host>
+)
+export class Application extends Component {}

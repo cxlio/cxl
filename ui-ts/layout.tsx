@@ -126,7 +126,6 @@ export class Content extends Component {
 			{{
 				$: {
 					display: 'block',
-					...margin(16),
 					position: 'relative',
 					flexGrow: 1,
 					overflowY: 'auto',
@@ -134,10 +133,11 @@ export class Content extends Component {
 					backgroundColor: 'surface',
 					color: 'onSurface',
 				},
-				'@medium': { $: margin(32) },
-				'@large': { $: margin(32, 64, 32, 64) },
+				container: { ...margin(16) },
+				'@medium': { container: margin(32) },
+				'@large': { container: margin(32, 64, 32, 64) },
 				'@xlarge': {
-					$: {
+					container: {
 						width: 1200,
 						marginLeft: 'auto',
 						marginRight: 'auto',
@@ -145,7 +145,9 @@ export class Content extends Component {
 				},
 			}}
 		</Style>
-		<slot />
+		<div className="container">
+			<slot />
+		</div>
 	</Host>
 )
 export class Page extends Component {}
