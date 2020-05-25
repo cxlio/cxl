@@ -21,6 +21,8 @@ const ENTITIES_MAP = {
 const anchors: Record<number, string> = {};
 
 let currentFile: string;
+let pkg: any;
+let sourceUrl: string | { url: string };
 
 function escape(str: string) {
 	return str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e]);
@@ -154,7 +156,9 @@ function ModuleNavbar({ id, children }: Container) {
 }
 
 function Navbar({ name, children }: Container) {
-	return `<cxl-navbar><cxl-c pad16><cxl-t h6>${name}</cxl-t></cxl-c>
+	return `<cxl-navbar><cxl-c pad16><cxl-t h6>${name} <small>${
+		pkg?.version || ''
+	}</small></cxl-t></cxl-c>
 		<cxl-hr></cxl-hr>
 		${children?.map(
 			m =>
@@ -165,13 +169,70 @@ function Navbar({ name, children }: Container) {
 		</cxl-navbar>`;
 }
 
-function ClassSignature(p: JSONOutput.Reflection) {
-	return `${p.name} CLASS`;
-}
-
 function Anchor(id: number, name: string = '') {
 	const anchor = `s${id}`;
 	return `<a name="${anchor}">${name}</a>`;
+}
+
+function getSourceLink(src: JSONOutput.SourceReference) {
+	const url = typeof sourceUrl === 'string' ? sourceUrl : sourceUrl.url;
+	if (url) {
+		if (url.startsWith('https://github.com'))
+			return `${url}/${src.fileName}#L${src.line}`;
+	}
+
+	return `#`;
+}
+
+function Source(sources?: JSONOutput.SourceReference[]) {
+	return sources && pkg && pkg.repository
+		? sources
+				.slice(0, 1)
+				.map(
+					s =>
+						`<a title="See Source" style="float:right;color:var(--cxl-onSurface87)" href="${getSourceLink(
+							s
+						)}"><cxl-icon icon="code"></cxl-icon></a>`
+				)
+				.join('')
+		: '';
+}
+
+function Table(headers: string[], rows: string[][]) {
+	return `<cxl-table>
+		<cxl-tr>${headers.map(h => `<cxl-th>${h}</cxl-th>`).join('')}</cxl-tr>
+		${rows
+			.map(
+				cols =>
+					`<cxl-tr>${cols
+						.map(c => `<cxl-td>${c}</cxl-td>`)
+						.join('')}</cxl-tr>`
+			)
+			.join('')}
+	</cxl-table>`;
+}
+
+function MemberBody(c: Declaration) {
+	let result: string = c.signatures
+		? c.signatures.map(sig => MemberBody(sig)).join('')
+		: `<cxl-t subtitle>${Signature(c)}</cxl-t>`;
+
+	if (c.parameters)
+		result +=
+			'<br/><cxl-t subtitle2>Parameters</cxl-t>' +
+			Table(
+				['Name', 'Description'],
+				c.parameters.map(p => [p.name, ''])
+			) +
+			'<br/>';
+
+	return result;
+}
+
+function MemberCard(c: Declaration) {
+	return `${Anchor(c.id)}<cxl-card><cxl-c pad16>
+		${Source(c.sources)}${MemberBody(c)}
+		</cxl-c></cxl-card>`;
 }
 
 function ModuleBody(json: Declaration) {
@@ -188,13 +249,7 @@ function ModuleBody(json: Declaration) {
 
 			index[c.kind].push(`<cxl-c sm4 lg3>${Link(c.id, c.name)}</cxl-c>`);
 
-			if (c.kind !== CLASS_KIND)
-				groupBody[c.kind].push(`${Anchor(c.id)}<cxl-card><cxl-c pad16>
-		<cxl-t subtitle>${
-			c.kind === CLASS_KIND ? ClassSignature(c) : Signature(c)
-		}</cxl-t>
-	</cxl-c></cxl-card>
-		`);
+			if (c.kind !== CLASS_KIND) groupBody[c.kind].push(MemberCard(c));
 		});
 
 	const moduleType = json.typeParameter
@@ -205,9 +260,10 @@ function ModuleBody(json: Declaration) {
 				.map(SignatureType)
 				.join(', ')}</small>`
 		: '';
+	const moduleName = json.name.replace(/\.tsx?$/, '');
 
 	return (
-		`<cxl-page><cxl-t h4>${json.name}${moduleType}${extendsName}</cxl-t>` +
+		`<cxl-page><cxl-t h4>${moduleName}${moduleType}${extendsName}</cxl-t>` +
 		groups
 			.map(
 				(group: any) =>
@@ -223,7 +279,7 @@ function ModuleBody(json: Declaration) {
 			.filter((group: any) => group.kind !== CLASS_KIND)
 			.map(
 				(group: any) =>
-					`<cxl-t h4>${group.title}</cxl-t>${groupBody[
+					`<br /><cxl-t h4>${group.title}</cxl-t>${groupBody[
 						group.kind
 					].join('<br />')}`
 			)
@@ -235,10 +291,10 @@ function ModuleBody(json: Declaration) {
 function Header(p: Project) {
 	return `<!DOCTYPE html>
 	<script src="../../tester/require-browser.js"></script>
-	<script>require('../../ui-ts/index.js');</script>
+	<script>require('../../ui-ts/index.js');require('../../ui-ts/icons.js');</script>
 	<cxl-application><title>${p.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(p)}
-	<a href="index.html"><cxl-appbar-title>${
+	<a href="index.html" style="text-decoration:none"><cxl-appbar-title>${
 		p.name
 	}</cxl-appbar-title></a></cxl-appbar>`;
 }
@@ -305,6 +361,8 @@ export class DocGen extends Application {
 		const json: Project = JSON.parse(
 			await promises.readFile('docs.json', 'utf8')
 		);
+		pkg = JSON.parse(await promises.readFile('package.json', 'utf8'));
+		sourceUrl = this.arguments?.repository || pkg.repository;
 
 		try {
 			await promises.mkdir('docs');

@@ -1,4 +1,4 @@
-import { Style } from '../css/index.js';
+import { Style, border } from '../css/index.js';
 import { onAction, triggerEvent } from '../template/index.js';
 import {
 	Component,
@@ -9,7 +9,7 @@ import {
 	bind,
 	get,
 	render,
-	role
+	role,
 } from '../component/index.js';
 import { dom, Host } from '../xdom/index.js';
 import { tap, merge } from '../rx/index.js';
@@ -55,18 +55,21 @@ function onSort(el: HTMLElement, view: ComponentView<Th>) {
 					paddingBottom: 12,
 					paddingLeft: 8,
 					paddingRight: 8,
-					// borderBottom: '1px solid',
+					...border(0, 0, 1, 0),
+					borderStyle: 'solid',
 					borderColor: 'divider',
 					lineHeight: 24,
-					whiteSpace: 'nowrap'
+					whiteSpace: 'nowrap',
 				},
 				sortIcon: {
 					display: 'none',
 					marginLeft: -18,
 					marginRight: 8,
 					scaleY: 0,
-					scaleX: 0
+					scaleX: 0,
 				},
+				$firstChild: { paddingLeft: 16 },
+				$lastChild: { paddingRight: 16 },
 				$sortable: { cursor: 'pointer' },
 				$sortable$hover: { color: 'onSurface' },
 				sortIcon$sortable: { display: 'inline-block' },
@@ -74,8 +77,8 @@ function onSort(el: HTMLElement, view: ComponentView<Th>) {
 				desc: {
 					rotate: 180,
 					scaleX: 1,
-					scaleY: 1
-				}
+					scaleY: 1,
+				},
 			}}
 		</Style>
 		<slot />
@@ -105,7 +108,7 @@ export class Th extends Component {
 		<Style>
 			{{
 				$: { display: 'block', width: '100%', overflowX: 'auto' },
-				'@small': { $: { display: 'table' } }
+				'@small': { $: { display: 'table' } },
 			}}
 		</Style>
 		<slot />
@@ -126,17 +129,14 @@ export class Table extends Component {
 				paddingLeft: 8,
 				paddingRight: 8,
 				flexGrow: 1,
-				borderTop: 0,
-				borderLeft: 0,
-				borderRight: 0,
-				borderBottom: 1,
+				...border(0, 0, 1, 0),
 				borderStyle: 'solid',
-				borderColor: 'divider'
+				borderColor: 'divider',
 			},
 			$firstChild: { paddingLeft: 16 },
 			$lastChild: { paddingRight: 16 },
 			$primary: { backgroundColor: 'primary', color: 'onPrimary' },
-			$secondary: { backgroundColor: 'secondary', color: 'onSecondary' }
+			$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
 		}}
 	</Style>
 )
@@ -151,7 +151,7 @@ export class Td extends Cell {
 	<Style>
 		{{
 			$: { width: 48 },
-			checkbox: { paddingTop: 0, paddingBottom: 0 }
+			checkbox: { paddingTop: 0, paddingBottom: 0 },
 		}}
 	</Style>,
 	bind(host =>
@@ -203,7 +203,7 @@ export class CheckboxTh extends CheckboxCell {
 		<Style>
 			{{
 				$: { display: 'table-row' },
-				$selected: { backgroundColor: 'primaryLight' }
+				$selected: { backgroundColor: 'primaryLight' },
 			}}
 		</Style>
 		<slot />
@@ -225,8 +225,8 @@ export class Tr extends Component {
 				paddingTop: 16,
 				paddingBottom: 16,
 				paddingLeft: 16,
-				paddingRight: 16
-			}
+				paddingRight: 16,
+			},
 		}}
 	</Style>,
 	<slot />
@@ -245,8 +245,8 @@ export class TableHeader extends Component {
 					height: 68,
 					backgroundColor: 'primaryLight',
 					color: 'onPrimaryLight',
-					display: 'flex'
-				}
+					display: 'flex',
+				},
 			}}
 		</Style>
 	</Host>,

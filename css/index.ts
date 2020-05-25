@@ -41,10 +41,10 @@ interface StrictStyleDefinition {
 	animation: string;
 	animationDuration: string;
 	backgroundColor: Color;
-	borderBottom: number;
-	borderLeft: number;
-	borderRight: number;
-	borderTop: number;
+	borderBottom: Length;
+	borderLeft: Length;
+	borderRight: Length;
+	borderTop: Length;
 	borderColor: Color;
 	borderWidth: number;
 	borderRadius: Length;
@@ -624,6 +624,15 @@ export function margin(
 	marginLeft = marginTop
 ) {
 	return { marginTop, marginRight, marginBottom, marginLeft };
+}
+
+export function border(
+	borderTop: number | 'auto',
+	borderRight = borderTop,
+	borderBottom = borderTop,
+	borderLeft = borderTop
+) {
+	return { borderTop, borderRight, borderBottom, borderLeft };
 }
 
 applyTheme();

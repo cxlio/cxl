@@ -10,5 +10,6 @@
 		"test": "node build && cd ../dist/rx && node ../tester",
 		"build-docs": "node build-docs && npm run docgen",
 		"docgen": "cd ../dist/rx && node ../docgen"
-	}
+	},
+	"repository": "https://github.com/cxlio/cxl/tree/$BRANCH/rx"
 }

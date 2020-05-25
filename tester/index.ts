@@ -97,34 +97,6 @@ function printReport(suite: Test) {
 	if (failures.length) process.exit(1);
 }
 
-/*private async handleRequire(page) {
-
-	}*/
-
-/*async function moduleRunner(page: Page, sources: Output[]) {
-
-	for (const src of sources) {
-		await page.addScriptTag({
-			type: 'module',
-			content: src.source
-		});
-	}
-	
-	return page.evaluate(`
-		let suite;
-		define('@tester', ['exports', 'require', 'index'], (exports, require, index) => {
-			suite = index.default;
-		})
-		suite.run().then(() => suite);
-	`);
-}*/
-
-/*async function doRequire(page: Page, path: string) {
-	await page.evaluate(`
-		require('${path}');
-	`);
-}*/
-
 function handleRequest(sources: Output[], req: Request) {
 	if (req.method() !== 'POST') return req.continue();
 

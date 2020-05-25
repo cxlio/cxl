@@ -8,7 +8,6 @@ import {
 	SourceFile,
 	Diagnostic,
 	Program,
-	IncrementalProgramOptions,
 	ParseConfigFileHost,
 	createProgram,
 	getDefaultCompilerOptions,
@@ -18,7 +17,7 @@ import {
 	convertCompilerOptionsFromJson,
 	ModuleKind,
 	ExitStatus,
-	createIncrementalProgram,
+	InvalidatedProject,
 	CreateProgramOptions,
 	getParsedCommandLineOfConfigFile,
 	createSolutionBuilder,
@@ -112,7 +111,8 @@ const parseConfigHost: ParseConfigFileHost = {
 	},
 };
 
-function tscError(d: any, line: number, _ch: number, msg: any) {
+function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
+	console.log(d.file?.getSourceFile());
 	if (typeof msg === 'string')
 		console.error(`[${d.file ? d.file.fileName : ''}:${line}] ${msg}`);
 	else {
@@ -210,7 +210,7 @@ export function tsbuild(
 	const host = createSolutionBuilderHost();
 	const builder = createSolutionBuilder(host, [tsconfig], options);
 	const relativePath = parsed.options.outDir || process.cwd();
-	let program: any;
+	let program: InvalidatedProject<any> | undefined;
 
 	function writeFile(name: string, source: string) {
 		name = relative(relativePath, name);
@@ -220,28 +220,8 @@ export function tsbuild(
 	while ((program = builder.getNextInvalidatedProject())) {
 		const status = program.done(undefined, writeFile);
 		if (status !== ExitStatus.Success)
-			throw 'Typescript compilation failed';
+			throw `${program.project}: Typescript compilation failed`;
 	}
-}
-
-export function tsIncremental(tsconfig: string) {
-	const parsed = parseTsConfig(tsconfig);
-	const compilerHost = new CustomCompilerHost(parsed.options);
-	const programOptions: IncrementalProgramOptions<BuilderProgram> = {
-		rootNames: parsed.fileNames,
-		projectReferences: parsed.projectReferences,
-		host: compilerHost,
-		options: parsed.options,
-	};
-
-	const program = createIncrementalProgram(programOptions);
-	const diagnostics = buildDiagnostics(program);
-
-	if (diagnostics.length) printDiagnostics(diagnostics);
-
-	program.emit();
-
-	return compilerHost.output;
 }
 
 export function tsc(inputFileName: string, options: CompilerOptions) {

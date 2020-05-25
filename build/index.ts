@@ -95,6 +95,14 @@ export function files(sources: string[]) {
 	});
 }
 
+function getRepo(repo: string | { url: string }) {
+	const branch = execSync('git rev-parse --abbrev-ref HEAD')
+		.toString()
+		.trim();
+	const url = typeof repo === 'string' ? repo : repo.url;
+	return url.replace(/\$BRANCH/g, branch);
+}
+
 export function pkg(config: PackageTask) {
 	const p = readPackage(BASEDIR);
 
@@ -108,7 +116,7 @@ export function pkg(config: PackageTask) {
 			main: 'index.js',
 			homepage: p.homepage,
 			bugs: p.bugs,
-			repository: p.repository,
+			repository: p.repository && getRepo(p.repository),
 			dependencies: p.dependencies,
 			peerDependencies: p.peerDependencies,
 			type: p.type,
