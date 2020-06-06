@@ -1,5 +1,6 @@
 import { Observable, from, map } from '../rx';
 import { colors } from './colors.js';
+import { promises as fs } from 'fs';
 require('source-map-support').install();
 
 function hrtime(): bigint {
@@ -13,7 +14,6 @@ interface OperationResult {
 	result: any;
 }
 
-export type ApplicationArguments = { [key: string]: any };
 type OperationFunction<T> = (() => Promise<T>) | Promise<T> | Observable<T>;
 type Operation = Observable<OperationResult>;
 type LogMessage<T = any> = string | ((p: T) => string) | Error;
@@ -68,11 +68,47 @@ function logError(prefix: string, error: Error) {
 	console.error(error);
 }
 
+function mtime(file: string) {
+	return fs.stat(file).then(
+		stat => stat.mtime.getTime(),
+		() => NaN
+	);
+}
+
+export async function syncFiles(file1: string, file2: string) {
+	const time = Date.now();
+	await Promise.all([
+		fs.utimes(file1, time, time).catch(() => {}),
+		fs.utimes(file2, time, time).catch(() => {}),
+	]);
+}
+
+export async function filesNeedSync(file1: string, file2: string) {
+	const [mtime1, mtime2] = await Promise.all([mtime(file1), mtime(file2)]);
+	return mtime1 !== mtime2;
+}
+
+const ArgRegex = /(--?)([\w\d-]+)/g;
+
+export function mkdirp(dir: string) {
+	return fs.mkdir(dir).catch(() => {});
+}
+
+interface Parameter {
+	name: string;
+	shortcut?: string;
+	rest?: boolean;
+	/// @default 'boolean'
+	type?: 'string' | 'boolean' | 'number';
+	help?: string;
+	handle?(value: string): void;
+}
+
 export abstract class Application {
 	abstract name: string;
 
 	color: keyof typeof colors = 'green';
-	arguments?: ApplicationArguments;
+	parameters?: Parameter[];
 	version?: string;
 
 	private coloredPrefix?: string;
@@ -92,21 +128,30 @@ export abstract class Application {
 		process.exit(1);
 	}
 
-	private parseArguments() {
-		const args: string[] = process.argv.slice(2);
-		return args.reduce(
-			(result, arg: string) => {
-				const match = /-{1,2}([\w\d-]+)/.exec(arg);
-				if (match) result[match[1]] = true;
-				else result.files.push(arg);
-				return result;
-			},
-			{ files: [] } as ApplicationArguments
-		);
+	private parseParameters(parameters: Parameter[]) {
+		const args = process.argv;
+		const rest = parameters.find(a => a.rest);
+
+		for (let i = 2; i < args.length; i++) {
+			const arg = args[i];
+			const match = ArgRegex.exec(arg);
+			if (match) {
+				const param = parameters.find(
+					a => a.name === match[2] || a.name === match[2]
+				);
+				if (!param) throw new Error(`Unknown argument ${arg}`);
+				if (!param.type || param.type === 'boolean')
+					(this as any)[param.name] = true;
+				else (this as any)[param.name] = args[++i];
+			} else if (rest) {
+				(this as any)[rest.name] = arg;
+			}
+		}
 	}
 
 	async start() {
-		this.arguments = this.parseArguments();
+		if (this.parameters) this.parseParameters(this.parameters);
+
 		this.coloredPrefix = colors[this.color](this.name);
 
 		if (this.version) this.log(this.version);

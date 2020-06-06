@@ -49,12 +49,12 @@ function onSort(el: HTMLElement, view: ComponentView<Th>) {
 				$: {
 					display: 'table-cell',
 					flexGrow: 1,
-					font: 'caption',
+					font: 'body',
 					color: 'headerText',
 					paddingTop: 12,
 					paddingBottom: 12,
-					paddingLeft: 8,
-					paddingRight: 8,
+					paddingLeft: 16,
+					paddingRight: 16,
 					...border(0, 0, 1, 0),
 					borderStyle: 'solid',
 					borderColor: 'divider',
@@ -68,8 +68,6 @@ function onSort(el: HTMLElement, view: ComponentView<Th>) {
 					scaleY: 0,
 					scaleX: 0,
 				},
-				$firstChild: { paddingLeft: 16 },
-				$lastChild: { paddingRight: 16 },
 				$sortable: { cursor: 'pointer' },
 				$sortable$hover: { color: 'onSurface' },
 				sortIcon$sortable: { display: 'inline-block' },
@@ -107,7 +105,15 @@ export class Th extends Component {
 	<Host>
 		<Style>
 			{{
-				$: { display: 'block', width: '100%', overflowX: 'auto' },
+				$: {
+					display: 'block',
+					width: '100%',
+					overflowX: 'auto',
+					...border(1, 1, 0, 1),
+					borderStyle: 'solid',
+					borderColor: 'divider',
+					borderRadius: 4,
+				},
 				'@small': { $: { display: 'table' } },
 			}}
 		</Style>
@@ -126,15 +132,13 @@ export class Table extends Component {
 				display: 'table-cell',
 				paddingTop: 12,
 				paddingBottom: 12,
-				paddingLeft: 8,
-				paddingRight: 8,
+				paddingLeft: 16,
+				paddingRight: 16,
 				flexGrow: 1,
 				...border(0, 0, 1, 0),
 				borderStyle: 'solid',
 				borderColor: 'divider',
 			},
-			$firstChild: { paddingLeft: 16 },
-			$lastChild: { paddingRight: 16 },
 			$primary: { backgroundColor: 'primary', color: 'onPrimary' },
 			$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
 		}}

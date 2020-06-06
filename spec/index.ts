@@ -65,6 +65,14 @@ export class Test {
 		this.results.push({ success: !!condition, message });
 	}
 
+	assert(
+		condition: any,
+		message: string = 'Assertion Failed'
+	): asserts condition {
+		if (!condition) throw new Error(message);
+		this.results.push({ success: condition, message });
+	}
+
 	equal<T>(a: T, b: T, desc?: string) {
 		return this.ok(
 			a === b,

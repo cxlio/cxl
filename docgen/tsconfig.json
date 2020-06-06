@@ -5,6 +5,6 @@
 		"types": ["node"],
 		"typeRoots": ["../node_modules/@types"]
 	},
-	"references": [{ "path": "../server" }],
-	"files": ["index.tsx"]
+	"references": [{ "path": "../server" }, { "path": "../dts" }],
+	"files": ["index.tsx", "theme.tsx", "localization.tsx"]
 }

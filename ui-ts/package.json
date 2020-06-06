@@ -8,6 +8,7 @@
 		"build": "node build",
 		"build-icons": "node build-icons",
 		"build-bundle": "tsc -b tsconfig.bundle.json",
+		"build-docs": "node ../dist/docgen repository: \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/ui-ts\"",
 		"test": "node build && cd ../dist/ui-ts && node ../tester"
 	}
 }

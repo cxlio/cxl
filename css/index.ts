@@ -290,7 +290,7 @@ export const theme: Theme = {
 		h4: { fontSize: '34px', letterSpacing: '0.25px' },
 		h5: { fontSize: '24px' },
 		h6: { fontSize: '20px', fontWeight: 400, letterSpacing: '0.15px' },
-		title: { fontSize: '18px', lineHeight: '24px' },
+		body2: { fontSize: '14px' },
 		subtitle: {
 			fontSize: '16px',
 			lineHeight: 1.375,

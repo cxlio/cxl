@@ -149,6 +149,10 @@ class Observable<T> {
 	}
 }
 
+/**
+ * A Subject is an Observable that allows values to be
+ * multicasted to many Observers.
+ */
 class Subject<T> extends Observable<T> {
 	protected subscriptions = new Set<Subscription<T>>();
 
@@ -433,6 +437,11 @@ export function exhaustMap<T, T2>(project: (value?: T) => Observable<T2>) {
 	);
 }
 
+/**
+ * Filter items emitted by the source Observable.
+ *
+ * @see distinctUntilChanged
+ */
 function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
 	return operator((subscriber: Subscription<T>) => (val: T) => {
 		if (fn(val)) subscriber.next(val);
@@ -446,7 +455,15 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
 	});
 }
 
-function catchError<T, T2>(
+/**
+ * Catches errors on the observable.
+ *
+ * @param selector A function that takes as arguments the error `err`,  and `source`, which
+ *  is the source observable. The observable
+ *  returned will be used to continue the observable chain.
+ *
+ */
+export function catchError<T, T2>(
 	selector: (err: any, source: Observable<T>) => Observable<T2> | void
 ) {
 	function subscribe(source: Observable<T>, subscriber: Subscription<T>) {
@@ -579,7 +596,6 @@ export {
 	from,
 	toPromise,
 	throwError,
-	catchError,
 	map,
 	filter,
 	debounceTime,

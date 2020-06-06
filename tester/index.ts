@@ -1,6 +1,6 @@
 import { Result, Test } from '../spec/index.js';
 import { colors } from '../server/colors.js';
-import { Application, ApplicationArguments } from '../server/index.js';
+import { Application } from '../server/index.js';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as path from 'path';
 
@@ -165,6 +165,14 @@ class TestRunner extends Application {
 	name = '@cxl/tester';
 	entryFile = 'test.js';
 
+	amd = false;
+	node = false;
+
+	parameters = [
+		{ name: 'node', help: 'Run tests in node mode.' },
+		{ name: 'entryFile', rest: true },
+	];
+
 	private handleConsole(msg: any) {
 		const type = msg.type();
 		const { url, lineNumber } = msg.location();
@@ -189,14 +197,14 @@ class TestRunner extends Application {
 		}
 	}
 
-	private runNode(_args: ApplicationArguments) {
+	private runNode() {
 		this.log(`Node ${process.version}`);
 		const suite = require(path.resolve(this.entryFile)).default as Test;
 		suite.run();
 		return suite;
 	}
 
-	private async runPuppeteer(args: ApplicationArguments) {
+	private async runPuppeteer() {
 		const browser = await launch({
 			headless: true,
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -218,7 +226,7 @@ class TestRunner extends Application {
 		const sources = [{ path: this.entryFile, source }];
 
 		await page.tracing.start({ path: 'trace.json' });
-		const suite = args.amd
+		const suite = this.amd
 			? await amdRunner(page, sources)
 			: await cjsRunner(page, sources);
 		await page.tracing.stop();
@@ -231,11 +239,7 @@ class TestRunner extends Application {
 	}
 
 	async run() {
-		const args = this.arguments || {};
-		if (args.files.length) this.entryFile = args.files[0];
-		const suite = await (args.node
-			? this.runNode(args)
-			: this.runPuppeteer(args));
+		const suite = await (this.node ? this.runNode() : this.runPuppeteer());
 		printReport(suite as Test);
 	}
 }

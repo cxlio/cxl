@@ -1,0 +1,8 @@
+{
+	"name": "@cxl/dts",
+	"version": "0.0.1",
+	"scripts": {
+		"build": "node build",
+		"test": "node build && cd ../dist/dts && node ../tester --node"
+	}
+}

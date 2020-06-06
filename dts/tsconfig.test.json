@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/dts",
+		"lib": ["es2017"]
+	},
+	"references": [{ "path": "." }, { "path": "../spec" }],
+	"include": ["test.ts"]
+}
