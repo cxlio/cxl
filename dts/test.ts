@@ -197,13 +197,15 @@ export default suite('dts', test => {
 		a.assert(kls.typeParameters);
 		const [T] = kls.typeParameters;
 		a.equal(T.name, 'T');
+		a.equal(T.kind, Kind.TypeParameter);
+		a.ok(!T.type);
 		a.assert(kls.children);
 		a.equal(kls.children.length, 1);
 		const member = kls.children[0];
 		a.equal(member.name, 'member');
 		a.assert(member.type);
 		a.equal(member.type.kind, Kind.Reference);
-		a.equal(member.type.id, T.id);
+		a.equal(member.type.type, T);
 	});
 
 	test('class implements interface', (a: Test) => {
@@ -229,9 +231,9 @@ export default suite('dts', test => {
 		a.equal(C.type.children.length, 2);
 
 		const [AType, BType] = C.type.children;
-		a.equal(AType.id, A.id);
+		a.equal(AType.type, A);
 		a.equal(AType.name, 'A');
-		a.equal(BType.id, B.id);
+		a.equal(BType.type, B);
 		a.equal(BType.name, 'B');
 	});
 
@@ -438,10 +440,10 @@ function op<T>() { return new Operator<T>(); }
 		a.ok(map);
 		a.assert(map.type);
 		a.equal(map.type.kind, Kind.Reference);
-		a.equal(map.type.id, Operator.id);
+		a.equal(map.type.type, Operator);
 		a.assert(map.type.typeParameters);
 		a.assert(map.typeParameters);
-		a.equal(map.type.typeParameters[0].id, map.typeParameters[0].id);
+		a.equal(map.type.typeParameters[0].type, map.typeParameters[0]);
 	});
 
 	test('Type Reference - Type Alias', (a: Test) => {
@@ -455,9 +457,9 @@ function map<T>() {	return operator<T>(); }
 		a.ok(map);
 		a.assert(map.type);
 		a.equal(map.type.kind, Kind.Reference);
-		a.equal(map.type.id, Operator.id);
+		a.equal(map.type.type, Operator);
 		a.assert(map.type.typeParameters);
 		a.assert(map.typeParameters);
-		a.equal(map.type.typeParameters[0].id, map.typeParameters[0].id);
+		a.equal(map.type.typeParameters[0].type, map.typeParameters[0]);
 	});
 });

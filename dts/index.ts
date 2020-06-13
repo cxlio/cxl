@@ -101,12 +101,12 @@ export const NumberType = createBaseType('number'),
 	UnknownType = createBaseType('unknown'),
 	BigIntType = createBaseType('BigInt');
 
+const dtsNode = Symbol('dtsNode');
+
 let currentIndex: Index;
 let program: ts.Program;
-// let currentSource: ts.SourceFile;
 let typeChecker: ts.TypeChecker;
 let currentId = 1;
-let nodeMap: Map<ts.Node, number>;
 
 const parseConfigHost: ParseConfigFileHost = {
 	useCaseSensitiveFileNames: true,
@@ -153,33 +153,38 @@ function getKind(node: ts.Node): Kind {
 	return (node.kind as any) as Kind;
 }
 
-function createNode(node: ts.Node, extra?: Partial<Node>): Node {
+function getNodeSource(node: ts.Node) {
 	const sourceFile = node.getSourceFile();
-	const source = sourceFile ? { sourceFile, index: node.pos } : undefined;
+	return sourceFile ? { sourceFile, index: node.pos } : undefined;
+}
+
+function createNode(node: ts.Node, extra?: Partial<Node>): Node {
+	const refNode = (node as any)[dtsNode];
+	const source = getNodeSource(node);
 	const kind = extra?.kind || getKind(node);
 
 	const name = ts.isLiteralTypeNode(node)
 		? node.getText()
 		: (node as any).name?.escapedText || '';
-
-	return {
+	const result = {
 		name,
 		kind,
 		flags: 0,
 		source,
 		...extra,
 	};
+
+	if (refNode) return Object.assign(refNode, result);
+
+	return ((node as any)[dtsNode] = result);
 }
 
-function getNodeId(node: ts.Node) {
-	let id = nodeMap.get(node);
+function getNodeFromDeclaration(node: ts.Node): Node {
+	let result = (node as any)[dtsNode];
 
-	if (!id) {
-		id = currentId++;
-		nodeMap.set(node, id);
-	}
+	if (!result) (node as any)[dtsNode] = result = { id: currentId++ };
 
-	return id;
+	return result;
 }
 
 export function isClassMember(node: Node) {
@@ -229,7 +234,12 @@ function getNodeDocs(node: ts.Node) {
 
 function serializeDeclaration(node: ts.Declaration): Node {
 	const result = createNode(node);
-	const id = (result.id = getNodeId(node));
+
+	if (!result.id) {
+		result.id = currentId++;
+		(node as any)[dtsNode] = result;
+	}
+	const id = result.id;
 	const anode = node as any;
 	const docs = getNodeDocs(node);
 
@@ -293,16 +303,17 @@ function getSymbolReference(
 	typeArgs?: readonly ts.Type[]
 ): Node {
 	const node = symbol.valueDeclaration || symbol.declarations[0];
-	const id = getNodeId(node);
-	return createNode(node, {
+	return {
 		name: symbol.getName(),
+		flags: 0,
+		source: getNodeSource(node),
 		kind: Kind.Reference,
-		id,
+		type: getNodeFromDeclaration(node),
 		typeParameters:
 			typeArgs && typeArgs.length
 				? typeArgs.map(serializeType)
 				: undefined,
-	});
+	};
 }
 
 function serializeType(type: ts.Type): Node {
@@ -438,12 +449,11 @@ function serializeReference(node: ts.TypeReferenceType) {
 	if (!symbol) return serializeType(type);
 
 	const decl = symbol.declarations[0];
-	const id = getNodeId(decl);
 	return createNode(node, {
 		name,
 		kind: Kind.Reference,
 		typeParameters: node.typeArguments?.map(serialize),
-		id,
+		type: getNodeFromDeclaration(decl),
 	});
 }
 
@@ -514,7 +524,6 @@ function setup(
 	}*/
 
 	typeChecker = program.getTypeChecker();
-	nodeMap = new Map<ts.Node, number>();
 	currentIndex = {};
 }
 

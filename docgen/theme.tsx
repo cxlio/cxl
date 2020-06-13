@@ -9,10 +9,8 @@ const ENTITIES_MAP = {
 	'&': '&amp;',
 	'<': '&lt;',
 };
-// let nodeIndex: Record<number, Node>;
-// const anchors: Record<number, string> = {};
-
-// let currentFile: string;
+const anchors: Record<number, string> = {};
+let currentPage: Node;
 
 function escape(str: string) {
 	return str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e]);
@@ -235,10 +233,10 @@ function MemberCard(c: Node) {
 }*/
 
 function Link(node: Node) {
-	const name = node.name ? escape(node.name) : '(Unknown)';
-	const id = node.id;
+	if (!node.source) return '';
 
-	return id && name ? `<a href="${getHref(id)}">${name}</a>` : name;
+	const name = node.name ? escape(node.name) : '(Unknown)';
+	return `<a href="${getHref(node)}">${name}</a>`;
 }
 
 function GroupIndex(kind: Kind, children: string[]) {
@@ -294,8 +292,8 @@ function ModuleBody(json: Node) {
 	);
 }
 
-function getHref(id?: number) {
-	//	const href = anchors[id];
+function getHref(node: Node) {
+	const href = node.source.sourceFile;
 	//	if (!href) throw new Error(`Link to ${id} not found`);
 	return id ? '#s' + id.toString() : '';
 }
@@ -340,5 +338,6 @@ function Header(module: Node) {
 
 export function Page(app: DocGen, p: Node) {
 	application = app;
+	currentPage = p;
 	return Header(p) + ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p);
 }

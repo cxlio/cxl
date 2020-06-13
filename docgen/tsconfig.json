@@ -2,9 +2,10 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/docgen",
+		"lib": ["es2019"],
 		"types": ["node"],
 		"typeRoots": ["../node_modules/@types"]
 	},
 	"references": [{ "path": "../server" }, { "path": "../dts" }],
-	"files": ["index.tsx", "theme.tsx", "localization.tsx"]
+	"files": ["index.tsx", "render-html.tsx", "localization.tsx"]
 }

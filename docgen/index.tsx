@@ -1,8 +1,12 @@
 import { Application, mkdirp } from '../server';
 import { promises } from 'fs';
-import { Output as DtsOutput, Node, build, Kind } from '../dts';
+import { Node, build } from '../dts';
 
-type Theme = typeof import('./theme');
+export interface File {
+	name: string;
+	content: string;
+	node: Node;
+}
 
 export class DocGen extends Application {
 	name = '@cxl/docgen';
@@ -13,52 +17,11 @@ export class DocGen extends Application {
 		this.parameters.register({ name: 'repository', type: 'string' });
 	}
 
-	generateContainer(module: Node, theme: Theme) {
-		const name = module.name.replace(/(\.tsx?)?$/, '.html');
-
-		return () =>
-			this.log(`Generating ${name} from ${module.name}`, () =>
-				promises.writeFile(
-					`${this.outputDir}/${name}`,
-					theme.Page(this, module)
-				)
-			);
-	}
-
-	generateModules(json: DtsOutput, theme: Theme) {
-		return Promise.all(
-			json.modules.map(async m => {
-				const renderModule = this.generateContainer(m, theme);
-
-				if (!m.children) return;
-
-				await Promise.all(
-					m.children
-						.filter(child => child.kind === Kind.Class)
-						.map(child => this.generateContainer(child, theme))
-						.map(render => render())
-				);
-
-				await renderModule();
-			})
+	writeFile(file: File) {
+		const name = file.name;
+		return this.log(`Writing ${name} from ${file.node.name}`, () =>
+			promises.writeFile(`${this.outputDir}/${name}`, file.content)
 		);
-	}
-
-	async generateJson(outFile: string, json: DtsOutput) {
-		await promises.writeFile(
-			outFile,
-			JSON.stringify(
-				{
-					modules: json.modules,
-				},
-				null,
-				2
-			)
-		);
-	}
-
-	async generateDocs(json: DtsOutput, theme: Theme) {
-		await this.generateModules(json, theme);
 	}
 
 	async run() {
@@ -70,9 +33,8 @@ export class DocGen extends Application {
 				typeof pkgRepo === 'string' ? pkgRepo : pkgRepo.url;
 
 		const json = build();
-		const theme = await import('./theme');
-		// await this.generateJson(`${this.outputDir}/docs.json`, json);
-		await this.generateDocs(json, theme);
+		const theme = await import('./render-html');
+		await Promise.all(theme.render(this, json).map(f => this.writeFile(f)));
 	}
 }
 
