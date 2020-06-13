@@ -109,8 +109,10 @@ export default suite('dts', test => {
 	test('function - infered type', (a: Test) => {
 		const [fn] = parse(`function fn() { return () => true; }`);
 
-		console.log(fn.type);
 		a.assert(fn.type);
+		a.equal(fn.type.kind, Kind.Function);
+		a.assert(fn.type.type);
+		a.equal(fn.type.type, BooleanType);
 	});
 
 	test('type declaration - type parameters', a => {
