@@ -1,5 +1,7 @@
 type TestFn = (test: Test) => void;
-type SuiteFn = (suiteFn: (name: string, testFn: TestFn) => void) => void;
+type SuiteFn = (
+	suiteFn: (name: string, testFn: TestFn, only?: boolean) => void
+) => void;
 
 declare function setTimeout(fn: () => any, n?: number): number;
 declare function clearTimeout(n: number): void;
@@ -36,6 +38,7 @@ export class Test {
 	promise?: Promise<any>;
 	results: Result[] = [];
 	tests: Test[] = [];
+	only: Test[] = [];
 	timeout = 5 * 1000;
 	private domElement?: Element;
 
@@ -112,8 +115,9 @@ export class Test {
 		};
 	}
 
-	test(name: string, testFn: TestFn) {
+	test(name: string, testFn: TestFn, only = false) {
 		this.tests.push(new Test(name, testFn));
+		if (only) this.only.push(new Test(name, testFn));
 	}
 
 	addTest(test: Test) {
@@ -126,7 +130,9 @@ export class Test {
 			await this.promise;
 			if (this.promise && this.completed === false)
 				throw new Error('Never completed');
-			if (this.tests.length)
+			if (this.only.length)
+				await Promise.all(this.only.map(test => test.run()));
+			else if (this.tests.length)
 				await Promise.all(this.tests.map(test => test.run()));
 		} catch (e) {
 			this.pushError(e);

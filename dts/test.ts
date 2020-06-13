@@ -106,6 +106,17 @@ export default suite('dts', test => {
 		a.equal(fn.type, NumberType);
 	});
 
+	test(
+		'function - infered type',
+		(a: Test) => {
+			const [fn] = parse(`function fn() { return () => true; }`);
+
+			console.log(fn.type);
+			a.assert(fn.type);
+		},
+		true
+	);
+
 	test('type declaration - type parameters', a => {
 		const [type] = parse('export type Operator<T, T2 = T> = Map<T, T2>');
 
@@ -361,12 +372,94 @@ export default suite('dts', test => {
 
 	test('type alias - function', (a: Test) => {
 		const [A] = parse(`type A<T> = (val: T) => void;`);
-		console.log(A);
 		a.assert(A.type);
 		const type = A.type;
 		a.equal(type.kind, Kind.FunctionType);
 		a.assert(type.parameters);
 		a.equal(type.parameters.length, 1);
 		a.equal(type.type, VoidType);
+	});
+
+	test('function - full', (a: Test) => {
+		const [A] = parse(`/**
+ * Catches errors on the observable.
+ *
+ * @param selector A function that takes as arguments the error err,  and source, which
+ *  is the source observable. The observable
+ *  returned will be used to continue the observable chain.
+ *
+ */
+export function catchError<T, T2>(
+	selector: (err: any, source: Set<T>) => Set<T2> | void
+) { return {} as any; }`);
+		a.ok(A);
+		a.assert(A.docs);
+		a.equal(A.docs.length, 2);
+		a.ok(A.flags & Flags.Export);
+		a.equal(A.name, 'catchError');
+		a.assert(A.typeParameters);
+		a.equal(A.typeParameters.length, 2);
+		const [T, T2] = A.typeParameters;
+		a.equal(T.name, 'T');
+		a.equal(T2.name, 'T2');
+
+		a.assert(A.parameters);
+		a.equal(A.parameters.length, 1);
+		const [selector] = A.parameters;
+		a.equal(selector.name, 'selector');
+		a.assert(selector.type);
+		const fnType = selector.type;
+		a.equal(fnType.kind, Kind.FunctionType);
+		a.assert(fnType.type);
+		a.equal(fnType.type.kind, Kind.TypeUnion);
+		a.assert(fnType.type.children);
+		const [u1, u2] = fnType.type.children;
+		a.assert(u1.typeParameters);
+		a.equal(u1.typeParameters.length, 1);
+		a.equal(u2, VoidType);
+	});
+
+	test('conditional type', (a: Test) => {
+		const [A] = parse(`
+function concat<R extends Set<any>[]>(
+	...observables: R
+): R extends (infer U)[] ? Set<U> : never { return {} as any; }
+		`);
+
+		a.ok(A);
+		a.assert(A.type);
+		a.equal(A.type.kind, Kind.ConditionalType);
+	});
+
+	test('Type Reference', (a: Test) => {
+		const [Operator, map] = parse(`
+class Operator<T> { };
+function op<T>() { return new Operator<T>(); }
+		`);
+		a.ok(Operator);
+		a.ok(map);
+		a.assert(map.type);
+		a.equal(map.type.kind, Kind.Reference);
+		a.equal(map.type.id, Operator.id);
+		a.assert(map.type.typeParameters);
+		a.assert(map.typeParameters);
+		a.equal(map.type.typeParameters[0].id, map.typeParameters[0].id);
+	});
+
+	test('Type Reference - Type Alias', (a: Test) => {
+		const [Operator, operator, map] = parse(`
+type Operator<T> = Set<T>;
+export function operator<T>(): Operator<T> { return new Set<T> }
+function map<T>() {	return operator<T>(); }
+		`);
+		a.ok(Operator);
+		a.ok(operator);
+		a.ok(map);
+		a.assert(map.type);
+		a.equal(map.type.kind, Kind.Reference);
+		a.equal(map.type.id, Operator.id);
+		a.assert(map.type.typeParameters);
+		a.assert(map.typeParameters);
+		a.equal(map.type.typeParameters[0].id, map.typeParameters[0].id);
 	});
 });

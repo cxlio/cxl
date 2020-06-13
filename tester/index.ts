@@ -30,7 +30,9 @@ class TestReport {
 
 		console.group(`${test.name} ${out}`);
 		failures.forEach(fail => this.printError(test, fail));
-		test.tests.forEach((test: Test) => this.printTest(test));
+		if (test.only.length)
+			test.only.forEach((test: Test) => this.printTest(test));
+		else test.tests.forEach((test: Test) => this.printTest(test));
 		console.groupEnd();
 
 		return failures;

@@ -47,6 +47,10 @@ export enum Kind {
 	Function = SK.FunctionDeclaration,
 	FunctionOverload = 1004,
 	FunctionType = SK.FunctionType,
+	ConditionalType = SK.ConditionalType,
+	Parenthesized = SK.ParenthesizedType,
+	Infer = SK.InferType,
+	Never = SK.NeverKeyword,
 }
 
 interface Documentation {
@@ -103,7 +107,7 @@ export const NumberType = createBaseType('number'),
 
 let currentIndex: Index;
 let program: ts.Program;
-let currentSource: ts.SourceFile;
+// let currentSource: ts.SourceFile;
 let typeChecker: ts.TypeChecker;
 let currentId = 1;
 let nodeMap: Map<ts.Node, number>;
@@ -154,12 +158,15 @@ function getKind(node: ts.Node): Kind {
 }
 
 function createNode(node: ts.Node, extra?: Partial<Node>): Node {
-	const pos = currentSource.getLineAndCharacterOfPosition(node.pos);
+	const source = node.getSourceFile();
+	const pos = source
+		? source.getLineAndCharacterOfPosition(node.pos)
+		: { line: 0, character: 0 };
 	const kind = extra?.kind || getKind(node);
 
 	const name = ts.isLiteralTypeNode(node)
 		? node.getText()
-		: (node as any).name?.escapedText;
+		: (node as any).name?.escapedText || '';
 
 	return {
 		name,
@@ -266,6 +273,11 @@ function serializeTypeParameter(node: ts.TypeParameterDeclaration) {
 	return result;
 }
 
+/*function serializeSymbol(symbol: ts.Symbol) {
+	const node = symbol.valueDeclaration;
+	return serialize(node);
+}*/
+
 function serializeParameter(symbol: ts.Symbol) {
 	const node = symbol.valueDeclaration as ts.ParameterDeclaration;
 
@@ -283,6 +295,23 @@ function serializeParameter(symbol: ts.Symbol) {
 	return result;
 }
 
+function getSymbolReference(
+	symbol: ts.Symbol,
+	typeArgs?: readonly ts.Type[]
+): Node {
+	const node = symbol.valueDeclaration || symbol.declarations[0];
+	const id = getNodeId(node);
+	return createNode(node, {
+		name: symbol.getName(),
+		kind: Kind.Reference,
+		id,
+		typeParameters:
+			typeArgs && typeArgs.length
+				? typeArgs.map(serializeType)
+				: undefined,
+	});
+}
+
 function serializeType(type: ts.Type): Node {
 	if (type.flags & TF.Any) return AnyType;
 	if (type.flags & TF.Unknown) return UnknownType;
@@ -296,6 +325,21 @@ function serializeType(type: ts.Type): Node {
 		return serializeType(baseType);
 	}
 
+	if (type.aliasSymbol)
+		return getSymbolReference(type.aliasSymbol, type.aliasTypeArguments);
+
+	if (type.flags & TF.Object) {
+		if (
+			(type as any).objectFlags & ts.ObjectFlags.Reference ||
+			type.flags & TF.TypeParameter
+		)
+			return getSymbolReference(
+				type.symbol,
+				typeChecker.getTypeArguments(type as ts.TypeReference)
+			);
+
+		return serialize(type.symbol.valueDeclaration);
+	}
 	const name = typeChecker.typeToString(type);
 	const kind: Kind = Kind.Unknown;
 
@@ -305,6 +349,8 @@ function serializeType(type: ts.Type): Node {
 function serializeFunction(node: ts.FunctionLikeDeclaration) {
 	const result = serializeDeclaration(node);
 	const signature = typeChecker.getSignatureFromDeclaration(node);
+
+	result.kind = Kind.Function;
 
 	if (node.typeParameters)
 		result.typeParameters = node.typeParameters.map(serialize);
@@ -377,10 +423,23 @@ function serializeClass(node: ts.ClassDeclaration) {
 	return result;
 }
 
+function getReferenceName(node: ts.TypeReferenceType) {
+	if (ts.isExpressionWithTypeArguments(node))
+		return node.expression.getText();
+
+	if (ts.isTypeReferenceNode(node))
+		return ts.isQualifiedName(node.typeName)
+			? `${serialize(node.typeName.left)}.${serialize(
+					node.typeName.right
+			  )}`
+			: node.typeName.text;
+
+	console.log(node);
+	return '(Unknown)';
+}
+
 function serializeReference(node: ts.TypeReferenceType) {
-	const name = ts.isExpressionWithTypeArguments(node)
-		? node.expression.getText()
-		: node.typeName?.getText();
+	const name = getReferenceName(node);
 	const type = typeChecker.getTypeFromTypeNode(node);
 	const symbol = type.symbol || type.aliasSymbol;
 
@@ -391,7 +450,19 @@ function serializeReference(node: ts.TypeReferenceType) {
 	return createNode(node, {
 		name,
 		kind: Kind.Reference,
+		typeParameters: node.typeArguments?.map(serialize),
 		id,
+	});
+}
+
+function serializeConditionalType(node: ts.ConditionalTypeNode) {
+	return createNode(node, {
+		children: [
+			serialize(node.checkType),
+			serialize(node.extendsType),
+			serialize(node.trueType),
+			serialize(node.falseType),
+		],
 	});
 }
 
@@ -405,8 +476,16 @@ const Serializer: SerializerMap = {
 
 	[SK.ArrayType]: serializeArray,
 	[SK.FunctionDeclaration]: serializeFunction,
+	[SK.ArrowFunction]: serializeFunction,
 	[SK.TypeReference]: serializeReference,
 	[SK.ExpressionWithTypeArguments]: serializeReference,
+	[SK.ConditionalType]: serializeConditionalType,
+	[SK.ParenthesizedType]: serializeDeclarationWithType,
+	[SK.InferType](node: ts.InferTypeNode) {
+		return createNode(node, {
+			type: serialize(node.typeParameter),
+		});
+	},
 
 	[SK.UnionType](node: ts.UnionTypeNode) {
 		return createNode(node, {
@@ -473,7 +552,7 @@ function markExported(symbol: ts.Symbol) {
 }
 
 function parseSourceFile(sourceFile: ts.SourceFile) {
-	currentSource = sourceFile;
+	// currentSource = sourceFile;
 	const result = createNode(sourceFile);
 	const children: Node[] = (result.children = []);
 	const symbol = typeChecker.getSymbolAtLocation(sourceFile);
@@ -528,18 +607,3 @@ export function build(tsconfig = resolve('tsconfig.json')) {
 
 	return result;
 }
-
-/*class DtsApplication extends Application {
-	name = '@cxl/dts';
-	async run() {
-		this.log('building...');
-		const out = build();
-		await fs.writeFile(
-			'docs.json',
-			JSON.stringify({ modules: out.modules }, null, 2),
-			'utf8'
-		);
-	}
-}
-
-new DtsApplication().start();*/

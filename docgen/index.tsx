@@ -19,7 +19,7 @@ export class DocGen extends Application {
 			this.log(`Generating ${name} from ${module.name}`, () =>
 				promises.writeFile(
 					`${this.outputDir}/${name}`,
-					theme.Page(json, module)
+					theme.Page(pkg, json, module)
 				)
 			);
 	}
@@ -59,7 +59,6 @@ export class DocGen extends Application {
 	}
 
 	async generateDocs(json: DtsOutput, theme: Theme) {
-		pkg = JSON.parse(await promises.readFile('package.json', 'utf8'));
 		sourceUrl = this.repository || pkg.repository;
 		this.log(`Using "${sourceUrl}" repository`);
 
@@ -71,6 +70,7 @@ export class DocGen extends Application {
 		await mkdirp(outputDir);
 		const json = build();
 		const theme = await import('./theme');
+		pkg = JSON.parse(await promises.readFile('package.json', 'utf8'));
 		await this.generateJson(`${this.outputDir}/docs.json`, json);
 		await this.generateDocs(json, theme);
 	}

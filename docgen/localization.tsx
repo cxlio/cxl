@@ -23,6 +23,10 @@ const KindMap: Record<Kind, string> = {
 	[Kind.Function]: 'Function',
 	[Kind.FunctionOverload]: 'Function',
 	[Kind.FunctionType]: 'Function Type',
+	[Kind.ConditionalType]: 'Conditional Type',
+	[Kind.Parenthesized]: 'Parenthesized',
+	[Kind.Infer]: 'Infer',
+	[Kind.Never]: 'Never',
 };
 
 export function kindToString(kind: Kind) {
