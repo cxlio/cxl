@@ -106,16 +106,12 @@ export default suite('dts', test => {
 		a.equal(fn.type, NumberType);
 	});
 
-	test(
-		'function - infered type',
-		(a: Test) => {
-			const [fn] = parse(`function fn() { return () => true; }`);
+	test('function - infered type', (a: Test) => {
+		const [fn] = parse(`function fn() { return () => true; }`);
 
-			console.log(fn.type);
-			a.assert(fn.type);
-		},
-		true
-	);
+		console.log(fn.type);
+		a.assert(fn.type);
+	});
 
 	test('type declaration - type parameters', a => {
 		const [type] = parse('export type Operator<T, T2 = T> = Map<T, T2>');
