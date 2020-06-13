@@ -1,7 +1,9 @@
-import { Output, Node, Kind, Flags } from '../dts';
+import { Node, Kind, Flags, Source } from '../dts';
+import type { DocGen } from './index.js';
 import { kindToString } from './localization';
+import { relative } from 'path';
 
-let pkg: any;
+let application: DocGen;
 const ENTITIES_REGEX = /[&<]/g;
 const ENTITIES_MAP = {
 	'&': '&amp;',
@@ -128,29 +130,34 @@ function Anchor(id: number) {
 	return `<a name="${anchor}"></a>`;
 }
 
-/*function getSourceLink(src: any) {
-	const url = typeof sourceUrl === 'string' ? sourceUrl : sourceUrl.url;
+function getSourceLink(src: Source) {
+	const url = application.repository;
 	if (url) {
-		if (url.startsWith('https://github.com'))
-			return `${url}/${src.fileName}#L${src.line}`;
+		if (url.startsWith('https://github.com')) {
+			const pos = src.sourceFile.getLineAndCharacterOfPosition(src.index);
+			return `${url}/${relative(
+				process.cwd(),
+				src.sourceFile.fileName
+			)}#L${pos.line}`;
+		}
 	}
 
 	return `#`;
 }
 
-function Source(sources?: JSONOutput.SourceReference[]) {
-	return sources && pkg && pkg.repository
-		? sources
-				.slice(0, 1)
-				.map(
-					s =>
-						`<a title="See Source" style="float:right;color:var(--cxl-onSurface87)" href="${getSourceLink(
-							s
-						)}"><cxl-icon icon="code"></cxl-icon></a>`
-				)
-				.join('')
+function getSource(source: Source) {
+	return `<a title="See Source" style="float:right;color:var(--cxl-onSurface87)" href="${getSourceLink(
+		source
+	)}"><cxl-icon icon="code"></cxl-icon></a>`;
+}
+
+function Source({ source }: Node) {
+	return source && application.repository
+		? Array.isArray(source)
+			? source.map(getSource).join('')
+			: getSource(source)
 		: '';
-}*/
+}
 
 function ParameterTable(rows: string[][]) {
 	return `<cxl-table>
@@ -205,10 +212,6 @@ function MemberBody(c: Node) {
 	if (returns) result += `<cxl-t subtitle2>Returns</cxl-t><p>${returns}</p>`;
 
 	return result;
-}
-
-function Source(_n: Node) {
-	return '';
 }
 
 function MemberCard(c: Node) {
@@ -322,7 +325,9 @@ function ModuleFooter(_p: Node) {
 	return `</cxl-application>`;
 }
 
-function Header(_out: Output, module: Node) {
+function Header(module: Node) {
+	const pkg = application.package;
+
 	return `<!DOCTYPE html>
 	<script src="../../dist/tester/require-browser.js"></script>
 	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');</script>
@@ -333,7 +338,7 @@ function Header(_out: Output, module: Node) {
 	}</cxl-appbar-title></a></cxl-appbar>`;
 }
 
-export function Page(newPkg: any, out: Output, p: Node) {
-	pkg = newPkg;
-	return Header(out, p) + ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p);
+export function Page(app: DocGen, p: Node) {
+	application = app;
+	return Header(p) + ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p);
 }

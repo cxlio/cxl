@@ -101,17 +101,63 @@ interface Parameter {
 	/// @default 'boolean'
 	type?: 'string' | 'boolean' | 'number';
 	help?: string;
-	handle?(value: string): void;
+	handle?(app: Application, value: string): void;
+}
+
+class ApplicationParameters {
+	readonly parameters: Parameter[] = [
+		{
+			name: 'help',
+			shortcut: 'h',
+			handle(app: Application) {
+				if (app.version) app.log(app.version);
+				process.exit(0);
+			},
+		},
+	];
+
+	constructor(private app: Application) {}
+
+	register(p: Parameter) {
+		this.parameters.push(p);
+	}
+
+	parse(args: string[]) {
+		const app = this.app;
+		const parameters = this.parameters;
+		const rest = parameters.find(a => a.rest);
+
+		for (let i = 2; i < args.length; i++) {
+			const arg = args[i];
+			const match = ArgRegex.exec(arg);
+			if (match) {
+				const param = parameters.find(
+					a => a.name === match[2] || a.shortcut === match[2]
+				);
+				if (!param) throw new Error(`Unknown argument ${arg}`);
+
+				if (param.handle) param.handle(app, args[++i]);
+				else if (!param.type || param.type === 'boolean')
+					(app as any)[param.name] = true;
+				else (app as any)[param.name] = args[++i];
+			} else if (rest) {
+				(app as any)[rest.name] = arg;
+			}
+		}
+	}
 }
 
 export abstract class Application {
 	abstract name: string;
 
 	color: keyof typeof colors = 'green';
-	parameters?: Parameter[];
 	version?: string;
+	parameters = new ApplicationParameters(this);
+	package?: any;
 
 	private coloredPrefix?: string;
+
+	protected setup() {}
 
 	log(msg: LogMessage, op?: OperationFunction<any>) {
 		const pre = this.coloredPrefix || '';
@@ -128,31 +174,17 @@ export abstract class Application {
 		process.exit(1);
 	}
 
-	private parseParameters(parameters: Parameter[]) {
-		const args = process.argv;
-		const rest = parameters.find(a => a.rest);
-
-		for (let i = 2; i < args.length; i++) {
-			const arg = args[i];
-			const match = ArgRegex.exec(arg);
-			if (match) {
-				const param = parameters.find(
-					a => a.name === match[2] || a.name === match[2]
-				);
-				if (!param) throw new Error(`Unknown argument ${arg}`);
-				if (!param.type || param.type === 'boolean')
-					(this as any)[param.name] = true;
-				else (this as any)[param.name] = args[++i];
-			} else if (rest) {
-				(this as any)[rest.name] = arg;
-			}
-		}
-	}
-
 	async start() {
-		if (this.parameters) this.parseParameters(this.parameters);
+		try {
+			this.package = JSON.parse(
+				await fs.readFile('package.json', 'utf8')
+			);
+			if (!this.version) this.version = this.package.version;
+		} catch (e) {}
 
 		this.coloredPrefix = colors[this.color](this.name);
+		this.setup();
+		this.parameters.parse(process.argv);
 
 		if (this.version) this.log(this.version);
 

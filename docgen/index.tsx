@@ -4,22 +4,23 @@ import { Output as DtsOutput, Node, build, Kind } from '../dts';
 
 type Theme = typeof import('./theme');
 
-let sourceUrl: string | { url: string };
-let pkg: any;
-
 export class DocGen extends Application {
 	name = '@cxl/docgen';
 	outputDir = './docs';
 	repository?: string;
 
-	generateContainer(json: DtsOutput, module: Node, theme: Theme) {
+	setup() {
+		this.parameters.register({ name: 'repository', type: 'string' });
+	}
+
+	generateContainer(module: Node, theme: Theme) {
 		const name = module.name.replace(/(\.tsx?)?$/, '.html');
 
 		return () =>
 			this.log(`Generating ${name} from ${module.name}`, () =>
 				promises.writeFile(
 					`${this.outputDir}/${name}`,
-					theme.Page(pkg, json, module)
+					theme.Page(this, module)
 				)
 			);
 	}
@@ -27,16 +28,14 @@ export class DocGen extends Application {
 	generateModules(json: DtsOutput, theme: Theme) {
 		return Promise.all(
 			json.modules.map(async m => {
-				const renderModule = this.generateContainer(json, m, theme);
+				const renderModule = this.generateContainer(m, theme);
 
 				if (!m.children) return;
 
 				await Promise.all(
 					m.children
 						.filter(child => child.kind === Kind.Class)
-						.map(child =>
-							this.generateContainer(json, child, theme)
-						)
+						.map(child => this.generateContainer(child, theme))
 						.map(render => render())
 				);
 
@@ -59,19 +58,20 @@ export class DocGen extends Application {
 	}
 
 	async generateDocs(json: DtsOutput, theme: Theme) {
-		sourceUrl = this.repository || pkg.repository;
-		this.log(`Using "${sourceUrl}" repository`);
-
 		await this.generateModules(json, theme);
 	}
 
 	async run() {
 		const outputDir = this.outputDir;
+		const pkgRepo = this.package?.repository;
 		await mkdirp(outputDir);
+		if (!this.repository && pkgRepo)
+			this.repository =
+				typeof pkgRepo === 'string' ? pkgRepo : pkgRepo.url;
+
 		const json = build();
 		const theme = await import('./theme');
-		pkg = JSON.parse(await promises.readFile('package.json', 'utf8'));
-		await this.generateJson(`${this.outputDir}/docs.json`, json);
+		// await this.generateJson(`${this.outputDir}/docs.json`, json);
 		await this.generateDocs(json, theme);
 	}
 }

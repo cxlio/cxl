@@ -1,5 +1,5 @@
+import * as ts from 'typescript';
 import { relative, resolve } from 'path';
-import { readFileSync } from 'fs';
 import {
 	ParsedCommandLine,
 	ParseConfigFileHost,
@@ -10,19 +10,12 @@ import {
 	createProgram,
 	sys,
 } from 'typescript';
-import * as ts from 'typescript';
 
 type SerializerMap = {
 	[K in SK]?: (node: any) => Node;
 };
 
 type Index = Record<number, Node>;
-
-export interface IndexRecord {
-	source: string;
-	line: number;
-	ch: number;
-}
 
 export enum Kind {
 	Unknown = SK.Unknown,
@@ -73,12 +66,16 @@ export enum Flags {
 	Optional = 8192,
 }
 
+export interface Source {
+	sourceFile: ts.SourceFile;
+	index: number;
+}
+
 export interface Node {
 	id?: number;
 	name: string;
 	kind: Kind;
-	line: number;
-	ch: number;
+	source?: Source | Source[];
 	flags: Flags;
 	docs?: Documentation[];
 	value?: string;
@@ -91,7 +88,6 @@ export interface Node {
 export interface Output {
 	index: Index;
 	config: ParsedCommandLine;
-	pkg: any;
 	modules: Node[];
 }
 
@@ -124,7 +120,7 @@ const parseConfigHost: ParseConfigFileHost = {
 };
 
 function createBaseType(name: string): Node {
-	return { name, kind: Kind.BaseType, line: -1, ch: -1, flags: 0 };
+	return { name, kind: Kind.BaseType, flags: 0 };
 }
 
 function parseTsConfig(tsconfig: string) {
@@ -158,10 +154,8 @@ function getKind(node: ts.Node): Kind {
 }
 
 function createNode(node: ts.Node, extra?: Partial<Node>): Node {
-	const source = node.getSourceFile();
-	const pos = source
-		? source.getLineAndCharacterOfPosition(node.pos)
-		: { line: 0, character: 0 };
+	const sourceFile = node.getSourceFile();
+	const source = sourceFile ? { sourceFile, index: node.pos } : undefined;
 	const kind = extra?.kind || getKind(node);
 
 	const name = ts.isLiteralTypeNode(node)
@@ -172,8 +166,7 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 		name,
 		kind,
 		flags: 0,
-		line: pos.line,
-		ch: pos.character,
+		source,
 		...extra,
 	};
 }
@@ -328,7 +321,7 @@ function serializeType(type: ts.Type): Node {
 	if (type.aliasSymbol)
 		return getSymbolReference(type.aliasSymbol, type.aliasTypeArguments);
 
-	if (type.flags & TF.Object) {
+	if (type.flags & TF.Object || type.flags & TF.TypeParameter) {
 		if (
 			(type as any).objectFlags & ts.ObjectFlags.Reference ||
 			type.flags & TF.TypeParameter
@@ -343,14 +336,14 @@ function serializeType(type: ts.Type): Node {
 	const name = typeChecker.typeToString(type);
 	const kind: Kind = Kind.Unknown;
 
-	return { name, kind, line: -1, ch: -1, flags: 0 };
+	return { name, kind, flags: 0 };
 }
 
 function serializeFunction(node: ts.FunctionLikeDeclaration) {
 	const result = serializeDeclaration(node);
 	const signature = typeChecker.getSignatureFromDeclaration(node);
 
-	result.kind = Kind.Function;
+	if (node.kind === SK.ArrowFunction) result.kind = Kind.Function;
 
 	if (node.typeParameters)
 		result.typeParameters = node.typeParameters.map(serialize);
@@ -411,8 +404,7 @@ function serializeClass(node: ts.ClassDeclaration) {
 			flags: 0,
 			kind: Kind.ClassType,
 			name: '',
-			line: result.line,
-			ch: result.ch,
+			source: result.source,
 		};
 
 		node.heritageClauses.forEach(heritage => {
@@ -552,7 +544,6 @@ function markExported(symbol: ts.Symbol) {
 }
 
 function parseSourceFile(sourceFile: ts.SourceFile) {
-	// currentSource = sourceFile;
 	const result = createNode(sourceFile);
 	const children: Node[] = (result.children = []);
 	const symbol = typeChecker.getSymbolAtLocation(sourceFile);
@@ -590,12 +581,10 @@ export function build(tsconfig = resolve('tsconfig.json')) {
 	const config = parseTsConfig(tsconfig);
 	setup(config.fileNames, config.options);
 
-	const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
 	const result: Output = {
-		index: currentIndex,
 		modules: [],
+		index: currentIndex,
 		config,
-		pkg,
 	};
 
 	config.fileNames.forEach(file => {
