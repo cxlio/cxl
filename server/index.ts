@@ -118,8 +118,8 @@ class ApplicationParameters {
 
 	constructor(private app: Application) {}
 
-	register(p: Parameter) {
-		this.parameters.push(p);
+	register(...p: Parameter[]) {
+		this.parameters.push(...p);
 	}
 
 	parse(args: string[]) {

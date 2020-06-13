@@ -170,10 +170,12 @@ class TestRunner extends Application {
 	amd = false;
 	node = false;
 
-	parameters = [
-		{ name: 'node', help: 'Run tests in node mode.' },
-		{ name: 'entryFile', rest: true },
-	];
+	setup() {
+		this.parameters.register(
+			{ name: 'node', help: 'Run tests in node mode.' },
+			{ name: 'entryFile', rest: true }
+		);
+	}
 
 	private handleConsole(msg: any) {
 		const type = msg.type();
