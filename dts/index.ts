@@ -86,6 +86,7 @@ export interface Node {
 	parameters?: Node[];
 	children?: Node[];
 	extendedBy?: Node[];
+	parent?: Node;
 }
 
 export interface Output {
@@ -283,7 +284,7 @@ function serializeDeclaration(node: ts.Declaration): Node {
 
 	if (anode.type) result.type = serialize(anode.type);
 
-	if (anode.members) result.children = anode.members.map(serialize);
+	if (anode.members) pushChildren(result, anode.members.map(serialize));
 
 	if (anode.initializer)
 		result.value = serializeExpression(anode.initializer);
@@ -428,8 +429,10 @@ function serializeDeclarationWithType(node: ts.Declaration): Node {
 	return result;
 }
 
-function pushChildren(parent: Node, ...children: Node[]) {
-	// children.forEach(n => (n.parent = parent));
+function pushChildren(parent: Node, children: Node[]) {
+	children.forEach(n =>
+		Object.defineProperty(n, 'parent', { value: parent, enumerable: false })
+	);
 	if (!parent.children) parent.children = children;
 	else parent.children.push(...children);
 }
@@ -445,7 +448,7 @@ function serializeClass(node: ts.ClassDeclaration) {
 		});
 
 		node.heritageClauses.forEach(heritage =>
-			pushChildren(type, ...heritage.types.map(serialize))
+			pushChildren(type, heritage.types.map(serialize))
 		);
 
 		type.children?.forEach(c => {
@@ -572,9 +575,9 @@ function setup(
 	currentIndex = {};
 }
 
-function visit(n: ts.Node, children: Node[]): void {
+function visit(n: ts.Node, parent: Node): void {
 	if (ts.isVariableStatement(n)) {
-		children.push(...n.declarationList.declarations.map(serialize));
+		pushChildren(parent, n.declarationList.declarations.map(serialize));
 	} else
 		switch (n.kind) {
 			case SK.TypeAliasDeclaration:
@@ -583,7 +586,7 @@ function visit(n: ts.Node, children: Node[]): void {
 			case SK.VariableDeclaration:
 			case SK.ClassDeclaration:
 			case SK.InterfaceDeclaration:
-				children.push(serialize(n));
+				pushChildren(parent, [serialize(n)]);
 		}
 }
 
@@ -600,13 +603,12 @@ function markExported(symbol: ts.Symbol) {
 
 function parseSourceFile(sourceFile: ts.SourceFile) {
 	const result = createNode(sourceFile);
-	const children: Node[] = (result.children = []);
 	const symbol = typeChecker.getSymbolAtLocation(sourceFile);
 
 	if (symbol && symbol.exports) symbol.exports.forEach(markExported);
 
 	result.name = relative(process.cwd(), sourceFile.fileName);
-	sourceFile.forEachChild(c => visit(c, children));
+	sourceFile.forEachChild(c => visit(c, result));
 
 	return result;
 }

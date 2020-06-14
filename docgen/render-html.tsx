@@ -297,10 +297,13 @@ function ModuleBody(json: Node) {
 	);
 }
 
-function getHref(node: Node) {
+function getHref(node: Node): string {
 	if (hasOwnPage(node)) return getPageName(node);
-	const id = node.id;
-	return id ? '#s' + id.toString() : '';
+
+	return (
+		(node.parent ? getHref(node.parent) : '') +
+		(node.id ? '#s' + node.id.toString() : '')
+	);
 }
 
 function declarationFilter(node: Node) {
