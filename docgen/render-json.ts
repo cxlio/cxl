@@ -17,6 +17,7 @@ function serialize(key: string, value: any) {
 	if (value && value.kind === Kind.Reference)
 		return {
 			id: value.type.id,
+			name: value.name,
 			kind: Kind.Reference,
 			typeParameters: value.typeParameters,
 		};

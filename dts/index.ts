@@ -161,7 +161,7 @@ function getNodeSource(node: ts.Node) {
 	return sourceFile ? { sourceFile, index: node.pos } : undefined;
 }
 
-function getNodeName(node: ts.Node) {
+function getNodeName(node: ts.Node): string {
 	if (ts.isLiteralTypeNode(node) || ts.isComputedPropertyName(node))
 		return node.getText();
 
@@ -169,7 +169,7 @@ function getNodeName(node: ts.Node) {
 
 	if (anode.name) return anode.name.escapedText || anode.name.getText();
 
-	return '';
+	return node.getText();
 }
 
 function createNode(node: ts.Node, extra?: Partial<Node>): Node {
@@ -363,7 +363,6 @@ function serializeType(type: ts.Type): Node {
 				typeChecker.getTypeArguments(type as ts.TypeReference)
 			);
 
-		console.log(type);
 		return serialize(
 			type.symbol.valueDeclaration || type.symbol.declarations[0]
 		);
@@ -429,23 +428,27 @@ function serializeDeclarationWithType(node: ts.Declaration): Node {
 	return result;
 }
 
+function pushChildren(parent: Node, ...children: Node[]) {
+	// children.forEach(n => (n.parent = parent));
+	if (!parent.children) parent.children = children;
+	else parent.children.push(...children);
+}
+
 function serializeClass(node: ts.ClassDeclaration) {
 	const result = serializeDeclaration(node);
 
 	if (node.heritageClauses?.length) {
-		const typeChildren: Node[] = [];
-		result.type = {
-			children: typeChildren,
+		const type: Node = (result.type = {
 			flags: 0,
 			kind: Kind.ClassType,
 			name: '',
-		};
-
-		node.heritageClauses.forEach(heritage => {
-			typeChildren.push(...heritage.types.map(serialize));
 		});
 
-		typeChildren.forEach(c => {
+		node.heritageClauses.forEach(heritage =>
+			pushChildren(type, ...heritage.types.map(serialize))
+		);
+
+		type.children?.forEach(c => {
 			if (c.kind === Kind.Reference && c.type)
 				(c.type.extendedBy || (c.type.extendedBy = [])).push({
 					name: result.name,
@@ -465,12 +468,11 @@ function getReferenceName(node: ts.TypeReferenceType) {
 
 	if (ts.isTypeReferenceNode(node))
 		return ts.isQualifiedName(node.typeName)
-			? `${serialize(node.typeName.left)}.${serialize(
+			? `${getNodeName(node.typeName.left)}.${getNodeName(
 					node.typeName.right
 			  )}`
 			: node.typeName.text;
 
-	console.log(node);
 	return '(Unknown)';
 }
 
@@ -566,14 +568,6 @@ function setup(
 	host: ts.CompilerHost = ts.createCompilerHost(options)
 ) {
 	program = createProgram(files, options, host);
-
-	/*const diagnostics = ts.getPreEmitDiagnostics(program);
-
-	if (diagnostics.length) {
-		console.log(ts.formatDiagnosticsWithColorAndContext(diagnostics, host));
-		throw new Error('Failed to create typescript program');
-	}*/
-
 	typeChecker = program.getTypeChecker();
 	currentIndex = {};
 }

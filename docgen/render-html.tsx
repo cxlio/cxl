@@ -242,7 +242,7 @@ function Link(node: Node): string {
 	if (!node.name) console.log(node);
 
 	const name = node.name ? escape(node.name) : '(Unknown)';
-	return `<a href="${getHref(node)}">${name}</a>`;
+	return node.id ? `<a href="${getHref(node)}">${name}</a>` : name;
 }
 
 function GroupIndex(kind: Kind, children: string[]) {
