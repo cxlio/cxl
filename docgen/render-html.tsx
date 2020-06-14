@@ -99,9 +99,8 @@ function Chip(label: string) {
 	return `<cxl-chip little primary>${label}</cxl-chip> `;
 }
 
-function NodeChips({ flags, kind }: Node) {
+function NodeChips({ flags }: Node) {
 	return (
-		(kind === Kind.Constant ? Chip('const') : '') +
 		(flags & Flags.Protected ? Chip('protected') : '') +
 		(flags & Flags.Abstract ? Chip('abstract') : '') +
 		(flags & Flags.Overload ? Chip('overload') : '')
@@ -238,10 +237,8 @@ function ExtendedBy(extendedBy?: Node[]) {
 }
 
 function Link(node: Node): string {
-	if (node.type && node.kind === Kind.Reference) return Link(node.type);
-	if (!node.name) console.log(node);
-
-	const name = node.name ? escape(node.name) : '(Unknown)';
+	let name = node.name ? escape(node.name) : '(Unknown)';
+	if (node.type && node.kind === Kind.Reference) node = node.type;
 	return node.id ? `<a href="${getHref(node)}">${name}</a>` : name;
 }
 
@@ -252,6 +249,14 @@ function GroupIndex(kind: Kind, children: string[]) {
 
 function sortNode(a: Node, b: Node) {
 	return a.name > b.name ? 1 : -1;
+}
+
+function ModuleTitle(node: Node) {
+	const chips =
+		(node.kind === Kind.Class ? Chip('class') : '') +
+		(node.kind === Kind.Interface ? Chip('interface') : '') +
+		(node.kind === Kind.Enum ? Chip('enum') : '');
+	return Signature(node) + ' ' + chips;
 }
 
 function ModuleBody(json: Node) {
@@ -276,7 +281,7 @@ function ModuleBody(json: Node) {
 			if (!hasOwnPage(c)) groupBody[groupKind].push(MemberCard(c));
 		});
 
-	const title = Signature(json);
+	const title = ModuleTitle(json);
 
 	return (
 		`<cxl-page><cxl-t h4>${title}</cxl-t>` +
@@ -346,6 +351,7 @@ function Header(module: Output) {
 	return `<!DOCTYPE html>
 	<script src="../../dist/tester/require-browser.js"></script>
 	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');</script>
+	<style>cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 };</style>
 	<cxl-application><title>${pkg.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(pkg, module)}
 	<a href="index.html" style="text-decoration:none"><cxl-appbar-title>${

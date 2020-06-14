@@ -284,7 +284,10 @@ function serializeDeclaration(node: ts.Declaration): Node {
 
 	if (anode.type) result.type = serialize(anode.type);
 
-	if (anode.members) pushChildren(result, anode.members.map(serialize));
+	if (anode.members) {
+		if (result.children) throw new Error('Node already initialized');
+		pushChildren(result, anode.members.map(serialize));
+	}
 
 	if (anode.initializer)
 		result.value = serializeExpression(anode.initializer);
@@ -335,8 +338,11 @@ function getSymbolReference(
 
 function isReferenceType(type: ts.Type) {
 	return (
-		(type as any).objectFlags & ts.ObjectFlags.Reference ||
-		type.flags & TF.TypeParameter
+		type.flags & TF.Enum ||
+		type.flags & TF.UniqueESSymbol ||
+		type.isClassOrInterface() ||
+		type.isTypeParameter() ||
+		(type as any).objectFlags & ts.ObjectFlags.Reference
 	);
 }
 
@@ -348,8 +354,10 @@ function serializeType(type: ts.Type): Node {
 	if (type.flags & TF.BigInt) return BigIntType;
 	if (type.flags & TF.Number || type.isNumberLiteral()) return NumberType;
 	if (type.flags & TF.String || type.isStringLiteral()) return StringType;
+	if (type.flags & TF.Undefined) return UndefinedType;
 	if (type.flags & TF.Never) return NeverType;
-	if (type.isLiteral()) {
+
+	if (type.flags & TF.Literal) {
 		const baseType = typeChecker.getBaseTypeOfLiteralType(type);
 		return serializeType(baseType);
 	}
@@ -357,21 +365,27 @@ function serializeType(type: ts.Type): Node {
 	if (type.aliasSymbol)
 		return getSymbolReference(type.aliasSymbol, type.aliasTypeArguments);
 
-	if (type.flags & TF.Object || type.flags & TF.TypeParameter) {
-		if (isReferenceType(type))
-			return getSymbolReference(
-				type.symbol,
-				typeChecker.getTypeArguments(type as ts.TypeReference)
-			);
+	if (isReferenceType(type))
+		return getSymbolReference(
+			type.symbol,
+			typeChecker.getTypeArguments(type as ts.TypeReference)
+		);
 
+	if (type.isUnionOrIntersection())
+		return {
+			name: '',
+			flags: 0,
+			kind: Kind.TypeUnion,
+			children: type.types.map(serializeType),
+		};
+
+	if (type.symbol || type.flags & TF.Literal)
 		return serialize(
 			type.symbol.valueDeclaration || type.symbol.declarations[0]
 		);
-	}
-	const name = typeChecker.typeToString(type);
-	const kind: Kind = Kind.Unknown;
 
-	return { name, kind, flags: 0 };
+	console.log(type);
+	throw new Error('Invalid Type');
 }
 
 function serializeFunction(node: ts.FunctionLikeDeclaration) {

@@ -161,6 +161,18 @@ export default suite('dts', test => {
 		a.equal(kls.kind, Kind.Interface);
 	});
 
+	test('interface - multiple properties', (a: Test) => {
+		const [kls] = parse(
+			`interface Test { m1: string; m2: number, m3: boolean }`
+		);
+
+		a.ok(kls);
+		a.equal(kls.name, 'Test');
+		a.equal(kls.kind, Kind.Interface);
+		a.assert(kls.children);
+		a.equal(kls.children.length, 3);
+	});
+
 	test('interface - multiple inheritance', (a: Test) => {
 		const [A, B, C] = parse(`
 			interface A { }
