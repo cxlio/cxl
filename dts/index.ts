@@ -38,12 +38,11 @@ export enum Kind {
 	Constructor = SK.Constructor,
 	Array = SK.ArrayType,
 	Function = SK.FunctionDeclaration,
-	FunctionOverload = 1004,
 	FunctionType = SK.FunctionType,
 	ConditionalType = SK.ConditionalType,
 	Parenthesized = SK.ParenthesizedType,
 	Infer = SK.InferType,
-	Never = SK.NeverKeyword,
+	IndexedType = SK.IndexedAccessType,
 }
 
 interface Documentation {
@@ -64,6 +63,8 @@ export enum Flags {
 	Default = 512,
 	Rest = 4096,
 	Optional = 8192,
+	Overload = 16384,
+	External = 32768,
 }
 
 export interface Source {
@@ -83,6 +84,7 @@ export interface Node {
 	typeParameters?: Node[];
 	parameters?: Node[];
 	children?: Node[];
+	extendedBy?: Node[];
 }
 
 export interface Output {
@@ -99,7 +101,8 @@ export const NumberType = createBaseType('number'),
 	VoidType = createBaseType('void'),
 	AnyType = createBaseType('any'),
 	UnknownType = createBaseType('unknown'),
-	BigIntType = createBaseType('BigInt');
+	BigIntType = createBaseType('BigInt'),
+	NeverType = createBaseType('never');
 
 const dtsNode = Symbol('dtsNode');
 
@@ -158,21 +161,35 @@ function getNodeSource(node: ts.Node) {
 	return sourceFile ? { sourceFile, index: node.pos } : undefined;
 }
 
+function getNodeName(node: ts.Node) {
+	if (ts.isLiteralTypeNode(node) || ts.isComputedPropertyName(node))
+		return node.getText();
+
+	const anode = node as any;
+
+	if (anode.name) return anode.name.escapedText || anode.name.getText();
+
+	return '';
+}
+
 function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 	const refNode = (node as any)[dtsNode];
 	const source = getNodeSource(node);
 	const kind = extra?.kind || getKind(node);
 
-	const name = ts.isLiteralTypeNode(node)
-		? node.getText()
-		: (node as any).name?.escapedText || '';
+	const name = getNodeName(node);
 	const result = {
 		name,
 		kind,
 		flags: 0,
-		source,
 		...extra,
 	};
+
+	if (source)
+		Object.defineProperty(result, 'source', {
+			value: source,
+			enumerable: false,
+		});
 
 	if (refNode) return Object.assign(refNode, result);
 
@@ -182,7 +199,15 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 function getNodeFromDeclaration(node: ts.Node): Node {
 	let result = (node as any)[dtsNode];
 
-	if (!result) (node as any)[dtsNode] = result = { id: currentId++ };
+	if (!result) {
+		const sourceFile = node.getSourceFile();
+		(node as any)[dtsNode] = result =
+			!sourceFile ||
+			program.isSourceFileFromExternalLibrary(sourceFile) ||
+			program.isSourceFileDefaultLibrary(sourceFile)
+				? createNode(node, { flags: Flags.External })
+				: { id: currentId++ };
+	}
 
 	return result;
 }
@@ -276,21 +301,12 @@ function serializeTypeParameter(node: ts.TypeParameterDeclaration) {
 	return result;
 }
 
-/*function serializeSymbol(symbol: ts.Symbol) {
-	const node = symbol.valueDeclaration;
-	return serialize(node);
-}*/
-
 function serializeParameter(symbol: ts.Symbol) {
 	const node = symbol.valueDeclaration as ts.ParameterDeclaration;
 
 	if (!node) throw new Error('Invalid Parameter');
 
 	const result = serializeDeclarationWithType(node);
-
-	/*const docs = ts.getJSDocParameterTags(node).map(serialize);
-	if (docs.length)
-		result.docs = result.docs ? result.docs.concat(docs) : docs;*/
 
 	if (node.dotDotDotToken) result.flags = result.flags | Flags.Rest;
 	if (node.questionToken) result.flags = result.flags | Flags.Optional;
@@ -324,6 +340,7 @@ function serializeType(type: ts.Type): Node {
 	if (type.flags & TF.BigInt) return BigIntType;
 	if (type.flags & TF.Number || type.isNumberLiteral()) return NumberType;
 	if (type.flags & TF.String || type.isStringLiteral()) return StringType;
+	if (type.flags & TF.Never) return NeverType;
 	if (type.isLiteral()) {
 		const baseType = typeChecker.getBaseTypeOfLiteralType(type);
 		return serializeType(baseType);
@@ -373,7 +390,7 @@ function serializeFunction(node: ts.FunctionLikeDeclaration) {
 		allSignatures?.length > 1 &&
 		!typeChecker.isImplementationOfOverload(node)
 	)
-		result.kind = Kind.FunctionOverload;
+		result.flags = result.flags | Flags.Overload;
 
 	if (signature && !result.type) {
 		const type = signature.getReturnType();
@@ -415,11 +432,20 @@ function serializeClass(node: ts.ClassDeclaration) {
 			flags: 0,
 			kind: Kind.ClassType,
 			name: '',
-			source: result.source,
 		};
 
 		node.heritageClauses.forEach(heritage => {
 			typeChildren.push(...heritage.types.map(serialize));
+		});
+
+		typeChildren.forEach(c => {
+			if (c.kind === Kind.Reference && c.type)
+				(c.type.extendedBy || (c.type.extendedBy = [])).push({
+					name: result.name,
+					type: result,
+					kind: Kind.Reference,
+					flags: 0,
+				});
 		});
 	}
 
@@ -444,7 +470,7 @@ function getReferenceName(node: ts.TypeReferenceType) {
 function serializeReference(node: ts.TypeReferenceType) {
 	const name = getReferenceName(node);
 	const type = typeChecker.getTypeFromTypeNode(node);
-	const symbol = type.symbol || type.aliasSymbol;
+	const symbol = type.aliasSymbol || type.symbol;
 
 	if (!symbol) return serializeType(type);
 
@@ -465,6 +491,18 @@ function serializeConditionalType(node: ts.ConditionalTypeNode) {
 			serialize(node.trueType),
 			serialize(node.falseType),
 		],
+	});
+}
+
+function serializeConstructor(node: ts.ConstructorDeclaration) {
+	const result = serializeFunction(node);
+	result.name = 'constructor';
+	return result;
+}
+
+function serializeIndexedAccessType(node: ts.IndexedAccessTypeNode) {
+	return createNode(node, {
+		children: [serialize(node.objectType), serialize(node.indexType)],
 	});
 }
 
@@ -489,6 +527,7 @@ const Serializer: SerializerMap = {
 		});
 	},
 
+	[SK.IndexedAccessType]: serializeIndexedAccessType,
 	[SK.UnionType](node: ts.UnionTypeNode) {
 		return createNode(node, {
 			kind: Kind.TypeUnion,
@@ -496,17 +535,18 @@ const Serializer: SerializerMap = {
 		});
 	},
 
+	[SK.Constructor]: serializeConstructor,
 	[SK.PropertySignature]: serializeDeclarationWithType,
 	[SK.Parameter]: serializeDeclarationWithType,
 	[SK.PropertyDeclaration]: serializeDeclarationWithType,
-	[SK.MethodDeclaration]: serializeDeclarationWithType,
+	[SK.MethodDeclaration]: serializeFunction,
 	[SK.ClassDeclaration]: serializeClass,
 	[SK.TypeAliasDeclaration]: serializeDeclaration,
 	[SK.TypeParameter]: serializeTypeParameter,
 	[SK.InterfaceDeclaration]: serializeClass,
 	[SK.VariableDeclaration]: serializeDeclarationWithType,
-	[SK.GetAccessor]: serializeDeclaration,
-	[SK.SetAccessor]: serializeDeclaration,
+	[SK.GetAccessor]: serializeFunction,
+	[SK.SetAccessor]: serializeFunction,
 };
 
 function setup(

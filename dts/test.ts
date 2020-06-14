@@ -206,6 +206,21 @@ export default suite('dts', test => {
 		a.assert(member.type);
 		a.equal(member.type.kind, Kind.Reference);
 		a.equal(member.type.type, T);
+		a.assert(kls.type);
+		a.assert(kls.type.children);
+		a.equal(kls.type.children.length, 1);
+		a.equal(kls.type.children[0].name, 'Set');
+	});
+
+	test('class constructor', (a: Test) => {
+		const [kls] = parse(`class Kls { constructor(public t: string) { }`);
+		a.assert(kls.children);
+		a.equal(kls.children.length, 1);
+		const ctor = kls.children[0];
+		a.equal(ctor.name, 'constructor');
+		a.assert(ctor.parameters);
+		a.equal(ctor.parameters.length, 1);
+		a.equal(ctor.kind, Kind.Constructor);
 	});
 
 	test('class implements interface', (a: Test) => {
@@ -276,21 +291,57 @@ export default suite('dts', test => {
 
 	test('class members', (a: Test) => {
 		const [A] = parse(`
-			class A { m1 = 'str'; m2() { } get m3() {} set m3(val) {} }
+			class A { m1 = 'str'; m2() { } get m3() {} set m3(val) {}, m4 = new Set<any>(); }
 		`);
 
 		a.ok(A);
 		a.equal(A.name, 'A');
 		a.equal(A.kind, Kind.Class);
 		a.assert(A.children);
-		a.equal(A.children.length, 4);
+		a.equal(A.children.length, 5);
 
-		const [m1, m2, m3, m4] = A.children;
+		const [m1, m2, m3, m4, m5] = A.children;
 		a.ok(m1.flags & Flags.Public);
 		a.ok(m2.flags & Flags.Public);
 		a.ok(m3.flags & Flags.Public);
 		a.ok(m4.flags & Flags.Public);
+		a.assert(m5.type);
+		a.equal(m5.type.name, 'Set');
+		a.assert(m5.type.typeParameters);
+		a.equal(m5.type.typeParameters.length, 1);
+		a.equal(m5.type.typeParameters[0], AnyType);
+		a.assert(m5.type.type);
+		a.equal(m5.type.type.name, 'Set');
+		a.equal(m5.type.type.flags, Flags.External);
 	});
+
+	test('class method', (a: Test) => {
+		const [Alias, A] = parse(`
+			type Alias = Set<any>;
+			class A { m1(): Alias { return new Set<any>(); } }
+		`);
+
+		a.assert(A.children);
+		const m1 = A.children[0];
+		a.assert(m1.type);
+		a.equal(m1.type.kind, Kind.Reference);
+		a.equal(m1.type.type, Alias);
+	});
+
+	test(
+		'class - computed property name',
+		(a: Test) => {
+			const [name, A] = parse(`
+			const name = 'm1';
+			class A { [name]() { return true; } }
+		`);
+
+			a.equal(name.value, "'m1'");
+			a.assert(A.children);
+			a.equal(A.children[0].name, '[name]');
+		},
+		true
+	);
 
 	test('class methods', (a: Test) => {
 		const [A] = parse(`

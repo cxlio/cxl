@@ -1,11 +1,12 @@
 import { Application, mkdirp } from '../server';
 import { promises } from 'fs';
 import { Node, build } from '../dts';
+import { render as renderJson } from './render-json';
 
 export interface File {
 	name: string;
 	content: string;
-	node: Node;
+	node?: Node;
 }
 
 export class DocGen extends Application {
@@ -19,8 +20,9 @@ export class DocGen extends Application {
 
 	writeFile(file: File) {
 		const name = file.name;
-		return this.log(`Writing ${name} from ${file.node.name}`, () =>
-			promises.writeFile(`${this.outputDir}/${name}`, file.content)
+		return this.log(
+			`Writing ${name}${file.node ? ` from ${file.node.name}` : ''}`,
+			() => promises.writeFile(`${this.outputDir}/${name}`, file.content)
 		);
 	}
 
@@ -34,6 +36,7 @@ export class DocGen extends Application {
 
 		const json = build();
 		const theme = await import('./render-html');
+		renderJson(this, json).map(f => this.writeFile(f));
 		await Promise.all(theme.render(this, json).map(f => this.writeFile(f)));
 	}
 }

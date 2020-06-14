@@ -4,6 +4,7 @@ import { kindToString } from './localization';
 import { relative } from 'path';
 
 let application: DocGen;
+let header: string;
 const ENTITIES_REGEX = /[&<]/g;
 const ENTITIES_MAP = {
 	'&': '&amp;',
@@ -22,7 +23,7 @@ function TypeArguments(types?: Node[]): string {
 				types
 					.map(
 						t =>
-							Link(t) +
+							Type(t) +
 							(t.kind !== Kind.Reference && t.type
 								? ` extends ${Type(t.type)}`
 								: '')
@@ -61,10 +62,11 @@ function Type(type?: Node): string {
 	if (!type) return '';
 
 	if (type.kind === Kind.ClassType) return ClassType(type);
-	if (type.kind === Kind.Never) return 'never';
 	if (type.kind === Kind.Infer) return `infer ${Type(type.type)}`;
 	if (type.kind === Kind.Parenthesized) return `(${Type(type.type)})`;
 	if (type.kind === Kind.ConditionalType) return ConditionalType(type);
+	if (type.kind === Kind.IndexedType && type.children)
+		return `${Type(type.children[0])}[${Type(type.children[1])}`;
 
 	if (type.kind === Kind.TypeUnion)
 		return type.children?.map(Type).join(' | ') || '';
@@ -226,23 +228,17 @@ function MemberCard(c: Node) {
 		</cxl-c></cxl-card>`;
 }
 
-/*function ExtendedBy(extendedBy?: Node[]) {
+function ExtendedBy(extendedBy?: Node[]) {
 	return extendedBy
 		? `<cxl-t subtitle2>Extended By</cxl-t><ul>${extendedBy
-				.map(ref =>
-					ref.name
-						? `<li>${
-								ref.id ? Link(ref.id, ref.name) : ref.name
-						  }</li>`
-						: ''
-				)
+				.map(ref => (ref.name ? `<li>${Link(ref)}</li>` : ''))
 				.join('')}</ul>`
 		: '';
-}*/
+}
 
 function Link(node: Node): string {
 	if (node.type && node.kind === Kind.Reference) return Link(node.type);
-	if (!node.source) return '';
+	if (!node.name) console.log(node);
 
 	const name = node.name ? escape(node.name) : '(Unknown)';
 	return `<a href="${getHref(node)}">${name}</a>`;
@@ -265,10 +261,9 @@ function ModuleBody(json: Node) {
 
 	if (children)
 		children.sort(sortNode).forEach(c => {
-			if (json.kind === Kind.Module && !(c.flags & Flags.Export)) return;
+			if (json.kind === Kind.Module && !declarationFilter(c)) return;
 
-			const groupKind =
-				c.kind === Kind.FunctionOverload ? Kind.Function : c.kind;
+			const groupKind = c.kind;
 
 			if (!index[groupKind]) {
 				groupBody[groupKind] = [];
@@ -276,7 +271,7 @@ function ModuleBody(json: Node) {
 				groups.push(groupKind);
 			}
 
-			if (c.kind !== Kind.FunctionOverload)
+			if (!(c.flags & Flags.Overload))
 				index[groupKind].push(`<cxl-c sm4 lg3>${Link(c)}</cxl-c>`);
 			if (c.kind !== Kind.Class) groupBody[groupKind].push(MemberCard(c));
 		});
@@ -285,6 +280,7 @@ function ModuleBody(json: Node) {
 
 	return (
 		`<cxl-page><cxl-t h4>${title}</cxl-t>` +
+		ExtendedBy(json.extendedBy) +
 		Documentation(json) +
 		groups.map(kind => GroupIndex(kind, index[kind])).join('<br/>') +
 		'<br/>' +
@@ -303,26 +299,33 @@ function ModuleBody(json: Node) {
 
 function getHref(node: Node) {
 	if (hasOwnPage(node)) return getPageName(node);
-
-	const id = node.id; // href = node.source.sourceFile;
-	//	if (!href) throw new Error(`Link to ${id} not found`);
+	const id = node.id;
 	return id ? '#s' + id.toString() : '';
+}
+
+function declarationFilter(node: Node) {
+	return node.flags & Flags.Export;
 }
 
 function ModuleNavbar(node: Node) {
 	return (
 		`<cxl-item href="${getHref(node)}"><i>Index</i></cxl-item>` +
 		node.children
-			?.map(c => `<cxl-item href="${getHref(c)}">${c.name}</cxl-item>`)
+			?.sort(sortNode)
+			.map(c =>
+				declarationFilter(c) && !(c.flags & Flags.Overload)
+					? `<cxl-item href="${getHref(c)}">${c.name}</cxl-item>`
+					: ''
+			)
 			.join('')
 	);
 }
 
-function Navbar(pkg: any, m: Node) {
+function Navbar(pkg: any, out: Output) {
 	return `<cxl-navbar><cxl-c pad16><cxl-t h6>${pkg.name} <small>${
 		pkg?.version || ''
 	}</small></cxl-t></cxl-c>
-		<cxl-hr></cxl-hr>${ModuleNavbar(m)}
+		<cxl-hr></cxl-hr>${out.modules.sort(sortNode).map(ModuleNavbar).join('')}
 		</cxl-navbar>`;
 }
 
@@ -334,7 +337,7 @@ function ModuleFooter(_p: Node) {
 	return `</cxl-application>`;
 }
 
-function Header(module: Node) {
+function Header(module: Output) {
 	const pkg = application.package;
 
 	return `<!DOCTYPE html>
@@ -357,7 +360,7 @@ function Page(p: Node) {
 	return {
 		name: getPageName(p),
 		node: p,
-		content: Header(p) + ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p),
+		content: header + ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p),
 	};
 }
 
@@ -376,5 +379,6 @@ function Module(module: Node) {
 
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
+	header = Header(output);
 	return output.modules.flatMap(Module);
 }

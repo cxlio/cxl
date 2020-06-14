@@ -7,5 +7,10 @@
 		"typeRoots": ["../node_modules/@types"]
 	},
 	"references": [{ "path": "../server" }, { "path": "../dts" }],
-	"files": ["index.tsx", "render-html.tsx", "localization.tsx"]
+	"files": [
+		"index.tsx",
+		"render-html.tsx",
+		"render-json.ts",
+		"localization.tsx"
+	]
 }
