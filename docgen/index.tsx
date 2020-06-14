@@ -15,7 +15,10 @@ export class DocGen extends Application {
 	repository?: string;
 
 	setup() {
-		this.parameters.register({ name: 'repository', type: 'string' });
+		this.parameters.register(
+			{ name: 'repository', type: 'string' },
+			{ name: 'outputDir', shortcut: 'o', type: 'string' }
+		);
 	}
 
 	writeFile(file: File) {

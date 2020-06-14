@@ -2,6 +2,7 @@ import { Observable, from, map } from '../rx';
 import { colors } from './colors.js';
 import { promises as fs } from 'fs';
 require('source-map-support').install();
+import { resolve } from 'path';
 
 function hrtime(): bigint {
 	return process.hrtime.bigint();
@@ -90,8 +91,10 @@ export async function filesNeedSync(file1: string, file2: string) {
 
 const ArgRegex = /(--?)([\w\d-]+)/g;
 
-export function mkdirp(dir: string) {
-	return fs.mkdir(dir).catch(() => {});
+export function mkdirp(dir: string): Promise<any> {
+	return fs
+		.stat(dir)
+		.catch(() => mkdirp(resolve(dir, '..')).then(() => fs.mkdir(dir)));
 }
 
 interface Parameter {

@@ -512,6 +512,7 @@ const Serializer: SerializerMap = {
 	[SK.NumberKeyword]: () => NumberType,
 	[SK.BooleanKeyword]: () => BooleanType,
 	[SK.VoidKeyword]: () => VoidType,
+	[SK.NeverKeyword]: () => NeverType,
 	[SK.FunctionType]: serializeFunction,
 
 	[SK.ArrayType]: serializeArray,

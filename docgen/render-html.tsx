@@ -103,7 +103,8 @@ function NodeChips({ flags, kind }: Node) {
 	return (
 		(kind === Kind.Constant ? Chip('const') : '') +
 		(flags & Flags.Protected ? Chip('protected') : '') +
-		(flags & Flags.Abstract ? Chip('abstract') : '')
+		(flags & Flags.Abstract ? Chip('abstract') : '') +
+		(flags & Flags.Overload ? Chip('overload') : '')
 	);
 }
 
