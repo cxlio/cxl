@@ -43,6 +43,7 @@ export enum Kind {
 	Parenthesized = SK.ParenthesizedType,
 	Infer = SK.InferType,
 	IndexedType = SK.IndexedAccessType,
+	Enum = SK.EnumDeclaration,
 }
 
 interface Documentation {
@@ -148,10 +149,9 @@ function getKind(node: ts.Node): Kind {
 			return node.parent.flags === ts.NodeFlags.Const
 				? Kind.Constant
 				: Kind.Variable;
-		case SK.StringKeyword:
-		case SK.NumberKeyword:
-		case SK.BooleanKeyword:
-			return Kind.BaseType;
+		case SK.PropertySignature:
+		case SK.EnumMember:
+			return Kind.Property;
 	}
 	return (node.kind as any) as Kind;
 }
@@ -212,7 +212,7 @@ function getNodeFromDeclaration(node: ts.Node): Node {
 	return result;
 }
 
-export function isClassMember(node: Node) {
+function isClassMember(node: Node) {
 	return (
 		node.kind === Kind.Property ||
 		node.kind === Kind.Method ||
@@ -332,6 +332,13 @@ function getSymbolReference(
 	};
 }
 
+function isReferenceType(type: ts.Type) {
+	return (
+		(type as any).objectFlags & ts.ObjectFlags.Reference ||
+		type.flags & TF.TypeParameter
+	);
+}
+
 function serializeType(type: ts.Type): Node {
 	if (type.flags & TF.Any) return AnyType;
 	if (type.flags & TF.Unknown) return UnknownType;
@@ -350,16 +357,16 @@ function serializeType(type: ts.Type): Node {
 		return getSymbolReference(type.aliasSymbol, type.aliasTypeArguments);
 
 	if (type.flags & TF.Object || type.flags & TF.TypeParameter) {
-		if (
-			(type as any).objectFlags & ts.ObjectFlags.Reference ||
-			type.flags & TF.TypeParameter
-		)
+		if (isReferenceType(type))
 			return getSymbolReference(
 				type.symbol,
 				typeChecker.getTypeArguments(type as ts.TypeReference)
 			);
 
-		return serialize(type.symbol.valueDeclaration);
+		console.log(type);
+		return serialize(
+			type.symbol.valueDeclaration || type.symbol.declarations[0]
+		);
 	}
 	const name = typeChecker.typeToString(type);
 	const kind: Kind = Kind.Unknown;
@@ -535,7 +542,10 @@ const Serializer: SerializerMap = {
 			children: node.types.map(serialize),
 		});
 	},
+	[SK.EnumDeclaration]: serializeClass,
+	[SK.EnumMember]: serializeDeclarationWithType,
 
+	[SK.PropertySignature]: serializeDeclarationWithType,
 	[SK.Constructor]: serializeConstructor,
 	[SK.PropertySignature]: serializeDeclarationWithType,
 	[SK.Parameter]: serializeDeclarationWithType,
@@ -575,6 +585,7 @@ function visit(n: ts.Node, children: Node[]): void {
 		switch (n.kind) {
 			case SK.TypeAliasDeclaration:
 			case SK.FunctionDeclaration:
+			case SK.EnumDeclaration:
 			case SK.VariableDeclaration:
 			case SK.ClassDeclaration:
 			case SK.InterfaceDeclaration:
@@ -606,6 +617,12 @@ function parseSourceFile(sourceFile: ts.SourceFile) {
 	return result;
 }
 
+/**
+ * Generate AST from a source string
+ *
+ * @param source Source to parse
+ * @param options Typescript compiler options
+ */
 export function parse(
 	source: string,
 	options: ts.CompilerOptions = { lib: ['es6.d.ts'] }
@@ -627,6 +644,11 @@ export function parse(
 	return sourceNode.children || [];
 }
 
+/**
+ * Generate AST from a tsconfig file
+ *
+ * @param tsconfig Path to tsconfig.json file
+ */
 export function build(tsconfig = resolve('tsconfig.json')) {
 	const config = parseTsConfig(tsconfig);
 	setup(config.fileNames, config.options);

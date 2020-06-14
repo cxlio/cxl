@@ -328,20 +328,16 @@ export default suite('dts', test => {
 		a.equal(m1.type.type, Alias);
 	});
 
-	test(
-		'class - computed property name',
-		(a: Test) => {
-			const [name, A] = parse(`
+	test('class - computed property name', (a: Test) => {
+		const [name, A] = parse(`
 			const name = 'm1';
 			class A { [name]() { return true; } }
 		`);
 
-			a.equal(name.value, "'m1'");
-			a.assert(A.children);
-			a.equal(A.children[0].name, '[name]');
-		},
-		true
-	);
+		a.equal(name.value, "'m1'");
+		a.assert(A.children);
+		a.equal(A.children[0].name, '[name]');
+	});
 
 	test('class methods', (a: Test) => {
 		const [A] = parse(`
@@ -512,5 +508,16 @@ function map<T>() {	return operator<T>(); }
 		a.assert(map.type.typeParameters);
 		a.assert(map.typeParameters);
 		a.equal(map.type.typeParameters[0].type, map.typeParameters[0]);
+	});
+
+	test('Enum', (a: Test) => {
+		const [E] = parse('enum E { One, Two=3 }');
+		a.assert(E.children);
+		a.equal(E.children.length, 2);
+		a.equal(E.children[0].name, 'One');
+		a.equal(E.children[0].kind, Kind.Property);
+		a.equal(E.children[1].name, 'Two');
+		a.equal(E.children[1].value, '3');
+		a.equal(E.children[1].kind, Kind.Property);
 	});
 });

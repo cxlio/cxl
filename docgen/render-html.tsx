@@ -262,8 +262,7 @@ function ModuleBody(json: Node) {
 
 	if (children)
 		children.sort(sortNode).forEach(c => {
-			if (json.kind === Kind.Module && !declarationFilter(c)) return;
-
+			if (json.kind === Kind.Module && !declarationFilter(c)) return '';
 			const groupKind = c.kind;
 
 			if (!index[groupKind]) {
@@ -274,7 +273,7 @@ function ModuleBody(json: Node) {
 
 			if (!(c.flags & Flags.Overload))
 				index[groupKind].push(`<cxl-c sm4 lg3>${Link(c)}</cxl-c>`);
-			if (c.kind !== Kind.Class) groupBody[groupKind].push(MemberCard(c));
+			if (!hasOwnPage(c)) groupBody[groupKind].push(MemberCard(c));
 		});
 
 	const title = Signature(json);
@@ -369,7 +368,8 @@ function hasOwnPage(node: Node) {
 	return (
 		node.kind === Kind.Class ||
 		node.kind === Kind.Interface ||
-		node.kind === Kind.Module
+		node.kind === Kind.Module ||
+		node.kind === Kind.Enum
 	);
 }
 

@@ -26,6 +26,7 @@ const KindMap: Record<Kind, string> = {
 	[Kind.Parenthesized]: 'Parenthesized',
 	[Kind.Infer]: 'Infer',
 	[Kind.IndexedType]: 'Indexed Type',
+	[Kind.Enum]: 'Enum',
 };
 
 export function kindToString(kind: Kind) {

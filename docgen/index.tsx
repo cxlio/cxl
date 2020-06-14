@@ -1,5 +1,5 @@
 import { Application, mkdirp } from '../server';
-import { promises } from 'fs';
+import { promises as fs } from 'fs';
 import { Node, build } from '../dts';
 import { render as renderJson } from './render-json';
 
@@ -25,7 +25,7 @@ export class DocGen extends Application {
 		const name = file.name;
 		return this.log(
 			`Writing ${name}${file.node ? ` from ${file.node.name}` : ''}`,
-			() => promises.writeFile(`${this.outputDir}/${name}`, file.content)
+			() => fs.writeFile(`${this.outputDir}/${name}`, file.content)
 		);
 	}
 
