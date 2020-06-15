@@ -58,23 +58,53 @@ function ClassType(node: Node) {
 	);
 }
 
+function FunctionType(node: Node) {
+	const { parameters, typeParameters, type } = node;
+	return `${SignatureName(node)}${TypeArguments(
+		typeParameters
+	)}${SignatureParameters(parameters)} => ${Type(type)}`;
+}
+
+function Property(node: Node) {
+	return `${node.name}: ${Type(node.type)}`;
+}
+
+function ObjectType(node: Node) {
+	return `{ ${node.children?.map(Property).join(', ') || ''} }`;
+}
+
 function Type(type?: Node): string {
 	if (!type) return '';
 
-	if (type.kind === Kind.ClassType) return ClassType(type);
-	if (type.kind === Kind.Infer) return `infer ${Type(type.type)}`;
-	if (type.kind === Kind.Parenthesized) return `(${Type(type.type)})`;
-	if (type.kind === Kind.ConditionalType) return ConditionalType(type);
-	if (type.kind === Kind.IndexedType && type.children)
-		return `${Type(type.children[0])}[${Type(type.children[1])}`;
+	switch (type.kind) {
+		case Kind.ClassType:
+			return ClassType(type);
+		case Kind.Infer:
+			return `infer ${Type(type.type)}`;
+		case Kind.Parenthesized:
+			return `(${Type(type.type)})`;
+		case Kind.ConditionalType:
+			return ConditionalType(type);
+		case Kind.IndexedType:
+			if (!type.children) throw new Error('Invalid node');
+			return `${Type(type.children[0])}[${Type(type.children[1])}`;
+		case Kind.TypeUnion:
+			return type.children?.map(Type).join(' | ') || '';
+		case Kind.Array:
+			return `${Type(type.type)}[]`;
+		case Kind.Reference:
+			return `${Link(type)}${TypeArguments(type.typeParameters)}`;
+		case Kind.FunctionType:
+		case Kind.Function:
+		case Kind.Method:
+			return FunctionType(type);
+		case Kind.BaseType:
+			return type.name;
+		case Kind.ObjectType:
+			return ObjectType(type);
+	}
 
-	if (type.kind === Kind.TypeUnion)
-		return type.children?.map(Type).join(' | ') || '';
-
-	if (type.kind === Kind.Array) return `${Type(type.type)}[]`;
-	if (type.kind === Kind.Reference)
-		return `${Link(type)}${TypeArguments(type.typeParameters)}`;
-
+	console.log(type);
 	return Signature(type);
 }
 
@@ -92,7 +122,7 @@ function Parameter(p: Node) {
 function SignatureParameters(parameters?: Node[]) {
 	if (!parameters) return '';
 
-	return `<b>(</b>${parameters.map(Parameter).join(', ')}<b>)</b>`;
+	return `(${parameters.map(Parameter).join(', ')})`;
 }
 
 function Chip(label: string) {
@@ -204,7 +234,9 @@ function InheritedFrom(symbol?: Node) {
 }
 
 function MemberBody(c: Node) {
-	let result = `<cxl-t subtitle>${Signature(c)}</cxl-t>${InheritedFrom()}`;
+	let result = `<cxl-t style="font-weight: 500" code subtitle>${Signature(
+		c
+	)}</cxl-t>${InheritedFrom()}`;
 	let returns = '';
 
 	if (c.docs) result += Documentation(c);

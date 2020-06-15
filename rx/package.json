@@ -1,5 +1,6 @@
 {
 	"name": "@cxl/rx",
+	"description": "Lightweight reactiveX implementation",
 	"version": "0.1.0",
 	"files": [
 		"index.js",
@@ -8,7 +9,8 @@
 	"scripts": {
 		"build": "node build",
 		"test": "node build && cd ../dist/rx && node ../tester",
-		"build-docs": "node ../dist/docgen -o ../docs/rx --repository \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/rx\""
+		"docs": "rm -rf ../docs/rx && node ../dist/docgen -o ../docs/rx --repository \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/rx\""
 	},
+	"homepage": "https://coaxialhost.com/rx",
 	"repository": "https://github.com/cxlio/cxl/tree/$BRANCH/rx"
 }

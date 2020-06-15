@@ -15,6 +15,7 @@
 	},
 	"scripts": {
 		"lint": "eslint --cache --ignore-path .gitignore **/*.ts **/*.tsx",
-		"build-all": "tsc -b tsconfig.all.json"
+		"build-all": "tsc -b tsconfig.all.json",
+		"build-readme": "node scripts/build-readme"
 	}
 }

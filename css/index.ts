@@ -307,7 +307,7 @@ export const theme: Theme = {
 			letterSpacing: '1.25px',
 			textTransform: 'uppercase',
 		},
-		code: { fontFamily: 'var(--fontMonospace)' },
+		code: { fontFamily: 'var(--cxl-fontMonospace)' },
 	},
 	colors: {
 		elevation: rgba(0, 0, 0, 0.26),

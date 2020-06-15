@@ -532,4 +532,41 @@ function map<T>() {	return operator<T>(); }
 		a.equal(E.children[1].value, '3');
 		a.equal(E.children[1].kind, Kind.Property);
 	});
+
+	test('object literal type', (a: Test) => {
+		const [fn] = parse(`function fn(p: { children: Set<any> }) { }`);
+		a.assert(fn.parameters);
+		const [p] = fn.parameters;
+		a.assert(p.type);
+		a.equal(p.type.kind, Kind.ObjectType);
+		a.assert(p.type.children);
+		const children = p.type.children[0];
+		a.equal(children.name, 'children');
+		a.assert(children.type);
+		a.equal(children.type.name, 'Set');
+	});
+
+	test(
+		'object literal infered type',
+		(a: Test) => {
+			const [fn] = parse(
+				`function fn(four: string) { return { one: 1, two: new Set(), three() {return true}, four }; }`
+			);
+			a.assert(fn.type);
+			a.equal(fn.type.kind, Kind.ObjectType);
+			a.assert(fn.type.children);
+			const [one, two, three, four] = fn.type.children;
+			a.equal(one.name, 'one');
+			a.equal(two.name, 'two');
+			a.equal(one.type, NumberType);
+			a.assert(two.type);
+			a.equal(two.type.name, 'Set');
+			a.assert(three.type);
+			a.equal(three.name, 'three');
+			a.equal(three.type, BooleanType);
+			a.equal(four.name, 'four');
+			a.equal(four.type, StringType);
+		},
+		true
+	);
 });

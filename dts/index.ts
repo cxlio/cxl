@@ -44,6 +44,8 @@ export enum Kind {
 	Infer = SK.InferType,
 	IndexedType = SK.IndexedAccessType,
 	Enum = SK.EnumDeclaration,
+	ObjectType = 1004,
+	Literal = SK.LiteralType,
 }
 
 interface Documentation {
@@ -150,6 +152,9 @@ function getKind(node: ts.Node): Kind {
 			return node.parent.flags === ts.NodeFlags.Const
 				? Kind.Constant
 				: Kind.Variable;
+		case SK.TypeLiteral:
+		case SK.ObjectLiteralExpression:
+			return Kind.ObjectType;
 		case SK.PropertySignature:
 		case SK.EnumMember:
 			return Kind.Property;
@@ -379,7 +384,7 @@ function serializeType(type: ts.Type): Node {
 			children: type.types.map(serializeType),
 		};
 
-	if (type.symbol || type.flags & TF.Literal)
+	if (type.symbol)
 		return serialize(
 			type.symbol.valueDeclaration || type.symbol.declarations[0]
 		);
@@ -449,6 +454,17 @@ function pushChildren(parent: Node, children: Node[]) {
 	);
 	if (!parent.children) parent.children = children;
 	else parent.children.push(...children);
+}
+
+function serializeObject(
+	node: ts.TypeLiteralNode | ts.ObjectLiteralExpression
+) {
+	const result = createNode(node);
+	const children = ts.isObjectLiteralExpression(node)
+		? node.properties.map(serialize)
+		: node.members.map(serialize);
+	pushChildren(result, children);
+	return result;
 }
 
 function serializeClass(node: ts.ClassDeclaration) {
@@ -577,6 +593,11 @@ const Serializer: SerializerMap = {
 	[SK.VariableDeclaration]: serializeDeclarationWithType,
 	[SK.GetAccessor]: serializeFunction,
 	[SK.SetAccessor]: serializeFunction,
+
+	[SK.TypeLiteral]: serializeObject,
+	[SK.ObjectLiteralExpression]: serializeObject,
+	[SK.PropertyAssignment]: serializeDeclarationWithType,
+	[SK.ShorthandPropertyAssignment]: serializeDeclarationWithType,
 };
 
 function setup(

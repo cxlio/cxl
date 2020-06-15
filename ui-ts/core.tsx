@@ -825,6 +825,7 @@ export class Spinner extends Component {
 				$button: { font: 'button' },
 				$subtitle: { font: 'subtitle', marginBottom: 0 },
 				$subtitle2: { font: 'subtitle2', opacity: 0.73 },
+				$code: { font: 'code' },
 			}}
 		</Style>
 		<slot />
@@ -850,6 +851,8 @@ export class T extends Component {
 	subtitle = false;
 	@StyleAttribute()
 	subtitle2 = false;
+	@StyleAttribute()
+	code = false;
 }
 
 @Augment<Toggle>(
