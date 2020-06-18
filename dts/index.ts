@@ -47,6 +47,7 @@ export enum Kind {
 	ObjectType = 1004,
 	Literal = SK.LiteralType,
 	IndexSignature = SK.IndexSignature,
+	Export = SK.ExportSpecifier,
 }
 
 interface Documentation {
@@ -339,6 +340,15 @@ function getSymbolReference(
 	typeArgs?: readonly ts.Type[]
 ): Node {
 	const node = symbol.valueDeclaration || symbol.declarations[0];
+
+	if (ts.isExportSpecifier(node)) {
+		const local = typeChecker.getExportSpecifierLocalTargetSymbol(node);
+		if (!local) throw new Error('Invalid Symbol');
+		const result = getSymbolReference(local);
+		result.name = symbol.getName();
+		return result;
+	}
+
 	return {
 		name: symbol.getName(),
 		flags: 0,
@@ -647,6 +657,7 @@ function setup(
 function visit(n: ts.Node, parent: Node): void {
 	if (ts.isVariableStatement(n)) {
 		pushChildren(parent, n.declarationList.declarations.map(serialize));
+		//	} else if (ts.isExportDeclaration(n)) {
 	} else
 		switch (n.kind) {
 			case SK.TypeAliasDeclaration:
@@ -659,24 +670,65 @@ function visit(n: ts.Node, parent: Node): void {
 		}
 }
 
-function markExported(symbol: ts.Symbol) {
-	symbol.declarations.forEach(d => {
-		if (ts.isExportSpecifier(d) && !(d as any).$$exported) {
-			const localSymbol = typeChecker.getExportSpecifierLocalTargetSymbol(
-				d
-			);
-			if (localSymbol) markExported(localSymbol);
-		} else (d as any).$$exported = true;
+function isLocalSymbol(symbol: ts.Symbol, sourceFile: ts.SourceFile) {
+	return !!symbol.declarations.find(
+		decl => decl.getSourceFile() === sourceFile
+	);
+}
+
+function serializeExternalExport(node: ts.Node, symbol: ts.Symbol) {
+	return createNode(node, {
+		kind: Kind.Export,
+		flags: Flags.Export,
+		type: getSymbolReference(symbol),
 	});
 }
 
+function markExported(
+	symbol: ts.Symbol,
+	parent: Node,
+	sourceFile: ts.SourceFile
+) {
+	if (!isLocalSymbol(symbol, sourceFile))
+		pushChildren(parent, [
+			{
+				name: symbol.name,
+				kind: Kind.Export,
+				flags: Flags.Export,
+				type: getSymbolReference(symbol),
+			},
+		]);
+	else
+		symbol.declarations.forEach(d => {
+			/*if (!isLocalSymbol(symbol, sourceFile))
+			pushChildren(parent, [serializeExternalExport(d, localSymbol)]);*/
+
+			if (ts.isExportSpecifier(d) && !(d as any).$$exported) {
+				const localSymbol = typeChecker.getExportSpecifierLocalTargetSymbol(
+					d
+				);
+				if (localSymbol) {
+					if (!isLocalSymbol(localSymbol, sourceFile)) {
+						pushChildren(parent, [
+							serializeExternalExport(d, localSymbol),
+						]);
+					} else markExported(localSymbol, parent, sourceFile);
+				}
+			} else (d as any).$$exported = true;
+		});
+}
+
 function parseSourceFile(sourceFile: ts.SourceFile) {
-	const result = createNode(sourceFile);
+	const result = createNode(sourceFile, {
+		name: relative(process.cwd(), sourceFile.fileName),
+	});
 	const symbol = typeChecker.getSymbolAtLocation(sourceFile);
 
-	if (symbol && symbol.exports) symbol.exports.forEach(markExported);
+	if (symbol)
+		typeChecker
+			.getExportsOfModule(symbol)
+			.forEach(s => markExported(s, result, sourceFile));
 
-	result.name = relative(process.cwd(), sourceFile.fileName);
 	sourceFile.forEachChild(c => visit(c, result));
 
 	return result;

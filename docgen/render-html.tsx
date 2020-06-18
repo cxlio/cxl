@@ -276,7 +276,11 @@ function ExtendedBy(extendedBy?: Node[]) {
 
 function Link(node: Node): string {
 	let name = node.name ? escape(node.name) : '(Unknown)';
-	if (node.type && node.kind === Kind.Reference) node = node.type;
+	if (node.type) {
+		if (node.kind === Kind.Reference) node = node.type;
+		else if (node.kind === Kind.Export) return Link(node.type);
+	}
+
 	return node.id ? `<a href="${getHref(node)}">${name}</a>` : name;
 }
 
@@ -306,7 +310,8 @@ function ModuleBody(json: Node) {
 	if (children)
 		children.sort(sortNode).forEach(c => {
 			if (json.kind === Kind.Module && !declarationFilter(c)) return '';
-			const groupKind = c.kind;
+			const groupKind =
+				(c.kind === Kind.Export && c.type?.type?.kind) || c.kind;
 
 			if (!index[groupKind]) {
 				groupBody[groupKind] = [];
@@ -316,7 +321,8 @@ function ModuleBody(json: Node) {
 
 			if (!(c.flags & Flags.Overload))
 				index[groupKind].push(`<cxl-c sm4 lg3>${Link(c)}</cxl-c>`);
-			if (!hasOwnPage(c)) groupBody[groupKind].push(MemberCard(c));
+			if (!hasOwnPage(c) && c.kind !== Kind.Export)
+				groupBody[groupKind].push(MemberCard(c));
 		});
 
 	const title = ModuleTitle(json);

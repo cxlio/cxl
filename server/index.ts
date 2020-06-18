@@ -133,7 +133,6 @@ class ApplicationParameters {
 		for (let i = 2; i < args.length; i++) {
 			const arg = args[i];
 			const match = ArgRegex.exec(arg);
-			console.log(match, arg);
 			if (match) {
 				const param = parameters.find(
 					a => a.name === match[2] || a.shortcut === match[2]

@@ -575,4 +575,13 @@ function map<T>() {	return operator<T>(); }
 		a.equal(key.parameters[0].name, 'key');
 		a.equal(key.parameters[0].type, StringType);
 	});
+
+	test('export', (a: Test) => {
+		const [A, B] = parse(`function B() { } export { Set as A, B }`);
+		a.equal(A.name, 'A');
+		a.equal(B.name, 'B');
+		a.assert(A.type);
+		a.equal(A.type.name, 'Set');
+		a.equal(A.kind, Kind.Export);
+	});
 });
