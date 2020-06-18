@@ -52,10 +52,10 @@ function ClassType(node: Node) {
 			? extendStr.push(link)
 			: implementStr.push(link);
 	});
-	return `<small>${
+	return `<cxl-t h6 inline>${
 		(extendStr.length ? `extends ${extendStr.join(', ')}` : '') +
 		(implementStr.length ? `implements ${implementStr.join(', ')}` : '')
-	}</small>`;
+	}</cxl-t>`;
 }
 
 function FunctionType(node: Node) {
@@ -247,7 +247,7 @@ function MemberBody(c: Node) {
 
 	if (c.docs) result += Documentation(c);
 
-	if (c.parameters)
+	if (c.parameters?.length)
 		result +=
 			'<br/><cxl-t subtitle2>Parameters</cxl-t>' +
 			ParameterTable(
@@ -294,7 +294,7 @@ function ModuleTitle(node: Node) {
 		(node.kind === Kind.Class ? Chip('class') : '') +
 		(node.kind === Kind.Interface ? Chip('interface') : '') +
 		(node.kind === Kind.Enum ? Chip('enum') : '');
-	return Signature(node) + ' ' + chips;
+	return Signature(node) + '<br/>' + chips;
 }
 
 function ModuleBody(json: Node) {

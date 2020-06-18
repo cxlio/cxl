@@ -409,7 +409,7 @@ export class Card extends Component {
 					color: 'onSurface',
 					lineHeight: 32,
 					height: 32,
-					verticalAlign: 'top',
+					// verticalAlign: 'top',
 				},
 				$primary: {
 					color: 'onPrimary',

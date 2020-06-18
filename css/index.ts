@@ -353,7 +353,7 @@ export const theme: Theme = {
 		$: {
 			// reset: '-webkit-tap-highlight-color:transparent;',
 			font: 'default',
-			verticalAlign: 'middle',
+			// verticalAlign: 'middle',
 		},
 		'*': {
 			boxSizing: 'border-box',

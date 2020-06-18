@@ -362,6 +362,18 @@ function isReferenceType(type: ts.Type) {
 	);
 }
 
+function serializeIndexedAccessType(type: ts.IndexedAccessType) {
+	return {
+		name: '',
+		kind: Kind.IndexedType,
+		flags: 0,
+		children: [
+			serializeType(type.objectType),
+			serializeType(type.indexType),
+		],
+	};
+}
+
 function serializeType(type: ts.Type): Node {
 	if (type.flags & TF.Any) return AnyType;
 	if (type.flags & TF.Unknown) return UnknownType;
@@ -372,6 +384,8 @@ function serializeType(type: ts.Type): Node {
 	if (type.flags & TF.String || type.isStringLiteral()) return StringType;
 	if (type.flags & TF.Undefined) return UndefinedType;
 	if (type.flags & TF.Never) return NeverType;
+	if (type.flags & TF.IndexedAccess)
+		return serializeIndexedAccessType(type as ts.IndexedAccessType);
 
 	if (type.flags & TF.Literal) {
 		const baseType = typeChecker.getBaseTypeOfLiteralType(type);
@@ -553,7 +567,7 @@ function serializeConstructor(node: ts.ConstructorDeclaration) {
 	return result;
 }
 
-function serializeIndexedAccessType(node: ts.IndexedAccessTypeNode) {
+function serializeIndexedAccessTypeNode(node: ts.IndexedAccessTypeNode) {
 	return createNode(node, {
 		children: [serialize(node.objectType), serialize(node.indexType)],
 	});
@@ -588,7 +602,7 @@ const Serializer: SerializerMap = {
 		});
 	},
 
-	[SK.IndexedAccessType]: serializeIndexedAccessType,
+	[SK.IndexedAccessType]: serializeIndexedAccessTypeNode,
 	[SK.UnionType](node: ts.UnionTypeNode) {
 		return createNode(node, {
 			kind: Kind.TypeUnion,
