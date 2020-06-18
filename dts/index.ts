@@ -69,6 +69,7 @@ export enum Flags {
 	Optional = 8192,
 	Overload = 16384,
 	External = 32768,
+	DefaultLibrary = 65536,
 }
 
 export interface Source {
@@ -206,14 +207,7 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 }
 
 function isOwnFile(sourceFile: ts.SourceFile) {
-	return (
-		sourceFile &&
-		sourceFiles.includes(sourceFile) &&
-		!(
-			program.isSourceFileFromExternalLibrary(sourceFile) ||
-			program.isSourceFileDefaultLibrary(sourceFile)
-		)
-	);
+	return sourceFile && sourceFiles.includes(sourceFile);
 }
 
 function getNodeFromDeclaration(node: ts.Node): Node {
@@ -221,9 +215,15 @@ function getNodeFromDeclaration(node: ts.Node): Node {
 
 	if (!result) {
 		const sourceFile = node.getSourceFile();
-		(node as any)[dtsNode] = result = isOwnFile(sourceFile)
-			? { id: currentId++ }
-			: createNode(node, { flags: Flags.External });
+		const flags = program.isSourceFileDefaultLibrary(sourceFile)
+			? Flags.DefaultLibrary
+			: program.isSourceFileFromExternalLibrary(sourceFile)
+			? Flags.External
+			: 0;
+		(node as any)[dtsNode] = result =
+			flags === 0 && isOwnFile(sourceFile)
+				? { id: currentId++ }
+				: createNode(node, { flags: flags });
 	}
 
 	return result;

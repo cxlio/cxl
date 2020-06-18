@@ -324,7 +324,7 @@ export default suite('dts', test => {
 		a.equal(m5.type.typeParameters[0], AnyType);
 		a.assert(m5.type.type);
 		a.equal(m5.type.type.name, 'Set');
-		a.equal(m5.type.type.flags, Flags.External);
+		a.equal(m5.type.type.flags, Flags.DefaultLibrary);
 	});
 
 	test('class method', (a: Test) => {

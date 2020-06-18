@@ -52,10 +52,10 @@ function ClassType(node: Node) {
 			? extendStr.push(link)
 			: implementStr.push(link);
 	});
-	return (
+	return `<small>${
 		(extendStr.length ? `extends ${extendStr.join(', ')}` : '') +
 		(implementStr.length ? `implements ${implementStr.join(', ')}` : '')
-	);
+	}</small>`;
 }
 
 function FunctionType(node: Node) {
