@@ -29,6 +29,7 @@ const KindMap: Record<Kind, string> = {
 	[Kind.Enum]: 'Enum',
 	[Kind.ObjectType]: 'Object Type',
 	[Kind.Literal]: 'Literal',
+	[Kind.IndexSignature]: 'Index Signature',
 };
 
 export function kindToString(kind: Kind) {

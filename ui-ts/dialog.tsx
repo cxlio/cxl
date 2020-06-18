@@ -226,7 +226,15 @@ export class DialogConfirm extends Component {
 					on(el, 'drawer.close').pipe(
 						tap(() => (view.host.visible = false))
 					),
-					on(el, 'click').pipe(tap(ev => ev.stopPropagation()))
+					on(el, 'click').pipe(tap(ev => ev.stopPropagation())),
+					get(view.host, 'visible').pipe(
+						tap(
+							visible =>
+								!visible &&
+								el.scrollTop !== 0 &&
+								el.scrollTo(0, 0)
+						)
+					)
 				)
 			}
 			className="drawer"

@@ -46,6 +46,7 @@ export enum Kind {
 	Enum = SK.EnumDeclaration,
 	ObjectType = 1004,
 	Literal = SK.LiteralType,
+	IndexSignature = SK.IndexSignature,
 }
 
 interface Documentation {
@@ -112,6 +113,8 @@ const dtsNode = Symbol('dtsNode');
 
 let currentIndex: Index;
 let program: ts.Program;
+let config: ts.ParsedCommandLine;
+let sourceFiles: ts.SourceFile[];
 let typeChecker: ts.TypeChecker;
 let currentId = 1;
 
@@ -202,17 +205,25 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 	return ((node as any)[dtsNode] = result);
 }
 
+function isOwnFile(sourceFile: ts.SourceFile) {
+	return (
+		sourceFile &&
+		sourceFiles.includes(sourceFile) &&
+		!(
+			program.isSourceFileFromExternalLibrary(sourceFile) ||
+			program.isSourceFileDefaultLibrary(sourceFile)
+		)
+	);
+}
+
 function getNodeFromDeclaration(node: ts.Node): Node {
 	let result = (node as any)[dtsNode];
 
 	if (!result) {
 		const sourceFile = node.getSourceFile();
-		(node as any)[dtsNode] = result =
-			!sourceFile ||
-			program.isSourceFileFromExternalLibrary(sourceFile) ||
-			program.isSourceFileDefaultLibrary(sourceFile)
-				? createNode(node, { flags: Flags.External })
-				: { id: currentId++ };
+		(node as any)[dtsNode] = result = isOwnFile(sourceFile)
+			? { id: currentId++ }
+			: createNode(node, { flags: Flags.External });
 	}
 
 	return result;
@@ -548,6 +559,13 @@ function serializeIndexedAccessType(node: ts.IndexedAccessTypeNode) {
 	});
 }
 
+function serializeIndexSignature(node: ts.IndexSignatureDeclaration) {
+	return createNode(node, {
+		parameters: node.parameters.map(serialize),
+		type: node.type && serialize(node.type),
+	});
+}
+
 const Serializer: SerializerMap = {
 	[SK.AnyKeyword]: () => AnyType,
 	[SK.StringKeyword]: () => StringType,
@@ -598,6 +616,8 @@ const Serializer: SerializerMap = {
 	[SK.ObjectLiteralExpression]: serializeObject,
 	[SK.PropertyAssignment]: serializeDeclarationWithType,
 	[SK.ShorthandPropertyAssignment]: serializeDeclarationWithType,
+
+	[SK.IndexSignature]: serializeIndexSignature,
 };
 
 function setup(
@@ -670,6 +690,7 @@ export function parse(
 	};
 
 	setup([fileName], options || {}, host);
+	sourceFiles = [sourceFile];
 
 	const sourceNode = parseSourceFile(sourceFile);
 	return sourceNode.children || [];
@@ -681,7 +702,7 @@ export function parse(
  * @param tsconfig Path to tsconfig.json file
  */
 export function build(tsconfig = resolve('tsconfig.json')) {
-	const config = parseTsConfig(tsconfig);
+	config = parseTsConfig(tsconfig);
 	setup(config.fileNames, config.options);
 
 	const result: Output = {
@@ -690,8 +711,9 @@ export function build(tsconfig = resolve('tsconfig.json')) {
 		config,
 	};
 
-	config.fileNames.forEach(file => {
-		const source = program.getSourceFile(file);
+	(sourceFiles = config.fileNames.flatMap(
+		file => program.getSourceFile(file) || []
+	)).forEach(source => {
 		if (source) {
 			result.modules.push(parseSourceFile(source));
 		} else throw new Error(`Could not parse ${source}`);

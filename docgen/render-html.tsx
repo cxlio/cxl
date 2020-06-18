@@ -148,11 +148,17 @@ function SignatureName({ flags, name }: Node) {
 	return (name ? escape(name) : '') + (flags & Flags.Optional ? '?' : '');
 }
 
+function IndexSignature(node: Node) {
+	const params = node.parameters?.map(Signature).join('') || '';
+	return `[${params}]: ${Type(node.type)}`;
+}
+
 /**
  * Return Node Signature
  */
 function Signature(node: Node): string {
 	if (node.kind === Kind.Module) return escape(node.name);
+	if (node.kind === Kind.IndexSignature) return IndexSignature(node);
 
 	const { value, parameters, typeParameters } = node;
 
@@ -348,13 +354,18 @@ function declarationFilter(node: Node) {
 }
 
 function ModuleNavbar(node: Node) {
+	const moduleName = node.name;
 	return (
-		`<cxl-item href="${getHref(node)}"><i>Index</i></cxl-item>` +
+		`<cxl-item href="${getHref(node)}"><i>${moduleName}</i></cxl-item>` +
 		node.children
 			?.sort(sortNode)
 			.map(c =>
 				declarationFilter(c) && !(c.flags & Flags.Overload)
-					? `<cxl-item href="${getHref(c)}">${c.name}</cxl-item>`
+					? `<cxl-item href="${getHref(
+							c
+					  )}"><cxl-chip little primary>T</cxl-chip>${
+							c.name
+					  }</cxl-item>`
 					: ''
 			)
 			.join('')
