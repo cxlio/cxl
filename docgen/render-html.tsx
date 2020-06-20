@@ -112,6 +112,7 @@ function Type(type?: Node): string {
 }
 
 function SignatureValue(val?: string) {
+	if (val && val.length > 50) return ` = <pre>${escape(val)}</pre>`;
 	return val ? ` = ${escape(val)}` : '';
 }
 
@@ -228,11 +229,18 @@ function ParameterTable(rows: string[][]) {
 }
 
 function Documentation(node: Node) {
-	return (
-		node.docs
-			?.map(doc => (doc.name === 'comment' ? `<p>${doc.value}</p>` : ''))
-			.join('') || ''
-	);
+	let comment = '';
+	let demo = '';
+	let tagName = '';
+
+	node.docs?.forEach(doc => {
+		if (doc.name === 'comment') comment += `<p>${doc.value}</p>`;
+	});
+
+	if (node.kind === Kind.Component)
+		demo = `<cxl-t h5>Demo</cxl-t><cxl-docs-demo component="${tagName}"></cxl-docs-demo>`;
+
+	return `${comment}${demo}`;
 }
 
 function ParameterDocumentation(node: Node) {
@@ -295,7 +303,7 @@ function Link(node: Node): string {
 }
 
 function GroupIndex(kind: Kind, children: string[]) {
-	return `<cxl-c pad16><cxl-t h5>${kindToString(kind)}
+	return `<cxl-c pad16><cxl-t h6>${kindToString(kind)}
 		</cxl-t><br/><cxl-grid>${children.join('')}</cxl-grid></cxl-c>`;
 }
 
@@ -476,7 +484,7 @@ function Header(module: Output) {
 
 	return `<!DOCTYPE html>
 	<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');</script>
+	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');require('../../dist/ui-ts/docs.js')</script>
 	<style>cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 };</style>
 	<cxl-application><title>${pkg.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(pkg, module)}

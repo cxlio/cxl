@@ -3,8 +3,8 @@ type CSSStyle = {
 	[P in keyof CSSStyleDeclaration]?: string | number;
 };
 type BaseColor = RGBA;
-type Color = keyof Colors | BaseColor | 'inherit' | 'transparent';
-type Length = number | Percentage | 'auto';
+export type Color = keyof Colors | BaseColor | 'inherit' | 'transparent';
+export type Length = number | Percentage | 'auto';
 
 interface Typography {
 	default: CSSStyle;
@@ -15,7 +15,7 @@ interface Variables {
 	[name: string]: any;
 }
 
-interface Colors {
+export interface Colors {
 	elevation: BaseColor;
 	primary: BaseColor;
 	primaryLight: BaseColor;
@@ -60,11 +60,10 @@ interface StrictStyleDefinition {
 	scaleY: number;
 	font: keyof Typography;
 	color: Color;
-	padding: number;
-	paddingLeft: number;
-	paddingRight: number;
-	paddingTop: number;
-	paddingBottom: number;
+	paddingLeft: Length;
+	paddingRight: Length;
+	paddingTop: Length;
+	paddingBottom: Length;
 	marginLeft: number | 'auto';
 	marginRight: number | 'auto';
 	marginTop: number | 'auto';
@@ -615,6 +614,15 @@ export function registerFont(def: FontDefinition) {
 export function Style(p: { children: Styles }) {
 	const ss = new StyleSheet({ styles: p.children });
 	return ss.clone.bind(ss);
+}
+
+export function padding(
+	paddingTop: number | 'auto',
+	paddingRight = paddingTop,
+	paddingBottom = paddingTop,
+	paddingLeft = paddingTop
+) {
+	return { paddingTop, paddingRight, paddingBottom, paddingLeft };
 }
 
 export function margin(

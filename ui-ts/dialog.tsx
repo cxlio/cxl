@@ -7,7 +7,7 @@ import {
 	render,
 	get,
 } from '../component/index.js';
-import { Style, pct } from '../css/index.js';
+import { Style, padding, pct } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
 import { tpl, onAction } from '../template/index.js';
 import { on, trigger } from '../dom/index.js';
@@ -77,8 +77,8 @@ export class Dialog extends Component {
 const DialogStyles = (
 	<Style>
 		{{
-			content: { padding: 16 },
-			footer: { padding: 8 },
+			content: padding(16),
+			footer: padding(8),
 		}}
 	</Style>
 );

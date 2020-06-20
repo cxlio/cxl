@@ -477,7 +477,7 @@ function serializeArray(node: ts.ArrayTypeNode) {
 	return result;
 }
 
-function hasDecorator(node: ts.Declaration, name: string) {
+function getCxlDecorator(node: ts.Declaration, name: string) {
 	return (
 		node.decorators &&
 		node.decorators.find(
@@ -489,10 +489,39 @@ function hasDecorator(node: ts.Declaration, name: string) {
 	);
 }
 
-function isCxlAttribute(node: ts.Declaration) {
-	return (
-		hasDecorator(node, 'Attribute') || hasDecorator(node, 'StyleAttribute')
+function isCxlAttribute(node: ts.Declaration): boolean {
+	return !!(
+		getCxlDecorator(node, 'Attribute') ||
+		getCxlDecorator(node, 'StyleAttribute')
 	);
+}
+
+function getCxlRole(node: ts.CallExpression): string {
+	const id = node.arguments[0];
+	return ts.isStringLiteral(id) ? id.text : '';
+}
+
+function getCxlClassMeta(node: ts.ClassDeclaration, result: Node): boolean {
+	const augment = getCxlDecorator(node, 'Augment');
+	const args = (augment?.expression as ts.CallExpression)?.arguments;
+
+	if (augment) result.kind = Kind.Component;
+
+	if (args) {
+		const docs = result.docs || [];
+		args.forEach(arg => {
+			if (
+				ts.isCallExpression(arg) &&
+				ts.isIdentifier(arg.expression) &&
+				arg.expression.escapedText === 'role'
+			)
+				docs.push({ name: 'role', value: getCxlRole(arg) });
+		});
+
+		if (docs.length > 0) result.docs = docs;
+	}
+
+	return !!augment;
 }
 
 function serializeDeclarationWithType(node: ts.Declaration): Node {
@@ -532,14 +561,10 @@ function serializeObject(
 	return result;
 }
 
-function isCxlComponent(node: ts.ClassDeclaration) {
-	return hasDecorator(node, 'Augment');
-}
-
 function serializeClass(node: ts.ClassDeclaration) {
 	const result = serializeDeclaration(node);
 
-	if (isCxlComponent(node)) result.kind = Kind.Component;
+	getCxlClassMeta(node, result);
 
 	if (node.heritageClauses?.length) {
 		const type: Node = (result.type = {

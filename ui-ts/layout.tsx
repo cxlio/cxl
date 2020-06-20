@@ -5,7 +5,7 @@ import {
 	StyleAttribute,
 	update,
 } from '../component/index.js';
-import { Style, margin } from '../css/index.js';
+import { Style, margin, padding } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
 
 const colStyles = ((r: any) => {
@@ -54,9 +54,9 @@ const colStyles = ((r: any) => {
 				'@xlarge': { ...colStyles.xl, $xl0: { display: 'none' } },
 
 				// Padding
-				$pad16: { padding: 16 },
-				$pad8: { padding: 8 },
-				$pad24: { padding: 24 },
+				$pad16: { ...padding(16) },
+				$pad8: { ...padding(8) },
+				$pad24: { ...padding(24) },
 				// Colors
 				$surface: { backgroundColor: 'surface', color: 'onSurface' },
 				$error: { backgroundColor: 'error', color: 'onError' },
@@ -88,22 +88,22 @@ export class C extends Component {
 		<Style>
 			{{
 				$: {
-					padding: 16,
+					...padding(16),
 					position: 'relative',
 					flexGrow: 1,
 					overflowY: 'auto',
 					overflowScrolling: 'touch',
 				},
 				'@medium': {
-					$: { padding: 32 },
+					$: padding(32),
 				},
 				'@large': {
-					$: { padding: 64 },
+					$: padding(64),
 				},
 				'@xlarge': {
 					content: { width: 1200 },
 					content$center: {
-						padding: 0,
+						...padding(0),
 						marginLeft: 'auto',
 						marginRight: 'auto',
 					},

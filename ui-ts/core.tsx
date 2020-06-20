@@ -16,7 +16,7 @@ import {
 import { onAction, triggerEvent, portal } from '../template/index.js';
 import { on, remove, setAttribute, trigger } from '../dom/index.js';
 import { Observable, map, tap, merge, debounceTime } from '../rx/index.js';
-import { Style, StyleSheet, pct, theme } from '../css/index.js';
+import { Style, StyleSheet, padding, pct, theme } from '../css/index.js';
 
 const StateStyles = {
 	$active: { filter: 'invert(0.2)' },
@@ -949,7 +949,7 @@ export class Toggle extends Component {
 					height: 36,
 				},
 
-				$big: { padding: 16, font: 'h5', height: 52 },
+				$big: { ...padding(16), font: 'h5', height: 52 },
 				$flat: {
 					backgroundColor: 'inherit',
 					elevation: 0,
@@ -1009,7 +1009,7 @@ export class Button extends ButtonBase {
 				opacity: 0,
 				scaleX: 0.5,
 				scaleY: 0.5,
-				padding: 16,
+				...padding(16),
 				elevation: 3,
 				backgroundColor: 'onSurface87',
 				color: 'surface',
@@ -1086,7 +1086,7 @@ export class SnackbarContainer extends Component {
 				$: { display: 'inline-block' },
 			},
 			link: {
-				padding: 16,
+				...padding(16),
 				paddingBottom: 12,
 				backgroundColor: 'primary',
 				font: 'button',

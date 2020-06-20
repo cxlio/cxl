@@ -28,7 +28,7 @@ import {
 	keypress,
 } from '../template/index.js';
 import { trigger, on } from '../dom/index.js';
-import { Style } from '../css/index.js';
+import { Style, padding } from '../css/index.js';
 import { Observable, merge, tap } from '../rx/index.js';
 
 const FocusCircleStyle = (
@@ -584,7 +584,7 @@ export class Form extends Component {
 					height: 22,
 					font: 'default',
 					borderWidth: 0,
-					padding: 0,
+					...padding(0),
 					backgroundColor: 'transparent',
 					marginTop: 0,
 					color: 'onSurface',

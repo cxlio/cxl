@@ -271,14 +271,23 @@ export default suite('dts', test => {
 		a.equal(BType.name, 'B');
 	});
 
-	test('class decorators', (a: Test) => {
-		const [A, B] = parse(`
-			function A() { return () => { }; }
-			@A()
+	test(
+		'class decorators - cxl Augment',
+		(a: Test) => {
+			const [role, A, B] = parse(`
+			function role(str: string) { }
+			function Augment() { return () => { }; }
+			@Augment(role('roleName'))
 			class B { }`);
-		a.ok(A);
-		a.ok(B);
-	});
+			a.ok(role);
+			a.ok(A);
+			a.equal(B.kind, Kind.Component);
+			a.assert(B.docs);
+			a.equal(B.docs[0].name, 'role');
+			a.equal(B.docs[0].value, 'roleName');
+		},
+		true
+	);
 
 	test('class extends class and implements interface', (a: Test) => {
 		const [A, B, C] = parse(`
