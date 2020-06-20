@@ -29,6 +29,8 @@ export default suite('dts', test => {
 		a.equal(x.type, StringType);
 		a.equal(x.value, '"hello"');
 		a.ok(x.flags & Flags.Export);
+		a.ok(x.source);
+		a.ok(y.source);
 
 		a.ok(y.id);
 		a.equal(y.kind, Kind.Constant);
@@ -45,12 +47,15 @@ export default suite('dts', test => {
 		a.equal(x.type, StringType);
 		a.equal(y.value, 'x');
 		a.equal(y.type, StringType);
+		a.ok(x.source);
+		a.ok(y.source);
 	});
 
 	test('function - empty', (a: Test) => {
 		const [fn] = parse('function fn() { return true; }');
 		a.equal(fn.name, 'fn');
 		a.equal(fn.type, BooleanType);
+		a.ok(fn.source);
 	});
 
 	test('function - optional parameter', (a: Test) => {
@@ -159,6 +164,7 @@ export default suite('dts', test => {
 		a.ok(kls);
 		a.equal(kls.name, 'Test');
 		a.equal(kls.kind, Kind.Interface);
+		a.ok(kls.source);
 	});
 
 	test('interface - multiple properties', (a: Test) => {
@@ -196,6 +202,7 @@ export default suite('dts', test => {
 
 		a.ok(kls);
 		a.equal(kls.name, 'Test');
+		a.ok(kls.source);
 	});
 
 	test('class declaration', (a: Test) => {
@@ -262,6 +269,15 @@ export default suite('dts', test => {
 		a.equal(AType.name, 'A');
 		a.equal(BType.type, B);
 		a.equal(BType.name, 'B');
+	});
+
+	test('class decorators', (a: Test) => {
+		const [A, B] = parse(`
+			function A() { return () => { }; }
+			@A()
+			class B { }`);
+		a.ok(A);
+		a.ok(B);
 	});
 
 	test('class extends class and implements interface', (a: Test) => {

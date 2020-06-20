@@ -31,8 +31,19 @@ const KindMap: Record<Kind, string> = {
 	[Kind.Literal]: 'Literal',
 	[Kind.IndexSignature]: 'Index Signature',
 	[Kind.Export]: 'Export',
+	[Kind.Component]: 'Component',
+	[Kind.Attribute]: 'Attribute',
+};
+
+const content: Record<string, string> = {
+	Members: 'Members',
+	API: 'API',
 };
 
 export function kindToString(kind: Kind) {
 	return KindMap[kind] || kind.toString();
+}
+
+export function translate(key: string) {
+	return content[key] || key;
 }

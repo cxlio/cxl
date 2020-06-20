@@ -1,6 +1,6 @@
 type TestFn = (test: Test) => void;
-type SuiteFn = (
-	suiteFn: (name: string, testFn: TestFn, only?: boolean) => void
+type SuiteFn<T = TestFn> = (
+	suiteFn: (name: string, testFn: T, only?: boolean) => void
 ) => void;
 
 declare function setTimeout(fn: () => any, n?: number): number;
@@ -144,6 +144,22 @@ export class Test {
 		return this.results;
 	}
 }
+
+/**
+ * special suite for Web Components
+export class Spec<T extends HTMLElement> extends Test {
+
+	constructor(public Component: T, fn: SuiteFn<Spec<T>>) {
+		const tagName = (Component as any).tagName;
+		super(tagName, fn);
+	}
+
+}
+
+export function spec<T extends HTMLElement>(symbol: T, fn: SuiteFn<Spec<T>>) {
+	return new Spec<T>(symbol, fn);
+}
+ */
 
 export function suite(
 	nameOrConfig: string | TestConfig,

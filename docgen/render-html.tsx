@@ -1,6 +1,6 @@
 import { Output, Node, Kind, Flags, Source } from '../dts';
 import type { DocGen, File } from './index.js';
-import { kindToString } from './localization';
+import { kindToString, translate } from './localization';
 import { relative } from 'path';
 
 let application: DocGen;
@@ -102,6 +102,9 @@ function Type(type?: Node): string {
 			return type.name;
 		case Kind.ObjectType:
 			return ObjectType(type);
+		case Kind.Literal:
+		case Kind.TypeParameter:
+			return type.name;
 	}
 
 	console.log(type);
@@ -131,15 +134,22 @@ function Chip(label: string) {
 
 function NodeChips({ flags }: Node) {
 	return (
+		(flags & Flags.Static ? Chip('static') : '') +
 		(flags & Flags.Protected ? Chip('protected') : '') +
 		(flags & Flags.Abstract ? Chip('abstract') : '') +
-		(flags & Flags.Overload ? Chip('overload') : '')
+		(flags & Flags.Overload ? Chip('overload') : '') +
+		(flags & Flags.Private ? Chip('private') : '')
 	);
 }
 
 function SignatureType({ type, kind, name }: Node) {
 	if (!type) return '';
-	if (kind === Kind.Class || kind === Kind.Interface) return ` ${Type(type)}`;
+	if (
+		kind === Kind.Class ||
+		kind === Kind.Interface ||
+		kind === Kind.Component
+	)
+		return ` ${Type(type)}`;
 	const typeColon = kind === Kind.TypeAlias ? ' = ' : name ? ': ' : ' => ';
 	return `${typeColon}${Type(type)}`;
 }
@@ -289,27 +299,62 @@ function GroupIndex(kind: Kind, children: string[]) {
 		</cxl-t><br/><cxl-grid>${children.join('')}</cxl-grid></cxl-c>`;
 }
 
+function getNodeCoef(a: Node) {
+	return (
+		(a.flags & Flags.Static) +
+		(a.kind === Kind.Module &&
+		(a.name === 'index.ts' || a.name === 'index.tsx')
+			? -10
+			: 0)
+	);
+}
+
 function sortNode(a: Node, b: Node) {
-	return a.name > b.name ? 1 : -1;
+	const coef = getNodeCoef(a) - getNodeCoef(b);
+	return coef + (a.name > b.name ? 1 : -1);
 }
 
 function ModuleTitle(node: Node) {
 	const chips =
+		`<span style="float:right">` +
 		(node.kind === Kind.Class ? Chip('class') : '') +
 		(node.kind === Kind.Interface ? Chip('interface') : '') +
-		(node.kind === Kind.Enum ? Chip('enum') : '');
-	return Signature(node) + '<br/>' + chips;
+		(node.kind === Kind.Component ? Chip('component') : '') +
+		(node.kind === Kind.Enum ? Chip('enum') : '') +
+		`</span>`;
+	return chips + Signature(node);
 }
 
-function ModuleBody(json: Node) {
-	const { children } = json;
+function getImportUrl(source: Source) {
+	const pkg = application.package?.name;
+	const moduleName = source.name.replace(/\.tsx?$/, '');
+
+	return `${pkg}${moduleName === 'index' ? '' : `/${moduleName}`}`;
+}
+
+function ImportStatement(node: Node) {
+	if (node.kind === Kind.Module || !application.package) return '';
+	const source = Array.isArray(node.source) ? node.source[0] : node.source;
+	if (!source) return '';
+	const importUrl = getImportUrl(source);
+
+	return `<cxl-t h5>Import</cxl-t><pre>import { ${node.name} } from '${importUrl}';</pre>`;
+}
+
+function Usage(node: Node) {
+	const importStr = ImportStatement(node);
+	return importStr ? `<cxl-t h4>Usage</cxl-t>${importStr}` : '';
+}
+
+function Members(node: Node) {
+	const { children } = node;
 	const index: Record<number, string[]> = {};
 	const groupBody: Record<number, string[]> = {};
 	const groups: Kind[] = [];
 
 	if (children)
 		children.sort(sortNode).forEach(c => {
-			if (json.kind === Kind.Module && !declarationFilter(c)) return '';
+			if (node.kind === Kind.Module && !declarationFilter(c)) return '';
 			const groupKind =
 				(c.kind === Kind.Export && c.type?.type?.kind) || c.kind;
 
@@ -319,29 +364,46 @@ function ModuleBody(json: Node) {
 				groups.push(groupKind);
 			}
 
-			if (!(c.flags & Flags.Overload))
-				index[groupKind].push(`<cxl-c sm4 lg3>${Link(c)}</cxl-c>`);
+			if (!(c.flags & Flags.Overload)) {
+				const chips =
+					c.flags & Flags.Static
+						? `<cxl-chip little primary>static</cxl-chip>`
+						: '';
+				index[groupKind].push(
+					`<cxl-c sm4 lg3>${chips} ${Link(c)}</cxl-c>`
+				);
+			}
 			if (!hasOwnPage(c) && c.kind !== Kind.Export)
 				groupBody[groupKind].push(MemberCard(c));
 		});
 
-	const title = ModuleTitle(json);
+	return groups.length
+		? `<cxl-t h4>${translate(
+				node.kind === Kind.Module ? 'Members' : 'API'
+		  )}</cxl-t>` +
+				groups
+					.map(kind => GroupIndex(kind, index[kind]))
+					.join('<br/>') +
+				'<br/>' +
+				groups
+					.filter(group => groupBody[group].length)
+					.map(
+						group =>
+							`<br /><cxl-t h5>${kindToString(
+								group
+							)}</cxl-t>${groupBody[group].join('<br />')}`
+					)
+					.join('<br />')
+		: '';
+}
 
+function ModuleBody(json: Node) {
 	return (
-		`<cxl-page><cxl-t h4>${title}</cxl-t>` +
+		`<cxl-page><cxl-t h3>${ModuleTitle(json)}</cxl-t>` +
 		ExtendedBy(json.extendedBy) +
 		Documentation(json) +
-		groups.map(kind => GroupIndex(kind, index[kind])).join('<br/>') +
-		'<br/>' +
-		groups
-			.filter(group => groupBody[group].length)
-			.map(
-				group =>
-					`<br /><cxl-t h4>${kindToString(group)}</cxl-t>${groupBody[
-						group
-					].join('<br />')}`
-			)
-			.join('<br />') +
+		Usage(json) +
+		Members(json) +
 		'</cxl-page>'
 	);
 }
@@ -359,17 +421,32 @@ function declarationFilter(node: Node) {
 	return node.flags & Flags.Export;
 }
 
+const IconMap: Record<number, string> = {
+	[Kind.Constant]: 'K',
+	[Kind.Variable]: 'V',
+	[Kind.Class]: 'C',
+	[Kind.Function]: 'F',
+	[Kind.Interface]: 'I',
+	[Kind.TypeAlias]: 'T',
+	[Kind.Component]: 'C',
+};
+
+function NodeIcon(node: Node) {
+	const icon = IconMap[node.kind] || '?';
+	return `<cxl-badge style="margin-right:12px">${icon}</cxl-badge>`;
+}
+
 function ModuleNavbar(node: Node) {
-	const moduleName = node.name;
+	const moduleName = node.name.match(/index\.tsx?/) ? 'Index' : node.name;
 	return (
 		`<cxl-item href="${getHref(node)}"><i>${moduleName}</i></cxl-item>` +
 		node.children
 			?.sort(sortNode)
 			.map(c =>
-				declarationFilter(c) && !(c.flags & Flags.Overload)
-					? `<cxl-item href="${getHref(
-							c
-					  )}"><cxl-chip little primary>T</cxl-chip>${
+				declarationFilter(c) &&
+				!(c.flags & Flags.Overload) &&
+				c.kind !== Kind.Export
+					? `<cxl-item href="${getHref(c)}">${NodeIcon(c)}${
 							c.name
 					  }</cxl-item>`
 					: ''
@@ -427,7 +504,8 @@ function hasOwnPage(node: Node) {
 		node.kind === Kind.Class ||
 		node.kind === Kind.Interface ||
 		node.kind === Kind.Module ||
-		node.kind === Kind.Enum
+		node.kind === Kind.Enum ||
+		node.kind === Kind.Component
 	);
 }
 

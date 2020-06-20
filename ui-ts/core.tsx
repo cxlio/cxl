@@ -223,6 +223,9 @@ export class RippleContainer extends Component {
 	static tagName = 'cxl-ripple-container';
 }
 
+/**
+ * The top app bar provides content and actions related to the current screen. It’s used for branding, screen titles, navigation, and actions.
+ */
 @Augment<Appbar>(
 	role('heading'),
 	<Host>
@@ -409,7 +412,7 @@ export class Card extends Component {
 					color: 'onSurface',
 					lineHeight: 32,
 					height: 32,
-					// verticalAlign: 'top',
+					verticalAlign: 'top',
 				},
 				$primary: {
 					color: 'onPrimary',
@@ -499,6 +502,8 @@ export class Chip extends Component {
 					borderRadius: 11,
 					color: 'onPrimary',
 					backgroundColor: 'primary',
+					textAlign: 'center',
+					verticalAlign: 'top',
 				},
 				$secondary: {
 					color: 'onSecondary',

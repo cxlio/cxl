@@ -19,9 +19,7 @@ type Index = Record<number, Node>;
 
 export enum Kind {
 	Unknown = SK.Unknown,
-	Constant = 1001,
 	Variable = SK.VariableDeclaration,
-	BaseType = 1002,
 	TypeAlias = SK.TypeAliasDeclaration,
 	TypeParameter = SK.TypeParameter,
 	Interface = SK.InterfaceDeclaration,
@@ -29,7 +27,6 @@ export enum Kind {
 	Reference = SK.TypeReference,
 	Module = SK.SourceFile,
 	Class = SK.ClassDeclaration,
-	ClassType = 1003,
 	Parameter = SK.Parameter,
 	Property = SK.PropertyDeclaration,
 	Method = SK.MethodDeclaration,
@@ -44,10 +41,15 @@ export enum Kind {
 	Infer = SK.InferType,
 	IndexedType = SK.IndexedAccessType,
 	Enum = SK.EnumDeclaration,
-	ObjectType = 1004,
 	Literal = SK.LiteralType,
 	IndexSignature = SK.IndexSignature,
 	Export = SK.ExportSpecifier,
+	Constant = 1001,
+	BaseType = 1002,
+	ClassType = 1003,
+	ObjectType = 1004,
+	Component = 1005,
+	Attribute = 1006,
 }
 
 interface Documentation {
@@ -74,6 +76,7 @@ export enum Flags {
 }
 
 export interface Source {
+	name: string;
 	sourceFile: ts.SourceFile;
 	index: number;
 }
@@ -167,9 +170,20 @@ function getKind(node: ts.Node): Kind {
 	return (node.kind as any) as Kind;
 }
 
-function getNodeSource(node: ts.Node) {
+function getNodeSource(node: ts.Node): Source {
 	const sourceFile = node.getSourceFile();
-	return sourceFile ? { sourceFile, index: node.pos } : undefined;
+	const result = sourceFile
+		? {
+				name: relative(process.cwd(), sourceFile.fileName),
+				index: node.pos,
+		  }
+		: undefined;
+	if (result)
+		Object.defineProperty(result, 'sourceFile', {
+			value: sourceFile,
+			enumerable: false,
+		});
+	return result as Source;
 }
 
 function getNodeName(node: ts.Node): string {
@@ -192,15 +206,10 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 	const result = {
 		name,
 		kind,
+		source,
 		flags: 0,
 		...extra,
 	};
-
-	if (source)
-		Object.defineProperty(result, 'source', {
-			value: source,
-			enumerable: false,
-		});
 
 	if (refNode) return Object.assign(refNode, result);
 
@@ -468,8 +477,29 @@ function serializeArray(node: ts.ArrayTypeNode) {
 	return result;
 }
 
+function hasDecorator(node: ts.Declaration, name: string) {
+	return (
+		node.decorators &&
+		node.decorators.find(
+			deco =>
+				ts.isCallExpression(deco.expression) &&
+				ts.isIdentifier(deco.expression.expression) &&
+				deco.expression.expression.escapedText === name
+		)
+	);
+}
+
+function isCxlAttribute(node: ts.Declaration) {
+	return (
+		hasDecorator(node, 'Attribute') || hasDecorator(node, 'StyleAttribute')
+	);
+}
+
 function serializeDeclarationWithType(node: ts.Declaration): Node {
 	const result = serializeDeclaration(node);
+
+	if (isCxlAttribute(node)) result.kind = Kind.Attribute;
+
 	if (!result.type) {
 		if (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node)) {
 			const sig = typeChecker.getSignatureFromDeclaration(node);
@@ -502,8 +532,14 @@ function serializeObject(
 	return result;
 }
 
+function isCxlComponent(node: ts.ClassDeclaration) {
+	return hasDecorator(node, 'Augment');
+}
+
 function serializeClass(node: ts.ClassDeclaration) {
 	const result = serializeDeclaration(node);
+
+	if (isCxlComponent(node)) result.kind = Kind.Component;
 
 	if (node.heritageClauses?.length) {
 		const type: Node = (result.type = {
@@ -598,6 +634,7 @@ const Serializer: SerializerMap = {
 	[SK.VoidKeyword]: () => VoidType,
 	[SK.NeverKeyword]: () => NeverType,
 	[SK.FunctionType]: serializeFunction,
+	[SK.UndefinedKeyword]: () => UndefinedType,
 
 	[SK.ArrayType]: serializeArray,
 	[SK.FunctionDeclaration]: serializeFunction,
