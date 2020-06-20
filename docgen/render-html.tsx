@@ -235,12 +235,13 @@ function Documentation(node: Node) {
 
 	node.docs?.forEach(doc => {
 		if (doc.name === 'comment') comment += `<p>${doc.value}</p>`;
+		else if (doc.name === 'tagName') tagName = doc.value || '';
 	});
 
-	if (node.kind === Kind.Component)
+	if (node.kind === Kind.Component && tagName)
 		demo = `<cxl-t h5>Demo</cxl-t><cxl-docs-demo component="${tagName}"></cxl-docs-demo>`;
 
-	return `${comment}${demo}`;
+	return `${comment}${demo}${Usage(node, tagName)}`;
 }
 
 function ParameterDocumentation(node: Node) {
@@ -309,7 +310,7 @@ function GroupIndex(kind: Kind, children: string[]) {
 
 function getNodeCoef(a: Node) {
 	return (
-		(a.flags & Flags.Static) +
+		-(a.flags & Flags.Static) +
 		(a.kind === Kind.Module &&
 		(a.name === 'index.ts' || a.name === 'index.tsx')
 			? -10
@@ -349,9 +350,14 @@ function ImportStatement(node: Node) {
 	return `<cxl-t h5>Import</cxl-t><pre>import { ${node.name} } from '${importUrl}';</pre>`;
 }
 
-function Usage(node: Node) {
+function Usage(node: Node, tagName?: string) {
 	const importStr = ImportStatement(node);
-	return importStr ? `<cxl-t h4>Usage</cxl-t>${importStr}` : '';
+	const htmlStr = tagName
+		? `<cxl-t h5>HTML</cxl-t><pre>&lt;${tagName}&gt;&lt;/${tagName}&gt;</pre>`
+		: '';
+	return importStr || htmlStr
+		? `<cxl-t h4>Usage</cxl-t>${importStr}${htmlStr}`
+		: '';
 }
 
 function Members(node: Node) {
@@ -385,15 +391,19 @@ function Members(node: Node) {
 				groupBody[groupKind].push(MemberCard(c));
 		});
 
+	const sortedGroups = groups.sort((a, b) =>
+		kindToString(a) > kindToString(b) ? 1 : -1
+	);
+
 	return groups.length
 		? `<cxl-t h4>${translate(
 				node.kind === Kind.Module ? 'Members' : 'API'
 		  )}</cxl-t>` +
-				groups
+				sortedGroups
 					.map(kind => GroupIndex(kind, index[kind]))
 					.join('<br/>') +
 				'<br/>' +
-				groups
+				sortedGroups
 					.filter(group => groupBody[group].length)
 					.map(
 						group =>
@@ -410,7 +420,6 @@ function ModuleBody(json: Node) {
 		`<cxl-page><cxl-t h3>${ModuleTitle(json)}</cxl-t>` +
 		ExtendedBy(json.extendedBy) +
 		Documentation(json) +
-		Usage(json) +
 		Members(json) +
 		'</cxl-page>'
 	);

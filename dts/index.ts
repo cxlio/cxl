@@ -504,22 +504,26 @@ function getCxlRole(node: ts.CallExpression): string {
 function getCxlClassMeta(node: ts.ClassDeclaration, result: Node): boolean {
 	const augment = getCxlDecorator(node, 'Augment');
 	const args = (augment?.expression as ts.CallExpression)?.arguments;
+	const docs = result.docs || [];
+	let tagName = '';
 
 	if (augment) result.kind = Kind.Component;
+	else return false;
 
 	if (args) {
-		const docs = result.docs || [];
-		args.forEach(arg => {
-			if (
+		args.forEach((arg, i) => {
+			if (i === 0 && ts.isStringLiteral(arg)) tagName = arg.text;
+			else if (
 				ts.isCallExpression(arg) &&
 				ts.isIdentifier(arg.expression) &&
 				arg.expression.escapedText === 'role'
 			)
 				docs.push({ name: 'role', value: getCxlRole(arg) });
 		});
-
-		if (docs.length > 0) result.docs = docs;
 	}
+	if (tagName) docs.push({ name: 'tagName', value: tagName });
+
+	if (docs.length > 0) result.docs = docs;
 
 	return !!augment;
 }

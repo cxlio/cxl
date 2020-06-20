@@ -227,6 +227,7 @@ export class RippleContainer extends Component {
  * The top app bar provides content and actions related to the current screen. It’s used for branding, screen titles, navigation, and actions.
  */
 @Augment<Appbar>(
+	'cxl-appbar',
 	role('heading'),
 	<Host>
 		<Style>
@@ -282,8 +283,6 @@ export class RippleContainer extends Component {
 	</Host>
 )
 export class Appbar extends Component {
-	static tagName = 'cxl-appbar';
-
 	@Attribute()
 	extended = false;
 
@@ -817,16 +816,17 @@ export class Spinner extends Component {
 		<Style>
 			{{
 				$: { display: 'block', font: 'default', marginBottom: 8 },
+				$firstChild: { marginTop: 0 },
 				$lastChild: { marginBottom: 0 },
-				$inline: { display: 'inline' },
+				$inline: { display: 'inline', marginTop: 0, marginBottom: 0 },
 
 				$caption: { font: 'caption' },
-				$h1: { font: 'h1', marginBottom: 64 },
-				$h2: { font: 'h2', marginBottom: 48 },
-				$h3: { font: 'h3', marginBottom: 32 },
-				$h4: { font: 'h4', marginBottom: 24 },
-				$h5: { font: 'h5', marginBottom: 16 },
-				$h6: { font: 'h6', marginBottom: 16 },
+				$h1: { font: 'h1', marginTop: 32, marginBottom: 64 },
+				$h2: { font: 'h2', marginTop: 24, marginBottom: 48 },
+				$h3: { font: 'h3', marginTop: 24, marginBottom: 32 },
+				$h4: { font: 'h4', marginTop: 24, marginBottom: 24 },
+				$h5: { font: 'h5', marginTop: 16, marginBottom: 16 },
+				$h6: { font: 'h6', marginTop: 16, marginBottom: 16 },
 				$button: { font: 'button' },
 				$subtitle: { font: 'subtitle', marginBottom: 0 },
 				$subtitle2: { font: 'subtitle2', opacity: 0.73 },
