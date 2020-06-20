@@ -26,7 +26,7 @@ import META from './meta.js';
 					marginRight: 'auto',
 					backgroundColor: 'background',
 					width: 320,
-					height: 240,
+					height: 180,
 				},
 			}}
 		</Style>

@@ -238,9 +238,6 @@ function Documentation(node: Node) {
 		else if (doc.name === 'tagName') tagName = doc.value || '';
 	});
 
-	if (node.kind === Kind.Component && tagName)
-		demo = `<cxl-t h5>Demo</cxl-t><cxl-docs-demo component="${tagName}"></cxl-docs-demo>`;
-
 	return `${comment}${demo}${Usage(node, tagName)}`;
 }
 
@@ -355,8 +352,13 @@ function Usage(node: Node, tagName?: string) {
 	const htmlStr = tagName
 		? `<cxl-t h5>HTML</cxl-t><pre>&lt;${tagName}&gt;&lt;/${tagName}&gt;</pre>`
 		: '';
-	return importStr || htmlStr
-		? `<cxl-t h4>Usage</cxl-t>${importStr}${htmlStr}`
+	const demo =
+		node.kind === Kind.Component && tagName
+			? `<cxl-t h5>Demo</cxl-t><cxl-docs-demo component="${tagName}"></cxl-docs-demo>`
+			: '';
+
+	return demo || importStr || htmlStr
+		? `<cxl-t h4>Usage</cxl-t>${demo}${importStr}${htmlStr}`
 		: '';
 }
 

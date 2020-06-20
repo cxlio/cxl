@@ -816,8 +816,6 @@ export class Spinner extends Component {
 		<Style>
 			{{
 				$: { display: 'block', font: 'default', marginBottom: 8 },
-				$firstChild: { marginTop: 0 },
-				$lastChild: { marginBottom: 0 },
 				$inline: { display: 'inline', marginTop: 0, marginBottom: 0 },
 
 				$caption: { font: 'caption' },
@@ -831,6 +829,8 @@ export class Spinner extends Component {
 				$subtitle: { font: 'subtitle', marginBottom: 0 },
 				$subtitle2: { font: 'subtitle2', opacity: 0.73 },
 				$code: { font: 'code' },
+				$firstChild: { marginTop: 0 },
+				$lastChild: { marginBottom: 0 },
 			}}
 		</Style>
 		<slot />
