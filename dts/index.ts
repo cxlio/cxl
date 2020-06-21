@@ -509,6 +509,11 @@ function getCxlClassMeta(node: ts.ClassDeclaration, result: Node): boolean {
 
 	if (augment) result.kind = Kind.Component;
 	else return false;
+	
+	if (result.children) {
+		const tagNode = result.children.find(m => m.name==='tagName' && m.kind===Kind.Property && m.flags & Flags.Static));
+		if (tagNode && tagName.value) tagName = tagNode.value.slice(1, -1);
+	}
 
 	if (args) {
 		args.forEach((arg, i) => {
