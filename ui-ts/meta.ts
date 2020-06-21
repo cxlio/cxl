@@ -4,11 +4,15 @@ export interface ComponentMeta {
 	summary?: string;
 	icon?: string;
 	tags?: string[];
-	demoContent?: string;
+	demo?: Demo;
 }
 
 export interface AttributeMeta {
 	summary: string;
+}
+
+export interface Demo {
+	content: string;
 }
 
 export const components: Record<string, ComponentMeta> = {
@@ -16,12 +20,14 @@ export const components: Record<string, ComponentMeta> = {
 		summary:
 			'The top app bar displays information and actions relating to the current screen.',
 		icon: 'window-maximize',
-		demoContent: `
+		demo: {
+			content: `
 	<cxl-appbar-title>Appbar Title</cxl-appbar-title>
 	<cxl-button flat primary><cxl-icon icon="heart"></cxl-icon></cxl-button>
 	<cxl-button flat primary><cxl-icon icon="search"></cxl-icon></cxl-button>
 	<cxl-button flat primary><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
 		`,
+		},
 		tags: ['navigation'],
 	},
 	'cxl-appbar-title': {

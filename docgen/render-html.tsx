@@ -87,7 +87,7 @@ function Type(type?: Node): string {
 			return ConditionalType(type);
 		case Kind.IndexedType:
 			if (!type.children) throw new Error('Invalid node');
-			return `${Type(type.children[0])}[${Type(type.children[1])}`;
+			return `${Type(type.children[0])}[${Type(type.children[1])}]`;
 		case Kind.TypeUnion:
 			return type.children?.map(Type).join(' | ') || '';
 		case Kind.Array:

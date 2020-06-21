@@ -194,7 +194,7 @@ function getNodeName(node: ts.Node): string {
 
 	if (anode.name) return anode.name.escapedText || anode.name.getText();
 
-	return node.getText();
+	return '';
 }
 
 function createNode(node: ts.Node, extra?: Partial<Node>): Node {
@@ -509,10 +509,15 @@ function getCxlClassMeta(node: ts.ClassDeclaration, result: Node): boolean {
 
 	if (augment) result.kind = Kind.Component;
 	else return false;
-	
+
 	if (result.children) {
-		const tagNode = result.children.find(m => m.name==='tagName' && m.kind===Kind.Property && m.flags & Flags.Static));
-		if (tagNode && tagName.value) tagName = tagNode.value.slice(1, -1);
+		const tagNode = result.children.find(
+			m =>
+				m.name === 'tagName' &&
+				m.kind === Kind.Property &&
+				m.flags & Flags.Static
+		);
+		if (tagNode && tagNode.value) tagName = tagNode.value.slice(1, -1);
 	}
 
 	if (args) {

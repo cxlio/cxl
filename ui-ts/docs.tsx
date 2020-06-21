@@ -39,8 +39,8 @@ import META from './meta.js';
 						const el = document.createElement(tagName);
 						parent.appendChild(el);
 						const meta = META.components[tagName];
-						if (meta && meta.demoContent) {
-							el.innerHTML = meta.demoContent;
+						if (meta && meta.demo) {
+							el.innerHTML = meta.demo.content;
 						}
 					}
 				})

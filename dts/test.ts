@@ -118,6 +118,7 @@ export default suite('dts', test => {
 		a.equal(fn.type.kind, Kind.Function);
 		a.assert(fn.type.type);
 		a.equal(fn.type.type, BooleanType);
+		a.equal(fn.type.name, '');
 	});
 
 	test('type declaration - type parameters', a => {
@@ -271,23 +272,19 @@ export default suite('dts', test => {
 		a.equal(BType.name, 'B');
 	});
 
-	test(
-		'class decorators - cxl Augment',
-		(a: Test) => {
-			const [role, A, B] = parse(`
+	test('class decorators - cxl Augment', (a: Test) => {
+		const [role, A, B] = parse(`
 			function role(str: string) { }
 			function Augment() { return () => { }; }
 			@Augment(role('roleName'))
 			class B { }`);
-			a.ok(role);
-			a.ok(A);
-			a.equal(B.kind, Kind.Component);
-			a.assert(B.docs);
-			a.equal(B.docs[0].name, 'role');
-			a.equal(B.docs[0].value, 'roleName');
-		},
-		true
-	);
+		a.ok(role);
+		a.ok(A);
+		a.equal(B.kind, Kind.Component);
+		a.assert(B.docs);
+		a.equal(B.docs[0].name, 'role');
+		a.equal(B.docs[0].value, 'roleName');
+	});
 
 	test('class extends class and implements interface', (a: Test) => {
 		const [A, B, C] = parse(`
