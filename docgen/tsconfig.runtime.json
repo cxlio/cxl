@@ -1,0 +1,27 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/docgen",
+		"outFile": "../dist/docgen/runtime.js",
+		"rootDir": "..",
+		"module": "amd"
+	},
+	"include": [
+		"runtime.tsx",
+		"../ui-ts/meta.ts",
+		"../ui-ts/index.tsx",
+		"../rx/index.ts",
+		"../css/index.ts",
+		"../xdom/index.ts",
+		"../template/index.ts",
+		"../dom/index.ts",
+		"../component/index.ts",
+		"../ui-ts/core.tsx",
+		"../ui-ts/form.tsx",
+		"../ui-ts/icons.tsx",
+		"../ui-ts/layout.tsx",
+		"../ui-ts/dialog.tsx",
+		"../ui-ts/table.tsx"
+	],
+	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
+}
