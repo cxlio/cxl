@@ -102,7 +102,7 @@ export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
 		operators.reduce((prev, fn) => fn(prev), source);
 }
 
-class Observable<T> {
+export class Observable<T> {
 	[observableSymbol]() {
 		return this;
 	}
@@ -305,9 +305,9 @@ function toPromise<T>(observable: Observable<T>) {
 /*
  * Operators
  */
-function cleanUpSubscriber<T>(
+function cleanUpSubscriber<T, T2>(
 	next: NextFunction<T>,
-	subscriber: Subscription<T>,
+	subscriber: Subscription<T2>,
 	cleanup: () => void
 ): NextObserver<T> {
 	return {
@@ -341,7 +341,7 @@ export function operator<T, T2 = T>(
 		});
 }
 
-function map<T, T2>(mapFn: (val: T) => T2) {
+export function map<T, T2>(mapFn: (val: T) => T2) {
 	return operator<T, T2>(subscriber => (val: T) => {
 		subscriber.next(mapFn(val));
 	});
@@ -375,7 +375,7 @@ export function collect<T>(source: Observable<T>, gate: Observable<any>) {
 	});
 }
 
-function debounceTime<T>(time?: number) {
+export function debounceTime<T>(time?: number) {
 	return operator<T>(subscriber =>
 		debounceFunction(subscriber.next.bind(subscriber), time)
 	);
@@ -384,7 +384,7 @@ function debounceTime<T>(time?: number) {
 export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 	let lastSubscription: Subscription<T2>;
 
-	return operator(subscriber => (val: T) => {
+	return operator<T, T2>(subscriber => (val: T) => {
 		if (lastSubscription) lastSubscription.unsubscribe();
 
 		const newObservable = project(val);
@@ -395,7 +395,7 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
 	let subscriptions: Subscription<T2>[];
 
-	return operator(subscriber =>
+	return operator<T, T2>(subscriber =>
 		cleanUpSubscriber(
 			(val: T) => {
 				const newObservable = project(val);
@@ -419,7 +419,7 @@ export function exhaustMap<T, T2>(project: (value?: T) => Observable<T2>) {
 		}
 	}
 
-	return operator(subscriber =>
+	return operator<T, T2>(subscriber =>
 		cleanUpSubscriber(
 			(val: T) => {
 				if (!lastSubscription)
@@ -489,7 +489,7 @@ export function catchError<T, T2>(
 
 const initialDistinct = {};
 
-function distinctUntilChanged<T>(): Operator<T, T> {
+export function distinctUntilChanged<T>(): Operator<T, T> {
 	return operator((subscriber: Subscription<T>) => {
 		let lastValue: T | typeof initialDistinct = initialDistinct;
 		return (val: T) => {
@@ -501,7 +501,7 @@ function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
-function merge<R extends Observable<any>[]>(
+export function merge<R extends Observable<any>[]>(
 	...observables: R
 ): R extends (infer U)[] ? Observable<Merge<U>> : never {
 	if (observables.length === 1) return observables[0] as any;
@@ -568,40 +568,46 @@ export function be<T>(initialValue: T) {
 	return new BehaviorSubject(initialValue);
 }
 
-function to<T, K extends keyof T>(o: Observable<T>, key: K): Observable<T[K]>;
-function to<T, R>(
-	o: Observable<T>,
-	toFn: (val: T) => R | Observable<R>
-): Observable<R>;
-function to<T, R>(o: Observable<T>, toFn: (val: T) => void): Observable<T>;
-function to(o: Observable<any>, key: any) {
-	return o.pipe(
-		typeof key === 'string'
-			? map(val => val[key])
-			: switchMap(val => {
-					const result = key(val);
-					return result instanceof Observable
-						? result
-						: of(result === undefined ? val : result);
-			  })
-	);
+const operators: any = {
+	map,
+	tap,
+	filter,
+	debounceTime,
+	distinctUntilChanged,
+	mergeMap,
+	switchMap,
+	catchError,
+};
+
+for (const p in operators) {
+	(Observable.prototype as any)[p] = function (...args: any) {
+		this.pipe((operators as any)[p](...args));
+	};
+}
+
+export interface Observable<T> {
+	catchError<T2>(
+		selector: (err: any, source: Observable<T>) => Observable<T2> | void
+	): Observable<T2>;
+	debounceTime(time?: number): Observable<T>;
+	defer(fn: () => Observable<T> | void): Observable<T>;
+	distinctUntilChanged(): Observable<T>;
+	filter(fn: (val: T) => boolean): Observable<T>;
+	map<T2>(mapFn: (val: T) => T2): Observable<T2>;
+	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
+	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
+	tap(tapFn: (val: T) => void): Observable<T>;
 }
 
 export {
-	to,
-	Observable,
 	BehaviorSubject,
 	Subject,
 	Subscriber,
 	from,
 	toPromise,
 	throwError,
-	map,
 	filter,
-	debounceTime,
-	distinctUntilChanged,
 	concat,
-	merge,
 	combineLatest,
 	of,
 };

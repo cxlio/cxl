@@ -1,4 +1,4 @@
-import { dirname, basename as pathBasename, join } from 'path';
+import { dirname, resolve, basename as pathBasename, join } from 'path';
 import {
 	mkdirSync,
 	readFileSync,
@@ -74,7 +74,7 @@ export function read(source: string): Promise<Output> {
 export function file(source: string, out?: string) {
 	return from(
 		read(source).then(res => ({
-			path: out || pathBasename(source),
+			path: out || resolve(source),
 			source: res.source,
 		}))
 	);
@@ -204,7 +204,7 @@ export class Builder extends Application {
 	}
 
 	writeFile(result: Output) {
-		const outFile = this.outputDir + '/' + result.path;
+		const outFile = join(this.outputDir, result.path);
 		const outputDir = dirname(outFile);
 
 		if (!existsSync(outputDir)) mkdirSync(outputDir);
@@ -245,10 +245,38 @@ export function build(config: BuildConfiguration) {
 	return new Builder(config).start();
 }
 
-export function minify(config?: any) {
-	return map((out: Output) => {
-		const { code, error } = Terser.minify(out.source, config);
+interface MinifyConfig {
+	sourceMap?: { content?: string; url: string };
+}
+
+export function getSourceMap(out: Output): Output | undefined {
+	const match = /\/\/# sourceMappingURL=(.+)/.exec(out.source);
+	const path = match ? resolve(dirname(out.path), match?.[1]) : null;
+
+	if (path)
+		return { path: pathBasename(path), source: readFileSync(path, 'utf8') };
+}
+
+export function minify(config: MinifyConfig = {}) {
+	return operator(subs => (out: Output) => {
+		const destPath = pathBasename(out.path.replace(/\.js$/, '.min.js'));
+
+		// Detect sourceMap if not present in config
+		if (!config.sourceMap) {
+			const sourceMap = getSourceMap(out);
+			if (sourceMap)
+				config.sourceMap = {
+					content: sourceMap.source,
+					url: destPath + '.map',
+				};
+		}
+
+		const { code, map, error } = Terser.minify(out.source, config);
+
 		if (error) throw error;
-		return { path: out.path, source: code };
+
+		subs.next({ path: destPath, source: code });
+		if (map && config.sourceMap)
+			subs.next({ path: config.sourceMap.url, source: map });
 	});
 }

@@ -3,7 +3,7 @@ const {
 	tsconfig,
 	typescript,
 	pkg,
-	file
+	file,
 } = require('../dist/build/index.js');
 
 build({
@@ -11,7 +11,6 @@ build({
 	tasks: [
 		tsconfig(),
 		tsconfig('tsconfig.test.json'),
-		file('test.html'),
-		pkg()
-	]
+		file('test.html', 'test.html'),
+	],
 });

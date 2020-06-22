@@ -230,15 +230,23 @@ function ParameterTable(rows: string[][]) {
 
 function Documentation(node: Node) {
 	let comment = '';
-	let demo = '';
+
+	node.docs?.forEach(doc => {
+		if (doc.name === 'comment' && doc.value)
+			comment += `<p>${doc.value}</p>`;
+	});
+
+	return `${comment}`;
+}
+
+function ModuleDocumentation(node: Node) {
 	let tagName = '';
 
 	node.docs?.forEach(doc => {
-		if (doc.name === 'comment') comment += `<p>${doc.value}</p>`;
-		else if (doc.name === 'tagName') tagName = doc.value || '';
+		if (doc.name === 'tagName') tagName = doc.value || '';
 	});
 
-	return `${comment}${demo}${Usage(node, tagName)}`;
+	return Documentation(node) + Usage(node, tagName);
 }
 
 function ParameterDocumentation(node: Node) {
@@ -358,7 +366,7 @@ function Usage(node: Node, tagName?: string) {
 			: '';
 
 	return demo || importStr || htmlStr
-		? `<cxl-t h4>Usage</cxl-t>${demo}${importStr}${htmlStr}`
+		? `<cxl-t h4>Usage</cxl-t>${importStr}${demo}${htmlStr}`
 		: '';
 }
 
@@ -373,6 +381,7 @@ function Members(node: Node) {
 			if (node.kind === Kind.Module && !declarationFilter(c)) return '';
 			const groupKind =
 				(c.kind === Kind.Export && c.type?.type?.kind) || c.kind;
+			if (groupKind === Kind.Export) console.log(c);
 
 			if (!index[groupKind]) {
 				groupBody[groupKind] = [];
@@ -421,7 +430,7 @@ function ModuleBody(json: Node) {
 	return (
 		`<cxl-page><cxl-t h3>${ModuleTitle(json)}</cxl-t>` +
 		ExtendedBy(json.extendedBy) +
-		Documentation(json) +
+		ModuleDocumentation(json) +
 		Members(json) +
 		'</cxl-page>'
 	);
@@ -437,7 +446,10 @@ function getHref(node: Node): string {
 }
 
 function declarationFilter(node: Node) {
-	return node.flags & Flags.Export;
+	return (
+		node.flags & Flags.Export &&
+		!(node.kind === Kind.Interface && node.flags & Flags.DeclarationMerge)
+	);
 }
 
 const IconMap: Record<number, string> = {

@@ -73,6 +73,7 @@ export enum Flags {
 	Overload = 16384,
 	External = 32768,
 	DefaultLibrary = 65536,
+	DeclarationMerge = 131072,
 }
 
 export interface Source {
@@ -118,6 +119,7 @@ const dtsNode = Symbol('dtsNode');
 
 let currentIndex: Index;
 let program: ts.Program;
+let compilerHost: ts.CompilerHost;
 let config: ts.ParsedCommandLine;
 let sourceFiles: ts.SourceFile[];
 let typeChecker: ts.TypeChecker;
@@ -198,20 +200,14 @@ function getNodeName(node: ts.Node): string {
 }
 
 function createNode(node: ts.Node, extra?: Partial<Node>): Node {
-	const refNode = (node as any)[dtsNode];
-	const source = getNodeSource(node);
-	const kind = extra?.kind || getKind(node);
+	const result = (node as any)[dtsNode] || {};
 
-	const name = getNodeName(node);
-	const result = {
-		name,
-		kind,
-		source,
-		flags: 0,
-		...extra,
-	};
+	result.source = result.source || getNodeSource(node);
+	result.kind = extra?.kind || result.kind || getKind(node);
+	result.name = result.name || getNodeName(node);
+	result.flags = result.flags || 0;
 
-	if (refNode) return Object.assign(refNode, result);
+	if (extra) Object.assign(result, extra);
 
 	return ((node as any)[dtsNode] = result);
 }
@@ -310,11 +306,6 @@ function serializeDeclaration(node: ts.Declaration): Node {
 
 	if (anode.type) result.type = serialize(anode.type);
 
-	if (anode.members) {
-		if (result.children) throw new Error('Node already initialized');
-		pushChildren(result, anode.members.map(serialize));
-	}
-
 	if (anode.initializer)
 		result.value = serializeExpression(anode.initializer);
 
@@ -337,6 +328,9 @@ function serializeParameter(symbol: ts.Symbol) {
 	if (!node) throw new Error('Invalid Parameter');
 
 	const result = serializeDeclarationWithType(node);
+
+	if (result.flags & (Flags.Private | Flags.Public | Flags.Protected))
+		result.kind = Kind.Property;
 
 	if (node.dotDotDotToken) result.flags = result.flags | Flags.Rest;
 	if (node.questionToken) result.flags = result.flags | Flags.Optional;
@@ -393,6 +387,10 @@ function serializeIndexedAccessType(type: ts.IndexedAccessType) {
 	};
 }
 
+function serializeSymbol(symbol: ts.Symbol): Node {
+	return serialize(symbol.valueDeclaration || symbol.declarations[0]);
+}
+
 function serializeType(type: ts.Type): Node {
 	if (type.flags & TF.Any) return AnyType;
 	if (type.flags & TF.Unknown) return UnknownType;
@@ -428,20 +426,20 @@ function serializeType(type: ts.Type): Node {
 			children: type.types.map(serializeType),
 		};
 
-	if (type.symbol)
-		return serialize(
-			type.symbol.valueDeclaration || type.symbol.declarations[0]
-		);
+	if (type.symbol) return serializeSymbol(type.symbol);
 
 	console.log(type);
 	throw new Error('Invalid Type');
 }
 
-function serializeFunction(node: ts.FunctionLikeDeclaration) {
+function serializeFunction(
+	node: ts.FunctionLikeDeclaration | ts.MethodSignature
+) {
 	const result = serializeDeclaration(node);
 	const signature = typeChecker.getSignatureFromDeclaration(node);
 
 	if (node.kind === SK.ArrowFunction) result.kind = Kind.Function;
+	else if (node.kind === SK.MethodSignature) result.kind = Kind.Method;
 
 	if (node.typeParameters)
 		result.typeParameters = node.typeParameters.map(serialize);
@@ -557,8 +555,13 @@ function serializeDeclarationWithType(node: ts.Declaration): Node {
 }
 
 function pushChildren(parent: Node, children: Node[]) {
-	children.forEach(n =>
-		Object.defineProperty(n, 'parent', { value: parent, enumerable: false })
+	children.forEach(
+		n =>
+			!n.parent &&
+			Object.defineProperty(n, 'parent', {
+				value: parent,
+				enumerable: false,
+			})
 	);
 	if (!parent.children) parent.children = children;
 	else parent.children.push(...children);
@@ -577,6 +580,39 @@ function serializeObject(
 
 function serializeClass(node: ts.ClassDeclaration) {
 	const result = serializeDeclaration(node);
+	const symbol =
+		// ts.isClassDeclaration(node) &&
+		typeChecker.getSymbolAtLocation(node) ||
+		(node.name && typeChecker.getSymbolAtLocation(node.name));
+
+	if (node.members) {
+		pushChildren(result, node.members.map(serialize));
+	}
+
+	if (symbol) {
+		if (
+			ts.isInterfaceDeclaration(node) &&
+			symbol.flags & ts.SymbolFlags.Class
+		)
+			result.flags &= Flags.DeclarationMerge;
+		else {
+			const exportedSymbol = typeChecker.getExportSymbolOfSymbol(symbol);
+			exportedSymbol?.members?.forEach(
+				s =>
+					!(s.flags & ts.SymbolFlags.TypeParameter) &&
+					pushChildren(
+						result,
+						s.declarations.flatMap(d => {
+							const existing: Node = (d as any)[dtsNode];
+							return existing &&
+								result.children?.indexOf(existing) !== -1
+								? []
+								: serialize(d);
+						})
+					)
+			);
+		}
+	}
 
 	getCxlClassMeta(node, result);
 
@@ -704,6 +740,7 @@ const Serializer: SerializerMap = {
 	[SK.Parameter]: serializeDeclarationWithType,
 	[SK.PropertyDeclaration]: serializeDeclarationWithType,
 	[SK.MethodDeclaration]: serializeFunction,
+	[SK.MethodSignature]: serializeFunction,
 	[SK.ClassDeclaration]: serializeClass,
 	[SK.TypeAliasDeclaration]: serializeDeclaration,
 	[SK.TypeParameter]: serializeTypeParameter,
@@ -736,12 +773,12 @@ function visit(n: ts.Node, parent: Node): void {
 		//	} else if (ts.isExportDeclaration(n)) {
 	} else
 		switch (n.kind) {
+			case SK.InterfaceDeclaration:
 			case SK.TypeAliasDeclaration:
 			case SK.FunctionDeclaration:
 			case SK.EnumDeclaration:
 			case SK.VariableDeclaration:
 			case SK.ClassDeclaration:
-			case SK.InterfaceDeclaration:
 				pushChildren(parent, [serialize(n)]);
 		}
 }
@@ -776,9 +813,6 @@ function markExported(
 		]);
 	else
 		symbol.declarations.forEach(d => {
-			/*if (!isLocalSymbol(symbol, sourceFile))
-			pushChildren(parent, [serializeExternalExport(d, localSymbol)]);*/
-
 			if (ts.isExportSpecifier(d) && !(d as any).$$exported) {
 				const localSymbol = typeChecker.getExportSpecifierLocalTargetSymbol(
 					d
@@ -800,10 +834,15 @@ function parseSourceFile(sourceFile: ts.SourceFile) {
 	});
 	const symbol = typeChecker.getSymbolAtLocation(sourceFile);
 
-	if (symbol)
+	if (symbol) {
 		typeChecker
 			.getExportsOfModule(symbol)
 			.forEach(s => markExported(s, result, sourceFile));
+	} else {
+		const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile);
+		if (diagnostics.length)
+			ts.formatDiagnosticsWithColorAndContext(diagnostics, compilerHost);
+	}
 
 	sourceFile.forEachChild(c => visit(c, result));
 
@@ -820,7 +859,7 @@ export function parse(
 	source: string,
 	options: ts.CompilerOptions = { lib: ['es6.d.ts'] }
 ): Node[] {
-	const host = ts.createCompilerHost(options);
+	const host = (compilerHost = ts.createCompilerHost(options));
 	const fileName = `(${Date.now()}).tsx`;
 	const oldGetSourceFile = host.getSourceFile;
 	let sourceFile: any;

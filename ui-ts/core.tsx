@@ -85,6 +85,10 @@ export function focusable<T extends FocusableComponent>(element: T) {
 
 const stateStyles = new StyleSheet({ styles: StateStyles });
 
+/**
+ * Adds focusable functionality to input components.
+ * @decorator
+ */
 export function Focusable() {
 	return (view: RenderContext) => {
 		view.bind(focusable(view.host as FocusableComponent));

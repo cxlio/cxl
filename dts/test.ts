@@ -206,6 +206,29 @@ export default suite('dts', test => {
 		a.ok(kls.source);
 	});
 
+	test('class - method overload', (a: Test) => {
+		const [A] = parse(`class A {
+			m1(a: string): void;
+			m1(b: boolean): boolean;
+			m1(c: any) { if (b===true) return true; }
+		}`);
+
+		a.assert(A.children);
+		a.equal(A.children.length, 3);
+		const [m1, m2, m3] = A.children;
+		a.equal(m1.name, 'm1');
+		a.equal(m1.type, VoidType);
+		a.assert(m1.parameters);
+		a.equal(m1.parameters[0].name, 'a');
+		a.equal(m2.name, 'm1');
+		a.equal(m2.type, BooleanType);
+		a.assert(m2.parameters);
+		a.equal(m2.parameters[0].name, 'b');
+		a.equal(m3.name, 'm1');
+		a.assert(m3.parameters);
+		a.equal(m3.parameters[0].name, 'c');
+	});
+
 	test('class declaration', (a: Test) => {
 		const [kls] = parse(`class Test<T> extends Set<T> {
 			member: T;
@@ -230,17 +253,26 @@ export default suite('dts', test => {
 		a.assert(kls.type.children);
 		a.equal(kls.type.children.length, 1);
 		a.equal(kls.type.children[0].name, 'Set');
+		/*const Tm = kls.children[1];
+		a.equal(Tm.name, 'T');
+		a.equal(Tm.kind, Kind.TypeParameter);*/
 	});
 
 	test('class constructor', (a: Test) => {
-		const [kls] = parse(`class Kls { constructor(public t: string) { }`);
+		const [kls] = parse(
+			`class Kls { constructor(public t: string, s: boolean) { }`
+		);
 		a.assert(kls.children);
-		a.equal(kls.children.length, 1);
-		const ctor = kls.children[0];
+		a.equal(kls.children.length, 2);
+		const [ctor, t] = kls.children;
 		a.equal(ctor.name, 'constructor');
 		a.assert(ctor.parameters);
-		a.equal(ctor.parameters.length, 1);
+		a.equal(ctor.parameters.length, 2);
 		a.equal(ctor.kind, Kind.Constructor);
+		a.equal(t.name, 't');
+		a.equal(t.type, StringType);
+		a.ok(t.flags & Flags.Public);
+		a.equal(t.kind, Kind.Property);
 	});
 
 	test('class implements interface', (a: Test) => {
@@ -605,5 +637,18 @@ function map<T>() {	return operator<T>(); }
 		a.assert(A.type);
 		a.equal(A.type.name, 'Set');
 		a.equal(A.kind, Kind.Export);
+	});
+
+	test('interface extends class', (a: Test) => {
+		const [A, B] = parse(
+			`export class A<T> { m1?: boolean; } export interface A<T> { m2: string; }`
+		);
+		a.ok(A);
+		a.ok(B);
+		console.log(A, B);
+		a.assert(A.children);
+		a.equal(A.children.length, 2);
+		a.equal(A.children[0].name, 'm1');
+		a.equal(A.children[1].name, 'm2');
 	});
 });

@@ -10,7 +10,7 @@ function write(path, source) {
 }
 
 cp.execSync('mkdir -p ../dist/build');
-cp.execSync('npm run build-index');
+cp.execSync('npm run build-index', { encoding: 'utf8' });
 
 const amdConfig = JSON.parse(fs.readFileSync('./tsconfig.amd.json'));
 amdConfig.compilerOptions.outFile = 'amd.js';
