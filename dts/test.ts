@@ -309,13 +309,13 @@ export default suite('dts', test => {
 			function role(str: string) { }
 			function Augment() { return () => { }; }
 			@Augment(role('roleName'))
-			class B { }`);
+			class B { static tagName = 'cxl-test'; }`);
 		a.ok(role);
 		a.ok(A);
 		a.equal(B.kind, Kind.Component);
 		a.assert(B.docs);
-		a.equal(B.docs[0].name, 'role');
-		a.equal(B.docs[0].value, 'roleName');
+		a.equal(B.docs.role, 'roleName');
+		a.equal(B.docs.tagName, 'cxl-test');
 	});
 
 	test('class extends class and implements interface', (a: Test) => {
@@ -469,18 +469,20 @@ export default suite('dts', test => {
 			 * @return Return Comment
 			 * Second Line Comment
 			 * @custom Custom Tag
+			 * @param p1 param1
+			 * @param p2 param2
 			 */
-			 function fn() { }
+			 function fn(p1: boolean, p2: string) { }
 		`);
 
 		a.assert(A.docs);
-		a.equal(A.docs.length, 3);
-		a.equal(A.docs[0].name, 'comment');
-		a.equal(A.docs[0].value, 'Function Description');
-		a.equal(A.docs[1].name, 'return');
-		a.equal(A.docs[1].value, 'Return Comment\nSecond Line Comment');
-		a.equal(A.docs[2].name, 'custom');
-		a.equal(A.docs[2].value, 'Custom Tag');
+		a.equal(A.docs.desc, 'Function Description');
+		a.equal(A.docs.return, 'Return Comment\nSecond Line Comment');
+		a.equal((A.docs as any).custom, 'Custom Tag');
+		a.assert(A.parameters);
+		const [p1, p2] = A.parameters;
+		a.equal(p1.docs?.desc, 'param1');
+		a.equal(p2.docs?.desc, 'param2');
 	});
 
 	test('type alias - function', (a: Test) => {
@@ -507,7 +509,7 @@ export function catchError<T, T2>(
 ) { return {} as any; }`);
 		a.ok(A);
 		a.assert(A.docs);
-		a.equal(A.docs.length, 2);
+		a.equal(A.docs.desc, 'Catches errors on the observable.');
 		a.ok(A.flags & Flags.Export);
 		a.equal(A.name, 'catchError');
 		a.assert(A.typeParameters);

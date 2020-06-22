@@ -3,6 +3,8 @@ import { promises as fs } from 'fs';
 import { Node, build } from '../dts';
 import { render as renderJson } from './render-json';
 
+const RUNTIME_JS = __dirname + '/runtime.min.js';
+
 export interface File {
 	name: string;
 	content: string;
@@ -13,11 +15,13 @@ export class DocGen extends Application {
 	name = '@cxl/docgen';
 	outputDir = './docs';
 	repository?: string;
+	debug = false;
 
 	setup() {
 		this.parameters.register(
 			{ name: 'repository', type: 'string' },
-			{ name: 'outputDir', shortcut: 'o', type: 'string' }
+			{ name: 'outputDir', shortcut: 'o', type: 'string' },
+			{ name: 'debug' }
 		);
 	}
 
@@ -41,6 +45,10 @@ export class DocGen extends Application {
 		const theme = await import('./render-html');
 		renderJson(this, json).map(f => this.writeFile(f));
 		await Promise.all(theme.render(this, json).map(f => this.writeFile(f)));
+		await this.writeFile({
+			name: 'runtime.bundle.min.js',
+			content: await fs.readFile(RUNTIME_JS, 'utf8'),
+		});
 	}
 }
 

@@ -229,32 +229,17 @@ function ParameterTable(rows: string[][]) {
 }
 
 function Documentation(node: Node) {
-	let comment = '';
-
-	node.docs?.forEach(doc => {
-		if (doc.name === 'comment' && doc.value)
-			comment += `<p>${doc.value}</p>`;
-	});
-
-	return `${comment}`;
+	let comment = node.docs?.desc;
+	return comment ? `<p>${comment}</p>` : '';
 }
 
 function ModuleDocumentation(node: Node) {
-	let tagName = '';
-
-	node.docs?.forEach(doc => {
-		if (doc.name === 'tagName') tagName = doc.value || '';
-	});
-
+	let tagName = node.docs?.tagName || '';
 	return Documentation(node) + Usage(node, tagName);
 }
 
 function ParameterDocumentation(node: Node) {
-	return (
-		node.docs
-			?.map(doc => (doc.name === 'param' ? `<p>${doc.value}</p>` : ''))
-			.join('') || ''
-	);
+	return Documentation(node);
 }
 
 function InheritedFrom(symbol?: Node) {
@@ -504,10 +489,12 @@ function ModuleFooter(_p: Node) {
 
 function Header(module: Output) {
 	const pkg = application.package;
+	const SCRIPTS = application.debug
+		? `<script src="../../dist/tester/require-browser.js"></script>
+	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');require('../../dist/ui-ts/docs.js')</script>`
+		: `<script src="runtime.bundle.min.js"></script>`;
 
-	return `<!DOCTYPE html>
-	<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');require('../../dist/ui-ts/docs.js')</script>
+	return `<!DOCTYPE html>${SCRIPTS}
 	<style>cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 };</style>
 	<cxl-application><title>${pkg.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(pkg, module)}

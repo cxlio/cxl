@@ -20,8 +20,13 @@ window.define =
 				typeof exports === 'undefined' ? moduleExports : exports,
 			args = [_require, name === 'index' ? globalExports : moduleExports];
 
+		function findModule(name) {
+			const id = name.replace(/\.js$/, '');
+			return modules[id] || _require(name);
+		}
+
 		for (let i = 2; i < injects.length; i++)
-			args.push(modules[injects[i]] || _require(injects[i]));
+			args.push(findModule(injects[i]));
 
 		module(...args);
 

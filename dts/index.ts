@@ -53,8 +53,11 @@ export enum Kind {
 }
 
 interface Documentation {
-	name: string;
-	value?: string;
+	desc?: string;
+	decorator?: boolean;
+	tagName?: string;
+	role?: string;
+	return?: string;
 }
 
 export enum Flags {
@@ -88,7 +91,7 @@ export interface Node {
 	kind: Kind;
 	source?: Source | Source[];
 	flags: Flags;
-	docs?: Documentation[];
+	docs?: Documentation;
 	value?: string;
 	type?: Node;
 	typeParameters?: Node[];
@@ -256,28 +259,21 @@ function getFlags(flags: ts.ModifierFlags) {
 	return (flags as any) as Flags;
 }
 
-function serializeJSDoc(node: ts.JSDocTag): Documentation {
-	return {
-		name: node.tagName.getText(),
-		value: node.comment,
-	};
-}
-
-function getNodeDocs(node: ts.Node) {
+function getNodeDocs(node: ts.Node): Documentation {
+	const docs: any = {};
 	const tags = ts.getJSDocTags(node);
-	const docs = tags.map(serializeJSDoc);
+	tags.forEach(tag => {
+		const name = tag.tagName.getText();
+
+		if (name === 'param')
+			docs.desc = node.kind === SK.Parameter ? tag.comment : undefined;
+		else docs[name] = tag.comment;
+	});
+
 	const jsDoc = (node as any).jsDoc as ts.JSDoc[];
+	if (jsDoc) docs.desc = jsDoc.map(doc => doc.comment).join('\n');
 
-	if (jsDoc) {
-		jsDoc.forEach(doc =>
-			docs.unshift({
-				name: 'comment',
-				value: doc.comment,
-			})
-		);
-	}
-
-	return docs.length ? docs : undefined;
+	return tags.length || jsDoc ? docs : undefined;
 }
 
 function serializeDeclaration(node: ts.Declaration): Node {
@@ -502,8 +498,7 @@ function getCxlRole(node: ts.CallExpression): string {
 function getCxlClassMeta(node: ts.ClassDeclaration, result: Node): boolean {
 	const augment = getCxlDecorator(node, 'Augment');
 	const args = (augment?.expression as ts.CallExpression)?.arguments;
-	const docs = result.docs || [];
-	let tagName = '';
+	const docs: Documentation = result.docs || {};
 
 	if (augment) result.kind = Kind.Component;
 	else return false;
@@ -515,23 +510,22 @@ function getCxlClassMeta(node: ts.ClassDeclaration, result: Node): boolean {
 				m.kind === Kind.Property &&
 				m.flags & Flags.Static
 		);
-		if (tagNode && tagNode.value) tagName = tagNode.value.slice(1, -1);
+		if (tagNode && tagNode.value) docs.tagName = tagNode.value.slice(1, -1);
 	}
 
 	if (args) {
 		args.forEach((arg, i) => {
-			if (i === 0 && ts.isStringLiteral(arg)) tagName = arg.text;
+			if (i === 0 && ts.isStringLiteral(arg)) docs.tagName = arg.text;
 			else if (
 				ts.isCallExpression(arg) &&
 				ts.isIdentifier(arg.expression) &&
 				arg.expression.escapedText === 'role'
 			)
-				docs.push({ name: 'role', value: getCxlRole(arg) });
+				docs.role = getCxlRole(arg);
 		});
 	}
-	if (tagName) docs.push({ name: 'tagName', value: tagName });
 
-	if (docs.length > 0) result.docs = docs;
+	if (docs.tagName || docs.role) result.docs = docs;
 
 	return !!augment;
 }

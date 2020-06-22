@@ -179,17 +179,21 @@ class Subject<T> extends Observable<T> {
 }
 
 class BehaviorSubject<T> extends Subject<T> {
-	constructor(public value: T) {
+	constructor(private currentValue: T) {
 		super();
 	}
 
+	get value() {
+		return this.currentValue;
+	}
+
 	protected onSubscribe(subscription: Subscription<T>) {
-		subscription.next(this.value);
+		subscription.next(this.currentValue);
 		return super.onSubscribe(subscription);
 	}
 
 	next(val: T) {
-		this.value = val;
+		this.currentValue = val;
 		super.next(val);
 	}
 }
@@ -393,7 +397,7 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 }
 
 export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
-	let subscriptions: Subscription<T2>[];
+	let subscriptions: Subscription<T2>[] = [];
 
 	return operator<T, T2>(subscriber =>
 		cleanUpSubscriber(
@@ -581,7 +585,7 @@ const operators: any = {
 
 for (const p in operators) {
 	(Observable.prototype as any)[p] = function (...args: any) {
-		this.pipe((operators as any)[p](...args));
+		return this.pipe((operators as any)[p](...args));
 	};
 }
 

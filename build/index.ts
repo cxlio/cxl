@@ -7,6 +7,7 @@ import {
 	existsSync,
 } from 'fs';
 import {
+	defer,
 	from,
 	of,
 	map,
@@ -21,6 +22,7 @@ import * as Terser from 'terser';
 import { execSync } from 'child_process';
 
 export { concat } from '../rx/index.js';
+export { tsc } from './tsc.js';
 
 type Task = Observable<Output>;
 type PackageTask = object;
@@ -72,11 +74,13 @@ export function read(source: string): Promise<Output> {
 }
 
 export function file(source: string, out?: string) {
-	return from(
-		read(source).then(res => ({
-			path: out || resolve(source),
-			source: res.source,
-		}))
+	return defer(() =>
+		from(
+			read(source).then(res => ({
+				path: out || resolve(source),
+				source: res.source,
+			}))
+		)
 	);
 }
 

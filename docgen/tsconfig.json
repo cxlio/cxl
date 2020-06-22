@@ -6,7 +6,11 @@
 		"types": ["node"],
 		"typeRoots": ["../node_modules/@types"]
 	},
-	"references": [{ "path": "../server" }, { "path": "../dts" }],
+	"references": [
+		{ "path": "../server" },
+		{ "path": "../dts" },
+		{ "path": "../ui-ts" }
+	],
 	"files": [
 		"index.tsx",
 		"render-html.tsx",

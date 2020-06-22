@@ -1,21 +1,11 @@
-import { readFileSync, existsSync } from 'fs';
 import { relative } from 'path';
 import {
 	BuilderProgram,
-	CompilerOptions,
-	CompilerHost,
-	ScriptTarget,
-	SourceFile,
 	Diagnostic,
-	Program,
 	ParseConfigFileHost,
 	createProgram,
-	getDefaultCompilerOptions,
-	createSourceFile,
 	getLineAndCharacterOfPosition,
-	getDefaultLibFilePath,
-	convertCompilerOptionsFromJson,
-	ModuleKind,
+	Program,
 	ExitStatus,
 	InvalidatedProject,
 	CreateProgramOptions,
@@ -26,78 +16,12 @@ import {
 	ParsedCommandLine,
 	sys,
 } from 'typescript';
-import { Subscription } from '../rx';
+import { Subscription, Observable } from '../rx';
 export { version as tscVersion } from 'typescript';
-
-const DEFAULT_TARGET = ScriptTarget.ES2015;
-const SOURCE_CACHE: Record<string, SourceFile> = {};
-const FILE_CACHE: Record<string, string> = {};
 
 interface Output {
 	path: string;
 	source: string;
-}
-
-class CustomCompilerHost implements CompilerHost {
-	output: Record<string, string> = {};
-
-	constructor(public options: CompilerOptions) {}
-
-	private createSourceFile(fileName: string, languageVersion: ScriptTarget) {
-		const result = createSourceFile(
-			fileName,
-			this.readFile(fileName),
-			languageVersion || DEFAULT_TARGET
-		);
-		(result as any).version = 0;
-		return result;
-	}
-
-	getSourceFile(fileName: string, languageVersion: ScriptTarget) {
-		return (
-			SOURCE_CACHE[fileName] ||
-			(SOURCE_CACHE[fileName] = this.createSourceFile(
-				fileName,
-				languageVersion
-			))
-		);
-	}
-
-	getDefaultLibFileName() {
-		return getDefaultLibFilePath(this.options);
-	}
-
-	writeFile(name: string, text: string) {
-		const relativePath = this.options.outDir || process.cwd();
-		name = relative(relativePath, name);
-
-		this.output[name] = text;
-	}
-
-	useCaseSensitiveFileNames() {
-		return true;
-	}
-
-	getCanonicalFileName(fileName: string) {
-		return fileName;
-	}
-
-	getCurrentDirectory() {
-		return process.cwd();
-	}
-
-	getNewLine() {
-		return '\n';
-	}
-
-	fileExists(fileName: string) {
-		return existsSync(fileName);
-	}
-
-	readFile(name: string) {
-		const cache = FILE_CACHE[name];
-		return cache ? cache : (FILE_CACHE[name] = readFileSync(name, 'utf8'));
-	}
 }
 
 const parseConfigHost: ParseConfigFileHost = {
@@ -124,21 +48,7 @@ function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
 	}
 }
 
-function createCustomProgram(programOptions: CreateProgramOptions) {
-	const options = programOptions.options;
-
-	if (options.module === ModuleKind.AMD && options.outFile)
-		programOptions.projectReferences = [
-			{
-				path: __dirname + '/tsconfig.amd.json',
-				prepend: true,
-			},
-		];
-
-	return createProgram(programOptions);
-}
-
-function normalizeCompilerOptions(options: CompilerOptions) {
+/*function normalizeCompilerOptions(options: CompilerOptions) {
 	const defaultOptions = getDefaultCompilerOptions();
 
 	return convertCompilerOptionsFromJson(
@@ -160,7 +70,7 @@ function normalizeCompilerOptions(options: CompilerOptions) {
 		},
 		'.'
 	).options;
-}
+}*/
 
 function buildDiagnostics(program: Program | BuilderProgram) {
 	return [
@@ -224,32 +134,19 @@ export function tsbuild(
 	}
 }
 
-export function tsc(inputFileName: string, options: CompilerOptions) {
-	let tsConfigOptions: CompilerOptions;
-	try {
-		tsConfigOptions =
-			existsSync('tsconfig.json') &&
-			JSON.parse(readFileSync('tsconfig.json', 'utf8')).compilerOptions;
-	} catch (e) {
-		tsConfigOptions = {};
-		console.error(e);
-	}
+export function tsc(options: CreateProgramOptions) {
+	return new Observable<Output>(_subs => {
+		// const host = createCompilerHost(options);
+		const program = createProgram(options);
+		const diagnostics = buildDiagnostics(program);
 
-	options = normalizeCompilerOptions({ ...tsConfigOptions, ...options });
+		if (diagnostics.length) {
+			printDiagnostics(diagnostics);
+			throw `Typescript compilation failed`;
+		}
 
-	const compilerHost = new CustomCompilerHost(options);
-	const programOptions: CreateProgramOptions = {
-		rootNames: [inputFileName],
-		host: compilerHost,
-		options,
-	};
-
-	const program = createCustomProgram(programOptions);
-	const diagnostics = buildDiagnostics(program);
-
-	if (diagnostics.length) printDiagnostics(diagnostics);
-
-	program.emit();
-
-	return compilerHost.output;
+		program.emit(undefined, (name: string, _source: string) => {
+			console.log(name);
+		});
+	});
 }
