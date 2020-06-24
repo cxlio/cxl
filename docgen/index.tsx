@@ -1,9 +1,9 @@
-import { Application, mkdirp } from '../server';
+import { Application, mkdirp, readJson } from '../server';
 import { promises as fs } from 'fs';
 import { Node, build } from '../dts';
 import { render as renderJson } from './render-json';
 
-const RUNTIME_JS = __dirname + '/runtime.min.js';
+const RUNTIME_JS = __dirname + '/runtime.bundle.min.js';
 
 export interface File {
 	name: string;
@@ -16,6 +16,7 @@ export class DocGen extends Application {
 	outputDir = './docs';
 	repository?: string;
 	debug = false;
+	modulePackage?: any;
 
 	setup() {
 		this.parameters.register(
@@ -35,7 +36,7 @@ export class DocGen extends Application {
 
 	async run() {
 		const outputDir = this.outputDir;
-		const pkgRepo = this.package?.repository;
+		const pkgRepo = (this.modulePackage = await readJson('package.json'));
 		await mkdirp(outputDir);
 		if (!this.repository && pkgRepo)
 			this.repository =

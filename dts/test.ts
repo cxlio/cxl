@@ -476,14 +476,40 @@ export default suite('dts', test => {
 		`);
 
 		a.assert(A.docs);
-		a.equal(A.docs.desc, 'Function Description');
-		a.equal(A.docs.return, 'Return Comment\nSecond Line Comment');
-		a.equal((A.docs as any).custom, 'Custom Tag');
+		a.assert(A.docs.content);
+		a.equal(A.docs.content[0].value, 'Function Description');
+		a.equal(A.docs.content[1].tag, 'return');
+		a.equal(A.docs.content[1].value, 'Return Comment\nSecond Line Comment');
+		a.equal(A.docs.content[2].tag, 'custom');
+		a.equal(A.docs.content[2].value, 'Custom Tag');
+
 		a.assert(A.parameters);
 		const [p1, p2] = A.parameters;
-		a.equal(p1.docs?.desc, 'param1');
-		a.equal(p2.docs?.desc, 'param2');
+		a.assert(p1.docs);
+		a.assert(p2.docs);
+		a.equal(p1.docs.content?.[0].value, 'param1');
+		a.equal(p2.docs.content?.[0].value, 'param2');
 	});
+
+	test(
+		'JSDOC - example',
+		(a: Test) => {
+			const [A] = parse(`
+			/**
+			 * Content
+			 * @example Demo Title
+			 * <div>Hello</div>
+			 * @example
+			 * <div>Example 2</div>
+			 */
+			 function fn() { }
+		`);
+
+			a.assert(A.docs);
+			console.log(A.docs);
+		},
+		true
+	);
 
 	test('type alias - function', (a: Test) => {
 		const [A] = parse(`type A<T> = (val: T) => void;`);
@@ -509,7 +535,7 @@ export function catchError<T, T2>(
 ) { return {} as any; }`);
 		a.ok(A);
 		a.assert(A.docs);
-		a.equal(A.docs.desc, 'Catches errors on the observable.');
+		a.equal(A.docs.content?.[0].value, 'Catches errors on the observable.');
 		a.ok(A.flags & Flags.Export);
 		a.equal(A.name, 'catchError');
 		a.assert(A.typeParameters);

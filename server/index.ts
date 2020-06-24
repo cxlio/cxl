@@ -150,6 +150,20 @@ class ApplicationParameters {
 	}
 }
 
+/**
+ * Read and parse a JSON file, ignores errors.
+ * @param fileName Path of file to parse
+ */
+export async function readJson<T = any>(
+	fileName: string
+): Promise<T | undefined> {
+	try {
+		return JSON.parse(await fs.readFile(fileName, 'utf8'));
+	} catch (e) {
+		return undefined;
+	}
+}
+
 export abstract class Application {
 	abstract name: string;
 
@@ -180,7 +194,7 @@ export abstract class Application {
 	async start() {
 		try {
 			this.package = JSON.parse(
-				await fs.readFile('package.json', 'utf8')
+				await fs.readFile(__dirname + '/package.json', 'utf8')
 			);
 			if (!this.version) this.version = this.package.version;
 		} catch (e) {}

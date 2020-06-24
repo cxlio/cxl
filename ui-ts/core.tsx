@@ -229,6 +229,14 @@ export class RippleContainer extends Component {
 
 /**
  * The top app bar provides content and actions related to the current screen. It’s used for branding, screen titles, navigation, and actions.
+ *
+ * @example
+ * <cxl-appbar>
+ * <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+ * <cxl-button flat primary><cxl-icon icon="heart"></cxl-icon></cxl-button>
+ * <cxl-button flat primary><cxl-icon icon="search"></cxl-icon></cxl-button>
+ * <cxl-button flat primary><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+ * </cxl-appbar>
  */
 @Augment<Appbar>(
 	'cxl-appbar',
@@ -1199,7 +1207,8 @@ export class Tabs extends Component {
 function Head(p: { children: any }) {
 	const children = normalizeChildren(p.children);
 	return (ctx: any) => {
-		children.forEach(child => document.head.appendChild(child(ctx)));
+		const head = ctx.host.ownerDocument.head;
+		children.forEach(child => head.appendChild(child(ctx)));
 	};
 }
 

@@ -52,12 +52,16 @@ export enum Kind {
 	Attribute = 1006,
 }
 
+interface DocumentationContent {
+	tag?: string;
+	value: string;
+}
+
 interface Documentation {
-	desc?: string;
 	decorator?: boolean;
+	content?: DocumentationContent[];
 	tagName?: string;
 	role?: string;
-	return?: string;
 }
 
 export enum Flags {
@@ -260,20 +264,21 @@ function getFlags(flags: ts.ModifierFlags) {
 }
 
 function getNodeDocs(node: ts.Node): Documentation {
-	const docs: any = {};
-	const tags = ts.getJSDocTags(node);
-	tags.forEach(tag => {
-		const name = tag.tagName.getText();
+	const jsDoc = (node as any).jsDoc as ts.JSDoc[];
+	const content: DocumentationContent[] = [];
+	const docs: any = { content };
 
-		if (name === 'param')
-			docs.desc = node.kind === SK.Parameter ? tag.comment : undefined;
-		else docs[name] = tag.comment;
+	jsDoc?.forEach(doc => doc.comment && content.push({ value: doc.comment }));
+
+	ts.getJSDocTags(node).forEach(doc => {
+		const tag = doc.tagName.getText();
+		const value = doc.comment;
+
+		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
+			content.push({ tag, value });
 	});
 
-	const jsDoc = (node as any).jsDoc as ts.JSDoc[];
-	if (jsDoc) docs.desc = jsDoc.map(doc => doc.comment).join('\n');
-
-	return tags.length || jsDoc ? docs : undefined;
+	return content.length ? docs : undefined;
 }
 
 function serializeDeclaration(node: ts.Declaration): Node {
@@ -764,7 +769,6 @@ function setup(
 function visit(n: ts.Node, parent: Node): void {
 	if (ts.isVariableStatement(n)) {
 		pushChildren(parent, n.declarationList.declarations.map(serialize));
-		//	} else if (ts.isExportDeclaration(n)) {
 	} else
 		switch (n.kind) {
 			case SK.InterfaceDeclaration:

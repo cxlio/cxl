@@ -2,7 +2,7 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/docgen",
-		"outFile": "../dist/docgen/runtime.js",
+		"outFile": "../dist/docgen/runtime.bundle.js",
 		"rootDir": "..",
 		"module": "amd"
 	},

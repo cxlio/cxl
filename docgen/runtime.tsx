@@ -1,14 +1,9 @@
 import { dom, Host } from '../xdom/index.js';
-import {
-	Augment,
-	Attribute,
-	Component,
-	get,
-	render,
-} from '../component/index.js';
+import { Augment, Attribute, Component, render } from '../component/index.js';
+import { onChildrenMutation } from '../dom/index.js';
+//import { defer } from '../rx/index.js';
 import { Style, padding } from '../css/index.js';
-import { tap } from '../rx/index.js';
-import META from '../ui-ts/meta.js';
+// import META from '../ui-ts/meta.js';
 
 @Augment(
 	'cxl-docs-demo',
@@ -22,32 +17,38 @@ import META from '../ui-ts/meta.js';
 					paddingBottom: 0,
 				},
 				container: {
+					display: 'block',
+					borderStyle: 'none',
 					marginLeft: 'auto',
 					marginRight: 'auto',
 					backgroundColor: 'background',
 					width: 320,
 					height: 180,
+					overflowX: 'hidden',
+					overflowY: 'hidden',
 				},
 			}}
 		</Style>
 	</Host>,
 	render((host: ComponentDemo) => {
-		function init(parent: HTMLElement) {
-			return get(host, 'component').pipe(
-				tap((tagName: string) => {
-					if (tagName) {
-						const el = document.createElement(tagName);
-						parent.appendChild(el);
-						const meta = META.components[tagName];
-						if (meta && meta.demo) {
-							el.innerHTML = meta.demo.content;
-						}
-					}
-				})
-			);
+		function init(parent: HTMLIFrameElement) {
+			return onChildrenMutation(host).tap(() => {
+				const doc = parent.contentDocument;
+				console.log(host.childNodes);
+				const content = host.childNodes[0].textContent;
+				if (!doc) return;
+				doc.write(
+					`<script src="runtime.bundle.min.js"></script><cxl-meta></cxl-meta>${content}`
+				);
+				/*tap((tagName: string) => {
+					const doc = parent.contentDocument;
+					if (tagName && doc)
+						doc.write(`${content}`);
+				})*/
+			});
 		}
 
-		return <div $={init} className="container" />;
+		return <iframe $={init} className="container" />;
 	})
 )
 export class ComponentDemo extends Component {

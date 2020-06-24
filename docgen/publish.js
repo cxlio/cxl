@@ -14,7 +14,7 @@ build({
 	tasks: [
 		concat(
 			tsconfig('tsconfig.runtime.json'),
-			file('../dist/docgen/runtime.js').pipe(minify())
+			file('../dist/docgen/runtime.bundle.js').pipe(minify())
 		),
 		pkg(),
 	],

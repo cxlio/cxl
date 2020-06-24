@@ -35,10 +35,30 @@ const KindMap: Record<Kind, string> = {
 	[Kind.Attribute]: 'Attribute',
 };
 
+const GroupTitle: Record<any, string> = {
+	[Kind.Constant]: 'Constants',
+	[Kind.Variable]: 'Variables',
+	[Kind.Interface]: 'Interfaces',
+	[Kind.Class]: 'Classes',
+	[Kind.Property]: 'Properties',
+	[Kind.Method]: 'Methods',
+	[Kind.Getter]: 'Getters',
+	[Kind.Setter]: 'Setters',
+	[Kind.Constructor]: 'Constructor',
+	[Kind.Function]: 'Functions',
+	[Kind.Enum]: 'Enums',
+	[Kind.Component]: 'Components',
+	[Kind.Attribute]: 'Attributes',
+};
+
 const content: Record<string, string> = {
 	Members: 'Members',
 	API: 'API',
 };
+
+export function groupTitle(kind: Kind) {
+	return translate(GroupTitle[kind] || 'Unknown');
+}
 
 export function kindToString(kind: Kind) {
 	return KindMap[kind] || kind.toString();

@@ -1,17 +1,16 @@
 import { Output, Node, Kind, Flags, Source } from '../dts';
 import type { DocGen, File } from './index.js';
-import { kindToString, translate } from './localization';
+import { kindToString, groupTitle, translate } from './localization';
 import { relative } from 'path';
 
 let application: DocGen;
 let header: string;
+
 const ENTITIES_REGEX = /[&<]/g;
 const ENTITIES_MAP = {
 	'&': '&amp;',
 	'<': '&lt;',
 };
-// const anchors: Record<number, string> = {};
-// let currentPage: Node;
 
 function escape(str: string) {
 	return str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e]);
@@ -228,14 +227,32 @@ function ParameterTable(rows: string[][]) {
 	</cxl-table>`;
 }
 
+function Example(node: Node, example: string): string {
+	const tagName = node.docs?.tagName;
+
+	return node.kind === Kind.Component && tagName
+		? `<cxl-docs-demo component="${tagName}"><!-- ${example} --></cxl-docs-demo>`
+		: `<pre>${example}</pre>`;
+}
+
 function Documentation(node: Node) {
-	let comment = node.docs?.desc;
-	return comment ? `<p>${comment}</p>` : '';
+	const docs = node.docs;
+
+	if (!docs || !docs.content) return '';
+
+	return docs.content
+		.map(doc => {
+			if (doc.tag === 'example')
+				return `<cxl-t h5>Demo</cxl-t>${Example(node, doc.value)}`;
+			if (doc.tag === 'return')
+				return `<cxl-t h5>Returns</cxl-t><p>${doc.value}</p>`;
+			return doc.value;
+		})
+		.join('');
 }
 
 function ModuleDocumentation(node: Node) {
-	let tagName = node.docs?.tagName || '';
-	return Documentation(node) + Usage(node, tagName);
+	return Documentation(node);
 }
 
 function ParameterDocumentation(node: Node) {
@@ -294,8 +311,8 @@ function Link(node: Node): string {
 }
 
 function GroupIndex(kind: Kind, children: string[]) {
-	return `<cxl-c pad16><cxl-t h6>${kindToString(kind)}
-		</cxl-t><br/><cxl-grid>${children.join('')}</cxl-grid></cxl-c>`;
+	return `<cxl-t h6>${groupTitle(kind)}
+		</cxl-t><br/><cxl-grid>${children.join('')}</cxl-grid>`;
 }
 
 function getNodeCoef(a: Node) {
@@ -325,34 +342,19 @@ function ModuleTitle(node: Node) {
 }
 
 function getImportUrl(source: Source) {
-	const pkg = application.package?.name;
+	const pkg = application.modulePackage?.name;
 	const moduleName = source.name.replace(/\.tsx?$/, '');
 
 	return `${pkg}${moduleName === 'index' ? '' : `/${moduleName}`}`;
 }
 
 function ImportStatement(node: Node) {
-	if (node.kind === Kind.Module || !application.package) return '';
+	if (node.kind === Kind.Module || !application.modulePackage) return '';
 	const source = Array.isArray(node.source) ? node.source[0] : node.source;
 	if (!source) return '';
 	const importUrl = getImportUrl(source);
 
 	return `<cxl-t h5>Import</cxl-t><pre>import { ${node.name} } from '${importUrl}';</pre>`;
-}
-
-function Usage(node: Node, tagName?: string) {
-	const importStr = ImportStatement(node);
-	const htmlStr = tagName
-		? `<cxl-t h5>HTML</cxl-t><pre>&lt;${tagName}&gt;&lt;/${tagName}&gt;</pre>`
-		: '';
-	const demo =
-		node.kind === Kind.Component && tagName
-			? `<cxl-t h5>Demo</cxl-t><cxl-docs-demo component="${tagName}"></cxl-docs-demo>`
-			: '';
-
-	return demo || importStr || htmlStr
-		? `<cxl-t h4>Usage</cxl-t>${importStr}${demo}${htmlStr}`
-		: '';
 }
 
 function Members(node: Node) {
@@ -366,7 +368,6 @@ function Members(node: Node) {
 			if (node.kind === Kind.Module && !declarationFilter(c)) return '';
 			const groupKind =
 				(c.kind === Kind.Export && c.type?.type?.kind) || c.kind;
-			if (groupKind === Kind.Export) console.log(c);
 
 			if (!index[groupKind]) {
 				groupBody[groupKind] = [];
@@ -390,11 +391,13 @@ function Members(node: Node) {
 	const sortedGroups = groups.sort((a, b) =>
 		kindToString(a) > kindToString(b) ? 1 : -1
 	);
+	const importStr = ImportStatement(node);
 
 	return groups.length
 		? `<cxl-t h4>${translate(
 				node.kind === Kind.Module ? 'Members' : 'API'
-		  )}</cxl-t>` +
+		  )}</cxl-t>${importStr}` +
+				(node.kind !== Kind.Module ? `<cxl-t h5>Members</cxl-t>` : '') +
 				sortedGroups
 					.map(kind => GroupIndex(kind, index[kind]))
 					.join('<br/>') +
@@ -403,7 +406,7 @@ function Members(node: Node) {
 					.filter(group => groupBody[group].length)
 					.map(
 						group =>
-							`<br /><cxl-t h5>${kindToString(
+							`<br /><cxl-t h5>${groupTitle(
 								group
 							)}</cxl-t>${groupBody[group].join('<br />')}`
 					)
@@ -488,13 +491,16 @@ function ModuleFooter(_p: Node) {
 }
 
 function Header(module: Output) {
-	const pkg = application.package;
+	const pkg = application.modulePackage;
 	const SCRIPTS = application.debug
 		? `<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');require('../../dist/ui-ts/docs.js')</script>`
+	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');require('../../dist/docgen/runtime.js')</script>`
 		: `<script src="runtime.bundle.min.js"></script>`;
 
-	return `<!DOCTYPE html>${SCRIPTS}
+	return `<!DOCTYPE html>
+	<head><meta name="description" content="Documentation for ${
+		pkg.name
+	}" />${SCRIPTS}</head>
 	<style>cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 };</style>
 	<cxl-application><title>${pkg.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(pkg, module)}

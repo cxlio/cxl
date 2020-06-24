@@ -241,6 +241,10 @@ export class Marker {
 	}
 }
 
+export function onChildrenMutation(el: Element) {
+	return new ChildrenObserver(el);
+}
+
 export class ChildrenObserver extends Subject<MutationEvent> {
 	private element?: Element;
 	private observer?: MutationObserver;
