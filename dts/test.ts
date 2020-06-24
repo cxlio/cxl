@@ -462,8 +462,10 @@ export default suite('dts', test => {
 		a.ok(A.flags & Flags.Export);
 	});
 
-	test('JSOoc comments', (a: Test) => {
-		const [A] = parse(`
+	test(
+		'JSOoc comments',
+		(a: Test) => {
+			const [A] = parse(`
 			/**
 			 * Function Description
 			 * @return Return Comment
@@ -471,30 +473,35 @@ export default suite('dts', test => {
 			 * @custom Custom Tag
 			 * @param p1 param1
 			 * @param p2 param2
+			 * @deprecated
 			 */
 			 function fn(p1: boolean, p2: string) { }
 		`);
 
-		a.assert(A.docs);
-		a.assert(A.docs.content);
-		a.equal(A.docs.content[0].value, 'Function Description');
-		a.equal(A.docs.content[1].tag, 'return');
-		a.equal(A.docs.content[1].value, 'Return Comment\nSecond Line Comment');
-		a.equal(A.docs.content[2].tag, 'custom');
-		a.equal(A.docs.content[2].value, 'Custom Tag');
+			a.assert(A.docs);
+			a.assert(A.docs.content);
+			a.equal(A.docs.content[0].value, 'Function Description');
+			a.equal(A.docs.content[1].tag, 'return');
+			a.equal(
+				A.docs.content[1].value,
+				'Return Comment\nSecond Line Comment'
+			);
+			a.equal(A.docs.content[2].tag, 'custom');
+			a.equal(A.docs.content[2].value, 'Custom Tag');
+			a.ok(A.flags & Flags.Deprecated);
 
-		a.assert(A.parameters);
-		const [p1, p2] = A.parameters;
-		a.assert(p1.docs);
-		a.assert(p2.docs);
-		a.equal(p1.docs.content?.[0].value, 'param1');
-		a.equal(p2.docs.content?.[0].value, 'param2');
-	});
+			a.assert(A.parameters);
+			const [p1, p2] = A.parameters;
+			a.assert(p1.docs);
+			a.assert(p2.docs);
+			a.equal(p1.docs.content?.[0].value, 'param1');
+			a.equal(p2.docs.content?.[0].value, 'param2');
+		},
+		true
+	);
 
-	test(
-		'JSDOC - example',
-		(a: Test) => {
-			const [A] = parse(`
+	test('JSDOC - example', (a: Test) => {
+		const [A] = parse(`
 			/**
 			 * Content
 			 * @example Demo Title
@@ -505,11 +512,8 @@ export default suite('dts', test => {
 			 function fn() { }
 		`);
 
-			a.assert(A.docs);
-			console.log(A.docs);
-		},
-		true
-	);
+		a.assert(A.docs);
+	});
 
 	test('type alias - function', (a: Test) => {
 		const [A] = parse(`type A<T> = (val: T) => void;`);
@@ -673,7 +677,6 @@ function map<T>() {	return operator<T>(); }
 		);
 		a.ok(A);
 		a.ok(B);
-		console.log(A, B);
 		a.assert(A.children);
 		a.equal(A.children.length, 2);
 		a.equal(A.children[0].name, 'm1');

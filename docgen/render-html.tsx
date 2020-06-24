@@ -138,7 +138,8 @@ function NodeChips({ flags }: Node) {
 		(flags & Flags.Protected ? Chip('protected') : '') +
 		(flags & Flags.Abstract ? Chip('abstract') : '') +
 		(flags & Flags.Overload ? Chip('overload') : '') +
-		(flags & Flags.Private ? Chip('private') : '')
+		(flags & Flags.Private ? Chip('private') : '') +
+		(flags & Flags.Deprecated ? Chip('deprecated') : '')
 	);
 }
 

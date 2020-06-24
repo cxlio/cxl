@@ -65,6 +65,7 @@ interface Documentation {
 }
 
 export enum Flags {
+	// From ts.ModifierFlags
 	None = 0,
 	Export = 1,
 	Public = 4,
@@ -75,12 +76,14 @@ export enum Flags {
 	Abstract = 128,
 	Async = 256,
 	Default = 512,
-	Rest = 4096,
-	Optional = 8192,
+	Deprecated = 8192,
+	// Custom Flags
 	Overload = 16384,
 	External = 32768,
 	DefaultLibrary = 65536,
 	DeclarationMerge = 131072,
+	Rest = 2 ** 18,
+	Optional = 2 ** 19,
 }
 
 export interface Source {
@@ -263,7 +266,7 @@ function getFlags(flags: ts.ModifierFlags) {
 	return (flags as any) as Flags;
 }
 
-function getNodeDocs(node: ts.Node): Documentation {
+function getNodeDocs(node: ts.Node, result: Node): Documentation {
 	const jsDoc = (node as any).jsDoc as ts.JSDoc[];
 	const content: DocumentationContent[] = [];
 	const docs: any = { content };
@@ -273,7 +276,7 @@ function getNodeDocs(node: ts.Node): Documentation {
 	ts.getJSDocTags(node).forEach(doc => {
 		const tag = doc.tagName.getText();
 		const value = doc.comment;
-
+		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
 			content.push({ tag, value });
 	});
@@ -288,11 +291,12 @@ function serializeDeclaration(node: ts.Declaration): Node {
 		result.id = currentId++;
 		(node as any)[dtsNode] = result;
 	}
-	const id = result.id;
-	const anode = node as any;
-	const docs = getNodeDocs(node);
 
 	result.flags = getFlags(ts.getCombinedModifierFlags(node));
+
+	const id = result.id;
+	const anode = node as any;
+	const docs = getNodeDocs(node, result);
 
 	if (docs) result.docs = docs;
 

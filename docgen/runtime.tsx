@@ -34,17 +34,13 @@ import { Style, padding } from '../css/index.js';
 		function init(parent: HTMLIFrameElement) {
 			return onChildrenMutation(host).tap(() => {
 				const doc = parent.contentDocument;
-				console.log(host.childNodes);
 				const content = host.childNodes[0].textContent;
 				if (!doc) return;
+				doc.open();
 				doc.write(
 					`<script src="runtime.bundle.min.js"></script><cxl-meta></cxl-meta>${content}`
 				);
-				/*tap((tagName: string) => {
-					const doc = parent.contentDocument;
-					if (tagName && doc)
-						doc.write(`${content}`);
-				})*/
+				doc.close();
 			});
 		}
 
