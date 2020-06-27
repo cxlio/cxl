@@ -98,21 +98,28 @@ export class Test {
 		);
 	}
 
-	async() {
-		let result: () => void, timeout: number;
-
-		this.promise = new Promise<void>((resolve, reject) => {
-			result = resolve;
-			timeout = setTimeout(() => {
+	doTimeout(promise: Promise<any>, time = this.timeout) {
+		return new Promise<void>((resolve, reject) => {
+			const timeoutId = setTimeout(() => {
 				reject('Async test timed out');
-			}, this.timeout);
+			}, time);
+
+			promise.then(() => {
+				if (this.completed)
+					throw new Error('Test was already completed.');
+				this.completed = true;
+				clearTimeout(timeoutId);
+				resolve();
+			});
 		});
-		return () => {
-			if (this.completed) throw new Error('Test was already completed.');
-			this.completed = true;
-			result();
-			clearTimeout(timeout);
-		};
+	}
+
+	async() {
+		let result: () => void;
+		this.promise = this.doTimeout(
+			new Promise<void>(resolve => (result = resolve))
+		);
+		return () => result();
 	}
 
 	test(name: string, testFn: TestFn, only = false) {
@@ -127,9 +134,7 @@ export class Test {
 	async run(): Promise<Result[]> {
 		try {
 			const result = this.testFn(this);
-			const promise = result
-				? result.then(() => (this.completed = true))
-				: this.promise;
+			const promise = result ? this.doTimeout(result) : this.promise;
 			await promise;
 			if (promise && this.completed === false)
 				throw new Error('Never completed');

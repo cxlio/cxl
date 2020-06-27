@@ -205,7 +205,7 @@ class TestRunner extends Application {
 		this.log(`Node ${process.version}`);
 		const suite = require(path.resolve(this.entryFile)).default as Test;
 		suite.run();
-		return suite;
+		printReport(suite);
 	}
 
 	private async runPuppeteer() {
@@ -239,12 +239,11 @@ class TestRunner extends Application {
 		await generateReport(page, sources);
 		await browser.close();
 
-		return suite;
+		printReport(suite as Test);
 	}
 
 	async run() {
-		const suite = await (this.node ? this.runNode() : this.runPuppeteer());
-		printReport(suite as Test);
+		await (this.node ? this.runNode() : this.runPuppeteer());
 	}
 }
 
