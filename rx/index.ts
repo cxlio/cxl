@@ -28,7 +28,7 @@ type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
 // Used for observable interoperability
 const observableSymbol = (Symbol as any).observable || '@@observable';
 
-class Subscriber<T> {
+export class Subscriber<T> {
 	public next: NextFunction<T>;
 	public error?: ErrorFunction;
 	public complete?: CompleteFunction;
@@ -102,6 +102,9 @@ export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
 		operators.reduce((prev, fn) => fn(prev), source);
 }
 
+/**
+ * A representation of any set of values over any amount of time.
+ */
 export class Observable<T> {
 	[observableSymbol]() {
 		return this;
@@ -112,6 +115,9 @@ export class Observable<T> {
 		if (subscribe) this.__subscribe = subscribe;
 	}
 
+	/**
+	 * Used to stitch together functional operators into a chain.
+	 */
 	pipe<A>(a: Operator<T, A>): Observable<A>;
 	pipe<A, B>(a: Operator<T, A>, b: Operator<A, B>): Observable<B>;
 	pipe<A, B, C>(
@@ -136,6 +142,9 @@ export class Observable<T> {
 		return extra.reduce((prev, fn) => fn(prev), this as Observable<any>);
 	}
 
+	/**
+	 * Invokes an execution of an Observable and registers Observer handlers for notifications it will emit.
+	 */
 	subscribe(
 		observer?: NextObserver<T>,
 		error?: ErrorFunction,
@@ -153,7 +162,7 @@ export class Observable<T> {
  * A Subject is an Observable that allows values to be
  * multicasted to many Observers.
  */
-class Subject<T> extends Observable<T> {
+export class Subject<T> extends Observable<T> {
 	protected subscriptions = new Set<Subscription<T>>();
 
 	protected onSubscribe(subscriber: Subscription<T>): UnsubscribeFunction {
@@ -178,7 +187,11 @@ class Subject<T> extends Observable<T> {
 	}
 }
 
-class BehaviorSubject<T> extends Subject<T> {
+/**
+ * A variant of Subject that requires an initial value and emits its current value whenever it is subscribed to.
+ * @see be
+ */
+export class BehaviorSubject<T> extends Subject<T> {
 	constructor(private currentValue: T) {
 		super();
 	}
@@ -198,6 +211,11 @@ class BehaviorSubject<T> extends Subject<T> {
 	}
 }
 
+/**
+ * A variant of Subject that "replays" or emits old values to new subscribers.
+ * It buffers a set number of values and will emit those values immediately to any
+ * new subscribers in addition to emitting new values to existing subscribers.
+ */
 export class ReplaySubject<T> extends Subject<T> {
 	private buffer: T[] = [];
 	constructor(public readonly bufferSize: number) {
@@ -232,7 +250,10 @@ export class Reference<T> extends Subject<T> {
 	}
 }
 
-function concat<R extends Observable<any>[]>(
+/**
+ * Creates an output Observable which sequentially emits all values from given Observable and then moves on to the next.
+ */
+export function concat<R extends Observable<any>[]>(
 	...observables: R
 ): R extends (infer U)[] ? Observable<Merge<U>> : never {
 	return new Observable(subscriber => {
@@ -258,6 +279,9 @@ function concat<R extends Observable<any>[]>(
 	}) as any;
 }
 
+/**
+ * Creates an Observable that, on subscribe, calls an Observable factory to make an Observable for each new Observer.
+ */
 export function defer<T>(fn: () => Observable<T> | void) {
 	return new Observable<T>(subs => {
 		const newObs = fn();
@@ -270,7 +294,12 @@ export function defer<T>(fn: () => Observable<T> | void) {
 	});
 }
 
-function from<T>(input: Array<T> | Promise<T> | Observable<T>): Observable<T> {
+/**
+ * Creates an Observable from an Array, an array-like object, a Promise, an iterable object, or an Observable-like object.
+ */
+export function from<T>(
+	input: Array<T> | Promise<T> | Observable<T>
+): Observable<T> {
 	if (input instanceof Observable) return input;
 
 	return new Observable<T>(subs => {
@@ -288,14 +317,20 @@ function from<T>(input: Array<T> | Promise<T> | Observable<T>): Observable<T> {
 	});
 }
 
-function of<T>(...values: T[]): Observable<T> {
+/**
+ * Converts the arguments to an observable sequence.
+ */
+export function of<T>(...values: T[]): Observable<T> {
 	return new Observable<T>(subscriber => {
 		values.forEach(val => subscriber.next(val));
 		subscriber.complete();
 	});
 }
 
-function toPromise<T>(observable: Observable<T>) {
+/**
+ * Generates a promise from an observable, the promise will resolve when the observable completes.
+ */
+export function toPromise<T>(observable: Observable<T>) {
 	return new Promise<T>((resolve, reject) => {
 		let value: T | undefined;
 		observable.subscribe(
@@ -345,6 +380,9 @@ export function operator<T, T2 = T>(
 		});
 }
 
+/**
+ * Applies a given project function to each value emitted by the source Observable, and emits the resulting values as an Observable.
+ */
 export function map<T, T2>(mapFn: (val: T) => T2) {
 	return operator<T, T2>(subscriber => (val: T) => {
 		subscriber.next(mapFn(val));
@@ -379,12 +417,19 @@ export function collect<T>(source: Observable<T>, gate: Observable<any>) {
 	});
 }
 
+/**
+ * Emits a value from the source Observable only after a particular time span has passed without another source emission.
+ */
 export function debounceTime<T>(time?: number) {
 	return operator<T>(subscriber =>
 		debounceFunction(subscriber.next.bind(subscriber), time)
 	);
 }
 
+/**
+ * Projects each source value to an Observable which is merged in the output Observable,
+ * emitting values only from the most recently projected Observable.
+ */
 export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 	let lastSubscription: Subscription<T2>;
 
@@ -396,8 +441,11 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 	});
 }
 
+/**
+ * Projects each source value to an Observable which is merged in the output Observable.
+ */
 export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
-	let subscriptions: Subscription<T2>[] = [];
+	const subscriptions: Subscription<T2>[] = [];
 
 	return operator<T, T2>(subscriber =>
 		cleanUpSubscriber(
@@ -413,6 +461,10 @@ export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
 	);
 }
 
+/**
+ * Projects each source value to an Observable which is merged in the output Observable
+ * only if the previous projected Observable has completed.
+ */
 export function exhaustMap<T, T2>(project: (value?: T) => Observable<T2>) {
 	let lastSubscription: Subscription<T2> | null;
 
@@ -446,12 +498,16 @@ export function exhaustMap<T, T2>(project: (value?: T) => Observable<T2>) {
  *
  * @see distinctUntilChanged
  */
-function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
+export function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
 	return operator((subscriber: Subscription<T>) => (val: T) => {
 		if (fn(val)) subscriber.next(val);
 	});
 }
 
+/**
+ * Perform a side effect for every emission on the source Observable,
+ * but return an Observable that is identical to the source.
+ */
 export function tap<T>(fn: (val: T) => void): Operator<T, T> {
 	return operator<T, T>((subscriber: Subscription<T>) => (val: T) => {
 		fn(val);
@@ -493,6 +549,10 @@ export function catchError<T, T2>(
 
 const initialDistinct = {};
 
+/**
+ * Returns an Observable that emits all items emitted by the source Observable
+ * that are distinct by comparison from the previous item.
+ */
 export function distinctUntilChanged<T>(): Operator<T, T> {
 	return operator((subscriber: Subscription<T>) => {
 		let lastValue: T | typeof initialDistinct = initialDistinct;
@@ -505,6 +565,9 @@ export function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
+/**
+ * Creates an output Observable which concurrently emits all values from every given input Observable.
+ */
 export function merge<R extends Observable<any>[]>(
 	...observables: R
 ): R extends (infer U)[] ? Observable<Merge<U>> : never {
@@ -530,22 +593,27 @@ export function merge<R extends Observable<any>[]>(
 	}) as any;
 }
 
-function combineLatest<T extends any[]>(
+/**
+ * Combines multiple Observables to create an Observable whose values are calculated from the
+ * latest values of each of its input Observables.
+ */
+export function combineLatest<T extends any[]>(
 	...observables: T
 ): Observable<PickObservable<T>> {
 	return new Observable<any>(subs => {
 		const latest: any[] = [],
 			len = observables.length;
-		let count = 0,
+		let count = len,
 			isReady = false;
 
 		const subscriptions = observables.map((o, i) =>
 			o.subscribe({
 				next(val: any) {
 					latest[i] = val;
-					if (isReady || count + 1 === len) {
+					if (latest.length === len) {
 						const clone = latest.slice(0);
 						isReady = true;
+						count = len;
 						subs.next(clone);
 					} else count++;
 				},
@@ -562,12 +630,21 @@ function combineLatest<T extends any[]>(
 	});
 }
 
-function throwError(error: any) {
+/**
+ * Creates an Observable that emits no items to the Observer and immediately emits an error notification.
+ */
+export function throwError(error: any) {
 	return new Observable(subs => subs.error(error));
 }
 
+/**
+ * An observable that completes on subscription.
+ */
 export const EMPTY = new Observable<void>(subs => subs.complete());
 
+/**
+ * Creates a new Behavior Subject.
+ */
 export function be<T>(initialValue: T) {
 	return new BehaviorSubject(initialValue);
 }
@@ -602,16 +679,3 @@ export interface Observable<T> {
 	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	tap(tapFn: (val: T) => void): Observable<T>;
 }
-
-export {
-	BehaviorSubject,
-	Subject,
-	Subscriber,
-	from,
-	toPromise,
-	throwError,
-	filter,
-	concat,
-	combineLatest,
-	of,
-};

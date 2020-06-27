@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"dependencies": {
 		"puppeteer": "^2",
-		"source-map-support": "*"
+		"source-map-support": "*",
+		"source-map": "*"
 	},
 	"devDependencies": {
 		"@types/puppeteer": "^2.0.0"

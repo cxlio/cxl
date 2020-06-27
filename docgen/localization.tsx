@@ -49,11 +49,16 @@ const GroupTitle: Record<any, string> = {
 	[Kind.Enum]: 'Enums',
 	[Kind.Component]: 'Components',
 	[Kind.Attribute]: 'Attributes',
+	[Kind.TypeAlias]: 'Type Alias',
 };
 
 const content: Record<string, string> = {
 	Members: 'Members',
 	API: 'API',
+};
+
+const jsdocMap: Record<string, string> = {
+	see: 'Related',
 };
 
 export function groupTitle(kind: Kind) {
@@ -66,4 +71,8 @@ export function kindToString(kind: Kind) {
 
 export function translate(key: string) {
 	return content[key] || key;
+}
+
+export function jsdocTitle(tag: string) {
+	return jsdocMap[tag] || tag;
 }

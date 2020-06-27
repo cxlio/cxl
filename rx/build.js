@@ -8,9 +8,5 @@ const {
 
 build({
 	outputDir: '../dist/rx',
-	tasks: [
-		tsconfig(),
-		tsconfig('tsconfig.test.json'),
-		file('test.html', 'test.html'),
-	],
+	tasks: [tsconfig('tsconfig.test.json'), file('test.html', 'test.html')],
 });

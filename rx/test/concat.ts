@@ -1,6 +1,6 @@
-import { suite } from '../../spec/index.js';
 import { cold, expectLog } from './util';
 import { concat } from '../index';
+import { suite } from '../../spec/index.js';
 
 export default suite('concat', test => {
 	test('should emit elements from multiple sources', a => {

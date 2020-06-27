@@ -1,4 +1,4 @@
-type TestFn = (test: Test) => void;
+type TestFn = (test: Test) => void | Promise<any>;
 type SuiteFn<T = TestFn> = (
 	suiteFn: (name: string, testFn: T, only?: boolean) => void
 ) => void;
@@ -126,9 +126,12 @@ export class Test {
 
 	async run(): Promise<Result[]> {
 		try {
-			this.testFn(this);
-			await this.promise;
-			if (this.promise && this.completed === false)
+			const result = this.testFn(this);
+			const promise = result
+				? result.then(() => (this.completed = true))
+				: this.promise;
+			await promise;
+			if (promise && this.completed === false)
 				throw new Error('Never completed');
 			if (this.only.length)
 				await Promise.all(this.only.map(test => test.run()));

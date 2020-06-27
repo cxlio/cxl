@@ -1,6 +1,11 @@
 import { Output, Node, Kind, Flags, Source } from '../dts';
 import type { DocGen, File } from './index.js';
-import { kindToString, groupTitle, translate } from './localization';
+import {
+	kindToString,
+	groupTitle,
+	jsdocTitle,
+	translate,
+} from './localization';
 import { relative } from 'path';
 
 let application: DocGen;
@@ -229,11 +234,11 @@ function ParameterTable(rows: string[][]) {
 }
 
 function Example(node: Node, example: string): string {
-	const tagName = node.docs?.tagName;
-
-	return node.kind === Kind.Component && tagName
-		? `<cxl-docs-demo component="${tagName}"><!-- ${example} --></cxl-docs-demo>`
-		: `<pre>${example}</pre>`;
+	return node.kind === Kind.Component || node.kind === Kind.Attribute
+		? `<cxl-docs-demo${
+				application.debug ? ' debug' : ''
+		  }><!--${example}--></cxl-docs-demo>`
+		: `<pre>${escape(example)}</pre>`;
 }
 
 function Documentation(node: Node) {
@@ -244,10 +249,18 @@ function Documentation(node: Node) {
 	return docs.content
 		.map(doc => {
 			if (doc.tag === 'example')
-				return `<cxl-t h5>Demo</cxl-t>${Example(node, doc.value)}`;
+				return `<cxl-t h5>${doc.title || 'Demo'}</cxl-t>${Example(
+					node,
+					doc.value
+				)}`;
 			if (doc.tag === 'return')
 				return `<cxl-t h5>Returns</cxl-t><p>${doc.value}</p>`;
-			return doc.value;
+
+			return doc.tag
+				? `<p>${jsdocTitle(doc.tag)}: ${
+						doc.ref ? Link(doc.ref) : doc.value
+				  }</p>`
+				: `<p>${doc.value}</p>`;
 		})
 		.join('');
 }
@@ -332,12 +345,14 @@ function sortNode(a: Node, b: Node) {
 }
 
 function ModuleTitle(node: Node) {
+	const docs = node.docs;
 	const chips =
 		`<span style="float:right">` +
 		(node.kind === Kind.Class ? Chip('class') : '') +
 		(node.kind === Kind.Interface ? Chip('interface') : '') +
 		(node.kind === Kind.Component ? Chip('component') : '') +
 		(node.kind === Kind.Enum ? Chip('enum') : '') +
+		(docs && docs.role ? Chip(`role: ${docs.role}`) : '') +
 		`</span>`;
 	return chips + Signature(node);
 }

@@ -2,10 +2,11 @@
 	"name": "@cxl/dts",
 	"description": "Generate a simplified AST from typescript source code",
 	"home": "https://coaxialhost.com/dts",
+	"license": "GPL-3.0-only",
 	"version": "0.0.1",
 	"scripts": {
 		"build": "node build",
-		"prepublishOnly": "node publish",
+		"package": "npm test && node publish",
 		"test": "node build && cd ../dist/dts && node ../tester --node",
 		"docs": "rm -rf ../docs/dts && node ../dist/docgen -o ../docs/dts --repository \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/dts\""
 	}

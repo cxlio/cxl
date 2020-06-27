@@ -1,18 +1,19 @@
-import { suite } from '../spec/index.js';
-import exhaustMapSuite from './test/exhaustMap.js';
-import mergeSuite from './test/merge.js';
-import concatSuite from './test/concat.js';
-import fromSuite from './test/from.js';
 import {
 	BehaviorSubject,
 	Observable,
 	Subject,
 	filter,
-	of,
 	map,
+	of,
 	tap,
 	toPromise,
 } from './index.js';
+import concatSuite from './test/concat.js';
+import exhaustMapSuite from './test/exhaustMap.js';
+import fromSuite from './test/from.js';
+import mergeSuite from './test/merge.js';
+import combineLatestSuite from './test/combineLatest.js';
+import { suite } from '../spec/index.js';
 
 declare function setInterval(fn: () => void, interval?: number): number;
 declare function clearInterval(intervalId: number): void;
@@ -30,6 +31,7 @@ export default suite('rx', [
 	exhaustMapSuite,
 	mergeSuite,
 	concatSuite,
+	combineLatestSuite,
 	suite('Observable', test => {
 		test('constructor', a => {
 			const observable = new Observable(function subscribe(observer) {

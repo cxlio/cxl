@@ -5,8 +5,7 @@ build({
 	tasks: [
 		tsconfig('tsconfig.json'),
 		tsconfig('tsconfig.browser.json'),
-		pkg(),
-		file('require.js'),
-		file('require-browser.js')
-	]
+		file('require.js', 'require.js'),
+		file('require-browser.js', 'require-browser.js'),
+	],
 });

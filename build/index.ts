@@ -1,4 +1,10 @@
-import { dirname, resolve, basename as pathBasename, join } from 'path';
+import {
+	dirname,
+	resolve,
+	basename as pathBasename,
+	join,
+	relative,
+} from 'path';
 import {
 	mkdirSync,
 	readFileSync,
@@ -9,7 +15,6 @@ import {
 import {
 	defer,
 	from,
-	of,
 	map,
 	tap,
 	Observable,
@@ -20,12 +25,15 @@ import { tsbuild, tscVersion } from './tsc.js';
 import { Application } from '../server/index.js';
 import * as Terser from 'terser';
 import { execSync } from 'child_process';
+import { ESLint } from 'eslint';
 
 export { concat } from '../rx/index.js';
 export { tsc } from './tsc.js';
 
 type Task = Observable<Output>;
-type PackageTask = object;
+interface PackageTask {
+	license?: string;
+}
 
 interface BuildConfiguration {
 	outputDir: string;
@@ -51,6 +59,41 @@ export function amd() {
 		out.source =
 			(AMD || (AMD = readFileSync(__dirname + '/amd.js', 'utf8'))) +
 			out.source;
+	});
+}
+
+function handleEslintResult(results: ESLint.LintResult[]) {
+	const result: Output[] = [];
+	let hasErrors = false;
+
+	results.forEach(result => {
+		const errorCount = result.errorCount; // - result.fixableErrorCount;
+		if (errorCount) {
+			hasErrors = true;
+			const file = relative(process.cwd(), result.filePath);
+			result.messages.forEach(
+				r =>
+					!r.fix &&
+					console.log(`${file}#${r.line}:${r.column}: ${r.message}`)
+			);
+		}
+	});
+	if (hasErrors) throw new Error('eslint errors found.');
+
+	return result;
+}
+
+export function eslint(options: any) {
+	return new Observable<Output>(subs => {
+		const linter = new ESLint({
+			cache: true,
+			fix: true,
+			...options,
+		});
+		linter
+			.lintFiles(['**/*.ts'])
+			.then(handleEslintResult, e => subs.error(e))
+			.then(() => subs.complete());
 	});
 }
 
@@ -107,26 +150,48 @@ function getRepo(repo: string | { url: string }) {
 	return url.replace(/\$BRANCH/g, branch);
 }
 
-export function pkg(config: PackageTask) {
-	const p = readPackage(BASEDIR);
+const LICENSE_MAP: Record<string, string> = {
+	'GPL-3.0': 'license-GPL-3.0.txt',
+	'GPL-3.0-only': 'license-GPL-3.0.txt',
+	'Apache-2.0': 'license-Apache-2.0.txt',
+};
 
-	return of({
-		path: 'package.json',
-		source: JSON.stringify({
-			name: p.name,
-			version: p.version,
-			license: p.license,
-			files: ['*.js', '*.d.ts', '*.js.map', 'LICENSE'],
-			main: 'index.js',
-			homepage: p.homepage,
-			bugs: p.bugs,
-			repository: p.repository && getRepo(p.repository),
-			dependencies: p.dependencies,
-			peerDependencies: p.peerDependencies,
-			type: p.type,
-			...config,
-		}),
-	});
+export function pkg(config: PackageTask = {}) {
+	const p = readPackage(BASEDIR);
+	const license = p.license || config.license;
+	const output: Output[] = [
+		{
+			path: 'package.json',
+			source: JSON.stringify(
+				{
+					name: p.name,
+					version: p.version,
+					license,
+					files: ['*.js', '*.d.ts', '*.js.map', 'LICENSE'],
+					main: 'index.js',
+					homepage: p.homepage,
+					bugs: p.bugs,
+					repository: p.repository && getRepo(p.repository),
+					dependencies: p.dependencies,
+					peerDependencies: p.peerDependencies,
+					type: p.type,
+				},
+				null,
+				2
+			),
+		},
+	];
+
+	if (license) {
+		if (!LICENSE_MAP[license])
+			throw new Error(`Invalid license: "${license}"`);
+		output.push({
+			path: 'LICENSE',
+			source: readFileSync(join(__dirname, LICENSE_MAP[license]), 'utf8'),
+		});
+	}
+
+	return from(output);
 }
 
 export function umd(namespace = 'this') {

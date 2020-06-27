@@ -462,10 +462,8 @@ export default suite('dts', test => {
 		a.ok(A.flags & Flags.Export);
 	});
 
-	test(
-		'JSOoc comments',
-		(a: Test) => {
-			const [A] = parse(`
+	test('JSOoc comments', (a: Test) => {
+		const [A] = parse(`
 			/**
 			 * Function Description
 			 * @return Return Comment
@@ -478,34 +476,29 @@ export default suite('dts', test => {
 			 function fn(p1: boolean, p2: string) { }
 		`);
 
-			a.assert(A.docs);
-			a.assert(A.docs.content);
-			a.equal(A.docs.content[0].value, 'Function Description');
-			a.equal(A.docs.content[1].tag, 'return');
-			a.equal(
-				A.docs.content[1].value,
-				'Return Comment\nSecond Line Comment'
-			);
-			a.equal(A.docs.content[2].tag, 'custom');
-			a.equal(A.docs.content[2].value, 'Custom Tag');
-			a.ok(A.flags & Flags.Deprecated);
+		a.assert(A.docs);
+		a.assert(A.docs.content);
+		a.equal(A.docs.content[0].value, 'Function Description');
+		a.equal(A.docs.content[1].tag, 'return');
+		a.equal(A.docs.content[1].value, 'Return Comment\nSecond Line Comment');
+		a.equal(A.docs.content[2].tag, 'custom');
+		a.equal(A.docs.content[2].value, 'Custom Tag');
+		a.ok(A.flags & Flags.Deprecated);
 
-			a.assert(A.parameters);
-			const [p1, p2] = A.parameters;
-			a.assert(p1.docs);
-			a.assert(p2.docs);
-			a.equal(p1.docs.content?.[0].value, 'param1');
-			a.equal(p2.docs.content?.[0].value, 'param2');
-		},
-		true
-	);
+		a.assert(A.parameters);
+		const [p1, p2] = A.parameters;
+		a.assert(p1.docs);
+		a.assert(p2.docs);
+		a.equal(p1.docs.content?.[0].value, 'param1');
+		a.equal(p2.docs.content?.[0].value, 'param2');
+	});
 
 	test('JSDOC - example', (a: Test) => {
 		const [A] = parse(`
 			/**
 			 * Content
 			 * @example Demo Title
-			 * <div>Hello</div>
+			 *   <div>Hello</div>
 			 * @example
 			 * <div>Example 2</div>
 			 */
@@ -513,6 +506,34 @@ export default suite('dts', test => {
 		`);
 
 		a.assert(A.docs);
+		a.assert(A.docs.content);
+		a.equal(A.docs.content.length, 3);
+		const [c1, c2, c3] = A.docs.content;
+		a.equal(c1.value, 'Content');
+		a.equal(c2.title, 'Demo Title');
+		a.equal(c2.value, '<div>Hello</div>');
+		a.equal(c3.value, '<div>Example 2</div>');
+	});
+
+	test('JSDOC - see', (a: Test) => {
+		const [A, fn] = parse(`
+			class A { }
+			
+			/**
+			 * @see A
+			 */
+			 function fn() { }
+		`);
+
+		a.assert(fn.docs);
+		a.assert(fn.docs.content);
+		a.equal(fn.docs.content.length, 1);
+
+		const see = fn.docs.content[0];
+		a.equal(see.tag, 'see');
+		a.equal(see.value, 'A');
+		a.assert(see.ref);
+		a.equal(see.ref.type, A);
 	});
 
 	test('type alias - function', (a: Test) => {
@@ -524,6 +545,21 @@ export default suite('dts', test => {
 		a.equal(type.parameters.length, 1);
 		a.equal(type.type, VoidType);
 	});
+
+	test(
+		'type alias - exported',
+		(a: Test) => {
+			const [A] = parse(`export type A<T> = (val: T) => void;`);
+			a.assert(A.type);
+			a.equal(A.kind, Kind.TypeAlias);
+			const type = A.type;
+			a.equal(type.kind, Kind.FunctionType);
+			a.assert(type.parameters);
+			a.equal(type.parameters.length, 1);
+			a.equal(type.type, VoidType);
+		},
+		true
+	);
 
 	test('function - full', (a: Test) => {
 		const [A] = parse(`/**

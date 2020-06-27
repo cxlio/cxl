@@ -307,6 +307,7 @@ export const theme: Theme = {
 			textTransform: 'uppercase',
 		},
 		code: { fontFamily: 'var(--cxl-fontMonospace)' },
+		monospace: { fontFamily: 'var(--cxl-fontMonospace)' },
 	},
 	colors: {
 		elevation: rgba(0, 0, 0, 0.26),
@@ -351,7 +352,7 @@ export const theme: Theme = {
 	globalStyles: {
 		$: {
 			// reset: '-webkit-tap-highlight-color:transparent;',
-			font: 'default',
+			// font: 'default',
 			// verticalAlign: 'middle',
 		},
 		'*': {
@@ -445,7 +446,8 @@ const renderMap: StyleMap = {
 		_p: any,
 		value: keyof Typography
 	) {
-		applyCSSStyle(style, theme.typography[value]);
+		const css = { ...theme.typography.default, ...theme.typography[value] };
+		applyCSSStyle(style, css);
 	},
 	flexGrow: renderNumber,
 	flexShrink: renderNumber,

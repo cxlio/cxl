@@ -230,13 +230,15 @@ export class RippleContainer extends Component {
 /**
  * The top app bar provides content and actions related to the current screen. It’s used for branding, screen titles, navigation, and actions.
  *
- * @example
+ * @example Appbar with actions
  * <cxl-appbar>
- * <cxl-appbar-title>Appbar Title</cxl-appbar-title>
- * <cxl-button flat primary><cxl-icon icon="heart"></cxl-icon></cxl-button>
- * <cxl-button flat primary><cxl-icon icon="search"></cxl-icon></cxl-button>
- * <cxl-button flat primary><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+ *   <cxl-navbar></cxl-navbar>
+ *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+ *   <cxl-button flat primary><cxl-icon icon="search"></cxl-icon></cxl-button>
+ *   <cxl-button flat primary><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
  * </cxl-appbar>
+ *
+ * @see AppbarTitle
  */
 @Augment<Appbar>(
 	'cxl-appbar',
@@ -260,12 +262,14 @@ export class RippleContainer extends Component {
 					paddingRight: 16,
 					paddingTop: 4,
 					paddingBottom: 4,
+					font: 'h6',
 				},
 
 				flex$extended: {
 					alignItems: 'start',
 					height: 128,
-					paddingBottom: 24,
+					paddingBottom: 16,
+					font: 'h5',
 				},
 				$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 				'@xlarge': {
@@ -295,6 +299,12 @@ export class RippleContainer extends Component {
 	</Host>
 )
 export class Appbar extends Component {
+	/**
+	 * @example
+	 * <cxl-appbar extended>
+	 * <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+	 * </cxl-appbar>
+	 */
 	@Attribute()
 	extended = false;
 
@@ -302,17 +312,23 @@ export class Appbar extends Component {
 	center = false;
 }
 
+/**
+ * @see Appbar
+ */
 @Augment(
 	<Host>
 		<Style>
 			{{
 				$: {
 					flexGrow: 1,
-					font: 'title',
+					marginTop: 8,
+					marginBottom: 8,
+					lineHeight: 28,
 					color: 'onPrimary',
 					textDecoration: 'none',
+					alignSelf: 'flex-end',
 				},
-				$extended: { font: 'h5', alignSelf: 'flex-end' },
+				// $extended: { font: 'h5', alignSelf: 'flex-end' },
 			}}
 		</Style>
 		<slot />
@@ -834,8 +850,8 @@ export class Spinner extends Component {
 				$h1: { font: 'h1', marginTop: 32, marginBottom: 64 },
 				$h2: { font: 'h2', marginTop: 24, marginBottom: 48 },
 				$h3: { font: 'h3', marginTop: 24, marginBottom: 32 },
-				$h4: { font: 'h4', marginTop: 24, marginBottom: 24 },
-				$h5: { font: 'h5', marginTop: 16, marginBottom: 16 },
+				$h4: { font: 'h4', marginTop: 30, marginBottom: 30 },
+				$h5: { font: 'h5', marginTop: 24, marginBottom: 24 },
 				$h6: { font: 'h6', marginTop: 16, marginBottom: 16 },
 				$button: { font: 'button' },
 				$subtitle: { font: 'subtitle', marginBottom: 0 },

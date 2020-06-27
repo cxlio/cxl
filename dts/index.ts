@@ -1,15 +1,15 @@
 import * as ts from 'typescript';
-import { relative, resolve } from 'path';
 import {
-	ParsedCommandLine,
-	ParseConfigFileHost,
 	ModifierFlags,
-	getParsedCommandLineOfConfigFile,
+	ParseConfigFileHost,
+	ParsedCommandLine,
 	SyntaxKind as SK,
 	TypeFlags as TF,
 	createProgram,
+	getParsedCommandLineOfConfigFile,
 	sys,
 } from 'typescript';
+import { relative, resolve } from 'path';
 
 type SerializerMap = {
 	[K in SK]?: (node: any) => Node;
@@ -54,7 +54,9 @@ export enum Kind {
 
 interface DocumentationContent {
 	tag?: string;
+	title?: string;
 	value: string;
+	ref?: Node;
 }
 
 interface Documentation {
@@ -266,6 +268,12 @@ function getFlags(flags: ts.ModifierFlags) {
 	return (flags as any) as Flags;
 }
 
+function findSymbol(scope: ts.Node, name: string) {
+	const symbols = typeChecker.getSymbolsInScope(scope, ts.SymbolFlags.Type);
+	const found = symbols.find(s => s.escapedName === name);
+	return found && getSymbolReference(found);
+}
+
 function getNodeDocs(node: ts.Node, result: Node): Documentation {
 	const jsDoc = (node as any).jsDoc as ts.JSDoc[];
 	const content: DocumentationContent[] = [];
@@ -275,10 +283,24 @@ function getNodeDocs(node: ts.Node, result: Node): Documentation {
 
 	ts.getJSDocTags(node).forEach(doc => {
 		const tag = doc.tagName.getText();
-		const value = doc.comment;
+		let value = doc.comment;
+		let ref: Node | undefined;
+		let title: string | undefined;
+
 		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
+		else if (tag === 'see' && value) ref = findSymbol(node, value);
+		else if (
+			tag === 'example' &&
+			value &&
+			doc.end === doc.tagName.end + 1
+		) {
+			const newLine = value.indexOf('\n');
+			title = value.slice(0, newLine).trim();
+			value = value.slice(newLine).trim();
+		}
+
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
-			content.push({ tag, value });
+			content.push({ tag, value, ref, title });
 	});
 
 	return content.length ? docs : undefined;
@@ -584,7 +606,6 @@ function serializeObject(
 function serializeClass(node: ts.ClassDeclaration) {
 	const result = serializeDeclaration(node);
 	const symbol =
-		// ts.isClassDeclaration(node) &&
 		typeChecker.getSymbolAtLocation(node) ||
 		(node.name && typeChecker.getSymbolAtLocation(node.name));
 
@@ -866,10 +887,21 @@ export function parse(
 	const oldGetSourceFile = host.getSourceFile;
 	let sourceFile: any;
 
-	host.getSourceFile = function (fn: string, target: ts.ScriptTarget) {
+	host.getSourceFile = function (
+		fn: string,
+		target: ts.ScriptTarget,
+		onError?: any,
+		shouldCreateNewSourceFile?: boolean
+	) {
 		return fn === fileName
 			? (sourceFile = ts.createSourceFile(fileName, source, target))
-			: oldGetSourceFile.apply(this, arguments as any);
+			: oldGetSourceFile.call(
+					this,
+					fn,
+					target,
+					onError,
+					shouldCreateNewSourceFile
+			  );
 	};
 
 	setup([fileName], options || {}, host);
