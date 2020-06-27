@@ -1,0 +1,8 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/docgen"
+	},
+	"references": [{ "path": "../ui-ts" }],
+	"files": ["runtime.tsx"]
+}
