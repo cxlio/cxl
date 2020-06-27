@@ -389,9 +389,8 @@ export function map<T, T2>(mapFn: (val: T) => T2) {
 	});
 }
 
-function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
+export function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
 	let to: number;
-
 	return function (this: any, ...args: A[]) {
 		if (to) clearTimeout(to);
 		to = setTimeout(() => {
@@ -421,9 +420,27 @@ export function collect<T>(source: Observable<T>, gate: Observable<any>) {
  * Emits a value from the source Observable only after a particular time span has passed without another source emission.
  */
 export function debounceTime<T>(time?: number) {
-	return operator<T>(subscriber =>
-		debounceFunction(subscriber.next.bind(subscriber), time)
-	);
+	let to: number,
+		completed = false;
+
+	return operator<T>(subscriber => ({
+		next(val: T) {
+			if (to) clearTimeout(to);
+			to = setTimeout(() => {
+				subscriber.next(val);
+				to = 0;
+				if (completed) subscriber.complete();
+			}, time);
+		},
+		error(e) {
+			if (to) clearTimeout(to);
+			subscriber.error(e);
+		},
+		complete() {
+			if (to) completed = true;
+			else subscriber.complete();
+		},
+	}));
 }
 
 /**
@@ -601,30 +618,30 @@ export function combineLatest<T extends any[]>(
 	...observables: T
 ): Observable<PickObservable<T>> {
 	return new Observable<any>(subs => {
-		const latest: any[] = [],
-			len = observables.length;
-		let count = len,
-			isReady = false;
+		const latest: any[] = [];
+		let len = observables.length;
+		let count = 0,
+			opened = len;
 
-		const subscriptions = observables.map((o, i) =>
-			o.subscribe({
+		const subscriptions = observables.map((o, i) => {
+			let fired = false;
+			return o.subscribe({
 				next(val: any) {
+					if (!fired) {
+						count++;
+						fired = true;
+					}
 					latest[i] = val;
-					if (latest.length === len) {
-						const clone = latest.slice(0);
-						isReady = true;
-						count = len;
-						subs.next(clone);
-					} else count++;
+					if (count === len) subs.next(latest.slice(0));
 				},
 				error(e: any) {
 					subs.error(e);
 				},
 				complete() {
-					if (isReady && --count === 0) subs.complete();
+					if (--opened === 0) subs.complete();
 				},
-			})
-		);
+			});
+		});
 
 		return () => subscriptions.forEach(s => s.unsubscribe());
 	});

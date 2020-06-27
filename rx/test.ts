@@ -13,6 +13,7 @@ import exhaustMapSuite from './test/exhaustMap.js';
 import fromSuite from './test/from.js';
 import mergeSuite from './test/merge.js';
 import combineLatestSuite from './test/combineLatest.js';
+import debounceTimeSuite from './test/debounceTime.js';
 import { suite } from '../spec/index.js';
 
 declare function setInterval(fn: () => void, interval?: number): number;
@@ -32,6 +33,7 @@ export default suite('rx', [
 	mergeSuite,
 	concatSuite,
 	combineLatestSuite,
+	debounceTimeSuite,
 	suite('Observable', test => {
 		test('constructor', a => {
 			const observable = new Observable(function subscribe(observer) {
