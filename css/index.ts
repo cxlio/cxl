@@ -350,11 +350,6 @@ export const theme: Theme = {
 		},
 	},
 	globalStyles: {
-		$: {
-			// reset: '-webkit-tap-highlight-color:transparent;',
-			// font: 'default',
-			// verticalAlign: 'middle',
-		},
 		'*': {
 			boxSizing: 'border-box',
 			transition:

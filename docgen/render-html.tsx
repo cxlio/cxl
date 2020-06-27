@@ -517,7 +517,7 @@ function Header(module: Output) {
 	<head><meta name="description" content="Documentation for ${
 		pkg.name
 	}" />${SCRIPTS}</head>
-	<style>cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 };</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 };</style>
 	<cxl-application><title>${pkg.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(pkg, module)}
 	<a href="index.html" style="text-decoration:none"><cxl-appbar-title>${
