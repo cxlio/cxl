@@ -5,7 +5,7 @@
 Super lightweight rxjs implementation.
 
 [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt)
-[Documentation](https://coaxialhost.com/rx)
+[Documentation](https://cxlio.github.io/cxl/rx)
 
 ## Features
 

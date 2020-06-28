@@ -28,9 +28,15 @@ export class DocGen extends Application {
 
 	writeFile(file: File) {
 		const name = file.name;
+		const out = this.outputDir;
+		const version = this.modulePackage.version;
 		return this.log(
 			`Writing ${name}${file.node ? ` from ${file.node.name}` : ''}`,
-			() => fs.writeFile(`${this.outputDir}/${name}`, file.content)
+			() =>
+				Promise.all([
+					fs.writeFile(`${out}/${name}`, file.content),
+					fs.writeFile(`${out}/${version}/${name}`, file.content),
+				])
 		);
 	}
 
@@ -38,6 +44,7 @@ export class DocGen extends Application {
 		const outputDir = this.outputDir;
 		const pkgRepo = (this.modulePackage = await readJson('package.json'));
 		await mkdirp(outputDir);
+		await mkdirp(outputDir + '/' + pkgRepo.version);
 		if (!this.repository && pkgRepo)
 			this.repository =
 				typeof pkgRepo === 'string' ? pkgRepo : pkgRepo.url;
