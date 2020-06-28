@@ -1,7 +1,7 @@
 import {
-	BehaviorSubject,
 	Observable,
 	Subject,
+	be,
 	filter,
 	map,
 	of,
@@ -9,7 +9,10 @@ import {
 	toPromise,
 } from './index.js';
 import concatSuite from './test/concat.js';
+import deferSuite from './test/defer.js';
+import distinctUntilChangedSuite from './test/distinctUntilChanged.js';
 import exhaustMapSuite from './test/exhaustMap.js';
+import filterSuite from './test/filter.js';
 import fromSuite from './test/from.js';
 import mergeSuite from './test/merge.js';
 import combineLatestSuite from './test/combineLatest.js';
@@ -28,6 +31,9 @@ function throwError(msg: string) {
 }
 
 export default suite('rx', [
+	deferSuite,
+	distinctUntilChangedSuite,
+	filterSuite,
 	fromSuite,
 	exhaustMapSuite,
 	mergeSuite,
@@ -429,7 +435,7 @@ export default suite('rx', [
 	suite('BehaviorSubject', test => {
 		test('BehaviorSubject#constructor', function (a) {
 			let c = 1;
-			const A = new BehaviorSubject(c);
+			const A = be(c);
 			A.subscribe(val => a.equal(val, c));
 			c++;
 			A.next(c);

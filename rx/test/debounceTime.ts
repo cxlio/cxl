@@ -1,8 +1,15 @@
-import { debounceTime, of, tap, toPromise } from '../index';
+import {
+	catchError,
+	debounceTime,
+	of,
+	tap,
+	throwError,
+	toPromise,
+} from '../index';
 import { suite } from '../../spec/index.js';
 
 export default suite('debounceTime', test => {
-	test('should combine events from two observables', async a => {
+	test('should debounce time asynchronously', async a => {
 		let fired = false;
 		const promise = toPromise(
 			of(true).pipe(
@@ -12,6 +19,17 @@ export default suite('debounceTime', test => {
 		);
 		a.equal(fired, false);
 		await promise;
+		a.equal(fired, true);
+	});
+
+	test('should propagate errors', a => {
+		let fired = false;
+		throwError(true)
+			.pipe(
+				debounceTime(100),
+				catchError(e => ((fired = e), of(e)))
+			)
+			.subscribe();
 		a.equal(fired, true);
 	});
 });
