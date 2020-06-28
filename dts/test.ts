@@ -546,20 +546,16 @@ export default suite('dts', test => {
 		a.equal(type.type, VoidType);
 	});
 
-	test(
-		'type alias - exported',
-		(a: Test) => {
-			const [A] = parse(`export type A<T> = (val: T) => void;`);
-			a.assert(A.type);
-			a.equal(A.kind, Kind.TypeAlias);
-			const type = A.type;
-			a.equal(type.kind, Kind.FunctionType);
-			a.assert(type.parameters);
-			a.equal(type.parameters.length, 1);
-			a.equal(type.type, VoidType);
-		},
-		true
-	);
+	test('type alias - exported', (a: Test) => {
+		const [A] = parse(`export type A<T> = (val: T) => void;`);
+		a.assert(A.type);
+		a.equal(A.kind, Kind.TypeAlias);
+		const type = A.type;
+		a.equal(type.kind, Kind.FunctionType);
+		a.assert(type.parameters);
+		a.equal(type.parameters.length, 1);
+		a.equal(type.type, VoidType);
+	});
 
 	test('function - full', (a: Test) => {
 		const [A] = parse(`/**

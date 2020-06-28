@@ -201,10 +201,10 @@ class TestRunner extends Application {
 		}
 	}
 
-	private runNode() {
+	private async runNode() {
 		this.log(`Node ${process.version}`);
 		const suite = require(path.resolve(this.entryFile)).default as Test;
-		suite.run();
+		await suite.run();
 		printReport(suite);
 	}
 

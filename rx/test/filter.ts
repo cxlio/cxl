@@ -8,7 +8,6 @@ export default suite('filter', test => {
 		const subs = '^                 !';
 		const expected = '-----1-----3-----|';
 
-		// Run Again
 		expectLog(a, source.pipe(filter(x => +x % 2 === 1)), expected);
 		a.equal(source.subscriptions, subs);
 	});
