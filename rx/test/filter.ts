@@ -1,5 +1,5 @@
+import { Observable, filter } from '../index';
 import { cold, expectLog } from './util';
-import { filter } from '../index';
 import { suite } from '../../spec/index.js';
 
 export default suite('filter', test => {
@@ -10,5 +10,31 @@ export default suite('filter', test => {
 
 		expectLog(a, source.pipe(filter(x => +x % 2 === 1)), expected);
 		a.equal(source.subscriptions, subs);
+	});
+	test('filter', a => {
+		const A = new Observable<number>(s => {
+			[1, 2, 3, 4, 5, 6].forEach(s.next, s);
+		});
+		let filterFn = (v: number) => v < 4,
+			B = A.pipe(filter(filterFn)),
+			b = B.subscribe(v => {
+				a.ok(v);
+			}),
+			i = 1;
+		b.unsubscribe();
+
+		filterFn = v => v % 2 === 0;
+		B = A.pipe(filter(filterFn));
+		b = B.subscribe(v => {
+			a.ok(v);
+		});
+		b.unsubscribe();
+
+		filterFn = () => true;
+		B = A.pipe(filter(filterFn));
+		b = B.subscribe(v => {
+			a.equal(v, i++);
+		});
+		b.unsubscribe();
 	});
 });

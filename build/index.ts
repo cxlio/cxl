@@ -20,6 +20,8 @@ import {
 	Observable,
 	Operator,
 	operator,
+	of,
+	merge,
 } from '../rx/index.js';
 import { tsbuild, tscVersion } from './tsc.js';
 import { Application } from '../server/index.js';
@@ -92,8 +94,11 @@ export function eslint(options: any) {
 		});
 		linter
 			.lintFiles(['**/*.ts'])
-			.then(handleEslintResult, e => subs.error(e))
-			.then(() => subs.complete());
+			.then(handleEslintResult)
+			.then(
+				() => subs.complete(),
+				e => subs.error(e)
+			);
 	});
 }
 
@@ -157,41 +162,57 @@ const LICENSE_MAP: Record<string, string> = {
 };
 
 export function pkg(config: PackageTask = {}) {
-	const p = readPackage(BASEDIR);
-	const license = p.license || config.license;
-	const output: Output[] = [
-		{
-			path: 'package.json',
-			source: JSON.stringify(
-				{
-					name: p.name,
-					version: p.version,
-					license,
-					files: ['*.js', '*.d.ts', '*.js.map', 'LICENSE'],
-					main: 'index.js',
-					homepage: p.homepage,
-					bugs: p.bugs,
-					repository: p.repository && getRepo(p.repository),
-					dependencies: p.dependencies,
-					peerDependencies: p.peerDependencies,
-					type: p.type,
-				},
-				null,
-				2
-			),
-		},
-	];
+	return defer(() => {
+		const p = readPackage(BASEDIR);
+		const license = p.license || config.license;
+		const publishedVersion = execSync(`npm show ${p.name} version`, {
+			encoding: 'utf8',
+		});
 
-	if (license) {
+		if (publishedVersion === p.version)
+			throw new Error(
+				`Package version must be different than published version (${publishedVersion})`
+			);
+
+		const output: Observable<Output>[] = [
+			of({
+				path: 'package.json',
+				source: JSON.stringify(
+					{
+						name: p.name,
+						version: p.version,
+						license,
+						files: [
+							'*.js',
+							'*.d.ts',
+							'*.js.map',
+							'LICENSE',
+							'*.md',
+						],
+						main: 'index.js',
+						homepage: p.homepage,
+						bugs: p.bugs,
+						repository: p.repository && getRepo(p.repository),
+						dependencies: p.dependencies,
+						peerDependencies: p.peerDependencies,
+						type: p.type,
+					},
+					null,
+					2
+				),
+			}),
+		];
+
+		output.push(file('README.md', 'README.md'));
+
+		if (!license) throw new Error('license field is required.');
 		if (!LICENSE_MAP[license])
 			throw new Error(`Invalid license: "${license}"`);
-		output.push({
-			path: 'LICENSE',
-			source: readFileSync(join(__dirname, LICENSE_MAP[license]), 'utf8'),
-		});
-	}
 
-	return from(output);
+		output.push(file(join(__dirname, LICENSE_MAP[license]), 'LICENSE'));
+
+		return merge(...output);
+	});
 }
 
 export function umd(namespace = 'this') {
@@ -310,7 +331,15 @@ export class Builder extends Application {
 	}
 }
 
-export function build(config: BuildConfiguration) {
+export function build(
+	targetOrConfig: string | BuildConfiguration,
+	config?: BuildConfiguration
+) {
+	if (typeof targetOrConfig !== 'string') config = targetOrConfig;
+	else if (!process.argv.includes(targetOrConfig)) return Promise.resolve();
+
+	if (!config) throw new Error('Invalid configuration');
+
 	return new Builder(config).start();
 }
 

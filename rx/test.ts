@@ -1,22 +1,14 @@
-import {
-	Observable,
-	Subject,
-	be,
-	filter,
-	map,
-	of,
-	tap,
-	toPromise,
-} from './index.js';
+import { Observable, Subject, be, map, of, tap, toPromise } from './index.js';
+import combineLatestSuite from './test/combineLatest.js';
 import concatSuite from './test/concat.js';
+import debounceTimeSuite from './test/debounceTime.js';
 import deferSuite from './test/defer.js';
 import distinctUntilChangedSuite from './test/distinctUntilChanged.js';
 import exhaustMapSuite from './test/exhaustMap.js';
 import filterSuite from './test/filter.js';
 import fromSuite from './test/from.js';
 import mergeSuite from './test/merge.js';
-import combineLatestSuite from './test/combineLatest.js';
-import debounceTimeSuite from './test/debounceTime.js';
+
 import { suite } from '../spec/index.js';
 
 declare function setInterval(fn: () => void, interval?: number): number;
@@ -440,35 +432,6 @@ export default suite('rx', [
 			c++;
 			A.next(c);
 			a.equal(A.value, c);
-		});
-	}),
-
-	suite('filter', test => {
-		test('filter', a => {
-			const A = new Observable<number>(s => {
-				[1, 2, 3, 4, 5, 6].forEach(s.next, s);
-			});
-			let filterFn = (v: number) => v < 4,
-				B = A.pipe(filter(filterFn)),
-				b = B.subscribe(v => {
-					a.ok(v);
-				}),
-				i = 1;
-			b.unsubscribe();
-
-			filterFn = v => v % 2 === 0;
-			B = A.pipe(filter(filterFn));
-			b = B.subscribe(v => {
-				a.ok(v);
-			});
-			b.unsubscribe();
-
-			filterFn = () => true;
-			B = A.pipe(filter(filterFn));
-			b = B.subscribe(v => {
-				a.equal(v, i++);
-			});
-			b.unsubscribe();
 		});
 	}),
 ]);

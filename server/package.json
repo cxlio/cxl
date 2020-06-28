@@ -3,8 +3,5 @@
 	"version": "0.0.1",
 	"scripts": {
 		"test": "node build && cd ../dist/server && node ../tester --node"
-	},
-	"dependencies": {
-		"express": "*"
 	}
 }

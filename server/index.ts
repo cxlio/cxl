@@ -2,7 +2,7 @@ import { Observable, from, map } from '../rx';
 import { colors } from './colors.js';
 import { promises as fs } from 'fs';
 require('source-map-support').install();
-import { resolve } from 'path';
+import { basename, dirname, join, resolve } from 'path';
 
 function hrtime(): bigint {
 	return process.hrtime.bigint();
@@ -165,8 +165,7 @@ export async function readJson<T = any>(
 }
 
 export abstract class Application {
-	abstract name: string;
-
+	name?: string;
 	color: keyof typeof colors = 'green';
 	version?: string;
 	parameters = new ApplicationParameters(this);
@@ -192,12 +191,18 @@ export abstract class Application {
 	}
 
 	async start() {
+		const dir = dirname(require.main?.filename || process.cwd());
 		try {
 			this.package = JSON.parse(
-				await fs.readFile(__dirname + '/package.json', 'utf8')
+				await fs.readFile(join(dir, 'package.json'), 'utf8')
 			);
-			if (!this.version) this.version = this.package.version;
-		} catch (e) {}
+		} catch (e) {
+			this.package = {};
+		}
+
+		if (!this.name) this.name = this.package.name || basename(dir);
+		if (!this.version) this.version = this.package.version;
+		if (!this.name) throw new Error('Application name is required');
 
 		this.coloredPrefix = colors[this.color](this.name);
 		this.setup();
