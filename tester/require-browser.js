@@ -6,11 +6,12 @@ function require(path) {
 	}
 	const mods = require.modules;
 
-	if (require.replace)
-		path = path.replace(require.replace.match, require.replace.replace);
-
+	if (require.replace) path = require.replace(path);
 	// Handle packages
-	if (path[0] !== '.') return mods[path];
+	if (path[0] !== '.') {
+		if (!mods[path]) throw new Error(`Module "${path}" not found.`);
+		return mods[path];
+	}
 
 	const xhr = new XMLHttpRequest();
 	let url = require.base + (path.endsWith('.js') ? path : path + '.js');
@@ -31,12 +32,13 @@ function require(path) {
 	const baseMatch = /(.*\/).*/.exec(url);
 	require.base = baseMatch ? normalizePath(baseMatch[1]) : '';
 
-	const exports = {};
-	new Function('exports', response)(exports);
+	const exports = {},
+		module = { exports: exports };
+	new Function('module', 'exports', response)(module, exports);
 
 	require.base = oldBase;
-	mods[id] = exports;
-	return exports;
+	mods[id] = module.exports;
+	return module.exports;
 }
 require.modules = {};
 require.base = '';

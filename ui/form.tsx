@@ -4,6 +4,7 @@ import {
 	Attribute,
 	Component,
 	Slot,
+	attributeChanged,
 	bind,
 	render,
 	get,
@@ -17,8 +18,10 @@ import {
 	Focusable,
 	Svg,
 	ariaChecked,
+	focusable,
 	navigationList,
 	registable,
+	registableHost,
 	selectable,
 	selectableHost,
 } from './core.js';
@@ -71,12 +74,46 @@ const FocusCircleStyle = (
 	</Style>
 );
 
+export type ValidateFunction<T> = (val: T) => string | true;
+
+export function $validate<T extends InputBase>(
+	...validators: ValidateFunction<T['value']>[]
+) {
+	return (el: T) =>
+		get(el, 'value').tap(value => {
+			validators.find(validateFn => {
+				const message = validateFn(value);
+				el.invalid = message !== true;
+				if (message !== true) (el as any).validationMessage = message;
+			});
+		});
+}
+
+export const ValidationMessage = {
+	json: 'Invalid JSON value',
+	zipcode: 'Please enter a valid zip code',
+	equalTo: 'Values do not match',
+	required: 'This field is required',
+	notZero: 'Value cannot be zero',
+	email: 'Please enter a valid email address',
+};
+
+export function required(val: any) {
+	return (
+		(val !== null && val !== undefined && val !== '' && val !== false) ||
+		ValidationMessage.required
+	);
+}
+
 const Undefined = {};
 
 @Augment<InputBase>(
 	<Host
 		$={host =>
 			merge(
+				attributeChanged(host, 'invalid').pipe(
+					triggerEvent(host, 'invalid')
+				),
 				registable(host, 'form'),
 				get(host, 'disabled').tap(val =>
 					host.setAttribute('aria-disabled', val ? 'true' : 'false')
@@ -105,6 +142,8 @@ class InputBase extends Component {
 	touched = false;
 	@Attribute()
 	name?: string;
+
+	readonly validationMessage = '';
 
 	/**
 	 * Used by element that do not directly receive focus. ie Input, Textarea
@@ -288,9 +327,9 @@ const FieldBase = (
 					// boxShadow: '0 0 0 1px var(--cxl-primary)',
 					borderColor: 'primary',
 				},
-				invalid: { color: 'error' },
-				invalid$outline: { borderColor: 'error' },
-				invalid$outline$focused: {
+				$invalid: { color: 'error' },
+				$invalid$outline: { borderColor: 'error' },
+				$invalid$outline$focused: {
 					// boxShadow: '0 0 0 1px var(--cxl-error)'
 				},
 				content: { position: 'relative' },
@@ -378,15 +417,23 @@ export class Label {
 			flex: { display: 'flex', alignItems: 'center', lineHeight: 22 },
 			line: { position: 'absolute', marginTop: 6, left: 0, right: 0 },
 			line$outline: { display: 'none' },
-			help: { paddingLeft: 12, paddingRight: 12, display: 'flex' },
+			help: {
+				font: 'caption',
+				position: 'relative',
+				marginTop: 14,
+				display: 'flex',
+			},
 			grow: { flexGrow: 1 },
 			counter: { textAlign: 'right' },
 			help$leading: { paddingLeft: 38 },
+			invalidMessage: { display: 'none' },
+			invalidMessage$invalid: { display: 'block' },
 		}}
 	</Style>,
 	FieldBase,
 	render(host => {
 		const invalid = be(false);
+		const invalidMessage = be('');
 		let input: InputBase;
 
 		function onRegister(ev: Event) {
@@ -396,9 +443,9 @@ export class Label {
 		function update(ev: any) {
 			if (input) {
 				invalid.next(input.touched && input.invalid);
-				host.className =
-					(input.disabled ? 'disabled' : '') +
-					(invalid.value ? 'invalid' : '');
+				host.inputdisabled = input.disabled;
+				host.invalid = invalid.value;
+				if (host.invalid) invalidMessage.next(input.validationMessage);
 
 				if (ev.type === 'focusable.focus') host.focused = true;
 				else if (ev.type === 'focusable.blur') host.focused = false;
@@ -437,7 +484,7 @@ export class Label {
 				<div className="help">
 					<div className="grow">
 						<Slot selector="cxl-field-help" />
-						<div title="=error:text:show"></div>
+						<div className="invalidMessage">{invalidMessage}</div>
 					</div>
 				</div>
 			</Host>
@@ -447,6 +494,10 @@ export class Label {
 export class Field extends Component {
 	@StyleAttribute()
 	outline = false;
+	@StyleAttribute()
+	protected inputdisabled = false;
+	@StyleAttribute()
+	invalid = false;
 	@StyleAttribute()
 	floating = false;
 	@StyleAttribute()
@@ -605,12 +656,17 @@ export class FocusLine extends Component {
 	role('form'),
 	bind(host =>
 		merge(
-			keypress(host, 'enter').pipe(
-				tap(ev => {
-					host.submit();
-					ev.preventDefault();
-				})
-			)
+			on(host, 'form.submit').tap(ev => {
+				host.submit();
+				ev.stopPropagation();
+			}),
+			registableHost<InputBase>(host, 'form').tap(
+				val => (host.elements = val)
+			),
+			keypress(host, 'enter').tap(ev => {
+				host.submit();
+				ev.preventDefault();
+			})
 		)
 	),
 	<slot />
@@ -619,20 +675,20 @@ export class Form extends Component {
 	@Attribute()
 	autocomplete = 'off';
 
-	readonly elements?: InputBase[];
+	elements?: Set<InputBase>;
 
 	submit() {
 		if (this.elements) {
 			let focus: InputBase | undefined;
 
-			this.elements.forEach(el => {
+			for (const el of this.elements) {
 				if (el.invalid) focus = focus || el;
-
 				el.touched = true;
-			});
+			}
 
-			if (focus) focus.focus();
+			if (focus) return focus.focus();
 		}
+		trigger(this, 'submit');
 	}
 }
 
@@ -1177,14 +1233,14 @@ export class Switch extends InputBase {
 function $focusProxy(el: HTMLElement, ctx: RenderContext<InputBase>) {
 	const host = ctx.host;
 	host.focusElement = el;
-
-	return merge(
+	return focusable(host, el);
+	/*merge(
 		on(el, 'focus').pipe(triggerEvent(host, 'focusable.focus')),
 		on(el, 'blur').tap(() => {
 			host.touched = true;
 			trigger(host, 'focusable.blur');
 		})
-	);
+	);*/
 }
 
 function $valueProxy(el: HTMLInputElement, ctx: RenderContext<InputBase>) {

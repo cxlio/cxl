@@ -4,6 +4,7 @@ import {
 	Component,
 	Slot,
 	StyleAttribute,
+	attributeChanged,
 	bind,
 	get,
 	onUpdate,
@@ -175,26 +176,41 @@ interface FocusableComponent extends Component {
 	touched: boolean;
 }
 
-export function focusableEvents<T extends FocusableComponent>(element: T) {
+export function focusableEvents<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
 	return merge(
-		on(element, 'focus').pipe(triggerEvent(element, 'focusable.focus')),
+		on(element, 'focus').pipe(triggerEvent(host, 'focusable.focus')),
 		on(element, 'blur').tap(() => {
-			element.touched = true;
-			trigger(element, 'focusable.blur');
-		})
+			host.touched = true;
+			trigger(host, 'focusable.blur');
+		}),
+		attributeChanged(host, 'touched').pipe(
+			triggerEvent(host, 'focusable.touched')
+		)
 	);
 }
 
-export function focusableDisabled<T extends FocusableComponent>(element: T) {
-	return get(element, 'disabled').tap(value => {
-		element.setAttribute('aria-disabled', value ? 'true' : 'false');
+export function focusableDisabled<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return get(host, 'disabled').tap(value => {
+		host.setAttribute('aria-disabled', value ? 'true' : 'false');
 		if (value) element.removeAttribute('tabindex');
 		else element.tabIndex = 0;
 	});
 }
 
-export function focusable<T extends FocusableComponent>(element: T) {
-	return merge(focusableDisabled(element), focusableEvents(element));
+export function focusable<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return merge(
+		focusableDisabled(host, element),
+		focusableEvents(host, element)
+	);
 }
 
 const stateStyles = new StyleSheet({ styles: StateStyles });

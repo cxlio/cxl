@@ -283,7 +283,7 @@ export const theme: Theme = {
 	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
 	variables: {
 		// Animation speed
-		speed: '0.2s',
+		speed: '0.3s',
 		font: 'Roboto, sans-serif',
 		fontSize: '16px',
 		fontMonospace: 'monospace',
