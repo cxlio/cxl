@@ -1,6 +1,6 @@
-import { suite } from '../spec/index.js';
-import { empty, setContent, setAttribute } from './index.js';
 import { dom, render } from '../xdom/index.js';
+import { empty, setAttribute, setContent } from './index.js';
+import { suite } from '../spec/index.js';
 
 export default suite('dom', test => {
 	test('empty(Element)', a => {

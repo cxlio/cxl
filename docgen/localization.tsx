@@ -33,6 +33,11 @@ const KindMap: Record<Kind, string> = {
 	[Kind.Export]: 'Export',
 	[Kind.Component]: 'Component',
 	[Kind.Attribute]: 'Attribute',
+	[Kind.Keyof]: 'Keyof',
+	[Kind.Typeof]: 'Typeof',
+	[Kind.ConstructorType]: 'Constructor Type',
+	[Kind.Tuple]: 'Tuple Type',
+	[Kind.ThisType]: 'this',
 };
 
 const GroupTitle: Record<any, string> = {
@@ -52,9 +57,14 @@ const GroupTitle: Record<any, string> = {
 	[Kind.TypeAlias]: 'Type Alias',
 };
 
-const content: Record<string, string> = {
+const content = {
 	Members: 'Members',
 	API: 'API',
+	'Inherited from': 'Inherited from',
+	Unknown: 'Unknown',
+	Parameters: 'Parameters',
+	Example: 'Example',
+	Demo: 'Demo',
 };
 
 const jsdocMap: Record<string, string> = {
@@ -62,14 +72,14 @@ const jsdocMap: Record<string, string> = {
 };
 
 export function groupTitle(kind: Kind) {
-	return translate(GroupTitle[kind] || 'Unknown');
+	return GroupTitle[kind] || translate('Unknown');
 }
 
 export function kindToString(kind: Kind) {
 	return KindMap[kind] || kind.toString();
 }
 
-export function translate(key: string) {
+export function translate(key: keyof typeof content) {
 	return content[key] || key;
 }
 

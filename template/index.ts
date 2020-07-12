@@ -1,39 +1,42 @@
 import {
+	AttributeObserver,
+	setContent as domSetContent,
+	on,
+	trigger,
+} from '../dom/index.js';
+import {
 	BehaviorSubject,
+	EMPTY,
 	Observable,
 	Operator,
 	Subscription,
 	be,
+	concat,
+	debounceTime,
+	defer,
 	filter,
 	map,
 	merge,
-	tap,
-	concat,
-	debounceTime,
 	of,
-	defer,
 	switchMap,
-	EMPTY,
+	tap,
 } from '../rx/index.js';
-import {
-	setContent as domSetContent,
-	on,
-	trigger,
-	AttributeObserver,
-} from '../dom/index.js';
 
-export function getAttribute<T extends HTMLElement>(el: T, name: keyof T) {
+export function getAttribute<T extends Node, K extends keyof T>(
+	el: T,
+	name: K
+) {
 	const view: any = (el as any).view;
 	const observer = view
 		? view.attributes$.pipe(filter((ev: any) => ev.attribute === name))
 		: new AttributeObserver(el).pipe(filter(ev => ev.value === name));
-	return concat(
+	return concat<Observable<T[K]>[]>(
 		defer(() => of(el[name])),
 		observer.pipe(map(() => el[name]))
 	);
 }
 
-export function triggerEvent<T extends Element, R>(element: T, event: string) {
+export function triggerEvent<R>(element: EventTarget, event: string) {
 	return tap<R>((val: R) => trigger(element, event, val));
 }
 
@@ -45,6 +48,10 @@ export function keypress(el: Element, key?: string) {
 	return on(el, 'keypress').pipe(
 		filter((ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key)
 	);
+}
+
+export function stopEvent<T extends Event>() {
+	return tap<T>((ev: T) => ev.stopPropagation());
 }
 
 export function onAction(el: Element) {
@@ -86,11 +93,26 @@ export function onHistoryChange() {
 	);
 }
 
+export function onLocation() {
+	return merge(onHashChange(), onHistoryChange()).map(() => window.location);
+}
+
 export function setContent(el: Element) {
 	return tap((val: any) => domSetContent(el, val));
 }
 
 const LOG = tap(val => console.log(val));
+
+declare module '../rx' {
+	interface Observable<T> {
+		log(): Observable<T>;
+	}
+}
+
+Observable.prototype.log = function () {
+	return this.pipe(LOG);
+};
+
 export function log<T>() {
 	return LOG as Operator<T>;
 }
@@ -122,7 +144,7 @@ type Pipe<ElementT, HostT> = (
 ) => void | Observable<any>;
 type Binding<T, T2> = (el: T, ctx: RenderContext<T2>) => Observable<any>;
 
-interface Sources<H, E> {
+interface Sources<E, H> {
 	get(attr: keyof H, cb?: Pipe<E, H>): Binding<E, H>;
 	onAction(cb?: Pipe<E, H>): Binding<E, H>;
 	on(ev: string, cb?: Pipe<E, H>): Binding<E, H>;
@@ -149,9 +171,9 @@ const sources: Sources<any, any> = {
 type Renderable<T> = (ctx: RenderContext<T>) => any;
 
 export function tpl<ElementT, HostT extends HTMLElement>(
-	fn: (helper: Sources<HostT, ElementT>) => Renderable<HostT>
+	fn: (helper: Sources<ElementT, HostT>) => Renderable<HostT>
 ) {
-	return fn(sources as Sources<HostT, ElementT>);
+	return fn(sources as Sources<ElementT, HostT>);
 }
 
 enum ListOperation {

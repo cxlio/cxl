@@ -129,6 +129,7 @@ function handleRequest(sources: Output[], req: Request) {
 
 async function cjsRunner(page: Page, sources: Output[]) {
 	const entry = sources[0].path;
+	app.log(`Running in commonjs mode`);
 	await page.addScriptTag({ path: __dirname + '/require.js' });
 
 	page.setRequestInterception(true);
@@ -140,10 +141,11 @@ async function cjsRunner(page: Page, sources: Output[]) {
 		}
 	});
 
-	return page.evaluate(`
-		const suite = require('${entry}').default;
-		suite.run().then(() => suite);
-	`);
+	return page.evaluate(async entry => {
+		const r = require(entry).default as Test;
+		await r.run();
+		return r.toJSON();
+	}, entry);
 }
 
 async function amdRunner(page: Page, sources: Output[]) {
@@ -153,13 +155,13 @@ async function amdRunner(page: Page, sources: Output[]) {
 		});
 	}
 
-	return page.evaluate(`
+	return await (page.evaluate(`
 		let suite;
 		define('@tester', ['exports', 'require', 'index'], (exports, require, index) => {
 			suite = index.default;
 		})
 		suite.run().then(() => suite);
-	`);
+	`) as Promise<Test>);
 }
 
 class TestRunner extends Application {
@@ -180,63 +182,69 @@ class TestRunner extends Application {
 	private handleConsole(msg: any) {
 		const type = msg.type();
 		const { url, lineNumber } = msg.location();
-		this.log(`Console: ${url}:${lineNumber}`);
-		Promise.all(
-			msg
-				.args()
-				.map((arg: any) =>
-					typeof arg === 'string' ? arg : arg.toString()
-				)
-		).then(out => {
-			out.forEach(arg => (console as any)[type](arg));
-		});
+		this.log(`console ${type}: ${url}:${lineNumber}`);
+		console.log(msg.text());
+		// msg.args().forEach(console.log);
 	}
 
 	private async openPage(browser: Browser) {
+		const context = await browser.createIncognitoBrowserContext();
 		try {
-			return await browser.newPage();
+			return await context.newPage();
 		} catch (e) {
-			// Try again
-			return await browser.newPage();
+			this.log(`Failed to open new page. Retrying.`);
+			return await context.newPage();
 		}
 	}
 
 	private async runNode() {
 		this.log(`Node ${process.version}`);
-		const suite = require(path.resolve(this.entryFile)).default as Test;
+		const suitePath = path.resolve(this.entryFile);
+		this.log(`Suite: ${suitePath}`);
+		const suite = require(suitePath).default as Test;
 		await suite.run();
 		printReport(suite);
+	}
+
+	private async startTracing(page: Page) {
+		await Promise.all([
+			page.coverage.startJSCoverage({
+				reportAnonymousScripts: true,
+			}),
+			page.coverage.startCSSCoverage(),
+			page.tracing.start({ path: 'trace.json' }),
+		]);
 	}
 
 	private async runPuppeteer() {
 		const browser = await launch({
 			headless: true,
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
+			timeout: 5000,
+			dumpio: true,
 		});
 		this.log(`Puppeteer ${await browser.version()}`);
 
 		const page = await this.openPage(browser);
 
-		await Promise.all([
-			page.coverage.startJSCoverage({
-				reportAnonymousScripts: true,
-			}),
-			page.coverage.startCSSCoverage(),
-		]);
 		page.on('console', msg => this.handleConsole(msg));
 		page.on('pageerror', msg => this.log(msg));
 
+		await this.startTracing(page);
+
+		this.log(`Entry file: ${this.entryFile}`);
 		const source = readFileSync(this.entryFile, 'utf8');
 		const sources = [{ path: this.entryFile, source }];
 
-		await page.tracing.start({ path: 'trace.json' });
 		const suite = this.amd
 			? await amdRunner(page, sources)
 			: await cjsRunner(page, sources);
+
+		if (!suite) throw new Error('Invalid suite');
+
 		await page.tracing.stop();
 
-		this.log('Generating report.json');
-		await generateReport(page, sources);
+		await this.log('Generating report.json', generateReport(page, sources));
 		await browser.close();
 
 		printReport(suite as Test);
@@ -248,4 +256,4 @@ class TestRunner extends Application {
 }
 
 const app = new TestRunner();
-app.start();
+app.start().then(() => process.exit(0));

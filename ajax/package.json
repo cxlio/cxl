@@ -1,7 +1,11 @@
 {
 	"name": "@cxl/ajax",
-	"version": "0.0.1",
+	"description": "ajax helper",
+	"version": "0.0.2",
+	"license": "GPL-3.0",
+	"homepage": "https://cxlio.github.io/cxl/ajax",
+	"private": true,
 	"scripts": {
-		"build": "node build"
+		"build": "node ../dist/build"
 	}
 }

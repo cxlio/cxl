@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/filewatch",
+		"lib": ["es2015"],
+		"types": ["node"],
+		"typeRoots": ["../node_modules/@types"]
+	},
+	"files": ["index.ts"],
+	"references": [{ "path": "../rx" }]
+}

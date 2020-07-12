@@ -2,9 +2,9 @@
 	"name": "@cxl/css",
 	"version": "0.0.1",
 	"description": "CSS in Typescript",
-	"home": "https://coaxialhost.com/css",
+	"homepage": "https://cxlio.github.io/cxl/css",
+	"license": "GPL-3.0",
 	"scripts": {
-		"build": "node build",
-		"docs": "node ../dist/docgen -o ../docs/css --repository \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/css\""
+		"build": "node ../dist/build"
 	}
 }

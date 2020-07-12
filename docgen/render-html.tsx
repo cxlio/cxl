@@ -1,4 +1,11 @@
-import { Output, Node, Kind, Flags, Source } from '../dts';
+import {
+	Output,
+	Node,
+	Kind,
+	Flags,
+	Source,
+	DocumentationContent,
+} from '../dts';
 import type { DocGen, File } from './index.js';
 import {
 	kindToString,
@@ -7,9 +14,11 @@ import {
 	translate,
 } from './localization';
 import { relative } from 'path';
+import hljs from 'highlight.js';
 
 let application: DocGen;
 let header: string;
+let index: Node[];
 
 const ENTITIES_REGEX = /[&<]/g;
 const ENTITIES_MAP = {
@@ -52,7 +61,9 @@ function ClassType(node: Node) {
 	node.children?.forEach(child => {
 		const link = Type(child);
 		const type = child.type;
-		type && type.kind === Kind.Class
+
+		return type &&
+			(type.kind === Kind.Class || type.kind === Kind.Component)
 			? extendStr.push(link)
 			: implementStr.push(link);
 	});
@@ -77,9 +88,7 @@ function ObjectType(node: Node) {
 	return `{ ${node.children?.map(Property).join(', ') || ''} }`;
 }
 
-function Type(type?: Node): string {
-	if (!type) return '';
-
+function renderType(type: Node) {
 	switch (type.kind) {
 		case Kind.ClassType:
 			return ClassType(type);
@@ -94,6 +103,8 @@ function Type(type?: Node): string {
 			return `${Type(type.children[0])}[${Type(type.children[1])}]`;
 		case Kind.TypeUnion:
 			return type.children?.map(Type).join(' | ') || '';
+		case Kind.Tuple:
+			return `[${type.children?.map(Type).join(', ') || ''}]`;
 		case Kind.Array:
 			return `${Type(type.type)}[]`;
 		case Kind.Reference:
@@ -102,21 +113,34 @@ function Type(type?: Node): string {
 		case Kind.Function:
 		case Kind.Method:
 			return FunctionType(type);
-		case Kind.BaseType:
-			return type.name;
 		case Kind.ObjectType:
 			return ObjectType(type);
+		case Kind.BaseType:
 		case Kind.Literal:
 		case Kind.TypeParameter:
 			return type.name;
+		case Kind.ConstructorType:
+			return `new ${FunctionType(type)}`;
+		case Kind.Keyof:
+			return `keyof ${Type(type.type)}`;
+		case Kind.Typeof:
+			return `typeof ${type.name}`;
+		case Kind.ThisType:
+			return 'this';
 	}
 
 	console.log(type);
 	return Signature(type);
 }
 
+function Type(type?: Node): string {
+	if (!type) return '';
+	const flags = type.flags & Flags.Rest ? '...' : '';
+	return `${flags}${renderType(type)}`;
+}
+
 function SignatureValue(val?: string) {
-	if (val && val.length > 50) return ` = <pre>${escape(val)}</pre>`;
+	if (val && val.length > 50) return ` = ${Code(val)}`;
 	return val ? ` = ${escape(val)}` : '';
 }
 
@@ -144,7 +168,8 @@ function NodeChips({ flags }: Node) {
 		(flags & Flags.Abstract ? Chip('abstract') : '') +
 		(flags & Flags.Overload ? Chip('overload') : '') +
 		(flags & Flags.Private ? Chip('private') : '') +
-		(flags & Flags.Deprecated ? Chip('deprecated') : '')
+		(flags & Flags.Deprecated ? Chip('deprecated') : '') +
+		(flags & Flags.Readonly ? Chip('readonly') : '')
 	);
 }
 
@@ -219,7 +244,7 @@ function Source({ source }: Node) {
 		: '';
 }
 
-function ParameterTable(rows: string[][]) {
+/*function ParameterTable(rows: string[][]) {
 	return `<cxl-table>
 		<cxl-tr><cxl-th>Name</cxl-th><cxl-th style="width:100%">Description</cxl-th></cxl-tr>
 		${rows
@@ -231,14 +256,66 @@ function ParameterTable(rows: string[][]) {
 			)
 			.join('')}
 	</cxl-table>`;
+}*/
+
+function Code(source: string, language?: string) {
+	return (
+		'<pre><code class="hljs">' +
+		(language
+			? hljs.highlight(language, source)
+			: hljs.highlightAuto(source, [
+					'html',
+					'typescript',
+					'javascript',
+					'css',
+			  ])
+		).value +
+		'</code></pre>'
+	);
 }
 
-function Example(node: Node, example: string): string {
-	return node.kind === Kind.Component || node.kind === Kind.Attribute
-		? `<cxl-docs-demo${
-				application.debug ? ' debug' : ''
-		  }><!--${example}--></cxl-docs-demo>`
-		: `<pre>${escape(example)}</pre>`;
+function parseExample(value: string) {
+	if (value.startsWith('<caption>')) {
+		const newLine = value.indexOf('\n');
+		return [
+			value.slice(0, newLine).trim().replace('</caption>', ''),
+			(value = value.slice(newLine).trim()),
+		];
+	}
+
+	return ['', value];
+}
+
+function Demo(doc: DocumentationContent): string {
+	const [title, example] = parseExample(doc.value);
+	return `<cxl-t h5>${title || translate('Demo')}</cxl-t><cxl-docs-demo${
+		application.debug ? ' debug' : ''
+	}><!--${example}--></cxl-docs-demo><cxl-t h6>Source</cxl-t>${Code(
+		example
+	)}`;
+}
+
+function Example(doc: DocumentationContent) {
+	const [title, value] = parseExample(doc.value);
+	return `<cxl-t h5>${
+		title || translate('Example')
+	}</cxl-t><cxl-c pad16>${value}</cxl-c><cxl-t h6>Source</cxl-t>${Code(
+		value
+	)}`;
+}
+
+function DocSee(doc: DocumentationContent) {
+	const names = doc.value.split(' ');
+	return (
+		`<p>${jsdocTitle('see')}:` +
+		names
+			.map(name => {
+				const symbol = index.find(n => n.name === name);
+				return symbol ? Link(symbol) : name;
+			})
+			.join(', ') +
+		'</p>'
+	);
 }
 
 function Documentation(node: Node) {
@@ -248,18 +325,15 @@ function Documentation(node: Node) {
 
 	return docs.content
 		.map(doc => {
-			if (doc.tag === 'example')
-				return `<cxl-t h5>${doc.title || 'Demo'}</cxl-t>${Example(
-					node,
-					doc.value
-				)}`;
+			if (doc.tag === 'demo') return Demo(doc);
+			if (doc.tag === 'example') return Example(doc);
 			if (doc.tag === 'return')
 				return `<cxl-t h5>Returns</cxl-t><p>${doc.value}</p>`;
+			if (doc.tag === 'param') return `<p>${doc.value}</p>`;
+			if (doc.tag === 'see') return DocSee(doc);
 
 			return doc.tag
-				? `<p>${jsdocTitle(doc.tag)}: ${
-						doc.ref ? Link(doc.ref) : doc.value
-				  }</p>`
+				? `<p>${jsdocTitle(doc.tag)}: ${doc.value}</p>`
 				: `<p>${doc.value}</p>`;
 		})
 		.join('');
@@ -275,7 +349,9 @@ function ParameterDocumentation(node: Node) {
 
 function InheritedFrom(symbol?: Node) {
 	return symbol
-		? `<p><cxl-t subtitle2>Inherited From: ${Link(symbol)}</cxl-t></p>`
+		? `<p><cxl-t subtitle2>${translate('Inherited from')}: ${Link(
+				symbol
+		  )}</cxl-t></p>`
 		: '';
 }
 
@@ -289,11 +365,13 @@ function MemberBody(c: Node) {
 
 	if (c.parameters?.length)
 		result +=
-			'<br/><cxl-t subtitle2>Parameters</cxl-t>' +
-			ParameterTable(
-				c.parameters.map(p => [p.name, ParameterDocumentation(p)])
-			) +
-			'<br/>';
+			`<br/><cxl-t subtitle2>${translate('Parameters')}</cxl-t><ul>` +
+			c.parameters
+				.map(
+					p => `<li>${Parameter(p)}${ParameterDocumentation(p)}</li>`
+				)
+				.join('') +
+			'</ul><br/>';
 
 	if (returns) result += `<cxl-t subtitle2>Returns</cxl-t><p>${returns}</p>`;
 
@@ -322,11 +400,6 @@ function Link(node: Node): string {
 	}
 
 	return node.id ? `<a href="${getHref(node)}">${name}</a>` : name;
-}
-
-function GroupIndex(kind: Kind, children: string[]) {
-	return `<cxl-t h6>${groupTitle(kind)}
-		</cxl-t><br/><cxl-grid>${children.join('')}</cxl-grid>`;
 }
 
 function getNodeCoef(a: Node) {
@@ -370,64 +443,116 @@ function ImportStatement(node: Node) {
 	if (!source) return '';
 	const importUrl = getImportUrl(source);
 
-	return `<cxl-t h5>Import</cxl-t><pre>import { ${node.name} } from '${importUrl}';</pre>`;
+	return `<cxl-t h5>Import</cxl-t>${Code(
+		`import { ${node.name} } from '${importUrl}';`
+	)}`;
+}
+
+function MemberIndexLink(node: Node) {
+	const chips = node.flags & Flags.Static ? Chip('static') : '';
+
+	return `<cxl-c sm4 lg3>${chips} ${Link(node)}</cxl-c>`;
+}
+
+function MemberGroupIndex({ kind, index }: Group) {
+	return `<cxl-t h6>${groupTitle(kind)}
+		</cxl-t><cxl-c pad16><cxl-grid>${index.join('')}</cxl-grid></cxl-c>`;
+}
+
+function MemberBodyGroup({ body, kind }: Group) {
+	return body.length === 0
+		? ''
+		: `<br /><cxl-t h5>${groupTitle(kind)}</cxl-t>${body.join(
+				'<br />'
+		  )}<br />`;
+}
+
+interface Group {
+	kind: Kind;
+	index: string[];
+	body: string[];
+}
+
+function getMemberGroups(node: Node, indexOnly = false, sort = true) {
+	const children = node.children;
+	const resultMap: Record<number, Group> = {};
+	const result: Group[] = [];
+
+	if (!children) return result;
+
+	children.sort(sortNode).forEach(c => {
+		if (node.kind === Kind.Module && !declarationFilter(c)) return;
+
+		const groupKind =
+			(c.kind === Kind.Export && c.type?.type?.kind) || c.kind;
+
+		let group = resultMap[groupKind];
+
+		if (!group) {
+			result.push(
+				(group = resultMap[groupKind] = {
+					kind: groupKind,
+					index: [],
+					body: [],
+				})
+			);
+		}
+
+		if (!(c.flags & Flags.Overload)) group.index.push(MemberIndexLink(c));
+
+		if (!indexOnly && !hasOwnPage(c) && c.kind !== Kind.Export)
+			group.body.push(MemberCard(c));
+	});
+
+	return sort
+		? result.sort((a, b) =>
+				kindToString(a.kind) > kindToString(b.kind) ? 1 : -1
+		  )
+		: result;
+}
+
+function MemberInherited(type: Node): string {
+	return (
+		type.children
+			?.map(c => {
+				if (!c.type) return '';
+				let result = '';
+				const kind = c.type.kind;
+
+				if (kind === Kind.Class || kind === Kind.Component) {
+					result = getMemberGroups(c.type, true)
+						.map(MemberGroupIndex)
+						.join('');
+					if (result)
+						result = `<cxl-t h5>Inherited from ${Link(
+							c
+						)}</cxl-t>${result}`;
+					if (c.type.type) result += MemberInherited(c.type.type);
+				}
+
+				return result;
+			})
+			.join('') || ''
+	);
 }
 
 function Members(node: Node) {
-	const { children } = node;
-	const index: Record<number, string[]> = {};
-	const groupBody: Record<number, string[]> = {};
-	const groups: Kind[] = [];
-
-	if (children)
-		children.sort(sortNode).forEach(c => {
-			if (node.kind === Kind.Module && !declarationFilter(c)) return '';
-			const groupKind =
-				(c.kind === Kind.Export && c.type?.type?.kind) || c.kind;
-
-			if (!index[groupKind]) {
-				groupBody[groupKind] = [];
-				index[groupKind] = [];
-				groups.push(groupKind);
-			}
-
-			if (!(c.flags & Flags.Overload)) {
-				const chips =
-					c.flags & Flags.Static
-						? `<cxl-chip little primary>static</cxl-chip>`
-						: '';
-				index[groupKind].push(
-					`<cxl-c sm4 lg3>${chips} ${Link(c)}</cxl-c>`
-				);
-			}
-			if (!hasOwnPage(c) && c.kind !== Kind.Export)
-				groupBody[groupKind].push(MemberCard(c));
-		});
-
-	const sortedGroups = groups.sort((a, b) =>
-		kindToString(a) > kindToString(b) ? 1 : -1
-	);
+	const type = node.type;
+	const groups = getMemberGroups(node);
 	const importStr = ImportStatement(node);
+	const inherited = type ? MemberInherited(type) : '';
 
-	return groups.length
-		? `<cxl-t h4>${translate(
-				node.kind === Kind.Module ? 'Members' : 'API'
-		  )}</cxl-t>${importStr}` +
-				(node.kind !== Kind.Module ? `<cxl-t h5>Members</cxl-t>` : '') +
-				sortedGroups
-					.map(kind => GroupIndex(kind, index[kind]))
-					.join('<br/>') +
-				'<br/>' +
-				sortedGroups
-					.filter(group => groupBody[group].length)
-					.map(
-						group =>
-							`<br /><cxl-t h5>${groupTitle(
-								group
-							)}</cxl-t>${groupBody[group].join('<br />')}`
-					)
-					.join('<br />')
-		: '';
+	return (
+		`<cxl-t h4>${translate(
+			node.kind === Kind.Module ? 'Members' : 'API'
+		)}</cxl-t>${importStr}` +
+		(groups.length || inherited
+			? (node.kind !== Kind.Module ? `<cxl-t h5>Members</cxl-t>` : '') +
+			  groups.map(MemberGroupIndex).join('') +
+			  inherited +
+			  groups.map(MemberBodyGroup).join('')
+			: '')
+	);
 }
 
 function ModuleBody(json: Node) {
@@ -441,6 +566,11 @@ function ModuleBody(json: Node) {
 }
 
 function getHref(node: Node): string {
+	if (
+		node.type &&
+		(node.kind === Kind.Reference || node.kind === Kind.Export)
+	)
+		return getHref(node.type);
 	if (hasOwnPage(node)) return getPageName(node);
 
 	return (
@@ -478,9 +608,7 @@ function ModuleNavbar(node: Node) {
 		node.children
 			?.sort(sortNode)
 			.map(c =>
-				declarationFilter(c) &&
-				!(c.flags & Flags.Overload) &&
-				c.kind !== Kind.Export
+				declarationFilter(c) && !(c.flags & Flags.Overload)
 					? `<cxl-item href="${getHref(c)}">${NodeIcon(c)}${
 							c.name
 					  }</cxl-item>`
@@ -510,14 +638,15 @@ function Header(module: Output) {
 	const pkg = application.modulePackage;
 	const SCRIPTS = application.debug
 		? `<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');require('../../dist/docgen/runtime.js')</script>`
+	<script>require('../../dist/ui/index.js');require('../../dist/ui/icons.js');require('../../dist/docgen/runtime.js')</script>`
 		: `<script src="runtime.bundle.min.js"></script>`;
 
 	return `<!DOCTYPE html>
 	<head><meta name="description" content="Documentation for ${
 		pkg.name
 	}" />${SCRIPTS}</head>
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 };</style>
+	<link rel="stylesheet" href="styles.css" />
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-fontSize)}</style>
 	<cxl-application><title>${pkg.name}</title><cxl-meta></cxl-meta><cxl-appbar>
 	${Navbar(pkg, module)}
 	<a href="index.html" style="text-decoration:none"><cxl-appbar-title>${
@@ -526,9 +655,13 @@ function Header(module: Output) {
 }
 
 function getPageName(page: Node) {
-	return page.kind === Kind.Module
-		? page.name.replace(/.tsx?$/, '.html')
-		: `${page.name}.${page.id}.html`;
+	if (page.kind === Kind.Module) return page.name.replace(/.tsx?$/, '.html');
+
+	const source = Array.isArray(page.source) ? page.source[0] : page.source;
+	const prefix =
+		source?.name.replace(/.tsx?$/, '-').replace(/\//g, '-') || '';
+
+	return `${prefix}${page.name}.html`;
 }
 
 function Page(p: Node) {
@@ -557,5 +690,7 @@ function Module(module: Node) {
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
 	header = Header(output);
+	index = Object.values(output.index);
+	hljs.configure({ tabReplace: '    ' });
 	return output.modules.flatMap(Module);
 }

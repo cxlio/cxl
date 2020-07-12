@@ -1,5 +1,5 @@
+import { Subscription, combineLatest } from '../rx/index.js';
 import { compile } from './index.js';
-import { combineLatest, Subscription } from '../rx/index.js';
 import { suite } from '../spec/index.js';
 
 export default suite('worker', test => {
@@ -49,7 +49,7 @@ export default suite('worker', test => {
 				a.equal(val, count++);
 				a.ran(2);
 				done();
-			}
+			},
 		});
 	});
 
@@ -76,7 +76,7 @@ export default suite('worker', test => {
 			complete() {
 				a.ran(3);
 				done();
-			}
+			},
 		});
 	});
 });

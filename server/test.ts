@@ -5,6 +5,11 @@ export default suite('server', test => {
 	test('Application', a => {
 		class TestApp extends Application {
 			name = 'test';
+			setup() {
+				this.parameters.register({
+					name: 'node',
+				});
+			}
 			run() {
 				a.equal(this.name, 'test');
 			}

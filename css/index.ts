@@ -11,8 +11,11 @@ interface Typography {
 	[name: string]: CSSStyle;
 }
 
-interface Variables {
-	[name: string]: any;
+export interface Variables {
+	speed: string;
+	font: string;
+	fontSize: string;
+	fontMonospace: string;
 }
 
 export interface Colors {
@@ -34,6 +37,8 @@ export interface Colors {
 	headerText: BaseColor;
 	divider: BaseColor;
 }
+
+export type VariableList = Colors & Variables;
 
 interface StrictStyleDefinition {
 	alignItems: string;
@@ -93,6 +98,8 @@ interface StrictStyleDefinition {
 	textAlign: string;
 	textDecoration: string;
 	height: Length;
+	minHeight: Length;
+	variables: Partial<VariableList>;
 	verticalAlign:
 		| 'top'
 		| 'middle'
@@ -103,6 +110,7 @@ interface StrictStyleDefinition {
 		| 'text-bottom'
 		| 'baseline';
 	whiteSpace: 'nowrap' | 'pre-wrap';
+	zIndex: number;
 }
 
 export type Styles =
@@ -255,7 +263,12 @@ export const theme: Theme = {
 		fadeIn: {
 			keyframes:
 				'0% { display: block; opacity: 0; } 100% { opacity: 1; }',
-			value: 'cxl-fadeIn var(--cxl-speed) linear',
+			value: 'cxl-fadeIn var(--cxl-speed) linear forwards',
+		},
+		fadeOut: {
+			keyframes:
+				'0% { opacity: 1 } 100% { visibility:hidden; opacity: 0; }',
+			value: 'cxl-fadeOut var(--cxl-speed) linear both',
 		},
 		wait: {
 			keyframes: `
@@ -349,6 +362,7 @@ export const theme: Theme = {
 			return this.onSurface.alpha(0.16);
 		},
 	},
+
 	globalStyles: {
 		'*': {
 			boxSizing: 'border-box',
@@ -357,6 +371,16 @@ export const theme: Theme = {
 		} as any,
 	},
 };
+
+export const ColorsInverse: Colors = Object.assign({}, theme.colors, {
+	surface: theme.colors.primary,
+	onSurface: theme.colors.onPrimary,
+	primary: theme.colors.secondary,
+	onPrimary: theme.colors.onSecondary,
+	link: theme.colors.onPrimary,
+	error: rgba(0xff, 0x6e, 0x40),
+	onError: rgba(0, 0, 0),
+});
 
 type StyleMap = {
 	[key: string]: (
@@ -453,6 +477,17 @@ const renderMap: StyleMap = {
 	scaleX: renderTransform,
 	scaleY: renderTransform,
 	rotate: renderTransform,
+	variables(
+		def: StyleDefinition,
+		_style: CSSStyle,
+		_p: any,
+		value: VariableList
+	) {
+		let result = ':host {';
+		for (const i in value) result += `--cxl-${i}: ${(value as any)[i]};`;
+		def.prepend = (def.prepend || '') + result + '}';
+	},
+	zIndex: renderNumber,
 };
 
 function toSnake(name: string) {
@@ -505,7 +540,7 @@ export function applyTheme() {
 
 	let result = ':root{background-color:var(--cxl-background);';
 	for (const i in colors) result += `--cxl-${i}:${(colors as any)[i]};`;
-	for (const i in variables) result += `--cxl-${i}:${variables[i]};`;
+	for (const i in variables) result += `--cxl-${i}:${(variables as any)[i]};`;
 
 	rootStyles.innerHTML = result + '}';
 	document.head.appendChild(rootStyles);

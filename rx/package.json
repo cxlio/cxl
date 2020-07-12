@@ -8,14 +8,9 @@
 		"index.d.ts"
 	],
 	"scripts": {
-		"build": "node build",
-		"test": "node build && cd ../dist/rx && node ../tester",
-		"docs": "rm -rf ../docs/rx && node ../dist/docgen -o ../docs/rx --repository \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/rx\"",
-		"package": "npm test && node build package",
-		"prepublishOnly": "npm run package",
-		"publishDocs": "npm run docs",
-		"publish": "cd ../dist/rx && npm publish && npm run publishDocs"
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/rx && node ../tester"
 	},
-	"homepage": "https://coaxialhost.com/rx",
+	"homepage": "https://cxlio.github.io/cxl/rx",
 	"repository": "https://github.com/cxlio/cxl/tree/$BRANCH/rx"
 }

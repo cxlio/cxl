@@ -1,8 +1,10 @@
 import { Observable, from, map } from '../rx';
-import { colors } from './colors.js';
-import { promises as fs } from 'fs';
-require('source-map-support').install();
 import { basename, dirname, join, resolve } from 'path';
+import { colors } from './colors.js';
+import { exec } from 'child_process';
+import { promises as fs } from 'fs';
+
+require('source-map-support').install();
 
 function hrtime(): bigint {
 	return process.hrtime.bigint();
@@ -79,8 +81,8 @@ function mtime(file: string) {
 export async function syncFiles(file1: string, file2: string) {
 	const time = Date.now();
 	await Promise.all([
-		fs.utimes(file1, time, time).catch(() => {}),
-		fs.utimes(file2, time, time).catch(() => {}),
+		fs.utimes(file1, time, time).catch(),
+		fs.utimes(file2, time, time).catch(),
 	]);
 }
 
@@ -95,6 +97,15 @@ export function mkdirp(dir: string): Promise<any> {
 	return fs
 		.stat(dir)
 		.catch(() => mkdirp(resolve(dir, '..')).then(() => fs.mkdir(dir)));
+}
+
+export function sh(cmd: string, options = {}) {
+	return new Promise((resolve, reject) =>
+		exec(cmd, { encoding: 'utf8', ...options }, (err, out) => {
+			if (err) reject(err.message);
+			else resolve(out.trim());
+		})
+	);
 }
 
 interface Parameter {
@@ -170,10 +181,13 @@ export abstract class Application {
 	version?: string;
 	parameters = new ApplicationParameters(this);
 	package?: any;
+	started = false;
 
 	private coloredPrefix?: string;
 
-	protected setup() {}
+	setup() {
+		// Implement
+	}
 
 	log(msg: LogMessage, op?: OperationFunction<any>) {
 		const pre = this.coloredPrefix || '';
@@ -185,12 +199,15 @@ export abstract class Application {
 		return Promise.resolve();
 	}
 
-	handleError(e?: any) {
+	protected handleError(e?: any) {
 		this.log(e);
 		process.exit(1);
 	}
 
 	async start() {
+		if (this.started) throw new Error('Application already started');
+		this.started = true;
+
 		const dir = dirname(require.main?.filename || process.cwd());
 		try {
 			this.package = JSON.parse(
@@ -202,20 +219,21 @@ export abstract class Application {
 
 		if (!this.name) this.name = this.package.name || basename(dir);
 		if (!this.version) this.version = this.package.version;
-		if (!this.name) throw new Error('Application name is required');
-
-		this.coloredPrefix = colors[this.color](this.name);
-		this.setup();
-		this.parameters.parse(process.argv);
-
-		if (this.version) this.log(this.version);
 
 		try {
+			if (!this.name) throw new Error('Application name is required');
+
+			this.coloredPrefix = colors[this.color](this.name);
+			this.setup();
+			this.parameters.parse(process.argv);
+
+			if (this.version) this.log(this.version);
+
 			return await this.run();
 		} catch (e) {
 			this.handleError(e);
 		}
 	}
 
-	abstract run(): Promise<any> | void;
+	protected abstract run(): Promise<any> | void;
 }

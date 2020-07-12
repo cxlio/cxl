@@ -1,42 +1,21 @@
+import type { AttributeType, RenderContext } from '../xdom/index.js';
+import { ChildrenObserver, MutationEvent, getShadow } from '../dom/index.js';
 import {
-	Subscription,
 	Observable,
-	Subject,
 	Operator,
+	Subject,
+	Subscription,
 	concat,
 	defer,
 	filter,
-	of,
 	map,
+	of,
 	tap,
 } from '../rx/index.js';
-import { ChildrenObserver, MutationEvent, getShadow } from '../dom/index.js';
 
-export interface RenderContext<T = HTMLElement> {
-	host: T;
-	bind(binding: Binding<any>): void;
-}
-type Binding<T> = Observable<T>;
 type Renderable<T = HTMLElement> = (ctx: RenderContext<T>) => Node;
 type RenderFunction<T> = (node: T) => void;
-type Augmentation<T> = (view: ComponentView<T>) => Node | void;
-
-interface Bindable<T> {
-	toBinding(): (el: T, host: any) => Observable<any>;
-}
-
-type HTMLAttributes<T> = {
-	[P in Exclude<keyof T, 'children'>]?:
-		| T[P]
-		| Observable<T[P]>
-		| Operator<T, any>;
-};
-type AttributeType<T> =
-	| HTMLAttributes<T>
-	| {
-			$?: Bindable<T> | ((el: T, host: any) => Observable<any>);
-			children?: any;
-	  };
+type Augmentation<T> = (context: RenderContext<T>) => Node | void;
 
 const registeredComponents: Record<string, typeof Component> = {};
 const subscriber = {
@@ -46,7 +25,7 @@ const subscriber = {
 };
 
 export class ComponentView<T> {
-	private bindings?: Binding<any>[];
+	private bindings?: Observable<any>[];
 	private subscriptions?: Subscription<any>[];
 	private rendered = false;
 	private connected = false;
@@ -54,7 +33,7 @@ export class ComponentView<T> {
 
 	constructor(public host: T, private render: (host: T) => void) {}
 
-	bind(binding: Binding<any>) {
+	bind(binding: Observable<any>) {
 		if (this.connected)
 			throw new Error('Cannot add bindings to a connected view');
 
@@ -94,6 +73,8 @@ export abstract class Component extends HTMLElement {
 		return document.createElement(this.tagName);
 	}
 
+	// EventMap
+	eventMap?: any;
 	jsxAttributes?: AttributeType<this>;
 	view = new ComponentView(this, this.render);
 
@@ -167,7 +148,7 @@ export function Augment(...augs: any[]) {
 }
 
 export function render<T extends Component>(renderFn: (node: T) => Renderable) {
-	return (view: ComponentView<T>) => {
+	return (view: RenderContext<T>) => {
 		const node = view.host,
 			child = renderFn(node)(view);
 		if (child !== node) getShadow(node).appendChild(child);
@@ -177,11 +158,11 @@ export function render<T extends Component>(renderFn: (node: T) => Renderable) {
 export function bind<T extends Component>(
 	bindFn: (node: T) => Observable<any>
 ) {
-	return (view: ComponentView<T>) => view.bind(bindFn(view.host));
+	return (view: RenderContext<T>) => view.bind(bindFn(view.host));
 }
 
 export function connect<T extends Component>(bindFn: (node: T) => void) {
-	return (view: ComponentView<T>) =>
+	return (view: RenderContext<T>) =>
 		view.bind(
 			defer(() => {
 				bindFn(view.host);
@@ -223,7 +204,7 @@ export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
  * Fires when connected and on attribute change
  */
 export function update<T extends Component>(fn: (node: T) => void) {
-	return (view: ComponentView<T>) => view.bind(onUpdate(view.host, fn));
+	return (view: RenderContext<T>) => view.bind(onUpdate(view.host, fn));
 }
 
 export function attributeChanged<T extends Component, K extends keyof T>(
@@ -291,8 +272,8 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 		if (descriptor) Object.defineProperty(target, prop, descriptor);
 
 		if (options?.persist)
-			pushRender(target, (node: Component) =>
-				node.view.bind(
+			pushRender(target, (node: Component) => {
+				return node.view.bind(
 					concat(
 						defer(() =>
 							of<AttributeEvent<any>>({
@@ -305,8 +286,8 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 							filter(ev => ev.attribute === attribute)
 						)
 					).pipe(options.persistOperator || attributeOperator)
-				)
-			);
+				);
+			});
 
 		Object.defineProperty(target, attribute, {
 			get() {
@@ -321,7 +302,6 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 						value,
 					});
 				}
-				return value;
 			},
 		});
 	};
@@ -339,7 +319,7 @@ export function getRegisteredComponents() {
 }
 
 export function role<T>(roleName: string) {
-	return (view: ComponentView<T>) =>
+	return (view: RenderContext<T>) =>
 		view.bind(
 			defer(() => {
 				const el = view.host as any;

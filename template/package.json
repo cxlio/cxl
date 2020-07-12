@@ -1,13 +1,10 @@
 {
 	"name": "@cxl/template",
 	"version": "1.0.0",
-	"files": [
-		"dist/*.js"
-	],
-	"main": "dist/cxl-template.min.js",
+	"description": "Reactive template library",
+	"license": "GPL-3.0",
 	"scripts": {
-		"build": "node build",
-		"prepublish": "node build test minify",
-		"test": "node build && cd ../dist/template && node ../tester"
+		"build": "node ../dist/build",
+		"test": "node ../dist/build && cd ../dist/template && node ../tester"
 	}
 }

@@ -3,18 +3,13 @@
 	"version": "0.0.1",
 	"main": "index.js",
 	"types": "index.d.ts",
-	"files": [
-		"index.js",
-		"index.d.ts",
-		"index.js.map"
-	],
+	"license": "GPL-3.0",
+	"description": "Store library",
 	"scripts": {
-		"build": "node build",
-		"test": "node build && cd ../dist/store && node ../tester",
-		"prepublish": "node build"
+		"build": "node ../dist/build",
+		"test": "node ../dist/build && cd ../dist/store && node ../tester"
 	},
-	"devDependencies": {
-		"typescript": "^3.5",
+	"peerDependencies": {
 		"@cxl/rx": "*"
 	}
 }

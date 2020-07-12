@@ -44,6 +44,11 @@ export enum Kind {
 	Literal = SK.LiteralType,
 	IndexSignature = SK.IndexSignature,
 	Export = SK.ExportSpecifier,
+	Keyof = SK.KeyOfKeyword,
+	Typeof = SK.TypeQuery,
+	ConstructorType = SK.ConstructorType,
+	Tuple = SK.TupleType,
+	ThisType = SK.ThisType,
 	Constant = 1001,
 	BaseType = 1002,
 	ClassType = 1003,
@@ -52,14 +57,12 @@ export enum Kind {
 	Attribute = 1006,
 }
 
-interface DocumentationContent {
+export interface DocumentationContent {
 	tag?: string;
-	title?: string;
 	value: string;
-	ref?: Node;
 }
 
-interface Documentation {
+export interface Documentation {
 	decorator?: boolean;
 	content?: DocumentationContent[];
 	tagName?: string;
@@ -268,11 +271,12 @@ function getFlags(flags: ts.ModifierFlags) {
 	return (flags as any) as Flags;
 }
 
-function findSymbol(scope: ts.Node, name: string) {
+/*function findSymbol(scope: ts.Node, name: string) {
 	const symbols = typeChecker.getSymbolsInScope(scope, ts.SymbolFlags.Type);
 	const found = symbols.find(s => s.escapedName === name);
+	if (!found) console.log(name);
 	return found && getSymbolReference(found);
-}
+}*/
 
 function getNodeDocs(node: ts.Node, result: Node): Documentation {
 	const jsDoc = (node as any).jsDoc as ts.JSDoc[];
@@ -283,24 +287,12 @@ function getNodeDocs(node: ts.Node, result: Node): Documentation {
 
 	ts.getJSDocTags(node).forEach(doc => {
 		const tag = doc.tagName.getText();
-		let value = doc.comment;
-		let ref: Node | undefined;
-		let title: string | undefined;
+		const value = doc.comment;
 
 		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
-		else if (tag === 'see' && value) ref = findSymbol(node, value);
-		else if (
-			tag === 'example' &&
-			value &&
-			doc.end === doc.tagName.end + 1
-		) {
-			const newLine = value.indexOf('\n');
-			title = value.slice(0, newLine).trim();
-			value = value.slice(newLine).trim();
-		}
 
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
-			content.push({ tag, value, ref, title });
+			content.push({ tag, value });
 	});
 
 	return content.length ? docs : undefined;
@@ -402,7 +394,7 @@ function isReferenceType(type: ts.Type) {
 	);
 }
 
-function serializeIndexedAccessType(type: ts.IndexedAccessType) {
+function serializeIndexedAccessType(type: ts.IndexedAccessType): Node {
 	return {
 		name: '',
 		kind: Kind.IndexedType,
@@ -418,26 +410,50 @@ function serializeSymbol(symbol: ts.Symbol): Node {
 	return serialize(symbol.valueDeclaration || symbol.declarations[0]);
 }
 
+function serializeKeyofType(type: ts.IndexType): Node {
+	return {
+		name: typeChecker.typeToString(type),
+		kind: Kind.Keyof,
+		type: serializeType(type.type),
+		flags: 0,
+	};
+}
+
+function serializeLiteralType(type: ts.Type, baseType: ts.Type): Node {
+	return {
+		name: typeChecker.typeToString(type),
+		kind: Kind.Literal,
+		type: serializeType(baseType),
+		flags: 0,
+	};
+}
+
 function serializeType(type: ts.Type): Node {
+	if (type.aliasSymbol)
+		return getSymbolReference(type.aliasSymbol, type.aliasTypeArguments);
+
 	if (type.flags & TF.Any) return AnyType;
 	if (type.flags & TF.Unknown) return UnknownType;
 	if (type.flags & TF.Void) return VoidType;
 	if (type.flags & TF.Boolean) return BooleanType;
 	if (type.flags & TF.BigInt) return BigIntType;
-	if (type.flags & TF.Number || type.isNumberLiteral()) return NumberType;
-	if (type.flags & TF.String || type.isStringLiteral()) return StringType;
+	if (type.flags & TF.Null) return NullType;
+	if (type.flags & TF.Number) return NumberType;
+	if (type.flags & TF.String) return StringType;
 	if (type.flags & TF.Undefined) return UndefinedType;
 	if (type.flags & TF.Never) return NeverType;
-	if (type.flags & TF.IndexedAccess)
-		return serializeIndexedAccessType(type as ts.IndexedAccessType);
-
 	if (type.flags & TF.Literal) {
 		const baseType = typeChecker.getBaseTypeOfLiteralType(type);
+
+		if (type.isStringLiteral() || type.isNumberLiteral())
+			return serializeLiteralType(type, baseType);
+
 		return serializeType(baseType);
 	}
 
-	if (type.aliasSymbol)
-		return getSymbolReference(type.aliasSymbol, type.aliasTypeArguments);
+	if (type.flags & TF.Index) return serializeKeyofType(type as ts.IndexType);
+	if (type.flags & TF.IndexedAccess)
+		return serializeIndexedAccessType(type as ts.IndexedAccessType);
 
 	if (isReferenceType(type))
 		return getSymbolReference(
@@ -455,8 +471,11 @@ function serializeType(type: ts.Type): Node {
 
 	if (type.symbol) return serializeSymbol(type.symbol);
 
-	console.log(type);
-	throw new Error('Invalid Type');
+	return {
+		name: typeChecker.typeToString(type),
+		kind: Kind.Unknown,
+		flags: 0,
+	};
 }
 
 function serializeFunction(
@@ -465,7 +484,8 @@ function serializeFunction(
 	const result = serializeDeclaration(node);
 	const signature = typeChecker.getSignatureFromDeclaration(node);
 
-	if (node.kind === SK.ArrowFunction) result.kind = Kind.Function;
+	if (node.kind === SK.ArrowFunction || node.kind === SK.FunctionExpression)
+		result.kind = Kind.Function;
 	else if (node.kind === SK.MethodSignature) result.kind = Kind.Method;
 
 	if (node.typeParameters)
@@ -665,33 +685,20 @@ function serializeClass(node: ts.ClassDeclaration) {
 	return result;
 }
 
-function getReferenceName(node: ts.TypeReferenceType) {
-	if (ts.isExpressionWithTypeArguments(node))
-		return node.expression.getText();
-
-	if (ts.isTypeReferenceNode(node))
-		return ts.isQualifiedName(node.typeName)
-			? `${getNodeName(node.typeName.left)}.${getNodeName(
-					node.typeName.right
-			  )}`
-			: node.typeName.text;
-
-	return '(Unknown)';
-}
-
 function serializeReference(node: ts.TypeReferenceType) {
-	const name = getReferenceName(node);
 	const type = typeChecker.getTypeFromTypeNode(node);
 	const symbol = type.aliasSymbol || type.symbol;
+	const decl = symbol && (symbol.valueDeclaration || symbol.declarations[0]);
+	const name = (ts.isTypeReferenceNode(node)
+		? node.typeName
+		: node.expression
+	).getText();
 
-	if (!symbol) return serializeType(type);
-
-	const decl = symbol.declarations[0];
 	return createNode(node, {
 		name,
 		kind: Kind.Reference,
+		type: decl && getNodeFromDeclaration(decl),
 		typeParameters: node.typeArguments?.map(serialize),
-		type: getNodeFromDeclaration(decl),
 	});
 }
 
@@ -725,6 +732,29 @@ function serializeIndexSignature(node: ts.IndexSignatureDeclaration) {
 	});
 }
 
+function serializeTypeOperator(node: ts.TypeOperatorNode) {
+	return createNode(node, {
+		kind: node.operator as any,
+		type: serialize(node.type),
+	});
+}
+
+function serializeTypeQuery(node: ts.TypeQueryNode) {
+	return createNode(node, { name: node.exprName.getText() });
+}
+
+function serializeTuple(node: ts.TupleTypeNode) {
+	return createNode(node, {
+		children: node.elementTypes.map(serialize),
+	});
+}
+
+function serializeRestType(node: ts.RestTypeNode) {
+	const result = serialize(node.type);
+	result.flags |= Flags.Rest;
+	return result;
+}
+
 const Serializer: SerializerMap = {
 	[SK.AnyKeyword]: () => AnyType,
 	[SK.StringKeyword]: () => StringType,
@@ -732,12 +762,14 @@ const Serializer: SerializerMap = {
 	[SK.BooleanKeyword]: () => BooleanType,
 	[SK.VoidKeyword]: () => VoidType,
 	[SK.NeverKeyword]: () => NeverType,
+	[SK.NullKeyword]: () => NullType,
 	[SK.FunctionType]: serializeFunction,
 	[SK.UndefinedKeyword]: () => UndefinedType,
 
 	[SK.ArrayType]: serializeArray,
 	[SK.FunctionDeclaration]: serializeFunction,
 	[SK.ArrowFunction]: serializeFunction,
+	[SK.FunctionExpression]: serializeFunction,
 	[SK.TypeReference]: serializeReference,
 	[SK.ExpressionWithTypeArguments]: serializeReference,
 	[SK.ConditionalType]: serializeConditionalType,
@@ -748,6 +780,7 @@ const Serializer: SerializerMap = {
 		});
 	},
 
+	[SK.TypeQuery]: serializeTypeQuery,
 	[SK.IndexedAccessType]: serializeIndexedAccessTypeNode,
 	[SK.UnionType](node: ts.UnionTypeNode) {
 		return createNode(node, {
@@ -755,8 +788,10 @@ const Serializer: SerializerMap = {
 			children: node.types.map(serialize),
 		});
 	},
+	[SK.TupleType]: serializeTuple,
 	[SK.EnumDeclaration]: serializeClass,
 	[SK.EnumMember]: serializeDeclarationWithType,
+	[SK.RestType]: serializeRestType,
 
 	[SK.PropertySignature]: serializeDeclarationWithType,
 	[SK.Constructor]: serializeConstructor,
@@ -770,8 +805,10 @@ const Serializer: SerializerMap = {
 	[SK.TypeParameter]: serializeTypeParameter,
 	[SK.InterfaceDeclaration]: serializeClass,
 	[SK.VariableDeclaration]: serializeDeclarationWithType,
+	[SK.ConstructorType]: serializeFunction,
 	[SK.GetAccessor]: serializeFunction,
 	[SK.SetAccessor]: serializeFunction,
+	[SK.TypeOperator]: serializeTypeOperator,
 
 	[SK.TypeLiteral]: serializeObject,
 	[SK.ObjectLiteralExpression]: serializeObject,

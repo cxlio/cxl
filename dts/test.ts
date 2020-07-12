@@ -1,32 +1,34 @@
 import {
-	parse,
+	AnyType,
+	BooleanType,
 	Flags,
 	Kind,
 	NumberType,
 	StringType,
-	BooleanType,
-	AnyType,
 	VoidType,
+	parse,
 } from './index.js';
-import { suite, Test } from '../spec/index.js';
+import { Test, suite } from '../spec/index.js';
 
 export default suite('dts', test => {
-	test('single literal const', a => {
+	test('single literal const', (a: Test) => {
 		const [out] = parse('export const x = 10;');
-
 		a.ok(out.id);
 		a.equal(out.kind, Kind.Constant);
-		a.equal(out.type, NumberType);
+		a.assert(out.type);
+		a.equal(out.type.name, '10');
+		a.equal(out.type.type, NumberType);
 		a.equal(out.value, '10');
 	});
 
-	test('multiple literal const', a => {
+	test('multiple literal const', (a: Test) => {
 		const [x, y] = parse('export const x = "hello", y = 10;');
 
 		a.ok(x.id);
 		a.equal(x.kind, Kind.Constant);
 		a.equal(x.name, 'x');
-		a.equal(x.type, StringType);
+		a.assert(x.type);
+		a.equal(x.type.name, '"hello"');
 		a.equal(x.value, '"hello"');
 		a.ok(x.flags & Flags.Export);
 		a.ok(x.source);
@@ -35,18 +37,21 @@ export default suite('dts', test => {
 		a.ok(y.id);
 		a.equal(y.kind, Kind.Constant);
 		a.equal(y.name, 'y');
-		a.equal(y.type, NumberType);
+		a.assert(y.type);
+		a.equal(y.type.type, NumberType);
 		a.equal(y.value, '10');
 	});
 
-	test('const reference', a => {
+	test('const reference', (a: Test) => {
 		const [x, y] = parse('export const x = "hello", y = x;');
 		a.ok(x.id);
 		a.ok(y.id);
 		a.equal(x.value, '"hello"');
-		a.equal(x.type, StringType);
+		a.assert(x.type);
+		a.equal(x.type.type, StringType);
 		a.equal(y.value, 'x');
-		a.equal(y.type, StringType);
+		a.assert(y.type);
+		a.equal(y.type.type, StringType);
 		a.ok(x.source);
 		a.ok(y.source);
 	});
@@ -458,7 +463,8 @@ export default suite('dts', test => {
 
 		a.ok(!B);
 		a.ok(A);
-		a.equal(A.type, StringType);
+		a.assert(A.type);
+		a.equal(A.type.type, StringType);
 		a.ok(A.flags & Flags.Export);
 	});
 
@@ -497,7 +503,7 @@ export default suite('dts', test => {
 		const [A] = parse(`
 			/**
 			 * Content
-			 * @example Demo Title
+			 * @example <caption>Demo Title</caption>
 			 *   <div>Hello</div>
 			 * @example
 			 * <div>Example 2</div>
@@ -510,15 +516,12 @@ export default suite('dts', test => {
 		a.equal(A.docs.content.length, 3);
 		const [c1, c2, c3] = A.docs.content;
 		a.equal(c1.value, 'Content');
-		a.equal(c2.title, 'Demo Title');
-		a.equal(c2.value, '<div>Hello</div>');
+		a.equal(c2.value, '<caption>Demo Title</caption>\n<div>Hello</div>');
 		a.equal(c3.value, '<div>Example 2</div>');
 	});
 
 	test('JSDOC - see', (a: Test) => {
-		const [A, fn] = parse(`
-			class A { }
-			
+		const [fn] = parse(`
 			/**
 			 * @see A
 			 */
@@ -532,8 +535,6 @@ export default suite('dts', test => {
 		const see = fn.docs.content[0];
 		a.equal(see.tag, 'see');
 		a.equal(see.value, 'A');
-		a.assert(see.ref);
-		a.equal(see.ref.type, A);
 	});
 
 	test('type alias - function', (a: Test) => {
@@ -555,6 +556,43 @@ export default suite('dts', test => {
 		a.assert(type.parameters);
 		a.equal(type.parameters.length, 1);
 		a.equal(type.type, VoidType);
+	});
+
+	test('type alias - Record', (a: Test) => {
+		const [A] = parse(`type A = Record<keyof Map, typeof Set>;`);
+		a.assert(A.type);
+		a.equal(A.kind, Kind.TypeAlias);
+		const type = A.type;
+		a.equal(type.kind, Kind.Reference);
+		a.equal(type.name, 'Record');
+		a.assert(type.typeParameters);
+		const [p1, p2] = type.typeParameters;
+		a.equal(p1.kind, Kind.Keyof);
+		a.assert(p1.type);
+		a.equal(p1.type.name, 'Map');
+		a.equal(p2.name, 'Set');
+	});
+
+	test('constructor type', (a: Test) => {
+		const [A] = parse(`function fn(ctor: new (a: string)=>boolean) {}`);
+		a.assert(A.parameters);
+		const type = A.parameters[0].type;
+		a.assert(type);
+		a.equal(type.kind, Kind.ConstructorType);
+		a.assert(type.parameters);
+		a.equal(type.parameters[0].type, StringType);
+		a.equal(type.type, BooleanType);
+	});
+
+	test('typle type', (a: Test) => {
+		const [A] = parse(`let A:[string, boolean, ...number];`);
+		a.assert(A.type);
+		a.assert(A.type.children);
+		const [t1, t2, t3] = A.type.children;
+		a.equal(t1, StringType);
+		a.equal(t2, BooleanType);
+		a.equal(t3, NumberType);
+		a.ok(t3.flags & Flags.Rest);
 	});
 
 	test('function - full', (a: Test) => {

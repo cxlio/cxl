@@ -1,0 +1,820 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 290,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 6,
+            "ch": 24
+          },
+          "kind": 246,
+          "name": "CollectionEvent",
+          "flags": 1,
+          "id": 1,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 8,
+                "ch": 33
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 2
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 8,
+                "ch": 37
+              },
+              "kind": 159,
+              "name": "type",
+              "flags": 4,
+              "id": 3,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 9,
+                  "ch": 6
+                },
+                "kind": 178,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 9,
+                      "ch": 6
+                    },
+                    "kind": 187,
+                    "name": "'start'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 9,
+                      "ch": 16
+                    },
+                    "kind": 187,
+                    "name": "'item'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 9,
+                      "ch": 25
+                    },
+                    "kind": 187,
+                    "name": "'complete'",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 9,
+                "ch": 37
+              },
+              "kind": 159,
+              "name": "value",
+              "flags": 4,
+              "id": 4,
+              "type": {
+                "id": 2,
+                "name": "T",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 11,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "Entity",
+          "flags": 1,
+          "id": 5,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 13,
+                "ch": 20
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 6
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 13,
+                "ch": 46
+              },
+              "kind": 159,
+              "name": "selectors",
+              "flags": 8,
+              "id": 7,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              },
+              "value": "{}"
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 14,
+                "ch": 29
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 8,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 16,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "value",
+                  "flags": 16,
+                  "id": 9,
+                  "type": {
+                    "id": 6,
+                    "name": "T",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "id": 5,
+                "name": "Entity",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 6,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 20,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "select",
+              "flags": 4,
+              "id": 10,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 22,
+                    "ch": 8
+                  },
+                  "kind": 155,
+                  "name": "K",
+                  "flags": 0,
+                  "id": 11
+                }
+              ],
+              "type": {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 22,
+                      "ch": 47
+                    },
+                    "kind": 185,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 6,
+                        "name": "T",
+                        "kind": 169
+                      },
+                      {
+                        "id": 11,
+                        "name": "K",
+                        "kind": 169
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 22,
+                    "ch": 27
+                  },
+                  "kind": 156,
+                  "name": "key",
+                  "flags": 0,
+                  "id": 12,
+                  "type": {
+                    "id": 11,
+                    "name": "K",
+                    "kind": 169
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 16,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "value",
+              "flags": 16,
+              "id": 9,
+              "type": {
+                "id": 6,
+                "name": "T",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 1003,
+            "name": "",
+            "children": [
+              {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 6,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 31,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "Collection",
+          "flags": 1,
+          "id": 13,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 33,
+                "ch": 24
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 14
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 33,
+                "ch": 26
+              },
+              "kind": 155,
+              "name": "EntityT",
+              "flags": 0,
+              "id": 15,
+              "value": "Entity<T>"
+            }
+          ],
+          "children": [],
+          "type": {
+            "flags": 0,
+            "kind": 1003,
+            "name": "",
+            "children": [
+              {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 15,
+                    "name": "EntityT",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 33,
+            "ch": 78
+          },
+          "kind": 245,
+          "name": "Store",
+          "flags": 1,
+          "id": 16,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 58,
+                "ch": 19
+              },
+              "kind": 155,
+              "name": "StateT",
+              "flags": 0,
+              "id": 17
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 58,
+                "ch": 52
+              },
+              "kind": 159,
+              "name": "selectors",
+              "flags": 16,
+              "id": 18,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              },
+              "value": "{}"
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 59,
+                "ch": 31
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 19,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 61,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "state",
+                  "flags": 16,
+                  "id": 20,
+                  "type": {
+                    "id": 17,
+                    "name": "StateT",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "id": 16,
+                "name": "Store",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 17,
+                    "name": "StateT",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 63,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "onSubscribe",
+              "flags": 16,
+              "id": 21,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 65,
+                    "ch": 23
+                  },
+                  "kind": 156,
+                  "name": "subscription",
+                  "flags": 0,
+                  "id": 22,
+                  "type": {
+                    "name": "Subscription",
+                    "kind": 169,
+                    "typeParameters": [
+                      {
+                        "id": 17,
+                        "name": "StateT",
+                        "kind": 169
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "name": "UnsubscribeFunction",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 68,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "next",
+              "flags": 4,
+              "id": 23,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 70,
+                    "ch": 6
+                  },
+                  "kind": 156,
+                  "name": "val",
+                  "flags": 0,
+                  "id": 24,
+                  "type": {
+                    "id": 17,
+                    "name": "StateT",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 73,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "select",
+              "flags": 4,
+              "id": 25,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 75,
+                    "ch": 8
+                  },
+                  "kind": 155,
+                  "name": "K",
+                  "flags": 0,
+                  "id": 26
+                }
+              ],
+              "type": {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 75,
+                      "ch": 52
+                    },
+                    "kind": 185,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 17,
+                        "name": "StateT",
+                        "kind": 169
+                      },
+                      {
+                        "id": 26,
+                        "name": "K",
+                        "kind": 169
+                      }
+                    ]
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 75,
+                    "ch": 32
+                  },
+                  "kind": 156,
+                  "name": "key",
+                  "flags": 0,
+                  "id": 27,
+                  "type": {
+                    "id": 26,
+                    "name": "K",
+                    "kind": 169
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 61,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "state",
+              "flags": 16,
+              "id": 20,
+              "type": {
+                "id": 17,
+                "name": "StateT",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 1003,
+            "name": "",
+            "children": [
+              {
+                "name": "Subject",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 17,
+                    "name": "StateT",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 84,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "SelectFn",
+          "flags": 0,
+          "id": 28,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 86,
+                "ch": 19
+              },
+              "kind": 155,
+              "name": "StateT",
+              "flags": 0,
+              "id": 29
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 86,
+                "ch": 28
+              },
+              "kind": 165,
+              "name": "",
+              "flags": 0
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 87,
+                "ch": 57
+              },
+              "kind": 161,
+              "name": "next",
+              "flags": 0,
+              "id": 30,
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 88,
+                    "ch": 6
+                  },
+                  "kind": 156,
+                  "name": "state",
+                  "flags": 0,
+                  "id": 31,
+                  "type": {
+                    "id": 29,
+                    "name": "StateT",
+                    "kind": 169
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 89,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "select",
+          "flags": 1,
+          "id": 32,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 91,
+                "ch": 23
+              },
+              "kind": 155,
+              "name": "StateT",
+              "flags": 0,
+              "id": 33
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 91,
+                "ch": 30
+              },
+              "kind": 155,
+              "name": "K",
+              "flags": 0,
+              "id": 34
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 91,
+                "ch": 55
+              },
+              "kind": 156,
+              "name": "key",
+              "flags": 0,
+              "id": 35,
+              "type": {
+                "id": 34,
+                "name": "K",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "Operator",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "id": 33,
+                "name": "StateT",
+                "kind": 169
+              },
+              {
+                "name": "",
+                "kind": 185,
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 33,
+                    "name": "StateT",
+                    "kind": 169
+                  },
+                  {
+                    "id": 34,
+                    "name": "K",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 93,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "store",
+          "flags": 1,
+          "id": 36,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 95,
+                "ch": 22
+              },
+              "kind": 155,
+              "name": "StateT",
+              "flags": 0,
+              "id": 37
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 95,
+                "ch": 30
+              },
+              "kind": 156,
+              "name": "state",
+              "flags": 524288,
+              "id": 38,
+              "type": {
+                "id": 37,
+                "name": "StateT",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 28,
+            "name": "SelectFn",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "id": 37,
+                "name": "StateT",
+                "kind": 169
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

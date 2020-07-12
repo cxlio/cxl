@@ -97,6 +97,9 @@ export class Subscription<T> {
 	}
 }
 
+/**
+ * Used to stitch together functional operators into a chain.
+ */
 export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
 	return (source: Observable<T>) =>
 		operators.reduce((prev, fn) => fn(prev), source);
@@ -115,9 +118,6 @@ export class Observable<T> {
 		if (subscribe) this.__subscribe = subscribe;
 	}
 
-	/**
-	 * Used to stitch together functional operators into a chain.
-	 */
 	pipe<A>(a: Operator<T, A>): Observable<A>;
 	pipe<A, B>(a: Operator<T, A>, b: Operator<A, B>): Observable<B>;
 	pipe<A, B, C>(
@@ -138,6 +138,10 @@ export class Observable<T> {
 		d: Operator<C, D>,
 		e: Operator<D, E>
 	): Observable<E>;
+
+	/**
+	 * Used to stitch together functional operators into a chain.
+	 */
 	pipe(...extra: Operator<any, any>[]): Observable<any> {
 		return extra.reduce((prev, fn) => fn(prev), this as Observable<any>);
 	}
@@ -238,7 +242,10 @@ export class ReplaySubject<T> extends Subject<T> {
 const Undefined = {};
 
 export class Reference<T> extends Subject<T> {
-	private value: T | typeof Undefined = Undefined;
+	constructor(private value: T | typeof Undefined = Undefined) {
+		super();
+	}
+
 	protected onSubscribe(subscription: Subscription<T>) {
 		if (this.value !== Undefined) subscription.next(this.value as T);
 		return super.onSubscribe(subscription);
@@ -619,7 +626,7 @@ export function combineLatest<T extends any[]>(
 ): Observable<PickObservable<T>> {
 	return new Observable<any>(subs => {
 		const latest: any[] = [];
-		let len = observables.length;
+		const len = observables.length;
 		let count = 0,
 			opened = len;
 
@@ -664,6 +671,13 @@ export const EMPTY = new Observable<void>(subs => subs.complete());
  */
 export function be<T>(initialValue: T) {
 	return new BehaviorSubject(initialValue);
+}
+
+/**
+ * Creates a new Reference object
+ */
+export function ref<T>(initial: T | typeof Undefined = Undefined) {
+	return new Reference<T>(initial);
 }
 
 const operators: any = {

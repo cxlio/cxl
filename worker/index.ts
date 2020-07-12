@@ -1,4 +1,4 @@
-import { Observable, Subject, operator, Subscription } from '../rx';
+import { Observable, Subject, Subscription, operator } from '../rx';
 
 declare const process: any;
 
@@ -100,7 +100,7 @@ export class WorkerManager {
 	private post(id: number, payload: any) {
 		this.worker.postMessage({
 			id,
-			payload
+			payload,
 		});
 		return id;
 	}

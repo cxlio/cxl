@@ -1,6 +1,9 @@
 {
 	"name": "@cxl/build",
 	"version": "0.0.2",
+	"private": true,
+	"description": "Build Tool",
+	"license": "GPL-3.0",
 	"main": "index.js",
 	"scripts": {
 		"build-index": "tsc -b",

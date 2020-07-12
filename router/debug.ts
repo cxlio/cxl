@@ -1,5 +1,5 @@
+import { log, override } from '../debug/index.js';
 import { Router } from './index.js';
-import { override, log } from '../debug/index.js';
 
 override(
 	Router.prototype,

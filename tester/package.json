@@ -1,8 +1,14 @@
 {
 	"name": "@cxl/tester",
 	"version": "0.0.1",
+	"private": true,
+	"description": "Test runner tool",
+	"license": "GPL-3.0",
+	"scripts": {
+		"build": "node build"
+	},
 	"dependencies": {
-		"puppeteer": "^2",
+		"puppeteer": "^5.0.0",
 		"source-map-support": "*",
 		"source-map": "*"
 	},

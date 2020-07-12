@@ -1,0 +1,3934 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 290,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 11,
+            "ch": 41
+          },
+          "kind": 247,
+          "name": "SerializerMap",
+          "flags": 0,
+          "id": 1,
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 13,
+              "ch": 20
+            },
+            "kind": 186,
+            "name": "",
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 15,
+            "ch": 2
+          },
+          "kind": 247,
+          "name": "Index",
+          "flags": 0,
+          "id": 2,
+          "type": {
+            "name": "Record",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              },
+              {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 17,
+            "ch": 34
+          },
+          "kind": 248,
+          "name": "Kind",
+          "flags": 1,
+          "id": 4,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 19,
+                "ch": 18
+              },
+              "kind": 159,
+              "name": "Unknown",
+              "flags": 4,
+              "id": 5,
+              "value": "SK.Unknown",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 20,
+                "ch": 22
+              },
+              "kind": 159,
+              "name": "Variable",
+              "flags": 4,
+              "id": 6,
+              "value": "SK.VariableDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 21,
+                "ch": 35
+              },
+              "kind": 159,
+              "name": "TypeAlias",
+              "flags": 4,
+              "id": 7,
+              "value": "SK.TypeAliasDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 22,
+                "ch": 37
+              },
+              "kind": 159,
+              "name": "TypeParameter",
+              "flags": 4,
+              "id": 8,
+              "value": "SK.TypeParameter",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 23,
+                "ch": 34
+              },
+              "kind": 159,
+              "name": "Interface",
+              "flags": 4,
+              "id": 9,
+              "value": "SK.InterfaceDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 24,
+                "ch": 37
+              },
+              "kind": 159,
+              "name": "TypeUnion",
+              "flags": 4,
+              "id": 10,
+              "value": "SK.UnionType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 25,
+                "ch": 26
+              },
+              "kind": 159,
+              "name": "Reference",
+              "flags": 4,
+              "id": 11,
+              "value": "SK.TypeReference",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 26,
+                "ch": 30
+              },
+              "kind": 159,
+              "name": "Module",
+              "flags": 4,
+              "id": 12,
+              "value": "SK.SourceFile",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 27,
+                "ch": 24
+              },
+              "kind": 159,
+              "name": "Class",
+              "flags": 4,
+              "id": 13,
+              "value": "SK.ClassDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 28,
+                "ch": 29
+              },
+              "kind": 159,
+              "name": "Parameter",
+              "flags": 4,
+              "id": 14,
+              "value": "SK.Parameter",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 29,
+                "ch": 26
+              },
+              "kind": 159,
+              "name": "Property",
+              "flags": 4,
+              "id": 15,
+              "value": "SK.PropertyDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 30,
+                "ch": 35
+              },
+              "kind": 159,
+              "name": "Method",
+              "flags": 4,
+              "id": 16,
+              "value": "SK.MethodDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 31,
+                "ch": 31
+              },
+              "kind": 159,
+              "name": "Getter",
+              "flags": 4,
+              "id": 17,
+              "value": "SK.GetAccessor",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 32,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "Setter",
+              "flags": 4,
+              "id": 18,
+              "value": "SK.SetAccessor",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 33,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "Constructor",
+              "flags": 4,
+              "id": 19,
+              "value": "SK.Constructor",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 34,
+                "ch": 30
+              },
+              "kind": 159,
+              "name": "Array",
+              "flags": 4,
+              "id": 20,
+              "value": "SK.ArrayType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 35,
+                "ch": 22
+              },
+              "kind": 159,
+              "name": "Function",
+              "flags": 4,
+              "id": 21,
+              "value": "SK.FunctionDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 36,
+                "ch": 35
+              },
+              "kind": 159,
+              "name": "FunctionType",
+              "flags": 4,
+              "id": 22,
+              "value": "SK.FunctionType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 37,
+                "ch": 32
+              },
+              "kind": 159,
+              "name": "ConditionalType",
+              "flags": 4,
+              "id": 23,
+              "value": "SK.ConditionalType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 38,
+                "ch": 38
+              },
+              "kind": 159,
+              "name": "Parenthesized",
+              "flags": 4,
+              "id": 24,
+              "value": "SK.ParenthesizedType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 39,
+                "ch": 38
+              },
+              "kind": 159,
+              "name": "Infer",
+              "flags": 4,
+              "id": 25,
+              "value": "SK.InferType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 40,
+                "ch": 22
+              },
+              "kind": 159,
+              "name": "IndexedType",
+              "flags": 4,
+              "id": 26,
+              "value": "SK.IndexedAccessType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 41,
+                "ch": 36
+              },
+              "kind": 159,
+              "name": "Enum",
+              "flags": 4,
+              "id": 27,
+              "value": "SK.EnumDeclaration",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 42,
+                "ch": 27
+              },
+              "kind": 159,
+              "name": "Literal",
+              "flags": 4,
+              "id": 28,
+              "value": "SK.LiteralType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 43,
+                "ch": 26
+              },
+              "kind": 159,
+              "name": "IndexSignature",
+              "flags": 4,
+              "id": 29,
+              "value": "SK.IndexSignature",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 44,
+                "ch": 36
+              },
+              "kind": 159,
+              "name": "Export",
+              "flags": 4,
+              "id": 30,
+              "value": "SK.ExportSpecifier",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 45,
+                "ch": 29
+              },
+              "kind": 159,
+              "name": "Keyof",
+              "flags": 4,
+              "id": 31,
+              "value": "SK.KeyOfKeyword",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 46,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "Typeof",
+              "flags": 4,
+              "id": 32,
+              "value": "SK.TypeQuery",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 47,
+                "ch": 23
+              },
+              "kind": 159,
+              "name": "ConstructorType",
+              "flags": 4,
+              "id": 33,
+              "value": "SK.ConstructorType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 48,
+                "ch": 38
+              },
+              "kind": 159,
+              "name": "Tuple",
+              "flags": 4,
+              "id": 34,
+              "value": "SK.TupleType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 49,
+                "ch": 22
+              },
+              "kind": 159,
+              "name": "ThisType",
+              "flags": 4,
+              "id": 35,
+              "value": "SK.ThisType",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 50,
+                "ch": 24
+              },
+              "kind": 159,
+              "name": "Constant",
+              "flags": 4,
+              "id": 36,
+              "value": "1001",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 51,
+                "ch": 17
+              },
+              "kind": 159,
+              "name": "BaseType",
+              "flags": 4,
+              "id": 37,
+              "value": "1002",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 52,
+                "ch": 17
+              },
+              "kind": 159,
+              "name": "ClassType",
+              "flags": 4,
+              "id": 38,
+              "value": "1003",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 53,
+                "ch": 18
+              },
+              "kind": 159,
+              "name": "ObjectType",
+              "flags": 4,
+              "id": 39,
+              "value": "1004",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 54,
+                "ch": 19
+              },
+              "kind": 159,
+              "name": "Component",
+              "flags": 4,
+              "id": 40,
+              "value": "1005",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 55,
+                "ch": 18
+              },
+              "kind": 159,
+              "name": "Attribute",
+              "flags": 4,
+              "id": 41,
+              "value": "1006",
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 57,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "DocumentationContent",
+          "flags": 1,
+          "id": 42,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 59,
+                "ch": 39
+              },
+              "kind": 159,
+              "name": "tag",
+              "flags": 4,
+              "id": 43,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 60,
+                "ch": 14
+              },
+              "kind": 159,
+              "name": "value",
+              "flags": 4,
+              "id": 44,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 62,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "Documentation",
+          "flags": 1,
+          "id": 45,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 64,
+                "ch": 32
+              },
+              "kind": 159,
+              "name": "decorator",
+              "flags": 4,
+              "id": 46,
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 65,
+                "ch": 21
+              },
+              "kind": 159,
+              "name": "content",
+              "flags": 4,
+              "id": 47,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 66,
+                  "ch": 10
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 42,
+                  "name": "DocumentationContent",
+                  "kind": 169
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 66,
+                "ch": 34
+              },
+              "kind": 159,
+              "name": "tagName",
+              "flags": 4,
+              "id": 48,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 67,
+                "ch": 18
+              },
+              "kind": 159,
+              "name": "role",
+              "flags": 4,
+              "id": 49,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 69,
+            "ch": 1
+          },
+          "kind": 248,
+          "name": "Flags",
+          "flags": 1,
+          "id": 50,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 71,
+                "ch": 19
+              },
+              "kind": 159,
+              "name": "None",
+              "flags": 4,
+              "id": 51,
+              "value": "0",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 73,
+                "ch": 10
+              },
+              "kind": 159,
+              "name": "Export",
+              "flags": 4,
+              "id": 52,
+              "value": "1",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 74,
+                "ch": 12
+              },
+              "kind": 159,
+              "name": "Public",
+              "flags": 4,
+              "id": 53,
+              "value": "4",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 75,
+                "ch": 12
+              },
+              "kind": 159,
+              "name": "Private",
+              "flags": 4,
+              "id": 54,
+              "value": "8",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 76,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "Protected",
+              "flags": 4,
+              "id": 55,
+              "value": "16",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 77,
+                "ch": 16
+              },
+              "kind": 159,
+              "name": "Static",
+              "flags": 4,
+              "id": 56,
+              "value": "32",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 78,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "Readonly",
+              "flags": 4,
+              "id": 57,
+              "value": "64",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 79,
+                "ch": 15
+              },
+              "kind": 159,
+              "name": "Abstract",
+              "flags": 4,
+              "id": 58,
+              "value": "128",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 80,
+                "ch": 16
+              },
+              "kind": 159,
+              "name": "Async",
+              "flags": 4,
+              "id": 59,
+              "value": "256",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 81,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "Default",
+              "flags": 4,
+              "id": 60,
+              "value": "512",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 82,
+                "ch": 15
+              },
+              "kind": 159,
+              "name": "Deprecated",
+              "flags": 4,
+              "id": 61,
+              "value": "8192",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 83,
+                "ch": 19
+              },
+              "kind": 159,
+              "name": "Overload",
+              "flags": 4,
+              "id": 62,
+              "value": "16384",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 85,
+                "ch": 18
+              },
+              "kind": 159,
+              "name": "External",
+              "flags": 4,
+              "id": 63,
+              "value": "32768",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 86,
+                "ch": 18
+              },
+              "kind": 159,
+              "name": "DefaultLibrary",
+              "flags": 4,
+              "id": 64,
+              "value": "65536",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 87,
+                "ch": 24
+              },
+              "kind": 159,
+              "name": "DeclarationMerge",
+              "flags": 4,
+              "id": 65,
+              "value": "131072",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 88,
+                "ch": 27
+              },
+              "kind": 159,
+              "name": "Rest",
+              "flags": 4,
+              "id": 66,
+              "value": "2 ** 18",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 89,
+                "ch": 16
+              },
+              "kind": 159,
+              "name": "Optional",
+              "flags": 4,
+              "id": 67,
+              "value": "2 ** 19",
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 91,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "Source",
+          "flags": 1,
+          "id": 68,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 93,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "name",
+              "flags": 4,
+              "id": 69,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 94,
+                "ch": 14
+              },
+              "kind": 159,
+              "name": "sourceFile",
+              "flags": 4,
+              "id": 70,
+              "type": {
+                "name": "ts.SourceFile",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 95,
+                "ch": 27
+              },
+              "kind": 159,
+              "name": "index",
+              "flags": 4,
+              "id": 71,
+              "type": {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "source": {
+            "fileName": "index.ts",
+            "line": 97,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "Node",
+          "flags": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 99,
+                "ch": 23
+              },
+              "kind": 159,
+              "name": "id",
+              "flags": 4,
+              "id": 72,
+              "type": {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 100,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "name",
+              "flags": 4,
+              "id": 73,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 101,
+                "ch": 14
+              },
+              "kind": 159,
+              "name": "kind",
+              "flags": 4,
+              "id": 74,
+              "type": {
+                "id": 4,
+                "name": "Kind",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 102,
+                "ch": 12
+              },
+              "kind": 159,
+              "name": "source",
+              "flags": 4,
+              "id": 75,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 103,
+                  "ch": 9
+                },
+                "kind": 178,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 68,
+                    "name": "Source",
+                    "kind": 169
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 103,
+                      "ch": 18
+                    },
+                    "kind": 174,
+                    "name": "Array",
+                    "flags": 0,
+                    "type": {
+                      "id": 68,
+                      "name": "Source",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 103,
+                "ch": 28
+              },
+              "kind": 159,
+              "name": "flags",
+              "flags": 4,
+              "id": 76,
+              "type": {
+                "id": 50,
+                "name": "Flags",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 104,
+                "ch": 14
+              },
+              "kind": 159,
+              "name": "docs",
+              "flags": 4,
+              "id": 77,
+              "type": {
+                "id": 45,
+                "name": "Documentation",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 105,
+                "ch": 22
+              },
+              "kind": 159,
+              "name": "value",
+              "flags": 4,
+              "id": 78,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 106,
+                "ch": 16
+              },
+              "kind": 159,
+              "name": "type",
+              "flags": 4,
+              "id": 79,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 107,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "typeParameters",
+              "flags": 4,
+              "id": 80,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 108,
+                  "ch": 17
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 3,
+                  "name": "Node",
+                  "kind": 169
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 108,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "parameters",
+              "flags": 4,
+              "id": 81,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 109,
+                  "ch": 13
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 3,
+                  "name": "Node",
+                  "kind": 169
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 109,
+                "ch": 21
+              },
+              "kind": 159,
+              "name": "children",
+              "flags": 4,
+              "id": 82,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 110,
+                  "ch": 11
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 3,
+                  "name": "Node",
+                  "kind": 169
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 110,
+                "ch": 19
+              },
+              "kind": 159,
+              "name": "extendedBy",
+              "flags": 4,
+              "id": 83,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 111,
+                  "ch": 13
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 3,
+                  "name": "Node",
+                  "kind": 169
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 111,
+                "ch": 21
+              },
+              "kind": 159,
+              "name": "parent",
+              "flags": 4,
+              "id": 84,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 113,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "Output",
+          "flags": 1,
+          "id": 85,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 115,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "index",
+              "flags": 4,
+              "id": 86,
+              "type": {
+                "name": "Index",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 116,
+                "ch": 14
+              },
+              "kind": 159,
+              "name": "config",
+              "flags": 4,
+              "id": 87,
+              "type": {
+                "name": "ParsedCommandLine",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 117,
+                "ch": 27
+              },
+              "kind": 159,
+              "name": "modules",
+              "flags": 4,
+              "id": 88,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 118,
+                  "ch": 9
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 3,
+                  "name": "Node",
+                  "kind": 169
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 121,
+            "ch": 12
+          },
+          "kind": 1001,
+          "name": "NumberType",
+          "flags": 1,
+          "id": 89,
+          "value": "createBaseType('number')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 121,
+            "ch": 51
+          },
+          "kind": 1001,
+          "name": "StringType",
+          "flags": 1,
+          "id": 90,
+          "value": "createBaseType('string')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 122,
+            "ch": 39
+          },
+          "kind": 1001,
+          "name": "BooleanType",
+          "flags": 1,
+          "id": 91,
+          "value": "createBaseType('boolean')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 123,
+            "ch": 41
+          },
+          "kind": 1001,
+          "name": "UndefinedType",
+          "flags": 1,
+          "id": 92,
+          "value": "createBaseType('undefined')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 124,
+            "ch": 45
+          },
+          "kind": 1001,
+          "name": "NullType",
+          "flags": 1,
+          "id": 93,
+          "value": "createBaseType('null')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 125,
+            "ch": 35
+          },
+          "kind": 1001,
+          "name": "VoidType",
+          "flags": 1,
+          "id": 94,
+          "value": "createBaseType('void')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 126,
+            "ch": 35
+          },
+          "kind": 1001,
+          "name": "AnyType",
+          "flags": 1,
+          "id": 95,
+          "value": "createBaseType('any')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 127,
+            "ch": 33
+          },
+          "kind": 1001,
+          "name": "UnknownType",
+          "flags": 1,
+          "id": 96,
+          "value": "createBaseType('unknown')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 128,
+            "ch": 41
+          },
+          "kind": 1001,
+          "name": "BigIntType",
+          "flags": 1,
+          "id": 97,
+          "value": "createBaseType('BigInt')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 129,
+            "ch": 39
+          },
+          "kind": 1001,
+          "name": "NeverType",
+          "flags": 1,
+          "id": 98,
+          "value": "createBaseType('never')",
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 132,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "dtsNode",
+          "flags": 0,
+          "id": 99,
+          "value": "Symbol('dtsNode')",
+          "type": {
+            "id": 99,
+            "name": "dtsNode",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 134,
+            "ch": 3
+          },
+          "kind": 242,
+          "name": "currentIndex",
+          "flags": 0,
+          "id": 100,
+          "type": {
+            "name": "Index",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 135,
+            "ch": 3
+          },
+          "kind": 242,
+          "name": "program",
+          "flags": 0,
+          "id": 101,
+          "type": {
+            "name": "ts.Program",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 136,
+            "ch": 3
+          },
+          "kind": 242,
+          "name": "compilerHost",
+          "flags": 0,
+          "id": 102,
+          "type": {
+            "name": "ts.CompilerHost",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 137,
+            "ch": 3
+          },
+          "kind": 242,
+          "name": "config",
+          "flags": 0,
+          "id": 103,
+          "type": {
+            "name": "ts.ParsedCommandLine",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 138,
+            "ch": 3
+          },
+          "kind": 242,
+          "name": "sourceFiles",
+          "flags": 0,
+          "id": 104,
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 138,
+              "ch": 16
+            },
+            "kind": 174,
+            "name": "Array",
+            "flags": 0,
+            "type": {
+              "name": "ts.SourceFile",
+              "kind": 169
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 139,
+            "ch": 3
+          },
+          "kind": 242,
+          "name": "typeChecker",
+          "flags": 0,
+          "id": 105,
+          "type": {
+            "name": "ts.TypeChecker",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 140,
+            "ch": 3
+          },
+          "kind": 242,
+          "name": "currentId",
+          "flags": 0,
+          "id": 106,
+          "value": "1",
+          "type": {
+            "name": "number",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 142,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "parseConfigHost",
+          "flags": 0,
+          "id": 107,
+          "type": {
+            "name": "ParseConfigFileHost",
+            "kind": 169
+          },
+          "value": "{\n\tuseCaseSensitiveFileNames: true,\n\treadDirectory: sys.readDirectory,\n\tgetCurrentDirectory: sys.getCurrentDirectory,\n\tfileExists: sys.fileExists,\n\treadFile: sys.readFile,\n\tonUnRecoverableConfigFileDiagnostic(e) {\n\t\tthrow e;\n\t},\n}"
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 151,
+            "ch": 2
+          },
+          "kind": 244,
+          "name": "createBaseType",
+          "flags": 0,
+          "id": 108,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 153,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "name",
+              "flags": 0,
+              "id": 109,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 155,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "parseTsConfig",
+          "flags": 0,
+          "id": 110,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 157,
+                "ch": 23
+              },
+              "kind": 156,
+              "name": "tsconfig",
+              "flags": 0,
+              "id": 111,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "ParsedCommandLine",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 171,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getKind",
+          "flags": 0,
+          "id": 112,
+          "type": {
+            "id": 4,
+            "name": "Kind",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 173,
+                "ch": 17
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 113,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 187,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getNodeSource",
+          "flags": 0,
+          "id": 114,
+          "type": {
+            "id": 68,
+            "name": "Source",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 189,
+                "ch": 23
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 115,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 203,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getNodeName",
+          "flags": 0,
+          "id": 116,
+          "type": {
+            "name": "string",
+            "kind": 1002,
+            "flags": 0
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 205,
+                "ch": 21
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 117,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 214,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "createNode",
+          "flags": 0,
+          "id": 118,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 216,
+                "ch": 20
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 119,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 216,
+                "ch": 34
+              },
+              "kind": 156,
+              "name": "extra",
+              "flags": 524288,
+              "id": 120,
+              "type": {
+                "name": "Partial",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 3,
+                    "name": "Node",
+                    "kind": 169
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 227,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "isOwnFile",
+          "flags": 0,
+          "id": 121,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 229,
+                "ch": 19
+              },
+              "kind": 156,
+              "name": "sourceFile",
+              "flags": 0,
+              "id": 122,
+              "type": {
+                "name": "ts.SourceFile",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "boolean",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 231,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getNodeFromDeclaration",
+          "flags": 0,
+          "id": 123,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 233,
+                "ch": 32
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 124,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 250,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "isClassMember",
+          "flags": 0,
+          "id": 125,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 252,
+                "ch": 23
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 126,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "boolean",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 259,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serialize",
+          "flags": 0,
+          "id": 127,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 261,
+                "ch": 19
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 128,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 263,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeExpression",
+          "flags": 0,
+          "id": 129,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 265,
+                "ch": 29
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 130,
+              "type": {
+                "name": "ts.Expression",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "string",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 267,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getFlags",
+          "flags": 0,
+          "id": 131,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 269,
+                "ch": 18
+              },
+              "kind": 156,
+              "name": "flags",
+              "flags": 0,
+              "id": 132,
+              "type": {
+                "name": "ts.ModifierFlags",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 50,
+            "name": "Flags",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 271,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getNodeDocs",
+          "flags": 0,
+          "id": 133,
+          "type": {
+            "id": 45,
+            "name": "Documentation",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 280,
+                "ch": 21
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 134,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 280,
+                "ch": 35
+              },
+              "kind": 156,
+              "name": "result",
+              "flags": 0,
+              "id": 135,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 298,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeDeclaration",
+          "flags": 0,
+          "id": 136,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 300,
+                "ch": 30
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 137,
+              "type": {
+                "name": "ts.Declaration",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 335,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeTypeParameter",
+          "flags": 0,
+          "id": 138,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 337,
+                "ch": 32
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 139,
+              "type": {
+                "name": "ts.TypeParameterDeclaration",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 341,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeParameter",
+          "flags": 0,
+          "id": 140,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 343,
+                "ch": 28
+              },
+              "kind": 156,
+              "name": "symbol",
+              "flags": 0,
+              "id": 141,
+              "type": {
+                "name": "ts.Symbol",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 357,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getSymbolReference",
+          "flags": 0,
+          "id": 142,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 359,
+                "ch": 28
+              },
+              "kind": 156,
+              "name": "symbol",
+              "flags": 0,
+              "id": 143,
+              "type": {
+                "name": "ts.Symbol",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 360,
+                "ch": 19
+              },
+              "kind": 156,
+              "name": "typeArgs",
+              "flags": 524288,
+              "id": 144,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 361,
+                  "ch": 11
+                },
+                "kind": 138,
+                "name": "",
+                "flags": 0,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 361,
+                    "ch": 20
+                  },
+                  "kind": 174,
+                  "name": "Array",
+                  "flags": 0,
+                  "type": {
+                    "name": "ts.Type",
+                    "kind": 169
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 384,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "isReferenceType",
+          "flags": 0,
+          "id": 145,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 386,
+                "ch": 25
+              },
+              "kind": 156,
+              "name": "type",
+              "flags": 0,
+              "id": 146,
+              "type": {
+                "name": "ts.Type",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "",
+            "flags": 0,
+            "kind": 178,
+            "children": [
+              {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              },
+              {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 394,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeIndexedAccessType",
+          "flags": 0,
+          "id": 147,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 396,
+                "ch": 36
+              },
+              "kind": 156,
+              "name": "type",
+              "flags": 0,
+              "id": 148,
+              "type": {
+                "name": "ts.IndexedAccessType",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 406,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeSymbol",
+          "flags": 0,
+          "id": 149,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 408,
+                "ch": 25
+              },
+              "kind": 156,
+              "name": "symbol",
+              "flags": 0,
+              "id": 150,
+              "type": {
+                "name": "ts.Symbol",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 410,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeKeyofType",
+          "flags": 0,
+          "id": 151,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 412,
+                "ch": 28
+              },
+              "kind": 156,
+              "name": "type",
+              "flags": 0,
+              "id": 152,
+              "type": {
+                "name": "ts.IndexType",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 419,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeLiteralType",
+          "flags": 0,
+          "id": 153,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 421,
+                "ch": 30
+              },
+              "kind": 156,
+              "name": "type",
+              "flags": 0,
+              "id": 154,
+              "type": {
+                "name": "ts.Type",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 421,
+                "ch": 44
+              },
+              "kind": 156,
+              "name": "baseType",
+              "flags": 0,
+              "id": 155,
+              "type": {
+                "name": "ts.Type",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 428,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeType",
+          "flags": 0,
+          "id": 156,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 430,
+                "ch": 23
+              },
+              "kind": 156,
+              "name": "type",
+              "flags": 0,
+              "id": 157,
+              "type": {
+                "name": "ts.Type",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 478,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeFunction",
+          "flags": 0,
+          "id": 158,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 480,
+                "ch": 27
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 159,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 481,
+                  "ch": 6
+                },
+                "kind": 178,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "ts.FunctionLikeDeclaration",
+                    "kind": 169
+                  },
+                  {
+                    "name": "ts.MethodSignature",
+                    "kind": 169
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 515,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeArray",
+          "flags": 0,
+          "id": 160,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 517,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 161,
+              "type": {
+                "name": "ts.ArrayTypeNode",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 522,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getCxlDecorator",
+          "flags": 0,
+          "id": 162,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 524,
+                "ch": 25
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 163,
+              "type": {
+                "name": "ts.Declaration",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 524,
+                "ch": 46
+              },
+              "kind": 156,
+              "name": "name",
+              "flags": 0,
+              "id": 164,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "",
+            "flags": 0,
+            "kind": 178,
+            "children": [
+              {
+                "name": "undefined",
+                "kind": 1002,
+                "flags": 0
+              },
+              {
+                "name": "Decorator",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 534,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "isCxlAttribute",
+          "flags": 0,
+          "id": 165,
+          "type": {
+            "name": "boolean",
+            "kind": 1002,
+            "flags": 0
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 536,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 166,
+              "type": {
+                "name": "ts.Declaration",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 541,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getCxlRole",
+          "flags": 0,
+          "id": 167,
+          "type": {
+            "name": "string",
+            "kind": 1002,
+            "flags": 0
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 543,
+                "ch": 20
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 168,
+              "type": {
+                "name": "ts.CallExpression",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 546,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getCxlClassMeta",
+          "flags": 0,
+          "id": 169,
+          "type": {
+            "name": "boolean",
+            "kind": 1002,
+            "flags": 0
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 548,
+                "ch": 25
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 170,
+              "type": {
+                "name": "ts.ClassDeclaration",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 548,
+                "ch": 51
+              },
+              "kind": 156,
+              "name": "result",
+              "flags": 0,
+              "id": 171,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 581,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeDeclarationWithType",
+          "flags": 0,
+          "id": 172,
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 583,
+                "ch": 38
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 173,
+              "type": {
+                "name": "ts.Declaration",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 599,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "pushChildren",
+          "flags": 0,
+          "id": 174,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 601,
+                "ch": 22
+              },
+              "kind": 156,
+              "name": "parent",
+              "flags": 0,
+              "id": 175,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 601,
+                "ch": 35
+              },
+              "kind": 156,
+              "name": "children",
+              "flags": 0,
+              "id": 176,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 601,
+                  "ch": 45
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 3,
+                  "name": "Node",
+                  "kind": 169
+                }
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 612,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeObject",
+          "flags": 0,
+          "id": 177,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 614,
+                "ch": 25
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 178,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 615,
+                  "ch": 6
+                },
+                "kind": 178,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "ts.TypeLiteralNode",
+                    "kind": 169
+                  },
+                  {
+                    "name": "ts.ObjectLiteralExpression",
+                    "kind": 169
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 623,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeClass",
+          "flags": 0,
+          "id": 179,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 625,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 180,
+              "type": {
+                "name": "ts.ClassDeclaration",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 685,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeReference",
+          "flags": 0,
+          "id": 181,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 687,
+                "ch": 28
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 182,
+              "type": {
+                "name": "ts.TypeReferenceType",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 702,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeConditionalType",
+          "flags": 0,
+          "id": 183,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 704,
+                "ch": 34
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 184,
+              "type": {
+                "name": "ts.ConditionalTypeNode",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 713,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeConstructor",
+          "flags": 0,
+          "id": 185,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 715,
+                "ch": 30
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 186,
+              "type": {
+                "name": "ts.ConstructorDeclaration",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 719,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeIndexedAccessTypeNode",
+          "flags": 0,
+          "id": 187,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 721,
+                "ch": 40
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 188,
+              "type": {
+                "name": "ts.IndexedAccessTypeNode",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 725,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeIndexSignature",
+          "flags": 0,
+          "id": 189,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 727,
+                "ch": 33
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 190,
+              "type": {
+                "name": "ts.IndexSignatureDeclaration",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 732,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeTypeOperator",
+          "flags": 0,
+          "id": 191,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 734,
+                "ch": 31
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 192,
+              "type": {
+                "name": "ts.TypeOperatorNode",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 739,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeTypeQuery",
+          "flags": 0,
+          "id": 193,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 741,
+                "ch": 28
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 194,
+              "type": {
+                "name": "ts.TypeQueryNode",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 743,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeTuple",
+          "flags": 0,
+          "id": 195,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 745,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 196,
+              "type": {
+                "name": "ts.TupleTypeNode",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 749,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeRestType",
+          "flags": 0,
+          "id": 197,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 751,
+                "ch": 27
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 198,
+              "type": {
+                "name": "ts.RestTypeNode",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 757,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "Serializer",
+          "flags": 0,
+          "id": 199,
+          "type": {
+            "id": 1,
+            "name": "SerializerMap",
+            "kind": 169
+          },
+          "value": "{\n\t[SK.AnyKeyword]: () => AnyType,\n\t[SK.StringKeyword]: () => StringType,\n\t[SK.NumberKeyword]: () => NumberType,\n\t[SK.BooleanKeyword]: () => BooleanType,\n\t[SK.VoidKeyword]: () => VoidType,\n\t[SK.NeverKeyword]: () => NeverType,\n\t[SK.NullKeyword]: () => NullType,\n\t[SK.FunctionType]: serializeFunction,\n\t[SK.UndefinedKeyword]: () => UndefinedType,\n\n\t[SK.ArrayType]: serializeArray,\n\t[SK.FunctionDeclaration]: serializeFunction,\n\t[SK.ArrowFunction]: serializeFunction,\n\t[SK.FunctionExpression]: serializeFunction,\n\t[SK.TypeReference]: serializeReference,\n\t[SK.ExpressionWithTypeArguments]: serializeReference,\n\t[SK.ConditionalType]: serializeConditionalType,\n\t[SK.ParenthesizedType]: serializeDeclarationWithType,\n\t[SK.InferType](node: ts.InferTypeNode) {\n\t\treturn createNode(node, {\n\t\t\ttype: serialize(node.typeParameter),\n\t\t});\n\t},\n\n\t[SK.TypeQuery]: serializeTypeQuery,\n\t[SK.IndexedAccessType]: serializeIndexedAccessTypeNode,\n\t[SK.UnionType](node: ts.UnionTypeNode) {\n\t\treturn createNode(node, {\n\t\t\tkind: Kind.TypeUnion,\n\t\t\tchildren: node.types.map(serialize),\n\t\t});\n\t},\n\t[SK.TupleType]: serializeTuple,\n\t[SK.EnumDeclaration]: serializeClass,\n\t[SK.EnumMember]: serializeDeclarationWithType,\n\t[SK.RestType]: serializeRestType,\n\n\t[SK.PropertySignature]: serializeDeclarationWithType,\n\t[SK.Constructor]: serializeConstructor,\n\t[SK.PropertySignature]: serializeDeclarationWithType,\n\t[SK.Parameter]: serializeDeclarationWithType,\n\t[SK.PropertyDeclaration]: serializeDeclarationWithType,\n\t[SK.MethodDeclaration]: serializeFunction,\n\t[SK.MethodSignature]: serializeFunction,\n\t[SK.ClassDeclaration]: serializeClass,\n\t[SK.TypeAliasDeclaration]: serializeDeclaration,\n\t[SK.TypeParameter]: serializeTypeParameter,\n\t[SK.InterfaceDeclaration]: serializeClass,\n\t[SK.VariableDeclaration]: serializeDeclarationWithType,\n\t[SK.ConstructorType]: serializeFunction,\n\t[SK.GetAccessor]: serializeFunction,\n\t[SK.SetAccessor]: serializeFunction,\n\t[SK.TypeOperator]: serializeTypeOperator,\n\n\t[SK.TypeLiteral]: serializeObject,\n\t[SK.ObjectLiteralExpression]: serializeObject,\n\t[SK.PropertyAssignment]: serializeDeclarationWithType,\n\t[SK.ShorthandPropertyAssignment]: serializeDeclarationWithType,\n\n\t[SK.IndexSignature]: serializeIndexSignature,\n}"
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 818,
+            "ch": 2
+          },
+          "kind": 244,
+          "name": "setup",
+          "flags": 0,
+          "id": 200,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 820,
+                "ch": 15
+              },
+              "kind": 156,
+              "name": "files",
+              "flags": 0,
+              "id": 201,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 821,
+                  "ch": 7
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "string",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 821,
+                "ch": 17
+              },
+              "kind": 156,
+              "name": "options",
+              "flags": 0,
+              "id": 202,
+              "type": {
+                "name": "ts.CompilerOptions",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 822,
+                "ch": 29
+              },
+              "kind": 156,
+              "name": "host",
+              "flags": 0,
+              "id": 203,
+              "type": {
+                "name": "ts.CompilerHost",
+                "kind": 169
+              },
+              "value": "ts.createCompilerHost(options)"
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 828,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "visit",
+          "flags": 0,
+          "id": 204,
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 830,
+                "ch": 15
+              },
+              "kind": 156,
+              "name": "n",
+              "flags": 0,
+              "id": 205,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 830,
+                "ch": 26
+              },
+              "kind": 156,
+              "name": "parent",
+              "flags": 0,
+              "id": 206,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 843,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "isLocalSymbol",
+          "flags": 0,
+          "id": 207,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 845,
+                "ch": 23
+              },
+              "kind": 156,
+              "name": "symbol",
+              "flags": 0,
+              "id": 208,
+              "type": {
+                "name": "ts.Symbol",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 845,
+                "ch": 41
+              },
+              "kind": 156,
+              "name": "sourceFile",
+              "flags": 0,
+              "id": 209,
+              "type": {
+                "name": "ts.SourceFile",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "boolean",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 849,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "serializeExternalExport",
+          "flags": 0,
+          "id": 210,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 851,
+                "ch": 33
+              },
+              "kind": 156,
+              "name": "node",
+              "flags": 0,
+              "id": 211,
+              "type": {
+                "name": "ts.Node",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 851,
+                "ch": 47
+              },
+              "kind": 156,
+              "name": "symbol",
+              "flags": 0,
+              "id": 212,
+              "type": {
+                "name": "ts.Symbol",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 857,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "markExported",
+          "flags": 0,
+          "id": 213,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 859,
+                "ch": 22
+              },
+              "kind": 156,
+              "name": "symbol",
+              "flags": 0,
+              "id": 214,
+              "type": {
+                "name": "ts.Symbol",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 860,
+                "ch": 19
+              },
+              "kind": 156,
+              "name": "parent",
+              "flags": 0,
+              "id": 215,
+              "type": {
+                "id": 3,
+                "name": "Node",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 861,
+                "ch": 14
+              },
+              "kind": 156,
+              "name": "sourceFile",
+              "flags": 0,
+              "id": 216,
+              "type": {
+                "name": "ts.SourceFile",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 888,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "parseSourceFile",
+          "flags": 0,
+          "id": 217,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 890,
+                "ch": 25
+              },
+              "kind": 156,
+              "name": "sourceFile",
+              "flags": 0,
+              "id": 218,
+              "type": {
+                "name": "ts.SourceFile",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 3,
+            "name": "Node",
+            "kind": 169
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 909,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "parse",
+          "flags": 1,
+          "id": 219,
+          "docs": {
+            "content": [
+              {
+                "value": "Generate AST from a source string"
+              }
+            ]
+          },
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 920,
+              "ch": 2
+            },
+            "kind": 174,
+            "name": "Array",
+            "flags": 0,
+            "type": {
+              "id": 3,
+              "name": "Node",
+              "kind": 169
+            }
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 917,
+                "ch": 22
+              },
+              "kind": 156,
+              "name": "source",
+              "flags": 0,
+              "id": 220,
+              "docs": {
+                "content": [
+                  {
+                    "tag": "param",
+                    "value": "Source to parse"
+                  }
+                ]
+              },
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 918,
+                "ch": 16
+              },
+              "kind": 156,
+              "name": "options",
+              "flags": 0,
+              "id": 221,
+              "docs": {
+                "content": [
+                  {
+                    "tag": "param",
+                    "value": "Typescript compiler options"
+                  }
+                ]
+              },
+              "type": {
+                "name": "ts.CompilerOptions",
+                "kind": 169
+              },
+              "value": "{ lib: ['es6.d.ts'] }"
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 948,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "build",
+          "flags": 1,
+          "id": 222,
+          "docs": {
+            "content": [
+              {
+                "value": "Generate AST from a tsconfig file"
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 955,
+                "ch": 22
+              },
+              "kind": 156,
+              "name": "tsconfig",
+              "flags": 0,
+              "id": 223,
+              "docs": {
+                "content": [
+                  {
+                    "tag": "param",
+                    "value": "Path to tsconfig.json file"
+                  }
+                ]
+              },
+              "value": "resolve('tsconfig.json')",
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "id": 85,
+            "name": "Output",
+            "kind": 169
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -5,9 +5,8 @@
 	"license": "GPL-3.0-only",
 	"version": "0.0.1",
 	"scripts": {
-		"build": "node build",
-		"package": "npm test && node publish",
-		"test": "node build && cd ../dist/dts && node ../tester --node",
-		"docs": "rm -rf ../docs/dts && node ../dist/docgen -o ../docs/dts --repository \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/dts\""
+		"build": "node ../dist/build",
+		"test": "node ../dist/build && cd ../dist/dts && node ../tester --node",
+		"docs": "node ../dist/build -- docs"
 	}
 }

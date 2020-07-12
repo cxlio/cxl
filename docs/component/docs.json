@@ -1,0 +1,2960 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 290,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 13,
+            "ch": 24
+          },
+          "kind": 247,
+          "name": "Renderable",
+          "flags": 0,
+          "id": 1,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 15,
+                "ch": 16
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 2,
+              "value": "HTMLElement"
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 15,
+              "ch": 34
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 3,
+            "type": {
+              "name": "Node",
+              "kind": 169
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 15,
+                  "ch": 36
+                },
+                "kind": 156,
+                "name": "ctx",
+                "flags": 0,
+                "id": 4,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 2,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 15,
+            "ch": 67
+          },
+          "kind": 247,
+          "name": "RenderFunction",
+          "flags": 0,
+          "id": 5,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 16,
+                "ch": 20
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 6
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 16,
+              "ch": 24
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 7,
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 16,
+                  "ch": 26
+                },
+                "kind": 156,
+                "name": "node",
+                "flags": 0,
+                "id": 8,
+                "type": {
+                  "id": 6,
+                  "name": "T",
+                  "kind": 169
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 16,
+            "ch": 43
+          },
+          "kind": 247,
+          "name": "Augmentation",
+          "flags": 0,
+          "id": 9,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 17,
+                "ch": 18
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 10
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 17,
+              "ch": 22
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 11,
+            "type": {
+              "source": {
+                "fileName": "index.ts",
+                "line": 17,
+                "ch": 53
+              },
+              "kind": 178,
+              "name": "",
+              "flags": 0,
+              "children": [
+                {
+                  "name": "Node",
+                  "kind": 169
+                },
+                {
+                  "name": "void",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              ]
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 17,
+                  "ch": 24
+                },
+                "kind": 156,
+                "name": "context",
+                "flags": 0,
+                "id": 12,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 10,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 19,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "registeredComponents",
+          "flags": 0,
+          "id": 13,
+          "type": {
+            "name": "Record",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 19,
+                  "ch": 42
+                },
+                "kind": 172,
+                "name": "Component",
+                "flags": 0
+              }
+            ]
+          },
+          "value": "{}"
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 20,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "subscriber",
+          "flags": 0,
+          "id": 14,
+          "value": "{\n\terror(e: any) {\n\t\tthrow e;\n\t},\n}",
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 20,
+              "ch": 18
+            },
+            "kind": 1004,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 20,
+                  "ch": 20
+                },
+                "kind": 161,
+                "name": "error",
+                "flags": 4,
+                "id": 15,
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 21,
+                      "ch": 7
+                    },
+                    "kind": 156,
+                    "name": "e",
+                    "flags": 0,
+                    "id": 16,
+                    "type": {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  }
+                ],
+                "type": {
+                  "name": "never",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 24,
+            "ch": 2
+          },
+          "kind": 245,
+          "name": "ComponentView",
+          "flags": 1,
+          "id": 17,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 26,
+                "ch": 27
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 18
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 26,
+                "ch": 31
+              },
+              "kind": 159,
+              "name": "bindings",
+              "flags": 8,
+              "id": 19,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 27,
+                  "ch": 19
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "Observable",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 27,
+                "ch": 38
+              },
+              "kind": 159,
+              "name": "subscriptions",
+              "flags": 8,
+              "id": 20,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 28,
+                  "ch": 24
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "Subscription",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 28,
+                "ch": 45
+              },
+              "kind": 159,
+              "name": "rendered",
+              "flags": 8,
+              "id": 21,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 29,
+                "ch": 26
+              },
+              "kind": 159,
+              "name": "connected",
+              "flags": 8,
+              "id": 22,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 30,
+                "ch": 27
+              },
+              "kind": 159,
+              "name": "attributes$",
+              "flags": 4,
+              "id": 23,
+              "value": "new Subject<AttributeEvent<T>>()",
+              "type": {
+                "name": "Subject",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 24,
+                    "name": "AttributeEvent",
+                    "kind": 169,
+                    "typeParameters": [
+                      {
+                        "id": 18,
+                        "name": "T",
+                        "kind": 169
+                      },
+                      {
+                        "name": "keyof T",
+                        "kind": 134,
+                        "type": {
+                          "id": 18,
+                          "name": "T",
+                          "kind": 169
+                        },
+                        "flags": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 31,
+                "ch": 48
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 25,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 33,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "host",
+                  "flags": 4,
+                  "id": 26,
+                  "type": {
+                    "id": 18,
+                    "name": "T",
+                    "kind": 169
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 33,
+                    "ch": 28
+                  },
+                  "kind": 159,
+                  "name": "render",
+                  "flags": 8,
+                  "id": 27,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 33,
+                      "ch": 44
+                    },
+                    "kind": 170,
+                    "name": "",
+                    "flags": 0,
+                    "id": 28,
+                    "type": {
+                      "name": "void",
+                      "kind": 1002,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "index.ts",
+                          "line": 33,
+                          "ch": 46
+                        },
+                        "kind": 156,
+                        "name": "host",
+                        "flags": 0,
+                        "id": 29,
+                        "type": {
+                          "id": 18,
+                          "name": "T",
+                          "kind": 169
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "id": 17,
+                "name": "ComponentView",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 18,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 33,
+                "ch": 66
+              },
+              "kind": 161,
+              "name": "bind",
+              "flags": 4,
+              "id": 30,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 35,
+                    "ch": 6
+                  },
+                  "kind": 156,
+                  "name": "binding",
+                  "flags": 0,
+                  "id": 31,
+                  "type": {
+                    "name": "Observable",
+                    "kind": 169,
+                    "typeParameters": [
+                      {
+                        "name": "any",
+                        "kind": 1002,
+                        "flags": 0
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 41,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "connect",
+              "flags": 4,
+              "id": 32,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 57,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "disconnect",
+              "flags": 4,
+              "id": 33,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 33,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "host",
+              "flags": 4,
+              "id": 26,
+              "type": {
+                "id": 18,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 33,
+                "ch": 28
+              },
+              "kind": 159,
+              "name": "render",
+              "flags": 8,
+              "id": 27,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 33,
+                  "ch": 44
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 28,
+                "type": {
+                  "name": "void",
+                  "kind": 1002,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 33,
+                      "ch": 46
+                    },
+                    "kind": 156,
+                    "name": "host",
+                    "flags": 0,
+                    "id": 29,
+                    "type": {
+                      "id": 18,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 66,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "Component",
+          "flags": 129,
+          "id": 34,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 68,
+                "ch": 53
+              },
+              "kind": 159,
+              "name": "tagName",
+              "flags": 36,
+              "id": 35,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 69,
+                "ch": 24
+              },
+              "kind": 159,
+              "name": "observedAttributes",
+              "flags": 36,
+              "id": 36,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 70,
+                  "ch": 27
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "string",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 70,
+                "ch": 37
+              },
+              "kind": 161,
+              "name": "create",
+              "flags": 36,
+              "id": 37,
+              "parameters": [],
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 73,
+                "ch": 2
+              },
+              "kind": 159,
+              "name": "eventMap",
+              "flags": 4,
+              "id": 38,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 76,
+                "ch": 16
+              },
+              "kind": 159,
+              "name": "jsxAttributes",
+              "flags": 4,
+              "id": 39,
+              "type": {
+                "name": "AttributeType",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 77,
+                      "ch": 31
+                    },
+                    "kind": 183,
+                    "name": "",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 77,
+                "ch": 37
+              },
+              "kind": 159,
+              "name": "view",
+              "flags": 4,
+              "id": 40,
+              "value": "new ComponentView(this, this.render)",
+              "type": {
+                "id": 17,
+                "name": "ComponentView",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 34,
+                    "name": "Component",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 78,
+                "ch": 45
+              },
+              "kind": 161,
+              "name": "render",
+              "flags": 4,
+              "id": 41,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 80,
+                    "ch": 8
+                  },
+                  "kind": 156,
+                  "name": "_node",
+                  "flags": 0,
+                  "id": 42,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 80,
+                      "ch": 14
+                    },
+                    "kind": 183,
+                    "name": "",
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 82,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "connectedCallback",
+              "flags": 4,
+              "id": 43,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 86,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "disconnectedCallback",
+              "flags": 4,
+              "id": 44,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 90,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "attributeChangedCallback",
+              "flags": 4,
+              "id": 45,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 92,
+                    "ch": 26
+                  },
+                  "kind": 156,
+                  "name": "name",
+                  "flags": 0,
+                  "id": 46,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 92,
+                      "ch": 31
+                    },
+                    "kind": 134,
+                    "name": "",
+                    "flags": 0,
+                    "type": {
+                      "source": {
+                        "fileName": "index.ts",
+                        "line": 92,
+                        "ch": 37
+                      },
+                      "kind": 183,
+                      "name": "",
+                      "flags": 0
+                    }
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 92,
+                    "ch": 43
+                  },
+                  "kind": 156,
+                  "name": "oldValue",
+                  "flags": 0,
+                  "id": 47,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 92,
+                    "ch": 58
+                  },
+                  "kind": 156,
+                  "name": "value",
+                  "flags": 0,
+                  "id": 48,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 1003,
+            "name": "",
+            "children": [
+              {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 99,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "pushRender",
+          "flags": 1,
+          "id": 49,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 101,
+                "ch": 27
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 50
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 101,
+                "ch": 30
+              },
+              "kind": 156,
+              "name": "proto",
+              "flags": 0,
+              "id": 51,
+              "type": {
+                "id": 50,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 101,
+                "ch": 39
+              },
+              "kind": 156,
+              "name": "renderFn",
+              "flags": 0,
+              "id": 52,
+              "type": {
+                "id": 5,
+                "name": "RenderFunction",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 50,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 107,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "augment",
+          "flags": 1,
+          "id": 53,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 109,
+                "ch": 24
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 54
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 109,
+                "ch": 27
+              },
+              "kind": 156,
+              "name": "constructor",
+              "flags": 0,
+              "id": 55,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 110,
+                  "ch": 13
+                },
+                "kind": 171,
+                "name": "",
+                "flags": 0,
+                "id": 56,
+                "type": {
+                  "id": 54,
+                  "name": "T",
+                  "kind": 169
+                },
+                "parameters": []
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 110,
+                "ch": 26
+              },
+              "kind": 156,
+              "name": "decorators",
+              "flags": 0,
+              "id": 57,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 111,
+                  "ch": 12
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 9,
+                  "name": "Augmentation",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 54,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 120,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "registerComponent",
+          "flags": 1,
+          "id": 58,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 122,
+                "ch": 34
+              },
+              "kind": 156,
+              "name": "tagName",
+              "flags": 0,
+              "id": 59,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 122,
+                "ch": 50
+              },
+              "kind": 156,
+              "name": "ctor",
+              "flags": 0,
+              "id": 60,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 126,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "Augment",
+          "flags": 16385,
+          "id": 61,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 128,
+                "ch": 24
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 62
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 128,
+              "ch": 29
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 63,
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 128,
+                  "ch": 31
+                },
+                "kind": 156,
+                "name": "ctor",
+                "flags": 0,
+                "id": 64,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 128,
+                    "ch": 36
+                  },
+                  "kind": 171,
+                  "name": "",
+                  "flags": 0,
+                  "id": 65,
+                  "type": {
+                    "id": 62,
+                    "name": "T",
+                    "kind": 169
+                  },
+                  "parameters": []
+                }
+              }
+            ]
+          },
+          "parameters": []
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 128,
+            "ch": 58
+          },
+          "kind": 244,
+          "name": "Augment",
+          "flags": 16385,
+          "id": 66,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 129,
+                "ch": 24
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 67
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 131,
+              "ch": 2
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 68,
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 131,
+                  "ch": 4
+                },
+                "kind": 156,
+                "name": "ctor",
+                "flags": 0,
+                "id": 69,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 131,
+                    "ch": 9
+                  },
+                  "kind": 171,
+                  "name": "",
+                  "flags": 0,
+                  "id": 70,
+                  "type": {
+                    "id": 67,
+                    "name": "T",
+                    "kind": 169
+                  },
+                  "parameters": []
+                }
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 129,
+                "ch": 27
+              },
+              "kind": 156,
+              "name": "augs",
+              "flags": 262144,
+              "id": 71,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 130,
+                  "ch": 9
+                },
+                "kind": 175,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 130,
+                      "ch": 11
+                    },
+                    "kind": 178,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "string",
+                        "kind": 1002,
+                        "flags": 0
+                      },
+                      {
+                        "id": 9,
+                        "name": "Augmentation",
+                        "kind": 169,
+                        "typeParameters": [
+                          {
+                            "id": 67,
+                            "name": "T",
+                            "kind": 169
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 130,
+                      "ch": 40
+                    },
+                    "kind": 174,
+                    "name": "Array",
+                    "flags": 262144,
+                    "type": {
+                      "id": 9,
+                      "name": "Augmentation",
+                      "kind": 169,
+                      "typeParameters": [
+                        {
+                          "id": 67,
+                          "name": "T",
+                          "kind": 169
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 131,
+            "ch": 31
+          },
+          "kind": 244,
+          "name": "Augment",
+          "flags": 1,
+          "id": 72,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 132,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "augs",
+              "flags": 262144,
+              "id": 73,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 132,
+                  "ch": 32
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 133,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 74,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 133,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "ctor",
+                "flags": 0,
+                "id": 75,
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 147,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "render",
+          "flags": 1,
+          "id": 76,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 149,
+                "ch": 23
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 77
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 149,
+                "ch": 44
+              },
+              "kind": 156,
+              "name": "renderFn",
+              "flags": 0,
+              "id": 78,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 149,
+                  "ch": 53
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 79,
+                "type": {
+                  "id": 1,
+                  "name": "Renderable",
+                  "kind": 169
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 149,
+                      "ch": 55
+                    },
+                    "kind": 156,
+                    "name": "node",
+                    "flags": 0,
+                    "id": 80,
+                    "type": {
+                      "id": 77,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 150,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 81,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 150,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "view",
+                "flags": 0,
+                "id": 82,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 77,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 155,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "bind",
+          "flags": 1,
+          "id": 83,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 157,
+                "ch": 21
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 84
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 157,
+                "ch": 42
+              },
+              "kind": 156,
+              "name": "bindFn",
+              "flags": 0,
+              "id": 85,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 158,
+                  "ch": 8
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 86,
+                "type": {
+                  "name": "Observable",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  ]
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 158,
+                      "ch": 10
+                    },
+                    "kind": 156,
+                    "name": "node",
+                    "flags": 0,
+                    "id": 87,
+                    "type": {
+                      "id": 84,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 160,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 88,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 160,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "view",
+                "flags": 0,
+                "id": 89,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 84,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 161,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "connect",
+          "flags": 1,
+          "id": 90,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 163,
+                "ch": 24
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 91
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 163,
+                "ch": 45
+              },
+              "kind": 156,
+              "name": "bindFn",
+              "flags": 0,
+              "id": 92,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 163,
+                  "ch": 52
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 93,
+                "type": {
+                  "name": "void",
+                  "kind": 1002,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 163,
+                      "ch": 54
+                    },
+                    "kind": 156,
+                    "name": "node",
+                    "flags": 0,
+                    "id": 94,
+                    "type": {
+                      "id": 91,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 164,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 95,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 164,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "view",
+                "flags": 0,
+                "id": 96,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 91,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 170,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "Slot",
+          "flags": 1,
+          "id": 97,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 172,
+                "ch": 21
+              },
+              "kind": 156,
+              "name": "{ selector }",
+              "flags": 0,
+              "id": 98,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 172,
+                  "ch": 34
+                },
+                "kind": 1004,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 172,
+                      "ch": 36
+                    },
+                    "kind": 159,
+                    "name": "selector",
+                    "flags": 4,
+                    "id": 99,
+                    "type": {
+                      "name": "string",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 184,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 100,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 184,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "ctx",
+                "flags": 524288,
+                "id": 101,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169
+                }
+              }
+            ],
+            "type": {
+              "name": "HTMLSlotElement",
+              "kind": 169
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 196,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "onUpdate",
+          "flags": 1,
+          "id": 102,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 198,
+                "ch": 25
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 103
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 198,
+                "ch": 46
+              },
+              "kind": 156,
+              "name": "host",
+              "flags": 0,
+              "id": 104,
+              "type": {
+                "id": 103,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 198,
+                "ch": 54
+              },
+              "kind": 156,
+              "name": "fn",
+              "flags": 0,
+              "id": 105,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 198,
+                  "ch": 58
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 106,
+                "type": {
+                  "name": "void",
+                  "kind": 1002,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 198,
+                      "ch": 60
+                    },
+                    "kind": 156,
+                    "name": "node",
+                    "flags": 0,
+                    "id": 107,
+                    "type": {
+                      "id": 103,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "",
+                "flags": 0,
+                "kind": 178,
+                "children": [
+                  {
+                    "id": 103,
+                    "name": "T",
+                    "kind": 169
+                  },
+                  {
+                    "id": 24,
+                    "name": "AttributeEvent",
+                    "kind": 169,
+                    "typeParameters": [
+                      {
+                        "id": 103,
+                        "name": "T",
+                        "kind": 169
+                      },
+                      {
+                        "name": "keyof T",
+                        "kind": 134,
+                        "type": {
+                          "id": 103,
+                          "name": "T",
+                          "kind": 169
+                        },
+                        "flags": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 200,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "update",
+          "flags": 1,
+          "id": 108,
+          "docs": {
+            "content": [
+              {
+                "value": "Fires when connected and on attribute change"
+              }
+            ]
+          },
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 205,
+                "ch": 23
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 109
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 205,
+                "ch": 44
+              },
+              "kind": 156,
+              "name": "fn",
+              "flags": 0,
+              "id": 110,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 205,
+                  "ch": 47
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 111,
+                "type": {
+                  "name": "void",
+                  "kind": 1002,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 205,
+                      "ch": 49
+                    },
+                    "kind": 156,
+                    "name": "node",
+                    "flags": 0,
+                    "id": 112,
+                    "type": {
+                      "id": 109,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 206,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 113,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 206,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "view",
+                "flags": 0,
+                "id": 114,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 109,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 207,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "attributeChanged",
+          "flags": 1,
+          "id": 115,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 209,
+                "ch": 33
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 116
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 209,
+                "ch": 53
+              },
+              "kind": 155,
+              "name": "K",
+              "flags": 0,
+              "id": 117
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 212,
+                  "ch": 14
+                },
+                "kind": 185,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 116,
+                    "name": "T",
+                    "kind": 169
+                  },
+                  {
+                    "id": 117,
+                    "name": "K",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 209,
+                "ch": 73
+              },
+              "kind": 156,
+              "name": "element",
+              "flags": 0,
+              "id": 118,
+              "type": {
+                "id": 116,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 210,
+                "ch": 12
+              },
+              "kind": 156,
+              "name": "attribute",
+              "flags": 0,
+              "id": 119,
+              "type": {
+                "id": 117,
+                "name": "K",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 217,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "get",
+          "flags": 1,
+          "id": 120,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 219,
+                "ch": 20
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 121
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 219,
+                "ch": 40
+              },
+              "kind": 155,
+              "name": "K",
+              "flags": 0,
+              "id": 122
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 222,
+                  "ch": 14
+                },
+                "kind": 185,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 121,
+                    "name": "T",
+                    "kind": 169
+                  },
+                  {
+                    "id": 122,
+                    "name": "K",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 219,
+                "ch": 60
+              },
+              "kind": 156,
+              "name": "element",
+              "flags": 0,
+              "id": 123,
+              "type": {
+                "id": 121,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 220,
+                "ch": 12
+              },
+              "kind": 156,
+              "name": "attribute",
+              "flags": 0,
+              "id": 124,
+              "type": {
+                "id": 122,
+                "name": "K",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 227,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "AttributeOptions",
+          "flags": 0,
+          "id": 125,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 229,
+                "ch": 28
+              },
+              "kind": 159,
+              "name": "persist",
+              "flags": 4,
+              "id": 126,
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 230,
+                "ch": 18
+              },
+              "kind": 159,
+              "name": "persistOperator",
+              "flags": 4,
+              "id": 127,
+              "type": {
+                "name": "Operator",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  },
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 231,
+                "ch": 37
+              },
+              "kind": 159,
+              "name": "observe",
+              "flags": 4,
+              "id": 128,
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 233,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getObservedAttributes",
+          "flags": 0,
+          "id": 129,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 235,
+                "ch": 31
+              },
+              "kind": 156,
+              "name": "target",
+              "flags": 0,
+              "id": 130,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 235,
+                  "ch": 38
+                },
+                "kind": 172,
+                "name": "Component",
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "Array",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "id": 24,
+          "source": {
+            "fileName": "index.ts",
+            "line": 242,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "AttributeEvent",
+          "flags": 0,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 244,
+                "ch": 25
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 131
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 244,
+                "ch": 27
+              },
+              "kind": 155,
+              "name": "K",
+              "flags": 0,
+              "id": 132,
+              "value": "keyof T"
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 244,
+                "ch": 58
+              },
+              "kind": 159,
+              "name": "target",
+              "flags": 4,
+              "id": 133,
+              "type": {
+                "id": 131,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 245,
+                "ch": 11
+              },
+              "kind": 159,
+              "name": "attribute",
+              "flags": 4,
+              "id": 134,
+              "type": {
+                "id": 132,
+                "name": "K",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 246,
+                "ch": 14
+              },
+              "kind": 159,
+              "name": "value",
+              "flags": 4,
+              "id": 135,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 247,
+                  "ch": 7
+                },
+                "kind": 185,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 131,
+                    "name": "T",
+                    "kind": 169
+                  },
+                  {
+                    "id": 132,
+                    "name": "K",
+                    "kind": 169
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 250,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "attributeOperator",
+          "flags": 0,
+          "id": 136,
+          "value": "tap<AttributeEvent<any>>(\n\t({ value, target, attribute }) => {\n\t\tif (value === false && target.hasAttribute(attribute))\n\t\t\ttarget.removeAttribute(attribute);\n\t\telse if (typeof value === 'string')\n\t\t\ttarget.setAttribute(attribute, value);\n\t\telse if (value === true) target.setAttribute(attribute, '');\n\t}\n)",
+          "type": {
+            "name": "Operator",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "id": 24,
+                "name": "AttributeEvent",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  },
+                  {
+                    "name": "",
+                    "flags": 0,
+                    "kind": 178,
+                    "children": [
+                      {
+                        "name": "string",
+                        "kind": 1002,
+                        "flags": 0
+                      },
+                      {
+                        "name": "number",
+                        "kind": 1002,
+                        "flags": 0
+                      },
+                      {
+                        "name": "symbol",
+                        "kind": 0,
+                        "flags": 0
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": 24,
+                "name": "AttributeEvent",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  },
+                  {
+                    "name": "",
+                    "flags": 0,
+                    "kind": 178,
+                    "children": [
+                      {
+                        "name": "string",
+                        "kind": 1002,
+                        "flags": 0
+                      },
+                      {
+                        "name": "number",
+                        "kind": 1002,
+                        "flags": 0
+                      },
+                      {
+                        "name": "symbol",
+                        "kind": 0,
+                        "flags": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 258,
+            "ch": 2
+          },
+          "kind": 244,
+          "name": "Attribute",
+          "flags": 1,
+          "id": 137,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 260,
+                "ch": 26
+              },
+              "kind": 156,
+              "name": "options",
+              "flags": 524288,
+              "id": 138,
+              "type": {
+                "name": "Partial",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 125,
+                    "name": "AttributeOptions",
+                    "kind": 169
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 261,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 139,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 261,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "target",
+                "flags": 0,
+                "id": 140,
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 262,
+                  "ch": 14
+                },
+                "kind": 156,
+                "name": "attribute",
+                "flags": 0,
+                "id": 141,
+                "type": {
+                  "name": "string",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 263,
+                  "ch": 20
+                },
+                "kind": 156,
+                "name": "descriptor",
+                "flags": 524288,
+                "id": 142,
+                "type": {
+                  "name": "PropertyDescriptor",
+                  "kind": 169
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 307,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "StyleAttribute",
+          "flags": 1,
+          "id": 143,
+          "parameters": [],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 261,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 139,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 261,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "target",
+                "flags": 0,
+                "id": 140,
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 262,
+                  "ch": 14
+                },
+                "kind": 156,
+                "name": "attribute",
+                "flags": 0,
+                "id": 141,
+                "type": {
+                  "name": "string",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 263,
+                  "ch": 20
+                },
+                "kind": 156,
+                "name": "descriptor",
+                "flags": 524288,
+                "id": 142,
+                "type": {
+                  "name": "PropertyDescriptor",
+                  "kind": 169
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 314,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "getRegisteredComponents",
+          "flags": 1,
+          "id": 144,
+          "parameters": [],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 317,
+              "ch": 7
+            },
+            "kind": 1004,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 317,
+                  "ch": 9
+                },
+                "kind": 283,
+                "name": "",
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 318,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "role",
+          "flags": 1,
+          "id": 145,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 320,
+                "ch": 21
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 146
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 320,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "roleName",
+              "flags": 0,
+              "id": 147,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 321,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 148,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 321,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "view",
+                "flags": 0,
+                "id": 149,
+                "type": {
+                  "name": "RenderContext",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 146,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

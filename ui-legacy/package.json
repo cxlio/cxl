@@ -1,0 +1,21 @@
+{
+	"name": "@cxl/ui",
+	"version": "2.3.0",
+	"private": true,
+	"files": [
+		"dist/*.js"
+	],
+	"main": "dist/index.js",
+	"license": "AGPL-3.0-or-later",
+	"homepage": "https://coaxialhost.com/ui-docs",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"repository": "https://github.com/cxlio/cxl",
+	"devDependencies": {
+		"@fortawesome/free-solid-svg-icons": "5"
+	},
+	"scripts": {
+		"build-all": "node build; node build-icons",
+		"build": "node build",
+		"prepublish": "node build test minify; node build-icons"
+	}
+}

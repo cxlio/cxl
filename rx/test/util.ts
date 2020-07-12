@@ -1,4 +1,4 @@
-import { Subject, Observable, operator, toPromise } from '../index.js';
+import { Observable, Subject, operator, toPromise } from '../index.js';
 import { Test } from '../../spec/index.js';
 
 interface Log {
@@ -56,7 +56,7 @@ function logOperator() {
 			flush();
 			subs.next(log);
 			subs.complete();
-		}
+		},
 	}));
 }
 

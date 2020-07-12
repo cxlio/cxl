@@ -1,0 +1,2949 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 290,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 18,
+            "ch": 1
+          },
+          "kind": 247,
+          "name": "AttributeType",
+          "flags": 1,
+          "id": 1,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 20,
+                "ch": 26
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 2
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 20,
+              "ch": 30
+            },
+            "kind": 178,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 21,
+                  "ch": 2
+                },
+                "kind": 186,
+                "name": "",
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 24,
+                  "ch": 2
+                },
+                "kind": 1004,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 24,
+                      "ch": 4
+                    },
+                    "kind": 159,
+                    "name": "$",
+                    "flags": 4,
+                    "id": 3,
+                    "type": {
+                      "id": 4,
+                      "name": "Binding",
+                      "kind": 169,
+                      "typeParameters": [
+                        {
+                          "id": 2,
+                          "name": "T",
+                          "kind": 169
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 25,
+                      "ch": 18
+                    },
+                    "kind": 159,
+                    "name": "children",
+                    "flags": 4,
+                    "id": 5,
+                    "type": {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "source": {
+            "fileName": "index.ts",
+            "line": 27,
+            "ch": 5
+          },
+          "kind": 247,
+          "name": "Binding",
+          "flags": 0,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 29,
+                "ch": 13
+              },
+              "kind": 155,
+              "name": "ElementT",
+              "flags": 0,
+              "id": 6,
+              "value": "HTMLElement"
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 29,
+                "ch": 36
+              },
+              "kind": 155,
+              "name": "DataT",
+              "flags": 0,
+              "id": 7,
+              "value": "any"
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 29,
+              "ch": 51
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 8,
+            "type": {
+              "name": "Observable",
+              "kind": 169,
+              "typeParameters": [
+                {
+                  "id": 7,
+                  "name": "DataT",
+                  "kind": 169
+                }
+              ]
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 29,
+                  "ch": 53
+                },
+                "kind": 156,
+                "name": "el",
+                "flags": 0,
+                "id": 9,
+                "type": {
+                  "id": 6,
+                  "name": "ElementT",
+                  "kind": 169
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 30,
+                  "ch": 14
+                },
+                "kind": 156,
+                "name": "ctx",
+                "flags": 0,
+                "id": 10,
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 32,
+            "ch": 23
+          },
+          "kind": 247,
+          "name": "ComponentFunction",
+          "flags": 0,
+          "id": 11,
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 33,
+              "ch": 24
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 12,
+            "type": {
+              "id": 13,
+              "name": "JSXElement",
+              "kind": 169
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 33,
+                  "ch": 26
+                },
+                "kind": 156,
+                "name": "attributes",
+                "flags": 524288,
+                "id": 14,
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 34,
+                  "ch": 18
+                },
+                "kind": 156,
+                "name": "children",
+                "flags": 524288,
+                "id": 15,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 35,
+                    "ch": 11
+                  },
+                  "kind": 174,
+                  "name": "Array",
+                  "flags": 0,
+                  "type": {
+                    "id": 13,
+                    "name": "JSXElement",
+                    "kind": 169
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 36,
+            "ch": 16
+          },
+          "kind": 246,
+          "name": "ComponentType",
+          "flags": 0,
+          "id": 16,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 38,
+                "ch": 24
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 17
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 38,
+                "ch": 28
+              },
+              "kind": 161,
+              "name": "create",
+              "flags": 0,
+              "id": 18,
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 39,
+                "ch": 23
+              },
+              "kind": 166,
+              "name": "",
+              "flags": 0
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 41,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "Component",
+          "flags": 0,
+          "id": 19,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 43,
+                "ch": 21
+              },
+              "kind": 159,
+              "name": "jsxAttributes",
+              "flags": 4,
+              "id": 20,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 45,
+            "ch": 1
+          },
+          "kind": 246,
+          "name": "RenderContext",
+          "flags": 1,
+          "id": 21,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 47,
+                "ch": 31
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 22,
+              "value": "HTMLElement"
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 47,
+                "ch": 49
+              },
+              "kind": 159,
+              "name": "host",
+              "flags": 4,
+              "id": 23,
+              "type": {
+                "id": 22,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 48,
+                "ch": 9
+              },
+              "kind": 161,
+              "name": "bind",
+              "flags": 0,
+              "id": 24,
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 49,
+                    "ch": 6
+                  },
+                  "kind": 156,
+                  "name": "binding",
+                  "flags": 0,
+                  "id": 25,
+                  "type": {
+                    "name": "Observable",
+                    "kind": 169,
+                    "typeParameters": [
+                      {
+                        "name": "any",
+                        "kind": 1002,
+                        "flags": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "source": {
+            "fileName": "index.ts",
+            "line": 50,
+            "ch": 1
+          },
+          "kind": 247,
+          "name": "JSXElement",
+          "flags": 1,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 52,
+                "ch": 23
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 26,
+              "value": "any"
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 52,
+              "ch": 33
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 27,
+            "type": {
+              "id": 26,
+              "name": "T",
+              "kind": 169
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 52,
+                  "ch": 35
+                },
+                "kind": 156,
+                "name": "context",
+                "flags": 0,
+                "id": 28,
+                "type": {
+                  "id": 21,
+                  "name": "RenderContext",
+                  "kind": 169
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 52,
+            "ch": 64
+          },
+          "kind": 244,
+          "name": "expression",
+          "flags": 0,
+          "id": 29,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 54,
+                "ch": 20
+              },
+              "kind": 156,
+              "name": "binding",
+              "flags": 0,
+              "id": 30,
+              "type": {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 55,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 31,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 55,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "ctx",
+                "flags": 0,
+                "id": 32,
+                "type": {
+                  "id": 21,
+                  "name": "RenderContext",
+                  "kind": 169
+                }
+              }
+            ],
+            "type": {
+              "name": "Text",
+              "kind": 169
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 60,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "binding",
+          "flags": 0,
+          "id": 33,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 62,
+                "ch": 17
+              },
+              "kind": 156,
+              "name": "bindingFn",
+              "flags": 0,
+              "id": 34,
+              "type": {
+                "id": 4,
+                "name": "Binding",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 63,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 35,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 63,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "ctx",
+                "flags": 0,
+                "id": 36,
+                "type": {
+                  "id": 21,
+                  "name": "RenderContext",
+                  "kind": 169
+                }
+              }
+            ],
+            "type": {
+              "name": "Text",
+              "kind": 169
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 64,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "normalizeChildren",
+          "flags": 1,
+          "id": 37,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 66,
+                "ch": 34
+              },
+              "kind": 156,
+              "name": "children",
+              "flags": 0,
+              "id": 38,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 66,
+                "ch": 48
+              },
+              "kind": 156,
+              "name": "result",
+              "flags": 524288,
+              "id": 39,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 66,
+                  "ch": 57
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            }
+          ],
+          "type": {
+            "name": "Array",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "id": 13,
+                "name": "JSXElement",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 82,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "renderChildren",
+          "flags": 0,
+          "id": 40,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 84,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "children",
+              "flags": 0,
+              "id": 41,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 85,
+                  "ch": 10
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 85,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "result",
+              "flags": 0,
+              "id": 42,
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 86,
+                "ch": 21
+              },
+              "kind": 156,
+              "name": "context",
+              "flags": 0,
+              "id": 43,
+              "type": {
+                "id": 21,
+                "name": "RenderContext",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 90,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "NativeElement",
+          "flags": 0,
+          "id": 44,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 92,
+                "ch": 21
+              },
+              "kind": 159,
+              "name": "native",
+              "flags": 8,
+              "id": 45,
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 93,
+                "ch": 30
+              },
+              "kind": 159,
+              "name": "bindings",
+              "flags": 16,
+              "id": 46,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 94,
+                  "ch": 21
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 4,
+                  "name": "Binding",
+                  "kind": 169
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 94,
+                "ch": 32
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 47,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 96,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "tagName",
+                  "flags": 16,
+                  "id": 48,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 97,
+                    "ch": 25
+                  },
+                  "kind": 159,
+                  "name": "attributes",
+                  "flags": 16,
+                  "id": 49,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 98,
+                    "ch": 29
+                  },
+                  "kind": 159,
+                  "name": "children",
+                  "flags": 16,
+                  "id": 50,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 99,
+                      "ch": 22
+                    },
+                    "kind": 174,
+                    "name": "Array",
+                    "flags": 0,
+                    "type": {
+                      "id": 13,
+                      "name": "JSXElement",
+                      "kind": 169
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "id": 44,
+                "name": "NativeElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 100,
+                "ch": 5
+              },
+              "kind": 161,
+              "name": "renderElement",
+              "flags": 16,
+              "id": 51,
+              "parameters": [],
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 106,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "compile",
+              "flags": 16,
+              "id": 52,
+              "parameters": [],
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 115,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "compileAttributes",
+              "flags": 16,
+              "id": 53,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 117,
+                    "ch": 29
+                  },
+                  "kind": 156,
+                  "name": "attributes",
+                  "flags": 0,
+                  "id": 54,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 117,
+                    "ch": 45
+                  },
+                  "kind": 156,
+                  "name": "other",
+                  "flags": 524288,
+                  "id": 55,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 142,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "renderBindings",
+              "flags": 4,
+              "id": 56,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 144,
+                    "ch": 16
+                  },
+                  "kind": 156,
+                  "name": "bindings",
+                  "flags": 0,
+                  "id": 57,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 144,
+                      "ch": 25
+                    },
+                    "kind": 174,
+                    "name": "Array",
+                    "flags": 0,
+                    "type": {
+                      "id": 4,
+                      "name": "Binding",
+                      "kind": 169
+                    }
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 144,
+                    "ch": 36
+                  },
+                  "kind": 156,
+                  "name": "el",
+                  "flags": 0,
+                  "id": 58,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 144,
+                    "ch": 45
+                  },
+                  "kind": 156,
+                  "name": "ctx",
+                  "flags": 0,
+                  "id": 59,
+                  "type": {
+                    "id": 21,
+                    "name": "RenderContext",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 146,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "render",
+              "flags": 4,
+              "id": 60,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 148,
+                    "ch": 8
+                  },
+                  "kind": 156,
+                  "name": "ctx",
+                  "flags": 0,
+                  "id": 61,
+                  "type": {
+                    "id": 21,
+                    "name": "RenderContext",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 96,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "tagName",
+              "flags": 16,
+              "id": 48,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 97,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "attributes",
+              "flags": 16,
+              "id": 49,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 98,
+                "ch": 29
+              },
+              "kind": 159,
+              "name": "children",
+              "flags": 16,
+              "id": 50,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 99,
+                  "ch": 22
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            }
+          ],
+          "extendedBy": [
+            {
+              "id": 62,
+              "name": "ComponentElement",
+              "kind": 169
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 154,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "ComponentElement",
+          "flags": 0,
+          "id": 62,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 156,
+                "ch": 46
+              },
+              "kind": 159,
+              "name": "compiled",
+              "flags": 16,
+              "id": 63,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 157,
+                "ch": 28
+              },
+              "kind": 159,
+              "name": "otherAttributes",
+              "flags": 16,
+              "id": 64,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 158,
+                "ch": 33
+              },
+              "kind": 161,
+              "name": "compile",
+              "flags": 16,
+              "id": 65,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 165,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "renderElement",
+              "flags": 16,
+              "id": 66,
+              "parameters": [],
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 1003,
+            "name": "",
+            "children": [
+              {
+                "id": 44,
+                "name": "NativeElement",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 177,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "FunctionElement",
+          "flags": 0,
+          "id": 67,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 179,
+                "ch": 23
+              },
+              "kind": 159,
+              "name": "element",
+              "flags": 8,
+              "id": 68,
+              "type": {
+                "id": 13,
+                "name": "JSXElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 180,
+                "ch": 30
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 69,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 182,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "Component",
+                  "flags": 16,
+                  "id": 70,
+                  "type": {
+                    "id": 11,
+                    "name": "ComponentFunction",
+                    "kind": 169
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 183,
+                    "ch": 41
+                  },
+                  "kind": 159,
+                  "name": "attributes",
+                  "flags": 16,
+                  "id": 71,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 184,
+                    "ch": 29
+                  },
+                  "kind": 159,
+                  "name": "children",
+                  "flags": 16,
+                  "id": 72,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 185,
+                      "ch": 22
+                    },
+                    "kind": 174,
+                    "name": "Array",
+                    "flags": 0,
+                    "type": {
+                      "id": 13,
+                      "name": "JSXElement",
+                      "kind": 169
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "id": 67,
+                "name": "FunctionElement",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 186,
+                "ch": 5
+              },
+              "kind": 161,
+              "name": "compile",
+              "flags": 4,
+              "id": 73,
+              "parameters": [],
+              "type": {
+                "id": 13,
+                "name": "JSXElement",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 196,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "render",
+              "flags": 4,
+              "id": 74,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 198,
+                    "ch": 8
+                  },
+                  "kind": 156,
+                  "name": "ctx",
+                  "flags": 0,
+                  "id": 75,
+                  "type": {
+                    "id": 21,
+                    "name": "RenderContext",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 182,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "Component",
+              "flags": 16,
+              "id": 70,
+              "type": {
+                "id": 11,
+                "name": "ComponentFunction",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 183,
+                "ch": 41
+              },
+              "kind": 159,
+              "name": "attributes",
+              "flags": 16,
+              "id": 71,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 184,
+                "ch": 29
+              },
+              "kind": 159,
+              "name": "children",
+              "flags": 16,
+              "id": 72,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 185,
+                  "ch": 22
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 202,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "dom",
+          "flags": 16385,
+          "id": 76,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 204,
+                "ch": 20
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 77
+            }
+          ],
+          "type": {
+            "id": 13,
+            "name": "JSXElement",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 208,
+                  "ch": 14
+                },
+                "kind": 185,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "HTMLElementTagNameMap",
+                    "kind": 169
+                  },
+                  {
+                    "id": 77,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 204,
+                "ch": 59
+              },
+              "kind": 156,
+              "name": "name",
+              "flags": 0,
+              "id": 78,
+              "type": {
+                "id": 77,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 205,
+                "ch": 9
+              },
+              "kind": 156,
+              "name": "attributes",
+              "flags": 524288,
+              "id": 79,
+              "type": {
+                "name": "Partial",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 206,
+                      "ch": 22
+                    },
+                    "kind": 185,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "HTMLElementTagNameMap",
+                        "kind": 169
+                      },
+                      {
+                        "id": 77,
+                        "name": "T",
+                        "kind": 169
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 206,
+                "ch": 48
+              },
+              "kind": 156,
+              "name": "children",
+              "flags": 262144,
+              "id": 80,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 207,
+                  "ch": 13
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 208,
+            "ch": 40
+          },
+          "kind": 244,
+          "name": "dom",
+          "flags": 16385,
+          "id": 81,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 209,
+                "ch": 20
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 82
+            }
+          ],
+          "type": {
+            "id": 13,
+            "name": "JSXElement",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "id": 82,
+                "name": "T",
+                "kind": 169
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 209,
+                "ch": 41
+              },
+              "kind": 156,
+              "name": "elementType",
+              "flags": 0,
+              "id": 83,
+              "type": {
+                "id": 16,
+                "name": "ComponentType",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 82,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 210,
+                "ch": 31
+              },
+              "kind": 156,
+              "name": "attributes",
+              "flags": 524288,
+              "id": 84,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 211,
+                  "ch": 13
+                },
+                "kind": 185,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 82,
+                    "name": "T",
+                    "kind": 169
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 211,
+                      "ch": 16
+                    },
+                    "kind": 187,
+                    "name": "'jsxAttributes'",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 211,
+                "ch": 33
+              },
+              "kind": 156,
+              "name": "children",
+              "flags": 262144,
+              "id": 85,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 212,
+                  "ch": 13
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 213,
+            "ch": 17
+          },
+          "kind": 244,
+          "name": "dom",
+          "flags": 16385,
+          "id": 86,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 214,
+                "ch": 20
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 87
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 214,
+                "ch": 22
+              },
+              "kind": 155,
+              "name": "T2",
+              "flags": 0,
+              "id": 88
+            }
+          ],
+          "type": {
+            "id": 13,
+            "name": "JSXElement",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "id": 87,
+                "name": "T",
+                "kind": 169
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 214,
+                "ch": 27
+              },
+              "kind": 156,
+              "name": "elementType",
+              "flags": 0,
+              "id": 89,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 215,
+                  "ch": 13
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 90,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 87,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 215,
+                      "ch": 15
+                    },
+                    "kind": 156,
+                    "name": "attributes",
+                    "flags": 524288,
+                    "id": 91,
+                    "type": {
+                      "id": 88,
+                      "name": "T2",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 215,
+                "ch": 49
+              },
+              "kind": 156,
+              "name": "attributes",
+              "flags": 524288,
+              "id": 92,
+              "type": {
+                "id": 88,
+                "name": "T2",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 216,
+                "ch": 17
+              },
+              "kind": 156,
+              "name": "children",
+              "flags": 262144,
+              "id": 93,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 217,
+                  "ch": 13
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 218,
+            "ch": 17
+          },
+          "kind": 244,
+          "name": "dom",
+          "flags": 1,
+          "id": 94,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 219,
+                "ch": 20
+              },
+              "kind": 156,
+              "name": "elementType",
+              "flags": 0,
+              "id": 95,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 220,
+                "ch": 18
+              },
+              "kind": 156,
+              "name": "attributes",
+              "flags": 524288,
+              "id": 96,
+              "type": {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 221,
+                "ch": 18
+              },
+              "kind": 156,
+              "name": "children",
+              "flags": 262144,
+              "id": 97,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 222,
+                  "ch": 13
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 13,
+                  "name": "JSXElement",
+                  "kind": 169
+                }
+              }
+            }
+          ],
+          "type": {
+            "name": "",
+            "flags": 0,
+            "kind": 178,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 146,
+                  "ch": 2
+                },
+                "kind": 161,
+                "name": "render",
+                "flags": 4,
+                "id": 60,
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 148,
+                      "ch": 8
+                    },
+                    "kind": 156,
+                    "name": "ctx",
+                    "flags": 0,
+                    "id": 61,
+                    "type": {
+                      "id": 21,
+                      "name": "RenderContext",
+                      "kind": 169
+                    }
+                  }
+                ],
+                "type": {
+                  "name": "HTMLElement",
+                  "kind": 169
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 146,
+                  "ch": 2
+                },
+                "kind": 161,
+                "name": "render",
+                "flags": 4,
+                "id": 60,
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 148,
+                      "ch": 8
+                    },
+                    "kind": 156,
+                    "name": "ctx",
+                    "flags": 0,
+                    "id": 61,
+                    "type": {
+                      "id": 21,
+                      "name": "RenderContext",
+                      "kind": 169
+                    }
+                  }
+                ],
+                "type": {
+                  "name": "HTMLElement",
+                  "kind": 169
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 196,
+                  "ch": 2
+                },
+                "kind": 161,
+                "name": "render",
+                "flags": 4,
+                "id": 74,
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 198,
+                      "ch": 8
+                    },
+                    "kind": 156,
+                    "name": "ctx",
+                    "flags": 0,
+                    "id": 75,
+                    "type": {
+                      "id": 21,
+                      "name": "RenderContext",
+                      "kind": 169
+                    }
+                  }
+                ],
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 233,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "View",
+          "flags": 1,
+          "id": 98,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 235,
+                "ch": 18
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 99
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 235,
+                "ch": 22
+              },
+              "kind": 159,
+              "name": "subscriptions",
+              "flags": 8,
+              "id": 100,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 236,
+                  "ch": 24
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "Subscription",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "id": 99,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 236,
+                "ch": 43
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 101,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 237,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "element",
+                  "flags": 4,
+                  "id": 102,
+                  "type": {
+                    "id": 99,
+                    "name": "T",
+                    "kind": 169
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 237,
+                    "ch": 31
+                  },
+                  "kind": 159,
+                  "name": "bindings",
+                  "flags": 8,
+                  "id": 103,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 237,
+                      "ch": 49
+                    },
+                    "kind": 174,
+                    "name": "Array",
+                    "flags": 0,
+                    "type": {
+                      "name": "Observable",
+                      "kind": 169,
+                      "typeParameters": [
+                        {
+                          "name": "any",
+                          "kind": 1002,
+                          "flags": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "id": 98,
+                "name": "View",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 99,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 237,
+                "ch": 71
+              },
+              "kind": 161,
+              "name": "connect",
+              "flags": 4,
+              "id": 104,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 241,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "disconnect",
+              "flags": 4,
+              "id": 105,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 237,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "element",
+              "flags": 4,
+              "id": 102,
+              "type": {
+                "id": 99,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 237,
+                "ch": 31
+              },
+              "kind": 159,
+              "name": "bindings",
+              "flags": 8,
+              "id": 103,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 237,
+                  "ch": 49
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "Observable",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 245,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "View2",
+          "flags": 1,
+          "id": 106,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 247,
+                "ch": 19
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 107
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 247,
+                "ch": 45
+              },
+              "kind": 159,
+              "name": "host",
+              "flags": 4,
+              "id": 108,
+              "type": {
+                "id": 107,
+                "name": "T",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 248,
+                "ch": 9
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 109,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 249,
+                    "ch": 13
+                  },
+                  "kind": 156,
+                  "name": "host",
+                  "flags": 0,
+                  "id": 110,
+                  "type": {
+                    "id": 107,
+                    "name": "T",
+                    "kind": 169
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 249,
+                    "ch": 21
+                  },
+                  "kind": 156,
+                  "name": "bindings",
+                  "flags": 0,
+                  "id": 111,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 249,
+                      "ch": 31
+                    },
+                    "kind": 174,
+                    "name": "Array",
+                    "flags": 0,
+                    "type": {
+                      "name": "Observable",
+                      "kind": 169,
+                      "typeParameters": [
+                        {
+                          "name": "any",
+                          "kind": 1002,
+                          "flags": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "id": 106,
+                "name": "View2",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 107,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 1003,
+            "name": "",
+            "children": [
+              {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 107,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 258,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "Context",
+          "flags": 1,
+          "id": 112,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 260,
+                "ch": 21
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 113
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 260,
+                "ch": 25
+              },
+              "kind": 159,
+              "name": "bindings",
+              "flags": 8,
+              "id": 114,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 261,
+                  "ch": 19
+                },
+                "kind": 174,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "Observable",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 261,
+                "ch": 38
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 115,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 262,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "host",
+                  "flags": 4,
+                  "id": 116,
+                  "type": {
+                    "id": 113,
+                    "name": "T",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "id": 112,
+                "name": "Context",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 113,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 262,
+                "ch": 31
+              },
+              "kind": 161,
+              "name": "bind",
+              "flags": 4,
+              "id": 117,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 263,
+                    "ch": 6
+                  },
+                  "kind": 156,
+                  "name": "b",
+                  "flags": 0,
+                  "id": 118,
+                  "type": {
+                    "name": "Observable",
+                    "kind": 169,
+                    "typeParameters": [
+                      {
+                        "name": "any",
+                        "kind": 1002,
+                        "flags": 0
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 262,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "host",
+              "flags": 4,
+              "id": 116,
+              "type": {
+                "id": 113,
+                "name": "T",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 267,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "render",
+          "flags": 1,
+          "id": 119,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 269,
+                "ch": 23
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 120
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 269,
+                "ch": 26
+              },
+              "kind": 156,
+              "name": "tpl",
+              "flags": 0,
+              "id": 121,
+              "type": {
+                "id": 13,
+                "name": "JSXElement",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 120,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 269,
+                "ch": 45
+              },
+              "kind": 156,
+              "name": "host",
+              "flags": 524288,
+              "id": 122,
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 98,
+            "name": "View",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "id": 120,
+                "name": "T",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 282,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "connect",
+          "flags": 1,
+          "id": 123,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 284,
+                "ch": 24
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 124
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 284,
+                "ch": 27
+              },
+              "kind": 156,
+              "name": "tpl",
+              "flags": 0,
+              "id": 125,
+              "type": {
+                "id": 13,
+                "name": "JSXElement",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 124,
+                    "name": "T",
+                    "kind": 169
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 285,
+                "ch": 20
+              },
+              "kind": 156,
+              "name": "fn",
+              "flags": 0,
+              "id": 126,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 286,
+                  "ch": 4
+                },
+                "kind": 170,
+                "name": "",
+                "flags": 0,
+                "id": 127,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 286,
+                    "ch": 15
+                  },
+                  "kind": 178,
+                  "name": "",
+                  "flags": 0,
+                  "children": [
+                    {
+                      "name": "Promise",
+                      "kind": 169,
+                      "typeParameters": [
+                        {
+                          "name": "any",
+                          "kind": 1002,
+                          "flags": 0
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Observable",
+                      "kind": 169,
+                      "typeParameters": [
+                        {
+                          "name": "any",
+                          "kind": 1002,
+                          "flags": 0
+                        }
+                      ]
+                    },
+                    {
+                      "name": "void",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  ]
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 286,
+                      "ch": 6
+                    },
+                    "kind": 156,
+                    "name": "el",
+                    "flags": 0,
+                    "id": 128,
+                    "type": {
+                      "id": 124,
+                      "name": "T",
+                      "kind": 169
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 294,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "Fragment",
+          "flags": 1,
+          "id": 129,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 296,
+                "ch": 23
+              },
+              "kind": 161,
+              "name": "create",
+              "flags": 36,
+              "id": 130,
+              "parameters": [],
+              "type": {
+                "name": "DocumentFragment",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 300,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "Host",
+          "flags": 1,
+          "id": 131,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 302,
+                "ch": 21
+              },
+              "kind": 156,
+              "name": "{\n\t$,\n\tchildren,\n}",
+              "flags": 0,
+              "id": 132,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 305,
+                  "ch": 2
+                },
+                "kind": 1004,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 305,
+                      "ch": 4
+                    },
+                    "kind": 159,
+                    "name": "$",
+                    "flags": 4,
+                    "id": 133,
+                    "type": {
+                      "source": {
+                        "fileName": "index.ts",
+                        "line": 306,
+                        "ch": 4
+                      },
+                      "kind": 170,
+                      "name": "",
+                      "flags": 0,
+                      "id": 134,
+                      "type": {
+                        "name": "Observable",
+                        "kind": 169,
+                        "typeParameters": [
+                          {
+                            "name": "any",
+                            "kind": 1002,
+                            "flags": 0
+                          }
+                        ]
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "index.ts",
+                            "line": 306,
+                            "ch": 6
+                          },
+                          "kind": 156,
+                          "name": "node",
+                          "flags": 0,
+                          "id": 135,
+                          "type": {
+                            "name": "any",
+                            "kind": 1002,
+                            "flags": 0
+                          }
+                        },
+                        {
+                          "source": {
+                            "fileName": "index.ts",
+                            "line": 306,
+                            "ch": 16
+                          },
+                          "kind": 156,
+                          "name": "ctx",
+                          "flags": 0,
+                          "id": 136,
+                          "type": {
+                            "id": 21,
+                            "name": "RenderContext",
+                            "kind": 169
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 306,
+                      "ch": 56
+                    },
+                    "kind": 159,
+                    "name": "children",
+                    "flags": 4,
+                    "id": 137,
+                    "type": {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 310,
+              "ch": 7
+            },
+            "kind": 244,
+            "name": "",
+            "flags": 0,
+            "id": 138,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 310,
+                  "ch": 9
+                },
+                "kind": 156,
+                "name": "ctx",
+                "flags": 0,
+                "id": 139,
+                "type": {
+                  "id": 21,
+                  "name": "RenderContext",
+                  "kind": 169
+                }
+              }
+            ],
+            "type": {
+              "name": "HTMLElement",
+              "kind": 169
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

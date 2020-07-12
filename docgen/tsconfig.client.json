@@ -3,6 +3,6 @@
 	"compilerOptions": {
 		"outDir": "../dist/docgen"
 	},
-	"references": [{ "path": "../ui-ts" }],
+	"references": [{ "path": "../ui" }],
 	"files": ["runtime.tsx"]
 }

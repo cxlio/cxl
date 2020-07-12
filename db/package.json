@@ -1,6 +1,9 @@
 {
 	"name": "@cxl/db",
 	"version": "0.0.1",
+	"private": true,
+	"description": "Database library",
+	"license": "Apache-2.0",
 	"peerDependencies": {
 		"@cxl/rx": "*"
 	}

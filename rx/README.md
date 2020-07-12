@@ -1,21 +1,18 @@
-# @cxl/rx
-
+# @cxl/rx 
+	
 [![npm version](https://badge.fury.io/js/%40cxl%2Frx.svg)](https://badge.fury.io/js/%40cxl%2Frx)
 
-Super lightweight rxjs implementation.
+Lightweight reactiveX implementation
 
-[Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0.txt)
-[Documentation](https://cxlio.github.io/cxl/rx)
+## Project Details
 
-## Features
-
--   Lightweight < 4Kb gzipped
--   Type Safe, Typescript 3.8+
--   Compatible with rxjs
+-   Branch Version: [0.1.0](https://npmjs.com/package/@cxl/rx/v/0.1.0)
+-   License: Apache-2.0
+-   Documentation: [Link](https://cxlio.github.io/cxl/rx)
 
 ## Installation
 
-    npm install @cxl/rx
+	npm install @cxl/rx
 
 ## Usage
 

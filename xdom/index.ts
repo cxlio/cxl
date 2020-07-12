@@ -1,14 +1,5 @@
 import { Observable, Subscription, from, tap } from '../rx/index.js';
 
-type IntrinsicElement<T> =
-	| {
-			[K in keyof T]?: T[K] | Observable<T[K]>;
-	  }
-	| {
-			$?: Binding<T>;
-			children?: any;
-	  };
-
 /* eslint @typescript-eslint/no-namespace: 'off' */
 declare global {
 	namespace JSX {
@@ -20,12 +11,21 @@ declare global {
 		}
 		type Element = JSXElement;
 		type IntrinsicElements = {
-			[P in keyof HTMLElementTagNameMap]: IntrinsicElement<
+			[P in keyof HTMLElementTagNameMap]: AttributeType<
 				HTMLElementTagNameMap[P]
 			>;
 		};
 	}
 }
+
+export type AttributeType<T> =
+	| {
+			[K in keyof T]?: T[K] | Observable<T[K]> | Binding<T>;
+	  }
+	| {
+			$?: Binding<T>;
+			children?: any;
+	  };
 
 type Binding<ElementT = HTMLElement, DataT = any> = (
 	el: ElementT,
@@ -45,8 +45,8 @@ interface Component {
 	jsxAttributes?: any;
 }
 
-interface RenderContext {
-	host: HTMLElement;
+export interface RenderContext<T = HTMLElement> {
+	host: T;
 	bind(binding: Observable<any>): void;
 }
 
@@ -125,7 +125,13 @@ class NativeElement {
 				bindings.push((el: any) =>
 					value.pipe(tap(val => (el[i] = val)))
 				);
-			else if (typeof value === 'function') bindings.push(value);
+			else if (typeof value === 'function')
+				bindings.push(
+					i === '$'
+						? value
+						: (el: any, ctx: any) =>
+								value(el, ctx).tap((val: any) => (el[i] = val))
+				);
 			else {
 				if (!other) other = {};
 				other[i] = value;
@@ -288,16 +294,22 @@ export function connect<T>(
 	else view.disconnect();
 }
 
+export class Fragment {
+	static create() {
+		return document.createDocumentFragment();
+	}
+}
+
 export function Host({
 	$,
 	children,
 }: {
-	$?: (node: any) => Observable<any>;
+	$?: (node: any, ctx: RenderContext) => Observable<any>;
 	children: any;
 }) {
 	const normalizedChildren = normalizeChildren(children);
 	return (ctx: RenderContext) => {
-		if ($) ctx.bind($(ctx.host));
+		if ($) ctx.bind($(ctx.host, ctx));
 
 		const shadow =
 			ctx.host.shadowRoot || ctx.host.attachShadow({ mode: 'open' });

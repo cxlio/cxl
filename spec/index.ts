@@ -1,12 +1,7 @@
-type TestFn = (test: Test) => void | Promise<any>;
+type TestFn<T = Test> = (test: T) => void | Promise<any>;
 type SuiteFn<T = TestFn> = (
 	suiteFn: (name: string, testFn: T, only?: boolean) => void
 ) => void;
-
-declare function setTimeout(fn: () => any, n?: number): number;
-declare function clearTimeout(n: number): void;
-declare const document: any;
-declare const console: any;
 
 export interface Result {
 	success: boolean;
@@ -16,12 +11,6 @@ export interface Result {
 
 interface TestConfig {
 	name: string;
-}
-
-interface Element {
-	parentNode: Element | null;
-	removeChild(child: any): void;
-	appendChild(child: any): void;
 }
 
 let lastTestId = 1;
@@ -40,8 +29,7 @@ export class Test {
 	tests: Test[] = [];
 	only: Test[] = [];
 	timeout = 5 * 1000;
-	private domElement?: Element;
-
+	private domContainer?: Element;
 	private completed = false;
 
 	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
@@ -52,11 +40,11 @@ export class Test {
 	/**
 	 * Returns a connected dom element. Cleaned up after test completion.
 	 */
-	get dom() {
-		if (this.domElement) return this.domElement;
+	get dom(): Element {
+		const el = this.domContainer || document.createElement('DIV');
+		if (!this.domContainer)
+			document.body.appendChild((this.domContainer = el));
 
-		const el = (this.domElement = document.createElement('DIV'));
-		document.body.appendChild(el);
 		return el;
 	}
 
@@ -68,18 +56,15 @@ export class Test {
 		this.results.push({ success: !!condition, message });
 	}
 
-	assert(
-		condition: any,
-		message: string = 'Assertion Failed'
-	): asserts condition {
+	assert(condition: any, message = 'Assertion Failed'): asserts condition {
 		if (!condition) throw new Error(message);
-		this.results.push({ success: condition, message });
+		this.results.push({ success: !!condition, message });
 	}
 
 	equal<T>(a: T, b: T, desc?: string) {
 		return this.ok(
 			a === b,
-			desc || `${inspect(a)} should equal ${inspect(b)}`
+			`${desc ? desc + ': ' : ''}${inspect(a)} should equal ${inspect(b)}`
 		);
 	}
 
@@ -101,16 +86,16 @@ export class Test {
 	doTimeout(promise: Promise<any>, time = this.timeout) {
 		return new Promise<void>((resolve, reject) => {
 			const timeoutId = setTimeout(() => {
-				reject('Async test timed out');
+				reject(new Error('Async test timed out'));
 			}, time);
 
 			promise.then(() => {
 				if (this.completed)
-					throw new Error('Test was already completed.');
+					reject(new Error('Test was already completed.'));
 				this.completed = true;
 				clearTimeout(timeoutId);
 				resolve();
-			});
+			}, reject);
 		});
 	}
 
@@ -120,6 +105,16 @@ export class Test {
 			new Promise<void>(resolve => (result = resolve))
 		);
 		return () => result();
+	}
+
+	/**
+	 * Create a component test
+	 */
+	component<T extends HTMLElement>(
+		tagName: string,
+		testFn: TestFn<ComponentTest<T>>
+	) {
+		this.tests.push(new ComponentTest(tagName, testFn));
 	}
 
 	test(name: string, testFn: TestFn, only = false) {
@@ -142,41 +137,68 @@ export class Test {
 				await Promise.all(this.only.map(test => test.run()));
 			else if (this.tests.length)
 				await Promise.all(this.tests.map(test => test.run()));
+			if (this.domContainer && this.domContainer.parentNode)
+				this.domContainer.parentNode.removeChild(this.domContainer);
 		} catch (e) {
 			this.pushError(e);
+		} finally {
+			this.domContainer = undefined;
 		}
 
-		if (this.domElement && this.domElement.parentNode)
-			this.domElement.parentNode.removeChild(this.domElement);
-
 		return this.results;
+	}
+
+	toJSON(): any {
+		return {
+			name: this.name,
+			results: this.results,
+			tests: this.tests.map(r => r.toJSON()),
+			only: this.only.map(r => r.toJSON()),
+		};
 	}
 }
 
 /**
  * special suite for Web Components
-export class Spec<T extends HTMLElement> extends Test {
-
-	constructor(public Component: T, fn: SuiteFn<Spec<T>>) {
-		const tagName = (Component as any).tagName;
-		super(tagName, fn);
+ */
+export class ComponentTest<T extends HTMLElement = HTMLElement> extends Test {
+	constructor(public tagName: string, fn: TestFn<ComponentTest<T>>) {
+		super(tagName, fn as TestFn);
 	}
 
+	/** Returns a connected element */
+	element(tagName = this.tagName): T {
+		const el = document.createElement(tagName) as T;
+		this.dom.appendChild(el);
+		return el;
+	}
+
+	testEvent(name: string, trigger: (el: T) => void) {
+		this.test(`on${name}`, a => {
+			const el = this.element();
+			const resolve = a.async();
+			function handler(ev: Event) {
+				a.equal(ev.type, name, `"${name}" event fired`);
+				el.removeEventListener(name, handler);
+				resolve();
+			}
+			el.addEventListener('change', handler);
+			trigger(el);
+		});
+	}
 }
 
-export function spec<T extends HTMLElement>(symbol: T, fn: SuiteFn<Spec<T>>) {
-	return new Spec<T>(symbol, fn);
+export function spec(name: string | TestConfig, fn: TestFn) {
+	return new Test(name, fn);
 }
- */
 
 export function suite(
 	nameOrConfig: string | TestConfig,
 	suiteFn: SuiteFn | any[]
 ) {
-	const suite = new Test(nameOrConfig, context => {
+	return new Test(nameOrConfig, context => {
 		if (Array.isArray(suiteFn))
 			suiteFn.forEach(test => context.addTest(test));
 		else suiteFn(context.test.bind(context));
 	});
-	return suite;
 }

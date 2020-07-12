@@ -1,15 +1,14 @@
 {
 	"name": "@cxl/router",
 	"version": "0.1.0",
+	"description": "Router library",
+	"license": "GPL-3.0",
 	"files": [
 		"index.js",
 		"index.d.ts"
 	],
 	"scripts": {
-		"build": "node build",
-		"test": "node build && cd ../dist/router && node ../tester"
-	},
-	"devDependencies": {
-		"typescript": "^3.6.2"
+		"build": "node ../dist/build",
+		"test": "node ../dist/build && cd ../dist/router && node ../tester"
 	}
 }

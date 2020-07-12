@@ -3,7 +3,6 @@ import { Augment, Attribute, Component, render } from '../component/index.js';
 import { onChildrenMutation } from '../dom/index.js';
 import { Style, padding } from '../css/index.js';
 import { be } from '../rx/index.js';
-import { T } from '../ui-ts/index.js';
 
 @Augment(
 	'cxl-docs-demo',
@@ -48,7 +47,7 @@ import { T } from '../ui-ts/index.js';
 				doc.write(
 					(host.debug
 						? `<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui-ts/index.js');require('../../dist/ui-ts/icons.js');require('../../dist/docgen/runtime.js')</script>`
+	<script>require('../../dist/ui/index.js');require('../../dist/ui/icons.js');require('../../dist/docgen/runtime.js')</script>`
 						: `<script src="runtime.bundle.min.js"></script>`) +
 						`<cxl-meta></cxl-meta>${content}`
 				);
@@ -58,12 +57,8 @@ import { T } from '../ui-ts/index.js';
 		}
 
 		return (
-			<div>
-				<div className="parent">
-					<iframe $={init} className="container" />
-				</div>
-				<T h6>Source</T>
-				<div className="source">{content$}</div>
+			<div className="parent">
+				<iframe $={init} className="container" />
 			</div>
 		);
 	})

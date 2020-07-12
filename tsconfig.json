@@ -5,6 +5,7 @@
 		"target": "es2017",
 		"module": "commonjs",
 		"allowJs": true,
+		"assumeChangesOnlyAffectDirectDependencies": true,
 		"experimentalDecorators": true,
 		"sourceMap": true,
 		"moduleResolution": "Node",

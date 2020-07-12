@@ -1,8 +1,7 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"outDir": "../dist/spec",
-		"lib": ["es2015"]
+		"outDir": "../dist/spec"
 	},
 	"files": ["index.ts"]
 }

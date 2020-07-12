@@ -55,7 +55,8 @@ class TestReport {
 	}
 
 	printError(fail: Result) {
-		console.error(fail.message, fail.stack);
+		console.error(fail.message);
+		if (fail.stack) console.error(fail.stack);
 		this.failures.push(fail);
 		const msg = fail.message;
 		error(msg);
@@ -78,7 +79,7 @@ const browserRunner = {
 		const container = document.createElement('cxl-content');
 		container.innerHTML = output;
 		document.body.appendChild(container);
-	}
+	},
 };
 
 export default browserRunner;

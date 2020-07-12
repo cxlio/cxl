@@ -24,7 +24,7 @@ function require(path) {
 		xhr.send();
 	}
 	const id = xhr.responseURL;
-	const response = xhr.responseText;
+	const response = xhr.responseText + '\n//# sourceURL=' + id;
 	if (mods[id]) return mods[id];
 
 	const oldBase = require.base;

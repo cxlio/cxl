@@ -1,7 +1,10 @@
 {
 	"name": "@cxl/server",
 	"version": "0.0.1",
+	"description": "Application library",
+	"license": "GPL-3.0",
 	"scripts": {
-		"test": "node build && cd ../dist/server && node ../tester --node"
+		"build": "node ../dist/build",
+		"test": "node ../dist/build && cd ../dist/server && node ../tester --node"
 	}
 }

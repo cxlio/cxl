@@ -1,0 +1,652 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 290,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 2,
+            "ch": 13
+          },
+          "kind": 242,
+          "name": "process",
+          "flags": 2,
+          "id": 1,
+          "type": {
+            "name": "any",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 4,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "IS_NODE",
+          "flags": 0,
+          "id": 2,
+          "value": "typeof process !== 'undefined' && process.versions && process.versions.node",
+          "type": {
+            "name": "any",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 7,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "SHARED_RUNTIME",
+          "flags": 0,
+          "id": 3,
+          "value": "`\n\tconst subscriber = {\n\t\tnext(val) {\n\t\t\tpostMessage({ id, type: 'next', payload: val });\n\t\t},\n\t\terror(val) {\n\t\t\tpostMessage({ id, type: 'error', payload: val });\n\t\t},\n\t\tcomplete(val) {\n\t\t\tpostMessage({ id, type: 'complete' });\n\t\t}\n\t};\n\ttry {\n\t\tworker(ev.payload, subscriber);\n\t} catch(e) {\n\t\tsubscriber.error(e);\n\t}\n`",
+          "type": {
+            "name": "\"\\n\\tconst subscriber = {\\n\\t\\tnext(val) {\\n\\t\\t\\tpostMessage({ id, type: 'next', payload: val });\\n\\t\\t},\\n\\t\\terror(val) {\\n\\t\\t\\tpostMessage({ id, type: 'error', payload: val });\\n\\t\\t},\\n\\t\\tcomplete(val) {\\n\\t\\t\\tpostMessage({ id, type: 'complete' });\\n\\t\\t}\\n\\t};\\n\\ttry {\\n\\t\\tworker(ev.payload, subscriber);\\n...",
+            "kind": 187,
+            "type": {
+              "name": "string",
+              "kind": 1002,
+              "flags": 0
+            },
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 25,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "RUNTIME",
+          "flags": 0,
+          "id": 4,
+          "value": "IS_NODE\n\t? `\nconst { parentPort } = require('worker_threads'); \nparentPort.on('message', ev => {\n\tconst id=ev.id,postMessage=parentPort.postMessage.bind(parentPort);\n\t${SHARED_RUNTIME}\n});\n`\n\t: `onmessage=function(message) { const ev=message.data,id=ev.id;${SHARED_RUNTIME}}`",
+          "type": {
+            "name": "string",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 35,
+            "ch": 13
+          },
+          "kind": 242,
+          "name": "require",
+          "flags": 2,
+          "id": 5,
+          "type": {
+            "name": "any",
+            "kind": 1002,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 35,
+            "ch": 27
+          },
+          "kind": 247,
+          "name": "WorkerFunction",
+          "flags": 0,
+          "id": 6,
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 37,
+              "ch": 21
+            },
+            "kind": 170,
+            "name": "",
+            "flags": 0,
+            "id": 7,
+            "type": {
+              "name": "void",
+              "kind": 1002,
+              "flags": 0
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 37,
+                  "ch": 23
+                },
+                "kind": 156,
+                "name": "payload",
+                "flags": 0,
+                "id": 8,
+                "type": {
+                  "name": "any",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 37,
+                  "ch": 36
+                },
+                "kind": 156,
+                "name": "subscriber",
+                "flags": 0,
+                "id": 9,
+                "type": {
+                  "name": "Subscription",
+                  "kind": 169,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 37,
+            "ch": 76
+          },
+          "kind": 246,
+          "name": "InternalMessage",
+          "flags": 0,
+          "id": 10,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 39,
+                "ch": 26
+              },
+              "kind": 155,
+              "name": "T",
+              "flags": 0,
+              "id": 11
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 39,
+                "ch": 30
+              },
+              "kind": 159,
+              "name": "id",
+              "flags": 4,
+              "id": 12,
+              "type": {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 40,
+                "ch": 12
+              },
+              "kind": 159,
+              "name": "type",
+              "flags": 4,
+              "id": 13,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 41,
+                  "ch": 6
+                },
+                "kind": 178,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 41,
+                      "ch": 6
+                    },
+                    "kind": 187,
+                    "name": "'next'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 41,
+                      "ch": 15
+                    },
+                    "kind": 187,
+                    "name": "'error'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 41,
+                      "ch": 25
+                    },
+                    "kind": 187,
+                    "name": "'complete'",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 41,
+                "ch": 37
+              },
+              "kind": 159,
+              "name": "payload",
+              "flags": 4,
+              "id": 14,
+              "type": {
+                "id": 11,
+                "name": "T",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 43,
+            "ch": 1
+          },
+          "kind": 245,
+          "name": "WorkerManager",
+          "flags": 1,
+          "id": 15,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 45,
+                "ch": 28
+              },
+              "kind": 163,
+              "name": "connected",
+              "flags": 4,
+              "id": 16,
+              "parameters": [],
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 48,
+                "ch": 2
+              },
+              "kind": 159,
+              "name": "id",
+              "flags": 8,
+              "id": 17,
+              "value": "0",
+              "type": {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 50,
+                "ch": 16
+              },
+              "kind": 159,
+              "name": "subject",
+              "flags": 8,
+              "id": 18,
+              "value": "new Subject<InternalMessage<any>>()",
+              "type": {
+                "name": "Subject",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 10,
+                    "name": "InternalMessage",
+                    "kind": 169,
+                    "typeParameters": [
+                      {
+                        "name": "any",
+                        "kind": 1002,
+                        "flags": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 51,
+                "ch": 55
+              },
+              "kind": 159,
+              "name": "onMessage",
+              "flags": 8,
+              "id": 19,
+              "value": "IS_NODE\n\t\t? (ev: any) => this.subject.next(ev)\n\t\t: (ev: any) => this.subject.next(ev.data)",
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 53,
+                  "ch": 3
+                },
+                "kind": 244,
+                "name": "",
+                "flags": 0,
+                "id": 20,
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 53,
+                      "ch": 5
+                    },
+                    "kind": 156,
+                    "name": "ev",
+                    "flags": 0,
+                    "id": 21,
+                    "type": {
+                      "name": "any",
+                      "kind": 1002,
+                      "flags": 0
+                    }
+                  }
+                ],
+                "type": {
+                  "name": "void",
+                  "kind": 1002,
+                  "flags": 0
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 54,
+                "ch": 44
+              },
+              "kind": 159,
+              "name": "refCount",
+              "flags": 8,
+              "id": 22,
+              "value": "0",
+              "type": {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 55,
+                "ch": 22
+              },
+              "kind": 162,
+              "name": "constructor",
+              "flags": 0,
+              "id": 23,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 57,
+                    "ch": 13
+                  },
+                  "kind": 159,
+                  "name": "worker",
+                  "flags": 4,
+                  "id": 24,
+                  "type": {
+                    "name": "Worker",
+                    "kind": 169
+                  }
+                }
+              ],
+              "type": {
+                "id": 15,
+                "name": "WorkerManager",
+                "kind": 169
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 57,
+                "ch": 38
+              },
+              "kind": 161,
+              "name": "request",
+              "flags": 4,
+              "id": 25,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 59,
+                    "ch": 9
+                  },
+                  "kind": 155,
+                  "name": "ResponseT",
+                  "flags": 0,
+                  "id": 26
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 59,
+                    "ch": 19
+                  },
+                  "kind": 155,
+                  "name": "MessageT",
+                  "flags": 0,
+                  "id": 27
+                }
+              ],
+              "type": {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "id": 26,
+                    "name": "ResponseT",
+                    "kind": 169
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 59,
+                    "ch": 30
+                  },
+                  "kind": 156,
+                  "name": "payload",
+                  "flags": 0,
+                  "id": 28,
+                  "type": {
+                    "id": 27,
+                    "name": "MessageT",
+                    "kind": 169
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 83,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "connect",
+              "flags": 8,
+              "id": 29,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 89,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "disconnect",
+              "flags": 8,
+              "id": 30,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 97,
+                "ch": 2
+              },
+              "kind": 161,
+              "name": "post",
+              "flags": 8,
+              "id": 31,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 99,
+                    "ch": 14
+                  },
+                  "kind": 156,
+                  "name": "id",
+                  "flags": 0,
+                  "id": 32,
+                  "type": {
+                    "name": "number",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 99,
+                    "ch": 25
+                  },
+                  "kind": 156,
+                  "name": "payload",
+                  "flags": 0,
+                  "id": 33,
+                  "type": {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "number",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 57,
+                "ch": 13
+              },
+              "kind": 159,
+              "name": "worker",
+              "flags": 4,
+              "id": 24,
+              "type": {
+                "name": "Worker",
+                "kind": 169
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 106,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "compile",
+          "flags": 1,
+          "id": 34,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 108,
+                "ch": 24
+              },
+              "kind": 156,
+              "name": "workerFn",
+              "flags": 0,
+              "id": 35,
+              "type": {
+                "id": 6,
+                "name": "WorkerFunction",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "id": 15,
+            "name": "WorkerManager",
+            "kind": 169
+          }
+        }
+      ]
+    }
+  ]
+}

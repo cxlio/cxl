@@ -1,6 +1,18 @@
-# @cxl/ui
-
+# @cxl/ui 
+	
 [![npm version](https://badge.fury.io/js/%40cxl%2Fui.svg)](https://badge.fury.io/js/%40cxl%2Fui)
+
+Web Components
+
+## Project Details
+
+-   Branch Version: [3.0.0](https://npmjs.com/package/@cxl/ui/v/3.0.0)
+-   License: GPL-3.0
+-   Documentation: [Link](https://cxlio.github.io/cxl/ui)
+
+## Installation
+
+	npm install @cxl/ui
 
 ## Features
 

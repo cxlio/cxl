@@ -1,4 +1,5 @@
 {
+	"ignore": ["docs"],
 	"watch": {
 		"rules": {
 			"ajax": {
@@ -6,28 +7,32 @@
 				"tasks": "cd ajax && npm run build"
 			},
 			"build": {
-				"files": ["build/index.ts", "build/tsc.ts"],
+				"files": ["build/*.ts"],
 				"tasks": "cd build && npm run build"
 			},
 			"component": {
 				"files": ["component/index.ts"],
-				"tasks": "cd component && node build"
+				"tasks": "cd component && npm run build"
 			},
 			"css": {
 				"files": ["css/index.ts", "css/build.js"],
-				"tasks": "cd css && node build"
+				"tasks": "cd css && npm run build"
 			},
 			"docgen": {
 				"files": ["docgen/*.tsx"],
-				"tasks": "cd docgen && node build"
+				"tasks": "cd docgen && npm run build"
 			},
 			"dom": {
 				"files": ["dom/index.ts"],
-				"tasks": "cd dom && node build"
+				"tasks": "cd dom && npm run build"
+			},
+			"dts": {
+				"files": ["dts/index.ts"],
+				"tasks": "cd dts && npm run build"
 			},
 			"rx": {
 				"files": ["rx/index.ts", "rx/tsconfig.json", "rx/test.html"],
-				"tasks": "cd rx && node build"
+				"tasks": "cd rx && npm run build"
 			},
 			"template": {
 				"files": ["template/index.ts", "template/build.js"],
@@ -43,53 +48,43 @@
 			},
 			"diff": {
 				"files": ["diff/src/*.js"],
-				"tasks": "node diff/build"
+				"tasks": "npm run build --prefix diff"
 			},
 			"icons": {
 				"files": ["ui/build-icons.js"],
-				"tasks": "node ui/build-icons"
+				"tasks": "cd ui && node build-icons"
 			},
 
-			"ui": {
+			"ui-legacy": {
 				"files": [
 					"template/src/*",
-					"ui/src/*",
+					"ui-legacy/src/*",
 					"template/build.js",
-					"ui/build.js",
-					"rx/index.js"
+					"ui-legacy/build.js"
 				],
-				"tasks": "node ui/build"
+				"tasks": "npm run build --prefix ui-legacy"
 			},
 
 			"fb": {
 				"files": ["fb/src/*", "fb/build.js"],
-				"tasks": "node fb/build"
+				"tasks": "npm run build --prefix fb"
 			},
 
-			"docs": {
-				"files": ["docs/src/*", "docs/build.js"],
-				"tasks": "cd docs && node build"
-			},
-
-			"ui-docs": {
-				"files": ["ui-docs/src/*", "ui-docs/build.js"],
-				"tasks": "node ui-docs/build"
-			},
-			"ui-ts": {
-				"files": ["ui-ts/*.tsx", "ui-ts/build.js"],
-				"tasks": "cd ui-ts && node build"
+			"ui": {
+				"files": ["ui/*.tsx", "ui/build.js"],
+				"tasks": "cd ui && npm run build"
 			},
 			"server": {
 				"files": ["server/*.ts", "server/build.js"],
-				"tasks": "cd server && node build"
+				"tasks": "npm run build --prefix server"
+			},
+			"spec": {
+				"files": ["spec/*.ts"],
+				"tasks": "npm run build --prefix spec"
 			},
 			"tester": {
 				"files": ["tester/index.ts", "tester/*.js"],
-				"tasks": "node tester/build"
-			},
-			"test": {
-				"files": ["test/index.html"],
-				"tasks": "cd test && node build"
+				"tasks": "npm run build --prefix tester"
 			}
 		}
 	}

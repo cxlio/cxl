@@ -1,16 +1,16 @@
-import { suite } from '../spec/index.js';
 import {
 	Attribute,
-	StyleAttribute,
 	Augment,
 	Component,
 	Slot,
-	get,
+	StyleAttribute,
 	bind,
+	get,
 	registerComponent,
 } from './index';
-import { dom, render, connect } from '../xdom';
+import { connect, dom, render } from '../xdom';
 import { of, tap } from '../rx';
+import { suite } from '../spec/index.js';
 
 export default suite('component', test => {
 	test('Component - empty', a => {
@@ -117,7 +117,9 @@ export default suite('component', test => {
 			@Attribute()
 			maxlength = -1;
 
-			focus() {}
+			focus() {
+				// do nothing
+			}
 		}
 
 		const instance = render<Input>(<Input maxlength={10}></Input>).element;
@@ -161,6 +163,28 @@ export default suite('component', test => {
 				a.equal(el.test, true);
 			}
 		);
+	});
+
+	test('Attribute Initialization', a => {
+		const id = 'cxl-test' + a.id;
+
+		@Augment()
+		class TestComponent extends Component {
+			static tagName = id;
+			@Attribute()
+			'test-boolean' = false;
+			@Attribute()
+			'test-string' = 'string';
+		}
+
+		a.ok(TestComponent);
+		a.dom.innerHTML = `<${id} test-boolean />`;
+		const el = a.dom.firstChild as any;
+		a.equal(el['test-boolean'], true);
+
+		a.dom.innerHTML = `<${id} test-string="hello" />`;
+		const el2 = a.dom.firstChild as any;
+		a.equal(el2['test-string'], 'hello');
 	});
 
 	test('Attribute - multi word', a => {

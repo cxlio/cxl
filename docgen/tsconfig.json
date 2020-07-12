@@ -4,6 +4,7 @@
 		"outDir": "../dist/docgen",
 		"lib": ["es2019"],
 		"types": ["node"],
+		"esModuleInterop": true,
 		"typeRoots": ["../node_modules/@types"]
 	},
 	"references": [{ "path": "../server" }, { "path": "../dts" }],

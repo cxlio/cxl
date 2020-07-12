@@ -1,4 +1,4 @@
-import { Observable, Subscription, Subject } from '../rx/index.js';
+import { Observable, Subject, Subscription } from '../rx/index.js';
 
 type ElementContent = string | Node;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
@@ -8,21 +8,35 @@ export function empty(el: Element) {
 	while ((c = el.childNodes[0])) el.removeChild(c);
 }
 
+/*interface CustomEventTarget extends EventTarget {
+	eventMap: any;
+}*/
+
+export function on<K extends keyof WindowEventMap>(
+	element: Window,
+	event: K,
+	options?: AddEventListenerOptions
+): Observable<WindowEventMap[K]>;
 export function on<K extends keyof GlobalEventHandlersEventMap>(
-	element: Element | Window,
+	element: EventTarget,
 	event: K,
 	options?: AddEventListenerOptions
 ): Observable<GlobalEventHandlersEventMap[K]>;
+/*export function on<T extends CustomEventHandler, K extends keyof T['eventMap']>(
+	element: T,
+	event: keyof T['eventMap'],
+	options?: AddEventListenerOptions
+): Observable<T['eventMap'][K]>;*/
 export function on(
-	element: Element | Window,
+	element: EventTarget | Window,
 	event: string,
 	options?: AddEventListenerOptions
 ): Observable<Event>;
 export function on(
-	element: Element | Window,
+	element: EventTarget | Window,
 	event: string,
 	options?: AddEventListenerOptions
-) {
+): Observable<Event> {
 	return new Observable<Event>(subscriber => {
 		const handler = subscriber.next.bind(subscriber);
 		element.addEventListener(event, handler, options);
@@ -99,7 +113,7 @@ export function setStyle(el: Element, className: string, enable: boolean) {
 	el.classList[enable || enable === undefined ? 'add' : 'remove'](className);
 }
 
-export function trigger(el: Element, event: string, detail?: any) {
+export function trigger(el: EventTarget, event: string, detail?: any) {
 	const ev = new CustomEvent(event, { detail: detail, bubbles: true });
 	el.dispatchEvent(ev);
 }
@@ -128,7 +142,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 	private $value: any;
 	private $checked: any;
 
-	element?: Element;
+	element?: Node;
 	observer?: MutationObserver;
 	bindings?: Subscription<any>[];
 
@@ -161,7 +175,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 		];
 	}
 
-	constructor(element: Element) {
+	constructor(element: Node) {
 		super();
 
 		if ((element as any).$$attributeObserver)

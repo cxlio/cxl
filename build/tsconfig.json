@@ -8,9 +8,9 @@
 		"typeRoots": ["../node_modules/@types"]
 	},
 	"references": [
-		{ "path": "./tsconfig.amd.json", "prepend": true },
 		{ "path": "../rx" },
-		{ "path": "../server" }
+		{ "path": "../server" },
+		{ "path": "../source" }
 	],
-	"files": ["index.ts", "tsc.ts"]
+	"files": ["index.ts", "tsc.ts", "package.ts", "file.ts"]
 }

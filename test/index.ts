@@ -4,8 +4,8 @@ import componentSuite from '../component/test';
 import domSuite from '../dom/test';
 import workerSuite from '../worker/test';
 import storeSuite from '../store/test';
-import uiSuite from '../ui-ts/test';
 import { suite } from '../spec';
+import uiSuite from '../ui/test';
 
 export default suite('@cxl', [
 	rxSuite,

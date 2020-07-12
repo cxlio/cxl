@@ -1,6 +1,6 @@
-import { suite } from '../spec/index.js';
 import { Router } from './index.js';
 import { dom } from '../xdom/index.js';
+import { suite } from '../spec/index.js';
 
 export default suite('router', test => {
 	const root = document.createElement('div');
@@ -29,6 +29,5 @@ export default suite('router', test => {
 		router.go('test/hello');
 
 		a.equal(router.currentRoute, router.routes.get('test'));
-		a.equal(router.instances.test.title, 'hello');
 	});
 });

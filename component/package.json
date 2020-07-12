@@ -1,8 +1,10 @@
 {
 	"name": "@cxl/component",
 	"version": "0.0.1",
+	"description": "Web Component Framework",
+	"license": "GPL-3.0",
 	"scripts": {
-		"build": "node build",
-		"test": "node build && cd ../dist/component && node ../tester"
+		"build": "node ../dist/build",
+		"test": "node ../dist/build && cd ../dist/component && node ../tester"
 	}
 }

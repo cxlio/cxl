@@ -1,11 +1,17 @@
 import { posix as path } from 'path';
-import fs from 'fs';
-import rx from '../rx';
+import { Observable } from '../rx/index.js';
+import * as fs from 'fs';
 
 const WATCHERS = {};
 
-class FileEvent {
-	constructor(type, path) {
+export enum EventType {
+	Change = 'change',
+	Rename = 'rename',
+	Remove = 'remove',
+}
+
+export class FileEvent {
+	constructor(type: FileEventType, path: string) {
 		this.type = type;
 		this.path = path;
 	}
@@ -15,7 +21,8 @@ class FileEvent {
 
 		fs.stat(this.path, (err, s) => {
 			if (err) {
-				if (ev === 'change' || ev === 'rename') this.type = 'remove';
+				if (ev === EventType.Change || ev === EventType.Rename)
+					this.type = EventType.Remove;
 				else return subscriber.error(err);
 			}
 
@@ -25,8 +32,21 @@ class FileEvent {
 	}
 }
 
+class Poller extends Observable {
+	constructor(public interval: number) {
+		super();
+	}
+
+	$decelerate(nochange) {
+		if (nochange > 100) this.interval = 10000;
+		else if (nochange > 30) this.interval = 5000;
+		else if (nochange > 5) this.interval = 2000;
+		else this.interval = 1000;
+	}
+}
+
 class FilePoller {
-	constructor(path, callback) {
+	constructor(path: string, callback) {
 		this.path = path;
 		this.callback = callback;
 		this.interval = 1000;
@@ -110,7 +130,7 @@ class FilePoller {
 	}
 }
 
-class FileWatch extends rx.Observable {
+export class FileWatch extends Observable<FileEvent> {
 	static getCount() {
 		return Object.keys(WATCHERS).length;
 	}
@@ -139,7 +159,7 @@ class FileWatch extends rx.Observable {
 		w.on('change', onChange);
 		w.on('error', onError);
 
-		return function() {
+		return function () {
 			w.removeListener('change', onChange);
 			w.removeListener('error', onError);
 
@@ -155,7 +175,7 @@ class FileWatch extends rx.Observable {
 				this.$onChange(subscriber, 'change', file);
 			},
 			poller = new FilePoller(path, onChange);
-		return function() {
+		return function () {
 			poller.destroy();
 		};
 	}
@@ -190,13 +210,8 @@ class FileWatch extends rx.Observable {
 	}
 }
 
-class DirectoryWatch extends FileWatch {
+export class DirectoryWatch extends FileWatch {
 	$getPath(filename) {
 		return path.join(this.path, filename);
 	}
 }
-
-Object.assign(exports, {
-	DirectoryWatch: DirectoryWatch,
-	FileWatch: FileWatch
-});

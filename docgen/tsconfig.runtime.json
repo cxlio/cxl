@@ -8,20 +8,21 @@
 	},
 	"include": [
 		"runtime.tsx",
-		"../ui-ts/meta.ts",
-		"../ui-ts/index.tsx",
+		"../ui/meta.ts",
+		"../ui/index.tsx",
 		"../rx/index.ts",
 		"../css/index.ts",
 		"../xdom/index.ts",
 		"../template/index.ts",
 		"../dom/index.ts",
 		"../component/index.ts",
-		"../ui-ts/core.tsx",
-		"../ui-ts/form.tsx",
-		"../ui-ts/icons.tsx",
-		"../ui-ts/layout.tsx",
-		"../ui-ts/dialog.tsx",
-		"../ui-ts/table.tsx"
+		"../ui/core.tsx",
+		"../ui/form.tsx",
+		"../ui/icons.tsx",
+		"../ui/layout.tsx",
+		"../ui/dialog.tsx",
+		"../ui/navigation.tsx",
+		"../ui/table.tsx"
 	],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

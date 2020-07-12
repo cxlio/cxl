@@ -1,7 +1,7 @@
+import { be, merge, tap } from '../rx';
+import { connect, dom, render } from '../xdom';
+import { getAttribute, portal, teleport } from './index.js';
 import { suite } from '../spec/index.js';
-import { tap, merge, be } from '../rx';
-import { dom, render, connect } from '../xdom';
-import { portal, teleport, getAttribute } from './index.js';
 
 export default suite('template', test => {
 	test('bindings - get', a => {

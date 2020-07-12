@@ -1,9 +1,9 @@
 import {
 	Observable,
-	Subscription,
 	Subject,
-	map,
+	Subscription,
 	distinctUntilChanged,
+	map,
 } from '../rx/index.js';
 
 export interface CollectionEvent<T> {
