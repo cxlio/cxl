@@ -1,10 +1,9 @@
-const { build, tsconfig, file, minify } = require('../dist/build');
+const { buildCxl, tsconfig, file, minify } = require('../dist/build');
 
-build(
+buildCxl(
 	{
 		outputDir: '../dist/docgen',
 		tasks: [
-			tsconfig(),
 			tsconfig('tsconfig.client.json'),
 			file(
 				'../node_modules/highlight.js/styles/default.css',

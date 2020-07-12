@@ -56,8 +56,8 @@ function ConditionalType(node: Node) {
 }
 
 function ClassType(node: Node) {
-	let extendStr: string[] = [];
-	let implementStr: string[] = [];
+	const extendStr: string[] = [];
+	const implementStr: string[] = [];
 	node.children?.forEach(child => {
 		const link = Type(child);
 		const type = child.type;
@@ -236,7 +236,7 @@ function getSource(source: Source) {
 	)}"><cxl-icon icon="code"></cxl-icon></a>`;
 }
 
-function Source({ source }: Node) {
+function SourceLink({ source }: Node) {
 	return source && application.repository
 		? Array.isArray(source)
 			? source.map(getSource).join('')
@@ -359,7 +359,6 @@ function MemberBody(c: Node) {
 	let result = `<cxl-t style="font-weight: 500" code subtitle>${Signature(
 		c
 	)}</cxl-t>${InheritedFrom()}`;
-	let returns = '';
 
 	if (c.docs) result += Documentation(c);
 
@@ -373,14 +372,12 @@ function MemberBody(c: Node) {
 				.join('') +
 			'</ul><br/>';
 
-	if (returns) result += `<cxl-t subtitle2>Returns</cxl-t><p>${returns}</p>`;
-
 	return result;
 }
 
 function MemberCard(c: Node) {
 	return `${c.id ? Anchor(c.id) : ''}<cxl-card><cxl-c pad16>
-		${Source(c)}${MemberBody(c)}
+		${SourceLink(c)}${MemberBody(c)}
 		</cxl-c></cxl-card>`;
 }
 
@@ -393,7 +390,7 @@ function ExtendedBy(extendedBy?: Node[]) {
 }
 
 function Link(node: Node): string {
-	let name = node.name ? escape(node.name) : '(Unknown)';
+	const name = node.name ? escape(node.name) : '(Unknown)';
 	if (node.type) {
 		if (node.kind === Kind.Reference) node = node.type;
 		else if (node.kind === Kind.Export) return Link(node.type);
