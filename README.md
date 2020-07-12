@@ -8,6 +8,7 @@ Collection of Libraries and Tools
 | -------------- | ------- | ------- | ------------------------------------ | ---------------------------------------------- |
 | @cxl/component        | [0.0.1](https://npmjs.com/package/@cxl/component/v/0.0.1) | GPL-3.0 | Web Component Framework       | [Docs](https://cxlio.github.io/cxl/component/0.0.1) |
 | @cxl/css        | [0.0.1](https://npmjs.com/package/@cxl/css/v/0.0.1) | GPL-3.0 | CSS in Typescript       | [Docs](https://cxlio.github.io/cxl/css/0.0.1) |
+| @cxl/docgen        | [0.0.1](https://npmjs.com/package/@cxl/docgen/v/0.0.1) | GPL-3.0 | Documentation generator for typescript       | [Docs](https://cxlio.github.io/cxl/docgen/0.0.1) |
 | @cxl/dom        | [0.0.1](https://npmjs.com/package/@cxl/dom/v/0.0.1) | GPL-3.0 | Reactive DOM wrapper       | [Docs](https://cxlio.github.io/cxl/dom/0.0.1) |
 | @cxl/dts        | [0.0.1](https://npmjs.com/package/@cxl/dts/v/0.0.1) | GPL-3.0-only | Generate a simplified AST from typescript source code       | [Docs](https://cxlio.github.io/cxl/dts/0.0.1) |
 | @cxl/router        | [0.1.0](https://npmjs.com/package/@cxl/router/v/0.1.0) | GPL-3.0 | Router library       | [Docs](https://cxlio.github.io/cxl/router/0.1.0) |
