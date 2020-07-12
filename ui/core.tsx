@@ -11,7 +11,7 @@ import {
 	role,
 } from '../component/index.js';
 import { Host, RenderContext, dom, normalizeChildren } from '../xdom/index.js';
-import { Observable, debounceTime, merge, tap } from '../rx/index.js';
+import { Observable, debounceTime, defer, merge, tap } from '../rx/index.js';
 import {
 	Style,
 	StyleSheet,
@@ -238,6 +238,11 @@ export function registableHost<TargetT extends EventTarget>(
 
 interface SelectableComponent extends Component {
 	selected: boolean;
+}
+
+export function aria(prop: string, value: string) {
+	return (ctx: RenderContext) =>
+		ctx.bind(defer(() => ctx.host.setAttribute(`aria-${prop}`, value)));
 }
 
 export function ariaProp(host: Element, prop: string) {

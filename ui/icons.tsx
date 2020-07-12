@@ -969,7 +969,7 @@ const icons = {
 	'x-ray': '\uf497',
 	'yen-sign': '\uf157',
 	'yin-yang': '\uf6ad',
-	'': ''
+	'': '',
 };
 
 type IconKey = keyof typeof icons;
@@ -978,28 +978,28 @@ registerFont({
 	family: 'Font Awesome\\ 5 Free',
 	url:
 		'https://use.fontawesome.com/releases/v5.1.0/webfonts/fa-solid-900.woff2',
-	weight: '900'
+	weight: '900',
 });
 
 theme.typography['icon'] = {
 	fontFamily: 'Font Awesome\\ 5 Free',
-	fontSize: 'inherit'
+	fontSize: 'inherit',
 };
 
 @Augment(
-	role('icon'),
+	role('img'),
 	<Host>
 		<Style>
 			{{
 				$: {
 					display: 'inline-block',
-					font: 'icon'
+					font: 'icon',
 				},
 				$round: {
 					borderRadius: 1,
-					textAlign: 'center'
+					textAlign: 'center',
 				},
-				$outline: { borderWidth: 1 }
+				$outline: { borderWidth: 1 },
 			}}
 		</Style>
 	</Host>
@@ -1040,9 +1040,9 @@ export class Icon extends Component {
 				paddingRight: 8,
 				lineHeight: 22,
 				width: 24,
-				textAlign: 'center'
+				textAlign: 'center',
 			},
-			$trailing: { paddingRight: 0, paddingLeft: 8 }
+			$trailing: { paddingRight: 0, paddingLeft: 8 },
 		}}
 	</Style>
 )

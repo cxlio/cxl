@@ -20,7 +20,7 @@ import {
 } from '../template/index.js';
 import { Style, padding } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
-import { Focusable, FocusHighlight, Svg, ripple } from './core.js';
+import { Focusable, FocusHighlight, Svg, aria, ripple } from './core.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -39,6 +39,7 @@ import { Drawer } from './dialog.js';
 @Augment<Appbar>(
 	'cxl-appbar',
 	role('heading'),
+	aria('level', '1'),
 	<Host>
 		<Style>
 			{{
