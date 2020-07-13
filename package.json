@@ -16,6 +16,7 @@
 	},
 	"scripts": {
 		"build-all": "node scripts/build-all.js",
-		"build-readme": "node scripts/build-readme"
+		"build-readme": "node scripts/build-readme",
+		"publish": "node scripts/build-all.js && node scripts/build-readme"
 	}
 }

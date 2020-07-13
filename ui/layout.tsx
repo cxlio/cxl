@@ -27,6 +27,7 @@ const colStyles = ((r: any) => {
 });
 
 @Augment(
+	'cxl-c',
 	<Host>
 		<Style>
 			{{
@@ -78,13 +79,12 @@ const colStyles = ((r: any) => {
 	</Host>
 )
 export class C extends Component {
-	static tagName = 'cxl-c';
-
 	@StyleAttribute()
 	pad16 = false;
 }
 
 @Augment(
+	'cxl-content',
 	<Host>
 		<Style>
 			{{
@@ -115,7 +115,6 @@ export class C extends Component {
 	</Host>
 )
 export class Content extends Component {
-	static tagName = 'cxl-content';
 	@StyleAttribute()
 	center = false;
 }
@@ -188,6 +187,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 export class Card extends Component {}
 
 @Augment<List>(
+	'cxl-list',
 	role('list'),
 	<Style>
 		{{
@@ -200,9 +200,7 @@ export class Card extends Component {}
 		}}
 	</Style>
 )
-export class List extends Component {
-	static tagName = 'cxl-list';
-}
+export class List extends Component {}
 
 /**
  * @example
@@ -215,6 +213,7 @@ export class List extends Component {
 </cxl-grid>
  */
 @Augment<Grid>(
+	'cxl-grid',
 	<Host>
 		<Style>
 			{{
@@ -230,8 +229,6 @@ export class List extends Component {
 	})
 )
 export class Grid extends Component {
-	static tagName = 'cxl-grid';
-
 	@Attribute()
 	rows?: number;
 
