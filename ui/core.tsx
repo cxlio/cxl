@@ -234,10 +234,9 @@ export function registable<T extends Component>(host: T, id: string) {
 
 export function registableHost<TargetT extends EventTarget>(
 	host: EventTarget,
-	id: string
+	id: string,
+	elements = new Set<TargetT>()
 ) {
-	const elements = new Set<TargetT>();
-
 	function register(ev: Event) {
 		if (ev.target) elements.add(ev.target as TargetT);
 	}
@@ -372,7 +371,7 @@ export function selectable<T extends SelectableComponent>(host: T) {
 			}}
 		</Style>
 		<div
-			$={(el, view: Ripple['view']) => {
+			$={(el, view: RenderContext<Ripple>) => {
 				return merge(
 					onUpdate(view.host, host => {
 						const style = el.style;
@@ -999,7 +998,12 @@ function Head(p: { children: any }) {
 		<style>{`body,html{padding:0;margin:0;height:100%}`}</style>
 	</Head>
 )
-export class Meta extends Component {}
+export class Meta extends Component {
+	connectedCallback() {
+		document.documentElement.lang = 'en';
+		super.connectedCallback();
+	}
+}
 
 @Augment(
 	'cxl-application',

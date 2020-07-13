@@ -33,7 +33,7 @@ import {
 	tpl,
 	triggerEvent,
 } from '../template/index.js';
-import { trigger, on } from '../dom/index.js';
+import { trigger, on, onChildrenMutation } from '../dom/index.js';
 import { Style, border, padding } from '../css/index.js';
 import { be, defer, merge, of, tap } from '../rx/index.js';
 
@@ -76,17 +76,24 @@ const FocusCircleStyle = (
 
 export type ValidateFunction<T> = (val: T) => string | true;
 
+export function validate<T extends InputBase>(
+	el: T,
+	...validators: ValidateFunction<T['value']>[]
+) {
+	return get(el, 'value').tap(value => {
+		validators.find(validateFn => {
+			const message = validateFn(value);
+			el.invalid = message !== true;
+			if (message !== true)
+				return ((el as any).validationMessage = message);
+		});
+	});
+}
+
 export function $validate<T extends InputBase>(
 	...validators: ValidateFunction<T['value']>[]
 ) {
-	return (el: T) =>
-		get(el, 'value').tap(value => {
-			validators.find(validateFn => {
-				const message = validateFn(value);
-				el.invalid = message !== true;
-				if (message !== true) (el as any).validationMessage = message;
-			});
-		});
+	return (el: T) => validate(el, ...validators);
 }
 
 export const ValidationMessage = {
@@ -103,6 +110,11 @@ export function required(val: any) {
 		(val !== null && val !== undefined && val !== '' && val !== false) ||
 		ValidationMessage.required
 	);
+}
+
+const EMAIL = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+export function email(val: string) {
+	return val === '' || EMAIL.test(val) || ValidationMessage.email;
 }
 
 const Undefined = {};
@@ -376,11 +388,10 @@ const FieldBase = (
 				label$floating$novalue$outline: { translateY: 27 },
 			}}
 		</Style>
-		<div className="mask">
-			<div className="label">
-				<Slot selector="cxl-label" />
-			</div>
-		</div>
+		<div className="mask"></div>
+		<label className="label">
+			<Slot selector="cxl-label" />
+		</label>
 		<div className="content">
 			<slot />
 		</div>
@@ -434,10 +445,20 @@ export class Label {
 	render(host => {
 		const invalid = be(false);
 		const invalidMessage = be('');
+		const labelText = be('');
 		let input: InputBase;
 
 		function onRegister(ev: Event) {
-			if (ev.target) input = ev.target as InputBase;
+			if (ev.target) {
+				input = ev.target as InputBase;
+				if (!input.hasAttribute('aria-label') && labelText.value) {
+					input.setAttribute('aria-label', labelText.value);
+					input.focusElement?.setAttribute(
+						'aria-label',
+						labelText.value
+					);
+				}
+			}
 		}
 
 		function update(ev: any) {
@@ -458,6 +479,14 @@ export class Label {
 		}
 
 		const hostBindings = merge(
+			labelText.tap(val => input?.setAttribute('aria-label', val)),
+			onChildrenMutation(host).tap(
+				ev =>
+					ev.type === 'added' &&
+					ev.value &&
+					ev.value.tagName === 'CXL-LABEL' &&
+					labelText.next(ev.value.innerText)
+			),
 			on(host, 'form.register').pipe(tap(onRegister)),
 			on(host, 'focusable.touched').pipe(tap(update)),
 			on(host, 'focusable.focus').pipe(tap(update)),
@@ -660,9 +689,7 @@ export class FocusLine extends Component {
 				host.submit();
 				ev.stopPropagation();
 			}),
-			registableHost<InputBase>(host, 'form').tap(
-				val => (host.elements = val)
-			),
+			registableHost<InputBase>(host, 'form', host.elements),
 			keypress(host, 'enter').tap(ev => {
 				host.submit();
 				ev.preventDefault();
@@ -675,19 +702,17 @@ export class Form extends Component {
 	@Attribute()
 	autocomplete = 'off';
 
-	elements?: Set<InputBase>;
+	elements = new Set<InputBase>();
 
 	submit() {
-		if (this.elements) {
-			let focus: InputBase | undefined;
+		let focus: InputBase | undefined;
 
-			for (const el of this.elements) {
-				if (el.invalid) focus = focus || el;
-				el.touched = true;
-			}
-
-			if (focus) return focus.focus();
+		for (const el of this.elements) {
+			if (el.invalid) focus = focus || el;
+			el.touched = true;
 		}
+
+		if (focus) return focus.focus();
 		trigger(this, 'submit');
 	}
 }
