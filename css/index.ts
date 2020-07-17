@@ -404,7 +404,9 @@ function renderColor(
 	value: Color
 ) {
 	style[prop] =
-		value in theme.colors ? `var(--cxl-${value})` : value.toString();
+		value in theme.colors
+			? `var(--cxl-${toSnake(value.toString())})`
+			: value.toString();
 }
 
 function renderDefault(style: CSSStyle, prop: any, value: string | number) {
@@ -478,14 +480,13 @@ const renderMap: StyleMap = {
 	scaleY: renderTransform,
 	rotate: renderTransform,
 	variables(
-		def: StyleDefinition,
-		_style: CSSStyle,
+		_def: StyleDefinition,
+		style: CSSStyle,
 		_p: any,
 		value: VariableList
 	) {
-		let result = ':host {';
-		for (const i in value) result += `--cxl-${i}: ${(value as any)[i]};`;
-		def.prepend = (def.prepend || '') + result + '}';
+		for (const i in value)
+			(style as any)[`--cxl-${toSnake(i)}`] = (value as any)[i];
 	},
 	zIndex: renderNumber,
 };
@@ -539,8 +540,10 @@ export function applyTheme() {
 	const { variables, colors } = theme;
 
 	let result = ':root{background-color:var(--cxl-background);';
-	for (const i in colors) result += `--cxl-${i}:${(colors as any)[i]};`;
-	for (const i in variables) result += `--cxl-${i}:${(variables as any)[i]};`;
+	for (const i in colors)
+		result += `--cxl-${toSnake(i)}:${(colors as any)[i]};`;
+	for (const i in variables)
+		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
 
 	rootStyles.innerHTML = result + '}';
 	document.head.appendChild(rootStyles);
