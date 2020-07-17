@@ -2,12 +2,14 @@ import {
 	Augment,
 	Component,
 	Attribute,
+	AttributeEvent,
 	StyleAttribute,
 	update,
 	role,
 } from '../component/index.js';
 import { Style, margin, padding } from '../css/index.js';
 import { dom, Host } from '../xdom/index.js';
+import { operator } from '../rx/index.js';
 
 const colStyles = ((r: any) => {
 	for (let i = 12; i > 0; i--)
@@ -25,6 +27,26 @@ const colStyles = ((r: any) => {
 	sm: {},
 	xs: {},
 });
+
+function persistWithParameter(prefix: string) {
+	return operator<AttributeEvent<any>>(() => {
+		let lastAttr: string;
+		return ({ value, target }) => {
+			if (value === undefined) {
+				if (target.hasAttribute(lastAttr))
+					target.removeAttribute(lastAttr);
+			} else {
+				const attr = `${prefix}${value}`;
+
+				if (lastAttr !== attr) {
+					target.removeAttribute(lastAttr);
+					target.setAttribute(attr, '');
+					lastAttr = attr;
+				}
+			}
+		};
+	});
+}
 
 @Augment(
 	'cxl-c',
@@ -81,6 +103,27 @@ const colStyles = ((r: any) => {
 export class C extends Component {
 	@StyleAttribute()
 	pad16 = false;
+
+	@Attribute({
+		persistOperator: persistWithParameter('xs'),
+	})
+	xs?: number;
+	@Attribute({
+		persistOperator: persistWithParameter('sm'),
+	})
+	sm?: number;
+	@Attribute({
+		persistOperator: persistWithParameter('md'),
+	})
+	md?: number;
+	@Attribute({
+		persistOperator: persistWithParameter('lg'),
+	})
+	lg?: number;
+	@Attribute({
+		persistOperator: persistWithParameter('xl'),
+	})
+	xl?: number;
 }
 
 @Augment(

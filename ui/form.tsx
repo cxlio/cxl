@@ -715,6 +715,14 @@ export class Form extends Component {
 		if (focus) return focus.focus();
 		trigger(this, 'submit');
 	}
+
+	getFormData() {
+		const result: Record<string, any> = {};
+
+		for (const el of this.elements) if (el.name) result[el.name] = el.value;
+
+		return result;
+	}
 }
 
 /**
@@ -1316,7 +1324,6 @@ function $contentEditable(el: HTMLElement, ctx: RenderContext<InputBase>) {
 					minHeight: 20,
 					lineHeight: 20,
 					color: 'onSurface',
-					backgroundColor: 'surface',
 					outline: 'none',
 				},
 			}}
