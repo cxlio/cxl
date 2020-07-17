@@ -529,6 +529,26 @@ export function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
 }
 
 /**
+ * Emits only the first count values emitted by the source Observable.
+ */
+export function take<T>(howMany: number) {
+	return operator((subs: Subscription<T>) => (val: T) => {
+		if (howMany-- > 0) subs.next(val);
+		if (howMany <= 0) subs.complete();
+	});
+}
+
+/**
+ * Emits only the first value emitted by the source Observable.
+ */
+export function first<T>() {
+	return operator((subs: Subscription<T>) => (val: T) => {
+		subs.next(val);
+		subs.complete();
+	});
+}
+
+/**
  * Perform a side effect for every emission on the source Observable,
  * but return an Observable that is identical to the source.
  */
@@ -689,6 +709,8 @@ const operators: any = {
 	mergeMap,
 	switchMap,
 	catchError,
+	first,
+	take,
 };
 
 for (const p in operators) {
@@ -709,4 +731,6 @@ export interface Observable<T> {
 	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	tap(tapFn: (val: T) => void): Observable<T>;
+	first(): Observable<T>;
+	take(howMany: number): Observable<T>;
 }
