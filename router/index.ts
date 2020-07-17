@@ -34,7 +34,7 @@ export interface RouteDefinition<T extends Element> {
 function routeToRegExp(route: string): [RegExp, string[]] {
 	const names: string[] = [],
 		result = new RegExp(
-			'^' +
+			'^/?' +
 				route
 					.replace(escapeRegExp, '\\$&')
 					.replace(optionalParam, '(?:$1)?')
@@ -62,6 +62,8 @@ class Fragment {
 	parameters: string[];
 
 	constructor(public path: string) {
+		if (path[0] === '/') path = path.slice(1);
+
 		[this.regex, this.parameters] = routeToRegExp(path);
 	}
 
