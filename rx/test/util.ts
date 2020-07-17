@@ -9,7 +9,7 @@ class Scheduler extends Subject<any> {
 	time = 0;
 	run() {
 		let maxCycles = 100;
-		while (this.subscriptions.size && maxCycles-- > 0) {
+		while (this.observers.size && maxCycles-- > 0) {
 			this.next(this.time++);
 		}
 		this.time = 0;

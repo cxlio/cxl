@@ -1,8 +1,9 @@
-import { dom, Host } from '../xdom/index.js';
+import { dom } from '../xdom/index.js';
 import {
 	Augment,
 	Attribute,
 	Component,
+	Host,
 	Slot,
 	StyleAttribute,
 	bind,
@@ -404,8 +405,7 @@ export class Menu extends Component {
 		}}
 	</Style>,
 	tpl(() => {
-		function init(el: any, ctx: any) {
-			const host = ctx.host;
+		function init(el: any, host: Item) {
 			return merge(
 				get(host, 'href').tap(val => (el.href = val)),
 				onAction(host)

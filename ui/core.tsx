@@ -2,6 +2,7 @@ import {
 	Attribute,
 	Augment,
 	Component,
+	Host,
 	Slot,
 	StyleAttribute,
 	attributeChanged,
@@ -11,7 +12,7 @@ import {
 	render,
 	role,
 } from '../component/index.js';
-import { Host, RenderContext, dom, normalizeChildren } from '../xdom/index.js';
+import { RenderContext, dom, normalizeChildren } from '../xdom/index.js';
 import { Observable, debounceTime, defer, merge, tap } from '../rx/index.js';
 import {
 	Style,
@@ -219,8 +220,8 @@ const stateStyles = new StyleSheet({ styles: StateStyles });
  * Adds focusable functionality to input components.
  */
 export function Focusable() {
-	return (view: RenderContext) => {
-		view.bind(focusable(view.host as FocusableComponent));
+	return (host: RenderContext) => {
+		host.bind(focusable(host as FocusableComponent));
 		return stateStyles.clone();
 	};
 }
@@ -257,7 +258,7 @@ interface SelectableComponent extends Component {
 
 export function aria(prop: string, value: string) {
 	return (ctx: RenderContext) =>
-		ctx.bind(defer(() => ctx.host.setAttribute(`aria-${prop}`, value)));
+		ctx.bind(defer(() => ctx.setAttribute(`aria-${prop}`, value)));
 }
 
 export function ariaProp(host: Element, prop: string) {
@@ -371,15 +372,15 @@ export function selectable<T extends SelectableComponent>(host: T) {
 			}}
 		</Style>
 		<div
-			$={(el, view: RenderContext<Ripple>) => {
+			$={(el, ctx) => {
 				return merge(
-					onUpdate(view.host, host => {
+					onUpdate(ctx as Ripple, host => {
 						const style = el.style;
 						style.left = host.x - host.radius + 'px';
 						style.top = host.y - host.radius + 'px';
 						style.width = style.height = host.radius * 2 + 'px';
 					}),
-					on(el, 'animationend').pipe(tap(() => remove(view.host)))
+					on(el, 'animationend').pipe(tap(() => remove(ctx)))
 				);
 			}}
 			className="ripple"
@@ -546,9 +547,7 @@ export class Avatar extends Component {
 			<slot></slot>
 		</span>
 		<span
-			$={(el, view) =>
-				on(el, 'click').pipe(tap(() => view.host.remove()))
-			}
+			$={(el, host) => on(el, 'click').pipe(tap(() => host.remove()))}
 			className="remove"
 		>
 			x
@@ -979,8 +978,8 @@ export class Button extends ButtonBase {}
 
 function Head(p: { children: any }) {
 	const children = normalizeChildren(p.children);
-	return (ctx: any) => {
-		const head = ctx.host.ownerDocument.head;
+	return (ctx: RenderContext) => {
+		const head = ctx.ownerDocument.head;
 		children.forEach(child => head.appendChild(child(ctx)));
 	};
 }

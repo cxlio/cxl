@@ -1,5 +1,11 @@
-import { dom, Host } from '../xdom/index.js';
-import { Augment, Component, Attribute, role } from '../component/index.js';
+import { dom } from '../xdom/index.js';
+import {
+	Augment,
+	Component,
+	Host,
+	Attribute,
+	role,
+} from '../component/index.js';
 import { Style, registerFont, theme } from '../css/index.js';
 import { getShadow } from '../dom/index.js';
 

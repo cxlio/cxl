@@ -3,12 +3,13 @@ import {
 	StyleAttribute,
 	Augment,
 	Component,
+	Host,
 	connect,
 	role,
 	get,
 } from '../component/index.js';
 import { Style, padding, pct } from '../css/index.js';
-import { dom, Host } from '../xdom/index.js';
+import { dom } from '../xdom/index.js';
 import { tpl } from '../template/index.js';
 import { on, trigger, remove } from '../dom/index.js';
 import { tap, merge } from '../rx/index.js';
@@ -248,23 +249,23 @@ export class DialogConfirm extends Component {
 		</Style>
 		<Backdrop
 			className="backdrop"
-			$={(el, view) =>
+			$={(el, host) =>
 				on(el, 'click').pipe(
 					tap(() => {
-						trigger(view.host, 'backdrop.click');
-						view.host.visible = false;
+						trigger(host, 'backdrop.click');
+						host.visible = false;
 					})
 				)
 			}
 		/>
 		<div
-			$={(el, view) =>
+			$={(el, host) =>
 				merge(
 					on(el, 'drawer.close').pipe(
-						tap(() => (view.host.visible = false))
+						tap(() => (host.visible = false))
 					),
 					on(el, 'click').pipe(tap(ev => ev.stopPropagation())),
-					get(view.host, 'visible').tap(visible => {
+					get(host, 'visible').tap(visible => {
 						if (!visible && el.scrollTop !== 0) el.scrollTo(0, 0);
 					})
 				)

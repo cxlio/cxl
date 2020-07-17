@@ -1,5 +1,5 @@
 import * as Terser from 'terser';
-import { Observable, defer, operator, tap } from '../rx/index.js';
+import { EMPTY, Observable, defer, operator, tap } from '../rx/index.js';
 import {
 	dirname,
 	join,
@@ -152,7 +152,9 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			outputDir,
 			tasks: [
 				eslint(),
-				file(`${outputDir}/index.js`).pipe(minify()),
+				packageJson.browser
+					? file(`${outputDir}/index.js`).pipe(minify())
+					: EMPTY,
 				pkg(),
 			],
 		},
@@ -240,6 +242,7 @@ const builder = new Builder();
 export async function build(...targets: BuildConfiguration[]) {
 	if (!targets) throw new Error('Invalid configuration');
 	if (!builder.started) await builder.start();
+
 	return targets.reduce(
 		(result, config) => result.then(() => builder.build(config)),
 		Promise.resolve()

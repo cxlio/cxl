@@ -71,7 +71,7 @@ export default suite('component', test => {
 		a.ok(el instanceof HTMLSlotElement);
 	});
 
-	test('bind', a => {
+	test('bind()', a => {
 		const id = 'cxl-test' + a.id;
 		function bindTest(node: Test) {
 			a.equal(node.tagName, id.toUpperCase());
@@ -83,7 +83,7 @@ export default suite('component', test => {
 			static tagName = id;
 		}
 
-		const el = render(<Test></Test>).element as Test;
+		const el = render<Test>(<Test></Test>).element;
 		a.dom.appendChild(el);
 		a.equal(el.title, 'hello');
 		a.ran(2);

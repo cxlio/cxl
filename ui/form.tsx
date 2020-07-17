@@ -3,6 +3,7 @@ import {
 	Augment,
 	Attribute,
 	Component,
+	Host,
 	Slot,
 	attributeChanged,
 	bind,
@@ -25,7 +26,7 @@ import {
 	selectable,
 	selectableHost,
 } from './core.js';
-import { dom, Host, RenderContext } from '../xdom/index.js';
+import { dom } from '../xdom/index.js';
 import {
 	onAction,
 	onValue,
@@ -1137,9 +1138,9 @@ export class SelectMenu extends Component {
 					}}
 				</Style>
 				<SelectMenu
-					visible={(_el, ctx) => get(ctx.host, 'opened')}
-					host={(_el, ctx) => of(ctx.host)}
-					selected={(_el, ctx) => get(ctx.host, 'selected')}
+					visible={(_el, host) => get(host, 'opened')}
+					host={(_el, host) => of(host)}
+					selected={(_el, host) => get(host, 'selected')}
 					className="selectMenu"
 				>
 					<slot />
@@ -1263,42 +1264,32 @@ export class Switch extends InputBase {
 	'false-value': any = false;
 }
 
-function $focusProxy(el: HTMLElement, ctx: RenderContext<InputBase>) {
-	const host = ctx.host;
+function $focusProxy(el: HTMLElement, host: InputBase) {
 	host.focusElement = el;
 	return focusable(host, el);
-	/*merge(
-		on(el, 'focus').pipe(triggerEvent(host, 'focusable.focus')),
-		on(el, 'blur').tap(() => {
-			host.touched = true;
-			trigger(host, 'focusable.blur');
-		})
-	);*/
 }
 
-function $valueProxy(el: HTMLInputElement, ctx: RenderContext<InputBase>) {
-	const host = ctx.host;
+function $valueProxy(el: HTMLInputElement, host: InputBase) {
 	return merge(
-		$focusProxy(el, ctx),
+		$focusProxy(el, host),
 		get(host, 'value').tap(val => {
 			if (el.value !== val) el.value = val;
 		}),
 		get(host, 'disabled').tap(val => (el.disabled = val)),
-		onValue(el).tap(() => (ctx.host.value = el.value))
+		onValue(el).tap(() => (host.value = el.value))
 	);
 }
 
-function $contentEditable(el: HTMLElement, ctx: RenderContext<InputBase>) {
-	const host = ctx.host;
+function $contentEditable(el: HTMLElement, host: InputBase) {
 	return merge(
-		$focusProxy(el, ctx),
+		$focusProxy(el, host),
 		get(host, 'value').tap(val => {
 			if (el.textContent !== val) el.textContent = val;
 		}),
 		get(host, 'disabled').tap(
 			val => (el.contentEditable = val ? 'false' : 'true')
 		),
-		on(el, 'input').tap(() => (ctx.host.value = el.textContent))
+		on(el, 'input').tap(() => (host.value = el.textContent))
 	);
 }
 

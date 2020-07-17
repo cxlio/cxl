@@ -144,7 +144,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 
 	element?: Node;
 	observer?: MutationObserver;
-	bindings?: Subscription<any>[];
+	bindings?: Subscription[];
 
 	$onMutation(events: MutationRecord[]) {
 		events.forEach(
@@ -194,7 +194,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 	}
 
 	unsubscribe() {
-		if (this.subscriptions.size === 0) this.disconnect();
+		if (this.observers.size === 0) this.disconnect();
 	}
 
 	disconnect() {
@@ -297,7 +297,7 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 	}
 
 	unsubscribe() {
-		if (this.subscriptions.size === 0 && this.observer)
+		if (this.observers.size === 0 && this.observer)
 			this.observer.disconnect();
 	}
 

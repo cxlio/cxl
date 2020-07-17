@@ -1,12 +1,10 @@
 {
 	"name": "@cxl/dts",
 	"description": "Generate a simplified AST from typescript source code",
-	"home": "https://coaxialhost.com/dts",
 	"license": "GPL-3.0-only",
 	"version": "0.0.1",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "node ../dist/build && cd ../dist/dts && node ../tester --node",
-		"docs": "node ../dist/build -- docs"
+		"test": "node ../dist/build && cd ../dist/dts && node ../tester --node"
 	}
 }

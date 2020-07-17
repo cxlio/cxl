@@ -27,9 +27,9 @@ export type AttributeType<T> =
 			children?: any;
 	  };
 
-type Binding<ElementT = HTMLElement, DataT = any> = (
+export type Binding<ElementT = any, HostT = any, DataT = any> = (
 	el: ElementT,
-	ctx: any
+	ctx: HostT
 ) => Observable<DataT>;
 type ComponentFunction = (
 	attributes?: any,
@@ -45,8 +45,7 @@ interface Component {
 	jsxAttributes?: any;
 }
 
-export interface RenderContext<T = HTMLElement> {
-	host: T;
+export interface RenderContext extends HTMLElement {
 	bind(binding: Observable<any>): void;
 }
 
@@ -61,7 +60,7 @@ function expression(binding: Observable<any>) {
 }
 
 function binding(bindingFn: Binding) {
-	return (ctx: RenderContext) => expression(bindingFn(ctx.host, ctx))(ctx);
+	return (ctx: RenderContext) => expression(bindingFn(ctx, ctx))(ctx);
 }
 
 export function normalizeChildren(children: any, result?: JSXElement[]) {
@@ -129,7 +128,7 @@ class NativeElement {
 				bindings.push(
 					i === '$'
 						? value
-						: (el: any, ctx: any) =>
+						: (el: any, ctx: RenderContext) =>
 								value(el, ctx).tap((val: any) => (el[i] = val))
 				);
 			else {
@@ -234,7 +233,7 @@ export function dom(
 }
 
 export class View<T> {
-	private subscriptions?: Subscription<T>[];
+	private subscriptions?: Subscription[];
 	constructor(public element: T, private bindings: Observable<any>[]) {}
 	connect() {
 		if (!this.subscriptions)
@@ -245,44 +244,23 @@ export class View<T> {
 	}
 }
 
-export class View2<T> extends Observable<T> {
-	host: T;
-	constructor(host: T, bindings: Observable<any>[]) {
-		let subscriptions: Subscription<T>[];
-		super(() => {
-			subscriptions = bindings.map(b => b.subscribe());
-			return () => subscriptions.forEach(s => s.unsubscribe());
-		});
+export function render<T extends HTMLElement>(
+	tpl: JSXElement<T>,
+	host?: RenderContext
+) {
+	const bindings: Observable<any>[] = [];
+	const ctx = host || (document.createElement('div') as any);
+	ctx.bind = (b: Observable<any>) => {
+		bindings.push(b);
+	};
+	const element = tpl(ctx);
 
-		this.host = host;
-	}
-}
-
-export class Context<T> {
-	private bindings?: Observable<any>[];
-	constructor(public host: T) {}
-	bind(b: Observable<any>) {
-		if (!this.bindings) this.bindings = [];
-		this.bindings.push(b);
-	}
-}
-
-export function render<T>(tpl: JSXElement<T>, host?: HTMLElement) {
-	const bindings: Observable<any>[] = [],
-		context = {
-			host: host || document.body,
-			bind(b: Observable<any>) {
-				bindings.push(b);
-			},
-		},
-		element = tpl(context) as T;
-
-	if (host) host.appendChild(element as any);
+	if (host) host.appendChild(element);
 
 	return new View(element, bindings);
 }
 
-export function connect<T>(
+export function connect<T extends HTMLElement>(
 	tpl: JSXElement<T>,
 	fn: (el: T) => Promise<any> | Observable<any> | void
 ) {
@@ -298,25 +276,4 @@ export class Fragment {
 	static create() {
 		return document.createDocumentFragment();
 	}
-}
-
-export function Host({
-	$,
-	children,
-}: {
-	$?: (node: any, ctx: RenderContext) => Observable<any>;
-	children: any;
-}) {
-	const normalizedChildren = normalizeChildren(children);
-	return (ctx: RenderContext) => {
-		if ($) ctx.bind($(ctx.host, ctx));
-
-		const shadow =
-			ctx.host.shadowRoot || ctx.host.attachShadow({ mode: 'open' });
-		normalizedChildren.forEach(c => {
-			const el = c(ctx);
-			if (el) shadow.appendChild(el);
-		});
-		return ctx.host;
-	};
 }

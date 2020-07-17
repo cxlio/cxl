@@ -16,7 +16,7 @@ import {
 	ParsedCommandLine,
 	sys,
 } from 'typescript';
-import { Subscription, Observable } from '../rx';
+import { Subscriber, Observable } from '../rx';
 export { version as tscVersion } from 'typescript';
 
 interface Output {
@@ -113,7 +113,7 @@ function parseTsConfig(tsconfig: string) {
 
 export function tsbuild(
 	tsconfig = 'tsconfig.json',
-	subs: Subscription<Output>,
+	subs: Subscriber<Output>,
 	options: BuildOptions = {}
 ) {
 	const parsed = parseTsConfig(tsconfig);

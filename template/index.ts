@@ -21,6 +21,7 @@ import {
 	switchMap,
 	tap,
 } from '../rx/index.js';
+import type { RenderContext } from '../xdom/index.js';
 
 export function getAttribute<T extends Node, K extends keyof T>(
 	el: T,
@@ -133,16 +134,12 @@ export function teleport(el: HTMLElement, portalName: string) {
 	portals.get(portalName)?.appendChild(el);
 }
 
-interface RenderContext<T> {
-	host: T;
-	bind(binding: Observable<any>): void;
-}
-
 type Pipe<ElementT, HostT> = (
 	el: ElementT,
-	ctx: RenderContext<HostT>
+	ctx: HostT
 ) => void | Observable<any>;
-type Binding<T, T2> = (el: T, ctx: RenderContext<T2>) => Observable<any>;
+
+type Binding<T, T2> = (el: T, ctx: T2) => Observable<any>;
 
 interface Sources<E, H> {
 	get(attr: keyof H, cb?: Pipe<E, H>): Binding<E, H>;
@@ -153,7 +150,7 @@ interface Sources<E, H> {
 
 function chain<T, T2>(source: Binding<T, T2>, pipe?: Pipe<T, T2>) {
 	const result = pipe
-		? (el: T, ctx: RenderContext<T2>) =>
+		? (el: T, ctx: T2) =>
 				source(el, ctx).pipe(switchMap(() => pipe(el, ctx) || EMPTY))
 		: source;
 	(result as any).cxlBinding = true;
@@ -161,14 +158,13 @@ function chain<T, T2>(source: Binding<T, T2>, pipe?: Pipe<T, T2>) {
 }
 
 const sources: Sources<any, any> = {
-	get: (attr, pipe) =>
-		chain((_el, ctx) => getAttribute(ctx.host, attr), pipe),
+	get: (attr, pipe) => chain((_el, ctx) => getAttribute(ctx, attr), pipe),
 	onAction: pipe => chain(el => onAction(el), pipe),
 	on: (ev, pipe) => chain(el => on(el, ev), pipe),
 	call: (method, pipe) => chain((_e, ctx) => ctx.host[method](), pipe),
 };
 
-type Renderable<T> = (ctx: RenderContext<T>) => any;
+type Renderable<T> = (ctx: T) => any;
 
 export function tpl<ElementT, HostT extends HTMLElement>(
 	fn: (helper: Sources<ElementT, HostT>) => Renderable<HostT>
@@ -212,7 +208,7 @@ class Marker {
 
 class Context {
 	private bindings: Observable<any>[] = [];
-	private subscriptions?: Subscription<any>[];
+	private subscriptions?: Subscription[];
 
 	constructor(public host: any) {}
 
@@ -241,9 +237,9 @@ export function list<T>(
 	source: Observable<T[]>,
 	renderFn: (item: T) => Renderable<any>
 ) {
-	return (ctx: RenderContext<any>) => {
+	return (ctx: RenderContext) => {
 		const marker = new Marker();
-		const context = new Context(ctx.host);
+		const context = new Context(ctx);
 
 		ctx.bind(
 			new Observable<void>(() => {

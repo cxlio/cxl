@@ -15,6 +15,7 @@ export interface Package {
 	license: License;
 	files: string[];
 	main: string;
+	browser?: string;
 	homepage: string;
 	private: boolean;
 	bugs: string;
@@ -88,6 +89,7 @@ function packageJson(p: any) {
 				license: p.license,
 				files: ['*.js', '*.d.ts', '*.js.map', 'LICENSE', '*.md'],
 				main: 'index.js',
+				browser: p.browser,
 				homepage: p.homepage,
 				bugs: p.bugs,
 				repository: p.repository && getRepo(p.repository),

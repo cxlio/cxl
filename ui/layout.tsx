@@ -3,12 +3,13 @@ import {
 	Component,
 	Attribute,
 	AttributeEvent,
+	Host,
 	StyleAttribute,
 	update,
 	role,
 } from '../component/index.js';
 import { Style, margin, padding } from '../css/index.js';
-import { dom, Host } from '../xdom/index.js';
+import { dom } from '../xdom/index.js';
 import { operator } from '../rx/index.js';
 
 const colStyles = ((r: any) => {

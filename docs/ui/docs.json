@@ -5477,7 +5477,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1326,
+                "line": 1325,
                 "ch": 41
               },
               "kind": 1006,
@@ -5508,7 +5508,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1329,
+            "line": 1328,
             "ch": 1
           },
           "kind": 1005,
@@ -5531,7 +5531,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1368,
+                "line": 1367,
                 "ch": 36
               },
               "kind": 1006,
@@ -5548,7 +5548,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1370,
+                "line": 1369,
                 "ch": 18
               },
               "kind": 1006,
@@ -5565,7 +5565,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1372,
+                "line": 1371,
                 "ch": 16
               },
               "kind": 159,
@@ -32786,30 +32786,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 79,
-                "ch": 34
-              },
-              "kind": 159,
-              "name": "tagName",
-              "flags": 36,
-              "id": 1274,
-              "value": "'cxl-c'",
-              "type": {
-                "name": "string",
-                "kind": 1002,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "layout.tsx",
                 "line": 80,
-                "ch": 26
+                "ch": 34
               },
               "kind": 1006,
               "name": "pad16",
               "flags": 4,
-              "id": 1275,
+              "id": 1274,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -32837,7 +32820,7 @@
           "id": 275,
           "source": {
             "fileName": "layout.tsx",
-            "line": 84,
+            "line": 83,
             "ch": 1
           },
           "kind": 1005,
@@ -32850,27 +32833,10 @@
                 "line": 116,
                 "ch": 40
               },
-              "kind": 159,
-              "name": "tagName",
-              "flags": 36,
-              "id": 1276,
-              "value": "'cxl-content'",
-              "type": {
-                "name": "string",
-                "kind": 1002,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "layout.tsx",
-                "line": 117,
-                "ch": 32
-              },
               "kind": 1006,
               "name": "center",
               "flags": 4,
-              "id": 1277,
+              "id": 1275,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -32898,7 +32864,7 @@
           "id": 276,
           "source": {
             "fileName": "layout.tsx",
-            "line": 120,
+            "line": 119,
             "ch": 1
           },
           "kind": 1005,
@@ -32924,7 +32890,7 @@
           "id": 277,
           "source": {
             "fileName": "layout.tsx",
-            "line": 153,
+            "line": 152,
             "ch": 38
           },
           "kind": 1005,
@@ -32956,31 +32922,13 @@
           "id": 278,
           "source": {
             "fileName": "layout.tsx",
-            "line": 187,
+            "line": 186,
             "ch": 38
           },
           "kind": 1005,
           "name": "List",
           "flags": 1,
-          "children": [
-            {
-              "source": {
-                "fileName": "layout.tsx",
-                "line": 202,
-                "ch": 37
-              },
-              "kind": 159,
-              "name": "tagName",
-              "flags": 36,
-              "id": 1278,
-              "value": "'cxl-list'",
-              "type": {
-                "name": "string",
-                "kind": 1002,
-                "flags": 0
-              }
-            }
-          ],
+          "children": [],
           "docs": {
             "tagName": "cxl-list",
             "role": "list"
@@ -33001,8 +32949,8 @@
           "id": 279,
           "source": {
             "fileName": "layout.tsx",
-            "line": 204,
-            "ch": 1
+            "line": 202,
+            "ch": 38
           },
           "kind": 1005,
           "name": "Grid",
@@ -33020,30 +32968,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 231,
+                "line": 230,
                 "ch": 37
-              },
-              "kind": 159,
-              "name": "tagName",
-              "flags": 36,
-              "id": 1279,
-              "value": "'cxl-grid'",
-              "type": {
-                "name": "string",
-                "kind": 1002,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "layout.tsx",
-                "line": 232,
-                "ch": 29
               },
               "kind": 1006,
               "name": "rows",
               "flags": 4,
-              "id": 1280,
+              "id": 1276,
               "type": {
                 "name": "number",
                 "kind": 1002,
@@ -33053,13 +32984,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 235,
+                "line": 232,
                 "ch": 15
               },
               "kind": 1006,
               "name": "columns",
               "flags": 4,
-              "id": 1281,
+              "id": 1277,
               "value": "'repeat(12, 1fr)'",
               "type": {
                 "name": "string",
@@ -33070,13 +33001,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 238,
+                "line": 235,
                 "ch": 29
               },
               "kind": 1006,
               "name": "gap",
               "flags": 4,
-              "id": 1282,
+              "id": 1278,
               "value": "16",
               "type": {
                 "name": "number",
@@ -33146,7 +33077,7 @@
               "kind": 1006,
               "name": "extended",
               "flags": 4,
-              "id": 1283,
+              "id": 1279,
               "docs": {
                 "content": [
                   {
@@ -33171,7 +33102,7 @@
               "kind": 1006,
               "name": "center",
               "flags": 4,
-              "id": 1284,
+              "id": 1280,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33221,7 +33152,7 @@
               "kind": 1006,
               "name": "extended",
               "flags": 4,
-              "id": 1285,
+              "id": 1281,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33276,7 +33207,7 @@
               "kind": 159,
               "name": "tagName",
               "flags": 36,
-              "id": 1286,
+              "id": 1282,
               "value": "'cxl-tab'",
               "type": {
                 "name": "string",
@@ -33293,7 +33224,7 @@
               "kind": 1006,
               "name": "href",
               "flags": 4,
-              "id": 1287,
+              "id": 1283,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -33309,7 +33240,7 @@
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1288,
+              "id": 1284,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33364,7 +33295,7 @@
               "kind": 159,
               "name": "tagName",
               "flags": 36,
-              "id": 1289,
+              "id": 1285,
               "value": "'cxl-tabs'",
               "type": {
                 "name": "string",
@@ -33381,7 +33312,7 @@
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1290,
+              "id": 1286,
               "type": {
                 "id": 282,
                 "name": "Tab",
@@ -33410,7 +33341,7 @@
           "kind": 1001,
           "name": "MenuIcon",
           "flags": 0,
-          "id": 1291,
+          "id": 1287,
           "value": "(\n\t<Svg\n\t\tviewBox=\"0 0 24 24\"\n\t\twidth={24}\n\t>{`<path style=\"fill:currentColor\" d=\"M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z\" />`}</Svg>\n)",
           "type": {
             "name": "JSXElement",
@@ -33444,7 +33375,7 @@
               "kind": 159,
               "name": "tagName",
               "flags": 36,
-              "id": 1292,
+              "id": 1288,
               "value": "'cxl-navbar'",
               "type": {
                 "name": "string",
@@ -33461,7 +33392,7 @@
               "kind": 1006,
               "name": "permanent",
               "flags": 4,
-              "id": 1293,
+              "id": 1289,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33478,7 +33409,7 @@
               "kind": 1006,
               "name": "drawer",
               "flags": 4,
-              "id": 1294,
+              "id": 1290,
               "type": {
                 "id": 271,
                 "name": "Drawer",
@@ -33531,7 +33462,7 @@
               "kind": 159,
               "name": "tagName",
               "flags": 36,
-              "id": 1295,
+              "id": 1291,
               "value": "'cxl-menu'",
               "type": {
                 "name": "string",
@@ -33548,7 +33479,7 @@
               "kind": 1006,
               "name": "closed",
               "flags": 4,
-              "id": 1296,
+              "id": 1292,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33565,7 +33496,7 @@
               "kind": 1006,
               "name": "dense",
               "flags": 4,
-              "id": 1297,
+              "id": 1293,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33606,7 +33537,7 @@
               "kind": 159,
               "name": "tagName",
               "flags": 36,
-              "id": 1298,
+              "id": 1294,
               "value": "'cxl-item'",
               "type": {
                 "name": "string",
@@ -33623,7 +33554,7 @@
               "kind": 1006,
               "name": "href",
               "flags": 4,
-              "id": 1299,
+              "id": 1295,
               "value": "''",
               "type": {
                 "name": "string",
@@ -33640,7 +33571,7 @@
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1300,
+              "id": 1296,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33657,7 +33588,7 @@
               "kind": 1006,
               "name": "disabled",
               "flags": 4,
-              "id": 1301,
+              "id": 1297,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33674,7 +33605,7 @@
               "kind": 1006,
               "name": "touched",
               "flags": 4,
-              "id": 1302,
+              "id": 1298,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33719,7 +33650,7 @@
           "kind": 244,
           "name": "onHeaderAction",
           "flags": 0,
-          "id": 1303,
+          "id": 1299,
           "parameters": [
             {
               "source": {
@@ -33730,7 +33661,7 @@
               "kind": 156,
               "name": "el",
               "flags": 0,
-              "id": 1304,
+              "id": 1300,
               "type": {
                 "id": 287,
                 "name": "Th",
@@ -33769,7 +33700,7 @@
           "kind": 244,
           "name": "onSort",
           "flags": 0,
-          "id": 1305,
+          "id": 1301,
           "parameters": [
             {
               "source": {
@@ -33780,7 +33711,7 @@
               "kind": 156,
               "name": "el",
               "flags": 0,
-              "id": 1306,
+              "id": 1302,
               "type": {
                 "name": "HTMLElement",
                 "kind": 169
@@ -33795,7 +33726,7 @@
               "kind": 156,
               "name": "view",
               "flags": 0,
-              "id": 1307,
+              "id": 1303,
               "type": {
                 "name": "ComponentView",
                 "kind": 169,
@@ -33873,7 +33804,7 @@
               "kind": 159,
               "name": "eventType",
               "flags": 4,
-              "id": 1308,
+              "id": 1304,
               "type": {
                 "source": {
                   "fileName": "table.tsx",
@@ -33894,7 +33825,7 @@
               "kind": 1006,
               "name": "width",
               "flags": 4,
-              "id": 1309,
+              "id": 1305,
               "type": {
                 "name": "number",
                 "kind": 1002,
@@ -33910,7 +33841,7 @@
               "kind": 1006,
               "name": "sortable",
               "flags": 4,
-              "id": 1310,
+              "id": 1306,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33927,7 +33858,7 @@
               "kind": 1006,
               "name": "'sort-order'",
               "flags": 4,
-              "id": 1311,
+              "id": 1307,
               "type": {
                 "source": {
                   "fileName": "table.tsx",
@@ -34034,7 +33965,7 @@
           "kind": 1005,
           "name": "Cell",
           "flags": 0,
-          "id": 1312,
+          "id": 1308,
           "children": [],
           "docs": {
             "role": "table-cell"
@@ -34083,7 +34014,7 @@
             "name": "",
             "children": [
               {
-                "id": 1312,
+                "id": 1308,
                 "name": "Cell",
                 "kind": 169
               }
@@ -34110,7 +34041,7 @@
               "kind": 159,
               "name": "selectEvent",
               "flags": 68,
-              "id": 1313,
+              "id": 1309,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -34127,7 +34058,7 @@
               "kind": 1006,
               "name": "checked",
               "flags": 4,
-              "id": 1314,
+              "id": 1310,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34142,7 +34073,7 @@
             "name": "",
             "children": [
               {
-                "id": 1312,
+                "id": 1308,
                 "name": "Cell",
                 "kind": 169
               }
@@ -34208,7 +34139,7 @@
               "kind": 159,
               "name": "selectEvent",
               "flags": 68,
-              "id": 1315,
+              "id": 1311,
               "value": "'datatable.selectAll'",
               "type": {
                 "name": "\"datatable.selectAll\"",
@@ -34258,7 +34189,7 @@
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1316,
+              "id": 1312,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34329,7 +34260,7 @@
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1317,
+              "id": 1313,
               "type": {
                 "name": "any",
                 "kind": 1002,
@@ -34437,7 +34368,7 @@
           "kind": 1001,
           "name": "DialogStyles",
           "flags": 0,
-          "id": 1318,
+          "id": 1314,
           "value": "(\n\t<Style>\n\t\t{{\n\t\t\tcontent: padding(16),\n\t\t\tfooter: padding(8),\n\t\t}}\n\t</Style>\n)",
           "type": {
             "name": "JSXElement",
@@ -34481,7 +34412,7 @@
               "kind": 159,
               "name": "resolve",
               "flags": 4,
-              "id": 1319,
+              "id": 1315,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -34491,7 +34422,7 @@
                 "kind": 170,
                 "name": "",
                 "flags": 0,
-                "id": 1320,
+                "id": 1316,
                 "type": {
                   "name": "void",
                   "kind": 1002,
@@ -34509,7 +34440,7 @@
               "kind": 1006,
               "name": "'title-text'",
               "flags": 4,
-              "id": 1321,
+              "id": 1317,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34526,7 +34457,7 @@
               "kind": 1006,
               "name": "message",
               "flags": 4,
-              "id": 1322,
+              "id": 1318,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34543,7 +34474,7 @@
               "kind": 1006,
               "name": "action",
               "flags": 4,
-              "id": 1323,
+              "id": 1319,
               "value": "'Ok'",
               "type": {
                 "name": "string",
@@ -34560,7 +34491,7 @@
               "kind": 159,
               "name": "promise",
               "flags": 68,
-              "id": 1324,
+              "id": 1320,
               "value": "new Promise(resolve => {\n\t\tthis.resolve = resolve;\n\t})",
               "type": {
                 "name": "Promise",
@@ -34617,7 +34548,7 @@
               "kind": 159,
               "name": "resolve",
               "flags": 4,
-              "id": 1325,
+              "id": 1321,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -34627,7 +34558,7 @@
                 "kind": 170,
                 "name": "",
                 "flags": 0,
-                "id": 1326,
+                "id": 1322,
                 "type": {
                   "name": "void",
                   "kind": 1002,
@@ -34645,7 +34576,7 @@
               "kind": 159,
               "name": "reject",
               "flags": 4,
-              "id": 1327,
+              "id": 1323,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -34655,7 +34586,7 @@
                 "kind": 170,
                 "name": "",
                 "flags": 0,
-                "id": 1328,
+                "id": 1324,
                 "type": {
                   "name": "void",
                   "kind": 1002,
@@ -34673,7 +34604,7 @@
               "kind": 1006,
               "name": "'cancel-text'",
               "flags": 4,
-              "id": 1329,
+              "id": 1325,
               "value": "'Cancel'",
               "type": {
                 "name": "string",
@@ -34690,7 +34621,7 @@
               "kind": 1006,
               "name": "'title-text'",
               "flags": 4,
-              "id": 1330,
+              "id": 1326,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34707,7 +34638,7 @@
               "kind": 1006,
               "name": "message",
               "flags": 4,
-              "id": 1331,
+              "id": 1327,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34724,7 +34655,7 @@
               "kind": 1006,
               "name": "action",
               "flags": 4,
-              "id": 1332,
+              "id": 1328,
               "value": "'Ok'",
               "type": {
                 "name": "string",
@@ -34741,7 +34672,7 @@
               "kind": 159,
               "name": "promise",
               "flags": 68,
-              "id": 1333,
+              "id": 1329,
               "value": "new Promise((resolve, reject) => {\n\t\tthis.resolve = resolve;\n\t\tthis.reject = reject;\n\t})",
               "type": {
                 "name": "Promise",
@@ -34797,7 +34728,7 @@
               "kind": 1006,
               "name": "visible",
               "flags": 4,
-              "id": 1334,
+              "id": 1330,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34814,7 +34745,7 @@
               "kind": 1006,
               "name": "right",
               "flags": 4,
-              "id": 1335,
+              "id": 1331,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34831,7 +34762,7 @@
               "kind": 1006,
               "name": "permanent",
               "flags": 4,
-              "id": 1336,
+              "id": 1332,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34881,7 +34812,7 @@
               "kind": 1006,
               "name": "delay",
               "flags": 4,
-              "id": 1337,
+              "id": 1333,
               "value": "4000",
               "type": {
                 "name": "number",
@@ -34922,7 +34853,7 @@
               "kind": 159,
               "name": "queue",
               "flags": 4,
-              "id": 1338,
+              "id": 1334,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -34949,7 +34880,7 @@
               "kind": 161,
               "name": "notifyNext",
               "flags": 8,
-              "id": 1339,
+              "id": 1335,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -34966,7 +34897,7 @@
               "kind": 161,
               "name": "notify",
               "flags": 4,
-              "id": 1340,
+              "id": 1336,
               "parameters": [
                 {
                   "source": {
@@ -34977,7 +34908,7 @@
                   "kind": 156,
                   "name": "snackbar",
                   "flags": 0,
-                  "id": 1341,
+                  "id": 1337,
                   "type": {
                     "id": 272,
                     "name": "Snackbar",
@@ -35028,7 +34959,7 @@
           "kind": 1001,
           "name": "routes",
           "flags": 0,
-          "id": 1342,
+          "id": 1338,
           "type": {
             "source": {
               "fileName": "router.tsx",
@@ -35061,7 +34992,7 @@
           "kind": 242,
           "name": "defaultRouter",
           "flags": 0,
-          "id": 1343,
+          "id": 1339,
           "type": {
             "name": "MainRouter",
             "kind": 169
@@ -35076,7 +35007,7 @@
           "kind": 244,
           "name": "Route",
           "flags": 1,
-          "id": 1344,
+          "id": 1340,
           "parameters": [
             {
               "source": {
@@ -35087,7 +35018,7 @@
               "kind": 156,
               "name": "path",
               "flags": 0,
-              "id": 1345,
+              "id": 1341,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35104,7 +35035,7 @@
             "kind": 244,
             "name": "",
             "flags": 0,
-            "id": 1346,
+            "id": 1342,
             "parameters": [
               {
                 "source": {
@@ -35115,7 +35046,7 @@
                 "kind": 156,
                 "name": "ctor",
                 "flags": 0,
-                "id": 1347,
+                "id": 1343,
                 "type": {
                   "name": "any",
                   "kind": 1002,
@@ -35139,7 +35070,7 @@
           "kind": 244,
           "name": "DefaultRoute",
           "flags": 1,
-          "id": 1348,
+          "id": 1344,
           "parameters": [
             {
               "source": {
@@ -35150,7 +35081,7 @@
               "kind": 156,
               "name": "path",
               "flags": 0,
-              "id": 1349,
+              "id": 1345,
               "value": "''",
               "type": {
                 "name": "string",
@@ -35168,7 +35099,7 @@
             "kind": 244,
             "name": "",
             "flags": 0,
-            "id": 1350,
+            "id": 1346,
             "parameters": [
               {
                 "source": {
@@ -35179,7 +35110,7 @@
                 "kind": 156,
                 "name": "ctor",
                 "flags": 0,
-                "id": 1351,
+                "id": 1347,
                 "type": {
                   "name": "any",
                   "kind": 1002,
@@ -35203,7 +35134,7 @@
           "kind": 244,
           "name": "Router",
           "flags": 1,
-          "id": 1352,
+          "id": 1348,
           "parameters": [
             {
               "source": {
@@ -35214,7 +35145,7 @@
               "kind": 156,
               "name": "strategy",
               "flags": 0,
-              "id": 1353,
+              "id": 1349,
               "type": {
                 "name": "Observable",
                 "kind": 169,
@@ -35237,7 +35168,7 @@
             "kind": 244,
             "name": "",
             "flags": 0,
-            "id": 1354,
+            "id": 1350,
             "parameters": [
               {
                 "source": {
@@ -35248,7 +35179,7 @@
                 "kind": 156,
                 "name": "ctor",
                 "flags": 0,
-                "id": 1355,
+                "id": 1351,
                 "type": {
                   "name": "any",
                   "kind": 1002,
@@ -35272,7 +35203,7 @@
           "kind": 244,
           "name": "RouterTitle",
           "flags": 1,
-          "id": 1356,
+          "id": 1352,
           "parameters": [],
           "type": {
             "name": "JSXElement",
@@ -35307,7 +35238,7 @@
           "kind": 246,
           "name": "ComponentMeta",
           "flags": 1,
-          "id": 1357,
+          "id": 1353,
           "children": [
             {
               "source": {
@@ -35318,7 +35249,7 @@
               "kind": 159,
               "name": "added",
               "flags": 4,
-              "id": 1358,
+              "id": 1354,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35334,7 +35265,7 @@
               "kind": 159,
               "name": "beta",
               "flags": 4,
-              "id": 1359,
+              "id": 1355,
               "type": {
                 "name": "boolean",
                 "kind": 1002,
@@ -35350,7 +35281,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1360,
+              "id": 1356,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35366,7 +35297,7 @@
               "kind": 159,
               "name": "icon",
               "flags": 4,
-              "id": 1361,
+              "id": 1357,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35382,7 +35313,7 @@
               "kind": 159,
               "name": "tags",
               "flags": 4,
-              "id": 1362,
+              "id": 1358,
               "type": {
                 "source": {
                   "fileName": "meta.ts",
@@ -35408,9 +35339,9 @@
               "kind": 159,
               "name": "demo",
               "flags": 4,
-              "id": 1363,
+              "id": 1359,
               "type": {
-                "id": 1364,
+                "id": 1360,
                 "name": "Demo",
                 "kind": 169
               }
@@ -35426,7 +35357,7 @@
           "kind": 246,
           "name": "AttributeMeta",
           "flags": 1,
-          "id": 1365,
+          "id": 1361,
           "children": [
             {
               "source": {
@@ -35437,7 +35368,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1366,
+              "id": 1362,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35453,7 +35384,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1367,
+              "id": 1363,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35463,7 +35394,7 @@
           ]
         },
         {
-          "id": 1364,
+          "id": 1360,
           "source": {
             "fileName": "meta.ts",
             "line": 11,
@@ -35482,7 +35413,7 @@
               "kind": 159,
               "name": "content",
               "flags": 4,
-              "id": 1368,
+              "id": 1364,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35500,7 +35431,7 @@
           "kind": 1001,
           "name": "components",
           "flags": 1,
-          "id": 1369,
+          "id": 1365,
           "type": {
             "name": "Record",
             "kind": 169,
@@ -35511,7 +35442,7 @@
                 "flags": 0
               },
               {
-                "id": 1357,
+                "id": 1353,
                 "name": "ComponentMeta",
                 "kind": 169
               }
@@ -35528,7 +35459,7 @@
           "kind": 246,
           "name": "AttributeMeta",
           "flags": 1,
-          "id": 1370,
+          "id": 1366,
           "children": [
             {
               "source": {
@@ -35539,7 +35470,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1367,
+              "id": 1363,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35555,7 +35486,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1366,
+              "id": 1362,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35573,7 +35504,7 @@
           "kind": 1001,
           "name": "attributes",
           "flags": 0,
-          "id": 1371,
+          "id": 1367,
           "type": {
             "name": "Record",
             "kind": 169,
@@ -35584,7 +35515,7 @@
                 "flags": 0
               },
               {
-                "id": 1365,
+                "id": 1361,
                 "name": "AttributeMeta",
                 "kind": 169
               }

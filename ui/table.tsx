@@ -4,14 +4,14 @@ import {
 	Component,
 	Augment,
 	Attribute,
+	Host,
 	StyleAttribute,
-	ComponentView,
 	bind,
 	get,
 	render,
 	role,
 } from '../component/index.js';
-import { dom, Host } from '../xdom/index.js';
+import { dom } from '../xdom/index.js';
 import { tap, merge } from '../rx/index.js';
 import { on } from '../dom/index.js';
 
@@ -30,9 +30,9 @@ function onHeaderAction(el: Th) {
 	);
 }
 
-function onSort(el: HTMLElement, view: ComponentView<Th>) {
+function onSort(el: HTMLElement, host: Th) {
 	let lastClass: string;
-	return get(view.host, 'sort-order').pipe(
+	return get(host, 'sort-order').pipe(
 		tap(sortOrder => {
 			if (lastClass) el.classList.remove(lastClass);
 			lastClass = sortOrder;
@@ -215,10 +215,8 @@ export class CheckboxTh extends CheckboxCell {
 	'cxl-tr',
 	role('row'),
 	bind(host =>
-		on(host, 'datatable.select').pipe(
-			tap(ev => {
-				if (ev.target) host.selected = ev.target;
-			})
+		on(host, 'datatable.select').tap(
+			ev => (host.selected = (ev.target as CheckboxCell)?.checked)
 		)
 	),
 	<Host>

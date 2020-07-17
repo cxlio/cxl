@@ -1,5 +1,11 @@
-import { dom, Host } from '../xdom/index.js';
-import { Augment, Attribute, Component, render } from '../component/index.js';
+import { dom } from '../xdom/index.js';
+import {
+	Augment,
+	Attribute,
+	Component,
+	Host,
+	render,
+} from '../component/index.js';
 import { onChildrenMutation } from '../dom/index.js';
 import { Style, padding } from '../css/index.js';
 import { be } from '../rx/index.js';
