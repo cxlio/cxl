@@ -292,7 +292,7 @@ export const theme: Theme = {
 		default: {
 			fontWeight: 400,
 			fontFamily: 'var(--cxl-font)',
-			fontSize: 'var(--cxl-fontSize)',
+			fontSize: 'var(--cxl-font-size)',
 			letterSpacing: 'normal',
 		},
 		caption: { fontSize: '12px', letterSpacing: '0.4px' },
@@ -319,8 +319,8 @@ export const theme: Theme = {
 			letterSpacing: '1.25px',
 			textTransform: 'uppercase',
 		},
-		code: { fontFamily: 'var(--cxl-fontMonospace)' },
-		monospace: { fontFamily: 'var(--cxl-fontMonospace)' },
+		code: { fontFamily: 'var(--cxl-font-monospace)' },
+		monospace: { fontFamily: 'var(--cxl-font-monospace)' },
 	},
 	colors: {
 		elevation: rgba(0, 0, 0, 0.26),
