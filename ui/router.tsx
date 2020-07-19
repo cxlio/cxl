@@ -1,5 +1,5 @@
 import { Router as MainRouter, RouteDefinition } from '../router/index.js';
-import { Observable, tap, map } from '../rx/index.js';
+import { Observable, map } from '../rx/index.js';
 import { augment, bind } from '../component/index.js';
 import { dom } from '../xdom/index.js';
 import { AppbarTitle } from './navigation.js';
@@ -33,7 +33,7 @@ export function Router(strategy: Observable<string>) {
 			bind((host: any) => {
 				defaultRouter = new MainRouter(host);
 				routes.forEach(r => defaultRouter.route(r));
-				return strategy.pipe(tap(url => defaultRouter.go(url)));
+				return strategy.tap(url => defaultRouter.go(url));
 			}),
 		]);
 	};

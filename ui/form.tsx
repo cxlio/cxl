@@ -555,10 +555,9 @@ export class Field extends Component {
 			$: {
 				display: 'block',
 				lineHeight: 12,
-				marginTop: 8,
+				marginTop: 4,
 				font: 'caption',
 				verticalAlign: 'bottom',
-				paddingTop: 8,
 			},
 			$invalid: { color: 'error' },
 		}}

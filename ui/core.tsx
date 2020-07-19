@@ -1010,6 +1010,9 @@ export class Meta extends Component {
 		<Style>
 			{{
 				$: { display: 'flex', flexDirection: 'column', height: '100%' },
+				'@large': {
+					$permanent: { marginLeft: 288 },
+				},
 			}}
 		</Style>
 		<slot />

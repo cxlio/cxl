@@ -290,7 +290,9 @@ const MenuIcon = (
 				marginRight: 32,
 				cursor: 'pointer',
 			},
-			toggler$permanent$large: { display: 'none' },
+			'@large': {
+				toggler$permanent: { display: 'none' },
+			},
 		}}
 	</Style>,
 	render(host => (

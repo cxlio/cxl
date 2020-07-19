@@ -31,14 +31,6 @@ Web Components
 -   iOS Webkit 10.3+
 -   Edge 17+
 
-## Packages
-
--   @cxl/ui
-
-## Documentation
-
--   [API Documentation](https://coaxialhost.com/ui-docs)
-
 ## Example Code
 
 ```html
@@ -52,7 +44,7 @@ Web Components
 </cxl-field>
 <cxl-field floating>
 	<cxl-label>Select Box</cxl-label>
-	<cxl-select &="valid(required)">
+	<cxl-select>
 		<cxl-option value="1">Value 1</cxl-option>
 		<cxl-option value="2">Value 2</cxl-option>
 	</cxl-select>

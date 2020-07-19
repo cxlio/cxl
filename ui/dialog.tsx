@@ -234,7 +234,12 @@ export class DialogConfirm extends Component {
 					drawer: { width: 288 },
 				},
 				'@large': {
-					drawer$permanent: { translateX: 0, opacity: 1 },
+					drawer$permanent: {
+						translateX: 0,
+						opacity: 1,
+						transition: 'unset',
+						animation: 'none',
+					},
 					backdrop$visible$permanent: { width: 0 },
 					backdrop$visible$right: { width: '100%' },
 				},
@@ -250,12 +255,10 @@ export class DialogConfirm extends Component {
 		<Backdrop
 			className="backdrop"
 			$={(el, host) =>
-				on(el, 'click').pipe(
-					tap(() => {
-						trigger(host, 'backdrop.click');
-						host.visible = false;
-					})
-				)
+				on(el, 'click').tap(() => {
+					trigger(host, 'backdrop.click');
+					host.visible = false;
+				})
 			}
 		/>
 		<div
