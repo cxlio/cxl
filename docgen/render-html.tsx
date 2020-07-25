@@ -15,20 +15,13 @@ import {
 } from './localization';
 import { relative } from 'path';
 import hljs from 'highlight.js';
+import { existsSync, readFileSync } from 'fs';
+import MarkdownIt from 'markdown-it';
+import { ExtraDocumentation, escape, parseExample } from './render.js';
 
 let application: DocGen;
-let header: string;
 let index: Node[];
-
-const ENTITIES_REGEX = /[&<]/g;
-const ENTITIES_MAP = {
-	'&': '&amp;',
-	'<': '&lt;',
-};
-
-function escape(str: string) {
-	return str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e]);
-}
+let extraDocs: ExtraDocumentation[];
 
 function TypeArguments(types?: Node[]): string {
 	return types
@@ -244,20 +237,6 @@ function SourceLink({ source }: Node) {
 		: '';
 }
 
-/*function ParameterTable(rows: string[][]) {
-	return `<cxl-table>
-		<cxl-tr><cxl-th>Name</cxl-th><cxl-th style="width:100%">Description</cxl-th></cxl-tr>
-		${rows
-			.map(
-				cols =>
-					`<cxl-tr>${cols
-						.map(c => `<cxl-td>${c}</cxl-td>`)
-						.join('')}</cxl-tr>`
-			)
-			.join('')}
-	</cxl-table>`;
-}*/
-
 function Code(source: string, language?: string) {
 	return (
 		'<pre><code class="hljs">' +
@@ -274,29 +253,15 @@ function Code(source: string, language?: string) {
 	);
 }
 
-function parseExample(value: string) {
-	if (value.startsWith('<caption>')) {
-		const newLine = value.indexOf('\n');
-		return [
-			value.slice(0, newLine).trim().replace('</caption>', ''),
-			(value = value.slice(newLine).trim()),
-		];
-	}
-
-	return ['', value];
-}
-
 function Demo(doc: DocumentationContent): string {
-	const [title, example] = parseExample(doc.value);
-	return `<cxl-t h5>${title || translate('Demo')}</cxl-t><cxl-docs-demo${
+	const { title, value } = parseExample(doc.value);
+	return `<cxl-t h5>${title || translate('Demo')}</cxl-t><docgen-demo${
 		application.debug ? ' debug' : ''
-	}><!--${example}--></cxl-docs-demo><cxl-t h6>Source</cxl-t>${Code(
-		example
-	)}`;
+	}><!--${value}--></docgen-demo><cxl-t h6>Source</cxl-t>${Code(value)}`;
 }
 
 function Example(doc: DocumentationContent) {
-	const [title, value] = parseExample(doc.value);
+	const { title, value } = parseExample(doc.value);
 	return `<cxl-t h5>${
 		title || translate('Example')
 	}</cxl-t><cxl-c pad16>${value}</cxl-c><cxl-t h6>Source</cxl-t>${Code(
@@ -389,14 +354,21 @@ function ExtendedBy(extendedBy?: Node[]) {
 		: '';
 }
 
-function Link(node: Node): string {
-	const name = node.name ? escape(node.name) : '(Unknown)';
+function Link(node: Node, content?: string): string {
+	const name = content || (node.name ? escape(node.name) : '(Unknown)');
 	if (node.type) {
 		if (node.kind === Kind.Reference) node = node.type;
 		else if (node.kind === Kind.Export) return Link(node.type);
 	}
 
-	return node.id ? `<a href="${getHref(node)}">${name}</a>` : name;
+	if (!node.id) return name;
+
+	const href = getHref(node);
+
+	if (application.spa && href[0] !== '#')
+		return `<cxl-router-link><a href="${href}">${name}</a></cxl-router-link>`;
+
+	return `<a href="${href}">${name}</a>`;
 }
 
 function getNodeCoef(a: Node) {
@@ -424,7 +396,8 @@ function ModuleTitle(node: Node) {
 		(node.kind === Kind.Enum ? Chip('enum') : '') +
 		(docs && docs.role ? Chip(`role: ${docs.role}`) : '') +
 		`</span>`;
-	return chips + Signature(node);
+
+	return `<cxl-t h3>${chips}${Signature(node)}</cxl-t>`;
 }
 
 function getImportUrl(source: Source) {
@@ -533,16 +506,23 @@ function MemberInherited(type: Node): string {
 	);
 }
 
+function TagName(node: Node) {
+	const tagName = node.kind === Kind.Component && node.docs?.tagName;
+
+	return tagName ? `<cxl-t h5>HTML</cxl-t>${Code(`<${tagName}>`)}` : '';
+}
+
 function Members(node: Node) {
 	const type = node.type;
 	const groups = getMemberGroups(node);
 	const importStr = ImportStatement(node);
+
 	const inherited = type ? MemberInherited(type) : '';
 
 	return (
 		`<cxl-t h4>${translate(
 			node.kind === Kind.Module ? 'Members' : 'API'
-		)}</cxl-t>${importStr}` +
+		)}</cxl-t>${TagName(node)}${importStr}` +
 		(groups.length || inherited
 			? (node.kind !== Kind.Module ? `<cxl-t h5>Members</cxl-t>` : '') +
 			  groups.map(MemberGroupIndex).join('') +
@@ -554,11 +534,10 @@ function Members(node: Node) {
 
 function ModuleBody(json: Node) {
 	return (
-		`<cxl-page><cxl-t h3>${ModuleTitle(json)}</cxl-t>` +
+		ModuleTitle(json) +
 		ExtendedBy(json.extendedBy) +
 		ModuleDocumentation(json) +
-		Members(json) +
-		'</cxl-page>'
+		Members(json)
 	);
 }
 
@@ -601,25 +580,43 @@ function NodeIcon(node: Node) {
 function ModuleNavbar(node: Node) {
 	const moduleName = node.name.match(/index\.tsx?/) ? 'Index' : node.name;
 	return (
-		`<cxl-item href="${getHref(node)}"><i>${moduleName}</i></cxl-item>` +
+		`${Item(`<i>${moduleName}</i>`, getHref(node))}` +
 		node.children
 			?.sort(sortNode)
 			.map(c =>
 				declarationFilter(c) && !(c.flags & Flags.Overload)
-					? `<cxl-item href="${getHref(c)}">${NodeIcon(c)}${
-							c.name
-					  }</cxl-item>`
+					? Item(`${NodeIcon(c)}${c.name}`, getHref(c))
 					: ''
 			)
 			.join('')
 	);
 }
 
+function Item(title: string, href: string, icon?: string) {
+	const result = `<cxl-router-item href="${href}">${
+		icon
+			? `<cxl-icon style="margin-right: 12px" icon="${icon}"></cxl-icon>`
+			: ''
+	}${title}</cxl-router-item>`;
+
+	return application.spa
+		? `<cxl-router-link>${result}</cxl-router-link>`
+		: result;
+}
+
+function NavbarExtra() {
+	return `<cxl-c>${extraDocs.map(docs =>
+		Item(docs.title, docs.file.name, docs.icon)
+	)}</cxl-c><cxl-hr></cxl-hr>`;
+}
+
 function Navbar(pkg: any, out: Output) {
-	return `<cxl-navbar><cxl-c pad16><cxl-t h6>${pkg.name} <small>${
+	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h6>${pkg.name} <small>${
 		pkg?.version || ''
 	}</small></cxl-t></cxl-c>
-		<cxl-hr></cxl-hr>${out.modules.sort(sortNode).map(ModuleNavbar).join('')}
+		<cxl-hr></cxl-hr>
+		${extraDocs.length ? NavbarExtra() : ''}	
+		${out.modules.sort(sortNode).map(ModuleNavbar).join('')}
 		</cxl-navbar>`;
 }
 
@@ -628,7 +625,7 @@ function ModuleHeader(_p: Node) {
 }
 
 function ModuleFooter(_p: Node) {
-	return `</cxl-application>`;
+	return ``;
 }
 
 function Header(module: Output) {
@@ -643,16 +640,23 @@ function Header(module: Output) {
 		pkg.name
 	}" />${SCRIPTS}</head>
 	<link rel="stylesheet" href="styles.css" />
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-fontSize)}</style>
-	<cxl-application><title>${pkg.name}</title><cxl-meta></cxl-meta><cxl-appbar>
-	${Navbar(pkg, module)}
-	<a href="index.html" style="text-decoration:none"><cxl-appbar-title>${
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
+	<cxl-application permanent><title>${
 		pkg.name
-	}</cxl-appbar-title></a></cxl-appbar>`;
+	}</title><cxl-meta></cxl-meta><cxl-appbar>
+	${Navbar(pkg, module)}
+	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">${
+		pkg.name
+	}</a></cxl-appbar-title></cxl-appbar><cxl-page>`;
 }
 
 function getPageName(page: Node) {
-	if (page.kind === Kind.Module) return page.name.replace(/.tsx?$/, '.html');
+	if (page.kind === Kind.Module) {
+		const result = page.name.replace(/.tsx?$/, '.html');
+		return result === 'index.html' && existsSync('README.md')
+			? 'index-api.html'
+			: result;
+	}
 
 	const source = Array.isArray(page.source) ? page.source[0] : page.source;
 	const prefix =
@@ -665,7 +669,7 @@ function Page(p: Node) {
 	return {
 		name: getPageName(p),
 		node: p,
-		content: header + ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p),
+		content: ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p),
 	};
 }
 
@@ -684,10 +688,73 @@ function Module(module: Node) {
 	return result ? result.concat(Page(module)) : [Page(module)];
 }
 
+function ExtraDocument(
+	name: string,
+	title: string,
+	icon?: string
+): ExtraDocumentation {
+	const md = new MarkdownIt({
+		highlight: Code,
+	});
+	const rules = md.renderer.rules;
+	const map: any = {
+		h1: 'h2',
+		h2: 'h3',
+		h3: 'h4',
+		h4: 'h5',
+		h5: 'h6',
+	};
+
+	/* eslint-disable @typescript-eslint/camelcase */
+	rules.heading_open = (tokens, idx) => `<cxl-t ${map[tokens[idx].tag]}>`;
+	rules.heading_close = () => `</cxl-t>`;
+	rules.code_block = (tokens, idx) => Code(tokens[idx].content);
+
+	return {
+		title,
+		icon,
+		file: {
+			name: 'index.html',
+			content: md.render(readFileSync(name, 'utf8')),
+		},
+	};
+}
+
+function Route(file: File) {
+	return `<template ${
+		file.name === 'index.html' ? 'data-default="true"' : ''
+	} data-path="${file.name}">${file.content}</template>`;
+}
+
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
-	header = Header(output);
 	index = Object.values(output.index);
 	hljs.configure({ tabReplace: '    ' });
-	return output.modules.flatMap(Module);
+	// Look for source documentation files
+	extraDocs = existsSync('README.md')
+		? [ExtraDocument('README.md', 'Home', 'home')]
+		: [];
+
+	const result: File[] = output.modules.flatMap(Module);
+	const header = Header(output);
+	const footer = '</cxl-page></cxl-application>';
+
+	result.push(...extraDocs.map(d => d.file));
+
+	let indexFile: File | undefined,
+		content = '<cxl-router-outlet></cxl-router-outlet><cxl-router>';
+
+	result.forEach(doc => {
+		if (app.spa) {
+			if (doc.name === 'index.html') indexFile = doc;
+			content += Route(doc);
+		} else doc.content = header + doc.content + footer;
+	});
+
+	if (app.spa && indexFile) {
+		indexFile.content = header + content + '</cxl-router>' + footer;
+		return [indexFile];
+	}
+
+	return result;
 }

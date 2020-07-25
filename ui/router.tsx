@@ -1,8 +1,19 @@
-import { Router as MainRouter, RouteDefinition } from '../router/index.js';
-import { Observable, map } from '../rx/index.js';
-import { augment, bind } from '../component/index.js';
+import {
+	Router as MainRouter,
+	RouteDefinition,
+	parseUrl,
+} from '../router/index.js';
+import { Observable, merge } from '../rx/index.js';
+import {
+	Attribute,
+	Augment,
+	Component,
+	augment,
+	bind,
+} from '../component/index.js';
 import { dom } from '../xdom/index.js';
-import { AppbarTitle } from './navigation.js';
+import { on, onChildrenMutation, onLocation } from '../dom/index.js';
+import { AppbarTitle, Item } from './navigation.js';
 import { list } from '../template/index.js';
 
 const routes: RouteDefinition<any>[] = [];
@@ -40,25 +51,108 @@ export function Router(strategy: Observable<string>) {
 }
 
 export function RouterTitle() {
-	const routes = defaultRouter.subject.pipe(
-		map((route: any) => {
-			const result = [];
-			do {
-				if (route.routeTitle) result.push(route);
-			} while ((route = route.parentNode));
+	const routes = defaultRouter.subject.map((route: any) => {
+		const result = [];
+		do {
+			if (route.routeTitle) result.push(route);
+		} while ((route = route.parentNode));
 
-			return result;
-		})
-	);
+		return result;
+	});
 
 	return (
 		<AppbarTitle>
 			{list(routes, (route: any) => (
-				<span>{route.routeTitle || ''}</span>
+				<span>{route.title || ''}</span>
 			))}
 		</AppbarTitle>
 	);
 }
+
+function renderTemplate(tpl: HTMLTemplateElement) {
+	const result = document.createElement('div');
+	result.appendChild(tpl.content.cloneNode(true));
+	return result;
+}
+
+@Augment<RouterItem>(
+	'cxl-router-item',
+	bind(host =>
+		onLocation()
+			.debounceTime()
+			.tap(() => {
+				const current = defaultRouter?.currentRoute;
+				if (current && host.href !== undefined) {
+					const url = parseUrl(host.href);
+					host.selected = current.path?.test(url.path) || false;
+				}
+			})
+	)
+)
+export class RouterItem extends Item {}
+
+@Augment<RouterLink>(
+	'cxl-router-link',
+	bind(host =>
+		on(host, 'click').tap(ev => {
+			if (ev.target && 'href' in ev.target) {
+				const el = ev.target as any;
+				const href =
+					el.tagName === 'A' ? el.getAttribute('href') : el.href;
+				ev.preventDefault();
+				defaultRouter.go(href);
+			}
+		})
+	)
+)
+export class RouterLink extends Component {}
+
+@Augment<RouterOutlet>(
+	'cxl-router-outlet',
+	bind(host => {
+		const router = host.router;
+		routes.forEach(r => router.route(r));
+
+		return merge(
+			on(window, 'load').tap(() =>
+				router.go(location.search.slice(1) + location.hash)
+			),
+			on(window, 'popstate').tap(() => router.go(history.state.href)),
+			router.subject.tap(() => {
+				const href = router.currentUrl;
+				history.pushState({ href }, '', `?${href}`);
+				if (host.autoScroll) host.parentElement?.scroll(0, 0);
+			})
+		);
+	})
+)
+export class RouterOutlet extends Component {
+	@Attribute()
+	autoScroll = true;
+
+	router = (defaultRouter = new MainRouter(this));
+}
+
+@Augment<RouterComponent>(
+	'cxl-router',
+	bind(host =>
+		onChildrenMutation(host).tap(ev => {
+			if (ev.type === 'added' && ev.value.tagName === 'TEMPLATE') {
+				const el = ev.value as HTMLTemplateElement;
+				const path = el.getAttribute('data-path') || '';
+				const route = {
+					path,
+					isDefault: el.hasAttribute('data-default'),
+					render: renderTemplate.bind(null, el),
+				};
+
+				if (defaultRouter) defaultRouter.route(route);
+				else routes.push(route);
+			}
+		})
+	)
+)
+export class RouterComponent extends Component {}
 
 /*
 	component(

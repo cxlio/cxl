@@ -132,7 +132,10 @@ async function cjsRunner(page: Page, sources: Output[]) {
 	app.log(`Running in commonjs mode`);
 	await page.addScriptTag({ path: __dirname + '/require.js' });
 
-	page.setRequestInterception(true);
+	await app.log(
+		'Setting up request interceptor',
+		page.setRequestInterception(true)
+	);
 	page.on('request', (req: Request) => {
 		try {
 			handleRequest(sources, req);
@@ -171,10 +174,12 @@ class TestRunner extends Application {
 
 	amd = false;
 	node = false;
+	firefox = false;
 
 	setup() {
 		this.parameters.register(
 			{ name: 'node', help: 'Run tests in node mode.' },
+			{ name: 'firefox', help: 'Run tests in firefox through puppeteer' },
 			{ name: 'entryFile', rest: true }
 		);
 	}
@@ -184,11 +189,12 @@ class TestRunner extends Application {
 		const { url, lineNumber } = msg.location();
 		this.log(`console ${type}: ${url}:${lineNumber}`);
 		console.log(msg.text());
-		// msg.args().forEach(console.log);
 	}
 
 	private async openPage(browser: Browser) {
-		const context = await browser.createIncognitoBrowserContext();
+		const context = await (this.firefox
+			? browser
+			: browser.createIncognitoBrowserContext());
 		try {
 			return await context.newPage();
 		} catch (e) {
@@ -218,6 +224,7 @@ class TestRunner extends Application {
 
 	private async runPuppeteer() {
 		const browser = await launch({
+			product: this.firefox ? 'firefox' : 'chrome',
 			headless: true,
 			args: ['--no-sandbox', '--disable-setuid-sandbox'],
 			timeout: 5000,
@@ -226,11 +233,10 @@ class TestRunner extends Application {
 		this.log(`Puppeteer ${await browser.version()}`);
 
 		const page = await this.openPage(browser);
-
 		page.on('console', msg => this.handleConsole(msg));
 		page.on('pageerror', msg => this.log(msg));
 
-		await this.startTracing(page);
+		if (!this.firefox) await this.startTracing(page);
 
 		this.log(`Entry file: ${this.entryFile}`);
 		const source = readFileSync(this.entryFile, 'utf8');
@@ -242,9 +248,14 @@ class TestRunner extends Application {
 
 		if (!suite) throw new Error('Invalid suite');
 
-		await page.tracing.stop();
+		if (!this.firefox) {
+			await page.tracing.stop();
+			await this.log(
+				'Generating report.json',
+				generateReport(page, sources)
+			);
+		}
 
-		await this.log('Generating report.json', generateReport(page, sources));
 		await browser.close();
 
 		printReport(suite as Test);

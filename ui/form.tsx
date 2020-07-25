@@ -35,7 +35,7 @@ import {
 	triggerEvent,
 } from '../template/index.js';
 import { trigger, on, onChildrenMutation } from '../dom/index.js';
-import { Style, border, padding } from '../css/index.js';
+import { Style, border, boxShadow, padding } from '../css/index.js';
 import { be, defer, merge, of, tap } from '../rx/index.js';
 
 const FocusCircleStyle = (
@@ -320,13 +320,10 @@ const FieldBase = (
 					position: 'relative',
 					paddingLeft: 12,
 					paddingRight: 12,
-					paddingTop: 28,
-					paddingBottom: 6,
-					backgroundColor: 'surface',
 					color: 'onSurface',
 					display: 'block',
 				},
-				$focused: { borderColor: 'primary', color: 'primary' },
+				$focused: { borderColor: 'primary' },
 				$outline: {
 					borderColor: 'onSurface',
 					borderWidth: 1,
@@ -334,18 +331,26 @@ const FieldBase = (
 					borderRadius: 4,
 					marginTop: 2,
 					paddingTop: 14,
-					paddingBottom: 14,
+					paddingBottom: 12,
+				},
+				$outline$focused: {
+					boxShadow: boxShadow(0, 0, 0, 1, 'primary'),
 				},
 				$focused$outline: {
-					// boxShadow: '0 0 0 1px var(--cxl-primary)',
 					borderColor: 'primary',
 				},
 				$invalid: { color: 'error' },
 				$invalid$outline: { borderColor: 'error' },
 				$invalid$outline$focused: {
+					boxShadow: boxShadow(0, 0, 0, 1, 'error'),
 					// boxShadow: '0 0 0 1px var(--cxl-error)'
 				},
-				content: { position: 'relative' },
+				content: {
+					display: 'flex',
+					position: 'relative',
+					marginBottom: 4,
+					marginTop: 2,
+				},
 				mask: {
 					position: 'absolute',
 					top: 0,
@@ -360,29 +365,25 @@ const FieldBase = (
 				},
 				mask$hover$disabled: { filter: 'none' },
 				label: {
-					position: 'absolute',
-					top: 10,
-					left: 12,
+					position: 'relative',
 					font: 'caption',
 					lineHeight: 10,
 					verticalAlign: 'bottom',
-					/*transition:
-					'transform var(--cxl-speed), font-size var(--cxl-speed)'*/
 				},
 				label$focused: { color: 'primary' },
 				label$invalid: { color: 'error' },
 				label$outline: {
-					top: -5,
-					left: 8,
+					position: 'absolute',
+					translateY: -26,
+					translateX: -4,
 					paddingLeft: 4,
 					paddingRight: 4,
-					marginBottom: 0,
-					backgroundColor: 'inherit',
+					backgroundColor: 'surface',
 					display: 'inline-block',
 				},
 				label$floating$novalue: {
 					font: 'default',
-					translateY: 23,
+					translateY: 20,
 					opacity: 0.75,
 				},
 				label$leading: { paddingLeft: 24 },
@@ -390,49 +391,56 @@ const FieldBase = (
 			}}
 		</Style>
 		<div className="mask"></div>
-		<label className="label">
+		<div className="label">
 			<Slot selector="cxl-label" />
-		</label>
+		</div>
 		<div className="content">
 			<slot />
 		</div>
 	</Host>
 );
 
-export class Label {
-	static create() {
-		return document.createElement('cxl-label');
-	}
-}
+@Augment(
+	'cxl-label',
+	<Style>
+		{{
+			$: {
+				display: 'inline-block',
+				paddingTop: 8,
+				paddingBottom: 2,
+			},
+		}}
+	</Style>,
+	<slot />
+)
+export class Label extends Component {}
 
 /**
  * @example
  * <cxl-field>
-	<cxl-label>Input Label</cxl-label>
-	<cxl-input required />
-</cxl-field>
-<cxl-field floating>
-	<cxl-label>Floating Label</cxl-label>
-	<cxl-input />
-</cxl-field>
-<cxl-field outline>
-	<cxl-label>Outlined Form Group</cxl-label>
-	<cxl-input />
-</cxl-field>
-*/
+ *   <cxl-label>Input Label</cxl-label>
+ *   <cxl-input required />
+ * </cxl-field>
+ * <cxl-field floating>
+ *   <cxl-label>Floating Label</cxl-label>
+ *   <cxl-input />
+ * </cxl-field>
+ * <cxl-field outline>
+ *   <cxl-label>Outlined Form Group</cxl-label>
+ *   <cxl-input />
+ * </cxl-field>
+ */
 @Augment<Field>(
 	'cxl-field',
 	<Style>
 		{{
 			$: { marginBottom: 16 },
 			$outline: { paddingTop: 2 },
-			flex: { display: 'flex', alignItems: 'center', lineHeight: 22 },
-			line: { position: 'absolute', marginTop: 6, left: 0, right: 0 },
+			line: { position: 'relative', left: -12, right: -24 },
 			line$outline: { display: 'none' },
 			help: {
 				font: 'caption',
 				position: 'relative',
-				marginTop: 14,
 				display: 'flex',
 			},
 			grow: { flexGrow: 1 },
@@ -637,9 +645,7 @@ export class FieldToggle extends Component {}
 	<Style>
 		{{
 			$: {
-				position: 'absolute',
-				left: 0,
-				right: 0,
+				display: 'block',
 				height: 2,
 				borderWidth: 0,
 				borderBottom: 1,
@@ -668,17 +674,17 @@ export class FocusLine extends Component {
 
 /**
  * @example
-	<cxl-form>
-	<cxl-field>
-		<cxl-label>E-mail Address</cxl-label>
-		<cxl-input &="valid(email)"></cxl-input>
-	</cxl-field>
-	<cxl-field>
-		<cxl-label>Password</cxl-label>
-		<cxl-password &="valid(required)"></cxl-password>
-	</cxl-field>
-	<cxl-submit>Submit</cxl-submit>
-	</cxl-form>
+ * <cxl-form>
+ *   <cxl-field>
+ *     <cxl-label>E-mail Address</cxl-label>
+ *     <cxl-input &="valid(email)"></cxl-input>
+ *   </cxl-field>
+ *   <cxl-field>
+ *     <cxl-label>Password</cxl-label>
+ *     <cxl-password &="valid(required)"></cxl-password>
+ *   </cxl-field>
+ *   <cxl-submit>Submit</cxl-submit>
+ * </cxl-form>
  */
 @Augment<Form>(
 	'cxl-form',
@@ -745,10 +751,11 @@ export class Form extends Component {
 					overflowY: 'hidden',
 				},
 				input: {
-					color: 'onSurface',
+					color: 'inherit',
 					font: 'default',
 					minHeight: 22,
-					lineHeight: 22,
+					paddingTop: 4,
+					lineHeight: 18,
 					outline: 0,
 				},
 			}}

@@ -8,6 +8,7 @@ import exhaustMapSuite from './test/exhaustMap.js';
 import filterSuite from './test/filter.js';
 import fromSuite from './test/from.js';
 import mergeSuite from './test/merge.js';
+import switchMapSuite from './test/switchMap.js';
 
 import { suite } from '../spec/index.js';
 
@@ -32,6 +33,7 @@ export default suite('rx', [
 	concatSuite,
 	combineLatestSuite,
 	debounceTimeSuite,
+	switchMapSuite,
 	suite('Observable', test => {
 		test('constructor', a => {
 			const observable = new Observable(function subscribe(observer) {

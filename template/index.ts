@@ -5,12 +5,10 @@ import {
 	trigger,
 } from '../dom/index.js';
 import {
-	BehaviorSubject,
 	EMPTY,
 	Observable,
 	Operator,
 	Subscription,
-	be,
 	concat,
 	debounceTime,
 	defer,
@@ -51,6 +49,19 @@ export function keypress(el: Element, key?: string) {
 	);
 }
 
+export function model<T extends Node>(
+	el: ElementWithValue<any>,
+	host: T,
+	key: keyof T
+) {
+	return merge(
+		getAttribute(host, key).tap(
+			val => val !== el.value && (el.value = val)
+		),
+		onValue(el).tap(val => (host[key] = val))
+	);
+}
+
 export function stopEvent<T extends Event>() {
 	return tap<T>((ev: T) => ev.stopPropagation());
 }
@@ -68,34 +79,6 @@ export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
 		map(ev => (ev.target as T).value),
 		debounceTime()
 	);
-}
-
-export function onHashChange() {
-	return concat(
-		of(location.hash.slice(1)),
-		on(window, 'hashchange').pipe(map(() => location.hash.slice(1)))
-	);
-}
-
-let pushSubject: BehaviorSubject<any>;
-export function onHistoryChange() {
-	if (!pushSubject) {
-		pushSubject = be(history.state);
-		const old = history.pushState;
-		history.pushState = function (...args: any) {
-			const result = old.apply(this, args);
-			pushSubject.next(history.state);
-			return result;
-		};
-	}
-	return merge(
-		on(window, 'popstate').pipe(tap(() => history.state)),
-		pushSubject
-	);
-}
-
-export function onLocation() {
-	return merge(onHashChange(), onHistoryChange()).map(() => window.location);
 }
 
 export function setContent(el: Element) {
@@ -131,7 +114,12 @@ export function portal(id: string) {
 }
 
 export function teleport(el: HTMLElement, portalName: string) {
-	portals.get(portalName)?.appendChild(el);
+	return new Observable<void>(() => {
+		const placeholder = document.createTextNode('');
+		el.replaceWith(placeholder);
+		portals.get(portalName)?.appendChild(el);
+		return () => placeholder.replaceWith(el);
+	});
 }
 
 type Pipe<ElementT, HostT> = (

@@ -1,9 +1,12 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"outDir": "../dist/router",
-		"lib": ["es2015"]
+		"outDir": "../dist/router"
 	},
 	"files": ["index.ts", "debug.ts"],
-	"references": [{ "path": "../xdom" }, { "path": "../debug" }]
+	"references": [
+		{ "path": "../xdom" },
+		{ "path": "../rx" },
+		{ "path": "../debug" }
+	]
 }

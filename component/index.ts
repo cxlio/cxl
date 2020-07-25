@@ -71,6 +71,7 @@ export abstract class Component extends HTMLElement {
 	static tagName: string;
 	static observedAttributes: string[];
 	static create() {
+		if (!this.tagName) throw new Error('tagName is undefined');
 		return document.createElement(this.tagName);
 	}
 
@@ -334,7 +335,7 @@ export function role<T extends Component>(roleName: string) {
 		);
 }
 
-export function Host({ $, children }: { $?: Binding; children: any }) {
+export function Host({ $, children }: { $?: Binding; children?: any }) {
 	const normalizedChildren = normalizeChildren(children);
 	return (host: RenderContext) => {
 		if ($) host.bind($(host, host));

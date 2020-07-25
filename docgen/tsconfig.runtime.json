@@ -16,13 +16,15 @@
 		"../template/index.ts",
 		"../dom/index.ts",
 		"../component/index.ts",
+		"../router/index.ts",
 		"../ui/core.tsx",
 		"../ui/form.tsx",
 		"../ui/icons.tsx",
 		"../ui/layout.tsx",
 		"../ui/dialog.tsx",
 		"../ui/navigation.tsx",
-		"../ui/table.tsx"
+		"../ui/table.tsx",
+		"../ui/router.tsx"
 	],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

@@ -1,4 +1,13 @@
-import { Observable, Subject, Subscription } from '../rx/index.js';
+import {
+	BehaviorSubject,
+	Observable,
+	Subject,
+	Subscription,
+	be,
+	concat,
+	of,
+	merge,
+} from '../rx/index.js';
 
 type ElementContent = string | Node;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
@@ -134,15 +143,16 @@ export class NodeSnapshot {
 	}
 }
 
-export class MutationEvent {
-	constructor(public type: string, public target: any, public value: any) {}
+export interface MutationEvent<T extends EventTarget = EventTarget> {
+	type: 'added' | 'removed' | 'attribute';
+	target: T;
+	value: any;
 }
 
 export class AttributeObserver extends Subject<MutationEvent> {
 	private $value: any;
 	private $checked: any;
 
-	element?: Node;
 	observer?: MutationObserver;
 	bindings?: Subscription[];
 
@@ -175,7 +185,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 		];
 	}
 
-	constructor(element: Node) {
+	constructor(public element: Node) {
 		super();
 
 		if ((element as any).$$attributeObserver)
@@ -205,7 +215,11 @@ export class AttributeObserver extends Subject<MutationEvent> {
 	}
 
 	trigger(attributeName: string) {
-		this.next(new MutationEvent('attribute', this.element, attributeName));
+		this.next({
+			type: 'attribute',
+			target: this.element,
+			value: attributeName,
+		});
 	}
 
 	destroy() {
@@ -260,23 +274,24 @@ export function onChildrenMutation(el: Element) {
 }
 
 export class ChildrenObserver extends Subject<MutationEvent> {
-	private element?: Element;
 	private observer?: MutationObserver;
 
-	constructor(element: Element) {
+	constructor(private element: Element) {
+		super();
+
 		if ((element as any).$$childrenObserver)
 			return (element as any).$$childrenObserver;
 
-		super();
 		this.element = element;
 		(element as any).$$childrenObserver = this;
 	}
 
 	$handleEvent(ev: MutationRecord) {
-		for (const el of ev.addedNodes)
-			this.next(new MutationEvent('added', this.element, el));
-		for (const el of ev.removedNodes)
-			this.next(new MutationEvent('removed', this.element, el));
+		const target = this.element;
+		for (const value of ev.addedNodes)
+			this.next({ type: 'added', target, value });
+		for (const value of ev.removedNodes)
+			this.next({ type: 'removed', target, value });
 	}
 
 	protected onSubscribe(subscription: any) {
@@ -355,4 +370,32 @@ export class Fragment {
 	clone() {
 		return document.importNode(this.content, true);
 	}
+}
+
+export function onHashChange() {
+	return concat(
+		of(location.hash.slice(1)),
+		on(window, 'hashchange').map(() => location.hash.slice(1))
+	);
+}
+
+let pushSubject: BehaviorSubject<any>;
+export function onHistoryChange() {
+	if (!pushSubject) {
+		pushSubject = be(history.state);
+		const old = history.pushState;
+		history.pushState = function (...args: any) {
+			const result = old.apply(this, args);
+			pushSubject.next(history.state);
+			return result;
+		};
+	}
+	return merge(
+		on(window, 'popstate').tap(() => history.state),
+		pushSubject
+	);
+}
+
+export function onLocation() {
+	return merge(onHashChange(), onHistoryChange()).map(() => window.location);
 }

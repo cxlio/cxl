@@ -4,6 +4,7 @@ type CSSStyle = {
 };
 type BaseColor = RGBA;
 export type Color = keyof Colors | BaseColor | 'inherit' | 'transparent';
+export type Percentage = '50%' | '100%' | CustomPercentage;
 export type Length = number | Percentage | 'auto';
 
 interface Typography {
@@ -54,7 +55,9 @@ interface StrictStyleDefinition {
 	borderWidth: number;
 	borderRadius: Length;
 	borderStyle: 'solid' | 'none';
+	boxShadow: BoxShadow;
 	elevation: number;
+	fontSize: 'inherit';
 	translateX: Length;
 	translateY: Length;
 	translateZ: Length;
@@ -97,6 +100,7 @@ interface StrictStyleDefinition {
 	userSelect: string;
 	textAlign: string;
 	textDecoration: string;
+	transition: 'unset';
 	height: Length;
 	minHeight: Length;
 	variables: Partial<VariableList>;
@@ -111,6 +115,14 @@ interface StrictStyleDefinition {
 		| 'baseline';
 	whiteSpace: 'nowrap' | 'pre-wrap';
 	zIndex: number;
+}
+
+export interface BoxShadow {
+	offsetX: number;
+	offsetY: number;
+	blurRadius: number;
+	spread: number;
+	color: Color;
 }
 
 export type Styles =
@@ -157,6 +169,7 @@ export interface Theme {
 
 const PSEUDO = {
 	focus: ':focus',
+	focusWithin: ':focus-within',
 	hover: ':hover',
 	empty: ':empty',
 	active: ':active',
@@ -164,14 +177,25 @@ const PSEUDO = {
 	lastChild: ':last-child',
 };
 
-class Percentage {
-	constructor(n: number) {
-		this.toString = () => n + '%';
+export class CustomPercentage {
+	constructor(private n: number) {}
+	toString() {
+		return this.n + '%';
 	}
 }
 
+export function boxShadow(
+	offsetX: number,
+	offsetY: number,
+	blurRadius: number,
+	spread: number,
+	color: Color
+) {
+	return { offsetX, offsetY, blurRadius, spread, color };
+}
+
 export function pct(n: number) {
-	return new Percentage(n);
+	return new CustomPercentage(n);
 }
 
 class RGBA {
@@ -372,15 +396,29 @@ export const theme: Theme = {
 	},
 };
 
-export const ColorsInverse: Colors = Object.assign({}, theme.colors, {
-	surface: theme.colors.primary,
-	onSurface: theme.colors.onPrimary,
-	primary: theme.colors.secondary,
-	onPrimary: theme.colors.onSecondary,
-	link: theme.colors.onPrimary,
-	error: rgba(0xff, 0x6e, 0x40),
-	onError: rgba(0, 0, 0),
-});
+export const ResetInverse = {
+	variables: {
+		surface: theme.colors.surface,
+		onSurface: theme.colors.onSurface,
+		primary: theme.colors.primary,
+		onPrimary: theme.colors.onPrimary,
+		link: theme.colors.onSurface,
+		error: theme.colors.error,
+		onError: theme.colors.onError,
+	},
+};
+
+export const InversePrimary = {
+	variables: {
+		surface: theme.colors.primary,
+		onSurface: theme.colors.onPrimary,
+		primary: theme.colors.surface,
+		onPrimary: theme.colors.onSurface,
+		link: theme.colors.onPrimary,
+		error: rgba(0xff, 0x6e, 0x40),
+		onError: rgba(0, 0, 0),
+	},
+};
 
 type StyleMap = {
 	[key: string]: (
@@ -397,19 +435,22 @@ function toUnit(n: Length) {
 	return `${n}${typeof n === 'number' ? UNIT : ''}`;
 }
 
+function color(val: Color) {
+	return val in theme.colors
+		? `var(--cxl-${toSnake(val.toString())})`
+		: val.toString();
+}
+
 function renderColor(
 	_def: StyleDefinition,
 	style: CSSStyle,
 	prop: any,
 	value: Color
 ) {
-	style[prop] =
-		value in theme.colors
-			? `var(--cxl-${toSnake(value.toString())})`
-			: value.toString();
+	style[prop] = color(value);
 }
 
-function renderDefault(style: CSSStyle, prop: any, value: string | number) {
+function renderDefault(style: CSSStyle, prop: any, value: any) {
 	style[prop] = toUnit(value);
 }
 
@@ -444,6 +485,11 @@ function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
 
 const renderMap: StyleMap = {
 	animation(def: any, style: CSSStyle, _prop: any, value: string) {
+		if (value === 'none') {
+			style.animation = 'none';
+			return;
+		}
+
 		const animation = theme.animation[value];
 
 		if (animation) {
@@ -455,6 +501,11 @@ const renderMap: StyleMap = {
 	},
 	backgroundColor: renderColor,
 	borderColor: renderColor,
+	boxShadow(_def, style, _prop, v: BoxShadow) {
+		style.boxShadow = `${toUnit(v.offsetX)} ${toUnit(v.offsetY)} ${toUnit(
+			v.blurRadius
+		)} ${toUnit(v.spread)} ${color(v.color)}`;
+	},
 	color: renderColor,
 	elevation(_def, style, _prop, n: number) {
 		const x = toUnit(n);

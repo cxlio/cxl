@@ -28,28 +28,6 @@ type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
 // Used for observable interoperability
 const observableSymbol = (Symbol as any).observable || '@@observable';
 
-/*export class Subscriber<T> {
-	public next: NextFunction<T>;
-	public error?: ErrorFunction;
-	public complete?: CompleteFunction;
-
-	constructor(
-		observer?: NextObserver<T>,
-		error?: ErrorFunction,
-		complete?: CompleteFunction
-	) {
-		if (observer && typeof observer !== 'function') {
-			error = observer.error && observer.error.bind(observer);
-			complete = observer.complete && observer.complete.bind(observer);
-			observer = observer.next && observer.next.bind(observer);
-		}
-
-		this.next = observer as NextFunction<T>;
-		this.error = error;
-		this.complete = complete;
-	}
-}*/
-
 function getObserver<T>(
 	next?: NextObserver<T>,
 	error?: ErrorFunction,
@@ -412,9 +390,12 @@ export function map<T, T2>(mapFn: (val: T) => T2) {
 	});
 }
 
-export function debounceFunction<A, R>(fn: (...a: A[]) => R, delay?: number) {
+export function debounceFunction<A extends any[], R>(
+	fn: (...a: A) => R,
+	delay?: number
+) {
 	let to: number;
-	return function (this: any, ...args: A[]) {
+	return function (this: any, ...args: A) {
 		if (to) clearTimeout(to);
 		to = setTimeout(() => {
 			fn.apply(this, args);

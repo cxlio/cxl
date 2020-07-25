@@ -5,6 +5,16 @@ import { getRegisteredComponents, Component } from '../component/index.js';
 import { tap } from '../rx/index.js';
 import './index.js';
 
+const Measure: Record<string, any> = {
+	'CXL-APPBAR'(test: ComponentTest) {
+		test.measure({
+			'cxl-appbar': {
+				height: '56px',
+			},
+		});
+	},
+};
+
 function testStringValue(test: ComponentTest) {
 	test.test('[value] string', (a: Test) => {
 		a.dom.innerHTML = `<${test.tagName} value="initial" />`;
@@ -141,6 +151,7 @@ function testComponent(def: typeof Component, a: ComponentTest) {
 
 	if (el.getAttribute('role') === 'button') testButton(a);
 	if (attributes) testAttributes(attributes, a);
+	if (el.tagName in Measure) Measure[el.tagName](a);
 }
 
 export default spec('ui', a => {

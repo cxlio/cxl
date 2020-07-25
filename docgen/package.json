@@ -5,7 +5,8 @@
 	"homepage": "https://cxlio.github.io/cxl/docgen",
 	"license": "GPL-3.0",
 	"dependencies": {
-		"highlight.js": "^10.1.1"
+		"highlight.js": "^10.1.1",
+		"markdown-it": "^11.0.0"
 	},
 	"scripts": {
 		"build": "node build",

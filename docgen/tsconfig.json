@@ -10,6 +10,7 @@
 	"references": [{ "path": "../server" }, { "path": "../dts" }],
 	"files": [
 		"index.tsx",
+		"render.tsx",
 		"render-html.tsx",
 		"render-json.ts",
 		"localization.tsx"

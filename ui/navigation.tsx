@@ -12,16 +12,18 @@ import {
 	role,
 } from '../component/index.js';
 import { on, trigger } from '../dom/index.js';
-import {
-	onAction,
-	onLocation,
-	portal,
-	tpl,
-	triggerEvent,
-} from '../template/index.js';
-import { Style, padding } from '../css/index.js';
+import { onAction, portal, tpl, triggerEvent } from '../template/index.js';
+import { InversePrimary, ResetInverse, Style, padding } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
-import { Focusable, FocusHighlight, Svg, aria, ripple } from './core.js';
+import {
+	IconButton,
+	Focusable,
+	FocusHighlight,
+	StateStyles,
+	Svg,
+	aria,
+	ripple,
+} from './core.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -31,8 +33,8 @@ import { Drawer } from './dialog.js';
  * <cxl-appbar>
  *   <cxl-navbar></cxl-navbar>
  *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
- *   <cxl-button flat primary><cxl-icon icon="search"></cxl-icon></cxl-button>
- *   <cxl-button flat primary><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-button>
+ *   <cxl-icon-button><cxl-icon icon="search"></cxl-icon></cxl-icon-button>
+ *   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
  * </cxl-appbar>
  *
  * @see AppbarTitle
@@ -46,28 +48,26 @@ import { Drawer } from './dialog.js';
 			{{
 				$: {
 					display: 'block',
-					backgroundColor: 'primary',
+					...InversePrimary,
+					backgroundColor: 'surface',
 					flexShrink: 0,
 					font: 'title',
-					color: 'onPrimary',
+					color: 'onSurface',
 					elevation: 2,
 				},
 				flex: {
 					display: 'flex',
 					alignItems: 'center',
 					height: 56,
-					paddingLeft: 16,
-					paddingRight: 16,
-					paddingTop: 4,
-					paddingBottom: 4,
+					...padding(4, 8, 4, 8),
 					font: 'h6',
 				},
-
+				actions: { marginRight: -8 },
 				flex$extended: {
 					alignItems: 'start',
 					height: 128,
 					paddingBottom: 16,
-					font: 'h5',
+					// font: 'h5',
 				},
 				$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 				'@xlarge': {
@@ -100,7 +100,8 @@ export class Appbar extends Component {
 	/**
 	 * @demo
 	 * <cxl-appbar extended>
-	 * <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+	 *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+	 *   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
 	 * </cxl-appbar>
 	 */
 	@StyleAttribute()
@@ -122,12 +123,12 @@ export class Appbar extends Component {
 					flexGrow: 1,
 					marginTop: 8,
 					marginBottom: 8,
+					paddingLeft: 16,
+					paddingRight: 16,
 					lineHeight: 28,
-					color: 'onPrimary',
 					textDecoration: 'none',
 					alignSelf: 'flex-end',
 				},
-				// $extended: { font: 'h5', alignSelf: 'flex-end' },
 			}}
 		</Style>
 		<slot />
@@ -285,11 +286,12 @@ const MenuIcon = (
 				overflowScrolling: 'touch',
 			},
 			toggler: {
-				width: 16,
-				paddingTop: 4,
-				marginRight: 32,
+				backgroundColor: 'surface',
+				color: 'onSurface',
 				cursor: 'pointer',
+				marginLeft: 4,
 			},
+			drawer: ResetInverse,
 			'@large': {
 				toggler$permanent: { display: 'none' },
 			},
@@ -297,13 +299,7 @@ const MenuIcon = (
 	</Style>,
 	render(host => (
 		<Host>
-			<Drawer
-				$={el => ((host.drawer = el), EMPTY)}
-				permanent={get(host, 'permanent')}
-			>
-				<slot />
-			</Drawer>
-			<div
+			<IconButton
 				$={el =>
 					onAction(el).tap(() => {
 						if (host.drawer)
@@ -313,7 +309,14 @@ const MenuIcon = (
 				className="toggler"
 			>
 				{MenuIcon}
-			</div>
+			</IconButton>
+			<Drawer
+				className="drawer"
+				$={el => ((host.drawer = el), EMPTY)}
+				permanent={get(host, 'permanent')}
+			>
+				<slot />
+			</Drawer>
 		</Host>
 	))
 )
@@ -369,7 +372,6 @@ export class Menu extends Component {
 
 @Augment<Item>(
 	bind(ripple),
-	<Focusable />,
 	<Style>
 		{{
 			$: {
@@ -391,7 +393,6 @@ export class Menu extends Component {
 				textDecoration: 'none',
 				display: 'flex',
 			},
-			content: { flexGrow: 1 },
 			icon: {
 				marginRight: 16,
 				width: 28,
@@ -403,30 +404,24 @@ export class Menu extends Component {
 				backgroundColor: 'primaryLight',
 				color: 'onPrimaryLight',
 			},
-			...FocusHighlight,
+			$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
+			$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
+			...StateStyles,
 		}}
 	</Style>,
 	tpl(() => {
 		function init(el: any, host: Item) {
 			return merge(
-				get(host, 'href').tap(val => (el.href = val)),
-				onAction(host)
-					.tap(ev => {
-						if (ev.target === host && host.href) el.click();
-					})
-					.pipe(triggerEvent(el, 'drawer.close')),
-				onLocation().tap(location => {
-					if (host.href)
-						host.selected = location.href.indexOf(el.href) === 0;
-				})
+				get(host, 'href').tap(
+					val => val !== undefined && (el.href = val)
+				),
+				onAction(host).pipe(triggerEvent(el, 'drawer.close'))
 			);
 		}
 
 		return (
-			<a $={init} className="link" tabIndex={-1}>
-				<div className="content">
-					<slot />
-				</div>
+			<a $={init} className="link">
+				<slot />
 			</a>
 		);
 	})
@@ -435,7 +430,7 @@ export class Item extends Component {
 	static tagName = 'cxl-item';
 
 	@Attribute()
-	href = '';
+	href?: string;
 
 	@StyleAttribute()
 	selected = false;
@@ -443,6 +438,6 @@ export class Item extends Component {
 	@StyleAttribute()
 	disabled = false;
 
-	@Attribute()
-	touched = false;
+	// @Attribute()
+	// touched = false;
 }

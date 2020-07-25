@@ -1,4 +1,4 @@
-import { Reference } from '../rx/index.js';
+import { Subject } from '../rx/index.js';
 
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	PARAM_REGEX = /:([\w_$]+)/g,
@@ -9,20 +9,14 @@ const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 
 type Dictionary = Record<string, string>;
 type RouteArguments = { [key: string]: any };
+type RouteElement = Element;
 
 interface RouteInstances {
-	[key: string]: Element;
+	[key: string]: RouteElement;
 }
 
-interface Element {
-	parentNode: Element | null;
-	appendChild(el: Element): void;
-	removeChild(el: Element): void;
-}
-
-export interface RouteDefinition<T extends Element> {
+export interface RouteDefinition<T extends RouteElement> {
 	id?: string;
-	title?: string;
 	path: string;
 	isDefault?: boolean;
 	parent?: string;
@@ -55,6 +49,14 @@ export function replaceParameters(
 ) {
 	if (!params) return path;
 	return path.replace(PARAM_REGEX, (_match, key) => params[key] || '');
+}
+
+export function parseQueryParameters(query: string) {
+	const result: Record<string, string> = {};
+	let m;
+	while ((m = PARAM_QUERY_REGEX.exec(query)))
+		result[m[1]] = decodeURIComponent(m[2]);
+	return result;
 }
 
 class Fragment {
@@ -100,8 +102,8 @@ class Fragment {
 		return this._extractQuery(fragment, result);
 	}
 
-	test(hash: string) {
-		return this.regex.test(hash);
+	test(url: string) {
+		return this.regex.test(url);
 	}
 
 	toString() {
@@ -109,7 +111,7 @@ class Fragment {
 	}
 }
 
-export class Route<T extends Element> {
+export class Route<T extends RouteElement> {
 	id: string;
 	path?: Fragment;
 	parent?: string;
@@ -157,6 +159,41 @@ class RouteManager {
 		if (route.isDefault) this.defaultRoute = route;
 		this.routes.unshift(route);
 	}
+
+	reset() {
+		this.routes = [];
+	}
+}
+
+export function saveHistoryQueryUrl(href: string) {
+	history.pushState({ href }, '', `?${href}`);
+}
+export function getHistoryQueryUrl() {
+	return history.state?.href || location.search?.slice(1) || '';
+}
+
+export function saveHistoryUrl(href: string) {
+	history.pushState({ href }, '', href);
+}
+
+export function saveHash(href: string) {
+	location.hash = href;
+}
+
+export function getHash() {
+	return location.hash;
+}
+
+const URL_REGEX = /([^#]+)(?:#(.+))?/;
+
+interface Url {
+	path: string;
+	hash: string;
+}
+
+export function parseUrl(url: string): Url {
+	const match = URL_REGEX.exec(url);
+	return { path: match?.[1] || '', hash: match?.[2] || '' };
 }
 
 export class Router {
@@ -164,7 +201,8 @@ export class Router {
 	instances: RouteInstances = {};
 	current?: Element;
 	currentRoute?: Route<any>;
-	subject = new Reference<Element>();
+	currentUrl?: string;
+	subject = new Subject<RouteElement>();
 
 	constructor(public readonly root: Element) {}
 
@@ -179,7 +217,7 @@ export class Router {
 		return route;
 	}
 
-	private executeRoute<T extends Element>(
+	private executeRoute<T extends RouteElement>(
 		route: Route<T>,
 		args: Partial<T>,
 		instances: RouteInstances
@@ -192,9 +230,8 @@ export class Router {
 				: this.root,
 			instance = this.findRoute(id, args) || route.create(args);
 
-		if (instance && parent && instance.parentNode !== parent) {
+		if (instance && parent && instance.parentNode !== parent)
 			parent.appendChild(instance);
-		}
 
 		instances[id] = instance;
 
@@ -213,31 +250,40 @@ export class Router {
 		}
 	}
 
-	private execute<T extends Element>(Route: Route<T>, args?: Partial<T>) {
+	private execute<T extends RouteElement>(
+		Route: Route<T>,
+		args?: Partial<T>
+	) {
 		const instances = {};
-		const current = (this.current = this.executeRoute(
-			Route,
-			args || {},
-			instances
-		));
+		this.current = this.executeRoute(Route, args || {}, instances);
 		this.currentRoute = Route;
 		this.discardOldRoutes(instances);
 		this.instances = instances;
-		this.subject.next(current);
+		this.subject.next(this.current);
 	}
 
-	route<T extends Element>(def: RouteDefinition<T>) {
+	reset() {
+		this.routes.reset();
+	}
+
+	route<T extends RouteElement>(def: RouteDefinition<T>) {
 		const route = new Route<T>(def);
 		this.routes.register(route);
 		return route;
 	}
 
-	go(path: string) {
+	go(url: string) {
+		const match = /([^#]+)(?:#(.+))?/.exec(url);
+		if (!match) return;
+		const [, path, hash] = match;
 		const route = this.routes.findRoute(path);
 
 		if (!route) throw new Error(`Path: "${path}" not found`);
-
+		this.currentUrl = url;
 		this.execute(route, route.path?.getArguments(path));
+
+		if (hash)
+			this.root.querySelector(`a[name="${hash}"]`)?.scrollIntoView();
 	}
 
 	getPath(routeId: string, params: RouteArguments) {

@@ -31,14 +31,17 @@ import {
 import { on, remove, trigger } from '../dom/index.js';
 
 export const FocusHighlight = {
-	$active: { filter: 'invert(0.2)' },
-	$focus: {
-		filter: 'invert(0.2) saturate(2) brightness(1.1)',
-	},
+	$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
 	$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 };
 
-const StateStyles = {
+export function prefix<T>(pre: string, obj: T) {
+	const result: any = {};
+	for (const key in obj) result[pre + key] = obj[key];
+	return result;
+}
+
+export const StateStyles = {
 	$focus: {
 		outline: 0,
 	},
@@ -818,6 +821,7 @@ export class T extends Component {
 }
 
 @Augment<Toggle>(
+	'cxl-toggle',
 	<Host>
 		<Focusable />
 		<Style>
@@ -896,7 +900,6 @@ export class Toggle extends Component {
 					paddingLeft: 16,
 					cursor: 'pointer',
 					display: 'inline-block',
-					position: 'relative',
 					font: 'button',
 					borderRadius: 2,
 					userSelect: 'none',
@@ -975,6 +978,22 @@ export class ButtonBase extends Component {
  */
 @Augment('cxl-button', <slot />)
 export class Button extends ButtonBase {}
+
+@Augment(
+	'cxl-icon-button',
+	<Style>
+		{{
+			$: {
+				fontSize: 'inherit',
+				elevation: 0,
+				paddingLeft: 8,
+				paddingRight: 8,
+			},
+		}}
+	</Style>,
+	<slot />
+)
+export class IconButton extends ButtonBase {}
 
 function Head(p: { children: any }) {
 	const children = normalizeChildren(p.children);

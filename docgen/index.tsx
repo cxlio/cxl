@@ -17,15 +17,18 @@ export class DocGen extends Application {
 	name = '@cxl/docgen';
 	outputDir = './docs';
 	repository?: string;
+
 	clean = false;
 	debug = false;
 	modulePackage?: any;
+	spa = true;
 
 	setup() {
 		this.parameters.register(
 			{ name: 'repository', type: 'string' },
 			{ name: 'clean', help: 'Remove all files from output directory' },
 			{ name: 'outputDir', shortcut: 'o', type: 'string' },
+			{ name: 'spa', help: 'Enable single page application mode' },
 			{ name: 'debug' }
 		);
 	}

@@ -158,6 +158,8 @@ export class Test {
 	}
 }
 
+export type Measurements = Record<string, any>;
+
 /**
  * special suite for Web Components
  */
@@ -171,6 +173,28 @@ export class ComponentTest<T extends HTMLElement = HTMLElement> extends Test {
 		const el = document.createElement(tagName) as T;
 		this.dom.appendChild(el);
 		return el;
+	}
+
+	measure(measurements: Measurements) {
+		for (const selector in measurements) {
+			const elements = this.dom.querySelectorAll(selector);
+			if (elements.length === 0)
+				throw new Error(
+					`Measurement failed. Could not find elements matching "${selector}".`
+				);
+
+			elements.forEach(el => {
+				const styles = getComputedStyle(el);
+				const compare = measurements[selector];
+				for (const styleName in compare) {
+					this.equal(
+						(styles as any)[styleName],
+						compare[styleName],
+						`"${styleName} should be "${compare[styleName]}"`
+					);
+				}
+			});
+		}
 	}
 
 	testEvent(name: string, trigger: (el: T) => void) {

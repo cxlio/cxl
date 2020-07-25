@@ -48,30 +48,6 @@ function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
 	}
 }
 
-/*function normalizeCompilerOptions(options: CompilerOptions) {
-	const defaultOptions = getDefaultCompilerOptions();
-
-	return convertCompilerOptionsFromJson(
-		{
-			...defaultOptions,
-			...{
-				target: 'es2015',
-				strict: true,
-				sourceMap: true,
-				moduleResolution: 'node',
-				module: 'es6',
-				allowJs: true,
-				skipLibCheck: true,
-				experimentalDecorators: true,
-				jsx: 'react',
-				jsxFactory: 'dom',
-			},
-			...options,
-		},
-		'.'
-	).options;
-}*/
-
 function buildDiagnostics(program: Program | BuilderProgram) {
 	return [
 		...program.getConfigFileParsingDiagnostics(),
