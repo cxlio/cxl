@@ -183,18 +183,18 @@
           "source": {
             "fileName": "core.tsx",
             "line": 43,
-            "ch": 5
+            "ch": 12
           },
           "kind": 1001,
           "name": "StateStyles",
-          "flags": 0,
+          "flags": 1,
           "id": 10,
           "value": "{\n\t$focus: {\n\t\toutline: 0,\n\t},\n\t$disabled: {\n\t\tcursor: 'default',\n\t\tfilter: 'saturate(0)',\n\t\topacity: 0.38,\n\t\tpointerEvents: 'none',\n\t},\n}",
           "type": {
             "source": {
               "fileName": "core.tsx",
               "line": 43,
-              "ch": 19
+              "ch": 26
             },
             "kind": 1004,
             "name": "",
@@ -204,7 +204,7 @@
                 "source": {
                   "fileName": "core.tsx",
                   "line": 43,
-                  "ch": 21
+                  "ch": 28
                 },
                 "kind": 281,
                 "name": "$focus",
@@ -4261,7 +4261,7 @@
           "name": "FieldBase",
           "flags": 0,
           "id": 204,
-          "value": "(\n\t<Host>\n\t\t<Style>\n\t\t\t{{\n\t\t\t\t$: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tpaddingLeft: 12,\n\t\t\t\t\tpaddingRight: 12,\n\t\t\t\t\tcolor: 'onSurface',\n\t\t\t\t\tdisplay: 'block',\n\t\t\t\t},\n\t\t\t\t$focused: { borderColor: 'primary' },\n\t\t\t\t$outline: {\n\t\t\t\t\tborderColor: 'onSurface',\n\t\t\t\t\tborderWidth: 1,\n\t\t\t\t\tborderStyle: 'solid',\n\t\t\t\t\tborderRadius: 4,\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t\tpaddingTop: 14,\n\t\t\t\t\tpaddingBottom: 12,\n\t\t\t\t},\n\t\t\t\t$focused$outline: {\n\t\t\t\t\tborderColor: 'primary',\n\t\t\t\t},\n\t\t\t\t$invalid: { color: 'error' },\n\t\t\t\t$invalid$outline: { borderColor: 'error' },\n\t\t\t\t$invalid$outline$focused: {\n\t\t\t\t\t// boxShadow: '0 0 0 1px var(--cxl-error)'\n\t\t\t\t},\n\t\t\t\tcontent: {\n\t\t\t\t\tdisplay: 'flex',\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tmarginBottom: 4,\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t},\n\t\t\t\tmask: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttop: 0,\n\t\t\t\t\tright: 0,\n\t\t\t\t\tleft: 0,\n\t\t\t\t\tbottom: 0,\n\t\t\t\t\tbackgroundColor: 'surface',\n\t\t\t\t},\n\t\t\t\tmask$outline: { borderRadius: 4 },\n\t\t\t\tmask$hover: {\n\t\t\t\t\tfilter: 'invert(0.15) saturate(1.5) brightness(1.1)',\n\t\t\t\t},\n\t\t\t\tmask$hover$disabled: { filter: 'none' },\n\t\t\t\tlabel: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tfont: 'caption',\n\t\t\t\t\tlineHeight: 10,\n\t\t\t\t\tverticalAlign: 'bottom',\n\t\t\t\t},\n\t\t\t\tlabel$focused: { color: 'primary' },\n\t\t\t\tlabel$invalid: { color: 'error' },\n\t\t\t\tlabel$outline: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttranslateY: -26,\n\t\t\t\t\ttranslateX: -4,\n\t\t\t\t\tpaddingLeft: 4,\n\t\t\t\t\tpaddingRight: 4,\n\t\t\t\t\tbackgroundColor: 'surface',\n\t\t\t\t\tdisplay: 'inline-block',\n\t\t\t\t},\n\t\t\t\tlabel$floating$novalue: {\n\t\t\t\t\tfont: 'default',\n\t\t\t\t\ttranslateY: 20,\n\t\t\t\t\topacity: 0.75,\n\t\t\t\t},\n\t\t\t\tlabel$leading: { paddingLeft: 24 },\n\t\t\t\tlabel$floating$novalue$outline: { translateY: 27 },\n\t\t\t}}\n\t\t</Style>\n\t\t<div className=\"mask\"></div>\n\t\t<div className=\"label\">\n\t\t\t<Slot selector=\"cxl-label\" />\n\t\t</div>\n\t\t<div className=\"content\">\n\t\t\t<slot />\n\t\t</div>\n\t</Host>\n)",
+          "value": "(\n\t<Host>\n\t\t<Style>\n\t\t\t{{\n\t\t\t\t$: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tpaddingLeft: 12,\n\t\t\t\t\tpaddingRight: 12,\n\t\t\t\t\tcolor: 'onSurface',\n\t\t\t\t\tdisplay: 'block',\n\t\t\t\t},\n\t\t\t\t$focused: { borderColor: 'primary' },\n\t\t\t\t$outline: {\n\t\t\t\t\tborderColor: 'onSurface',\n\t\t\t\t\tborderWidth: 1,\n\t\t\t\t\tborderStyle: 'solid',\n\t\t\t\t\tborderRadius: 4,\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t\tpaddingTop: 14,\n\t\t\t\t\tpaddingBottom: 12,\n\t\t\t\t},\n\t\t\t\t$outline$focused: {\n\t\t\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'primary'),\n\t\t\t\t},\n\t\t\t\t$focused$outline: {\n\t\t\t\t\tborderColor: 'primary',\n\t\t\t\t},\n\t\t\t\t$invalid: { color: 'error' },\n\t\t\t\t$invalid$outline: { borderColor: 'error' },\n\t\t\t\t$invalid$outline$focused: {\n\t\t\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'error'),\n\t\t\t\t},\n\t\t\t\tcontent: {\n\t\t\t\t\tdisplay: 'flex',\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tmarginBottom: 4,\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t},\n\t\t\t\tmask: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttop: 0,\n\t\t\t\t\tright: 0,\n\t\t\t\t\tleft: 0,\n\t\t\t\t\tbottom: 0,\n\t\t\t\t\tbackgroundColor: 'surface',\n\t\t\t\t},\n\t\t\t\tmask$outline: { borderRadius: 4 },\n\t\t\t\tmask$hover: {\n\t\t\t\t\tfilter: 'invert(0.15) saturate(1.5) brightness(1.1)',\n\t\t\t\t},\n\t\t\t\tmask$hover$disabled: { filter: 'none' },\n\t\t\t\tlabel: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tfont: 'caption',\n\t\t\t\t\tlineHeight: 10,\n\t\t\t\t\tverticalAlign: 'bottom',\n\t\t\t\t},\n\t\t\t\tlabel$focused: { color: 'primary' },\n\t\t\t\tlabel$invalid: { color: 'error' },\n\t\t\t\tlabel$outline: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttranslateY: -26,\n\t\t\t\t\ttranslateX: -4,\n\t\t\t\t\tpaddingLeft: 4,\n\t\t\t\t\tpaddingRight: 4,\n\t\t\t\t\tbackgroundColor: 'surface',\n\t\t\t\t\tdisplay: 'inline-block',\n\t\t\t\t},\n\t\t\t\tlabel$floating$novalue: {\n\t\t\t\t\tfont: 'default',\n\t\t\t\t\ttranslateY: 20,\n\t\t\t\t\topacity: 0.75,\n\t\t\t\t},\n\t\t\t\tlabel$leading: { paddingLeft: 24 },\n\t\t\t\tlabel$floating$novalue$outline: { translateY: 27 },\n\t\t\t}}\n\t\t</Style>\n\t\t<div className=\"mask\"></div>\n\t\t<div className=\"label\">\n\t\t\t<Slot selector=\"cxl-label\" />\n\t\t</div>\n\t\t<div className=\"content\">\n\t\t\t<slot />\n\t\t</div>\n\t</Host>\n)",
           "type": {
             "name": "JSXElement",
             "kind": 169,
@@ -4277,7 +4277,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 396,
+            "line": 399,
             "ch": 2
           },
           "kind": 1005,
@@ -4303,7 +4303,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 411,
+            "line": 414,
             "ch": 39
           },
           "kind": 1005,
@@ -4323,7 +4323,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 527,
+                "line": 531,
                 "ch": 38
               },
               "kind": 1006,
@@ -4340,7 +4340,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 529,
+                "line": 533,
                 "ch": 17
               },
               "kind": 1006,
@@ -4357,7 +4357,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 531,
+                "line": 535,
                 "ch": 33
               },
               "kind": 1006,
@@ -4374,7 +4374,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 533,
+                "line": 537,
                 "ch": 17
               },
               "kind": 1006,
@@ -4391,7 +4391,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 535,
+                "line": 539,
                 "ch": 18
               },
               "kind": 1006,
@@ -4408,7 +4408,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 537,
+                "line": 541,
                 "ch": 17
               },
               "kind": 1006,
@@ -4425,7 +4425,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 539,
+                "line": 543,
                 "ch": 17
               },
               "kind": 1006,
@@ -4442,7 +4442,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 541,
+                "line": 545,
                 "ch": 17
               },
               "kind": 1006,
@@ -4472,7 +4472,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 544,
+            "line": 548,
             "ch": 1
           },
           "kind": 1005,
@@ -4492,7 +4492,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 570,
+                "line": 574,
                 "ch": 42
               },
               "kind": 1006,
@@ -4522,7 +4522,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 573,
+            "line": 577,
             "ch": 1
           },
           "kind": 1005,
@@ -4548,7 +4548,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 636,
+            "line": 640,
             "ch": 45
           },
           "kind": 1005,
@@ -4559,7 +4559,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 662,
+                "line": 666,
                 "ch": 42
               },
               "kind": 1006,
@@ -4576,7 +4576,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 664,
+                "line": 668,
                 "ch": 17
               },
               "kind": 1006,
@@ -4609,7 +4609,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 668,
+            "line": 672,
             "ch": 1
           },
           "kind": 1005,
@@ -4630,7 +4630,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 702,
+                "line": 706,
                 "ch": 37
               },
               "kind": 1006,
@@ -4647,7 +4647,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 704,
+                "line": 708,
                 "ch": 22
               },
               "kind": 159,
@@ -4670,7 +4670,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 706,
+                "line": 710,
                 "ch": 33
               },
               "kind": 161,
@@ -4687,7 +4687,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 718,
+                "line": 722,
                 "ch": 2
               },
               "kind": 161,
@@ -4728,7 +4728,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 727,
+            "line": 731,
             "ch": 1
           },
           "kind": 1005,
@@ -4749,7 +4749,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 761,
+                "line": 765,
                 "ch": 38
               },
               "kind": 1006,
@@ -4765,7 +4765,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 763,
+                "line": 767,
                 "ch": 20
               },
               "kind": 159,
@@ -4796,7 +4796,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 766,
+            "line": 770,
             "ch": 1
           },
           "kind": 1005,
@@ -4807,7 +4807,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 821,
+                "line": 825,
                 "ch": 39
               },
               "kind": 1006,
@@ -4824,7 +4824,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 823,
+                "line": 827,
                 "ch": 19
               },
               "kind": 1006,
@@ -4841,7 +4841,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 826,
+                "line": 830,
                 "ch": 18
               },
               "kind": 1006,
@@ -4858,7 +4858,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 829,
+                "line": 833,
                 "ch": 17
               },
               "kind": 1006,
@@ -4892,7 +4892,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 833,
+            "line": 837,
             "ch": 1
           },
           "kind": 1005,
@@ -4913,7 +4913,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 869,
+                "line": 873,
                 "ch": 46
               },
               "kind": 1006,
@@ -4929,7 +4929,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 871,
+                "line": 875,
                 "ch": 20
               },
               "kind": 159,
@@ -4960,7 +4960,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 876,
+            "line": 880,
             "ch": 5
           },
           "kind": 1001,
@@ -4984,7 +4984,7 @@
           "id": 238,
           "source": {
             "fileName": "form.tsx",
-            "line": 876,
+            "line": 880,
             "ch": 39
           },
           "kind": 1005,
@@ -5004,7 +5004,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 978,
+                "line": 982,
                 "ch": 38
               },
               "kind": 1006,
@@ -5035,7 +5035,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 981,
+            "line": 985,
             "ch": 1
           },
           "kind": 1005,
@@ -5046,7 +5046,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1048,
+                "line": 1052,
                 "ch": 43
               },
               "kind": 1006,
@@ -5063,7 +5063,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1050,
+                "line": 1054,
                 "ch": 17
               },
               "kind": 1006,
@@ -5078,7 +5078,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1053,
+                "line": 1057,
                 "ch": 18
               },
               "kind": 1006,
@@ -5094,7 +5094,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1056,
+                "line": 1060,
                 "ch": 19
               },
               "kind": 1006,
@@ -5127,7 +5127,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1060,
+            "line": 1064,
             "ch": 1
           },
           "kind": 1005,
@@ -5148,7 +5148,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1158,
+                "line": 1162,
                 "ch": 42
               },
               "kind": 1006,
@@ -5165,7 +5165,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1160,
+                "line": 1164,
                 "ch": 16
               },
               "kind": 1006,
@@ -5181,7 +5181,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1163,
+                "line": 1167,
                 "ch": 19
               },
               "kind": 161,
@@ -5198,7 +5198,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1169,
+                "line": 1173,
                 "ch": 2
               },
               "kind": 161,
@@ -5229,7 +5229,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1175,
+            "line": 1179,
             "ch": 1
           },
           "kind": 1005,
@@ -5250,7 +5250,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1258,
+                "line": 1262,
                 "ch": 39
               },
               "kind": 159,
@@ -5273,7 +5273,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1259,
+                "line": 1263,
                 "ch": 19
               },
               "kind": 1006,
@@ -5290,7 +5290,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1261,
+                "line": 1265,
                 "ch": 17
               },
               "kind": 1006,
@@ -5307,7 +5307,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1263,
+                "line": 1267,
                 "ch": 26
               },
               "kind": 1006,
@@ -5338,7 +5338,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1266,
+            "line": 1270,
             "ch": 1
           },
           "kind": 244,
@@ -5349,7 +5349,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1268,
+                "line": 1272,
                 "ch": 21
               },
               "kind": 156,
@@ -5364,7 +5364,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1268,
+                "line": 1272,
                 "ch": 37
               },
               "kind": 156,
@@ -5409,7 +5409,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1271,
+            "line": 1275,
             "ch": 1
           },
           "kind": 244,
@@ -5420,7 +5420,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1273,
+                "line": 1277,
                 "ch": 21
               },
               "kind": 156,
@@ -5435,7 +5435,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1273,
+                "line": 1277,
                 "ch": 42
               },
               "kind": 156,
@@ -5464,7 +5464,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1282,
+            "line": 1286,
             "ch": 1
           },
           "kind": 244,
@@ -5475,7 +5475,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1284,
+                "line": 1288,
                 "ch": 26
               },
               "kind": 156,
@@ -5490,7 +5490,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1284,
+                "line": 1288,
                 "ch": 42
               },
               "kind": 156,
@@ -5519,7 +5519,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1295,
+            "line": 1299,
             "ch": 1
           },
           "kind": 1005,
@@ -5540,7 +5540,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1326,
+                "line": 1330,
                 "ch": 41
               },
               "kind": 1006,
@@ -5571,7 +5571,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1329,
+            "line": 1333,
             "ch": 1
           },
           "kind": 1005,
@@ -5594,7 +5594,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1368,
+                "line": 1372,
                 "ch": 36
               },
               "kind": 1006,
@@ -5611,7 +5611,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1370,
+                "line": 1374,
                 "ch": 18
               },
               "kind": 1006,
@@ -5628,7 +5628,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1372,
+                "line": 1376,
                 "ch": 16
               },
               "kind": 159,
@@ -5824,6 +5824,16 @@
           "type": {
             "id": 1,
             "name": "FocusHighlight",
+            "kind": 169
+          }
+        },
+        {
+          "name": "StateStyles",
+          "kind": 263,
+          "flags": 1,
+          "type": {
+            "id": 10,
+            "name": "StateStyles",
             "kind": 169
           }
         },
@@ -33711,7 +33721,7 @@
             "content": [
               {
                 "tag": "example",
-                "value": "<cxl-menu>\n<cxl-item disabled>Option disabled</cxl-item>\n<cxl-item selected>Option Selected</cxl-item>\n<cxl-item>Option 2</cxl-item>\n<cxl-hr></cxl-hr>\n<cxl-item>Option 3</cxl-item>\n</cxl-menu>"
+                "value": "<cxl-menu>\n  <cxl-item disabled>Option disabled</cxl-item>\n  <cxl-item selected>Option Selected</cxl-item>\n  <cxl-item>Option 2</cxl-item>\n  <cxl-hr></cxl-hr>\n  <cxl-item>Option 3</cxl-item>\n</cxl-menu>"
               }
             ],
             "tagName": "cxl-menu"
@@ -33795,64 +33805,13 @@
             {
               "source": {
                 "fileName": "navigation.tsx",
-                "line": 425,
+                "line": 397,
                 "ch": 37
-              },
-              "kind": 159,
-              "name": "tagName",
-              "flags": 36,
-              "id": 1304,
-              "value": "'cxl-item'",
-              "type": {
-                "name": "string",
-                "kind": 1002,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "navigation.tsx",
-                "line": 426,
-                "ch": 29
-              },
-              "kind": 1006,
-              "name": "href",
-              "flags": 4,
-              "id": 1305,
-              "value": "''",
-              "type": {
-                "name": "string",
-                "kind": 1002,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "navigation.tsx",
-                "line": 429,
-                "ch": 11
               },
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1306,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 1002,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "navigation.tsx",
-                "line": 432,
-                "ch": 18
-              },
-              "kind": 1006,
-              "name": "disabled",
-              "flags": 4,
-              "id": 1307,
+              "id": 1304,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -33874,14 +33833,7 @@
                 "kind": 169
               }
             ]
-          },
-          "extendedBy": [
-            {
-              "id": 1364,
-              "name": "RouterItem",
-              "kind": 169
-            }
-          ]
+          }
         }
       ]
     },
@@ -33904,7 +33856,7 @@
           "kind": 244,
           "name": "onHeaderAction",
           "flags": 0,
-          "id": 1308,
+          "id": 1305,
           "parameters": [
             {
               "source": {
@@ -33915,7 +33867,7 @@
               "kind": 156,
               "name": "el",
               "flags": 0,
-              "id": 1309,
+              "id": 1306,
               "type": {
                 "id": 290,
                 "name": "Th",
@@ -33954,7 +33906,7 @@
           "kind": 244,
           "name": "onSort",
           "flags": 0,
-          "id": 1310,
+          "id": 1307,
           "parameters": [
             {
               "source": {
@@ -33965,7 +33917,7 @@
               "kind": 156,
               "name": "el",
               "flags": 0,
-              "id": 1311,
+              "id": 1308,
               "type": {
                 "name": "HTMLElement",
                 "kind": 169
@@ -33980,7 +33932,7 @@
               "kind": 156,
               "name": "host",
               "flags": 0,
-              "id": 1312,
+              "id": 1309,
               "type": {
                 "id": 290,
                 "name": "Th",
@@ -34052,7 +34004,7 @@
               "kind": 159,
               "name": "eventType",
               "flags": 4,
-              "id": 1313,
+              "id": 1310,
               "type": {
                 "source": {
                   "fileName": "table.tsx",
@@ -34073,7 +34025,7 @@
               "kind": 1006,
               "name": "width",
               "flags": 4,
-              "id": 1314,
+              "id": 1311,
               "type": {
                 "name": "number",
                 "kind": 1002,
@@ -34089,7 +34041,7 @@
               "kind": 1006,
               "name": "sortable",
               "flags": 4,
-              "id": 1315,
+              "id": 1312,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34106,7 +34058,7 @@
               "kind": 1006,
               "name": "'sort-order'",
               "flags": 4,
-              "id": 1316,
+              "id": 1313,
               "type": {
                 "source": {
                   "fileName": "table.tsx",
@@ -34213,7 +34165,7 @@
           "kind": 1005,
           "name": "Cell",
           "flags": 0,
-          "id": 1317,
+          "id": 1314,
           "children": [],
           "docs": {
             "role": "table-cell"
@@ -34262,7 +34214,7 @@
             "name": "",
             "children": [
               {
-                "id": 1317,
+                "id": 1314,
                 "name": "Cell",
                 "kind": 169
               }
@@ -34289,7 +34241,7 @@
               "kind": 159,
               "name": "selectEvent",
               "flags": 68,
-              "id": 1318,
+              "id": 1315,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -34306,7 +34258,7 @@
               "kind": 1006,
               "name": "checked",
               "flags": 4,
-              "id": 1319,
+              "id": 1316,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34321,7 +34273,7 @@
             "name": "",
             "children": [
               {
-                "id": 1317,
+                "id": 1314,
                 "name": "Cell",
                 "kind": 169
               }
@@ -34387,7 +34339,7 @@
               "kind": 159,
               "name": "selectEvent",
               "flags": 68,
-              "id": 1320,
+              "id": 1317,
               "value": "'datatable.selectAll'",
               "type": {
                 "name": "\"datatable.selectAll\"",
@@ -34437,7 +34389,7 @@
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1321,
+              "id": 1318,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34508,7 +34460,7 @@
               "kind": 1006,
               "name": "selected",
               "flags": 4,
-              "id": 1322,
+              "id": 1319,
               "type": {
                 "name": "any",
                 "kind": 1002,
@@ -34616,7 +34568,7 @@
           "kind": 1001,
           "name": "DialogStyles",
           "flags": 0,
-          "id": 1323,
+          "id": 1320,
           "value": "(\n\t<Style>\n\t\t{{\n\t\t\tcontent: padding(16),\n\t\t\tfooter: padding(8),\n\t\t}}\n\t</Style>\n)",
           "type": {
             "name": "JSXElement",
@@ -34660,7 +34612,7 @@
               "kind": 159,
               "name": "resolve",
               "flags": 4,
-              "id": 1324,
+              "id": 1321,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -34670,7 +34622,7 @@
                 "kind": 170,
                 "name": "",
                 "flags": 0,
-                "id": 1325,
+                "id": 1322,
                 "type": {
                   "name": "void",
                   "kind": 1002,
@@ -34688,7 +34640,7 @@
               "kind": 1006,
               "name": "'title-text'",
               "flags": 4,
-              "id": 1326,
+              "id": 1323,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34705,7 +34657,7 @@
               "kind": 1006,
               "name": "message",
               "flags": 4,
-              "id": 1327,
+              "id": 1324,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34722,7 +34674,7 @@
               "kind": 1006,
               "name": "action",
               "flags": 4,
-              "id": 1328,
+              "id": 1325,
               "value": "'Ok'",
               "type": {
                 "name": "string",
@@ -34739,7 +34691,7 @@
               "kind": 159,
               "name": "promise",
               "flags": 68,
-              "id": 1329,
+              "id": 1326,
               "value": "new Promise(resolve => {\n\t\tthis.resolve = resolve;\n\t})",
               "type": {
                 "name": "Promise",
@@ -34796,7 +34748,7 @@
               "kind": 159,
               "name": "resolve",
               "flags": 4,
-              "id": 1330,
+              "id": 1327,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -34806,7 +34758,7 @@
                 "kind": 170,
                 "name": "",
                 "flags": 0,
-                "id": 1331,
+                "id": 1328,
                 "type": {
                   "name": "void",
                   "kind": 1002,
@@ -34824,7 +34776,7 @@
               "kind": 159,
               "name": "reject",
               "flags": 4,
-              "id": 1332,
+              "id": 1329,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -34834,7 +34786,7 @@
                 "kind": 170,
                 "name": "",
                 "flags": 0,
-                "id": 1333,
+                "id": 1330,
                 "type": {
                   "name": "void",
                   "kind": 1002,
@@ -34852,7 +34804,7 @@
               "kind": 1006,
               "name": "'cancel-text'",
               "flags": 4,
-              "id": 1334,
+              "id": 1331,
               "value": "'Cancel'",
               "type": {
                 "name": "string",
@@ -34869,7 +34821,7 @@
               "kind": 1006,
               "name": "'title-text'",
               "flags": 4,
-              "id": 1335,
+              "id": 1332,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34886,7 +34838,7 @@
               "kind": 1006,
               "name": "message",
               "flags": 4,
-              "id": 1336,
+              "id": 1333,
               "value": "''",
               "type": {
                 "name": "string",
@@ -34903,7 +34855,7 @@
               "kind": 1006,
               "name": "action",
               "flags": 4,
-              "id": 1337,
+              "id": 1334,
               "value": "'Ok'",
               "type": {
                 "name": "string",
@@ -34920,7 +34872,7 @@
               "kind": 159,
               "name": "promise",
               "flags": 68,
-              "id": 1338,
+              "id": 1335,
               "value": "new Promise((resolve, reject) => {\n\t\tthis.resolve = resolve;\n\t\tthis.reject = reject;\n\t})",
               "type": {
                 "name": "Promise",
@@ -34976,7 +34928,7 @@
               "kind": 1006,
               "name": "visible",
               "flags": 4,
-              "id": 1339,
+              "id": 1336,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -34993,7 +34945,7 @@
               "kind": 1006,
               "name": "right",
               "flags": 4,
-              "id": 1340,
+              "id": 1337,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -35010,7 +34962,7 @@
               "kind": 1006,
               "name": "permanent",
               "flags": 4,
-              "id": 1341,
+              "id": 1338,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -35060,7 +35012,7 @@
               "kind": 1006,
               "name": "delay",
               "flags": 4,
-              "id": 1342,
+              "id": 1339,
               "value": "4000",
               "type": {
                 "name": "number",
@@ -35101,7 +35053,7 @@
               "kind": 159,
               "name": "queue",
               "flags": 4,
-              "id": 1343,
+              "id": 1340,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -35128,7 +35080,7 @@
               "kind": 161,
               "name": "notifyNext",
               "flags": 8,
-              "id": 1344,
+              "id": 1341,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -35145,7 +35097,7 @@
               "kind": 161,
               "name": "notify",
               "flags": 4,
-              "id": 1345,
+              "id": 1342,
               "parameters": [
                 {
                   "source": {
@@ -35156,7 +35108,7 @@
                   "kind": 156,
                   "name": "snackbar",
                   "flags": 0,
-                  "id": 1346,
+                  "id": 1343,
                   "type": {
                     "id": 275,
                     "name": "Snackbar",
@@ -35201,72 +35153,84 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 8,
+            "line": 22,
             "ch": 5
           },
           "kind": 1001,
-          "name": "routes",
+          "name": "router$",
           "flags": 0,
-          "id": 1347,
+          "id": 1344,
+          "value": "new Reference<RouterState>()",
           "type": {
-            "source": {
-              "fileName": "router.tsx",
-              "line": 8,
-              "ch": 13
-            },
-            "kind": 174,
-            "name": "Array",
-            "flags": 0,
-            "type": {
-              "name": "RouteDefinition",
-              "kind": 169,
-              "typeParameters": [
-                {
-                  "name": "any",
-                  "kind": 1002,
-                  "flags": 0
-                }
-              ]
-            }
-          },
-          "value": "[]"
+            "name": "Reference",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "RouterState",
+                "kind": 169
+              }
+            ]
+          }
         },
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 9,
-            "ch": 3
+            "line": 23,
+            "ch": 5
           },
-          "kind": 242,
-          "name": "defaultRouter",
+          "kind": 1001,
+          "name": "strategy$",
           "flags": 0,
-          "id": 1348,
+          "id": 1345,
+          "value": "new Reference<Strategy>()",
           "type": {
-            "name": "MainRouter",
+            "name": "Reference",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "Strategy",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "router.tsx",
+            "line": 24,
+            "ch": 5
+          },
+          "kind": 1001,
+          "name": "router",
+          "flags": 0,
+          "id": 1346,
+          "value": "new MainRouter(state => router$.next(state))",
+          "type": {
+            "name": "Router",
             "kind": 169
           }
         },
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 9,
-            "ch": 30
+            "line": 24,
+            "ch": 60
           },
           "kind": 244,
           "name": "Route",
           "flags": 1,
-          "id": 1349,
+          "id": 1347,
           "parameters": [
             {
               "source": {
                 "fileName": "router.tsx",
-                "line": 11,
+                "line": 26,
                 "ch": 22
               },
               "kind": 156,
               "name": "path",
               "flags": 0,
-              "id": 1350,
+              "id": 1348,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35277,24 +35241,24 @@
           "type": {
             "source": {
               "fileName": "router.tsx",
-              "line": 12,
+              "line": 27,
               "ch": 7
             },
             "kind": 244,
             "name": "",
             "flags": 0,
-            "id": 1351,
+            "id": 1349,
             "parameters": [
               {
                 "source": {
                   "fileName": "router.tsx",
-                  "line": 12,
+                  "line": 27,
                   "ch": 9
                 },
                 "kind": 156,
                 "name": "ctor",
                 "flags": 0,
-                "id": 1352,
+                "id": 1350,
                 "type": {
                   "name": "any",
                   "kind": 1002,
@@ -35312,24 +35276,24 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 18,
+            "line": 33,
             "ch": 1
           },
           "kind": 244,
           "name": "DefaultRoute",
           "flags": 1,
-          "id": 1353,
+          "id": 1351,
           "parameters": [
             {
               "source": {
                 "fileName": "router.tsx",
-                "line": 20,
+                "line": 35,
                 "ch": 29
               },
               "kind": 156,
               "name": "path",
               "flags": 0,
-              "id": 1354,
+              "id": 1352,
               "value": "''",
               "type": {
                 "name": "string",
@@ -35341,24 +35305,24 @@
           "type": {
             "source": {
               "fileName": "router.tsx",
-              "line": 21,
+              "line": 36,
               "ch": 7
             },
             "kind": 244,
             "name": "",
             "flags": 0,
-            "id": 1355,
+            "id": 1353,
             "parameters": [
               {
                 "source": {
                   "fileName": "router.tsx",
-                  "line": 21,
+                  "line": 36,
                   "ch": 9
                 },
                 "kind": 156,
                 "name": "ctor",
                 "flags": 0,
-                "id": 1356,
+                "id": 1354,
                 "type": {
                   "name": "any",
                   "kind": 1002,
@@ -35376,22 +35340,60 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 28,
+            "line": 43,
             "ch": 1
           },
           "kind": 244,
-          "name": "Router",
+          "name": "routerOutlet",
+          "flags": 1,
+          "id": 1355,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "router.tsx",
+                "line": 45,
+                "ch": 29
+              },
+              "kind": 156,
+              "name": "host",
+              "flags": 0,
+              "id": 1356,
+              "type": {
+                "name": "HTMLElement",
+                "kind": 169
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "RouterState",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "router.tsx",
+            "line": 59,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "routerStrategy",
           "flags": 1,
           "id": 1357,
           "parameters": [
             {
               "source": {
                 "fileName": "router.tsx",
-                "line": 30,
-                "ch": 23
+                "line": 61,
+                "ch": 31
               },
               "kind": 156,
-              "name": "strategy",
+              "name": "getUrl",
               "flags": 0,
               "id": 1358,
               "type": {
@@ -35399,35 +35401,115 @@
                 "kind": 169,
                 "typeParameters": [
                   {
-                    "name": "string",
+                    "name": "any",
                     "kind": 1002,
                     "flags": 0
                   }
                 ]
+              },
+              "value": "onLocation()"
+            },
+            {
+              "source": {
+                "fileName": "router.tsx",
+                "line": 62,
+                "ch": 40
+              },
+              "kind": 156,
+              "name": "strategy",
+              "flags": 0,
+              "id": 1359,
+              "type": {
+                "name": "Strategy",
+                "kind": 169
+              },
+              "value": "Strategies.query"
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 169,
+            "typeParameters": [
+              {
+                "name": "any",
+                "kind": 1002,
+                "flags": 0
               }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "router.tsx",
+            "line": 69,
+            "ch": 1
+          },
+          "kind": 244,
+          "name": "Router",
+          "flags": 1,
+          "id": 1360,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "router.tsx",
+                "line": 71,
+                "ch": 23
+              },
+              "kind": 156,
+              "name": "getUrl",
+              "flags": 0,
+              "id": 1361,
+              "type": {
+                "name": "Observable",
+                "kind": 169,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 1002,
+                    "flags": 0
+                  }
+                ]
+              },
+              "value": "onLocation()"
+            },
+            {
+              "source": {
+                "fileName": "router.tsx",
+                "line": 72,
+                "ch": 40
+              },
+              "kind": 156,
+              "name": "strategy",
+              "flags": 0,
+              "id": 1362,
+              "type": {
+                "name": "Strategy",
+                "kind": 169
+              },
+              "value": "Strategies.query"
             }
           ],
           "type": {
             "source": {
               "fileName": "router.tsx",
-              "line": 31,
+              "line": 75,
               "ch": 7
             },
             "kind": 244,
             "name": "",
             "flags": 0,
-            "id": 1359,
+            "id": 1363,
             "parameters": [
               {
                 "source": {
                   "fileName": "router.tsx",
-                  "line": 31,
+                  "line": 75,
                   "ch": 9
                 },
                 "kind": 156,
                 "name": "ctor",
                 "flags": 0,
-                "id": 1360,
+                "id": 1364,
                 "type": {
                   "name": "any",
                   "kind": 1002,
@@ -35445,13 +35527,13 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 40,
+            "line": 82,
             "ch": 1
           },
           "kind": 244,
           "name": "RouterTitle",
           "flags": 1,
-          "id": 1361,
+          "id": 1365,
           "parameters": [],
           "type": {
             "name": "JSXElement",
@@ -35468,24 +35550,24 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 59,
+            "line": 102,
             "ch": 1
           },
           "kind": 244,
           "name": "renderTemplate",
           "flags": 0,
-          "id": 1362,
+          "id": 1366,
           "parameters": [
             {
               "source": {
                 "fileName": "router.tsx",
-                "line": 61,
+                "line": 104,
                 "ch": 24
               },
               "kind": 156,
               "name": "tpl",
               "flags": 0,
-              "id": 1363,
+              "id": 1367,
               "type": {
                 "name": "HTMLTemplateElement",
                 "kind": 169
@@ -35500,41 +35582,31 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 65,
+            "line": 108,
             "ch": 1
-          },
-          "kind": 1005,
-          "name": "RouterItem",
-          "flags": 1,
-          "id": 1364,
-          "children": [],
-          "docs": {
-            "tagName": "cxl-router-item"
-          },
-          "type": {
-            "flags": 0,
-            "kind": 1003,
-            "name": "",
-            "children": [
-              {
-                "id": 289,
-                "name": "Item",
-                "kind": 169
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "router.tsx",
-            "line": 79,
-            "ch": 39
           },
           "kind": 1005,
           "name": "RouterLink",
           "flags": 1,
-          "id": 1365,
-          "children": [],
+          "id": 1368,
+          "children": [
+            {
+              "source": {
+                "fileName": "router.tsx",
+                "line": 142,
+                "ch": 43
+              },
+              "kind": 1006,
+              "name": "href",
+              "flags": 4,
+              "id": 1369,
+              "type": {
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            }
+          ],
           "docs": {
             "tagName": "cxl-router-link"
           },
@@ -35553,31 +35625,74 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 95,
-            "ch": 44
+            "line": 145,
+            "ch": 1
           },
           "kind": 1005,
-          "name": "RouterOutlet",
+          "name": "RouterItem",
           "flags": 1,
-          "id": 1366,
+          "id": 1370,
           "children": [
             {
               "source": {
                 "fileName": "router.tsx",
-                "line": 109,
-                "ch": 45
+                "line": 181,
+                "ch": 43
               },
-              "kind": 159,
-              "name": "router",
+              "kind": 1006,
+              "name": "href",
               "flags": 4,
-              "id": 1367,
-              "value": "(defaultRouter = new MainRouter(this))",
+              "id": 1371,
               "type": {
-                "name": "Router",
-                "kind": 169
+                "name": "string",
+                "kind": 1002,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "router.tsx",
+                "line": 183,
+                "ch": 15
+              },
+              "kind": 1006,
+              "name": "disabled",
+              "flags": 4,
+              "id": 1372,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 1002,
+                "flags": 0
               }
             }
           ],
+          "docs": {
+            "tagName": "cxl-router-item"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 1003,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 169
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "router.tsx",
+            "line": 187,
+            "ch": 1
+          },
+          "kind": 1005,
+          "name": "RouterOutlet",
+          "flags": 1,
+          "id": 1373,
+          "children": [],
           "docs": {
             "tagName": "cxl-router-outlet"
           },
@@ -35596,14 +35711,69 @@
         {
           "source": {
             "fileName": "router.tsx",
-            "line": 111,
-            "ch": 1
+            "line": 190,
+            "ch": 46
           },
           "kind": 1005,
           "name": "RouterComponent",
           "flags": 1,
-          "id": 1368,
-          "children": [],
+          "id": 1374,
+          "children": [
+            {
+              "source": {
+                "fileName": "router.tsx",
+                "line": 222,
+                "ch": 48
+              },
+              "kind": 1006,
+              "name": "strategy",
+              "flags": 4,
+              "id": 1375,
+              "type": {
+                "source": {
+                  "fileName": "router.tsx",
+                  "line": 224,
+                  "ch": 10
+                },
+                "kind": 178,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "router.tsx",
+                      "line": 224,
+                      "ch": 10
+                    },
+                    "kind": 187,
+                    "name": "'hash'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "router.tsx",
+                      "line": 224,
+                      "ch": 19
+                    },
+                    "kind": 187,
+                    "name": "'path'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "router.tsx",
+                      "line": 224,
+                      "ch": 28
+                    },
+                    "kind": 187,
+                    "name": "'query'",
+                    "flags": 0
+                  }
+                ]
+              },
+              "value": "'query'"
+            }
+          ],
           "docs": {
             "tagName": "cxl-router"
           },
@@ -35640,7 +35810,7 @@
           "kind": 246,
           "name": "ComponentMeta",
           "flags": 1,
-          "id": 1369,
+          "id": 1376,
           "children": [
             {
               "source": {
@@ -35651,7 +35821,7 @@
               "kind": 159,
               "name": "added",
               "flags": 4,
-              "id": 1370,
+              "id": 1377,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35667,7 +35837,7 @@
               "kind": 159,
               "name": "beta",
               "flags": 4,
-              "id": 1371,
+              "id": 1378,
               "type": {
                 "name": "boolean",
                 "kind": 1002,
@@ -35683,7 +35853,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1372,
+              "id": 1379,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35699,7 +35869,7 @@
               "kind": 159,
               "name": "icon",
               "flags": 4,
-              "id": 1373,
+              "id": 1380,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35715,7 +35885,7 @@
               "kind": 159,
               "name": "tags",
               "flags": 4,
-              "id": 1374,
+              "id": 1381,
               "type": {
                 "source": {
                   "fileName": "meta.ts",
@@ -35741,9 +35911,9 @@
               "kind": 159,
               "name": "demo",
               "flags": 4,
-              "id": 1375,
+              "id": 1382,
               "type": {
-                "id": 1376,
+                "id": 1383,
                 "name": "Demo",
                 "kind": 169
               }
@@ -35759,7 +35929,7 @@
           "kind": 246,
           "name": "AttributeMeta",
           "flags": 1,
-          "id": 1377,
+          "id": 1384,
           "children": [
             {
               "source": {
@@ -35770,7 +35940,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1378,
+              "id": 1385,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35786,7 +35956,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1379,
+              "id": 1386,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35796,7 +35966,7 @@
           ]
         },
         {
-          "id": 1376,
+          "id": 1383,
           "source": {
             "fileName": "meta.ts",
             "line": 11,
@@ -35815,7 +35985,7 @@
               "kind": 159,
               "name": "content",
               "flags": 4,
-              "id": 1380,
+              "id": 1387,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35833,7 +36003,7 @@
           "kind": 1001,
           "name": "components",
           "flags": 1,
-          "id": 1381,
+          "id": 1388,
           "type": {
             "name": "Record",
             "kind": 169,
@@ -35844,7 +36014,7 @@
                 "flags": 0
               },
               {
-                "id": 1369,
+                "id": 1376,
                 "name": "ComponentMeta",
                 "kind": 169
               }
@@ -35861,7 +36031,7 @@
           "kind": 246,
           "name": "AttributeMeta",
           "flags": 1,
-          "id": 1382,
+          "id": 1389,
           "children": [
             {
               "source": {
@@ -35872,7 +36042,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1379,
+              "id": 1386,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35888,7 +36058,7 @@
               "kind": 159,
               "name": "summary",
               "flags": 4,
-              "id": 1378,
+              "id": 1385,
               "type": {
                 "name": "string",
                 "kind": 1002,
@@ -35906,7 +36076,7 @@
           "kind": 1001,
           "name": "attributes",
           "flags": 0,
-          "id": 1383,
+          "id": 1390,
           "type": {
             "name": "Record",
             "kind": 169,
@@ -35917,7 +36087,7 @@
                 "flags": 0
               },
               {
-                "id": 1377,
+                "id": 1384,
                 "name": "AttributeMeta",
                 "kind": 169
               }

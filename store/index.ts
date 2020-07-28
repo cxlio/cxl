@@ -1,7 +1,7 @@
 import {
 	Observable,
 	Subject,
-	Subscription,
+	Subscriber,
 	distinctUntilChanged,
 	map,
 } from '../rx/index.js';
@@ -63,9 +63,9 @@ export class Store<StateT> extends Subject<StateT> {
 		super();
 	}
 
-	protected onSubscribe(subscription: Subscription<StateT>) {
-		if (this.state !== undefined) subscription.next(this.state);
-		return super.onSubscribe(subscription);
+	protected onSubscribe(subscriber: Subscriber<StateT>) {
+		if (this.state !== undefined) subscriber.next(this.state);
+		return super.onSubscribe(subscriber);
 	}
 
 	next(val: StateT) {

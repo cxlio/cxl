@@ -1,4 +1,4 @@
-import { Observable, Subject, Subscription, operator } from '../rx';
+import { Observable, Subject, Subscriber, operator } from '../rx';
 
 declare const process: any;
 
@@ -35,7 +35,7 @@ parentPort.on('message', ev => {
 
 declare const require: any;
 
-type WorkerFunction = (payload: any, subscriber: Subscription<any>) => void;
+type WorkerFunction = (payload: any, subscriber: Subscriber<any>) => void;
 
 interface InternalMessage<T> {
 	id: number;

@@ -235,9 +235,14 @@ export class ReplaySubject<T> extends Subject<T> {
 
 const Undefined = {};
 
+/**
+ * A Reference is a behavior subject that does not require an initial value.
+ */
 export class Reference<T> extends Subject<T> {
-	constructor(private value: T | typeof Undefined = Undefined) {
+	private value: T | typeof Undefined = Undefined;
+	constructor(value?: T) {
 		super();
+		if (arguments.length === 1 && value !== undefined) this.value = value;
 	}
 
 	protected onSubscribe(subscription: Subscriber<T>) {
@@ -693,7 +698,7 @@ export function be<T>(initialValue: T) {
 /**
  * Creates a new Reference object
  */
-export function ref<T>(initial: T | typeof Undefined = Undefined) {
+export function ref<T>(initial?: T) {
 	return new Reference<T>(initial);
 }
 

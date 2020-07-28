@@ -17,11 +17,19 @@ Web Components
 ## Features
 
 -   Lightweight and Fast
+-   Type Safe
+-   Module Architecture
 -   Open Source
 -   Responsive
 -   Accessibility Focused
 -   Framework Agnostic
 -   Flexible Theming
+
+## Quick Start
+
+```html
+<script src=""></script>
+```
 
 ## Browser Support
 

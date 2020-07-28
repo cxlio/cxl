@@ -1,5 +1,3 @@
-import { Subject } from '../rx/index.js';
-
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	PARAM_REGEX = /:([\w_$]+)/g,
 	optionalParam = /\((.*?)\)/g,
@@ -15,6 +13,13 @@ interface RouteInstances {
 	[key: string]: RouteElement;
 }
 
+export interface RouterState {
+	url: Url;
+	root: Element;
+	current: Element;
+	route: Route<RouteElement>;
+}
+
 export interface RouteDefinition<T extends RouteElement> {
 	id?: string;
 	path: string;
@@ -23,6 +28,18 @@ export interface RouteDefinition<T extends RouteElement> {
 	redirectTo?: string;
 	resolve?: (args: Partial<T>) => boolean;
 	render: (ctx?: any) => T;
+}
+
+export interface Url {
+	path: string;
+	hash: string;
+}
+
+export interface Strategy {
+	// parse(href: string): Url;
+	getHref(url: Url): string;
+	serialize(url: Url): void;
+	deserialize(): Url;
 }
 
 function routeToRegExp(route: string): [RegExp, string[]] {
@@ -165,54 +182,89 @@ class RouteManager {
 	}
 }
 
-export function saveHistoryQueryUrl(href: string) {
-	history.pushState({ href }, '', `?${href}`);
-}
-export function getHistoryQueryUrl() {
-	return history.state?.href || location.search?.slice(1) || '';
-}
-
-export function saveHistoryUrl(href: string) {
-	history.pushState({ href }, '', href);
-}
-
-export function saveHash(href: string) {
-	location.hash = href;
-}
-
-export function getHash() {
-	return location.hash;
-}
-
 const URL_REGEX = /([^#]+)(?:#(.+))?/;
-
-interface Url {
-	path: string;
-	hash: string;
-}
 
 export function parseUrl(url: string): Url {
 	const match = URL_REGEX.exec(url);
 	return { path: match?.[1] || '', hash: match?.[2] || '' };
 }
 
+export const QueryStrategy: Strategy = {
+	getHref(url: Url | string) {
+		url = typeof url === 'string' ? parseUrl(url) : url;
+		return `${url.path ? `?${url.path}` : ''}${
+			url.hash ? `#${url.hash}` : ''
+		}`;
+	},
+
+	serialize(url) {
+		history.pushState({ url }, '', this.getHref(url));
+	},
+
+	deserialize() {
+		return (
+			history.state?.url || {
+				path: location.search.slice(1),
+				hash: location.hash.slice(1),
+			}
+		);
+	},
+};
+
+export const PathStrategy: Strategy = {
+	getHref(url: Url | string) {
+		url = typeof url === 'string' ? parseUrl(url) : url;
+		return `${url.path}${url.hash ? `#${url.hash}` : ''}`;
+	},
+
+	serialize(url) {
+		history.pushState({ url }, '', this.getHref(url));
+	},
+
+	deserialize() {
+		return (
+			history.state?.url || {
+				path: location.pathname,
+				hash: location.hash.slice(1),
+			}
+		);
+	},
+};
+
+export const HashStrategy: Strategy = {
+	getHref(url: Url | string) {
+		url = typeof url === 'string' ? parseUrl(url) : url;
+		return `#${url.path}${url.hash ? `#${url.hash}` : ''}`;
+	},
+
+	serialize(url) {
+		location.hash = this.getHref(url);
+	},
+
+	deserialize() {
+		return parseUrl(location.hash.slice(1));
+	},
+};
+
+export const Strategies = {
+	hash: HashStrategy,
+	path: PathStrategy,
+	query: QueryStrategy,
+};
+
 export class Router {
+	state?: RouterState;
 	routes = new RouteManager();
 	instances: RouteInstances = {};
-	current?: Element;
-	currentRoute?: Route<any>;
-	currentUrl?: string;
-	subject = new Subject<RouteElement>();
+	root?: RouteElement;
 
-	constructor(public readonly root: Element) {}
+	constructor(private callbackFn?: (state: RouterState) => void) {}
 
 	private findRoute(id: string, args: any) {
 		const route = this.instances[id];
 		let i: string;
 
-		if (route) {
-			for (i in args) (route as any)[i] = args[i];
-		}
+		if (route) for (i in args) (route as any)[i] = args[i];
 
 		return route;
 	}
@@ -225,12 +277,11 @@ export class Router {
 		const parentId = route.parent,
 			Parent = parentId && this.routes.get(parentId),
 			id = route.id,
-			parent = Parent
-				? this.executeRoute(Parent, args, instances)
-				: this.root,
+			parent = Parent && this.executeRoute(Parent, args, instances),
 			instance = this.findRoute(id, args) || route.create(args);
 
-		if (instance && parent && instance.parentNode !== parent)
+		if (!parent) this.root = instance;
+		else if (instance && instance.parentNode !== parent)
 			parent.appendChild(instance);
 
 		instances[id] = instance;
@@ -255,43 +306,62 @@ export class Router {
 		args?: Partial<T>
 	) {
 		const instances = {};
-		this.current = this.executeRoute(Route, args || {}, instances);
-		this.currentRoute = Route;
+		const result = this.executeRoute(Route, args || {}, instances);
 		this.discardOldRoutes(instances);
 		this.instances = instances;
-		this.subject.next(this.current);
+		return result;
 	}
 
 	reset() {
 		this.routes.reset();
 	}
 
+	/**
+	 * Register a new route
+	 */
 	route<T extends RouteElement>(def: RouteDefinition<T>) {
 		const route = new Route<T>(def);
 		this.routes.register(route);
 		return route;
 	}
 
-	go(url: string) {
-		const match = /([^#]+)(?:#(.+))?/.exec(url);
-		if (!match) return;
-		const [, path, hash] = match;
+	go(url: Url | string) {
+		const parsedUrl = typeof url === 'string' ? parseUrl(url) : url;
+		const path = parsedUrl.path;
+		const currentUrl = this.state?.url;
+
+		if (
+			currentUrl &&
+			path === currentUrl.path &&
+			parsedUrl.hash === currentUrl.hash
+		)
+			return;
 		const route = this.routes.findRoute(path);
 
 		if (!route) throw new Error(`Path: "${path}" not found`);
-		this.currentUrl = url;
-		this.execute(route, route.path?.getArguments(path));
-
-		if (hash)
-			this.root.querySelector(`a[name="${hash}"]`)?.scrollIntoView();
+		const current = this.execute(route, route.path?.getArguments(path));
+		if (!this.root)
+			throw new Error(`Route: "${path}" could not be created`);
+		this.state = {
+			url: parsedUrl,
+			route,
+			current,
+			root: this.root,
+		};
+		if (this.callbackFn) this.callbackFn(this.state);
 	}
 
 	getPath(routeId: string, params: RouteArguments) {
 		const route = this.routes.get(routeId);
 		const path = route && route.path;
 
-		params = params || this.current;
-
 		return path && replaceParameters(path.toString(), params);
+	}
+
+	isActiveUrl(url: string) {
+		const parsed = parseUrl(url);
+		if (!this.state?.url) return false;
+		const current = this.state.url;
+		return parsed.path === current.path && parsed.hash === current.hash;
 	}
 }

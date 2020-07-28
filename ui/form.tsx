@@ -343,7 +343,6 @@ const FieldBase = (
 				$invalid$outline: { borderColor: 'error' },
 				$invalid$outline$focused: {
 					boxShadow: boxShadow(0, 0, 0, 1, 'error'),
-					// boxShadow: '0 0 0 1px var(--cxl-error)'
 				},
 				content: {
 					display: 'flex',
@@ -436,12 +435,13 @@ export class Label extends Component {}
 		{{
 			$: { marginBottom: 16 },
 			$outline: { paddingTop: 2 },
-			line: { position: 'relative', left: -12, right: -24 },
+			line: { position: 'absolute', left: 0, right: 0 },
 			line$outline: { display: 'none' },
 			help: {
 				font: 'caption',
 				position: 'relative',
 				display: 'flex',
+				marginTop: 2,
 			},
 			grow: { flexGrow: 1 },
 			counter: { textAlign: 'right' },

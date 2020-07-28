@@ -5,6 +5,7 @@ import {
 	Subscription,
 	be,
 	concat,
+	defer,
 	of,
 	merge,
 } from '../rx/index.js';
@@ -17,10 +18,6 @@ export function empty(el: Element) {
 	while ((c = el.childNodes[0])) el.removeChild(c);
 }
 
-/*interface CustomEventTarget extends EventTarget {
-	eventMap: any;
-}*/
-
 export function on<K extends keyof WindowEventMap>(
 	element: Window,
 	event: K,
@@ -31,11 +28,6 @@ export function on<K extends keyof GlobalEventHandlersEventMap>(
 	event: K,
 	options?: AddEventListenerOptions
 ): Observable<GlobalEventHandlersEventMap[K]>;
-/*export function on<T extends CustomEventHandler, K extends keyof T['eventMap']>(
-	element: T,
-	event: keyof T['eventMap'],
-	options?: AddEventListenerOptions
-): Observable<T['eventMap'][K]>;*/
 export function on(
 	element: EventTarget | Window,
 	event: string,
@@ -56,6 +48,18 @@ export function on(
 			options
 		);
 	});
+}
+
+export function onReady() {
+	return defer(() =>
+		document.readyState !== 'loading'
+			? of(true)
+			: on(window, 'DOMContentLoaded').map(() => true)
+	);
+}
+
+export function onLoad() {
+	return on(window, 'load');
 }
 
 export function getShadow(el: Element) {
@@ -391,7 +395,7 @@ export function onHistoryChange() {
 		};
 	}
 	return merge(
-		on(window, 'popstate').tap(() => history.state),
+		on(window, 'popstate').map(() => history.state),
 		pushSubject
 	);
 }

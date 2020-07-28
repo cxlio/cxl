@@ -3,10 +3,8 @@ import { dom } from '../xdom/index.js';
 import { suite } from '../spec/index.js';
 
 export default suite('router', test => {
-	const root = document.createElement('div');
-
 	test('Router#go - no parameters', a => {
-		const router = new Router(root);
+		const router = new Router();
 		router.route({
 			path: 'test',
 			render: <div>Hello World</div>,
@@ -15,11 +13,11 @@ export default suite('router', test => {
 		router.go('test');
 
 		a.ok(router.instances.test);
-		a.equal(router.currentRoute, router.routes.get('test'));
+		a.equal(router.state?.route, router.routes.get('test'));
 	});
 
 	test('Router#go - parameters', a => {
-		const router = new Router(root);
+		const router = new Router();
 		router.route({
 			id: 'test',
 			path: 'test/:title',
@@ -28,6 +26,6 @@ export default suite('router', test => {
 
 		router.go('test/hello');
 
-		a.equal(router.currentRoute, router.routes.get('test'));
+		a.equal(router.state?.route, router.routes.get('test'));
 	});
 });

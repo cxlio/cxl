@@ -69,7 +69,9 @@ export default suite('template', test => {
 		const id = 'cxl-test' + a.id;
 
 		connect<HTMLDivElement>(<div $={portal(id)} />, el => {
-			teleport(render(<span>Hello</span>).element, id);
+			teleport(render(<span>Hello</span>).element, id)
+				.subscribe()
+				.unsubscribe();
 			a.ok(el);
 			a.equal(el.childNodes.length, 1);
 			a.equal(el.childNodes[0]?.textContent, 'Hello');

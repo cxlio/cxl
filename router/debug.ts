@@ -8,7 +8,7 @@ override(
 		log(`[router] Navigating to "${path}"`);
 	},
 	function (_void, path) {
-		const route = this.currentRoute;
+		const route = this.state?.route;
 		if (route === this.routes.defaultRoute && !route?.path?.test(path))
 			log(
 				`[router] Path "${path}" not found. Falling back to default route`,

@@ -12,14 +12,13 @@ import {
 	role,
 } from '../component/index.js';
 import { on, trigger } from '../dom/index.js';
-import { onAction, portal, tpl, triggerEvent } from '../template/index.js';
+import { onAction, portal, triggerEvent } from '../template/index.js';
 import { InversePrimary, ResetInverse, Style, padding } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
 import {
 	IconButton,
 	Focusable,
 	FocusHighlight,
-	StateStyles,
 	Svg,
 	aria,
 	ripple,
@@ -332,13 +331,13 @@ export class Navbar extends Component {
 
 /**
  * @example
-<cxl-menu>
-	<cxl-item disabled>Option disabled</cxl-item>
-	<cxl-item selected>Option Selected</cxl-item>
-	<cxl-item>Option 2</cxl-item>
-	<cxl-hr></cxl-hr>
-	<cxl-item>Option 3</cxl-item>
-</cxl-menu>
+ * <cxl-menu>
+ *   <cxl-item disabled>Option disabled</cxl-item>
+ *   <cxl-item selected>Option Selected</cxl-item>
+ *   <cxl-item>Option 2</cxl-item>
+ *   <cxl-hr></cxl-hr>
+ *   <cxl-item>Option 3</cxl-item>
+ * </cxl-menu>
  */
 @Augment(
 	<Host>
@@ -371,73 +370,32 @@ export class Menu extends Component {
 }
 
 @Augment<Item>(
+	'cxl-item',
 	bind(ripple),
 	<Style>
 		{{
 			$: {
-				cursor: 'pointer',
-				position: 'relative',
 				display: 'block',
-			},
-			link: {
 				color: 'onSurface',
-				outline: 0,
+				font: 'default',
 				lineHeight: 24,
 				paddingRight: 16,
 				paddingLeft: 16,
 				paddingTop: 12,
-				font: 'default',
 				paddingBottom: 12,
 				alignItems: 'center',
 				backgroundColor: 'surface',
-				textDecoration: 'none',
-				display: 'flex',
 			},
-			icon: {
-				marginRight: 16,
-				width: 28,
-				color: 'onSurface',
-				opacity: 0.7,
-			},
-			icon$selected: { color: 'onPrimaryLight' },
-			link$selected: {
+			$selected: {
 				backgroundColor: 'primaryLight',
 				color: 'onPrimaryLight',
 			},
-			$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
-			$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
-			...StateStyles,
 		}}
 	</Style>,
-	tpl(() => {
-		function init(el: any, host: Item) {
-			return merge(
-				get(host, 'href').tap(
-					val => val !== undefined && (el.href = val)
-				),
-				onAction(host).pipe(triggerEvent(el, 'drawer.close'))
-			);
-		}
-
-		return (
-			<a $={init} className="link">
-				<slot />
-			</a>
-		);
-	})
+	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
+	<slot />
 )
 export class Item extends Component {
-	static tagName = 'cxl-item';
-
-	@Attribute()
-	href?: string;
-
 	@StyleAttribute()
 	selected = false;
-
-	@StyleAttribute()
-	disabled = false;
-
-	// @Attribute()
-	// touched = false;
 }

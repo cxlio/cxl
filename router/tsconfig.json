@@ -4,9 +4,5 @@
 		"outDir": "../dist/router"
 	},
 	"files": ["index.ts", "debug.ts"],
-	"references": [
-		{ "path": "../xdom" },
-		{ "path": "../rx" },
-		{ "path": "../debug" }
-	]
+	"references": [{ "path": "../debug" }]
 }

@@ -36,9 +36,8 @@ type ComponentFunction = (
 	children?: JSXElement[]
 ) => JSXElement;
 
-interface ComponentType<T> {
+interface ComponentType {
 	create(): HTMLElement;
-	new (): T;
 }
 
 interface Component {
@@ -72,7 +71,6 @@ export function normalizeChildren(children: any, result?: JSXElement[]) {
 		if (!child) continue;
 		else if (Array.isArray(child)) normalizeChildren(child, result);
 		else if (child instanceof Observable) result.push(expression(child));
-		// TODO keep this here, use symbol?
 		else if (child['cxlBinding']) result.push(binding(child));
 		else if (typeof child === 'function') result.push(child);
 		else result.push(() => document.createTextNode(child));
@@ -207,7 +205,7 @@ export function dom<T extends keyof HTMLElementTagNameMap>(
 	...children: JSXElement[]
 ): JSXElement<HTMLElementTagNameMap[T]>;
 export function dom<T extends Component>(
-	elementType: ComponentType<T>,
+	elementType: ComponentType,
 	attributes?: T['jsxAttributes'],
 	...children: JSXElement[]
 ): JSXElement<T>;
@@ -244,10 +242,7 @@ export class View<T> {
 	}
 }
 
-export function render<T extends HTMLElement>(
-	tpl: JSXElement<T>,
-	host?: RenderContext
-) {
+export function render<T>(tpl: JSXElement<T>, host?: RenderContext) {
 	const bindings: Observable<any>[] = [];
 	const ctx = host || (document.createElement('div') as any);
 	ctx.bind = (b: Observable<any>) => {
@@ -255,7 +250,7 @@ export function render<T extends HTMLElement>(
 	};
 	const element = tpl(ctx);
 
-	if (host) host.appendChild(element);
+	// if (host) host.appendChild(element);
 
 	return new View(element, bindings);
 }

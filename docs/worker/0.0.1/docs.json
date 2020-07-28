@@ -151,7 +151,7 @@
                 "flags": 0,
                 "id": 9,
                 "type": {
-                  "name": "Subscription",
+                  "name": "Subscriber",
                   "kind": 169,
                   "typeParameters": [
                     {
@@ -169,7 +169,7 @@
           "source": {
             "fileName": "index.ts",
             "line": 37,
-            "ch": 76
+            "ch": 74
           },
           "kind": 246,
           "name": "InternalMessage",

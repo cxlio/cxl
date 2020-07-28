@@ -1,4 +1,13 @@
-import { Observable, Subject, be, map, of, tap, toPromise } from './index.js';
+import {
+	Observable,
+	Reference,
+	Subject,
+	be,
+	map,
+	of,
+	tap,
+	toPromise,
+} from './index.js';
 import combineLatestSuite from './test/combineLatest.js';
 import concatSuite from './test/concat.js';
 import debounceTimeSuite from './test/debounceTime.js';
@@ -434,6 +443,19 @@ export default suite('rx', [
 			c++;
 			A.next(c);
 			a.equal(A.value, c);
+		});
+	}),
+
+	suite('Reference', test => {
+		test('Reference', a => {
+			const ref = new Reference<boolean>();
+			const done = a.async();
+
+			ref.first().subscribe(val => {
+				a.ok(val);
+				done();
+			});
+			ref.next(true);
 		});
 	}),
 ]);

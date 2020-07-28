@@ -366,7 +366,7 @@ function Link(node: Node, content?: string): string {
 	const href = getHref(node);
 
 	if (application.spa && href[0] !== '#')
-		return `<cxl-router-link><a href="${href}">${name}</a></cxl-router-link>`;
+		return `<cxl-router-link href="${href}">${name}</cxl-router-link>`;
 
 	return `<a href="${href}">${name}</a>`;
 }
@@ -599,9 +599,7 @@ function Item(title: string, href: string, icon?: string) {
 			: ''
 	}${title}</cxl-router-item>`;
 
-	return application.spa
-		? `<cxl-router-link>${result}</cxl-router-link>`
-		: result;
+	return result;
 }
 
 function NavbarExtra() {
@@ -676,7 +674,8 @@ function Page(p: Node) {
 function hasOwnPage(node: Node) {
 	return (
 		node.kind === Kind.Class ||
-		node.kind === Kind.Interface ||
+		(node.kind === Kind.Interface &&
+			!(node.flags & Flags.DeclarationMerge)) ||
 		node.kind === Kind.Module ||
 		node.kind === Kind.Enum ||
 		node.kind === Kind.Component

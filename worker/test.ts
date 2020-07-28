@@ -1,11 +1,11 @@
-import { Subscription, combineLatest } from '../rx/index.js';
+import { Subscriber, combineLatest } from '../rx/index.js';
 import { compile } from './index.js';
 import { suite } from '../spec/index.js';
 
 export default suite('worker', test => {
 	test('Multiple Requests', a => {
 		const done = a.async();
-		function workerFn(payload: any, subscriber: Subscription<any>) {
+		function workerFn(payload: any, subscriber: Subscriber<any>) {
 			setTimeout(() => {
 				subscriber.next(payload);
 				subscriber.complete();
@@ -27,7 +27,7 @@ export default suite('worker', test => {
 
 	test('Error', a => {
 		const done = a.async();
-		function workerFn(payload: any, subscriber: Subscription<any>) {
+		function workerFn(payload: any, subscriber: Subscriber<any>) {
 			subscriber.next(payload);
 			setTimeout(() => {
 				subscriber.error(++payload);
@@ -55,7 +55,7 @@ export default suite('worker', test => {
 
 	test('Streaming', a => {
 		const done = a.async();
-		function workerFn(payload: any, subscriber: Subscription<any>) {
+		function workerFn(payload: any, subscriber: Subscriber<any>) {
 			subscriber.next(payload);
 			setTimeout(() => {
 				subscriber.next(++payload);

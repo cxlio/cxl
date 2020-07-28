@@ -638,7 +638,7 @@ function serializeClass(node: ts.ClassDeclaration) {
 			ts.isInterfaceDeclaration(node) &&
 			symbol.flags & ts.SymbolFlags.Class
 		)
-			result.flags &= Flags.DeclarationMerge;
+			result.flags |= Flags.DeclarationMerge;
 		else {
 			const exportedSymbol = typeChecker.getExportSymbolOfSymbol(symbol);
 			exportedSymbol?.members?.forEach(

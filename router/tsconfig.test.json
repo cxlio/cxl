@@ -3,6 +3,10 @@
 	"compilerOptions": {
 		"outDir": "../dist/router"
 	},
-	"references": [{ "path": "tsconfig.json" }, { "path": "../spec" }],
+	"references": [
+		{ "path": "tsconfig.json" },
+		{ "path": "../spec" },
+		{ "path": "../xdom" }
+	],
 	"files": ["test.tsx"]
 }
