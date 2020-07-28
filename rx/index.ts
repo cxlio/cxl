@@ -680,7 +680,7 @@ export function combineLatest<T extends any[]>(
  * Creates an Observable that emits no items to the Observer and immediately emits an error notification.
  */
 export function throwError(error: any) {
-	return new Observable(subs => subs.error(error));
+	return new Observable<never>(subs => subs.error(error));
 }
 
 /**

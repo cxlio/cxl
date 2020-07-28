@@ -16,7 +16,7 @@ import {
 import { dom } from '../xdom/index.js';
 import { on, onReady, onChildrenMutation, onLocation } from '../dom/index.js';
 import { AppbarTitle, Item } from './navigation.js';
-import { list } from '../template/index.js';
+import { list, onAction, triggerEvent } from '../template/index.js';
 import { StateStyles } from './core.js';
 import { Style } from '../css/index.js';
 
@@ -173,6 +173,7 @@ export class RouterLink extends Component {
 			<slot />
 		</Item>
 	</RouterLink>,
+	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
 	bind(host =>
 		get(host, 'disabled').tap(value =>
 			host.setAttribute('aria-disabled', value ? 'true' : 'false')

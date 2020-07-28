@@ -12,7 +12,7 @@ import { Style, padding, pct } from '../css/index.js';
 import { dom } from '../xdom/index.js';
 import { tpl } from '../template/index.js';
 import { on, trigger, remove } from '../dom/index.js';
-import { tap, merge } from '../rx/index.js';
+import { merge } from '../rx/index.js';
 import { T, Button } from './core.js';
 
 /**
@@ -262,12 +262,10 @@ export class DialogConfirm extends Component {
 			}
 		/>
 		<div
-			$={(el, host) =>
+			$={(el, host: Drawer) =>
 				merge(
-					on(el, 'drawer.close').pipe(
-						tap(() => (host.visible = false))
-					),
-					on(el, 'click').pipe(tap(ev => ev.stopPropagation())),
+					on(el, 'drawer.close').tap(() => (host.visible = false)),
+					on(el, 'click').tap(ev => ev.stopPropagation()),
 					get(host, 'visible').tap(visible => {
 						if (!visible && el.scrollTop !== 0) el.scrollTo(0, 0);
 					})
@@ -280,8 +278,6 @@ export class DialogConfirm extends Component {
 	</Host>
 )
 export class Drawer extends Component {
-	// events: ['backdrop.click'],
-
 	@StyleAttribute()
 	visible = false;
 
