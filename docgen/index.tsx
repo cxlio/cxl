@@ -22,12 +22,25 @@ export class DocGen extends Application {
 	debug = false;
 	modulePackage?: any;
 	spa = true;
+	tsconfig = 'tsconfig.json';
+	packageJson = 'package.json';
 
 	setup() {
 		this.parameters.register(
 			{ name: 'repository', type: 'string' },
 			{ name: 'clean', help: 'Remove all files from output directory' },
 			{ name: 'outputDir', shortcut: 'o', type: 'string' },
+			{
+				name: 'packageJson',
+				help: 'Location of package.json. Defaults to ./package.json',
+				type: 'string',
+			},
+			{
+				name: 'tsconfig',
+				help:
+					'Location of tsconfig file to use. Defaults to ./tsconfig.json',
+				type: 'string',
+			},
 			{ name: 'spa', help: 'Enable single page application mode' },
 			{ name: 'debug' }
 		);
@@ -53,7 +66,7 @@ export class DocGen extends Application {
 
 	async run() {
 		const outputDir = this.outputDir;
-		const pkgRepo = (this.modulePackage = await readJson('package.json'));
+		const pkgRepo = (this.modulePackage = await readJson(this.packageJson));
 		await mkdirp(outputDir);
 		await mkdirp(outputDir + '/' + pkgRepo.version);
 
@@ -66,7 +79,7 @@ export class DocGen extends Application {
 			this.repository =
 				typeof pkgRepo === 'string' ? pkgRepo : pkgRepo.url;
 
-		const json = build();
+		const json = build(this.tsconfig);
 		const theme = await import('./render-html');
 		renderJson(this, json).map(f => this.writeFile(f));
 		await Promise.all(theme.render(this, json).map(f => this.writeFile(f)));

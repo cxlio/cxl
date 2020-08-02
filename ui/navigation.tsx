@@ -11,18 +11,11 @@ import {
 	render,
 	role,
 } from '../component/index.js';
-import { on, trigger } from '../dom/index.js';
-import { onAction, portal, triggerEvent } from '../template/index.js';
+import { on, onAction, onLoad, trigger } from '../dom/index.js';
+import { portal, triggerEvent } from '../template/index.js';
 import { InversePrimary, ResetInverse, Style, padding } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
-import {
-	IconButton,
-	Focusable,
-	FocusHighlight,
-	Svg,
-	aria,
-	ripple,
-} from './core.js';
+import { IconButton, Svg, aria, ripple } from './core.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -34,6 +27,17 @@ import { Drawer } from './dialog.js';
  *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
  *   <cxl-icon-button><cxl-icon icon="search"></cxl-icon></cxl-icon-button>
  *   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
+ * </cxl-appbar>
+ *
+ * @demo <caption>Appbar with Tabs</caption>
+ * <cxl-appbar>
+ *   <cxl-navbar></cxl-navbar>
+ *   <cxl-appbar-title>Appbar with Tabs</cxl-appbar-title>
+ *   <cxl-tabs>
+ *     <cxl-tab selected>Tab 1</cxl-tab>
+ *     <cxl-tab>Tab 2</cxl-tab>
+ *     <cxl-tab>Tab 3</cxl-tab>
+ *   </cxl-tabs>
  * </cxl-appbar>
  *
  * @see AppbarTitle
@@ -65,8 +69,7 @@ import { Drawer } from './dialog.js';
 				flex$extended: {
 					alignItems: 'start',
 					height: 128,
-					paddingBottom: 16,
-					// font: 'h5',
+					paddingBottom: 8,
 				},
 				$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 				'@xlarge': {
@@ -148,26 +151,28 @@ export class AppbarTitle extends Component {
  * @see Tabs
  */
 @Augment<Tab>(
+	'cxl-tab',
 	role('tab'),
-	<Focusable />,
 	<Style>
 		{{
-			$: { flexShrink: 0 },
+			$: { flexShrink: 0, flexGrow: 1 },
 			'@small': {
 				$: { display: 'inline-block' },
 			},
 			link: {
 				...padding(16),
 				paddingBottom: 12,
-				backgroundColor: 'primary',
+				backgroundColor: 'surface',
 				font: 'button',
-				color: 'onPrimary',
+				color: 'onSurface',
 				lineHeight: 20,
 				textDecoration: 'none',
 				textAlign: 'center',
 				display: 'block',
+				outline: 0,
 			},
-			...FocusHighlight,
+			$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
+			$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 		}}
 	</Style>,
 	render(host => (
@@ -186,8 +191,6 @@ export class AppbarTitle extends Component {
 	)
 )
 export class Tab extends Component {
-	static tagName = 'cxl-tab';
-
 	@Attribute()
 	href?: string;
 
@@ -205,13 +208,14 @@ export class Tab extends Component {
  * @see Tab
  */
 @Augment<Tabs>(
+	'cxl-tabs',
 	role('tablist'),
 	<Host>
 		<Style>
 			{{
 				$: {
-					backgroundColor: 'primary',
-					color: 'onPrimary',
+					backgroundColor: 'surface',
+					color: 'onSurface',
 					display: 'block',
 					flexShrink: 0,
 					position: 'relative',
@@ -227,7 +231,9 @@ export class Tab extends Component {
 					display: 'none',
 				},
 				content: { display: 'flex' },
-				content$small: { display: 'block' },
+				'@small': {
+					content: { display: 'block' },
+				},
 			}}
 		</Style>
 		<div className="content">
@@ -246,23 +252,25 @@ export class Tab extends Component {
 		<div
 			className="selected"
 			$={el =>
-				get(host, 'selected').tap(sel => {
-					if (!sel) return (el.style.transform = 'scaleX(0)');
-
-					// Add delay so styles finish rendering...
-					requestAnimationFrame(() => {
-						const scaleX = sel.clientWidth / 100;
-						el.style.transform = `translate(${sel.offsetLeft}px, 0) scaleX(${scaleX})`;
-						el.style.display = 'block';
-					});
-				})
+				onLoad().switchMap(() =>
+					merge(get(host, 'selected'), on(window, 'resize')).tap(
+						() => {
+							const sel = host.selected;
+							if (!sel) return (el.style.transform = 'scaleX(0)');
+							// Add delay so styles finish rendering...
+							requestAnimationFrame(() => {
+								const scaleX = sel.clientWidth / 100;
+								el.style.transform = `translate(${sel.offsetLeft}px, 0) scaleX(${scaleX})`;
+								el.style.display = 'block';
+							});
+						}
+					)
+				)
 			}
 		/>
 	))
 )
 export class Tabs extends Component {
-	static tagName = 'cxl-tabs';
-
 	@Attribute()
 	selected?: Tab;
 }
@@ -275,6 +283,7 @@ const MenuIcon = (
 );
 
 @Augment<Navbar>(
+	'cxl-navbar',
 	role('navigation'),
 	<Style>
 		{{
@@ -320,8 +329,6 @@ const MenuIcon = (
 	))
 )
 export class Navbar extends Component {
-	static tagName = 'cxl-navbar';
-
 	@StyleAttribute()
 	permanent = false;
 
@@ -340,6 +347,7 @@ export class Navbar extends Component {
  * </cxl-menu>
  */
 @Augment(
+	'cxl-menu',
 	<Host>
 		<Style>
 			{{
@@ -360,8 +368,6 @@ export class Navbar extends Component {
 	</Host>
 )
 export class Menu extends Component {
-	static tagName = 'cxl-menu';
-
 	@StyleAttribute()
 	closed = false;
 

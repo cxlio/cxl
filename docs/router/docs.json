@@ -6,7 +6,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "index.ts",
       "flags": 0,
       "children": [
@@ -16,14 +16,14 @@
             "line": 0,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "PARAM_QUERY_REGEX",
           "flags": 0,
           "id": 1,
           "value": "/([^&=]+)=?([^&]*)/g",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -32,14 +32,14 @@
             "line": 0,
             "ch": 47
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "PARAM_REGEX",
           "flags": 0,
           "id": 2,
           "value": "/:([\\w_$]+)/g",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -48,14 +48,14 @@
             "line": 1,
             "ch": 29
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "optionalParam",
           "flags": 0,
           "id": 3,
           "value": "/\\((.*?)\\)/g",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -64,14 +64,14 @@
             "line": 2,
             "ch": 30
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "namedParam",
           "flags": 0,
           "id": 4,
           "value": "/(\\(\\?)?:\\w+/g",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -80,14 +80,14 @@
             "line": 3,
             "ch": 29
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "splatParam",
           "flags": 0,
           "id": 5,
           "value": "/\\*\\w+/g",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -96,14 +96,14 @@
             "line": 4,
             "ch": 23
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "escapeRegExp",
           "flags": 0,
           "id": 6,
           "value": "/[-{}[\\]+?.,\\\\^$|#\\s]/g",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -112,22 +112,22 @@
             "line": 5,
             "ch": 40
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Dictionary",
           "flags": 0,
           "id": 7,
           "type": {
             "name": "Record",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -139,7 +139,7 @@
             "line": 7,
             "ch": 41
           },
-          "kind": 247,
+          "kind": 2,
           "name": "RouteArguments",
           "flags": 0,
           "id": 8,
@@ -149,7 +149,7 @@
               "line": 8,
               "ch": 21
             },
-            "kind": 1004,
+            "kind": 34,
             "name": "",
             "flags": 0,
             "children": [
@@ -159,7 +159,7 @@
                   "line": 8,
                   "ch": 23
                 },
-                "kind": 167,
+                "kind": 24,
                 "name": "",
                 "flags": 0,
                 "parameters": [
@@ -169,20 +169,20 @@
                       "line": 8,
                       "ch": 25
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "key",
                     "flags": 0,
                     "id": 9,
                     "type": {
                       "name": "string",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   }
                 ],
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -195,13 +195,13 @@
             "line": 8,
             "ch": 45
           },
-          "kind": 247,
+          "kind": 2,
           "name": "RouteElement",
           "flags": 0,
           "id": 10,
           "type": {
             "name": "Element",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -210,7 +210,7 @@
             "line": 9,
             "ch": 28
           },
-          "kind": 246,
+          "kind": 4,
           "name": "RouteInstances",
           "flags": 0,
           "id": 11,
@@ -221,7 +221,7 @@
                 "line": 11,
                 "ch": 26
               },
-              "kind": 167,
+              "kind": 24,
               "name": "",
               "flags": 0,
               "parameters": [
@@ -231,20 +231,20 @@
                     "line": 12,
                     "ch": 2
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "key",
                   "flags": 0,
                   "id": 12,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
               ],
               "type": {
                 "name": "RouteElement",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -255,7 +255,7 @@
             "line": 13,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "RouterState",
           "flags": 1,
           "id": 13,
@@ -266,14 +266,14 @@
                 "line": 15,
                 "ch": 30
               },
-              "kind": 159,
+              "kind": 10,
               "name": "url",
               "flags": 4,
               "id": 14,
               "type": {
                 "id": 15,
                 "name": "Url",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -282,13 +282,13 @@
                 "line": 16,
                 "ch": 10
               },
-              "kind": 159,
+              "kind": 10,
               "name": "root",
               "flags": 4,
               "id": 16,
               "type": {
                 "name": "Element",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -297,13 +297,13 @@
                 "line": 17,
                 "ch": 15
               },
-              "kind": 159,
+              "kind": 10,
               "name": "current",
               "flags": 4,
               "id": 17,
               "type": {
                 "name": "Element",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -312,18 +312,18 @@
                 "line": 18,
                 "ch": 18
               },
-              "kind": 159,
+              "kind": 10,
               "name": "route",
               "flags": 4,
               "id": 18,
               "type": {
                 "id": 19,
                 "name": "Route",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "RouteElement",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -336,7 +336,7 @@
             "line": 20,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "RouteDefinition",
           "flags": 1,
           "id": 20,
@@ -347,7 +347,7 @@
                 "line": 22,
                 "ch": 33
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 21
@@ -360,13 +360,13 @@
                 "line": 22,
                 "ch": 58
               },
-              "kind": 159,
+              "kind": 10,
               "name": "id",
               "flags": 4,
               "id": 22,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -376,13 +376,13 @@
                 "line": 23,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "path",
               "flags": 4,
               "id": 23,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -392,13 +392,13 @@
                 "line": 24,
                 "ch": 14
               },
-              "kind": 159,
+              "kind": 10,
               "name": "isDefault",
               "flags": 4,
               "id": 24,
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -408,13 +408,13 @@
                 "line": 25,
                 "ch": 21
               },
-              "kind": 159,
+              "kind": 10,
               "name": "parent",
               "flags": 4,
               "id": 25,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -424,13 +424,13 @@
                 "line": 26,
                 "ch": 17
               },
-              "kind": 159,
+              "kind": 10,
               "name": "redirectTo",
               "flags": 4,
               "id": 26,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -440,7 +440,7 @@
                 "line": 27,
                 "ch": 21
               },
-              "kind": 159,
+              "kind": 10,
               "name": "resolve",
               "flags": 4,
               "id": 27,
@@ -450,13 +450,13 @@
                   "line": 28,
                   "ch": 10
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 28,
                 "type": {
                   "name": "boolean",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
@@ -466,18 +466,18 @@
                       "line": 28,
                       "ch": 12
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "args",
                     "flags": 0,
                     "id": 29,
                     "type": {
                       "name": "Partial",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "id": 21,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     }
@@ -491,7 +491,7 @@
                 "line": 28,
                 "ch": 41
               },
-              "kind": 159,
+              "kind": 10,
               "name": "render",
               "flags": 4,
               "id": 30,
@@ -501,14 +501,14 @@
                   "line": 29,
                   "ch": 8
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 31,
                 "type": {
                   "id": 21,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 },
                 "parameters": [
                   {
@@ -517,13 +517,13 @@
                       "line": 29,
                       "ch": 10
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "ctx",
                     "flags": 524288,
                     "id": 32,
                     "type": {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   }
@@ -539,7 +539,7 @@
             "line": 30,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "Url",
           "flags": 1,
           "children": [
@@ -549,13 +549,13 @@
                 "line": 32,
                 "ch": 22
               },
-              "kind": 159,
+              "kind": 10,
               "name": "path",
               "flags": 4,
               "id": 33,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -565,13 +565,13 @@
                 "line": 33,
                 "ch": 14
               },
-              "kind": 159,
+              "kind": 10,
               "name": "hash",
               "flags": 4,
               "id": 34,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -583,7 +583,7 @@
             "line": 35,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "Strategy",
           "flags": 1,
           "id": 35,
@@ -594,13 +594,13 @@
                 "line": 37,
                 "ch": 27
               },
-              "kind": 161,
+              "kind": 11,
               "name": "getHref",
               "flags": 0,
               "id": 36,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": [
@@ -610,14 +610,14 @@
                     "line": 38,
                     "ch": 9
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "url",
                   "flags": 0,
                   "id": 37,
                   "type": {
                     "id": 15,
                     "name": "Url",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -628,13 +628,13 @@
                 "line": 38,
                 "ch": 27
               },
-              "kind": 161,
+              "kind": 11,
               "name": "serialize",
               "flags": 0,
               "id": 38,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": [
@@ -644,14 +644,14 @@
                     "line": 39,
                     "ch": 11
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "url",
                   "flags": 0,
                   "id": 39,
                   "type": {
                     "id": 15,
                     "name": "Url",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -662,14 +662,14 @@
                 "line": 39,
                 "ch": 27
               },
-              "kind": 161,
+              "kind": 11,
               "name": "deserialize",
               "flags": 0,
               "id": 40,
               "type": {
                 "id": 15,
                 "name": "Url",
-                "kind": 169
+                "kind": 6
               },
               "parameters": []
             }
@@ -681,7 +681,7 @@
             "line": 41,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "routeToRegExp",
           "flags": 0,
           "id": 41,
@@ -691,13 +691,13 @@
               "line": 43,
               "ch": 38
             },
-            "kind": 175,
+            "kind": 29,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "name": "RegExp",
-                "kind": 169
+                "kind": 6
               },
               {
                 "source": {
@@ -705,12 +705,12 @@
                   "line": 43,
                   "ch": 47
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "string",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -723,13 +723,13 @@
                 "line": 43,
                 "ch": 23
               },
-              "kind": 156,
+              "kind": 9,
               "name": "route",
               "flags": 0,
               "id": 42,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -741,7 +741,7 @@
             "line": 59,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "replaceParameters",
           "flags": 1,
           "id": 43,
@@ -752,13 +752,13 @@
                 "line": 61,
                 "ch": 34
               },
-              "kind": 156,
+              "kind": 9,
               "name": "path",
               "flags": 0,
               "id": 44,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -768,22 +768,22 @@
                 "line": 62,
                 "ch": 14
               },
-              "kind": 156,
+              "kind": 9,
               "name": "params",
               "flags": 524288,
               "id": 45,
               "type": {
                 "name": "Record",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -792,7 +792,7 @@
           ],
           "type": {
             "name": "string",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -802,7 +802,7 @@
             "line": 67,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "parseQueryParameters",
           "flags": 1,
           "id": 46,
@@ -813,29 +813,29 @@
                 "line": 69,
                 "ch": 37
               },
-              "kind": 156,
+              "kind": 9,
               "name": "query",
               "flags": 0,
               "id": 47,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "name": "Record",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -847,7 +847,7 @@
             "line": 75,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Fragment",
           "flags": 0,
           "id": 48,
@@ -858,13 +858,13 @@
                 "line": 77,
                 "ch": 16
               },
-              "kind": 159,
+              "kind": 10,
               "name": "regex",
               "flags": 4,
               "id": 49,
               "type": {
                 "name": "RegExp",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -873,7 +873,7 @@
                 "line": 78,
                 "ch": 15
               },
-              "kind": 159,
+              "kind": 10,
               "name": "parameters",
               "flags": 4,
               "id": 50,
@@ -883,12 +883,12 @@
                   "line": 79,
                   "ch": 12
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "string",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -899,7 +899,7 @@
                 "line": 79,
                 "ch": 22
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 51,
@@ -910,13 +910,13 @@
                     "line": 81,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "path",
                   "flags": 4,
                   "id": 52,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -924,7 +924,7 @@
               "type": {
                 "id": 48,
                 "name": "Fragment",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -933,7 +933,7 @@
                 "line": 85,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "_extractQuery",
               "flags": 4,
               "id": 53,
@@ -944,13 +944,13 @@
                     "line": 87,
                     "ch": 15
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "frag",
                   "flags": 0,
                   "id": 54,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
@@ -960,28 +960,28 @@
                     "line": 87,
                     "ch": 28
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "result",
                   "flags": 0,
                   "id": 55,
                   "type": {
                     "name": "Dictionary",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "Record",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -993,7 +993,7 @@
                 "line": 96,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "getArguments",
               "flags": 4,
               "id": 56,
@@ -1004,13 +1004,13 @@
                     "line": 98,
                     "ch": 14
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "fragment",
                   "flags": 0,
                   "id": 57,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -1018,25 +1018,25 @@
               "type": {
                 "name": "",
                 "flags": 0,
-                "kind": 178,
+                "kind": 5,
                 "children": [
                   {
                     "name": "undefined",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "name": "Record",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "string",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       },
                       {
                         "name": "string",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -1050,7 +1050,7 @@
                 "line": 118,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "test",
               "flags": 4,
               "id": 58,
@@ -1061,20 +1061,20 @@
                     "line": 120,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "url",
                   "flags": 0,
                   "id": 59,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
               ],
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1084,14 +1084,14 @@
                 "line": 122,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "toString",
               "flags": 4,
               "id": 60,
               "parameters": [],
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1101,13 +1101,13 @@
                 "line": 81,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "path",
               "flags": 4,
               "id": 52,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -1120,7 +1120,7 @@
             "line": 127,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Route",
           "flags": 1,
           "typeParameters": [
@@ -1130,7 +1130,7 @@
                 "line": 129,
                 "ch": 19
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 61
@@ -1143,13 +1143,13 @@
                 "line": 129,
                 "ch": 44
               },
-              "kind": 159,
+              "kind": 10,
               "name": "id",
               "flags": 4,
               "id": 62,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1159,14 +1159,14 @@
                 "line": 130,
                 "ch": 12
               },
-              "kind": 159,
+              "kind": 10,
               "name": "path",
               "flags": 4,
               "id": 63,
               "type": {
                 "id": 48,
                 "name": "Fragment",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1175,13 +1175,13 @@
                 "line": 131,
                 "ch": 17
               },
-              "kind": 159,
+              "kind": 10,
               "name": "parent",
               "flags": 4,
               "id": 64,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1191,19 +1191,35 @@
                 "line": 132,
                 "ch": 17
               },
-              "kind": 159,
-              "name": "definition",
+              "kind": 10,
+              "name": "redirectTo",
               "flags": 4,
               "id": 65,
               "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 133,
+                "ch": 21
+              },
+              "kind": 10,
+              "name": "definition",
+              "flags": 4,
+              "id": 66,
+              "type": {
                 "id": 20,
                 "name": "RouteDefinition",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 61,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1211,49 +1227,49 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 133,
+                "line": 134,
                 "ch": 32
               },
-              "kind": 159,
+              "kind": 10,
               "name": "isDefault",
               "flags": 4,
-              "id": 66,
+              "id": 67,
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 134,
+                "line": 135,
                 "ch": 20
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 67,
+              "id": 68,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 136,
+                    "line": 137,
                     "ch": 13
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "def",
                   "flags": 0,
-                  "id": 68,
+                  "id": 69,
                   "type": {
                     "id": 20,
                     "name": "RouteDefinition",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 61,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1262,12 +1278,12 @@
               "type": {
                 "id": 19,
                 "name": "Route",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 61,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1275,32 +1291,32 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 143,
+                "line": 145,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "createElement",
               "flags": 4,
-              "id": 69,
+              "id": 70,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 145,
+                    "line": 147,
                     "ch": 15
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "args",
                   "flags": 0,
-                  "id": 70,
+                  "id": 71,
                   "type": {
                     "name": "Partial",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 61,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1309,38 +1325,38 @@
               "type": {
                 "id": 61,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 149,
+                "line": 151,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "create",
               "flags": 4,
-              "id": 71,
+              "id": 72,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 151,
+                    "line": 153,
                     "ch": 8
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "args",
                   "flags": 0,
-                  "id": 72,
+                  "id": 73,
                   "type": {
                     "name": "Partial",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 61,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1349,17 +1365,17 @@
               "type": {
                 "name": "",
                 "flags": 0,
-                "kind": 178,
+                "kind": 5,
                 "children": [
                   {
                     "name": "null",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "id": 61,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1369,41 +1385,41 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 159,
+            "line": 161,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "RouteManager",
-          "flags": 0,
-          "id": 73,
+          "flags": 1,
+          "id": 74,
           "children": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 161,
-                "ch": 20
+                "line": 163,
+                "ch": 27
               },
-              "kind": 159,
+              "kind": 10,
               "name": "routes",
               "flags": 8,
-              "id": 74,
+              "id": 75,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 162,
+                  "line": 164,
                   "ch": 16
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 19,
                   "name": "Route",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1414,21 +1430,21 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 162,
+                "line": 164,
                 "ch": 35
               },
-              "kind": 159,
+              "kind": 10,
               "name": "defaultRoute",
               "flags": 4,
-              "id": 75,
+              "id": 76,
               "type": {
                 "id": 19,
                 "name": "Route",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -1437,27 +1453,27 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 163,
+                "line": 165,
                 "ch": 27
               },
-              "kind": 161,
+              "kind": 11,
               "name": "findRoute",
               "flags": 4,
-              "id": 76,
+              "id": 77,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 165,
+                    "line": 167,
                     "ch": 11
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "path",
                   "flags": 0,
-                  "id": 77,
+                  "id": 78,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -1465,21 +1481,21 @@
               "type": {
                 "name": "",
                 "flags": 0,
-                "kind": 178,
+                "kind": 5,
                 "children": [
                   {
                     "name": "undefined",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "id": 19,
                     "name": "Route",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -1490,27 +1506,27 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 167,
+                "line": 169,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "get",
               "flags": 4,
-              "id": 78,
+              "id": 79,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 169,
+                    "line": 171,
                     "ch": 5
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "id",
                   "flags": 0,
-                  "id": 79,
+                  "id": 80,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -1518,21 +1534,21 @@
               "type": {
                 "name": "",
                 "flags": 0,
-                "kind": 178,
+                "kind": 5,
                 "children": [
                   {
                     "name": "undefined",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "id": 19,
                     "name": "Route",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -1543,32 +1559,32 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 171,
+                "line": 173,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "register",
               "flags": 4,
-              "id": 80,
+              "id": 81,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 173,
+                    "line": 175,
                     "ch": 10
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "route",
                   "flags": 0,
-                  "id": 81,
+                  "id": 82,
                   "type": {
                     "id": 19,
                     "name": "Route",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -1577,24 +1593,24 @@
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 176,
+                "line": 178,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "reset",
               "flags": 4,
-              "id": 82,
+              "id": 83,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -1603,48 +1619,48 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 183,
+            "line": 185,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "URL_REGEX",
           "flags": 0,
-          "id": 83,
+          "id": 84,
           "value": "/([^#]+)(?:#(.+))?/",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 183,
+            "line": 185,
             "ch": 38
           },
-          "kind": 244,
+          "kind": 16,
           "name": "parseUrl",
           "flags": 1,
-          "id": 84,
+          "id": 85,
           "type": {
             "id": 15,
             "name": "Url",
-            "kind": 169
+            "kind": 6
           },
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 185,
+                "line": 187,
                 "ch": 25
               },
-              "kind": 156,
+              "kind": 9,
               "name": "url",
               "flags": 0,
-              "id": 85,
+              "id": 86,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -1653,124 +1669,124 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 190,
+            "line": 192,
             "ch": 12
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "QueryStrategy",
           "flags": 1,
-          "id": 86,
+          "id": 87,
           "type": {
             "id": 35,
             "name": "Strategy",
-            "kind": 169
+            "kind": 6
           },
           "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `${url.path ? `?${url.path}` : ''}${\n\t\t\turl.hash ? `#${url.hash}` : ''\n\t\t}`;\n\t},\n\n\tserialize(url) {\n\t\thistory.pushState({ url }, '', this.getHref(url));\n\t},\n\n\tdeserialize() {\n\t\treturn (\n\t\t\thistory.state?.url || {\n\t\t\t\tpath: location.search.slice(1),\n\t\t\t\thash: location.hash.slice(1),\n\t\t\t}\n\t\t);\n\t},\n}"
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 212,
+            "line": 214,
             "ch": 12
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "PathStrategy",
           "flags": 1,
-          "id": 87,
+          "id": 88,
           "type": {
             "id": 35,
             "name": "Strategy",
-            "kind": 169
+            "kind": 6
           },
           "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `${url.path}${url.hash ? `#${url.hash}` : ''}`;\n\t},\n\n\tserialize(url) {\n\t\thistory.pushState({ url }, '', this.getHref(url));\n\t},\n\n\tdeserialize() {\n\t\treturn (\n\t\t\thistory.state?.url || {\n\t\t\t\tpath: location.pathname,\n\t\t\t\thash: location.hash.slice(1),\n\t\t\t}\n\t\t);\n\t},\n}"
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 232,
+            "line": 234,
             "ch": 12
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "HashStrategy",
           "flags": 1,
-          "id": 88,
+          "id": 89,
           "type": {
             "id": 35,
             "name": "Strategy",
-            "kind": 169
+            "kind": 6
           },
-          "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `#${url.path}${url.hash ? `#${url.hash}` : ''}`;\n\t},\n\n\tserialize(url) {\n\t\tlocation.hash = this.getHref(url);\n\t},\n\n\tdeserialize() {\n\t\treturn parseUrl(location.hash.slice(1));\n\t},\n}"
+          "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `#${url.path}${url.hash ? `#${url.hash}` : ''}`;\n\t},\n\n\tserialize(url) {\n\t\tconst href = this.getHref(url);\n\t\tif (location.hash !== href) location.hash = href;\n\t},\n\n\tdeserialize() {\n\t\treturn parseUrl(location.hash.slice(1));\n\t},\n}"
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 247,
+            "line": 250,
             "ch": 12
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "Strategies",
           "flags": 1,
-          "id": 89,
+          "id": 90,
           "value": "{\n\thash: HashStrategy,\n\tpath: PathStrategy,\n\tquery: QueryStrategy,\n}",
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 247,
+              "line": 250,
               "ch": 25
             },
-            "kind": 1004,
+            "kind": 34,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 247,
+                  "line": 250,
                   "ch": 27
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "hash",
                 "flags": 0,
-                "id": 90,
+                "id": 91,
                 "value": "HashStrategy",
                 "type": {
                   "id": 35,
                   "name": "Strategy",
-                  "kind": 169
+                  "kind": 6
                 }
               },
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 248,
+                  "line": 251,
                   "ch": 20
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "path",
                 "flags": 0,
-                "id": 91,
+                "id": 92,
                 "value": "PathStrategy",
                 "type": {
                   "id": 35,
                   "name": "Strategy",
-                  "kind": 169
+                  "kind": 6
                 }
               },
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 249,
+                  "line": 252,
                   "ch": 20
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "query",
                 "flags": 0,
-                "id": 92,
+                "id": 93,
                 "value": "QueryStrategy",
                 "type": {
                   "id": 35,
                   "name": "Strategy",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -1779,77 +1795,28 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 251,
+            "line": 254,
             "ch": 2
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Router",
           "flags": 1,
-          "id": 93,
+          "id": 94,
           "children": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 253,
+                "line": 256,
                 "ch": 21
               },
-              "kind": 159,
+              "kind": 10,
               "name": "state",
               "flags": 4,
-              "id": 94,
+              "id": 95,
               "type": {
                 "id": 13,
                 "name": "RouterState",
-                "kind": 169
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 254,
-                "ch": 21
-              },
-              "kind": 159,
-              "name": "routes",
-              "flags": 4,
-              "id": 95,
-              "value": "new RouteManager()",
-              "type": {
-                "id": 73,
-                "name": "RouteManager",
-                "kind": 169
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 255,
-                "ch": 29
-              },
-              "kind": 159,
-              "name": "instances",
-              "flags": 4,
-              "id": 96,
-              "type": {
-                "id": 11,
-                "name": "RouteInstances",
-                "kind": 169
-              },
-              "value": "{}"
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 256,
-                "ch": 32
-              },
-              "kind": 159,
-              "name": "root",
-              "flags": 4,
-              "id": 97,
-              "type": {
-                "name": "RouteElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1858,51 +1825,100 @@
                 "line": 257,
                 "ch": 21
               },
-              "kind": 162,
+              "kind": 10,
+              "name": "routes",
+              "flags": 4,
+              "id": 96,
+              "value": "new RouteManager()",
+              "type": {
+                "id": 74,
+                "name": "RouteManager",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 258,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "instances",
+              "flags": 4,
+              "id": 97,
+              "type": {
+                "id": 11,
+                "name": "RouteInstances",
+                "kind": 6
+              },
+              "value": "{}"
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 259,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "root",
+              "flags": 4,
+              "id": 98,
+              "type": {
+                "name": "RouteElement",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 260,
+                "ch": 21
+              },
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 98,
+              "id": 99,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 259,
+                    "line": 262,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "callbackFn",
                   "flags": 8,
-                  "id": 99,
+                  "id": 100,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 259,
+                      "line": 262,
                       "ch": 33
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 100,
+                    "id": 101,
                     "type": {
                       "name": "void",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     },
                     "parameters": [
                       {
                         "source": {
                           "fileName": "index.ts",
-                          "line": 259,
+                          "line": 262,
                           "ch": 35
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "state",
                         "flags": 0,
-                        "id": 101,
+                        "id": 102,
                         "type": {
                           "id": 13,
                           "name": "RouterState",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -1910,125 +1926,103 @@
                 }
               ],
               "type": {
-                "id": 93,
+                "id": 94,
                 "name": "Router",
-                "kind": 169
+                "kind": 6
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 259,
+                "line": 262,
                 "ch": 66
               },
-              "kind": 161,
+              "kind": 11,
               "name": "findRoute",
               "flags": 8,
-              "id": 102,
+              "id": 103,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 261,
+                    "line": 264,
                     "ch": 19
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "id",
-                  "flags": 0,
-                  "id": 103,
-                  "type": {
-                    "name": "string",
-                    "kind": 1002,
-                    "flags": 0
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "index.ts",
-                    "line": 261,
-                    "ch": 30
-                  },
-                  "kind": 156,
-                  "name": "args",
                   "flags": 0,
                   "id": 104,
                   "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 264,
+                    "ch": 30
+                  },
+                  "kind": 9,
+                  "name": "args",
+                  "flags": 0,
+                  "id": 105,
+                  "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
               ],
               "type": {
                 "name": "Element",
-                "kind": 169
+                "kind": 6
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 268,
+                "line": 271,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "executeRoute",
               "flags": 8,
-              "id": 105,
+              "id": 106,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 270,
+                    "line": 273,
                     "ch": 22
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T",
                   "flags": 0,
-                  "id": 106
+                  "id": 107
                 }
               ],
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 270,
+                    "line": 273,
                     "ch": 46
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "route",
-                  "flags": 0,
-                  "id": 107,
-                  "type": {
-                    "id": 19,
-                    "name": "Route",
-                    "kind": 169,
-                    "typeParameters": [
-                      {
-                        "id": 106,
-                        "name": "T",
-                        "kind": 169
-                      }
-                    ]
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "index.ts",
-                    "line": 271,
-                    "ch": 18
-                  },
-                  "kind": 156,
-                  "name": "args",
                   "flags": 0,
                   "id": 108,
                   "type": {
-                    "name": "Partial",
-                    "kind": 169,
+                    "id": 19,
+                    "name": "Route",
+                    "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 106,
+                        "id": 107,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2036,102 +2030,124 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 272,
-                    "ch": 19
+                    "line": 274,
+                    "ch": 18
                   },
-                  "kind": 156,
-                  "name": "instances",
+                  "kind": 9,
+                  "name": "args",
                   "flags": 0,
                   "id": 109,
                   "type": {
+                    "name": "Partial",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 107,
+                        "name": "T",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 275,
+                    "ch": 19
+                  },
+                  "kind": 9,
+                  "name": "instances",
+                  "flags": 0,
+                  "id": 110,
+                  "type": {
                     "id": 11,
                     "name": "RouteInstances",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "Element",
-                "kind": 169
+                "kind": 6
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 288,
+                "line": 291,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "discardOldRoutes",
               "flags": 8,
-              "id": 110,
+              "id": 111,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 290,
+                    "line": 293,
                     "ch": 26
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "newInstances",
                   "flags": 0,
-                  "id": 111,
+                  "id": 112,
                   "type": {
                     "id": 11,
                     "name": "RouteInstances",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 300,
+                "line": 303,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "execute",
               "flags": 8,
-              "id": 112,
+              "id": 113,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 302,
+                    "line": 305,
                     "ch": 17
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T",
                   "flags": 0,
-                  "id": 113
+                  "id": 114
                 }
               ],
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 302,
+                    "line": 305,
                     "ch": 41
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "Route",
                   "flags": 0,
-                  "id": 114,
+                  "id": 115,
                   "type": {
                     "id": 19,
                     "name": "Route",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 113,
+                        "id": 114,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2139,21 +2155,21 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 303,
+                    "line": 306,
                     "ch": 18
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "args",
                   "flags": 524288,
-                  "id": 115,
+                  "id": 116,
                   "type": {
                     "name": "Partial",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 113,
+                        "id": 114,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2161,36 +2177,36 @@
               ],
               "type": {
                 "name": "Element",
-                "kind": 169
+                "kind": 6
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 311,
+                "line": 314,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "reset",
               "flags": 4,
-              "id": 116,
+              "id": 117,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 315,
+                "line": 318,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "route",
               "flags": 4,
-              "id": 117,
+              "id": 118,
               "docs": {
                 "content": [
                   {
@@ -2202,35 +2218,35 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 320,
+                    "line": 323,
                     "ch": 7
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T",
                   "flags": 0,
-                  "id": 118
+                  "id": 119
                 }
               ],
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 320,
+                    "line": 323,
                     "ch": 31
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "def",
                   "flags": 0,
-                  "id": 119,
+                  "id": 120,
                   "type": {
                     "id": 20,
                     "name": "RouteDefinition",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 118,
+                        "id": 119,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2239,12 +2255,12 @@
               "type": {
                 "id": 19,
                 "name": "Route",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 118,
+                    "id": 119,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2252,111 +2268,111 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 324,
+                "line": 327,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "go",
               "flags": 4,
-              "id": 120,
+              "id": 121,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 326,
+                    "line": 329,
                     "ch": 4
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "url",
                   "flags": 0,
-                  "id": 121,
+                  "id": 122,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 326,
+                      "line": 329,
                       "ch": 8
                     },
-                    "kind": 178,
+                    "kind": 5,
                     "name": "",
                     "flags": 0,
                     "children": [
                       {
                         "id": 15,
                         "name": "Url",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "name": "string",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
                   }
                 }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 1002,
-                "flags": 0
-              }
+              ]
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 350,
+                "line": 361,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "getPath",
               "flags": 4,
-              "id": 122,
+              "id": 123,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 352,
+                    "line": 363,
                     "ch": 9
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "routeId",
                   "flags": 0,
-                  "id": 123,
+                  "id": 124,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 352,
+                    "line": 363,
                     "ch": 25
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "params",
                   "flags": 0,
-                  "id": 124,
+                  "id": 125,
                   "type": {
                     "id": 8,
                     "name": "RouteArguments",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "",
                 "flags": 0,
-                "kind": 178,
+                "kind": 5,
                 "children": [
                   {
                     "name": "undefined",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -2365,77 +2381,77 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 357,
+                "line": 368,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "isActiveUrl",
               "flags": 4,
-              "id": 125,
+              "id": 126,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 359,
+                    "line": 370,
                     "ch": 13
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "url",
                   "flags": 0,
-                  "id": 126,
+                  "id": 127,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
               ],
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 259,
+                "line": 262,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "callbackFn",
               "flags": 8,
-              "id": 99,
+              "id": 100,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 259,
+                  "line": 262,
                   "ch": 33
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
-                "id": 100,
+                "id": 101,
                 "type": {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 259,
+                      "line": 262,
                       "ch": 35
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "state",
                     "flags": 0,
-                    "id": 101,
+                    "id": 102,
                     "type": {
                       "id": 13,
                       "name": "RouterState",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -2451,7 +2467,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "debug.ts",
       "flags": 0
     }

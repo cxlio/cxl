@@ -6,7 +6,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "index.ts",
       "flags": 0,
       "children": [
@@ -16,7 +16,7 @@
             "line": 18,
             "ch": 1
           },
-          "kind": 247,
+          "kind": 2,
           "name": "AttributeType",
           "flags": 1,
           "id": 1,
@@ -27,7 +27,7 @@
                 "line": 20,
                 "ch": 26
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 2
@@ -39,7 +39,7 @@
               "line": 20,
               "ch": 30
             },
-            "kind": 178,
+            "kind": 5,
             "name": "",
             "flags": 0,
             "children": [
@@ -49,7 +49,7 @@
                   "line": 21,
                   "ch": 2
                 },
-                "kind": 186,
+                "kind": 0,
                 "name": "",
                 "flags": 0
               },
@@ -59,7 +59,7 @@
                   "line": 24,
                   "ch": 2
                 },
-                "kind": 1004,
+                "kind": 34,
                 "name": "",
                 "flags": 0,
                 "children": [
@@ -69,19 +69,19 @@
                       "line": 24,
                       "ch": 4
                     },
-                    "kind": 159,
+                    "kind": 10,
                     "name": "$",
                     "flags": 4,
                     "id": 3,
                     "type": {
                       "id": 4,
                       "name": "Binding",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "id": 2,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     }
@@ -92,13 +92,13 @@
                       "line": 25,
                       "ch": 18
                     },
-                    "kind": 159,
+                    "kind": 10,
                     "name": "children",
                     "flags": 4,
                     "id": 5,
                     "type": {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   }
@@ -114,7 +114,7 @@
             "line": 27,
             "ch": 5
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Binding",
           "flags": 1,
           "typeParameters": [
@@ -124,7 +124,7 @@
                 "line": 29,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "ElementT",
               "flags": 0,
               "id": 6,
@@ -136,7 +136,7 @@
                 "line": 29,
                 "ch": 35
               },
-              "kind": 155,
+              "kind": 3,
               "name": "HostT",
               "flags": 0,
               "id": 7,
@@ -148,7 +148,7 @@
                 "line": 29,
                 "ch": 48
               },
-              "kind": 155,
+              "kind": 3,
               "name": "DataT",
               "flags": 0,
               "id": 8,
@@ -161,18 +161,18 @@
               "line": 29,
               "ch": 63
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 9,
             "type": {
               "name": "Observable",
-              "kind": 169,
+              "kind": 6,
               "typeParameters": [
                 {
                   "id": 8,
                   "name": "DataT",
-                  "kind": 169
+                  "kind": 6
                 }
               ]
             },
@@ -183,14 +183,14 @@
                   "line": 29,
                   "ch": 65
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "el",
                 "flags": 0,
                 "id": 10,
                 "type": {
                   "id": 6,
                   "name": "ElementT",
-                  "kind": 169
+                  "kind": 6
                 }
               },
               {
@@ -199,14 +199,14 @@
                   "line": 30,
                   "ch": 14
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "ctx",
                 "flags": 0,
                 "id": 11,
                 "type": {
                   "id": 7,
                   "name": "HostT",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -218,7 +218,7 @@
             "line": 32,
             "ch": 23
           },
-          "kind": 247,
+          "kind": 2,
           "name": "ComponentFunction",
           "flags": 0,
           "id": 12,
@@ -228,14 +228,14 @@
               "line": 33,
               "ch": 24
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 13,
             "type": {
               "id": 14,
               "name": "JSXElement",
-              "kind": 169
+              "kind": 6
             },
             "parameters": [
               {
@@ -244,13 +244,13 @@
                   "line": 33,
                   "ch": 26
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "attributes",
                 "flags": 524288,
                 "id": 15,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               },
@@ -260,7 +260,7 @@
                   "line": 34,
                   "ch": 18
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "children",
                 "flags": 524288,
                 "id": 16,
@@ -270,13 +270,13 @@
                     "line": 35,
                     "ch": 11
                   },
-                  "kind": 174,
+                  "kind": 15,
                   "name": "Array",
                   "flags": 0,
                   "type": {
                     "id": 14,
                     "name": "JSXElement",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               }
@@ -289,7 +289,7 @@
             "line": 36,
             "ch": 16
           },
-          "kind": 246,
+          "kind": 4,
           "name": "ComponentType",
           "flags": 0,
           "id": 17,
@@ -300,13 +300,13 @@
                 "line": 38,
                 "ch": 25
               },
-              "kind": 161,
+              "kind": 11,
               "name": "create",
               "flags": 0,
               "id": 18,
               "type": {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               },
               "parameters": []
             }
@@ -318,7 +318,7 @@
             "line": 40,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "Component",
           "flags": 0,
           "id": 19,
@@ -329,13 +329,13 @@
                 "line": 42,
                 "ch": 21
               },
-              "kind": 159,
+              "kind": 10,
               "name": "jsxAttributes",
               "flags": 4,
               "id": 20,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -347,7 +347,7 @@
             "line": 44,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "RenderContext",
           "flags": 1,
           "id": 21,
@@ -358,13 +358,13 @@
                 "line": 46,
                 "ch": 52
               },
-              "kind": 161,
+              "kind": 11,
               "name": "bind",
               "flags": 0,
               "id": 22,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": [
@@ -374,17 +374,17 @@
                     "line": 47,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "binding",
                   "flags": 0,
                   "id": 23,
                   "type": {
                     "name": "Observable",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -395,12 +395,12 @@
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -412,7 +412,7 @@
             "line": 48,
             "ch": 1
           },
-          "kind": 247,
+          "kind": 2,
           "name": "JSXElement",
           "flags": 1,
           "typeParameters": [
@@ -422,7 +422,7 @@
                 "line": 50,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 24,
@@ -435,14 +435,14 @@
               "line": 50,
               "ch": 33
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 25,
             "type": {
               "id": 24,
               "name": "T",
-              "kind": 169
+              "kind": 6
             },
             "parameters": [
               {
@@ -451,14 +451,14 @@
                   "line": 50,
                   "ch": 35
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "context",
                 "flags": 0,
                 "id": 26,
                 "type": {
                   "id": 21,
                   "name": "RenderContext",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -470,7 +470,7 @@
             "line": 50,
             "ch": 64
           },
-          "kind": 244,
+          "kind": 16,
           "name": "expression",
           "flags": 0,
           "id": 27,
@@ -481,17 +481,17 @@
                 "line": 52,
                 "ch": 20
               },
-              "kind": 156,
+              "kind": 9,
               "name": "binding",
               "flags": 0,
               "id": 28,
               "type": {
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -504,7 +504,7 @@
               "line": 53,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 29,
@@ -515,20 +515,20 @@
                   "line": 53,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "ctx",
                 "flags": 0,
                 "id": 30,
                 "type": {
                   "id": 21,
                   "name": "RenderContext",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "Text",
-              "kind": 169
+              "kind": 6
             }
           }
         },
@@ -538,7 +538,7 @@
             "line": 58,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "binding",
           "flags": 0,
           "id": 31,
@@ -549,14 +549,14 @@
                 "line": 60,
                 "ch": 17
               },
-              "kind": 156,
+              "kind": 9,
               "name": "bindingFn",
               "flags": 0,
               "id": 32,
               "type": {
                 "id": 4,
                 "name": "Binding",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
@@ -566,7 +566,7 @@
               "line": 61,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 33,
@@ -577,20 +577,20 @@
                   "line": 61,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "ctx",
                 "flags": 0,
                 "id": 34,
                 "type": {
                   "id": 21,
                   "name": "RenderContext",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "Text",
-              "kind": 169
+              "kind": 6
             }
           }
         },
@@ -600,7 +600,7 @@
             "line": 62,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "normalizeChildren",
           "flags": 1,
           "id": 35,
@@ -611,13 +611,13 @@
                 "line": 64,
                 "ch": 34
               },
-              "kind": 156,
+              "kind": 9,
               "name": "children",
               "flags": 0,
               "id": 36,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -627,7 +627,7 @@
                 "line": 64,
                 "ch": 48
               },
-              "kind": 156,
+              "kind": 9,
               "name": "result",
               "flags": 524288,
               "id": 37,
@@ -637,29 +637,29 @@
                   "line": 64,
                   "ch": 57
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
           ],
           "type": {
             "name": "Array",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 14,
                 "name": "JSXElement",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -673,7 +673,7 @@
             "line": 79,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "renderChildren",
           "flags": 0,
           "id": 38,
@@ -684,7 +684,7 @@
                 "line": 81,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "children",
               "flags": 0,
               "id": 39,
@@ -694,13 +694,13 @@
                   "line": 82,
                   "ch": 10
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             },
@@ -710,13 +710,13 @@
                 "line": 82,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "result",
               "flags": 0,
               "id": 40,
               "type": {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -725,20 +725,20 @@
                 "line": 83,
                 "ch": 21
               },
-              "kind": 156,
+              "kind": 9,
               "name": "context",
               "flags": 0,
               "id": 41,
               "type": {
                 "id": 21,
                 "name": "RenderContext",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "name": "void",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -748,7 +748,7 @@
             "line": 87,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "NativeElement",
           "flags": 0,
           "id": 42,
@@ -759,13 +759,13 @@
                 "line": 89,
                 "ch": 21
               },
-              "kind": 159,
+              "kind": 10,
               "name": "native",
               "flags": 8,
               "id": 43,
               "type": {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -774,7 +774,7 @@
                 "line": 90,
                 "ch": 30
               },
-              "kind": 159,
+              "kind": 10,
               "name": "bindings",
               "flags": 16,
               "id": 44,
@@ -784,13 +784,13 @@
                   "line": 91,
                   "ch": 21
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 4,
                   "name": "Binding",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             },
@@ -800,7 +800,7 @@
                 "line": 91,
                 "ch": 32
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 45,
@@ -811,13 +811,13 @@
                     "line": 93,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "tagName",
                   "flags": 16,
                   "id": 46,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
@@ -827,13 +827,13 @@
                     "line": 94,
                     "ch": 25
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "attributes",
                   "flags": 16,
                   "id": 47,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
@@ -843,7 +843,7 @@
                     "line": 95,
                     "ch": 29
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "children",
                   "flags": 16,
                   "id": 48,
@@ -853,13 +853,13 @@
                       "line": 96,
                       "ch": 22
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 0,
                     "type": {
                       "id": 14,
                       "name": "JSXElement",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 }
@@ -867,7 +867,7 @@
               "type": {
                 "id": 42,
                 "name": "NativeElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -876,14 +876,14 @@
                 "line": 97,
                 "ch": 5
               },
-              "kind": 161,
+              "kind": 11,
               "name": "renderElement",
               "flags": 16,
               "id": 49,
               "parameters": [],
               "type": {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -892,14 +892,14 @@
                 "line": 103,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "compile",
               "flags": 16,
               "id": 50,
               "parameters": [],
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -909,7 +909,7 @@
                 "line": 112,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "compileAttributes",
               "flags": 16,
               "id": 51,
@@ -920,13 +920,13 @@
                     "line": 114,
                     "ch": 29
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "attributes",
                   "flags": 0,
                   "id": 52,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
@@ -936,20 +936,20 @@
                     "line": 114,
                     "ch": 45
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "other",
                   "flags": 524288,
                   "id": 53,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
               ],
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -959,7 +959,7 @@
                 "line": 139,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "renderBindings",
               "flags": 4,
               "id": 54,
@@ -970,7 +970,7 @@
                     "line": 141,
                     "ch": 16
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "bindings",
                   "flags": 0,
                   "id": 55,
@@ -980,13 +980,13 @@
                       "line": 141,
                       "ch": 25
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 0,
                     "type": {
                       "id": 4,
                       "name": "Binding",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 },
@@ -996,13 +996,13 @@
                     "line": 141,
                     "ch": 36
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "el",
                   "flags": 0,
                   "id": 56,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
@@ -1012,20 +1012,20 @@
                     "line": 141,
                     "ch": 45
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "ctx",
                   "flags": 0,
                   "id": 57,
                   "type": {
                     "id": 21,
                     "name": "RenderContext",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1035,7 +1035,7 @@
                 "line": 143,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "render",
               "flags": 4,
               "id": 58,
@@ -1046,20 +1046,20 @@
                     "line": 145,
                     "ch": 8
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "ctx",
                   "flags": 0,
                   "id": 59,
                   "type": {
                     "id": 21,
                     "name": "RenderContext",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1068,13 +1068,13 @@
                 "line": 93,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "tagName",
               "flags": 16,
               "id": 46,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1084,13 +1084,13 @@
                 "line": 94,
                 "ch": 25
               },
-              "kind": 159,
+              "kind": 10,
               "name": "attributes",
               "flags": 16,
               "id": 47,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1100,7 +1100,7 @@
                 "line": 95,
                 "ch": 29
               },
-              "kind": 159,
+              "kind": 10,
               "name": "children",
               "flags": 16,
               "id": 48,
@@ -1110,13 +1110,13 @@
                   "line": 96,
                   "ch": 22
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
@@ -1125,7 +1125,7 @@
             {
               "id": 60,
               "name": "ComponentElement",
-              "kind": 169
+              "kind": 6
             }
           ]
         },
@@ -1135,7 +1135,7 @@
             "line": 151,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "ComponentElement",
           "flags": 0,
           "id": 60,
@@ -1146,14 +1146,14 @@
                 "line": 153,
                 "ch": 46
               },
-              "kind": 159,
+              "kind": 10,
               "name": "compiled",
               "flags": 16,
               "id": 61,
               "value": "false",
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1163,13 +1163,13 @@
                 "line": 154,
                 "ch": 28
               },
-              "kind": 159,
+              "kind": 10,
               "name": "otherAttributes",
               "flags": 16,
               "id": 62,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1179,14 +1179,14 @@
                 "line": 155,
                 "ch": 33
               },
-              "kind": 161,
+              "kind": 11,
               "name": "compile",
               "flags": 16,
               "id": 63,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1196,27 +1196,27 @@
                 "line": 162,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "renderElement",
               "flags": 16,
               "id": 64,
               "parameters": [],
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "id": 42,
                 "name": "NativeElement",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -1227,7 +1227,7 @@
             "line": 174,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "FunctionElement",
           "flags": 0,
           "id": 65,
@@ -1238,14 +1238,14 @@
                 "line": 176,
                 "ch": 23
               },
-              "kind": 159,
+              "kind": 10,
               "name": "element",
               "flags": 8,
               "id": 66,
               "type": {
                 "id": 14,
                 "name": "JSXElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1254,7 +1254,7 @@
                 "line": 177,
                 "ch": 30
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 67,
@@ -1265,14 +1265,14 @@
                     "line": 179,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "Component",
                   "flags": 16,
                   "id": 68,
                   "type": {
                     "id": 12,
                     "name": "ComponentFunction",
-                    "kind": 169
+                    "kind": 6
                   }
                 },
                 {
@@ -1281,13 +1281,13 @@
                     "line": 180,
                     "ch": 41
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "attributes",
                   "flags": 16,
                   "id": 69,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
@@ -1297,7 +1297,7 @@
                     "line": 181,
                     "ch": 29
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "children",
                   "flags": 16,
                   "id": 70,
@@ -1307,13 +1307,13 @@
                       "line": 182,
                       "ch": 22
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 0,
                     "type": {
                       "id": 14,
                       "name": "JSXElement",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 }
@@ -1321,7 +1321,7 @@
               "type": {
                 "id": 65,
                 "name": "FunctionElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1330,7 +1330,7 @@
                 "line": 183,
                 "ch": 5
               },
-              "kind": 161,
+              "kind": 11,
               "name": "compile",
               "flags": 4,
               "id": 71,
@@ -1338,11 +1338,11 @@
               "type": {
                 "id": 14,
                 "name": "JSXElement",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -1354,7 +1354,7 @@
                 "line": 193,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "render",
               "flags": 4,
               "id": 72,
@@ -1365,20 +1365,20 @@
                     "line": 195,
                     "ch": 8
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "ctx",
                   "flags": 0,
                   "id": 73,
                   "type": {
                     "id": 21,
                     "name": "RenderContext",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1388,14 +1388,14 @@
                 "line": 179,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "Component",
               "flags": 16,
               "id": 68,
               "type": {
                 "id": 12,
                 "name": "ComponentFunction",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1404,13 +1404,13 @@
                 "line": 180,
                 "ch": 41
               },
-              "kind": 159,
+              "kind": 10,
               "name": "attributes",
               "flags": 16,
               "id": 69,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1420,7 +1420,7 @@
                 "line": 181,
                 "ch": 29
               },
-              "kind": 159,
+              "kind": 10,
               "name": "children",
               "flags": 16,
               "id": 70,
@@ -1430,13 +1430,13 @@
                   "line": 182,
                   "ch": 22
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
@@ -1448,7 +1448,7 @@
             "line": 199,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "dom",
           "flags": 16385,
           "id": 74,
@@ -1459,7 +1459,7 @@
                 "line": 201,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 75
@@ -1468,7 +1468,7 @@
           "type": {
             "id": 14,
             "name": "JSXElement",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "source": {
@@ -1476,18 +1476,18 @@
                   "line": 205,
                   "ch": 14
                 },
-                "kind": 185,
+                "kind": 21,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "name": "HTMLElementTagNameMap",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "id": 75,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1500,14 +1500,14 @@
                 "line": 201,
                 "ch": 59
               },
-              "kind": 156,
+              "kind": 9,
               "name": "name",
               "flags": 0,
               "id": 76,
               "type": {
                 "id": 75,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1516,13 +1516,13 @@
                 "line": 202,
                 "ch": 9
               },
-              "kind": 156,
+              "kind": 9,
               "name": "attributes",
               "flags": 524288,
               "id": 77,
               "type": {
                 "name": "Partial",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "source": {
@@ -1530,18 +1530,18 @@
                       "line": 203,
                       "ch": 22
                     },
-                    "kind": 185,
+                    "kind": 21,
                     "name": "",
                     "flags": 0,
                     "children": [
                       {
                         "name": "HTMLElementTagNameMap",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 75,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1554,7 +1554,7 @@
                 "line": 203,
                 "ch": 48
               },
-              "kind": 156,
+              "kind": 9,
               "name": "children",
               "flags": 262144,
               "id": 78,
@@ -1564,13 +1564,13 @@
                   "line": 204,
                   "ch": 13
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
@@ -1582,7 +1582,7 @@
             "line": 205,
             "ch": 40
           },
-          "kind": 244,
+          "kind": 16,
           "name": "dom",
           "flags": 16385,
           "id": 79,
@@ -1593,7 +1593,7 @@
                 "line": 206,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 80
@@ -1602,12 +1602,12 @@
           "type": {
             "id": 14,
             "name": "JSXElement",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 80,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -1618,14 +1618,14 @@
                 "line": 206,
                 "ch": 41
               },
-              "kind": 156,
+              "kind": 9,
               "name": "elementType",
               "flags": 0,
               "id": 81,
               "type": {
                 "id": 17,
                 "name": "ComponentType",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1634,7 +1634,7 @@
                 "line": 207,
                 "ch": 28
               },
-              "kind": 156,
+              "kind": 9,
               "name": "attributes",
               "flags": 524288,
               "id": 82,
@@ -1644,14 +1644,14 @@
                   "line": 208,
                   "ch": 13
                 },
-                "kind": 185,
+                "kind": 21,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "id": 80,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "source": {
@@ -1659,7 +1659,7 @@
                       "line": 208,
                       "ch": 16
                     },
-                    "kind": 187,
+                    "kind": 23,
                     "name": "'jsxAttributes'",
                     "flags": 0
                   }
@@ -1672,7 +1672,7 @@
                 "line": 208,
                 "ch": 33
               },
-              "kind": 156,
+              "kind": 9,
               "name": "children",
               "flags": 262144,
               "id": 83,
@@ -1682,13 +1682,13 @@
                   "line": 209,
                   "ch": 13
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
@@ -1700,7 +1700,7 @@
             "line": 210,
             "ch": 17
           },
-          "kind": 244,
+          "kind": 16,
           "name": "dom",
           "flags": 16385,
           "id": 84,
@@ -1711,7 +1711,7 @@
                 "line": 211,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 85
@@ -1722,7 +1722,7 @@
                 "line": 211,
                 "ch": 22
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 86
@@ -1731,12 +1731,12 @@
           "type": {
             "id": 14,
             "name": "JSXElement",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 85,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -1747,7 +1747,7 @@
                 "line": 211,
                 "ch": 27
               },
-              "kind": 156,
+              "kind": 9,
               "name": "elementType",
               "flags": 0,
               "id": 87,
@@ -1757,19 +1757,19 @@
                   "line": 212,
                   "ch": 13
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 88,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 85,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 },
@@ -1780,14 +1780,14 @@
                       "line": 212,
                       "ch": 15
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "attributes",
                     "flags": 524288,
                     "id": 89,
                     "type": {
                       "id": 86,
                       "name": "T2",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -1799,14 +1799,14 @@
                 "line": 212,
                 "ch": 49
               },
-              "kind": 156,
+              "kind": 9,
               "name": "attributes",
               "flags": 524288,
               "id": 90,
               "type": {
                 "id": 86,
                 "name": "T2",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1815,7 +1815,7 @@
                 "line": 213,
                 "ch": 17
               },
-              "kind": 156,
+              "kind": 9,
               "name": "children",
               "flags": 262144,
               "id": 91,
@@ -1825,13 +1825,13 @@
                   "line": 214,
                   "ch": 13
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
@@ -1843,7 +1843,7 @@
             "line": 215,
             "ch": 17
           },
-          "kind": 244,
+          "kind": 16,
           "name": "dom",
           "flags": 1,
           "id": 92,
@@ -1854,13 +1854,13 @@
                 "line": 216,
                 "ch": 20
               },
-              "kind": 156,
+              "kind": 9,
               "name": "elementType",
               "flags": 0,
               "id": 93,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1870,13 +1870,13 @@
                 "line": 217,
                 "ch": 18
               },
-              "kind": 156,
+              "kind": 9,
               "name": "attributes",
               "flags": 524288,
               "id": 94,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1886,7 +1886,7 @@
                 "line": 218,
                 "ch": 18
               },
-              "kind": 156,
+              "kind": 9,
               "name": "children",
               "flags": 262144,
               "id": 95,
@@ -1896,13 +1896,13 @@
                   "line": 219,
                   "ch": 13
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 14,
                   "name": "JSXElement",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
@@ -1910,7 +1910,7 @@
           "type": {
             "name": "",
             "flags": 0,
-            "kind": 178,
+            "kind": 5,
             "children": [
               {
                 "source": {
@@ -1918,7 +1918,7 @@
                   "line": 143,
                   "ch": 2
                 },
-                "kind": 161,
+                "kind": 11,
                 "name": "render",
                 "flags": 4,
                 "id": 58,
@@ -1929,20 +1929,20 @@
                       "line": 145,
                       "ch": 8
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "ctx",
                     "flags": 0,
                     "id": 59,
                     "type": {
                       "id": 21,
                       "name": "RenderContext",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ],
                 "type": {
                   "name": "HTMLElement",
-                  "kind": 169
+                  "kind": 6
                 }
               },
               {
@@ -1951,7 +1951,7 @@
                   "line": 143,
                   "ch": 2
                 },
-                "kind": 161,
+                "kind": 11,
                 "name": "render",
                 "flags": 4,
                 "id": 58,
@@ -1962,20 +1962,20 @@
                       "line": 145,
                       "ch": 8
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "ctx",
                     "flags": 0,
                     "id": 59,
                     "type": {
                       "id": 21,
                       "name": "RenderContext",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ],
                 "type": {
                   "name": "HTMLElement",
-                  "kind": 169
+                  "kind": 6
                 }
               },
               {
@@ -1984,7 +1984,7 @@
                   "line": 193,
                   "ch": 2
                 },
-                "kind": 161,
+                "kind": 11,
                 "name": "render",
                 "flags": 4,
                 "id": 72,
@@ -1995,20 +1995,20 @@
                       "line": 195,
                       "ch": 8
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "ctx",
                     "flags": 0,
                     "id": 73,
                     "type": {
                       "id": 21,
                       "name": "RenderContext",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ],
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -2021,7 +2021,7 @@
             "line": 230,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "View",
           "flags": 1,
           "id": 96,
@@ -2032,7 +2032,7 @@
                 "line": 232,
                 "ch": 18
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 97
@@ -2045,7 +2045,7 @@
                 "line": 232,
                 "ch": 22
               },
-              "kind": 159,
+              "kind": 10,
               "name": "subscriptions",
               "flags": 8,
               "id": 98,
@@ -2055,12 +2055,12 @@
                   "line": 233,
                   "ch": 24
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "Subscription",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             },
@@ -2070,7 +2070,7 @@
                 "line": 233,
                 "ch": 40
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 99,
@@ -2081,14 +2081,14 @@
                     "line": 234,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "element",
                   "flags": 4,
                   "id": 100,
                   "type": {
                     "id": 97,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 },
                 {
@@ -2097,7 +2097,7 @@
                     "line": 234,
                     "ch": 31
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "bindings",
                   "flags": 8,
                   "id": 101,
@@ -2107,16 +2107,16 @@
                       "line": 234,
                       "ch": 49
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 0,
                     "type": {
                       "name": "Observable",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "name": "any",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
@@ -2127,12 +2127,12 @@
               "type": {
                 "id": 96,
                 "name": "View",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 97,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2143,14 +2143,14 @@
                 "line": 234,
                 "ch": 71
               },
-              "kind": 161,
+              "kind": 11,
               "name": "connect",
               "flags": 4,
               "id": 102,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -2160,14 +2160,14 @@
                 "line": 238,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "disconnect",
               "flags": 4,
               "id": 103,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -2177,14 +2177,14 @@
                 "line": 234,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "element",
               "flags": 4,
               "id": 100,
               "type": {
                 "id": 97,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -2193,7 +2193,7 @@
                 "line": 234,
                 "ch": 31
               },
-              "kind": 159,
+              "kind": 10,
               "name": "bindings",
               "flags": 8,
               "id": 101,
@@ -2203,16 +2203,16 @@
                   "line": 234,
                   "ch": 49
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2227,7 +2227,7 @@
             "line": 242,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "render",
           "flags": 1,
           "id": 104,
@@ -2238,7 +2238,7 @@
                 "line": 244,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 105
@@ -2251,19 +2251,19 @@
                 "line": 244,
                 "ch": 26
               },
-              "kind": 156,
+              "kind": 9,
               "name": "tpl",
               "flags": 0,
               "id": 106,
               "type": {
                 "id": 14,
                 "name": "JSXElement",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 105,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2274,26 +2274,26 @@
                 "line": 244,
                 "ch": 45
               },
-              "kind": 156,
+              "kind": 9,
               "name": "host",
               "flags": 524288,
               "id": 107,
               "type": {
                 "id": 21,
                 "name": "RenderContext",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "id": 96,
             "name": "View",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 105,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -2301,10 +2301,10 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 255,
+            "line": 253,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "connect",
           "flags": 1,
           "id": 108,
@@ -2312,10 +2312,10 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 257,
+                "line": 255,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 109
@@ -2325,22 +2325,22 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 257,
+                "line": 255,
                 "ch": 47
               },
-              "kind": 156,
+              "kind": 9,
               "name": "tpl",
               "flags": 0,
               "id": 110,
               "type": {
                 "id": 14,
                 "name": "JSXElement",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 109,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2348,58 +2348,58 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 258,
+                "line": 256,
                 "ch": 20
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 111,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 259,
+                  "line": 257,
                   "ch": 4
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 112,
                 "type": {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 259,
+                    "line": 257,
                     "ch": 15
                   },
-                  "kind": 178,
+                  "kind": 5,
                   "name": "",
                   "flags": 0,
                   "children": [
                     {
                       "name": "Promise",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "name": "any",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
                     },
                     {
                       "name": "Observable",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "name": "any",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
                     },
                     {
                       "name": "void",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2408,17 +2408,17 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 259,
+                      "line": 257,
                       "ch": 6
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "el",
                     "flags": 0,
                     "id": 113,
                     "type": {
                       "id": 109,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -2427,17 +2427,17 @@
           ],
           "type": {
             "name": "void",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 267,
+            "line": 265,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Fragment",
           "flags": 1,
           "id": 114,
@@ -2445,17 +2445,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 269,
+                "line": 267,
                 "ch": 23
               },
-              "kind": 161,
+              "kind": 11,
               "name": "create",
               "flags": 36,
               "id": 115,
               "parameters": [],
               "type": {
                 "name": "DocumentFragment",
-                "kind": 169
+                "kind": 6
               }
             }
           ]

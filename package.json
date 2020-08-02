@@ -10,16 +10,17 @@
 		"@typescript-eslint/eslint-plugin": "^2.13.0",
 		"@typescript-eslint/parser": "^2.13.0",
 		"eslint": "^7.3.1",
+		"firebase": "^7.17.1",
 		"highlight.js": "^10.1.1",
 		"markdown-it": "^11.0.0",
 		"puppeteer": "^5.2.0",
 		"source-map-support": "*",
-		"typescript": "^3.9.2",
-		"terser": "^4.6.13"
+		"terser": "^4.6.13",
+		"typescript": "^3.9.2"
 	},
 	"scripts": {
-		"build-all": "node scripts/build-all.js",
-		"build-readme": "node scripts/build-readme",
-		"publish": "node scripts/build-all.js && node scripts/build-readme"
+		"build": "node scripts/build-all.js",
+		"prepublishOnly": "node scripts/build-all.js && node scripts/build-readme",
+		"install": "cd build && node build"
 	}
 }

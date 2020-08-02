@@ -11,7 +11,7 @@ import {
 import { Style, padding, pct } from '../css/index.js';
 import { dom } from '../xdom/index.js';
 import { tpl } from '../template/index.js';
-import { on, trigger, remove } from '../dom/index.js';
+import { createElement, insert, on, trigger, remove } from '../dom/index.js';
 import { merge } from '../rx/index.js';
 import { T, Button } from './core.js';
 
@@ -120,7 +120,7 @@ const DialogStyles = (
 	))
 )
 export class DialogAlert extends Component {
-	//				'role(alertdialog) =modal:aria.prop(modal) =title-text:aria.prop(label)',
+	// '=modal:aria.prop(modal) =title-text:aria.prop(label)',
 
 	resolve?: () => void;
 
@@ -266,9 +266,12 @@ export class DialogConfirm extends Component {
 				merge(
 					on(el, 'drawer.close').tap(() => (host.visible = false)),
 					on(el, 'click').tap(ev => ev.stopPropagation()),
-					get(host, 'visible').tap(visible => {
-						if (!visible && el.scrollTop !== 0) el.scrollTo(0, 0);
-					})
+					get(host, 'visible')
+						.debounceTime(300)
+						.tap(visible => {
+							if (!visible && el.scrollTop !== 0)
+								el.scrollTo(0, 0);
+						})
 				)
 			}
 			className="drawer"
@@ -364,4 +367,48 @@ export class SnackbarContainer extends Component {
 
 		if (this.queue.length === 1) this.notifyNext();
 	}
+}
+
+export function alert(options: string | Partial<DialogAlert>) {
+	if (typeof options === 'string') options = { message: options };
+
+	const modal = createElement(DialogAlert, options);
+
+	document.body.appendChild(modal);
+
+	return modal.promise;
+}
+
+/**
+ * Confirmation dialog
+ */
+export function confirm(options: string | Partial<DialogConfirm>) {
+	if (typeof options === 'string') options = { message: options };
+
+	const modal = createElement(DialogConfirm, options);
+
+	document.body.appendChild(modal);
+
+	return modal.promise;
+}
+
+let snackbarContainer: SnackbarContainer;
+
+export function notify(
+	options: string | (Partial<Snackbar> & { content: string })
+) {
+	let bar = snackbarContainer;
+
+	if (!bar) {
+		bar = snackbarContainer = createElement(SnackbarContainer);
+		document.body.appendChild(bar);
+	}
+
+	if (typeof options === 'string') options = { content: options };
+
+	const snackbar = createElement(Snackbar, options);
+
+	if (options.content) insert(snackbar, options.content);
+
+	bar.notify(snackbar);
 }

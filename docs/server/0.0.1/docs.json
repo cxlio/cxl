@@ -6,7 +6,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "index.ts",
       "flags": 0,
       "children": [
@@ -16,7 +16,7 @@
             "line": 6,
             "ch": 40
           },
-          "kind": 244,
+          "kind": 16,
           "name": "hrtime",
           "flags": 0,
           "id": 1,
@@ -26,7 +26,7 @@
               "line": 8,
               "ch": 18
             },
-            "kind": 151,
+            "kind": 0,
             "name": "",
             "flags": 0
           },
@@ -38,7 +38,7 @@
             "line": 10,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "OperationResult",
           "flags": 0,
           "id": 2,
@@ -49,7 +49,7 @@
                 "line": 12,
                 "ch": 27
               },
-              "kind": 159,
+              "kind": 10,
               "name": "start",
               "flags": 4,
               "id": 3,
@@ -59,7 +59,7 @@
                   "line": 13,
                   "ch": 7
                 },
-                "kind": 151,
+                "kind": 0,
                 "name": "",
                 "flags": 0
               }
@@ -70,7 +70,7 @@
                 "line": 13,
                 "ch": 15
               },
-              "kind": 159,
+              "kind": 10,
               "name": "time",
               "flags": 4,
               "id": 4,
@@ -80,7 +80,7 @@
                   "line": 14,
                   "ch": 6
                 },
-                "kind": 151,
+                "kind": 0,
                 "name": "",
                 "flags": 0
               }
@@ -91,13 +91,13 @@
                 "line": 14,
                 "ch": 14
               },
-              "kind": 159,
+              "kind": 10,
               "name": "tasks",
               "flags": 4,
               "id": 5,
               "type": {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -107,13 +107,13 @@
                 "line": 15,
                 "ch": 15
               },
-              "kind": 159,
+              "kind": 10,
               "name": "result",
               "flags": 4,
               "id": 6,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -125,7 +125,7 @@
             "line": 17,
             "ch": 1
           },
-          "kind": 247,
+          "kind": 2,
           "name": "OperationFunction",
           "flags": 0,
           "id": 7,
@@ -136,7 +136,7 @@
                 "line": 19,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 8
@@ -148,7 +148,7 @@
               "line": 19,
               "ch": 27
             },
-            "kind": 178,
+            "kind": 5,
             "name": "",
             "flags": 0,
             "children": [
@@ -158,7 +158,7 @@
                   "line": 19,
                   "ch": 27
                 },
-                "kind": 182,
+                "kind": 19,
                 "name": "",
                 "flags": 0,
                 "id": 9,
@@ -168,18 +168,18 @@
                     "line": 19,
                     "ch": 29
                   },
-                  "kind": 170,
+                  "kind": 17,
                   "name": "",
                   "flags": 0,
                   "id": 10,
                   "type": {
                     "name": "Promise",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 8,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   },
@@ -188,23 +188,23 @@
               },
               {
                 "name": "Promise",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 8,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
               {
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 8,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -217,19 +217,19 @@
             "line": 19,
             "ch": 76
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Operation",
           "flags": 0,
           "id": 11,
           "type": {
             "id": 11,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 2,
                 "name": "OperationResult",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -240,7 +240,7 @@
             "line": 20,
             "ch": 45
           },
-          "kind": 247,
+          "kind": 2,
           "name": "LogMessage",
           "flags": 0,
           "id": 12,
@@ -251,7 +251,7 @@
                 "line": 21,
                 "ch": 16
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 13,
@@ -264,13 +264,13 @@
               "line": 21,
               "ch": 26
             },
-            "kind": 178,
+            "kind": 5,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               {
@@ -279,7 +279,7 @@
                   "line": 21,
                   "ch": 35
                 },
-                "kind": 182,
+                "kind": 19,
                 "name": "",
                 "flags": 0,
                 "id": 14,
@@ -289,13 +289,13 @@
                     "line": 21,
                     "ch": 37
                   },
-                  "kind": 170,
+                  "kind": 17,
                   "name": "",
                   "flags": 0,
                   "id": 15,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   "parameters": [
@@ -305,14 +305,14 @@
                         "line": 21,
                         "ch": 38
                       },
-                      "kind": 156,
+                      "kind": 9,
                       "name": "p",
                       "flags": 0,
                       "id": 16,
                       "type": {
                         "id": 13,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     }
                   ]
@@ -320,7 +320,7 @@
               },
               {
                 "name": "Error",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -331,7 +331,7 @@
             "line": 21,
             "ch": 63
           },
-          "kind": 244,
+          "kind": 16,
           "name": "operation",
           "flags": 0,
           "id": 17,
@@ -342,7 +342,7 @@
                 "line": 23,
                 "ch": 19
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 18
@@ -351,7 +351,7 @@
           "type": {
             "id": 11,
             "name": "Operation",
-            "kind": 169
+            "kind": 6
           },
           "parameters": [
             {
@@ -360,19 +360,19 @@
                 "line": 23,
                 "ch": 22
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 19,
               "type": {
                 "id": 7,
                 "name": "OperationFunction",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 18,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -385,7 +385,7 @@
             "line": 41,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "formatTime",
           "flags": 0,
           "id": 20,
@@ -396,7 +396,7 @@
                 "line": 43,
                 "ch": 20
               },
-              "kind": 156,
+              "kind": 9,
               "name": "time",
               "flags": 0,
               "id": 21,
@@ -406,7 +406,7 @@
                   "line": 43,
                   "ch": 25
                 },
-                "kind": 151,
+                "kind": 0,
                 "name": "",
                 "flags": 0
               }
@@ -414,7 +414,7 @@
           ],
           "type": {
             "name": "string",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -424,7 +424,7 @@
             "line": 48,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "logOperation",
           "flags": 0,
           "id": 22,
@@ -435,13 +435,13 @@
                 "line": 50,
                 "ch": 22
               },
-              "kind": 156,
+              "kind": 9,
               "name": "prefix",
               "flags": 0,
               "id": 23,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -451,14 +451,14 @@
                 "line": 50,
                 "ch": 37
               },
-              "kind": 156,
+              "kind": 9,
               "name": "msg",
               "flags": 0,
               "id": 24,
               "type": {
                 "id": 12,
                 "name": "LogMessage",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -467,24 +467,24 @@
                 "line": 50,
                 "ch": 54
               },
-              "kind": 156,
+              "kind": 9,
               "name": "op",
               "flags": 0,
               "id": 25,
               "type": {
                 "id": 11,
                 "name": "Operation",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -496,7 +496,7 @@
             "line": 66,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "logError",
           "flags": 0,
           "id": 26,
@@ -507,13 +507,13 @@
                 "line": 68,
                 "ch": 18
               },
-              "kind": 156,
+              "kind": 9,
               "name": "prefix",
               "flags": 0,
               "id": 27,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -523,19 +523,19 @@
                 "line": 68,
                 "ch": 33
               },
-              "kind": 156,
+              "kind": 9,
               "name": "error",
               "flags": 0,
               "id": 28,
               "type": {
                 "name": "Error",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "name": "void",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -545,7 +545,7 @@
             "line": 71,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "mtime",
           "flags": 0,
           "id": 29,
@@ -556,24 +556,24 @@
                 "line": 73,
                 "ch": 15
               },
-              "kind": 156,
+              "kind": 9,
               "name": "file",
               "flags": 0,
               "id": 30,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -585,7 +585,7 @@
             "line": 78,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "syncFiles",
           "flags": 257,
           "id": 31,
@@ -596,13 +596,13 @@
                 "line": 80,
                 "ch": 32
               },
-              "kind": 156,
+              "kind": 9,
               "name": "file1",
               "flags": 0,
               "id": 32,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -612,24 +612,24 @@
                 "line": 80,
                 "ch": 46
               },
-              "kind": 156,
+              "kind": 9,
               "name": "file2",
               "flags": 0,
               "id": 33,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -641,7 +641,7 @@
             "line": 86,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "filesNeedSync",
           "flags": 257,
           "id": 34,
@@ -652,13 +652,13 @@
                 "line": 88,
                 "ch": 36
               },
-              "kind": 156,
+              "kind": 9,
               "name": "file1",
               "flags": 0,
               "id": 35,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -668,24 +668,24 @@
                 "line": 88,
                 "ch": 50
               },
-              "kind": 156,
+              "kind": 9,
               "name": "file2",
               "flags": 0,
               "id": 36,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -697,14 +697,14 @@
             "line": 93,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "ArgRegex",
           "flags": 0,
           "id": 37,
           "value": "/^\\s*(-{1,2})(\\w[\\w-]*)/",
           "type": {
             "name": "RegExp",
-            "kind": 169
+            "kind": 6
           }
         },
         {
@@ -713,17 +713,17 @@
             "line": 93,
             "ch": 42
           },
-          "kind": 244,
+          "kind": 16,
           "name": "mkdirp",
           "flags": 1,
           "id": 38,
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -735,13 +735,13 @@
                 "line": 95,
                 "ch": 23
               },
-              "kind": 156,
+              "kind": 9,
               "name": "dir",
               "flags": 0,
               "id": 39,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -753,7 +753,7 @@
             "line": 99,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "sh",
           "flags": 1,
           "id": 40,
@@ -764,13 +764,13 @@
                 "line": 101,
                 "ch": 19
               },
-              "kind": 156,
+              "kind": 9,
               "name": "cmd",
               "flags": 0,
               "id": 41,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -780,7 +780,7 @@
                 "line": 101,
                 "ch": 31
               },
-              "kind": 156,
+              "kind": 9,
               "name": "options",
               "flags": 0,
               "id": 42,
@@ -791,7 +791,7 @@
                   "line": 101,
                   "ch": 41
                 },
-                "kind": 1004,
+                "kind": 34,
                 "name": "",
                 "flags": 0,
                 "children": []
@@ -800,11 +800,11 @@
           ],
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "unknown",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -816,7 +816,7 @@
             "line": 108,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "Parameter",
           "flags": 0,
           "id": 43,
@@ -827,13 +827,13 @@
                 "line": 110,
                 "ch": 21
               },
-              "kind": 159,
+              "kind": 10,
               "name": "name",
               "flags": 4,
               "id": 44,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -843,13 +843,13 @@
                 "line": 111,
                 "ch": 14
               },
-              "kind": 159,
+              "kind": 10,
               "name": "shortcut",
               "flags": 4,
               "id": 45,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -859,13 +859,13 @@
                 "line": 112,
                 "ch": 19
               },
-              "kind": 159,
+              "kind": 10,
               "name": "rest",
               "flags": 4,
               "id": 46,
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -875,7 +875,7 @@
                 "line": 113,
                 "ch": 16
               },
-              "kind": 159,
+              "kind": 10,
               "name": "type",
               "flags": 4,
               "id": 47,
@@ -885,7 +885,7 @@
                   "line": 115,
                   "ch": 7
                 },
-                "kind": 178,
+                "kind": 5,
                 "name": "",
                 "flags": 0,
                 "children": [
@@ -895,7 +895,7 @@
                       "line": 115,
                       "ch": 7
                     },
-                    "kind": 187,
+                    "kind": 23,
                     "name": "'string'",
                     "flags": 0
                   },
@@ -905,7 +905,7 @@
                       "line": 115,
                       "ch": 18
                     },
-                    "kind": 187,
+                    "kind": 23,
                     "name": "'boolean'",
                     "flags": 0
                   },
@@ -915,7 +915,7 @@
                       "line": 115,
                       "ch": 30
                     },
-                    "kind": 187,
+                    "kind": 23,
                     "name": "'number'",
                     "flags": 0
                   }
@@ -928,13 +928,13 @@
                 "line": 115,
                 "ch": 40
               },
-              "kind": 159,
+              "kind": 10,
               "name": "help",
               "flags": 4,
               "id": 48,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -944,13 +944,13 @@
                 "line": 116,
                 "ch": 15
               },
-              "kind": 161,
+              "kind": 11,
               "name": "handle",
               "flags": 0,
               "id": 49,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": [
@@ -960,14 +960,14 @@
                     "line": 117,
                     "ch": 9
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "app",
                   "flags": 0,
                   "id": 50,
                   "type": {
                     "id": 51,
                     "name": "Application",
-                    "kind": 169
+                    "kind": 6
                   }
                 },
                 {
@@ -976,13 +976,13 @@
                     "line": 117,
                     "ch": 26
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "value",
                   "flags": 0,
                   "id": 52,
                   "type": {
                     "name": "string",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -996,7 +996,7 @@
             "line": 118,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "ApplicationParameters",
           "flags": 0,
           "id": 53,
@@ -1007,7 +1007,7 @@
                 "line": 120,
                 "ch": 29
               },
-              "kind": 159,
+              "kind": 10,
               "name": "parameters",
               "flags": 68,
               "id": 54,
@@ -1017,13 +1017,13 @@
                   "line": 121,
                   "ch": 21
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 43,
                   "name": "Parameter",
-                  "kind": 169
+                  "kind": 6
                 }
               },
               "value": "[\n\t\t{\n\t\t\tname: 'help',\n\t\t\tshortcut: 'h',\n\t\t\thandle(app: Application) {\n\t\t\t\tif (app.version) app.log(app.version);\n\t\t\t\tprocess.exit(0);\n\t\t\t},\n\t\t},\n\t]"
@@ -1034,7 +1034,7 @@
                 "line": 130,
                 "ch": 3
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 55,
@@ -1045,21 +1045,21 @@
                     "line": 132,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "app",
                   "flags": 8,
                   "id": 56,
                   "type": {
                     "id": 51,
                     "name": "Application",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "id": 53,
                 "name": "ApplicationParameters",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1068,7 +1068,7 @@
                 "line": 132,
                 "ch": 41
               },
-              "kind": 161,
+              "kind": 11,
               "name": "register",
               "flags": 4,
               "id": 57,
@@ -1079,7 +1079,7 @@
                     "line": 134,
                     "ch": 10
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "p",
                   "flags": 262144,
                   "id": 58,
@@ -1089,20 +1089,20 @@
                       "line": 134,
                       "ch": 15
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 0,
                     "type": {
                       "id": 43,
                       "name": "Parameter",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1112,7 +1112,7 @@
                 "line": 136,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "parse",
               "flags": 4,
               "id": 59,
@@ -1123,7 +1123,7 @@
                     "line": 138,
                     "ch": 7
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "args",
                   "flags": 0,
                   "id": 60,
@@ -1133,12 +1133,12 @@
                       "line": 138,
                       "ch": 12
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 0,
                     "type": {
                       "name": "string",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   }
@@ -1146,7 +1146,7 @@
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1156,14 +1156,14 @@
                 "line": 132,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "app",
               "flags": 8,
               "id": 56,
               "type": {
                 "id": 51,
                 "name": "Application",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -1174,7 +1174,7 @@
             "line": 161,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "readJson",
           "flags": 257,
           "id": 61,
@@ -1192,7 +1192,7 @@
                 "line": 167,
                 "ch": 31
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 62,
@@ -1201,7 +1201,7 @@
           ],
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "source": {
@@ -1209,18 +1209,18 @@
                   "line": 169,
                   "ch": 11
                 },
-                "kind": 178,
+                "kind": 5,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "id": 62,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "name": "undefined",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -1234,7 +1234,7 @@
                 "line": 167,
                 "ch": 40
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fileName",
               "flags": 0,
               "id": 63,
@@ -1248,7 +1248,7 @@
               },
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -1261,7 +1261,7 @@
             "line": 175,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Application",
           "flags": 129,
           "children": [
@@ -1271,13 +1271,13 @@
                 "line": 177,
                 "ch": 35
               },
-              "kind": 159,
+              "kind": 10,
               "name": "name",
               "flags": 4,
               "id": 64,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1287,7 +1287,7 @@
                 "line": 178,
                 "ch": 15
               },
-              "kind": 159,
+              "kind": 10,
               "name": "color",
               "flags": 4,
               "id": 65,
@@ -1297,7 +1297,7 @@
                   "line": 179,
                   "ch": 7
                 },
-                "kind": 134,
+                "kind": 26,
                 "name": "",
                 "flags": 0,
                 "type": {
@@ -1306,7 +1306,7 @@
                     "line": 179,
                     "ch": 13
                   },
-                  "kind": 172,
+                  "kind": 27,
                   "name": "colors",
                   "flags": 0
                 }
@@ -1319,13 +1319,13 @@
                 "line": 179,
                 "ch": 38
               },
-              "kind": 159,
+              "kind": 10,
               "name": "version",
               "flags": 4,
               "id": 66,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1335,7 +1335,7 @@
                 "line": 180,
                 "ch": 18
               },
-              "kind": 159,
+              "kind": 10,
               "name": "parameters",
               "flags": 4,
               "id": 67,
@@ -1343,7 +1343,7 @@
               "type": {
                 "id": 53,
                 "name": "ApplicationParameters",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1352,13 +1352,13 @@
                 "line": 181,
                 "ch": 46
               },
-              "kind": 159,
+              "kind": 10,
               "name": "package",
               "flags": 4,
               "id": 68,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1368,14 +1368,14 @@
                 "line": 182,
                 "ch": 15
               },
-              "kind": 159,
+              "kind": 10,
               "name": "started",
               "flags": 4,
               "id": 69,
               "value": "false",
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1385,13 +1385,13 @@
                 "line": 183,
                 "ch": 17
               },
-              "kind": 159,
+              "kind": 10,
               "name": "coloredPrefix",
               "flags": 8,
               "id": 70,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1401,14 +1401,14 @@
                 "line": 185,
                 "ch": 32
               },
-              "kind": 161,
+              "kind": 11,
               "name": "setup",
               "flags": 4,
               "id": 71,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1418,7 +1418,7 @@
                 "line": 189,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "log",
               "flags": 4,
               "id": 72,
@@ -1429,14 +1429,14 @@
                     "line": 191,
                     "ch": 5
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "msg",
                   "flags": 0,
                   "id": 73,
                   "type": {
                     "id": 12,
                     "name": "LogMessage",
-                    "kind": 169
+                    "kind": 6
                   }
                 },
                 {
@@ -1445,18 +1445,18 @@
                     "line": 191,
                     "ch": 21
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "op",
                   "flags": 524288,
                   "id": 74,
                   "type": {
                     "id": 7,
                     "name": "OperationFunction",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -1465,11 +1465,11 @@
               ],
               "type": {
                 "name": "Promise",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "void",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -1481,7 +1481,7 @@
                 "line": 199,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "handleError",
               "flags": 16,
               "id": 75,
@@ -1492,20 +1492,20 @@
                     "line": 201,
                     "ch": 23
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "e",
                   "flags": 524288,
                   "id": 76,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1515,18 +1515,18 @@
                 "line": 204,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "start",
               "flags": 260,
               "id": 77,
               "parameters": [],
               "type": {
                 "name": "Promise",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -1538,7 +1538,7 @@
                 "line": 235,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "run",
               "flags": 144,
               "id": 78,
@@ -1548,24 +1548,24 @@
                   "line": 237,
                   "ch": 26
                 },
-                "kind": 178,
+                "kind": 5,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "name": "Promise",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
                   },
                   {
                     "name": "void",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -1582,7 +1582,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "colors.ts",
       "flags": 0,
       "children": [
@@ -1592,7 +1592,7 @@
             "line": 0,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "codes",
           "flags": 0,
           "id": 79,
@@ -1603,7 +1603,7 @@
               "line": 0,
               "ch": 13
             },
-            "kind": 1004,
+            "kind": 34,
             "name": "",
             "flags": 0,
             "children": [
@@ -1613,18 +1613,18 @@
                   "line": 0,
                   "ch": 15
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "reset",
                 "flags": 0,
                 "id": 80,
                 "value": "[0, 0]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1636,18 +1636,18 @@
                   "line": 1,
                   "ch": 15
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bold",
                 "flags": 0,
                 "id": 81,
                 "value": "[1, 22]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1659,18 +1659,18 @@
                   "line": 3,
                   "ch": 15
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "dim",
                 "flags": 0,
                 "id": 82,
                 "value": "[2, 22]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1682,18 +1682,18 @@
                   "line": 4,
                   "ch": 14
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "italic",
                 "flags": 0,
                 "id": 83,
                 "value": "[3, 23]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1705,18 +1705,18 @@
                   "line": 5,
                   "ch": 17
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "underline",
                 "flags": 0,
                 "id": 84,
                 "value": "[4, 24]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1728,18 +1728,18 @@
                   "line": 6,
                   "ch": 20
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "inverse",
                 "flags": 0,
                 "id": 85,
                 "value": "[7, 27]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1751,18 +1751,18 @@
                   "line": 7,
                   "ch": 18
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "hidden",
                 "flags": 0,
                 "id": 86,
                 "value": "[8, 28]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1774,18 +1774,18 @@
                   "line": 8,
                   "ch": 17
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "strikethrough",
                 "flags": 0,
                 "id": 87,
                 "value": "[9, 29]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1797,18 +1797,18 @@
                   "line": 9,
                   "ch": 24
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "black",
                 "flags": 0,
                 "id": 88,
                 "value": "[30, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1820,18 +1820,18 @@
                   "line": 11,
                   "ch": 17
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "red",
                 "flags": 0,
                 "id": 89,
                 "value": "[31, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1843,18 +1843,18 @@
                   "line": 12,
                   "ch": 15
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "green",
                 "flags": 0,
                 "id": 90,
                 "value": "[32, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1866,18 +1866,18 @@
                   "line": 13,
                   "ch": 17
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "yellow",
                 "flags": 0,
                 "id": 91,
                 "value": "[33, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1889,18 +1889,18 @@
                   "line": 14,
                   "ch": 18
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "blue",
                 "flags": 0,
                 "id": 92,
                 "value": "[34, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1912,18 +1912,18 @@
                   "line": 15,
                   "ch": 16
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "magenta",
                 "flags": 0,
                 "id": 93,
                 "value": "[35, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1935,18 +1935,18 @@
                   "line": 16,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "cyan",
                 "flags": 0,
                 "id": 94,
                 "value": "[36, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1958,18 +1958,18 @@
                   "line": 17,
                   "ch": 16
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "white",
                 "flags": 0,
                 "id": 95,
                 "value": "[37, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1981,18 +1981,18 @@
                   "line": 18,
                   "ch": 17
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "gray",
                 "flags": 0,
                 "id": 96,
                 "value": "[90, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2004,18 +2004,18 @@
                   "line": 19,
                   "ch": 16
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "grey",
                 "flags": 0,
                 "id": 97,
                 "value": "[90, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2027,18 +2027,18 @@
                   "line": 20,
                   "ch": 16
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "brightRed",
                 "flags": 0,
                 "id": 98,
                 "value": "[91, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2050,18 +2050,18 @@
                   "line": 22,
                   "ch": 21
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "brightGreen",
                 "flags": 0,
                 "id": 99,
                 "value": "[92, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2073,18 +2073,18 @@
                   "line": 23,
                   "ch": 23
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "brightYellow",
                 "flags": 0,
                 "id": 100,
                 "value": "[93, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2096,18 +2096,18 @@
                   "line": 24,
                   "ch": 24
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "brightBlue",
                 "flags": 0,
                 "id": 101,
                 "value": "[94, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2119,18 +2119,18 @@
                   "line": 25,
                   "ch": 22
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "brightMagenta",
                 "flags": 0,
                 "id": 102,
                 "value": "[95, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2142,18 +2142,18 @@
                   "line": 26,
                   "ch": 25
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "brightCyan",
                 "flags": 0,
                 "id": 103,
                 "value": "[96, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2165,18 +2165,18 @@
                   "line": 27,
                   "ch": 22
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "brightWhite",
                 "flags": 0,
                 "id": 104,
                 "value": "[97, 39]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2188,18 +2188,18 @@
                   "line": 28,
                   "ch": 23
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBlack",
                 "flags": 0,
                 "id": 105,
                 "value": "[40, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2211,18 +2211,18 @@
                   "line": 30,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgRed",
                 "flags": 0,
                 "id": 106,
                 "value": "[41, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2234,18 +2234,18 @@
                   "line": 31,
                   "ch": 17
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgGreen",
                 "flags": 0,
                 "id": 107,
                 "value": "[42, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2257,18 +2257,18 @@
                   "line": 32,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgYellow",
                 "flags": 0,
                 "id": 108,
                 "value": "[43, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2280,18 +2280,18 @@
                   "line": 33,
                   "ch": 20
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBlue",
                 "flags": 0,
                 "id": 109,
                 "value": "[44, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2303,18 +2303,18 @@
                   "line": 34,
                   "ch": 18
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgMagenta",
                 "flags": 0,
                 "id": 110,
                 "value": "[45, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2326,18 +2326,18 @@
                   "line": 35,
                   "ch": 21
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgCyan",
                 "flags": 0,
                 "id": 111,
                 "value": "[46, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2349,18 +2349,18 @@
                   "line": 36,
                   "ch": 18
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgWhite",
                 "flags": 0,
                 "id": 112,
                 "value": "[47, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2372,18 +2372,18 @@
                   "line": 37,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgGray",
                 "flags": 0,
                 "id": 113,
                 "value": "[100, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2395,18 +2395,18 @@
                   "line": 38,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgGrey",
                 "flags": 0,
                 "id": 114,
                 "value": "[100, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2418,18 +2418,18 @@
                   "line": 39,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBrightRed",
                 "flags": 0,
                 "id": 115,
                 "value": "[101, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2441,18 +2441,18 @@
                   "line": 41,
                   "ch": 24
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBrightGreen",
                 "flags": 0,
                 "id": 116,
                 "value": "[102, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2464,18 +2464,18 @@
                   "line": 42,
                   "ch": 26
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBrightYellow",
                 "flags": 0,
                 "id": 117,
                 "value": "[103, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2487,18 +2487,18 @@
                   "line": 43,
                   "ch": 27
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBrightBlue",
                 "flags": 0,
                 "id": 118,
                 "value": "[104, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2510,18 +2510,18 @@
                   "line": 44,
                   "ch": 25
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBrightMagenta",
                 "flags": 0,
                 "id": 119,
                 "value": "[105, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2533,18 +2533,18 @@
                   "line": 45,
                   "ch": 28
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBrightCyan",
                 "flags": 0,
                 "id": 120,
                 "value": "[106, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2556,18 +2556,18 @@
                   "line": 46,
                   "ch": 25
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "bgBrightWhite",
                 "flags": 0,
                 "id": 121,
                 "value": "[107, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2579,18 +2579,18 @@
                   "line": 47,
                   "ch": 26
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "blackBG",
                 "flags": 0,
                 "id": 122,
                 "value": "[40, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2602,18 +2602,18 @@
                   "line": 50,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "redBG",
                 "flags": 0,
                 "id": 123,
                 "value": "[41, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2625,18 +2625,18 @@
                   "line": 51,
                   "ch": 17
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "greenBG",
                 "flags": 0,
                 "id": 124,
                 "value": "[42, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2648,18 +2648,18 @@
                   "line": 52,
                   "ch": 19
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "yellowBG",
                 "flags": 0,
                 "id": 125,
                 "value": "[43, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2671,18 +2671,18 @@
                   "line": 53,
                   "ch": 20
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "blueBG",
                 "flags": 0,
                 "id": 126,
                 "value": "[44, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2694,18 +2694,18 @@
                   "line": 54,
                   "ch": 18
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "magentaBG",
                 "flags": 0,
                 "id": 127,
                 "value": "[45, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2717,18 +2717,18 @@
                   "line": 55,
                   "ch": 21
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "cyanBG",
                 "flags": 0,
                 "id": 128,
                 "value": "[46, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2740,18 +2740,18 @@
                   "line": 56,
                   "ch": 18
                 },
-                "kind": 281,
+                "kind": 0,
                 "name": "whiteBG",
                 "flags": 0,
                 "id": 129,
                 "value": "[47, 49]",
                 "type": {
                   "name": "Array",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "number",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -2766,7 +2766,7 @@
             "line": 58,
             "ch": 2
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Colors",
           "flags": 0,
           "id": 130,
@@ -2777,7 +2777,7 @@
                 "line": 60,
                 "ch": 12
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 131
@@ -2789,7 +2789,7 @@
               "line": 60,
               "ch": 16
             },
-            "kind": 186,
+            "kind": 0,
             "name": "",
             "flags": 0
           }
@@ -2800,13 +2800,13 @@
             "line": 62,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "styles",
           "flags": 0,
           "id": 132,
           "type": {
             "name": "any",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           },
           "value": "{}"
@@ -2817,14 +2817,14 @@
             "line": 63,
             "ch": 12
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "colors",
           "flags": 1,
           "id": 133,
           "type": {
             "id": 130,
             "name": "Colors",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "source": {
@@ -2832,7 +2832,7 @@
                   "line": 63,
                   "ch": 28
                 },
-                "kind": 172,
+                "kind": 27,
                 "name": "codes",
                 "flags": 0
               }

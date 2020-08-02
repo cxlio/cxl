@@ -6,7 +6,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "index.ts",
       "flags": 0,
       "children": [
@@ -16,7 +16,7 @@
             "line": 6,
             "ch": 24
           },
-          "kind": 246,
+          "kind": 4,
           "name": "CollectionEvent",
           "flags": 1,
           "id": 1,
@@ -27,7 +27,7 @@
                 "line": 8,
                 "ch": 33
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 2
@@ -40,7 +40,7 @@
                 "line": 8,
                 "ch": 37
               },
-              "kind": 159,
+              "kind": 10,
               "name": "type",
               "flags": 4,
               "id": 3,
@@ -50,7 +50,7 @@
                   "line": 9,
                   "ch": 6
                 },
-                "kind": 178,
+                "kind": 5,
                 "name": "",
                 "flags": 0,
                 "children": [
@@ -60,7 +60,7 @@
                       "line": 9,
                       "ch": 6
                     },
-                    "kind": 187,
+                    "kind": 23,
                     "name": "'start'",
                     "flags": 0
                   },
@@ -70,7 +70,7 @@
                       "line": 9,
                       "ch": 16
                     },
-                    "kind": 187,
+                    "kind": 23,
                     "name": "'item'",
                     "flags": 0
                   },
@@ -80,7 +80,7 @@
                       "line": 9,
                       "ch": 25
                     },
-                    "kind": 187,
+                    "kind": 23,
                     "name": "'complete'",
                     "flags": 0
                   }
@@ -93,14 +93,14 @@
                 "line": 9,
                 "ch": 37
               },
-              "kind": 159,
+              "kind": 10,
               "name": "value",
               "flags": 4,
               "id": 4,
               "type": {
                 "id": 2,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -111,7 +111,7 @@
             "line": 11,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Entity",
           "flags": 1,
           "id": 5,
@@ -122,7 +122,7 @@
                 "line": 13,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 6
@@ -135,13 +135,13 @@
                 "line": 13,
                 "ch": 46
               },
-              "kind": 159,
+              "kind": 10,
               "name": "selectors",
               "flags": 8,
               "id": 7,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "value": "{}"
@@ -152,7 +152,7 @@
                 "line": 14,
                 "ch": 29
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 8,
@@ -163,26 +163,26 @@
                     "line": 16,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "value",
                   "flags": 16,
                   "id": 9,
                   "type": {
                     "id": 6,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "id": 5,
                 "name": "Entity",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 6,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -193,7 +193,7 @@
                 "line": 20,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "select",
               "flags": 4,
               "id": 10,
@@ -204,7 +204,7 @@
                     "line": 22,
                     "ch": 8
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "K",
                   "flags": 0,
                   "id": 11
@@ -212,7 +212,7 @@
               ],
               "type": {
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "source": {
@@ -220,19 +220,19 @@
                       "line": 22,
                       "ch": 47
                     },
-                    "kind": 185,
+                    "kind": 21,
                     "name": "",
                     "flags": 0,
                     "children": [
                       {
                         "id": 6,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 11,
                         "name": "K",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -245,14 +245,14 @@
                     "line": 22,
                     "ch": 27
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "key",
                   "flags": 0,
                   "id": 12,
                   "type": {
                     "id": 11,
                     "name": "K",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -263,30 +263,30 @@
                 "line": 16,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "value",
               "flags": 16,
               "id": 9,
               "type": {
                 "id": 6,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 6,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -299,7 +299,7 @@
             "line": 31,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Collection",
           "flags": 1,
           "id": 13,
@@ -310,7 +310,7 @@
                 "line": 33,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 14
@@ -321,7 +321,7 @@
                 "line": 33,
                 "ch": 26
               },
-              "kind": 155,
+              "kind": 3,
               "name": "EntityT",
               "flags": 0,
               "id": 15,
@@ -331,17 +331,17 @@
           "children": [],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 15,
                     "name": "EntityT",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -354,7 +354,7 @@
             "line": 33,
             "ch": 78
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Store",
           "flags": 1,
           "id": 16,
@@ -365,7 +365,7 @@
                 "line": 58,
                 "ch": 19
               },
-              "kind": 155,
+              "kind": 3,
               "name": "StateT",
               "flags": 0,
               "id": 17
@@ -378,13 +378,13 @@
                 "line": 58,
                 "ch": 52
               },
-              "kind": 159,
+              "kind": 10,
               "name": "selectors",
               "flags": 16,
               "id": 18,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "value": "{}"
@@ -395,7 +395,7 @@
                 "line": 59,
                 "ch": 31
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 19,
@@ -406,26 +406,26 @@
                     "line": 61,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "state",
                   "flags": 16,
                   "id": 20,
                   "type": {
                     "id": 17,
                     "name": "StateT",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "id": 16,
                 "name": "Store",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 17,
                     "name": "StateT",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -436,7 +436,7 @@
                 "line": 63,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "onSubscribe",
               "flags": 16,
               "id": 21,
@@ -447,18 +447,18 @@
                     "line": 65,
                     "ch": 23
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscriber",
                   "flags": 0,
                   "id": 22,
                   "type": {
                     "name": "Subscriber",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 17,
                         "name": "StateT",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -466,7 +466,7 @@
               ],
               "type": {
                 "name": "UnsubscribeFunction",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -475,7 +475,7 @@
                 "line": 68,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "next",
               "flags": 4,
               "id": 23,
@@ -486,20 +486,20 @@
                     "line": 70,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "val",
                   "flags": 0,
                   "id": 24,
                   "type": {
                     "id": 17,
                     "name": "StateT",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -509,7 +509,7 @@
                 "line": 73,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "select",
               "flags": 4,
               "id": 25,
@@ -520,7 +520,7 @@
                     "line": 75,
                     "ch": 8
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "K",
                   "flags": 0,
                   "id": 26
@@ -528,7 +528,7 @@
               ],
               "type": {
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "source": {
@@ -536,19 +536,19 @@
                       "line": 75,
                       "ch": 52
                     },
-                    "kind": 185,
+                    "kind": 21,
                     "name": "",
                     "flags": 0,
                     "children": [
                       {
                         "id": 17,
                         "name": "StateT",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 26,
                         "name": "K",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -561,14 +561,14 @@
                     "line": 75,
                     "ch": 32
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "key",
                   "flags": 0,
                   "id": 27,
                   "type": {
                     "id": 26,
                     "name": "K",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -579,30 +579,30 @@
                 "line": 61,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "state",
               "flags": 16,
               "id": 20,
               "type": {
                 "id": 17,
                 "name": "StateT",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "name": "Subject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 17,
                     "name": "StateT",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -615,7 +615,7 @@
             "line": 84,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "SelectFn",
           "flags": 0,
           "id": 28,
@@ -626,7 +626,7 @@
                 "line": 86,
                 "ch": 19
               },
-              "kind": 155,
+              "kind": 3,
               "name": "StateT",
               "flags": 0,
               "id": 29
@@ -639,7 +639,7 @@
                 "line": 86,
                 "ch": 28
               },
-              "kind": 165,
+              "kind": 0,
               "name": "",
               "flags": 0
             },
@@ -649,13 +649,13 @@
                 "line": 87,
                 "ch": 57
               },
-              "kind": 161,
+              "kind": 11,
               "name": "next",
               "flags": 0,
               "id": 30,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": [
@@ -665,14 +665,14 @@
                     "line": 88,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "state",
                   "flags": 0,
                   "id": 31,
                   "type": {
                     "id": 29,
                     "name": "StateT",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -685,7 +685,7 @@
             "line": 89,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "select",
           "flags": 1,
           "id": 32,
@@ -696,7 +696,7 @@
                 "line": 91,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "StateT",
               "flags": 0,
               "id": 33
@@ -707,7 +707,7 @@
                 "line": 91,
                 "ch": 30
               },
-              "kind": 155,
+              "kind": 3,
               "name": "K",
               "flags": 0,
               "id": 34
@@ -720,40 +720,40 @@
                 "line": 91,
                 "ch": 55
               },
-              "kind": 156,
+              "kind": 9,
               "name": "key",
               "flags": 0,
               "id": 35,
               "type": {
                 "id": 34,
                 "name": "K",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 33,
                 "name": "StateT",
-                "kind": 169
+                "kind": 6
               },
               {
                 "name": "",
-                "kind": 185,
+                "kind": 21,
                 "flags": 0,
                 "children": [
                   {
                     "id": 33,
                     "name": "StateT",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "id": 34,
                     "name": "K",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -766,7 +766,7 @@
             "line": 93,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "store",
           "flags": 1,
           "id": 36,
@@ -777,7 +777,7 @@
                 "line": 95,
                 "ch": 22
               },
-              "kind": 155,
+              "kind": 3,
               "name": "StateT",
               "flags": 0,
               "id": 37
@@ -790,26 +790,26 @@
                 "line": 95,
                 "ch": 30
               },
-              "kind": 156,
+              "kind": 9,
               "name": "state",
               "flags": 524288,
               "id": 38,
               "type": {
                 "id": 37,
                 "name": "StateT",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "id": 28,
             "name": "SelectFn",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 37,
                 "name": "StateT",
-                "kind": 169
+                "kind": 6
               }
             ]
           }

@@ -27,14 +27,14 @@ import {
 	selectableHost,
 } from './core.js';
 import { dom } from '../xdom/index.js';
+import { onValue, tpl, triggerEvent } from '../template/index.js';
 import {
+	trigger,
+	onKeypress,
+	on,
 	onAction,
-	onValue,
-	keypress,
-	tpl,
-	triggerEvent,
-} from '../template/index.js';
-import { trigger, on, onChildrenMutation } from '../dom/index.js';
+	onChildrenMutation,
+} from '../dom/index.js';
 import { Style, border, boxShadow, padding } from '../css/index.js';
 import { be, defer, merge, of, tap } from '../rx/index.js';
 
@@ -75,49 +75,6 @@ const FocusCircleStyle = (
 	</Style>
 );
 
-export type ValidateFunction<T> = (val: T) => string | true;
-
-export function validate<T extends InputBase>(
-	el: T,
-	...validators: ValidateFunction<T['value']>[]
-) {
-	return get(el, 'value').tap(value => {
-		validators.find(validateFn => {
-			const message = validateFn(value);
-			el.invalid = message !== true;
-			if (message !== true)
-				return ((el as any).validationMessage = message);
-		});
-	});
-}
-
-export function $validate<T extends InputBase>(
-	...validators: ValidateFunction<T['value']>[]
-) {
-	return (el: T) => validate(el, ...validators);
-}
-
-export const ValidationMessage = {
-	json: 'Invalid JSON value',
-	zipcode: 'Please enter a valid zip code',
-	equalTo: 'Values do not match',
-	required: 'This field is required',
-	notZero: 'Value cannot be zero',
-	email: 'Please enter a valid email address',
-};
-
-export function required(val: any) {
-	return (
-		(val !== null && val !== undefined && val !== '' && val !== false) ||
-		ValidationMessage.required
-	);
-}
-
-const EMAIL = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-export function email(val: string) {
-	return val === '' || EMAIL.test(val) || ValidationMessage.email;
-}
-
 const Undefined = {};
 
 @Augment<InputBase>(
@@ -144,7 +101,7 @@ const Undefined = {};
 		</Style>
 	</Host>
 )
-class InputBase extends Component {
+export class InputBase extends Component {
 	@Attribute()
 	value: any;
 	@StyleAttribute()
@@ -318,10 +275,12 @@ const FieldBase = (
 			{{
 				$: {
 					position: 'relative',
-					paddingLeft: 12,
-					paddingRight: 12,
 					color: 'onSurface',
 					display: 'block',
+				},
+				container: {
+					position: 'relative',
+					...padding(0, 12, 4, 12),
 				},
 				$focused: { borderColor: 'primary' },
 				$outline: {
@@ -347,7 +306,7 @@ const FieldBase = (
 				content: {
 					display: 'flex',
 					position: 'relative',
-					marginBottom: 4,
+					font: 'default',
 					marginTop: 2,
 				},
 				mask: {
@@ -356,7 +315,7 @@ const FieldBase = (
 					right: 0,
 					left: 0,
 					bottom: 0,
-					backgroundColor: 'surface',
+					backgroundColor: 'onSurface8',
 				},
 				mask$outline: { borderRadius: 4 },
 				mask$hover: {
@@ -389,12 +348,14 @@ const FieldBase = (
 				label$floating$novalue$outline: { translateY: 27 },
 			}}
 		</Style>
-		<div className="mask"></div>
-		<div className="label">
-			<Slot selector="cxl-label" />
-		</div>
-		<div className="content">
-			<slot />
+		<div className="container">
+			<div className="mask"></div>
+			<div className="label">
+				<Slot selector="cxl-label" />
+			</div>
+			<div className="content">
+				<slot />
+			</div>
 		</div>
 	</Host>
 );
@@ -434,6 +395,7 @@ export class Label extends Component {}
 	<Style>
 		{{
 			$: { marginBottom: 16 },
+			$lastChild: { marginBottom: 0 },
 			$outline: { paddingTop: 2 },
 			line: { position: 'absolute', left: 0, right: 0 },
 			line$outline: { display: 'none' },
@@ -441,13 +403,16 @@ export class Label extends Component {}
 				font: 'caption',
 				position: 'relative',
 				display: 'flex',
-				marginTop: 2,
+				paddingTop: 4,
+				flexGrow: 1,
+				paddingLeft: 12,
+				paddingRight: 12,
 			},
-			grow: { flexGrow: 1 },
 			counter: { textAlign: 'right' },
 			help$leading: { paddingLeft: 38 },
-			invalidMessage: { display: 'none' },
+			invalidMessage: { display: 'none', paddingTop: 4 },
 			invalidMessage$invalid: { display: 'block' },
+			// $inputdisabled: { filter: 'saturate(0)' },
 		}}
 	</Style>,
 	FieldBase,
@@ -497,13 +462,12 @@ export class Label extends Component {}
 					labelText.next(ev.value.innerText)
 			),
 			on(host, 'form.register').pipe(tap(onRegister)),
-			on(host, 'focusable.touched').pipe(tap(update)),
+			on(host, 'focusable.change').pipe(tap(update)),
 			on(host, 'focusable.focus').pipe(tap(update)),
 			on(host, 'focusable.blur').pipe(tap(update)),
 			on(host, 'invalid').pipe(tap(update)),
 			on(host, 'input').tap(onChange),
 			on(host, 'change').tap(onChange),
-			on(host, 'form.disabled').pipe(tap(update)),
 			on(host, 'click').tap(
 				() =>
 					document.activeElement !== input &&
@@ -520,10 +484,8 @@ export class Label extends Component {}
 					invalid={invalid}
 				/>
 				<div className="help">
-					<div className="grow">
-						<Slot selector="cxl-field-help" />
-						<div className="invalidMessage">{invalidMessage}</div>
-					</div>
+					<Slot selector="cxl-field-help" />
+					<div className="invalidMessage">{invalidMessage}</div>
 				</div>
 			</Host>
 		);
@@ -551,10 +513,16 @@ export class Field extends Component {
 /**
  * @example
  * <cxl-field>
- * 	<cxl-label>Field Label</cxl-label>
- * 	<cxl-input value="Input Value"></cxl-input>
- * 	<cxl-field-help>Helper Text</cxl-field-help>
+ *   <cxl-label>Field Label</cxl-label>
+ *   <cxl-input value="Input Value"></cxl-input>
+ *   <cxl-field-help>Helper Text</cxl-field-help>
  * </cxl-field>
+ * <cxl-field>
+ *   <cxl-label>Field Label</cxl-label>
+ *   <cxl-input touched invalid value="Input Value"></cxl-input>
+ *   <cxl-field-help invalid>Field Error Text</cxl-field-help>
+ * </cxl-field>
+ *
  */
 @Augment(
 	'cxl-field-help',
@@ -563,7 +531,7 @@ export class Field extends Component {
 			$: {
 				display: 'block',
 				lineHeight: 12,
-				marginTop: 4,
+				paddingTop: 4,
 				font: 'caption',
 				verticalAlign: 'bottom',
 			},
@@ -648,13 +616,14 @@ export class FieldToggle extends Component {}
 				display: 'block',
 				height: 2,
 				borderWidth: 0,
-				borderBottom: 1,
+				borderTop: 1,
 				borderStyle: 'solid',
 				borderColor: 'onSurface',
 			},
 			$invalid: { borderColor: 'error' },
 			line: {
 				backgroundColor: 'primary',
+				marginTop: -1,
 				scaleX: 0,
 				height: 2,
 			},
@@ -696,7 +665,7 @@ export class FocusLine extends Component {
 				ev.stopPropagation();
 			}),
 			registableHost<InputBase>(host, 'form', host.elements),
-			keypress(host, 'enter').tap(ev => {
+			onKeypress(host, 'enter').tap(ev => {
 				host.submit();
 				ev.preventDefault();
 			})
@@ -741,7 +710,7 @@ export class Form extends Component {
 @Augment<Input>(
 	'cxl-input',
 	role('textbox'),
-	bind(host => keypress(host, 'enter').tap(ev => ev.preventDefault())),
+	bind(host => onKeypress(host, 'enter').tap(ev => ev.preventDefault())),
 	<Host>
 		<Style>
 			{{
@@ -1101,7 +1070,7 @@ export class SelectMenu extends Component {
 							el.opened ? el.close() : el.open()
 						),
 						on(el, 'blur').tap(() => el.close()),
-						keypress(el, 'escape').tap(() => el.close())
+						onKeypress(el, 'escape').tap(() => el.close())
 					)
 				}
 			>

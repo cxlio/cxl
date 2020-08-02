@@ -6,7 +6,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "index.ts",
       "flags": 0,
       "children": [
@@ -16,13 +16,13 @@
             "line": 0,
             "ch": 0
           },
-          "kind": 247,
+          "kind": 2,
           "name": "ObservableError",
           "flags": 0,
           "id": 1,
           "type": {
             "name": "any",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -32,7 +32,7 @@
             "line": 0,
             "ch": 27
           },
-          "kind": 247,
+          "kind": 2,
           "name": "NextFunction",
           "flags": 0,
           "id": 2,
@@ -43,7 +43,7 @@
                 "line": 1,
                 "ch": 18
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 3
@@ -55,13 +55,13 @@
               "line": 1,
               "ch": 22
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 4,
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             },
             "parameters": [
@@ -71,14 +71,14 @@
                   "line": 1,
                   "ch": 24
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "val",
                 "flags": 0,
                 "id": 5,
                 "type": {
                   "id": 3,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -90,7 +90,7 @@
             "line": 1,
             "ch": 40
           },
-          "kind": 247,
+          "kind": 2,
           "name": "ErrorFunction",
           "flags": 0,
           "id": 6,
@@ -100,13 +100,13 @@
               "line": 2,
               "ch": 20
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 7,
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             },
             "parameters": [
@@ -116,13 +116,13 @@
                   "line": 2,
                   "ch": 22
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "err",
                 "flags": 0,
                 "id": 8,
                 "type": {
                   "name": "ObservableError",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -134,7 +134,7 @@
             "line": 2,
             "ch": 52
           },
-          "kind": 247,
+          "kind": 2,
           "name": "CompleteFunction",
           "flags": 0,
           "id": 9,
@@ -144,13 +144,13 @@
               "line": 3,
               "ch": 23
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 10,
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             },
             "parameters": []
@@ -162,7 +162,7 @@
             "line": 3,
             "ch": 35
           },
-          "kind": 247,
+          "kind": 2,
           "name": "UnsubscribeFunction",
           "flags": 0,
           "id": 11,
@@ -172,13 +172,13 @@
               "line": 4,
               "ch": 26
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 12,
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             },
             "parameters": []
@@ -190,7 +190,7 @@
             "line": 4,
             "ch": 38
           },
-          "kind": 247,
+          "kind": 2,
           "name": "SubscribeFunction",
           "flags": 0,
           "id": 13,
@@ -201,7 +201,7 @@
                 "line": 5,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 14
@@ -213,7 +213,7 @@
               "line": 5,
               "ch": 27
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 15,
@@ -223,18 +223,18 @@
                 "line": 7,
                 "ch": 4
               },
-              "kind": 178,
+              "kind": 5,
               "name": "",
               "flags": 0,
               "children": [
                 {
                   "id": 11,
                   "name": "UnsubscribeFunction",
-                  "kind": 169
+                  "kind": 6
                 },
                 {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               ]
@@ -246,19 +246,19 @@
                   "line": 5,
                   "ch": 29
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "subscription",
                 "flags": 0,
                 "id": 16,
                 "type": {
                   "id": 17,
                   "name": "Subscriber",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 14,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 }
@@ -272,7 +272,7 @@
             "line": 7,
             "ch": 32
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Merge",
           "flags": 0,
           "id": 18,
@@ -283,7 +283,7 @@
                 "line": 8,
                 "ch": 11
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 19
@@ -295,19 +295,19 @@
               "line": 8,
               "ch": 15
             },
-            "kind": 180,
+            "kind": 18,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "id": 19,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "source": {
@@ -315,7 +315,7 @@
                       "line": 8,
                       "ch": 37
                     },
-                    "kind": 181,
+                    "kind": 20,
                     "name": "",
                     "flags": 0,
                     "type": {
@@ -324,7 +324,7 @@
                         "line": 8,
                         "ch": 42
                       },
-                      "kind": 155,
+                      "kind": 3,
                       "name": "U",
                       "flags": 0,
                       "id": 21
@@ -335,11 +335,11 @@
               {
                 "id": 21,
                 "name": "U",
-                "kind": 169
+                "kind": 6
               },
               {
                 "name": "never",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -351,7 +351,7 @@
             "line": 8,
             "ch": 58
           },
-          "kind": 247,
+          "kind": 2,
           "name": "ObservableT",
           "flags": 0,
           "id": 22,
@@ -362,7 +362,7 @@
                 "line": 9,
                 "ch": 17
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 23
@@ -374,19 +374,19 @@
               "line": 9,
               "ch": 21
             },
-            "kind": 180,
+            "kind": 18,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "id": 23,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "source": {
@@ -394,7 +394,7 @@
                       "line": 9,
                       "ch": 43
                     },
-                    "kind": 181,
+                    "kind": 20,
                     "name": "",
                     "flags": 0,
                     "type": {
@@ -403,7 +403,7 @@
                         "line": 9,
                         "ch": 48
                       },
-                      "kind": 155,
+                      "kind": 3,
                       "name": "U",
                       "flags": 0,
                       "id": 24
@@ -414,11 +414,11 @@
               {
                 "id": 24,
                 "name": "U",
-                "kind": 169
+                "kind": 6
               },
               {
                 "name": "never",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -430,7 +430,7 @@
             "line": 9,
             "ch": 64
           },
-          "kind": 247,
+          "kind": 2,
           "name": "PickObservable",
           "flags": 0,
           "id": 25,
@@ -441,7 +441,7 @@
                 "line": 10,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 26
@@ -453,7 +453,7 @@
               "line": 10,
               "ch": 24
             },
-            "kind": 186,
+            "kind": 0,
             "name": "",
             "flags": 0
           }
@@ -464,7 +464,7 @@
             "line": 12,
             "ch": 2
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Operator",
           "flags": 1,
           "id": 27,
@@ -475,7 +475,7 @@
                 "line": 14,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 28
@@ -486,7 +486,7 @@
                 "line": 14,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 29,
@@ -499,19 +499,19 @@
               "line": 14,
               "ch": 33
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 30,
             "type": {
               "id": 20,
               "name": "Observable",
-              "kind": 169,
+              "kind": 6,
               "typeParameters": [
                 {
                   "id": 29,
                   "name": "T2",
-                  "kind": 169
+                  "kind": 6
                 }
               ]
             },
@@ -522,19 +522,19 @@
                   "line": 14,
                   "ch": 35
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "observable",
                 "flags": 0,
                 "id": 31,
                 "type": {
                   "id": 20,
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 28,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 }
@@ -548,13 +548,13 @@
             "line": 14,
             "ch": 80
           },
-          "kind": 244,
+          "kind": 16,
           "name": "setTimeout",
           "flags": 2,
           "id": 32,
           "type": {
             "name": "number",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           },
           "parameters": [
@@ -564,7 +564,7 @@
                 "line": 16,
                 "ch": 28
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 33,
@@ -574,13 +574,13 @@
                   "line": 16,
                   "ch": 31
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 34,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": []
@@ -592,13 +592,13 @@
                 "line": 16,
                 "ch": 42
               },
-              "kind": 156,
+              "kind": 9,
               "name": "n",
               "flags": 524288,
               "id": 35,
               "type": {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -610,13 +610,13 @@
             "line": 16,
             "ch": 63
           },
-          "kind": 244,
+          "kind": 16,
           "name": "clearTimeout",
           "flags": 2,
           "id": 36,
           "type": {
             "name": "void",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           },
           "parameters": [
@@ -626,13 +626,13 @@
                 "line": 17,
                 "ch": 30
               },
-              "kind": 156,
+              "kind": 9,
               "name": "n",
               "flags": 0,
               "id": 37,
               "type": {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -644,7 +644,7 @@
             "line": 17,
             "ch": 47
           },
-          "kind": 246,
+          "kind": 4,
           "name": "Observer",
           "flags": 1,
           "id": 38,
@@ -655,7 +655,7 @@
                 "line": 19,
                 "ch": 26
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 39
@@ -668,19 +668,19 @@
                 "line": 19,
                 "ch": 30
               },
-              "kind": 159,
+              "kind": 10,
               "name": "next",
               "flags": 4,
               "id": 40,
               "type": {
                 "id": 2,
                 "name": "NextFunction",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 39,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -691,14 +691,14 @@
                 "line": 20,
                 "ch": 24
               },
-              "kind": 159,
+              "kind": 10,
               "name": "error",
               "flags": 4,
               "id": 41,
               "type": {
                 "id": 6,
                 "name": "ErrorFunction",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -707,14 +707,14 @@
                 "line": 21,
                 "ch": 23
               },
-              "kind": 159,
+              "kind": 10,
               "name": "complete",
               "flags": 4,
               "id": 42,
               "type": {
                 "id": 9,
                 "name": "CompleteFunction",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -725,7 +725,7 @@
             "line": 23,
             "ch": 1
           },
-          "kind": 247,
+          "kind": 2,
           "name": "NextObserver",
           "flags": 0,
           "id": 43,
@@ -736,7 +736,7 @@
                 "line": 25,
                 "ch": 18
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 44
@@ -748,37 +748,37 @@
               "line": 25,
               "ch": 22
             },
-            "kind": 178,
+            "kind": 5,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "id": 2,
                 "name": "NextFunction",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 44,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
               {
                 "id": 38,
                 "name": "Observer",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 44,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
               {
                 "name": "undefined",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -790,14 +790,14 @@
             "line": 28,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "observableSymbol",
           "flags": 0,
           "id": 45,
           "value": "(Symbol as any).observable || '@@observable'",
           "type": {
             "name": "any",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -807,7 +807,7 @@
             "line": 28,
             "ch": 70
           },
-          "kind": 244,
+          "kind": 16,
           "name": "getObserver",
           "flags": 0,
           "id": 46,
@@ -818,7 +818,7 @@
                 "line": 30,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 47
@@ -827,12 +827,12 @@
           "type": {
             "id": 38,
             "name": "Observer",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 47,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -843,19 +843,19 @@
                 "line": 30,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "next",
               "flags": 524288,
               "id": 48,
               "type": {
                 "id": 43,
                 "name": "NextObserver",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 47,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -866,14 +866,14 @@
                 "line": 31,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "error",
               "flags": 524288,
               "id": 49,
               "type": {
                 "id": 6,
                 "name": "ErrorFunction",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -882,14 +882,14 @@
                 "line": 32,
                 "ch": 23
               },
-              "kind": 156,
+              "kind": 9,
               "name": "complete",
               "flags": 524288,
               "id": 50,
               "type": {
                 "id": 9,
                 "name": "CompleteFunction",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -900,7 +900,7 @@
             "line": 42,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "Subscription",
           "flags": 1,
           "id": 51,
@@ -911,13 +911,13 @@
                 "line": 44,
                 "ch": 31
               },
-              "kind": 161,
+              "kind": 11,
               "name": "unsubscribe",
               "flags": 0,
               "id": 52,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": []
@@ -931,7 +931,7 @@
             "line": 46,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Subscriber",
           "flags": 1,
           "typeParameters": [
@@ -941,7 +941,7 @@
                 "line": 48,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 53
@@ -954,14 +954,14 @@
                 "line": 48,
                 "ch": 28
               },
-              "kind": 159,
+              "kind": 10,
               "name": "isUnsubscribed",
               "flags": 4,
               "id": 54,
               "value": "false",
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -971,7 +971,7 @@
                 "line": 49,
                 "ch": 24
               },
-              "kind": 159,
+              "kind": 10,
               "name": "onUnsubscribe",
               "flags": 4,
               "id": 55,
@@ -981,18 +981,18 @@
                   "line": 50,
                   "ch": 15
                 },
-                "kind": 178,
+                "kind": 5,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "id": 11,
                     "name": "UnsubscribeFunction",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "name": "void",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -1004,19 +1004,19 @@
                 "line": 50,
                 "ch": 43
               },
-              "kind": 159,
+              "kind": 10,
               "name": "subscriber",
               "flags": 4,
               "id": 56,
               "type": {
                 "id": 38,
                 "name": "Observer",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 53,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1027,7 +1027,7 @@
                 "line": 51,
                 "ch": 25
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 57,
@@ -1038,19 +1038,19 @@
                     "line": 53,
                     "ch": 13
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscriber",
                   "flags": 0,
                   "id": 58,
                   "type": {
                     "id": 38,
                     "name": "Observer",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 53,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1061,19 +1061,19 @@
                     "line": 53,
                     "ch": 37
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscribe",
                   "flags": 524288,
                   "id": 59,
                   "type": {
                     "id": 13,
                     "name": "SubscribeFunction",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 53,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1082,12 +1082,12 @@
               "type": {
                 "id": 17,
                 "name": "Subscriber",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 53,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1098,7 +1098,7 @@
                 "line": 60,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "next",
               "flags": 4,
               "id": 60,
@@ -1109,20 +1109,20 @@
                     "line": 62,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "val",
                   "flags": 0,
                   "id": 61,
                   "type": {
                     "id": 53,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1132,7 +1132,7 @@
                 "line": 70,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "error",
               "flags": 4,
               "id": 62,
@@ -1143,19 +1143,19 @@
                     "line": 72,
                     "ch": 7
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "e",
                   "flags": 0,
                   "id": 63,
                   "type": {
                     "name": "ObservableError",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1165,14 +1165,14 @@
                 "line": 79,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "complete",
               "flags": 4,
               "id": 64,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1182,14 +1182,14 @@
                 "line": 85,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "unsubscribe",
               "flags": 4,
               "id": 65,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -1201,7 +1201,7 @@
             "line": 93,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "pipe",
           "flags": 1,
           "id": 66,
@@ -1219,7 +1219,7 @@
                 "line": 98,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 67
@@ -1228,12 +1228,12 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 67,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -1244,7 +1244,7 @@
                 "line": 98,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "operators",
               "flags": 262144,
               "id": 68,
@@ -1254,18 +1254,18 @@
                   "line": 98,
                   "ch": 37
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 27,
                   "name": "Operator",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 67,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 }
@@ -1280,7 +1280,7 @@
             "line": 101,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Observable",
           "flags": 1,
           "docs": {
@@ -1297,7 +1297,7 @@
                 "line": 106,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 69
@@ -1310,7 +1310,7 @@
                 "line": 106,
                 "ch": 28
               },
-              "kind": 161,
+              "kind": 11,
               "name": "[observableSymbol]",
               "flags": 4,
               "id": 70,
@@ -1318,7 +1318,7 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1327,19 +1327,19 @@
                 "line": 109,
                 "ch": 2
               },
-              "kind": 159,
+              "kind": 10,
               "name": "___subscribe",
               "flags": 16,
               "id": 71,
               "type": {
                 "id": 13,
                 "name": "SubscribeFunction",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1350,7 +1350,7 @@
                 "line": 110,
                 "ch": 46
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 72,
@@ -1361,19 +1361,19 @@
                     "line": 112,
                     "ch": 13
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscribe",
                   "flags": 524288,
                   "id": 73,
                   "type": {
                     "id": 13,
                     "name": "SubscribeFunction",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 69,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1382,12 +1382,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1398,7 +1398,7 @@
                 "line": 114,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "pipe",
               "flags": 16388,
               "id": 74,
@@ -1409,7 +1409,7 @@
                     "line": 116,
                     "ch": 6
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "A",
                   "flags": 0,
                   "id": 75
@@ -1418,12 +1418,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 75,
                     "name": "A",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -1434,24 +1434,24 @@
                     "line": 116,
                     "ch": 9
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "a",
                   "flags": 0,
                   "id": 76,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 69,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 75,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1464,7 +1464,7 @@
                 "line": 116,
                 "ch": 43
               },
-              "kind": 161,
+              "kind": 11,
               "name": "pipe",
               "flags": 16388,
               "id": 77,
@@ -1475,7 +1475,7 @@
                     "line": 117,
                     "ch": 6
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "A",
                   "flags": 0,
                   "id": 78
@@ -1486,7 +1486,7 @@
                     "line": 117,
                     "ch": 8
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "B",
                   "flags": 0,
                   "id": 79
@@ -1495,12 +1495,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 79,
                     "name": "B",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -1511,24 +1511,24 @@
                     "line": 117,
                     "ch": 12
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "a",
                   "flags": 0,
                   "id": 80,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 69,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 78,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1539,24 +1539,24 @@
                     "line": 117,
                     "ch": 30
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "b",
                   "flags": 0,
                   "id": 81,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 78,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 79,
                         "name": "B",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1569,7 +1569,7 @@
                 "line": 117,
                 "ch": 65
               },
-              "kind": 161,
+              "kind": 11,
               "name": "pipe",
               "flags": 16388,
               "id": 82,
@@ -1580,7 +1580,7 @@
                     "line": 118,
                     "ch": 6
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "A",
                   "flags": 0,
                   "id": 83
@@ -1591,7 +1591,7 @@
                     "line": 118,
                     "ch": 8
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "B",
                   "flags": 0,
                   "id": 84
@@ -1602,7 +1602,7 @@
                     "line": 118,
                     "ch": 11
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "C",
                   "flags": 0,
                   "id": 85
@@ -1611,12 +1611,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 85,
                     "name": "C",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -1627,24 +1627,24 @@
                     "line": 118,
                     "ch": 15
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "a",
                   "flags": 0,
                   "id": 86,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 69,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 83,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1655,24 +1655,24 @@
                     "line": 119,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "b",
                   "flags": 0,
                   "id": 87,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 83,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 84,
                         "name": "B",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1683,24 +1683,24 @@
                     "line": 120,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "c",
                   "flags": 0,
                   "id": 88,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 84,
                         "name": "B",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 85,
                         "name": "C",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1713,7 +1713,7 @@
                 "line": 122,
                 "ch": 18
               },
-              "kind": 161,
+              "kind": 11,
               "name": "pipe",
               "flags": 16388,
               "id": 89,
@@ -1724,7 +1724,7 @@
                     "line": 123,
                     "ch": 6
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "A",
                   "flags": 0,
                   "id": 90
@@ -1735,7 +1735,7 @@
                     "line": 123,
                     "ch": 8
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "B",
                   "flags": 0,
                   "id": 91
@@ -1746,7 +1746,7 @@
                     "line": 123,
                     "ch": 11
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "C",
                   "flags": 0,
                   "id": 92
@@ -1757,7 +1757,7 @@
                     "line": 123,
                     "ch": 14
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "D",
                   "flags": 0,
                   "id": 93
@@ -1766,12 +1766,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 93,
                     "name": "D",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -1782,24 +1782,24 @@
                     "line": 123,
                     "ch": 18
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "a",
                   "flags": 0,
                   "id": 94,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 69,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 90,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1810,24 +1810,24 @@
                     "line": 124,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "b",
                   "flags": 0,
                   "id": 95,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 90,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 91,
                         "name": "B",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1838,24 +1838,24 @@
                     "line": 125,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "c",
                   "flags": 0,
                   "id": 96,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 91,
                         "name": "B",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 92,
                         "name": "C",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1866,24 +1866,24 @@
                     "line": 126,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "d",
                   "flags": 0,
                   "id": 97,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 92,
                         "name": "C",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 93,
                         "name": "D",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -1896,7 +1896,7 @@
                 "line": 128,
                 "ch": 18
               },
-              "kind": 161,
+              "kind": 11,
               "name": "pipe",
               "flags": 16388,
               "id": 98,
@@ -1907,7 +1907,7 @@
                     "line": 129,
                     "ch": 6
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "A",
                   "flags": 0,
                   "id": 99
@@ -1918,7 +1918,7 @@
                     "line": 129,
                     "ch": 8
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "B",
                   "flags": 0,
                   "id": 100
@@ -1929,7 +1929,7 @@
                     "line": 129,
                     "ch": 11
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "C",
                   "flags": 0,
                   "id": 101
@@ -1940,7 +1940,7 @@
                     "line": 129,
                     "ch": 14
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "D",
                   "flags": 0,
                   "id": 102
@@ -1951,7 +1951,7 @@
                     "line": 129,
                     "ch": 17
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "E",
                   "flags": 0,
                   "id": 103
@@ -1960,12 +1960,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 103,
                     "name": "E",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -1976,24 +1976,24 @@
                     "line": 129,
                     "ch": 21
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "a",
                   "flags": 0,
                   "id": 104,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 69,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 99,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2004,24 +2004,24 @@
                     "line": 130,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "b",
                   "flags": 0,
                   "id": 105,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 99,
                         "name": "A",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 100,
                         "name": "B",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2032,24 +2032,24 @@
                     "line": 131,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "c",
                   "flags": 0,
                   "id": 106,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 100,
                         "name": "B",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 101,
                         "name": "C",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2060,24 +2060,24 @@
                     "line": 132,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "d",
                   "flags": 0,
                   "id": 107,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 101,
                         "name": "C",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 102,
                         "name": "D",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2088,24 +2088,24 @@
                     "line": 133,
                     "ch": 20
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "e",
                   "flags": 0,
                   "id": 108,
                   "type": {
                     "id": 27,
                     "name": "Operator",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 102,
                         "name": "D",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "id": 103,
                         "name": "E",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2118,7 +2118,7 @@
                 "line": 135,
                 "ch": 18
               },
-              "kind": 161,
+              "kind": 11,
               "name": "pipe",
               "flags": 4,
               "id": 109,
@@ -2132,11 +2132,11 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -2148,7 +2148,7 @@
                     "line": 140,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "extra",
                   "flags": 262144,
                   "id": 110,
@@ -2158,22 +2158,22 @@
                       "line": 140,
                       "ch": 15
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 0,
                     "type": {
                       "id": 27,
                       "name": "Operator",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "name": "any",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         },
                         {
                           "name": "any",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
@@ -2188,7 +2188,7 @@
                 "line": 142,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "subscribe",
               "flags": 4,
               "id": 111,
@@ -2202,7 +2202,7 @@
               "type": {
                 "id": 51,
                 "name": "Subscription",
-                "kind": 169
+                "kind": 6
               },
               "parameters": [
                 {
@@ -2211,19 +2211,19 @@
                     "line": 147,
                     "ch": 11
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "next",
                   "flags": 524288,
                   "id": 112,
                   "type": {
                     "id": 43,
                     "name": "NextObserver",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 69,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -2234,14 +2234,14 @@
                     "line": 148,
                     "ch": 25
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "error",
                   "flags": 524288,
                   "id": 113,
                   "type": {
                     "id": 6,
                     "name": "ErrorFunction",
-                    "kind": 169
+                    "kind": 6
                   }
                 },
                 {
@@ -2250,14 +2250,14 @@
                     "line": 149,
                     "ch": 24
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "complete",
                   "flags": 524288,
                   "id": 114,
                   "type": {
                     "id": 9,
                     "name": "CompleteFunction",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -2268,7 +2268,7 @@
                 "line": 723,
                 "ch": 32
               },
-              "kind": 161,
+              "kind": 11,
               "name": "catchError",
               "flags": 4,
               "id": 115,
@@ -2279,7 +2279,7 @@
                     "line": 724,
                     "ch": 12
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T2",
                   "flags": 0,
                   "id": 116
@@ -2288,12 +2288,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 116,
                     "name": "T2",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2304,7 +2304,7 @@
                     "line": 724,
                     "ch": 16
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "selector",
                   "flags": 0,
                   "id": 117,
@@ -2314,7 +2314,7 @@
                       "line": 725,
                       "ch": 11
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
                     "id": 118,
@@ -2324,25 +2324,25 @@
                         "line": 725,
                         "ch": 48
                       },
-                      "kind": 178,
+                      "kind": 5,
                       "name": "",
                       "flags": 0,
                       "children": [
                         {
                           "id": 20,
                           "name": "Observable",
-                          "kind": 169,
+                          "kind": 6,
                           "typeParameters": [
                             {
                               "id": 116,
                               "name": "T2",
-                              "kind": 169
+                              "kind": 6
                             }
                           ]
                         },
                         {
                           "name": "void",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
@@ -2354,13 +2354,13 @@
                           "line": 725,
                           "ch": 13
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "err",
                         "flags": 0,
                         "id": 119,
                         "type": {
                           "name": "any",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       },
@@ -2370,19 +2370,19 @@
                           "line": 725,
                           "ch": 22
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "source",
                         "flags": 0,
                         "id": 120,
                         "type": {
                           "id": 20,
                           "name": "Observable",
-                          "kind": 169,
+                          "kind": 6,
                           "typeParameters": [
                             {
                               "id": 69,
                               "name": "T",
-                              "kind": 169
+                              "kind": 6
                             }
                           ]
                         }
@@ -2398,19 +2398,19 @@
                 "line": 726,
                 "ch": 19
               },
-              "kind": 161,
+              "kind": 11,
               "name": "debounceTime",
               "flags": 4,
               "id": 121,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2421,13 +2421,13 @@
                     "line": 727,
                     "ch": 14
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "time",
                   "flags": 524288,
                   "id": 122,
                   "type": {
                     "name": "number",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -2439,19 +2439,19 @@
                 "line": 727,
                 "ch": 44
               },
-              "kind": 161,
+              "kind": 11,
               "name": "defer",
               "flags": 4,
               "id": 123,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2462,7 +2462,7 @@
                     "line": 728,
                     "ch": 7
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "fn",
                   "flags": 0,
                   "id": 124,
@@ -2472,7 +2472,7 @@
                       "line": 728,
                       "ch": 10
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
                     "id": 125,
@@ -2482,25 +2482,25 @@
                         "line": 728,
                         "ch": 16
                       },
-                      "kind": 178,
+                      "kind": 5,
                       "name": "",
                       "flags": 0,
                       "children": [
                         {
                           "id": 20,
                           "name": "Observable",
-                          "kind": 169,
+                          "kind": 6,
                           "typeParameters": [
                             {
                               "id": 69,
                               "name": "T",
-                              "kind": 169
+                              "kind": 6
                             }
                           ]
                         },
                         {
                           "name": "void",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
@@ -2516,19 +2516,19 @@
                 "line": 728,
                 "ch": 54
               },
-              "kind": 161,
+              "kind": 11,
               "name": "distinctUntilChanged",
               "flags": 4,
               "id": 126,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2540,19 +2540,19 @@
                 "line": 729,
                 "ch": 39
               },
-              "kind": 161,
+              "kind": 11,
               "name": "filter",
               "flags": 4,
               "id": 127,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2563,7 +2563,7 @@
                     "line": 730,
                     "ch": 8
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "fn",
                   "flags": 0,
                   "id": 128,
@@ -2573,13 +2573,13 @@
                       "line": 730,
                       "ch": 11
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
                     "id": 129,
                     "type": {
                       "name": "boolean",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     },
                     "parameters": [
@@ -2589,14 +2589,14 @@
                           "line": 730,
                           "ch": 13
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
                         "id": 130,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -2610,115 +2610,56 @@
                 "line": 730,
                 "ch": 48
               },
-              "kind": 161,
-              "name": "map",
+              "kind": 11,
+              "name": "first",
               "flags": 4,
               "id": 131,
-              "typeParameters": [
-                {
-                  "source": {
-                    "fileName": "index.ts",
-                    "line": 731,
-                    "ch": 5
-                  },
-                  "kind": 155,
-                  "name": "T2",
-                  "flags": 0,
-                  "id": 132
-                }
-              ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 132,
-                    "name": "T2",
-                    "kind": 169
+                    "id": 69,
+                    "name": "T",
+                    "kind": 6
                   }
                 ]
               },
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "index.ts",
-                    "line": 731,
-                    "ch": 9
-                  },
-                  "kind": 156,
-                  "name": "mapFn",
-                  "flags": 0,
-                  "id": 133,
-                  "type": {
-                    "source": {
-                      "fileName": "index.ts",
-                      "line": 731,
-                      "ch": 15
-                    },
-                    "kind": 170,
-                    "name": "",
-                    "flags": 0,
-                    "id": 134,
-                    "type": {
-                      "id": 132,
-                      "name": "T2",
-                      "kind": 169
-                    },
-                    "parameters": [
-                      {
-                        "source": {
-                          "fileName": "index.ts",
-                          "line": 731,
-                          "ch": 17
-                        },
-                        "kind": 156,
-                        "name": "val",
-                        "flags": 0,
-                        "id": 135,
-                        "type": {
-                          "id": 69,
-                          "name": "T",
-                          "kind": 169
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
+              "parameters": []
             },
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 731,
-                "ch": 48
+                "ch": 24
               },
-              "kind": 161,
-              "name": "mergeMap",
+              "kind": 11,
+              "name": "map",
               "flags": 4,
-              "id": 136,
+              "id": 132,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
                     "line": 732,
-                    "ch": 10
+                    "ch": 5
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T2",
                   "flags": 0,
-                  "id": 137
+                  "id": 133
                 }
               ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 137,
+                    "id": 133,
                     "name": "T2",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2727,49 +2668,42 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 732,
-                    "ch": 14
+                    "ch": 9
                   },
-                  "kind": 156,
-                  "name": "project",
+                  "kind": 9,
+                  "name": "mapFn",
                   "flags": 0,
-                  "id": 138,
+                  "id": 134,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
                       "line": 732,
-                      "ch": 22
+                      "ch": 15
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 139,
+                    "id": 135,
                     "type": {
-                      "id": 20,
-                      "name": "Observable",
-                      "kind": 169,
-                      "typeParameters": [
-                        {
-                          "id": 137,
-                          "name": "T2",
-                          "kind": 169
-                        }
-                      ]
+                      "id": 133,
+                      "name": "T2",
+                      "kind": 6
                     },
                     "parameters": [
                       {
                         "source": {
                           "fileName": "index.ts",
                           "line": 732,
-                          "ch": 24
+                          "ch": 17
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
-                        "id": 140,
+                        "id": 136,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -2781,34 +2715,34 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 732,
-                "ch": 67
+                "ch": 48
               },
-              "kind": 161,
-              "name": "switchMap",
+              "kind": 11,
+              "name": "mergeMap",
               "flags": 4,
-              "id": 141,
+              "id": 137,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
                     "line": 733,
-                    "ch": 11
+                    "ch": 10
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T2",
                   "flags": 0,
-                  "id": 142
+                  "id": 138
                 }
               ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 142,
+                    "id": 138,
                     "name": "T2",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2817,31 +2751,31 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 733,
-                    "ch": 15
+                    "ch": 14
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "project",
                   "flags": 0,
-                  "id": 143,
+                  "id": 139,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
                       "line": 733,
-                      "ch": 23
+                      "ch": 22
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 144,
+                    "id": 140,
                     "type": {
                       "id": 20,
                       "name": "Observable",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
-                          "id": 142,
+                          "id": 138,
                           "name": "T2",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     },
@@ -2850,16 +2784,16 @@
                         "source": {
                           "fileName": "index.ts",
                           "line": 733,
-                          "ch": 25
+                          "ch": 24
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
-                        "id": 145,
+                        "id": 141,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -2871,21 +2805,34 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 733,
-                "ch": 68
+                "ch": 67
               },
-              "kind": 161,
-              "name": "tap",
+              "kind": 11,
+              "name": "switchMap",
               "flags": 4,
-              "id": 146,
+              "id": 142,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 734,
+                    "ch": 11
+                  },
+                  "kind": 3,
+                  "name": "T2",
+                  "flags": 0,
+                  "id": 143
+                }
+              ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 69,
-                    "name": "T",
-                    "kind": 169
+                    "id": 143,
+                    "name": "T2",
+                    "kind": 6
                   }
                 ]
               },
@@ -2894,42 +2841,49 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 734,
-                    "ch": 5
+                    "ch": 15
                   },
-                  "kind": 156,
-                  "name": "tapFn",
+                  "kind": 9,
+                  "name": "project",
                   "flags": 0,
-                  "id": 147,
+                  "id": 144,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
                       "line": 734,
-                      "ch": 11
+                      "ch": 23
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 148,
+                    "id": 145,
                     "type": {
-                      "name": "void",
-                      "kind": 1002,
-                      "flags": 0
+                      "id": 20,
+                      "name": "Observable",
+                      "kind": 6,
+                      "typeParameters": [
+                        {
+                          "id": 143,
+                          "name": "T2",
+                          "kind": 6
+                        }
+                      ]
                     },
                     "parameters": [
                       {
                         "source": {
                           "fileName": "index.ts",
                           "line": 734,
-                          "ch": 13
+                          "ch": 25
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
-                        "id": 149,
+                        "id": 146,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -2941,45 +2895,91 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 734,
-                "ch": 45
+                "ch": 68
               },
-              "kind": 161,
-              "name": "first",
+              "kind": 11,
+              "name": "tap",
               "flags": 4,
-              "id": 150,
+              "id": 147,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
-              "parameters": []
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 735,
+                    "ch": 5
+                  },
+                  "kind": 9,
+                  "name": "tapFn",
+                  "flags": 0,
+                  "id": 148,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 735,
+                      "ch": 11
+                    },
+                    "kind": 17,
+                    "name": "",
+                    "flags": 0,
+                    "id": 149,
+                    "type": {
+                      "name": "void",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "index.ts",
+                          "line": 735,
+                          "ch": 13
+                        },
+                        "kind": 9,
+                        "name": "val",
+                        "flags": 0,
+                        "id": 150,
+                        "type": {
+                          "id": 69,
+                          "name": "T",
+                          "kind": 6
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
             },
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 735,
-                "ch": 24
+                "ch": 45
               },
-              "kind": 161,
+              "kind": 11,
               "name": "take",
               "flags": 4,
               "id": 151,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -2990,13 +2990,13 @@
                     "line": 736,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "howMany",
                   "flags": 0,
                   "id": 152,
                   "type": {
                     "name": "number",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -3007,7 +3007,7 @@
             {
               "id": 153,
               "name": "Subject",
-              "kind": 169
+              "kind": 6
             }
           ]
         },
@@ -3017,7 +3017,7 @@
             "line": 158,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Subject",
           "flags": 1,
           "id": 153,
@@ -3035,7 +3035,7 @@
                 "line": 164,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 154
@@ -3048,24 +3048,24 @@
                 "line": 164,
                 "ch": 47
               },
-              "kind": 159,
+              "kind": 10,
               "name": "observers",
               "flags": 16,
               "id": 155,
               "value": "new Set<Subscriber<T>>()",
               "type": {
                 "name": "Set",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 17,
                     "name": "Subscriber",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 154,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -3078,14 +3078,14 @@
                 "line": 165,
                 "ch": 48
               },
-              "kind": 161,
+              "kind": 11,
               "name": "onSubscribe",
               "flags": 16,
               "id": 156,
               "type": {
                 "id": 11,
                 "name": "UnsubscribeFunction",
-                "kind": 169
+                "kind": 6
               },
               "parameters": [
                 {
@@ -3094,19 +3094,19 @@
                     "line": 167,
                     "ch": 23
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscriber",
                   "flags": 0,
                   "id": 157,
                   "type": {
                     "id": 17,
                     "name": "Subscriber",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 154,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -3119,7 +3119,7 @@
                 "line": 170,
                 "ch": 2
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 158,
@@ -3127,12 +3127,12 @@
               "type": {
                 "id": 153,
                 "name": "Subject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 154,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3143,13 +3143,13 @@
                 "line": 174,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "next",
               "flags": 4,
               "id": 159,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": [
@@ -3159,14 +3159,14 @@
                     "line": 176,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "a",
                   "flags": 0,
                   "id": 160,
                   "type": {
                     "id": 154,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -3177,13 +3177,13 @@
                 "line": 178,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "error",
               "flags": 4,
               "id": 161,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": [
@@ -3193,13 +3193,13 @@
                     "line": 179,
                     "ch": 7
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "e",
                   "flags": 0,
                   "id": 162,
                   "type": {
                     "name": "ObservableError",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ]
@@ -3210,13 +3210,13 @@
                 "line": 181,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "complete",
               "flags": 4,
               "id": 163,
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               "parameters": []
@@ -3224,18 +3224,18 @@
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 154,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3245,17 +3245,17 @@
             {
               "id": 164,
               "name": "BehaviorSubject",
-              "kind": 169
+              "kind": 6
             },
             {
               "id": 173,
               "name": "ReplaySubject",
-              "kind": 169
+              "kind": 6
             },
             {
               "id": 183,
               "name": "Reference",
-              "kind": 169
+              "kind": 6
             }
           ]
         },
@@ -3265,7 +3265,7 @@
             "line": 185,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "BehaviorSubject",
           "flags": 1,
           "id": 164,
@@ -3287,7 +3287,7 @@
                 "line": 191,
                 "ch": 29
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 165
@@ -3300,7 +3300,7 @@
                 "line": 191,
                 "ch": 52
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 166,
@@ -3311,26 +3311,26 @@
                     "line": 192,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "currentValue",
                   "flags": 8,
                   "id": 167,
                   "type": {
                     "id": 165,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "id": 164,
                 "name": "BehaviorSubject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 165,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3341,7 +3341,7 @@
                 "line": 194,
                 "ch": 2
               },
-              "kind": 163,
+              "kind": 12,
               "name": "value",
               "flags": 4,
               "id": 168,
@@ -3349,7 +3349,7 @@
               "type": {
                 "id": 165,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -3358,7 +3358,7 @@
                 "line": 198,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "onSubscribe",
               "flags": 16,
               "id": 169,
@@ -3369,19 +3369,19 @@
                     "line": 200,
                     "ch": 23
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscription",
                   "flags": 0,
                   "id": 170,
                   "type": {
                     "id": 17,
                     "name": "Subscriber",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 165,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -3390,7 +3390,7 @@
               "type": {
                 "id": 11,
                 "name": "UnsubscribeFunction",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -3399,7 +3399,7 @@
                 "line": 203,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "next",
               "flags": 4,
               "id": 171,
@@ -3410,20 +3410,20 @@
                     "line": 205,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "val",
                   "flags": 0,
                   "id": 172,
                   "type": {
                     "id": 165,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -3433,31 +3433,31 @@
                 "line": 192,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "currentValue",
               "flags": 8,
               "id": 167,
               "type": {
                 "id": 165,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "id": 153,
                 "name": "Subject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 165,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3470,7 +3470,7 @@
             "line": 209,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "ReplaySubject",
           "flags": 1,
           "id": 173,
@@ -3488,7 +3488,7 @@
                 "line": 216,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 174
@@ -3501,7 +3501,7 @@
                 "line": 216,
                 "ch": 50
               },
-              "kind": 159,
+              "kind": 10,
               "name": "buffer",
               "flags": 8,
               "id": 175,
@@ -3511,13 +3511,13 @@
                   "line": 217,
                   "ch": 16
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 174,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               },
               "value": "[]"
@@ -3528,7 +3528,7 @@
                 "line": 217,
                 "ch": 26
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 176,
@@ -3539,13 +3539,13 @@
                     "line": 218,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "bufferSize",
                   "flags": 68,
                   "id": 177,
                   "type": {
                     "name": "number",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -3553,12 +3553,12 @@
               "type": {
                 "id": 173,
                 "name": "ReplaySubject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 174,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3569,7 +3569,7 @@
                 "line": 220,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "onSubscribe",
               "flags": 16,
               "id": 178,
@@ -3580,19 +3580,19 @@
                     "line": 222,
                     "ch": 23
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscription",
                   "flags": 0,
                   "id": 179,
                   "type": {
                     "id": 17,
                     "name": "Subscriber",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 174,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -3601,7 +3601,7 @@
               "type": {
                 "id": 11,
                 "name": "UnsubscribeFunction",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -3610,7 +3610,7 @@
                 "line": 225,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "next",
               "flags": 4,
               "id": 180,
@@ -3621,20 +3621,20 @@
                     "line": 227,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "val",
                   "flags": 0,
                   "id": 181,
                   "type": {
                     "id": 174,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -3644,31 +3644,31 @@
                 "line": 218,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "bufferSize",
               "flags": 68,
               "id": 177,
               "type": {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "id": 153,
                 "name": "Subject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 174,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3681,7 +3681,7 @@
             "line": 235,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "Undefined",
           "flags": 0,
           "id": 182,
@@ -3692,7 +3692,7 @@
               "line": 235,
               "ch": 17
             },
-            "kind": 1004,
+            "kind": 34,
             "name": "",
             "flags": 0,
             "children": []
@@ -3704,7 +3704,7 @@
             "line": 235,
             "ch": 21
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Reference",
           "flags": 1,
           "id": 183,
@@ -3722,7 +3722,7 @@
                 "line": 240,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 184
@@ -3735,7 +3735,7 @@
                 "line": 240,
                 "ch": 46
               },
-              "kind": 159,
+              "kind": 10,
               "name": "value",
               "flags": 8,
               "id": 185,
@@ -3745,14 +3745,14 @@
                   "line": 241,
                   "ch": 15
                 },
-                "kind": 178,
+                "kind": 5,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "id": 184,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "source": {
@@ -3760,7 +3760,7 @@
                       "line": 241,
                       "ch": 19
                     },
-                    "kind": 172,
+                    "kind": 27,
                     "name": "Undefined",
                     "flags": 0
                   }
@@ -3774,7 +3774,7 @@
                 "line": 241,
                 "ch": 49
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 186,
@@ -3785,26 +3785,26 @@
                     "line": 242,
                     "ch": 13
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "value",
                   "flags": 524288,
                   "id": 187,
                   "type": {
                     "id": 184,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "id": 183,
                 "name": "Reference",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 184,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3815,7 +3815,7 @@
                 "line": 245,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "onSubscribe",
               "flags": 16,
               "id": 188,
@@ -3826,19 +3826,19 @@
                     "line": 247,
                     "ch": 23
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "subscription",
                   "flags": 0,
                   "id": 189,
                   "type": {
                     "id": 17,
                     "name": "Subscriber",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 184,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -3847,7 +3847,7 @@
               "type": {
                 "id": 11,
                 "name": "UnsubscribeFunction",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -3856,7 +3856,7 @@
                 "line": 250,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "next",
               "flags": 4,
               "id": 190,
@@ -3867,38 +3867,38 @@
                     "line": 252,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "val",
                   "flags": 0,
                   "id": 191,
                   "type": {
                     "id": 184,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "id": 153,
                 "name": "Subject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 184,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -3911,7 +3911,7 @@
             "line": 256,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "concat",
           "flags": 1,
           "id": 192,
@@ -3929,7 +3929,7 @@
                 "line": 261,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "R",
               "flags": 0,
               "id": 193
@@ -3941,14 +3941,14 @@
               "line": 263,
               "ch": 2
             },
-            "kind": 180,
+            "kind": 18,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "id": 193,
                 "name": "R",
-                "kind": 169
+                "kind": 6
               },
               {
                 "source": {
@@ -3956,7 +3956,7 @@
                   "line": 263,
                   "ch": 12
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
@@ -3965,7 +3965,7 @@
                     "line": 263,
                     "ch": 12
                   },
-                  "kind": 182,
+                  "kind": 19,
                   "name": "",
                   "flags": 0,
                   "id": 194,
@@ -3975,7 +3975,7 @@
                       "line": 263,
                       "ch": 14
                     },
-                    "kind": 181,
+                    "kind": 20,
                     "name": "",
                     "flags": 0,
                     "type": {
@@ -3984,7 +3984,7 @@
                         "line": 263,
                         "ch": 19
                       },
-                      "kind": 155,
+                      "kind": 3,
                       "name": "U",
                       "flags": 0,
                       "id": 195
@@ -3995,17 +3995,17 @@
               {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 18,
                     "name": "Merge",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 195,
                         "name": "U",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -4013,7 +4013,7 @@
               },
               {
                 "name": "never",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -4025,14 +4025,14 @@
                 "line": 261,
                 "ch": 52
               },
-              "kind": 156,
+              "kind": 9,
               "name": "observables",
               "flags": 262144,
               "id": 196,
               "type": {
                 "id": 193,
                 "name": "R",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -4043,7 +4043,7 @@
             "line": 285,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "defer",
           "flags": 1,
           "id": 197,
@@ -4061,7 +4061,7 @@
                 "line": 290,
                 "ch": 22
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 198
@@ -4074,7 +4074,7 @@
                 "line": 290,
                 "ch": 25
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 199,
@@ -4084,7 +4084,7 @@
                   "line": 290,
                   "ch": 28
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 200,
@@ -4094,25 +4094,25 @@
                     "line": 290,
                     "ch": 34
                   },
-                  "kind": 178,
+                  "kind": 5,
                   "name": "",
                   "flags": 0,
                   "children": [
                     {
                       "id": 20,
                       "name": "Observable",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "id": 198,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     },
                     {
                       "name": "void",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -4124,12 +4124,12 @@
           "type": {
             "id": 20,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 198,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -4140,7 +4140,7 @@
             "line": 300,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "from",
           "flags": 1,
           "id": 201,
@@ -4158,7 +4158,7 @@
                 "line": 305,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 202
@@ -4167,12 +4167,12 @@
           "type": {
             "id": 20,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 202,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -4183,7 +4183,7 @@
                 "line": 305,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "input",
               "flags": 0,
               "id": 203,
@@ -4193,41 +4193,41 @@
                   "line": 306,
                   "ch": 7
                 },
-                "kind": 178,
+                "kind": 5,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "name": "Array",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 202,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   },
                   {
                     "name": "Promise",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 202,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   },
                   {
                     "id": 20,
                     "name": "Observable",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 202,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -4242,7 +4242,7 @@
             "line": 323,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "of",
           "flags": 1,
           "id": 204,
@@ -4260,7 +4260,7 @@
                 "line": 328,
                 "ch": 19
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 205
@@ -4269,12 +4269,12 @@
           "type": {
             "id": 20,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 205,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -4285,7 +4285,7 @@
                 "line": 328,
                 "ch": 22
               },
-              "kind": 156,
+              "kind": 9,
               "name": "values",
               "flags": 262144,
               "id": 206,
@@ -4295,13 +4295,13 @@
                   "line": 328,
                   "ch": 32
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 205,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             }
@@ -4313,7 +4313,7 @@
             "line": 333,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "toPromise",
           "flags": 1,
           "id": 207,
@@ -4331,7 +4331,7 @@
                 "line": 338,
                 "ch": 26
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 208
@@ -4344,19 +4344,19 @@
                 "line": 338,
                 "ch": 29
               },
-              "kind": 156,
+              "kind": 9,
               "name": "observable",
               "flags": 0,
               "id": 209,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 208,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -4364,12 +4364,12 @@
           ],
           "type": {
             "name": "Promise",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 208,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -4380,7 +4380,7 @@
             "line": 347,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "cleanUpSubscriber",
           "flags": 0,
           "id": 210,
@@ -4391,7 +4391,7 @@
                 "line": 352,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 211
@@ -4402,7 +4402,7 @@
                 "line": 352,
                 "ch": 29
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 212
@@ -4411,12 +4411,12 @@
           "type": {
             "id": 43,
             "name": "NextObserver",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 211,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -4427,19 +4427,19 @@
                 "line": 352,
                 "ch": 34
               },
-              "kind": 156,
+              "kind": 9,
               "name": "next",
               "flags": 0,
               "id": 213,
               "type": {
                 "id": 2,
                 "name": "NextFunction",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 211,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -4450,19 +4450,19 @@
                 "line": 353,
                 "ch": 23
               },
-              "kind": 156,
+              "kind": 9,
               "name": "subscriber",
               "flags": 0,
               "id": 214,
               "type": {
                 "id": 17,
                 "name": "Subscriber",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 212,
                     "name": "T2",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -4473,7 +4473,7 @@
                 "line": 354,
                 "ch": 28
               },
-              "kind": 156,
+              "kind": 9,
               "name": "cleanup",
               "flags": 0,
               "id": 215,
@@ -4483,13 +4483,13 @@
                   "line": 355,
                   "ch": 9
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 216,
                 "type": {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": []
@@ -4503,7 +4503,7 @@
             "line": 368,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "operator",
           "flags": 1,
           "id": 217,
@@ -4514,7 +4514,7 @@
                 "line": 370,
                 "ch": 25
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 218
@@ -4525,7 +4525,7 @@
                 "line": 370,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 219,
@@ -4535,17 +4535,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 218,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 219,
                 "name": "T2",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -4556,7 +4556,7 @@
                 "line": 370,
                 "ch": 36
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 220,
@@ -4566,19 +4566,19 @@
                   "line": 371,
                   "ch": 4
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 221,
                 "type": {
                   "id": 43,
                   "name": "NextObserver",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 218,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 },
@@ -4589,19 +4589,19 @@
                       "line": 371,
                       "ch": 6
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "subs",
                     "flags": 0,
                     "id": 222,
                     "type": {
                       "id": 17,
                       "name": "Subscriber",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "id": 219,
                           "name": "T2",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     }
@@ -4617,7 +4617,7 @@
             "line": 386,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "map",
           "flags": 1,
           "id": 223,
@@ -4635,7 +4635,7 @@
                 "line": 391,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 224
@@ -4646,7 +4646,7 @@
                 "line": 391,
                 "ch": 22
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 225
@@ -4659,7 +4659,7 @@
                 "line": 391,
                 "ch": 27
               },
-              "kind": 156,
+              "kind": 9,
               "name": "mapFn",
               "flags": 0,
               "id": 226,
@@ -4669,14 +4669,14 @@
                   "line": 391,
                   "ch": 33
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 227,
                 "type": {
                   "id": 225,
                   "name": "T2",
-                  "kind": 169
+                  "kind": 6
                 },
                 "parameters": [
                   {
@@ -4685,14 +4685,14 @@
                       "line": 391,
                       "ch": 35
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "val",
                     "flags": 0,
                     "id": 228,
                     "type": {
                       "id": 224,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -4702,17 +4702,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 224,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 225,
                 "name": "T2",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -4723,7 +4723,7 @@
             "line": 395,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "debounceFunction",
           "flags": 1,
           "id": 229,
@@ -4734,7 +4734,7 @@
                 "line": 397,
                 "ch": 33
               },
-              "kind": 155,
+              "kind": 3,
               "name": "A",
               "flags": 0,
               "id": 230
@@ -4745,7 +4745,7 @@
                 "line": 397,
                 "ch": 49
               },
-              "kind": 155,
+              "kind": 3,
               "name": "R",
               "flags": 0,
               "id": 231
@@ -4758,7 +4758,7 @@
                 "line": 397,
                 "ch": 53
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 232,
@@ -4768,14 +4768,14 @@
                   "line": 398,
                   "ch": 4
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 233,
                 "type": {
                   "id": 231,
                   "name": "R",
-                  "kind": 169
+                  "kind": 6
                 },
                 "parameters": [
                   {
@@ -4784,14 +4784,14 @@
                       "line": 398,
                       "ch": 6
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "a",
                     "flags": 262144,
                     "id": 234,
                     "type": {
                       "id": 230,
                       "name": "A",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -4803,13 +4803,13 @@
                 "line": 398,
                 "ch": 20
               },
-              "kind": 156,
+              "kind": 9,
               "name": "delay",
               "flags": 524288,
               "id": 235,
               "type": {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -4820,7 +4820,7 @@
               "line": 402,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 236,
@@ -4831,20 +4831,20 @@
                   "line": 402,
                   "ch": 28
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "args",
                 "flags": 262144,
                 "id": 237,
                 "type": {
                   "id": 230,
                   "name": "A",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -4855,7 +4855,7 @@
             "line": 408,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "collect",
           "flags": 1,
           "id": 238,
@@ -4866,7 +4866,7 @@
                 "line": 410,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 239
@@ -4879,19 +4879,19 @@
                 "line": 410,
                 "ch": 27
               },
-              "kind": 156,
+              "kind": 9,
               "name": "source",
               "flags": 0,
               "id": 240,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 239,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -4902,18 +4902,18 @@
                 "line": 410,
                 "ch": 49
               },
-              "kind": 156,
+              "kind": 9,
               "name": "gate",
               "flags": 0,
               "id": 241,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -4923,12 +4923,12 @@
           "type": {
             "id": 20,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 239,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -4939,7 +4939,7 @@
             "line": 425,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "debounceTime",
           "flags": 1,
           "id": 242,
@@ -4957,7 +4957,7 @@
                 "line": 430,
                 "ch": 29
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 243
@@ -4970,13 +4970,13 @@
                 "line": 430,
                 "ch": 32
               },
-              "kind": 156,
+              "kind": 9,
               "name": "time",
               "flags": 524288,
               "id": 244,
               "type": {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -4984,17 +4984,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 243,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 243,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -5005,7 +5005,7 @@
             "line": 452,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "switchMap",
           "flags": 1,
           "id": 245,
@@ -5023,7 +5023,7 @@
                 "line": 458,
                 "ch": 26
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 246
@@ -5034,7 +5034,7 @@
                 "line": 458,
                 "ch": 28
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 247
@@ -5047,7 +5047,7 @@
                 "line": 458,
                 "ch": 33
               },
-              "kind": 156,
+              "kind": 9,
               "name": "project",
               "flags": 0,
               "id": 248,
@@ -5057,19 +5057,19 @@
                   "line": 458,
                   "ch": 41
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 249,
                 "type": {
                   "id": 20,
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 247,
                       "name": "T2",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 },
@@ -5080,14 +5080,14 @@
                       "line": 458,
                       "ch": 43
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "val",
                     "flags": 0,
                     "id": 250,
                     "type": {
                       "id": 246,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -5097,17 +5097,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 246,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 247,
                 "name": "T2",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -5118,7 +5118,7 @@
             "line": 467,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "mergeMap",
           "flags": 1,
           "id": 251,
@@ -5136,7 +5136,7 @@
                 "line": 472,
                 "ch": 25
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 252
@@ -5147,7 +5147,7 @@
                 "line": 472,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 253
@@ -5160,7 +5160,7 @@
                 "line": 472,
                 "ch": 32
               },
-              "kind": 156,
+              "kind": 9,
               "name": "project",
               "flags": 0,
               "id": 254,
@@ -5170,19 +5170,19 @@
                   "line": 472,
                   "ch": 40
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 255,
                 "type": {
                   "id": 20,
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 253,
                       "name": "T2",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 },
@@ -5193,14 +5193,14 @@
                       "line": 472,
                       "ch": 42
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "val",
                     "flags": 0,
                     "id": 256,
                     "type": {
                       "id": 252,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -5210,17 +5210,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 252,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 253,
                 "name": "T2",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -5231,7 +5231,7 @@
             "line": 487,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "exhaustMap",
           "flags": 1,
           "id": 257,
@@ -5249,7 +5249,7 @@
                 "line": 493,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 258
@@ -5260,7 +5260,7 @@
                 "line": 493,
                 "ch": 29
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 259
@@ -5273,7 +5273,7 @@
                 "line": 493,
                 "ch": 34
               },
-              "kind": 156,
+              "kind": 9,
               "name": "project",
               "flags": 0,
               "id": 260,
@@ -5283,19 +5283,19 @@
                   "line": 493,
                   "ch": 42
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 261,
                 "type": {
                   "id": 20,
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 259,
                       "name": "T2",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 },
@@ -5306,14 +5306,14 @@
                       "line": 493,
                       "ch": 44
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "value",
                     "flags": 524288,
                     "id": 262,
                     "type": {
                       "id": 258,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -5323,17 +5323,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 258,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 259,
                 "name": "T2",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -5344,7 +5344,7 @@
             "line": 519,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "filter",
           "flags": 1,
           "id": 263,
@@ -5366,7 +5366,7 @@
                 "line": 526,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 264
@@ -5375,17 +5375,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 264,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 264,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -5396,7 +5396,7 @@
                 "line": 526,
                 "ch": 26
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 265,
@@ -5406,13 +5406,13 @@
                   "line": 526,
                   "ch": 29
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 266,
                 "type": {
                   "name": "boolean",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
@@ -5422,14 +5422,14 @@
                       "line": 526,
                       "ch": 31
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "val",
                     "flags": 0,
                     "id": 267,
                     "type": {
                       "id": 264,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -5443,7 +5443,7 @@
             "line": 530,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "take",
           "flags": 1,
           "id": 268,
@@ -5461,7 +5461,7 @@
                 "line": 535,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 269
@@ -5474,13 +5474,13 @@
                 "line": 535,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "howMany",
               "flags": 0,
               "id": 270,
               "type": {
                 "name": "number",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -5488,17 +5488,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 269,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 269,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -5509,7 +5509,7 @@
             "line": 540,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "first",
           "flags": 1,
           "id": 271,
@@ -5527,7 +5527,7 @@
                 "line": 545,
                 "ch": 22
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 272
@@ -5537,17 +5537,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 272,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 272,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -5558,7 +5558,7 @@
             "line": 550,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "tap",
           "flags": 1,
           "id": 273,
@@ -5576,7 +5576,7 @@
                 "line": 556,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 274
@@ -5585,17 +5585,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 274,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 274,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -5606,7 +5606,7 @@
                 "line": 556,
                 "ch": 23
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 275,
@@ -5616,13 +5616,13 @@
                   "line": 556,
                   "ch": 26
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 276,
                 "type": {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
@@ -5632,14 +5632,14 @@
                       "line": 556,
                       "ch": 28
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "val",
                     "flags": 0,
                     "id": 277,
                     "type": {
                       "id": 274,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -5653,7 +5653,7 @@
             "line": 561,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "catchError",
           "flags": 1,
           "id": 278,
@@ -5671,7 +5671,7 @@
                 "line": 571,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 279
@@ -5682,7 +5682,7 @@
                 "line": 571,
                 "ch": 29
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T2",
               "flags": 0,
               "id": 280
@@ -5695,7 +5695,7 @@
                 "line": 571,
                 "ch": 34
               },
-              "kind": 156,
+              "kind": 9,
               "name": "selector",
               "flags": 0,
               "id": 281,
@@ -5713,7 +5713,7 @@
                   "line": 572,
                   "ch": 10
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 282,
@@ -5723,25 +5723,25 @@
                     "line": 572,
                     "ch": 47
                   },
-                  "kind": 178,
+                  "kind": 5,
                   "name": "",
                   "flags": 0,
                   "children": [
                     {
                       "id": 20,
                       "name": "Observable",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "id": 280,
                           "name": "T2",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     },
                     {
                       "name": "void",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -5753,13 +5753,13 @@
                       "line": 572,
                       "ch": 12
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "err",
                     "flags": 0,
                     "id": 283,
                     "type": {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   },
@@ -5769,19 +5769,19 @@
                       "line": 572,
                       "ch": 21
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "source",
                     "flags": 0,
                     "id": 284,
                     "type": {
                       "id": 20,
                       "name": "Observable",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "id": 279,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     }
@@ -5796,7 +5796,7 @@
               "line": 591,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 285,
@@ -5807,19 +5807,19 @@
                   "line": 591,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "source",
                 "flags": 0,
                 "id": 286,
                 "type": {
                   "id": 20,
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 279,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 }
@@ -5828,12 +5828,12 @@
             "type": {
               "id": 20,
               "name": "Observable",
-              "kind": 169,
+              "kind": 6,
               "typeParameters": [
                 {
                   "id": 279,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               ]
             }
@@ -5845,7 +5845,7 @@
             "line": 595,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "initialDistinct",
           "flags": 0,
           "id": 287,
@@ -5856,7 +5856,7 @@
               "line": 595,
               "ch": 23
             },
-            "kind": 1004,
+            "kind": 34,
             "name": "",
             "flags": 0,
             "children": []
@@ -5868,7 +5868,7 @@
             "line": 595,
             "ch": 27
           },
-          "kind": 244,
+          "kind": 16,
           "name": "distinctUntilChanged",
           "flags": 1,
           "id": 288,
@@ -5886,7 +5886,7 @@
                 "line": 601,
                 "ch": 37
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 289
@@ -5895,17 +5895,17 @@
           "type": {
             "id": 27,
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 289,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               },
               {
                 "id": 289,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           },
@@ -5917,7 +5917,7 @@
             "line": 611,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "merge",
           "flags": 1,
           "id": 290,
@@ -5935,7 +5935,7 @@
                 "line": 616,
                 "ch": 22
               },
-              "kind": 155,
+              "kind": 3,
               "name": "R",
               "flags": 0,
               "id": 291
@@ -5947,14 +5947,14 @@
               "line": 618,
               "ch": 2
             },
-            "kind": 180,
+            "kind": 18,
             "name": "",
             "flags": 0,
             "children": [
               {
                 "id": 291,
                 "name": "R",
-                "kind": 169
+                "kind": 6
               },
               {
                 "source": {
@@ -5962,7 +5962,7 @@
                   "line": 618,
                   "ch": 12
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
@@ -5971,7 +5971,7 @@
                     "line": 618,
                     "ch": 12
                   },
-                  "kind": 182,
+                  "kind": 19,
                   "name": "",
                   "flags": 0,
                   "id": 292,
@@ -5981,7 +5981,7 @@
                       "line": 618,
                       "ch": 14
                     },
-                    "kind": 181,
+                    "kind": 20,
                     "name": "",
                     "flags": 0,
                     "type": {
@@ -5990,7 +5990,7 @@
                         "line": 618,
                         "ch": 19
                       },
-                      "kind": 155,
+                      "kind": 3,
                       "name": "U",
                       "flags": 0,
                       "id": 293
@@ -6001,17 +6001,17 @@
               {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 18,
                     "name": "Merge",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 293,
                         "name": "U",
-                        "kind": 169
+                        "kind": 6
                       }
                     ]
                   }
@@ -6019,7 +6019,7 @@
               },
               {
                 "name": "never",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -6031,14 +6031,14 @@
                 "line": 616,
                 "ch": 51
               },
-              "kind": 156,
+              "kind": 9,
               "name": "observables",
               "flags": 262144,
               "id": 294,
               "type": {
                 "id": 291,
                 "name": "R",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -6049,7 +6049,7 @@
             "line": 639,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "combineLatest",
           "flags": 1,
           "id": 295,
@@ -6067,7 +6067,7 @@
                 "line": 645,
                 "ch": 30
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 296
@@ -6076,17 +6076,17 @@
           "type": {
             "id": 20,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 25,
                 "name": "PickObservable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 296,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -6099,14 +6099,14 @@
                 "line": 645,
                 "ch": 47
               },
-              "kind": 156,
+              "kind": 9,
               "name": "observables",
               "flags": 262144,
               "id": 297,
               "type": {
                 "id": 296,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -6117,7 +6117,7 @@
             "line": 676,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "throwError",
           "flags": 1,
           "id": 298,
@@ -6135,13 +6135,13 @@
                 "line": 681,
                 "ch": 27
               },
-              "kind": 156,
+              "kind": 9,
               "name": "error",
               "flags": 0,
               "id": 299,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -6149,11 +6149,11 @@
           "type": {
             "id": 20,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "never",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -6165,7 +6165,7 @@
             "line": 688,
             "ch": 12
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "EMPTY",
           "flags": 1,
           "id": 300,
@@ -6173,11 +6173,11 @@
           "type": {
             "id": 20,
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "never",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -6189,7 +6189,7 @@
             "line": 688,
             "ch": 68
           },
-          "kind": 244,
+          "kind": 16,
           "name": "be",
           "flags": 1,
           "id": 301,
@@ -6207,7 +6207,7 @@
                 "line": 693,
                 "ch": 19
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 302
@@ -6220,26 +6220,26 @@
                 "line": 693,
                 "ch": 22
               },
-              "kind": 156,
+              "kind": 9,
               "name": "initialValue",
               "flags": 0,
               "id": 303,
               "type": {
                 "id": 302,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "id": 164,
             "name": "BehaviorSubject",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 302,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -6250,7 +6250,7 @@
             "line": 695,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "ref",
           "flags": 1,
           "id": 304,
@@ -6268,7 +6268,7 @@
                 "line": 700,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 305
@@ -6281,26 +6281,26 @@
                 "line": 700,
                 "ch": 23
               },
-              "kind": 156,
+              "kind": 9,
               "name": "initial",
               "flags": 524288,
               "id": 306,
               "type": {
                 "id": 305,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             }
           ],
           "type": {
             "id": 183,
             "name": "Reference",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 305,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -6311,13 +6311,13 @@
             "line": 704,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "operators",
           "flags": 0,
           "id": 307,
           "type": {
             "name": "any",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           },
           "value": "{\n\tmap,\n\ttap,\n\tfilter,\n\tdebounceTime,\n\tdistinctUntilChanged,\n\tmergeMap,\n\tswitchMap,\n\tcatchError,\n\tfirst,\n\ttake,\n}"
@@ -6328,7 +6328,7 @@
             "line": 721,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "Observable",
           "flags": 131073,
           "id": 308,
@@ -6339,7 +6339,7 @@
                 "line": 723,
                 "ch": 28
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 309
@@ -6352,7 +6352,7 @@
                 "line": 723,
                 "ch": 32
               },
-              "kind": 161,
+              "kind": 11,
               "name": "catchError",
               "flags": 4,
               "id": 115,
@@ -6363,7 +6363,7 @@
                     "line": 724,
                     "ch": 12
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T2",
                   "flags": 0,
                   "id": 116
@@ -6372,12 +6372,12 @@
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 116,
                     "name": "T2",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -6388,7 +6388,7 @@
                     "line": 724,
                     "ch": 16
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "selector",
                   "flags": 0,
                   "id": 117,
@@ -6398,7 +6398,7 @@
                       "line": 725,
                       "ch": 11
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
                     "id": 118,
@@ -6408,25 +6408,25 @@
                         "line": 725,
                         "ch": 48
                       },
-                      "kind": 178,
+                      "kind": 5,
                       "name": "",
                       "flags": 0,
                       "children": [
                         {
                           "id": 20,
                           "name": "Observable",
-                          "kind": 169,
+                          "kind": 6,
                           "typeParameters": [
                             {
                               "id": 116,
                               "name": "T2",
-                              "kind": 169
+                              "kind": 6
                             }
                           ]
                         },
                         {
                           "name": "void",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
@@ -6438,13 +6438,13 @@
                           "line": 725,
                           "ch": 13
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "err",
                         "flags": 0,
                         "id": 119,
                         "type": {
                           "name": "any",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       },
@@ -6454,19 +6454,19 @@
                           "line": 725,
                           "ch": 22
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "source",
                         "flags": 0,
                         "id": 120,
                         "type": {
                           "id": 20,
                           "name": "Observable",
-                          "kind": 169,
+                          "kind": 6,
                           "typeParameters": [
                             {
                               "id": 69,
                               "name": "T",
-                              "kind": 169
+                              "kind": 6
                             }
                           ]
                         }
@@ -6482,19 +6482,19 @@
                 "line": 726,
                 "ch": 19
               },
-              "kind": 161,
+              "kind": 11,
               "name": "debounceTime",
               "flags": 4,
               "id": 121,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -6505,13 +6505,13 @@
                     "line": 727,
                     "ch": 14
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "time",
                   "flags": 524288,
                   "id": 122,
                   "type": {
                     "name": "number",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
@@ -6523,19 +6523,19 @@
                 "line": 727,
                 "ch": 44
               },
-              "kind": 161,
+              "kind": 11,
               "name": "defer",
               "flags": 4,
               "id": 123,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -6546,7 +6546,7 @@
                     "line": 728,
                     "ch": 7
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "fn",
                   "flags": 0,
                   "id": 124,
@@ -6556,7 +6556,7 @@
                       "line": 728,
                       "ch": 10
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
                     "id": 125,
@@ -6566,25 +6566,25 @@
                         "line": 728,
                         "ch": 16
                       },
-                      "kind": 178,
+                      "kind": 5,
                       "name": "",
                       "flags": 0,
                       "children": [
                         {
                           "id": 20,
                           "name": "Observable",
-                          "kind": 169,
+                          "kind": 6,
                           "typeParameters": [
                             {
                               "id": 69,
                               "name": "T",
-                              "kind": 169
+                              "kind": 6
                             }
                           ]
                         },
                         {
                           "name": "void",
-                          "kind": 1002,
+                          "kind": 32,
                           "flags": 0
                         }
                       ]
@@ -6600,19 +6600,19 @@
                 "line": 728,
                 "ch": 54
               },
-              "kind": 161,
+              "kind": 11,
               "name": "distinctUntilChanged",
               "flags": 4,
               "id": 126,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -6624,19 +6624,19 @@
                 "line": 729,
                 "ch": 39
               },
-              "kind": 161,
+              "kind": 11,
               "name": "filter",
               "flags": 4,
               "id": 127,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -6647,7 +6647,7 @@
                     "line": 730,
                     "ch": 8
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "fn",
                   "flags": 0,
                   "id": 128,
@@ -6657,13 +6657,13 @@
                       "line": 730,
                       "ch": 11
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
                     "id": 129,
                     "type": {
                       "name": "boolean",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     },
                     "parameters": [
@@ -6673,14 +6673,14 @@
                           "line": 730,
                           "ch": 13
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
                         "id": 130,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -6694,115 +6694,56 @@
                 "line": 730,
                 "ch": 48
               },
-              "kind": 161,
-              "name": "map",
+              "kind": 11,
+              "name": "first",
               "flags": 4,
               "id": 131,
-              "typeParameters": [
-                {
-                  "source": {
-                    "fileName": "index.ts",
-                    "line": 731,
-                    "ch": 5
-                  },
-                  "kind": 155,
-                  "name": "T2",
-                  "flags": 0,
-                  "id": 132
-                }
-              ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 132,
-                    "name": "T2",
-                    "kind": 169
+                    "id": 69,
+                    "name": "T",
+                    "kind": 6
                   }
                 ]
               },
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "index.ts",
-                    "line": 731,
-                    "ch": 9
-                  },
-                  "kind": 156,
-                  "name": "mapFn",
-                  "flags": 0,
-                  "id": 133,
-                  "type": {
-                    "source": {
-                      "fileName": "index.ts",
-                      "line": 731,
-                      "ch": 15
-                    },
-                    "kind": 170,
-                    "name": "",
-                    "flags": 0,
-                    "id": 134,
-                    "type": {
-                      "id": 132,
-                      "name": "T2",
-                      "kind": 169
-                    },
-                    "parameters": [
-                      {
-                        "source": {
-                          "fileName": "index.ts",
-                          "line": 731,
-                          "ch": 17
-                        },
-                        "kind": 156,
-                        "name": "val",
-                        "flags": 0,
-                        "id": 135,
-                        "type": {
-                          "id": 69,
-                          "name": "T",
-                          "kind": 169
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
+              "parameters": []
             },
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 731,
-                "ch": 48
+                "ch": 24
               },
-              "kind": 161,
-              "name": "mergeMap",
+              "kind": 11,
+              "name": "map",
               "flags": 4,
-              "id": 136,
+              "id": 132,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
                     "line": 732,
-                    "ch": 10
+                    "ch": 5
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T2",
                   "flags": 0,
-                  "id": 137
+                  "id": 133
                 }
               ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 137,
+                    "id": 133,
                     "name": "T2",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -6811,49 +6752,42 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 732,
-                    "ch": 14
+                    "ch": 9
                   },
-                  "kind": 156,
-                  "name": "project",
+                  "kind": 9,
+                  "name": "mapFn",
                   "flags": 0,
-                  "id": 138,
+                  "id": 134,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
                       "line": 732,
-                      "ch": 22
+                      "ch": 15
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 139,
+                    "id": 135,
                     "type": {
-                      "id": 20,
-                      "name": "Observable",
-                      "kind": 169,
-                      "typeParameters": [
-                        {
-                          "id": 137,
-                          "name": "T2",
-                          "kind": 169
-                        }
-                      ]
+                      "id": 133,
+                      "name": "T2",
+                      "kind": 6
                     },
                     "parameters": [
                       {
                         "source": {
                           "fileName": "index.ts",
                           "line": 732,
-                          "ch": 24
+                          "ch": 17
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
-                        "id": 140,
+                        "id": 136,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -6865,34 +6799,34 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 732,
-                "ch": 67
+                "ch": 48
               },
-              "kind": 161,
-              "name": "switchMap",
+              "kind": 11,
+              "name": "mergeMap",
               "flags": 4,
-              "id": 141,
+              "id": 137,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
                     "line": 733,
-                    "ch": 11
+                    "ch": 10
                   },
-                  "kind": 155,
+                  "kind": 3,
                   "name": "T2",
                   "flags": 0,
-                  "id": 142
+                  "id": 138
                 }
               ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 142,
+                    "id": 138,
                     "name": "T2",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -6901,31 +6835,31 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 733,
-                    "ch": 15
+                    "ch": 14
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "project",
                   "flags": 0,
-                  "id": 143,
+                  "id": 139,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
                       "line": 733,
-                      "ch": 23
+                      "ch": 22
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 144,
+                    "id": 140,
                     "type": {
                       "id": 20,
                       "name": "Observable",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
-                          "id": 142,
+                          "id": 138,
                           "name": "T2",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     },
@@ -6934,16 +6868,16 @@
                         "source": {
                           "fileName": "index.ts",
                           "line": 733,
-                          "ch": 25
+                          "ch": 24
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
-                        "id": 145,
+                        "id": 141,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -6955,21 +6889,34 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 733,
-                "ch": 68
+                "ch": 67
               },
-              "kind": 161,
-              "name": "tap",
+              "kind": 11,
+              "name": "switchMap",
               "flags": 4,
-              "id": 146,
+              "id": 142,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 734,
+                    "ch": 11
+                  },
+                  "kind": 3,
+                  "name": "T2",
+                  "flags": 0,
+                  "id": 143
+                }
+              ],
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 69,
-                    "name": "T",
-                    "kind": 169
+                    "id": 143,
+                    "name": "T2",
+                    "kind": 6
                   }
                 ]
               },
@@ -6978,42 +6925,49 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 734,
-                    "ch": 5
+                    "ch": 15
                   },
-                  "kind": 156,
-                  "name": "tapFn",
+                  "kind": 9,
+                  "name": "project",
                   "flags": 0,
-                  "id": 147,
+                  "id": 144,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
                       "line": 734,
-                      "ch": 11
+                      "ch": 23
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 148,
+                    "id": 145,
                     "type": {
-                      "name": "void",
-                      "kind": 1002,
-                      "flags": 0
+                      "id": 20,
+                      "name": "Observable",
+                      "kind": 6,
+                      "typeParameters": [
+                        {
+                          "id": 143,
+                          "name": "T2",
+                          "kind": 6
+                        }
+                      ]
                     },
                     "parameters": [
                       {
                         "source": {
                           "fileName": "index.ts",
                           "line": 734,
-                          "ch": 13
+                          "ch": 25
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "val",
                         "flags": 0,
-                        "id": 149,
+                        "id": 146,
                         "type": {
                           "id": 69,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -7025,45 +6979,91 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 734,
-                "ch": 45
+                "ch": 68
               },
-              "kind": 161,
-              "name": "first",
+              "kind": 11,
+              "name": "tap",
               "flags": 4,
-              "id": 150,
+              "id": 147,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
-              "parameters": []
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 735,
+                    "ch": 5
+                  },
+                  "kind": 9,
+                  "name": "tapFn",
+                  "flags": 0,
+                  "id": 148,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 735,
+                      "ch": 11
+                    },
+                    "kind": 17,
+                    "name": "",
+                    "flags": 0,
+                    "id": 149,
+                    "type": {
+                      "name": "void",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "index.ts",
+                          "line": 735,
+                          "ch": 13
+                        },
+                        "kind": 9,
+                        "name": "val",
+                        "flags": 0,
+                        "id": 150,
+                        "type": {
+                          "id": 69,
+                          "name": "T",
+                          "kind": 6
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
             },
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 735,
-                "ch": 24
+                "ch": 45
               },
-              "kind": 161,
+              "kind": 11,
               "name": "take",
               "flags": 4,
               "id": 151,
               "type": {
                 "id": 20,
                 "name": "Observable",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 69,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               },
@@ -7074,13 +7074,13 @@
                     "line": 736,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "howMany",
                   "flags": 0,
                   "id": 152,
                   "type": {
                     "name": "number",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }

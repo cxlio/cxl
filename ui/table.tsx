@@ -1,5 +1,5 @@
 import { Style, border } from '../css/index.js';
-import { onAction, triggerEvent } from '../template/index.js';
+import { triggerEvent } from '../template/index.js';
 import {
 	Component,
 	Augment,
@@ -13,7 +13,7 @@ import {
 } from '../component/index.js';
 import { dom } from '../xdom/index.js';
 import { tap, merge } from '../rx/index.js';
-import { on } from '../dom/index.js';
+import { on, onAction } from '../dom/index.js';
 
 import { Checkbox } from './form.js';
 import { registable, ariaProp } from './core.js';

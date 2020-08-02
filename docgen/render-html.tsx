@@ -56,7 +56,9 @@ function ClassType(node: Node) {
 		const type = child.type;
 
 		return type &&
-			(type.kind === Kind.Class || type.kind === Kind.Component)
+			(node.kind === Kind.Interface ||
+				type.kind === Kind.Class ||
+				type.kind === Kind.Component)
 			? extendStr.push(link)
 			: implementStr.push(link);
 	});
@@ -122,7 +124,6 @@ function renderType(type: Node) {
 			return 'this';
 	}
 
-	console.log(type);
 	return Signature(type);
 }
 
@@ -162,7 +163,8 @@ function NodeChips({ flags }: Node) {
 		(flags & Flags.Overload ? Chip('overload') : '') +
 		(flags & Flags.Private ? Chip('private') : '') +
 		(flags & Flags.Deprecated ? Chip('deprecated') : '') +
-		(flags & Flags.Readonly ? Chip('readonly') : '')
+		(flags & Flags.Readonly ? Chip('readonly') : '') +
+		(flags & Flags.Internal ? Chip('internal') : '')
 	);
 }
 
@@ -297,9 +299,11 @@ function Documentation(node: Node) {
 			if (doc.tag === 'param') return `<p>${doc.value}</p>`;
 			if (doc.tag === 'see') return DocSee(doc);
 
-			return doc.tag
-				? `<p>${jsdocTitle(doc.tag)}: ${doc.value}</p>`
-				: `<p>${doc.value}</p>`;
+			return `<p style="white-space: pre-wrap">${
+				doc.tag
+					? `${jsdocTitle(doc.tag)}: ${doc.value}`
+					: `${doc.value}`
+			}</p>`;
 		})
 		.join('');
 }
@@ -393,6 +397,7 @@ function ModuleTitle(node: Node) {
 		(node.kind === Kind.Class ? Chip('class') : '') +
 		(node.kind === Kind.Interface ? Chip('interface') : '') +
 		(node.kind === Kind.Component ? Chip('component') : '') +
+		(node.kind === Kind.Namespace ? Chip('namespace') : '') +
 		(node.kind === Kind.Enum ? Chip('enum') : '') +
 		(docs && docs.role ? Chip(`role: ${docs.role}`) : '') +
 		`</span>`;
@@ -421,7 +426,7 @@ function ImportStatement(node: Node) {
 function MemberIndexLink(node: Node) {
 	const chips = node.flags & Flags.Static ? Chip('static') : '';
 
-	return `<cxl-c sm4 lg3>${chips} ${Link(node)}</cxl-c>`;
+	return `<cxl-c sm4 xl3>${chips} ${Link(node)}</cxl-c>`;
 }
 
 function MemberGroupIndex({ kind, index }: Group) {
@@ -573,26 +578,33 @@ const IconMap: Record<number, string> = {
 };
 
 function NodeIcon(node: Node) {
-	const icon = IconMap[node.kind] || '?';
+	node = (node.kind === Kind.Export && node.type) || node;
+	const kind =
+		node.kind === Kind.Reference && node.type ? node.type.kind : node.kind;
+	const icon = IconMap[kind] || '?';
 	return `<cxl-badge style="margin-right:12px">${icon}</cxl-badge>`;
 }
 
 function ModuleNavbar(node: Node) {
 	const moduleName = node.name.match(/index\.tsx?/) ? 'Index' : node.name;
+	const href = getHref(node);
+
 	return (
-		`${Item(`<i>${moduleName}</i>`, getHref(node))}` +
-		node.children
+		`${Item(`<i>${moduleName}</i>`, href)}` +
+		(node.children
 			?.sort(sortNode)
 			.map(c =>
 				declarationFilter(c) && !(c.flags & Flags.Overload)
 					? Item(`${NodeIcon(c)}${c.name}`, getHref(c))
 					: ''
 			)
-			.join('')
+			.join('') || '')
 	);
 }
 
 function Item(title: string, href: string, icon?: string) {
+	if (!href) throw new Error(`No href for "${title}"`);
+
 	const result = `<cxl-router-item href="${href}">${
 		icon
 			? `<cxl-icon style="margin-right: 12px" icon="${icon}"></cxl-icon>`
@@ -648,17 +660,26 @@ function Header(module: Output) {
 	}</a></cxl-appbar-title></cxl-appbar><cxl-page>`;
 }
 
+function escapeFileName(name: string, replaceExt = '.html') {
+	return name.replace(/\.[tj]sx?$/, replaceExt).replace(/\//g, '--');
+}
+
 function getPageName(page: Node) {
 	if (page.kind === Kind.Module) {
-		const result = page.name.replace(/.tsx?$/, '.html');
+		const result = escapeFileName(page.name);
 		return result === 'index.html' && existsSync('README.md')
 			? 'index-api.html'
 			: result;
 	}
 
+	if (page.kind === Kind.Namespace) return `ns-${page.name}.html`;
+
 	const source = Array.isArray(page.source) ? page.source[0] : page.source;
-	const prefix =
-		source?.name.replace(/.tsx?$/, '-').replace(/\//g, '-') || '';
+
+	if (!source)
+		throw new Error(`Source not found for page node "${page.name}"`);
+
+	const prefix = escapeFileName(source.name, '--');
 
 	return `${prefix}${page.name}.html`;
 }
@@ -678,7 +699,8 @@ function hasOwnPage(node: Node) {
 			!(node.flags & Flags.DeclarationMerge)) ||
 		node.kind === Kind.Module ||
 		node.kind === Kind.Enum ||
-		node.kind === Kind.Component
+		node.kind === Kind.Component ||
+		node.kind === Kind.Namespace
 	);
 }
 
@@ -740,19 +762,21 @@ export function render(app: DocGen, output: Output): File[] {
 
 	result.push(...extraDocs.map(d => d.file));
 
-	let indexFile: File | undefined,
-		content = '<cxl-router-outlet></cxl-router-outlet><cxl-router>';
+	let content = '<cxl-router-outlet></cxl-router-outlet><cxl-router>';
 
 	result.forEach(doc => {
 		if (app.spa) {
-			if (doc.name === 'index.html') indexFile = doc;
 			content += Route(doc);
 		} else doc.content = header + doc.content + footer;
 	});
 
-	if (app.spa && indexFile) {
-		indexFile.content = header + content + '</cxl-router>' + footer;
-		return [indexFile];
+	if (app.spa) {
+		return [
+			{
+				name: 'index.html',
+				content: header + content + '</cxl-router>' + footer,
+			},
+		];
 	}
 
 	return result;

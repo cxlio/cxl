@@ -18,6 +18,26 @@ export function empty(el: Element) {
 	while ((c = el.childNodes[0])) el.removeChild(c);
 }
 
+export function createElement<T extends keyof HTMLElementTagNameMap>(
+	name: T,
+	attributes?: Partial<HTMLElementTagNameMap[T]>
+): HTMLElementTagNameMap[T];
+export function createElement<T>(
+	elementType: { create(): any; new (): T },
+	attributes?: Partial<T>
+): T;
+export function createElement(elementType: any, attributes?: any) {
+	const element =
+		typeof elementType === 'string'
+			? document.createElement(elementType)
+			: elementType.create();
+
+	if (attributes)
+		for (const attr in attributes) element[attr] = attributes[attr];
+
+	return element;
+}
+
 export function on<K extends keyof WindowEventMap>(
 	element: Window,
 	event: K,
@@ -50,6 +70,16 @@ export function on(
 	});
 }
 
+export function onKeypress(el: Element, key?: string) {
+	return on(el, 'keypress').filter(
+		(ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key
+	);
+}
+
+export function onAction(el: Element) {
+	return merge(on(el, 'click'), onKeypress(el, 'enter'));
+}
+
 export function onReady() {
 	return defer(() =>
 		document.readyState !== 'loading'
@@ -59,7 +89,11 @@ export function onReady() {
 }
 
 export function onLoad() {
-	return on(window, 'load');
+	return defer(() =>
+		document.readyState === 'complete'
+			? of(true)
+			: on(window, 'load').map(() => true)
+	);
 }
 
 export function getShadow(el: Element) {

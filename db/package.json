@@ -4,6 +4,12 @@
 	"private": true,
 	"description": "Database library",
 	"license": "Apache-2.0",
+	"scripts": {
+		"build": "node ../dist/build"
+	},
+	"dependencies": {
+		"firebase": "^7.17.1"
+	},
 	"peerDependencies": {
 		"@cxl/rx": "*"
 	}

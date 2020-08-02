@@ -30,6 +30,7 @@ export interface Colors {
 	onPrimaryLight: BaseColor;
 	onSecondary: BaseColor;
 	onSurface: BaseColor;
+	onSurface8: BaseColor;
 	onSurface12: BaseColor;
 	onSurface87: BaseColor;
 	onError: BaseColor;
@@ -339,6 +340,7 @@ export const theme: Theme = {
 		},
 		button: {
 			fontSize: '14px',
+			fontWeight: 500,
 			lineHeight: '20px',
 			letterSpacing: '1.25px',
 			textTransform: 'uppercase',
@@ -364,7 +366,10 @@ export const theme: Theme = {
 		},
 		onSecondary: rgba(0, 0, 0),
 		onSurface: rgba(0, 0, 0),
-		// TOFO better name?
+
+		get onSurface8() {
+			return this.onSurface.alpha(0.08);
+		},
 		get onSurface12() {
 			return this.onSurface.alpha(0.12);
 		},
@@ -418,6 +423,18 @@ export const InversePrimary = {
 		error: rgba(0xff, 0x6e, 0x40),
 		onError: rgba(0, 0, 0),
 	},
+};
+
+export const DarkColors: Partial<Colors> = {
+	background: rgba(0x12, 0x12, 0x12),
+	surface: rgba(0x12, 0x12, 0x12),
+	onSurface: rgba(0xff, 0xff, 0xff),
+	error: rgba(0xcf, 0x66, 0x79),
+	onError: rgba(0, 0, 0),
+	primary: rgba(0xbb, 0x86, 0xfc),
+	secondary: rgba(0x03, 0xda, 0xc6),
+	onPrimary: rgba(0, 0, 0),
+	onSecondary: rgba(0, 0, 0),
 };
 
 type StyleMap = {

@@ -1,10 +1,11 @@
 import { Observable, defer, merge, of } from '../rx';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, promises } from 'fs';
 import { join } from 'path';
 import { file } from './file.js';
 import { execSync } from 'child_process';
 import { Output } from '../source/index.js';
 import { sh } from '../server';
+import * as ts from 'typescript';
 
 type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0';
 
@@ -189,4 +190,57 @@ export function publish() {
 	const p = readPackage();
 	const isPublished = getPublishedVersion(p);
 	if (isPublished) throw new Error(`Package version already published.`);
+}
+
+function createBundle(
+	files: string[],
+	resolvedFiles: string[],
+	content: string[]
+) {
+	const options: ts.CompilerOptions = {
+		lib: ['lib.es2017.d.ts'],
+		module: ts.ModuleKind.AMD,
+		allowJs: true,
+		declaration: false,
+		outDir: '.',
+		outFile: 'test.js',
+		sourceMap: false,
+	};
+	const host = ts.createCompilerHost(options);
+	const oldGetSourceFile = host.getSourceFile;
+
+	host.getSourceFile = function (fn: string, target: ts.ScriptTarget) {
+		const i = resolvedFiles.indexOf(fn);
+
+		if (i !== -1) {
+			const sf = ts.createSourceFile(
+				resolvedFiles[i],
+				content[i],
+				target,
+				true,
+				ts.ScriptKind.TS
+			);
+			sf.moduleName = files[i];
+			console.log(sf.referencedFiles);
+			return sf;
+		}
+
+		return oldGetSourceFile.apply(this, arguments as any);
+	};
+
+	const program = ts.createProgram(resolvedFiles, options, host);
+	console.log(program.emit(undefined, (a, b) => console.log(a, b)));
+}
+
+export function bundle(files: string[], _out: string) {
+	return new Observable<Output>(subs => {
+		// const AMD = readFileSync(__dirname + '/amd.js');
+		const resolvedFiles = files.map(f => require.resolve(f));
+		Promise.all(resolvedFiles.map(f => promises.readFile(f, 'utf8'))).then(
+			content => {
+				createBundle(files, resolvedFiles, content);
+			}
+		);
+		subs.complete();
+	});
 }

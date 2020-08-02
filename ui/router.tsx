@@ -14,33 +14,53 @@ import {
 	get,
 } from '../component/index.js';
 import { dom } from '../xdom/index.js';
-import { on, onReady, onChildrenMutation, onLocation } from '../dom/index.js';
+import {
+	on,
+	onAction,
+	onReady,
+	onHashChange,
+	onChildrenMutation,
+	onLocation,
+} from '../dom/index.js';
 import { AppbarTitle, Item } from './navigation.js';
-import { list, onAction, triggerEvent } from '../template/index.js';
+import { list, triggerEvent } from '../template/index.js';
 import { StateStyles } from './core.js';
 import { Style } from '../css/index.js';
 
 const router$ = new Reference<RouterState>();
 const strategy$ = new Reference<Strategy>();
-const router = new MainRouter(state => router$.next(state));
+export const router = new MainRouter(state => router$.next(state));
 
-export function Route(path: string) {
+interface RouteOptions {
+	path: string;
+	id?: string;
+	parent?: string;
+	redirectTo?: string;
+}
+
+export function Route(path: string | RouteOptions) {
 	return (ctor: any) => {
+		const options = typeof path === 'string' ? { path } : path;
 		router.route({
-			path,
+			...options,
 			render: dom(ctor),
 		});
 	};
 }
 
-export function DefaultRoute(path = '') {
+export function DefaultRoute(path: string | RouteOptions = '') {
 	return (ctor: any) => {
+		const options = typeof path === 'string' ? { path } : path;
 		router.route({
-			path,
+			...options,
 			isDefault: true,
 			render: dom(ctor),
 		});
 	};
+}
+
+export function routeIsActive(path: string) {
+	return router$.map(state => state.url.path === path);
 }
 
 export function routerOutlet(host: HTMLElement) {
@@ -60,23 +80,46 @@ export function routerOutlet(host: HTMLElement) {
 }
 
 export function routerStrategy(
-	getUrl: Observable<any> = onLocation(),
+	getUrl: Observable<any>,
 	strategy: Strategy = Strategies.query
 ) {
 	return merge(
-		getUrl.tap(() => router.go(strategy.deserialize())),
+		getUrl.tap(() => router.go(strategy.deserialize())).catchError(o => o),
 		router$.tap(state => strategy.serialize(state.url))
 	);
 }
 
+export function setDocumentTitle() {
+	return router$.tap(state => {
+		const title = [];
+		let current: any = state.current;
+
+		do {
+			if (current.routeTitle) title.unshift(current.routeTitle);
+		} while ((current = current.parentNode));
+
+		document.title = title.join(' - ');
+	});
+}
+
 export function Router(
-	getUrl: Observable<any> = onLocation(),
-	strategy: Strategy = Strategies.query
+	strategy: 'hash' | 'query' | 'path' | Strategy = Strategies.query,
+	getUrl?: Observable<any>
 ) {
+	const strategyObj =
+		typeof strategy === 'string' ? Strategies[strategy] : strategy;
+	const getter =
+		getUrl ||
+		(strategyObj === Strategies.hash ? onHashChange() : onLocation());
+
 	return (ctor: any) => {
 		augment(ctor, [
 			bind((host: Component) =>
-				merge(routerStrategy(getUrl, strategy), routerOutlet(host))
+				merge(
+					routerStrategy(getter, strategyObj),
+					routerOutlet(host),
+					setDocumentTitle()
+				)
 			),
 		]);
 	};

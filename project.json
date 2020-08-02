@@ -18,6 +18,10 @@
 				"files": ["css/index.ts", "css/build.js"],
 				"tasks": "cd css && npm run build"
 			},
+			"db": {
+				"files": ["db/*.ts"],
+				"tasks": "npm run build --prefix db"
+			},
 			"docgen": {
 				"files": ["docgen/*.tsx"],
 				"tasks": "cd docgen && npm run build"
@@ -36,10 +40,10 @@
 			},
 			"template": {
 				"files": ["template/index.ts", "template/build.js"],
-				"tasks": "cd template && npm run test"
+				"tasks": "npm run build --prefix template"
 			},
 			"router": {
-				"files": ["router/index.ts", "router/tsconfig.json"],
+				"files": ["router/*.ts", "router/tsconfig.json"],
 				"tasks": "cd router && npm run build"
 			},
 			"store": {

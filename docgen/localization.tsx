@@ -38,6 +38,7 @@ const KindMap: Record<Kind, string> = {
 	[Kind.ConstructorType]: 'Constructor Type',
 	[Kind.Tuple]: 'Tuple Type',
 	[Kind.ThisType]: 'this',
+	[Kind.Namespace]: 'Namespace',
 };
 
 const GroupTitle: Record<any, string> = {

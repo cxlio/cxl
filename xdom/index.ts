@@ -250,8 +250,6 @@ export function render<T>(tpl: JSXElement<T>, host?: RenderContext) {
 	};
 	const element = tpl(ctx);
 
-	// if (host) host.appendChild(element);
-
 	return new View(element, bindings);
 }
 

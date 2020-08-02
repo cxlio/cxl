@@ -21,7 +21,10 @@ async function build(dir) {
 
 module.exports = fs.readdir('.').then(async all => {
 	const start = Date.now();
-	for (let dir of all) {
+
+	await build('docgen');
+
+	for (const dir of all) {
 		try {
 			await build(dir);
 		} catch (e) {

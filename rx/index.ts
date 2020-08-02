@@ -729,10 +729,10 @@ export interface Observable<T> {
 	defer(fn: () => Observable<T> | void): Observable<T>;
 	distinctUntilChanged(): Observable<T>;
 	filter(fn: (val: T) => boolean): Observable<T>;
+	first(): Observable<T>;
 	map<T2>(mapFn: (val: T) => T2): Observable<T2>;
 	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	tap(tapFn: (val: T) => void): Observable<T>;
-	first(): Observable<T>;
 	take(howMany: number): Observable<T>;
 }

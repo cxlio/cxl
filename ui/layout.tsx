@@ -103,6 +103,12 @@ function persistWithParameter(prefix: string) {
 )
 export class C extends Component {
 	@StyleAttribute()
+	flex = false;
+
+	@StyleAttribute()
+	grow = false;
+
+	@StyleAttribute()
 	pad16 = false;
 
 	@Attribute({

@@ -20,7 +20,7 @@ import { file } from './file.js';
 export { file, files } from './file.js';
 export { concat } from '../rx/index.js';
 export { tsc } from './tsc.js';
-export { pkg, readme } from './package.js';
+export { pkg, readme, bundle } from './package.js';
 export { sh } from '../server';
 
 type Task = Observable<Output>;
@@ -83,29 +83,6 @@ export function tsconfig(tsconfig = 'tsconfig.json') {
 		tsbuild(tsconfig, subs);
 		subs.complete();
 	});
-}
-
-interface BundleOptions {
-	header?: string;
-	footer?: string;
-}
-
-export function bundle(outFile: string, options?: BundleOptions) {
-	const output = {
-		[outFile]: { path: outFile, source: options?.header || '' },
-	};
-	return operator<Output>(subs => ({
-		next(out) {
-			if (/.js$/.test(out.path))
-				output[outFile].source += out.source + '\n';
-		},
-		complete() {
-			if (options && options.footer)
-				output[outFile].source += options.footer;
-
-			for (const i in output) subs.next(output[i]);
-		},
-	}));
 }
 
 export function basename(replace?: string) {

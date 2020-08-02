@@ -22,13 +22,8 @@ import {
 	pct,
 	theme,
 } from '../css/index.js';
-import {
-	getAttribute,
-	onAction,
-	stopEvent,
-	triggerEvent,
-} from '../template/index.js';
-import { on, remove, trigger } from '../dom/index.js';
+import { getAttribute, stopEvent, triggerEvent } from '../template/index.js';
+import { on, onAction, remove, trigger } from '../dom/index.js';
 
 export const FocusHighlight = {
 	$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
@@ -190,8 +185,11 @@ export function focusableEvents<T extends FocusableComponent>(
 			host.touched = true;
 			trigger(host, 'focusable.blur');
 		}),
+		attributeChanged(host, 'disabled').pipe(
+			triggerEvent(host, 'focusable.change')
+		),
 		attributeChanged(host, 'touched').pipe(
-			triggerEvent(host, 'focusable.touched')
+			triggerEvent(host, 'focusable.change')
 		)
 	);
 }
@@ -811,7 +809,8 @@ export class T extends Component {
 	h5 = false;
 	@StyleAttribute()
 	h6 = false;
-
+	@StyleAttribute()
+	caption = false;
 	@StyleAttribute()
 	subtitle = false;
 	@StyleAttribute()

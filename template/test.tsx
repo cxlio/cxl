@@ -1,6 +1,6 @@
 import { be, merge, tap } from '../rx';
-import { connect, dom, render } from '../xdom';
-import { getAttribute, portal, teleport } from './index.js';
+import { RenderContext, connect, dom, render } from '../xdom';
+import { getAttribute, portal, teleport, tpl } from './index.js';
 import { suite } from '../spec/index.js';
 
 export default suite('template', test => {
@@ -76,5 +76,14 @@ export default suite('template', test => {
 			a.equal(el.childNodes.length, 1);
 			a.equal(el.childNodes[0]?.textContent, 'Hello');
 		});
+	});
+
+	test('tpl', a => {
+		const host = document.createElement('div');
+		(host as any).bind = (b: any) => a.ok(b);
+
+		tpl<RenderContext>($ => {
+			return <div title={$.get('title', $.call('focus'))} />;
+		})(host as any);
 	});
 });

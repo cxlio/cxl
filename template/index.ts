@@ -1,7 +1,9 @@
 import {
 	AttributeObserver,
+	getShadow,
 	setContent as domSetContent,
 	on,
+	onAction,
 	trigger,
 } from '../dom/index.js';
 import {
@@ -19,7 +21,16 @@ import {
 	switchMap,
 	tap,
 } from '../rx/index.js';
-import type { RenderContext } from '../xdom/index.js';
+import {
+	Component,
+	pushRender,
+	registerComponent,
+} from '../component/index.js';
+import type { Binding, RenderContext } from '../xdom/index.js';
+
+interface ElementWithValue<T> extends HTMLElement {
+	value: T;
+}
 
 export function getAttribute<T extends Node, K extends keyof T>(
 	el: T,
@@ -43,35 +54,29 @@ export function setAttribute(el: Element, attribute: string) {
 	return tap(val => ((el as any)[attribute] = val));
 }
 
-export function keypress(el: Element, key?: string) {
-	return on(el, 'keypress').pipe(
-		filter((ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key)
-	);
-}
-
-export function model<T extends Node>(
-	el: ElementWithValue<any>,
-	host: T,
-	key: keyof T
-) {
-	return merge(
-		getAttribute(host, key).tap(
-			val => val !== el.value && (el.value = val)
-		),
-		onValue(el).tap(val => (host[key] = val))
-	);
-}
-
 export function stopEvent<T extends Event>() {
 	return tap<T>((ev: T) => ev.stopPropagation());
 }
 
-export function onAction(el: Element) {
-	return merge(on(el, 'click'), keypress(el, 'enter'));
+export function sync<T>(
+	getA: Observable<T>,
+	setA: (val: T) => void,
+	getB: Observable<T>,
+	setB: (val: T) => void
+) {
+	let value: T;
+	return merge(
+		getA.tap(val => val !== value && setB((value = val))),
+		getB.tap(val => val !== value && setA((value = val)))
+	);
 }
 
-interface ElementWithValue<T> extends HTMLElement {
-	value: T;
+interface NextObservable<T> extends Observable<T> {
+	next(val: T): void;
+}
+
+export function model<T>(el: ElementWithValue<T>, ref: NextObservable<T>) {
+	return sync(onValue(el), val => (el.value = val), ref, ref.next.bind(ref));
 }
 
 export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
@@ -127,13 +132,11 @@ type Pipe<ElementT, HostT> = (
 	ctx: HostT
 ) => void | Observable<any>;
 
-type Binding<T, T2> = (el: T, ctx: T2) => Observable<any>;
-
-interface Sources<E, H> {
-	get(attr: keyof H, cb?: Pipe<E, H>): Binding<E, H>;
-	onAction(cb?: Pipe<E, H>): Binding<E, H>;
-	on(ev: string, cb?: Pipe<E, H>): Binding<E, H>;
-	call(method: keyof H, cb?: Pipe<E, H>): Binding<E, H>;
+interface Sources<H> {
+	get<E, K extends keyof H>(attr: K, cb?: Pipe<E, H>): Binding<E, H, H[K]>;
+	onAction<E extends Element>(cb?: Pipe<E, H>): Binding<E, H>;
+	on<E extends Element>(ev: string, cb?: Pipe<E, H>): Binding<E, H>;
+	call<E>(method: keyof H, cb?: Pipe<E, H>): Binding<E, H>;
 }
 
 function chain<T, T2>(source: Binding<T, T2>, pipe?: Pipe<T, T2>) {
@@ -145,19 +148,58 @@ function chain<T, T2>(source: Binding<T, T2>, pipe?: Pipe<T, T2>) {
 	return result;
 }
 
-const sources: Sources<any, any> = {
+const sources: Sources<any> = {
 	get: (attr, pipe) => chain((_el, ctx) => getAttribute(ctx, attr), pipe),
 	onAction: pipe => chain(el => onAction(el), pipe),
 	on: (ev, pipe) => chain(el => on(el, ev), pipe),
 	call: (method, pipe) => chain((_e, ctx) => ctx.host[method](), pipe),
 };
 
-type Renderable<T> = (ctx: T) => any;
+export function tpl<HostT>(fn: (helper: Sources<HostT>) => Renderable<HostT>) {
+	return fn(sources as Sources<HostT>);
+}
 
-export function tpl<ElementT, HostT extends HTMLElement>(
-	fn: (helper: Sources<ElementT, HostT>) => Renderable<HostT>
+interface TemplateSources<T> {
+	get<K extends keyof T>(attr: K): Observable<T[K]>;
+}
+
+let templateContext: any;
+
+const templateSources: TemplateSources<any> = {
+	get(attr) {
+		return defer(() => {
+			return getAttribute(templateContext, attr);
+		});
+	},
+};
+
+type Renderable<T> = (ctx: T) => Element;
+type TemplateFn<T> = (sources: TemplateSources<T>) => Renderable<T>;
+
+export function Template<T extends Component>(
+	tagName: string,
+	tplFn: TemplateFn<T>
 ) {
-	return fn(sources as Sources<ElementT, HostT>);
+	return (ctor: any) => {
+		const tpl = tplFn(templateSources);
+		registerComponent(tagName, ctor);
+		pushRender(ctor.prototype, node => {
+			const oldContext = templateContext;
+			node.bind(
+				defer(() => {
+					templateContext = node;
+				})
+			);
+			const result = tpl(node);
+			node.bind(
+				defer(() => {
+					templateContext = oldContext;
+				})
+			);
+
+			if (result !== node) getShadow(node).appendChild(result);
+		});
+	};
 }
 
 enum ListOperation {

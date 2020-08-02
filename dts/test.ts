@@ -6,6 +6,7 @@ import {
 	NumberType,
 	StringType,
 	VoidType,
+	ScriptTarget,
 	parse,
 } from './index.js';
 import { Test, suite } from '../spec/index.js';
@@ -215,7 +216,7 @@ export default suite('dts', test => {
 		const [A] = parse(`class A {
 			m1(a: string): void;
 			m1(b: boolean): boolean;
-			m1(c: any) { if (b===true) return true; }
+			m1(c: any) { if (c===true) return true; }
 		}`);
 
 		a.assert(A.children);
@@ -265,7 +266,7 @@ export default suite('dts', test => {
 
 	test('class constructor', (a: Test) => {
 		const [kls] = parse(
-			`class Kls { constructor(public t: string, s: boolean) { }`
+			`class Kls { constructor(public t: string, s: boolean) { } }`
 		);
 		a.assert(kls.children);
 		a.equal(kls.children.length, 2);
@@ -310,11 +311,14 @@ export default suite('dts', test => {
 	});
 
 	test('class decorators - cxl Augment', (a: Test) => {
-		const [role, A, B] = parse(`
+		const [role, A, B] = parse(
+			`
 			function role(str: string) { }
-			function Augment() { return () => { }; }
+			function Augment(a) { return ctor => { }; }
 			@Augment(role('roleName'))
-			class B { static tagName = 'cxl-test'; }`);
+			class B { static tagName = 'cxl-test'; }`,
+			{ experimentalDecorators: true }
+		);
 		a.ok(role);
 		a.ok(A);
 		a.equal(B.kind, Kind.Component);
@@ -361,9 +365,12 @@ export default suite('dts', test => {
 	});
 
 	test('class members', (a: Test) => {
-		const [A] = parse(`
-			class A { m1 = 'str'; m2() { } get m3() {} set m3(val) {}, m4 = new Set<any>(); }
-		`);
+		const [A] = parse(
+			`
+			class A { m1 = 'str'; m2() { } get m3() { return undefined; } set m3(val) {} m4 = new Set<any>(); }
+		`,
+			{ target: ScriptTarget.ES2017 }
+		);
 
 		a.ok(A);
 		a.equal(A.name, 'A');
@@ -559,7 +566,7 @@ export default suite('dts', test => {
 	});
 
 	test('type alias - Record', (a: Test) => {
-		const [A] = parse(`type A = Record<keyof Map, typeof Set>;`);
+		const [A] = parse(`type A = Record<keyof Map<any, any>, typeof Set>;`);
 		a.assert(A.type);
 		a.equal(A.kind, Kind.TypeAlias);
 		const type = A.type;
@@ -584,14 +591,14 @@ export default suite('dts', test => {
 		a.equal(type.type, BooleanType);
 	});
 
-	test('typle type', (a: Test) => {
-		const [A] = parse(`let A:[string, boolean, ...number];`);
+	test('tuple type', (a: Test) => {
+		const [A] = parse(`let A:[string, boolean, ...number[]];`);
 		a.assert(A.type);
 		a.assert(A.type.children);
 		const [t1, t2, t3] = A.type.children;
 		a.equal(t1, StringType);
 		a.equal(t2, BooleanType);
-		a.equal(t3, NumberType);
+		a.equal(t3.kind, Kind.Array);
 		a.ok(t3.flags & Flags.Rest);
 	});
 
@@ -751,5 +758,18 @@ function map<T>() {	return operator<T>(); }
 		a.equal(A.children.length, 2);
 		a.equal(A.children[0].name, 'm1');
 		a.equal(A.children[1].name, 'm2');
+	});
+
+	test('@internal', (a: Test) => {
+		const [A, B] = parse(
+			`/* @internal */
+				export class B { }
+				// TODO test
+				export class C { 
+					/* @internal */ test?: number;
+				}`
+		);
+		a.ok(A.flags & Flags.Internal);
+		a.ok(!(B.flags & Flags.Internal));
 	});
 });

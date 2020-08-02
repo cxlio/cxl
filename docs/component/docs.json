@@ -6,7 +6,7 @@
         "line": 0,
         "ch": 0
       },
-      "kind": 290,
+      "kind": 7,
       "name": "index.ts",
       "flags": 0,
       "children": [
@@ -16,7 +16,7 @@
             "line": 14,
             "ch": 24
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Renderable",
           "flags": 0,
           "id": 1,
@@ -27,7 +27,7 @@
                 "line": 16,
                 "ch": 16
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 2
@@ -39,13 +39,13 @@
               "line": 16,
               "ch": 38
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 3,
             "type": {
               "name": "Node",
-              "kind": 169
+              "kind": 6
             },
             "parameters": [
               {
@@ -54,14 +54,14 @@
                   "line": 16,
                   "ch": 40
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "ctx",
                 "flags": 0,
                 "id": 4,
                 "type": {
                   "id": 2,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -73,7 +73,7 @@
             "line": 16,
             "ch": 56
           },
-          "kind": 247,
+          "kind": 2,
           "name": "RenderFunction",
           "flags": 0,
           "id": 5,
@@ -84,7 +84,7 @@
                 "line": 17,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 6
@@ -96,13 +96,13 @@
               "line": 17,
               "ch": 24
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 7,
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             },
             "parameters": [
@@ -112,14 +112,14 @@
                   "line": 17,
                   "ch": 26
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "node",
                 "flags": 0,
                 "id": 8,
                 "type": {
                   "id": 6,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -131,7 +131,7 @@
             "line": 17,
             "ch": 43
           },
-          "kind": 247,
+          "kind": 2,
           "name": "Augmentation",
           "flags": 0,
           "id": 9,
@@ -142,7 +142,7 @@
                 "line": 18,
                 "ch": 18
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 10
@@ -154,7 +154,7 @@
               "line": 18,
               "ch": 44
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 11,
@@ -164,17 +164,17 @@
                 "line": 18,
                 "ch": 60
               },
-              "kind": 178,
+              "kind": 5,
               "name": "",
               "flags": 0,
               "children": [
                 {
                   "name": "Node",
-                  "kind": 169
+                  "kind": 6
                 },
                 {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               ]
@@ -186,14 +186,14 @@
                   "line": 18,
                   "ch": 46
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "context",
                 "flags": 0,
                 "id": 12,
                 "type": {
                   "id": 10,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ]
@@ -205,17 +205,17 @@
             "line": 20,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "registeredComponents",
           "flags": 0,
           "id": 13,
           "type": {
             "name": "Record",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               },
               {
@@ -224,7 +224,7 @@
                   "line": 20,
                   "ch": 42
                 },
-                "kind": 172,
+                "kind": 27,
                 "name": "Component",
                 "flags": 0
               }
@@ -238,7 +238,7 @@
             "line": 21,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "subscriber",
           "flags": 0,
           "id": 14,
@@ -249,7 +249,7 @@
               "line": 21,
               "ch": 18
             },
-            "kind": 1004,
+            "kind": 34,
             "name": "",
             "flags": 0,
             "children": [
@@ -259,7 +259,7 @@
                   "line": 21,
                   "ch": 20
                 },
-                "kind": 161,
+                "kind": 11,
                 "name": "error",
                 "flags": 4,
                 "id": 15,
@@ -270,20 +270,20 @@
                       "line": 22,
                       "ch": 7
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "e",
                     "flags": 0,
                     "id": 16,
                     "type": {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   }
                 ],
                 "type": {
                   "name": "never",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -296,7 +296,7 @@
             "line": 25,
             "ch": 2
           },
-          "kind": 245,
+          "kind": 8,
           "name": "ComponentView",
           "flags": 1,
           "id": 17,
@@ -307,7 +307,7 @@
                 "line": 27,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 18
@@ -320,7 +320,7 @@
                 "line": 27,
                 "ch": 31
               },
-              "kind": 159,
+              "kind": 10,
               "name": "bindings",
               "flags": 8,
               "id": 19,
@@ -330,16 +330,16 @@
                   "line": 28,
                   "ch": 19
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -352,7 +352,7 @@
                 "line": 28,
                 "ch": 38
               },
-              "kind": 159,
+              "kind": 10,
               "name": "subscriptions",
               "flags": 8,
               "id": 20,
@@ -362,12 +362,12 @@
                   "line": 29,
                   "ch": 24
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "Subscription",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             },
@@ -377,14 +377,14 @@
                 "line": 29,
                 "ch": 40
               },
-              "kind": 159,
+              "kind": 10,
               "name": "rendered",
               "flags": 8,
               "id": 21,
               "value": "false",
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -394,14 +394,14 @@
                 "line": 30,
                 "ch": 26
               },
-              "kind": 159,
+              "kind": 10,
               "name": "connected",
               "flags": 8,
               "id": 22,
               "value": "false",
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -411,32 +411,32 @@
                 "line": 31,
                 "ch": 27
               },
-              "kind": 159,
+              "kind": 10,
               "name": "attributes$",
               "flags": 4,
               "id": 23,
               "value": "new Subject<AttributeEvent<T>>()",
               "type": {
                 "name": "Subject",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 24,
                     "name": "AttributeEvent",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 18,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "name": "keyof T",
-                        "kind": 134,
+                        "kind": 26,
                         "type": {
                           "id": 18,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         },
                         "flags": 0
                       }
@@ -451,7 +451,7 @@
                 "line": 32,
                 "ch": 48
               },
-              "kind": 162,
+              "kind": 14,
               "name": "constructor",
               "flags": 0,
               "id": 25,
@@ -462,14 +462,14 @@
                     "line": 34,
                     "ch": 13
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "host",
                   "flags": 4,
                   "id": 26,
                   "type": {
                     "id": 18,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 },
                 {
@@ -478,7 +478,7 @@
                     "line": 34,
                     "ch": 28
                   },
-                  "kind": 159,
+                  "kind": 10,
                   "name": "render",
                   "flags": 8,
                   "id": 27,
@@ -488,13 +488,13 @@
                       "line": 34,
                       "ch": 44
                     },
-                    "kind": 170,
+                    "kind": 17,
                     "name": "",
                     "flags": 0,
                     "id": 28,
                     "type": {
                       "name": "void",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     },
                     "parameters": [
@@ -504,14 +504,14 @@
                           "line": 34,
                           "ch": 46
                         },
-                        "kind": 156,
+                        "kind": 9,
                         "name": "host",
                         "flags": 0,
                         "id": 29,
                         "type": {
                           "id": 18,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       }
                     ]
@@ -521,12 +521,12 @@
               "type": {
                 "id": 17,
                 "name": "ComponentView",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 18,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -537,7 +537,7 @@
                 "line": 34,
                 "ch": 66
               },
-              "kind": 161,
+              "kind": 11,
               "name": "bind",
               "flags": 4,
               "id": 30,
@@ -548,17 +548,17 @@
                     "line": 36,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "binding",
                   "flags": 0,
                   "id": 31,
                   "type": {
                     "name": "Observable",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -567,7 +567,7 @@
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -577,14 +577,14 @@
                 "line": 42,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "connect",
               "flags": 4,
               "id": 32,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -594,14 +594,14 @@
                 "line": 58,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "disconnect",
               "flags": 4,
               "id": 33,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -611,14 +611,14 @@
                 "line": 34,
                 "ch": 13
               },
-              "kind": 159,
+              "kind": 10,
               "name": "host",
               "flags": 4,
               "id": 26,
               "type": {
                 "id": 18,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -627,7 +627,7 @@
                 "line": 34,
                 "ch": 28
               },
-              "kind": 159,
+              "kind": 10,
               "name": "render",
               "flags": 8,
               "id": 27,
@@ -637,13 +637,13 @@
                   "line": 34,
                   "ch": 44
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 28,
                 "type": {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
@@ -653,14 +653,14 @@
                       "line": 34,
                       "ch": 46
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "host",
                     "flags": 0,
                     "id": 29,
                     "type": {
                       "id": 18,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -674,7 +674,7 @@
             "line": 67,
             "ch": 1
           },
-          "kind": 245,
+          "kind": 8,
           "name": "Component",
           "flags": 129,
           "id": 34,
@@ -685,13 +685,13 @@
                 "line": 69,
                 "ch": 53
               },
-              "kind": 159,
+              "kind": 10,
               "name": "tagName",
               "flags": 36,
               "id": 35,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -701,7 +701,7 @@
                 "line": 70,
                 "ch": 24
               },
-              "kind": 159,
+              "kind": 10,
               "name": "observedAttributes",
               "flags": 36,
               "id": 36,
@@ -711,12 +711,12 @@
                   "line": 71,
                   "ch": 27
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "string",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -727,14 +727,14 @@
                 "line": 71,
                 "ch": 37
               },
-              "kind": 161,
+              "kind": 11,
               "name": "create",
               "flags": 36,
               "id": 37,
               "parameters": [],
               "type": {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -743,13 +743,13 @@
                 "line": 75,
                 "ch": 2
               },
-              "kind": 159,
+              "kind": 10,
               "name": "eventMap",
               "flags": 4,
               "id": 38,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -759,13 +759,13 @@
                 "line": 78,
                 "ch": 16
               },
-              "kind": 159,
+              "kind": 10,
               "name": "jsxAttributes",
               "flags": 4,
               "id": 39,
               "type": {
                 "name": "AttributeType",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "source": {
@@ -773,7 +773,7 @@
                       "line": 79,
                       "ch": 31
                     },
-                    "kind": 183,
+                    "kind": 30,
                     "name": "",
                     "flags": 0
                   }
@@ -786,7 +786,7 @@
                 "line": 79,
                 "ch": 37
               },
-              "kind": 159,
+              "kind": 10,
               "name": "view",
               "flags": 4,
               "id": 40,
@@ -794,12 +794,12 @@
               "type": {
                 "id": 17,
                 "name": "ComponentView",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 34,
                     "name": "Component",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -810,7 +810,7 @@
                 "line": 80,
                 "ch": 45
               },
-              "kind": 161,
+              "kind": 11,
               "name": "bind",
               "flags": 4,
               "id": 41,
@@ -821,17 +821,17 @@
                     "line": 82,
                     "ch": 6
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "binding",
                   "flags": 0,
                   "id": 42,
                   "type": {
                     "name": "Observable",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "name": "any",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       }
                     ]
@@ -840,7 +840,7 @@
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -850,7 +850,7 @@
                 "line": 84,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "render",
               "flags": 4,
               "id": 43,
@@ -861,7 +861,7 @@
                     "line": 86,
                     "ch": 8
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "_node",
                   "flags": 0,
                   "id": 44,
@@ -871,7 +871,7 @@
                       "line": 86,
                       "ch": 14
                     },
-                    "kind": 183,
+                    "kind": 30,
                     "name": "",
                     "flags": 0
                   }
@@ -879,7 +879,7 @@
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -889,14 +889,14 @@
                 "line": 88,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "connectedCallback",
               "flags": 4,
               "id": 45,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -906,14 +906,14 @@
                 "line": 92,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "disconnectedCallback",
               "flags": 4,
               "id": 46,
               "parameters": [],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -923,7 +923,7 @@
                 "line": 96,
                 "ch": 2
               },
-              "kind": 161,
+              "kind": 11,
               "name": "attributeChangedCallback",
               "flags": 4,
               "id": 47,
@@ -934,7 +934,7 @@
                     "line": 98,
                     "ch": 26
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "name",
                   "flags": 0,
                   "id": 48,
@@ -944,7 +944,7 @@
                       "line": 98,
                       "ch": 31
                     },
-                    "kind": 134,
+                    "kind": 26,
                     "name": "",
                     "flags": 0,
                     "type": {
@@ -953,7 +953,7 @@
                         "line": 98,
                         "ch": 37
                       },
-                      "kind": 183,
+                      "kind": 30,
                       "name": "",
                       "flags": 0
                     }
@@ -965,13 +965,13 @@
                     "line": 98,
                     "ch": 43
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "oldValue",
                   "flags": 0,
                   "id": 49,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 },
@@ -981,32 +981,32 @@
                     "line": 98,
                     "ch": 58
                   },
-                  "kind": 156,
+                  "kind": 9,
                   "name": "value",
                   "flags": 0,
                   "id": 50,
                   "type": {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 }
               ],
               "type": {
                 "name": "void",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "flags": 0,
-            "kind": 1003,
+            "kind": 33,
             "name": "",
             "children": [
               {
                 "name": "HTMLElement",
-                "kind": 169
+                "kind": 6
               }
             ]
           }
@@ -1017,7 +1017,7 @@
             "line": 105,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "pushRender",
           "flags": 1,
           "id": 51,
@@ -1028,7 +1028,7 @@
                 "line": 107,
                 "ch": 27
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 52
@@ -1041,14 +1041,14 @@
                 "line": 107,
                 "ch": 30
               },
-              "kind": 156,
+              "kind": 9,
               "name": "proto",
               "flags": 0,
               "id": 53,
               "type": {
                 "id": 52,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1057,19 +1057,19 @@
                 "line": 107,
                 "ch": 39
               },
-              "kind": 156,
+              "kind": 9,
               "name": "renderFn",
               "flags": 0,
               "id": 54,
               "type": {
                 "id": 5,
                 "name": "RenderFunction",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 52,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -1077,7 +1077,7 @@
           ],
           "type": {
             "name": "void",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1087,7 +1087,7 @@
             "line": 113,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "augment",
           "flags": 1,
           "id": 55,
@@ -1098,7 +1098,7 @@
                 "line": 115,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 56
@@ -1111,7 +1111,7 @@
                 "line": 115,
                 "ch": 45
               },
-              "kind": 156,
+              "kind": 9,
               "name": "constructor",
               "flags": 0,
               "id": 57,
@@ -1121,14 +1121,14 @@
                   "line": 116,
                   "ch": 13
                 },
-                "kind": 171,
+                "kind": 28,
                 "name": "",
                 "flags": 0,
                 "id": 58,
                 "type": {
                   "id": 56,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 },
                 "parameters": []
               }
@@ -1139,7 +1139,7 @@
                 "line": 116,
                 "ch": 26
               },
-              "kind": 156,
+              "kind": 9,
               "name": "decorators",
               "flags": 0,
               "id": 59,
@@ -1149,18 +1149,18 @@
                   "line": 117,
                   "ch": 12
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "id": 9,
                   "name": "Augmentation",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 56,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 }
@@ -1169,7 +1169,7 @@
           ],
           "type": {
             "name": "void",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1179,7 +1179,7 @@
             "line": 126,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "registerComponent",
           "flags": 1,
           "id": 60,
@@ -1190,13 +1190,13 @@
                 "line": 128,
                 "ch": 34
               },
-              "kind": 156,
+              "kind": 9,
               "name": "tagName",
               "flags": 0,
               "id": 61,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -1206,20 +1206,20 @@
                 "line": 128,
                 "ch": 50
               },
-              "kind": 156,
+              "kind": 9,
               "name": "ctor",
               "flags": 0,
               "id": 62,
               "type": {
                 "name": "any",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
           ],
           "type": {
             "name": "void",
-            "kind": 1002,
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1229,7 +1229,7 @@
             "line": 132,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "Augment",
           "flags": 16385,
           "id": 63,
@@ -1240,7 +1240,7 @@
                 "line": 134,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 64
@@ -1252,13 +1252,13 @@
               "line": 134,
               "ch": 47
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 65,
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             },
             "parameters": [
@@ -1268,13 +1268,13 @@
                   "line": 134,
                   "ch": 49
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "ctor",
                 "flags": 0,
                 "id": 66,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -1288,7 +1288,7 @@
             "line": 134,
             "ch": 68
           },
-          "kind": 244,
+          "kind": 16,
           "name": "Augment",
           "flags": 16385,
           "id": 67,
@@ -1299,7 +1299,7 @@
                 "line": 135,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 68
@@ -1311,13 +1311,13 @@
               "line": 137,
               "ch": 2
             },
-            "kind": 170,
+            "kind": 17,
             "name": "",
             "flags": 0,
             "id": 69,
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             },
             "parameters": [
@@ -1327,13 +1327,13 @@
                   "line": 137,
                   "ch": 4
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "ctor",
                 "flags": 0,
                 "id": 70,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -1346,7 +1346,7 @@
                 "line": 135,
                 "ch": 45
               },
-              "kind": 156,
+              "kind": 9,
               "name": "augs",
               "flags": 262144,
               "id": 71,
@@ -1356,7 +1356,7 @@
                   "line": 136,
                   "ch": 9
                 },
-                "kind": 175,
+                "kind": 29,
                 "name": "",
                 "flags": 0,
                 "children": [
@@ -1366,24 +1366,24 @@
                       "line": 136,
                       "ch": 11
                     },
-                    "kind": 178,
+                    "kind": 5,
                     "name": "",
                     "flags": 0,
                     "children": [
                       {
                         "name": "string",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       },
                       {
                         "id": 9,
                         "name": "Augmentation",
-                        "kind": 169,
+                        "kind": 6,
                         "typeParameters": [
                           {
                             "id": 68,
                             "name": "T",
-                            "kind": 169
+                            "kind": 6
                           }
                         ]
                       }
@@ -1395,18 +1395,18 @@
                       "line": 136,
                       "ch": 40
                     },
-                    "kind": 174,
+                    "kind": 15,
                     "name": "Array",
                     "flags": 262144,
                     "type": {
                       "id": 9,
                       "name": "Augmentation",
-                      "kind": 169,
+                      "kind": 6,
                       "typeParameters": [
                         {
                           "id": 68,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         }
                       ]
                     }
@@ -1422,7 +1422,7 @@
             "line": 137,
             "ch": 23
           },
-          "kind": 244,
+          "kind": 16,
           "name": "Augment",
           "flags": 1,
           "id": 72,
@@ -1433,7 +1433,7 @@
                 "line": 138,
                 "ch": 24
               },
-              "kind": 156,
+              "kind": 9,
               "name": "augs",
               "flags": 262144,
               "id": 73,
@@ -1443,12 +1443,12 @@
                   "line": 138,
                   "ch": 32
                 },
-                "kind": 174,
+                "kind": 15,
                 "name": "Array",
                 "flags": 0,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
@@ -1460,7 +1460,7 @@
               "line": 139,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 74,
@@ -1471,20 +1471,20 @@
                   "line": 139,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "ctor",
                 "flags": 0,
                 "id": 75,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -1495,7 +1495,7 @@
             "line": 153,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "render",
           "flags": 1,
           "id": 76,
@@ -1506,7 +1506,7 @@
                 "line": 155,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 77
@@ -1519,7 +1519,7 @@
                 "line": 155,
                 "ch": 44
               },
-              "kind": 156,
+              "kind": 9,
               "name": "renderFn",
               "flags": 0,
               "id": 78,
@@ -1529,19 +1529,19 @@
                   "line": 156,
                   "ch": 10
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 79,
                 "type": {
                   "id": 1,
                   "name": "Renderable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "id": 77,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   ]
                 },
@@ -1552,14 +1552,14 @@
                       "line": 156,
                       "ch": 12
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "node",
                     "flags": 0,
                     "id": 80,
                     "type": {
                       "id": 77,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -1572,7 +1572,7 @@
               "line": 158,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 81,
@@ -1583,20 +1583,20 @@
                   "line": 158,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "host",
                 "flags": 0,
                 "id": 82,
                 "type": {
                   "id": 77,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -1607,7 +1607,7 @@
             "line": 162,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "bind",
           "flags": 1,
           "id": 83,
@@ -1618,7 +1618,7 @@
                 "line": 164,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 84
@@ -1631,7 +1631,7 @@
                 "line": 164,
                 "ch": 42
               },
-              "kind": 156,
+              "kind": 9,
               "name": "bindFn",
               "flags": 0,
               "id": 85,
@@ -1641,17 +1641,17 @@
                   "line": 165,
                   "ch": 8
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 86,
                 "type": {
                   "name": "Observable",
-                  "kind": 169,
+                  "kind": 6,
                   "typeParameters": [
                     {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   ]
@@ -1663,14 +1663,14 @@
                       "line": 165,
                       "ch": 10
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "node",
                     "flags": 0,
                     "id": 87,
                     "type": {
                       "id": 84,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -1683,7 +1683,7 @@
               "line": 167,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 88,
@@ -1694,20 +1694,20 @@
                   "line": 167,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "host",
                 "flags": 0,
                 "id": 89,
                 "type": {
                   "id": 84,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -1718,7 +1718,7 @@
             "line": 168,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "connect",
           "flags": 1,
           "id": 90,
@@ -1729,7 +1729,7 @@
                 "line": 170,
                 "ch": 24
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 91
@@ -1742,7 +1742,7 @@
                 "line": 170,
                 "ch": 45
               },
-              "kind": 156,
+              "kind": 9,
               "name": "bindFn",
               "flags": 0,
               "id": 92,
@@ -1752,13 +1752,13 @@
                   "line": 170,
                   "ch": 52
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 93,
                 "type": {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
@@ -1768,14 +1768,14 @@
                       "line": 170,
                       "ch": 54
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "node",
                     "flags": 0,
                     "id": 94,
                     "type": {
                       "id": 91,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -1788,7 +1788,7 @@
               "line": 171,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 95,
@@ -1799,20 +1799,20 @@
                   "line": 171,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "host",
                 "flags": 0,
                 "id": 96,
                 "type": {
                   "id": 91,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -1823,7 +1823,7 @@
             "line": 177,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "Slot",
           "flags": 1,
           "id": 97,
@@ -1834,7 +1834,7 @@
                 "line": 179,
                 "ch": 21
               },
-              "kind": 156,
+              "kind": 9,
               "name": "{ selector }",
               "flags": 0,
               "id": 98,
@@ -1844,7 +1844,7 @@
                   "line": 179,
                   "ch": 34
                 },
-                "kind": 1004,
+                "kind": 34,
                 "name": "",
                 "flags": 0,
                 "children": [
@@ -1854,13 +1854,13 @@
                       "line": 179,
                       "ch": 36
                     },
-                    "kind": 159,
+                    "kind": 10,
                     "name": "selector",
                     "flags": 4,
                     "id": 99,
                     "type": {
                       "name": "string",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   }
@@ -1874,7 +1874,7 @@
               "line": 191,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 100,
@@ -1885,19 +1885,19 @@
                   "line": 191,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "host",
                 "flags": 0,
                 "id": 101,
                 "type": {
                   "name": "RenderContext",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "HTMLSlotElement",
-              "kind": 169
+              "kind": 6
             }
           }
         },
@@ -1907,7 +1907,7 @@
             "line": 203,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "onUpdate",
           "flags": 1,
           "id": 102,
@@ -1918,7 +1918,7 @@
                 "line": 205,
                 "ch": 25
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 103
@@ -1931,14 +1931,14 @@
                 "line": 205,
                 "ch": 46
               },
-              "kind": 156,
+              "kind": 9,
               "name": "host",
               "flags": 0,
               "id": 104,
               "type": {
                 "id": 103,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -1947,7 +1947,7 @@
                 "line": 205,
                 "ch": 54
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 105,
@@ -1957,13 +1957,13 @@
                   "line": 205,
                   "ch": 58
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 106,
                 "type": {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
@@ -1973,14 +1973,14 @@
                       "line": 205,
                       "ch": 60
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "node",
                     "flags": 0,
                     "id": 107,
                     "type": {
                       "id": 103,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -1989,35 +1989,35 @@
           ],
           "type": {
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "",
                 "flags": 0,
-                "kind": 178,
+                "kind": 5,
                 "children": [
                   {
                     "id": 103,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "id": 24,
                     "name": "AttributeEvent",
-                    "kind": 169,
+                    "kind": 6,
                     "typeParameters": [
                       {
                         "id": 103,
                         "name": "T",
-                        "kind": 169
+                        "kind": 6
                       },
                       {
                         "name": "keyof T",
-                        "kind": 134,
+                        "kind": 26,
                         "type": {
                           "id": 103,
                           "name": "T",
-                          "kind": 169
+                          "kind": 6
                         },
                         "flags": 0
                       }
@@ -2034,7 +2034,7 @@
             "line": 207,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "update",
           "flags": 1,
           "id": 108,
@@ -2052,7 +2052,7 @@
                 "line": 212,
                 "ch": 23
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 109
@@ -2065,7 +2065,7 @@
                 "line": 212,
                 "ch": 44
               },
-              "kind": 156,
+              "kind": 9,
               "name": "fn",
               "flags": 0,
               "id": 110,
@@ -2075,13 +2075,13 @@
                   "line": 212,
                   "ch": 47
                 },
-                "kind": 170,
+                "kind": 17,
                 "name": "",
                 "flags": 0,
                 "id": 111,
                 "type": {
                   "name": "void",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 },
                 "parameters": [
@@ -2091,14 +2091,14 @@
                       "line": 212,
                       "ch": 49
                     },
-                    "kind": 156,
+                    "kind": 9,
                     "name": "node",
                     "flags": 0,
                     "id": 112,
                     "type": {
                       "id": 109,
                       "name": "T",
-                      "kind": 169
+                      "kind": 6
                     }
                   }
                 ]
@@ -2111,7 +2111,7 @@
               "line": 213,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 113,
@@ -2122,20 +2122,20 @@
                   "line": 213,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "host",
                 "flags": 0,
                 "id": 114,
                 "type": {
                   "id": 109,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -2146,7 +2146,7 @@
             "line": 214,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "attributeChanged",
           "flags": 1,
           "id": 115,
@@ -2157,7 +2157,7 @@
                 "line": 216,
                 "ch": 33
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 116
@@ -2168,7 +2168,7 @@
                 "line": 216,
                 "ch": 53
               },
-              "kind": 155,
+              "kind": 3,
               "name": "K",
               "flags": 0,
               "id": 117
@@ -2176,7 +2176,7 @@
           ],
           "type": {
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "source": {
@@ -2184,19 +2184,19 @@
                   "line": 219,
                   "ch": 14
                 },
-                "kind": 185,
+                "kind": 21,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "id": 116,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "id": 117,
                     "name": "K",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2209,14 +2209,14 @@
                 "line": 216,
                 "ch": 73
               },
-              "kind": 156,
+              "kind": 9,
               "name": "element",
               "flags": 0,
               "id": 118,
               "type": {
                 "id": 116,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -2225,14 +2225,14 @@
                 "line": 217,
                 "ch": 12
               },
-              "kind": 156,
+              "kind": 9,
               "name": "attribute",
               "flags": 0,
               "id": 119,
               "type": {
                 "id": 117,
                 "name": "K",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -2243,7 +2243,7 @@
             "line": 224,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "get",
           "flags": 1,
           "id": 120,
@@ -2254,7 +2254,7 @@
                 "line": 226,
                 "ch": 20
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 121
@@ -2265,7 +2265,7 @@
                 "line": 226,
                 "ch": 40
               },
-              "kind": 155,
+              "kind": 3,
               "name": "K",
               "flags": 0,
               "id": 122
@@ -2273,7 +2273,7 @@
           ],
           "type": {
             "name": "Observable",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "source": {
@@ -2281,19 +2281,19 @@
                   "line": 229,
                   "ch": 14
                 },
-                "kind": 185,
+                "kind": 21,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "id": 121,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "id": 122,
                     "name": "K",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2306,14 +2306,14 @@
                 "line": 226,
                 "ch": 60
               },
-              "kind": 156,
+              "kind": 9,
               "name": "element",
               "flags": 0,
               "id": 123,
               "type": {
                 "id": 121,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -2322,14 +2322,14 @@
                 "line": 227,
                 "ch": 12
               },
-              "kind": 156,
+              "kind": 9,
               "name": "attribute",
               "flags": 0,
               "id": 124,
               "type": {
                 "id": 122,
                 "name": "K",
-                "kind": 169
+                "kind": 6
               }
             }
           ]
@@ -2340,7 +2340,7 @@
             "line": 234,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "AttributeOptions",
           "flags": 0,
           "id": 125,
@@ -2351,13 +2351,13 @@
                 "line": 236,
                 "ch": 28
               },
-              "kind": 159,
+              "kind": 10,
               "name": "persist",
               "flags": 4,
               "id": 126,
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             },
@@ -2367,22 +2367,22 @@
                 "line": 237,
                 "ch": 18
               },
-              "kind": 159,
+              "kind": 10,
               "name": "persistOperator",
               "flags": 4,
               "id": 127,
               "type": {
                 "name": "Operator",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -2394,13 +2394,13 @@
                 "line": 238,
                 "ch": 37
               },
-              "kind": 159,
+              "kind": 10,
               "name": "observe",
               "flags": 4,
               "id": 128,
               "type": {
                 "name": "boolean",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -2412,7 +2412,7 @@
             "line": 240,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "getObservedAttributes",
           "flags": 0,
           "id": 129,
@@ -2423,7 +2423,7 @@
                 "line": 242,
                 "ch": 31
               },
-              "kind": 156,
+              "kind": 9,
               "name": "target",
               "flags": 0,
               "id": 130,
@@ -2433,7 +2433,7 @@
                   "line": 242,
                   "ch": 38
                 },
-                "kind": 172,
+                "kind": 27,
                 "name": "Component",
                 "flags": 0
               }
@@ -2441,11 +2441,11 @@
           ],
           "type": {
             "name": "Array",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             ]
@@ -2458,7 +2458,7 @@
             "line": 249,
             "ch": 1
           },
-          "kind": 246,
+          "kind": 4,
           "name": "AttributeEvent",
           "flags": 1,
           "typeParameters": [
@@ -2468,7 +2468,7 @@
                 "line": 251,
                 "ch": 32
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 131
@@ -2479,7 +2479,7 @@
                 "line": 251,
                 "ch": 34
               },
-              "kind": 155,
+              "kind": 3,
               "name": "K",
               "flags": 0,
               "id": 132,
@@ -2493,14 +2493,14 @@
                 "line": 251,
                 "ch": 65
               },
-              "kind": 159,
+              "kind": 10,
               "name": "target",
               "flags": 4,
               "id": 133,
               "type": {
                 "id": 131,
                 "name": "T",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -2509,14 +2509,14 @@
                 "line": 252,
                 "ch": 11
               },
-              "kind": 159,
+              "kind": 10,
               "name": "attribute",
               "flags": 4,
               "id": 134,
               "type": {
                 "id": 132,
                 "name": "K",
-                "kind": 169
+                "kind": 6
               }
             },
             {
@@ -2525,7 +2525,7 @@
                 "line": 253,
                 "ch": 14
               },
-              "kind": 159,
+              "kind": 10,
               "name": "value",
               "flags": 4,
               "id": 135,
@@ -2535,19 +2535,19 @@
                   "line": 254,
                   "ch": 7
                 },
-                "kind": 185,
+                "kind": 21,
                 "name": "",
                 "flags": 0,
                 "children": [
                   {
                     "id": 131,
                     "name": "T",
-                    "kind": 169
+                    "kind": 6
                   },
                   {
                     "id": 132,
                     "name": "K",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2560,38 +2560,38 @@
             "line": 257,
             "ch": 5
           },
-          "kind": 1001,
+          "kind": 31,
           "name": "attributeOperator",
           "flags": 0,
           "id": 136,
           "value": "tap<AttributeEvent<any>>(\n\t({ value, target, attribute }) => {\n\t\tif (value === false && target.hasAttribute(attribute))\n\t\t\ttarget.removeAttribute(attribute);\n\t\telse if (typeof value === 'string')\n\t\t\ttarget.setAttribute(attribute, value);\n\t\telse if (value === true) target.setAttribute(attribute, '');\n\t}\n)",
           "type": {
             "name": "Operator",
-            "kind": 169,
+            "kind": 6,
             "typeParameters": [
               {
                 "id": 24,
                 "name": "AttributeEvent",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "name": "",
                     "flags": 0,
-                    "kind": 178,
+                    "kind": 5,
                     "children": [
                       {
                         "name": "string",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       },
                       {
                         "name": "number",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       },
                       {
@@ -2606,26 +2606,26 @@
               {
                 "id": 24,
                 "name": "AttributeEvent",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "name": "any",
-                    "kind": 1002,
+                    "kind": 32,
                     "flags": 0
                   },
                   {
                     "name": "",
                     "flags": 0,
-                    "kind": 178,
+                    "kind": 5,
                     "children": [
                       {
                         "name": "string",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       },
                       {
                         "name": "number",
-                        "kind": 1002,
+                        "kind": 32,
                         "flags": 0
                       },
                       {
@@ -2646,7 +2646,7 @@
             "line": 265,
             "ch": 2
           },
-          "kind": 244,
+          "kind": 16,
           "name": "Attribute",
           "flags": 1,
           "id": 137,
@@ -2657,18 +2657,18 @@
                 "line": 267,
                 "ch": 26
               },
-              "kind": 156,
+              "kind": 9,
               "name": "options",
               "flags": 524288,
               "id": 138,
               "type": {
                 "name": "Partial",
-                "kind": 169,
+                "kind": 6,
                 "typeParameters": [
                   {
                     "id": 125,
                     "name": "AttributeOptions",
-                    "kind": 169
+                    "kind": 6
                   }
                 ]
               }
@@ -2680,7 +2680,7 @@
               "line": 268,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 139,
@@ -2691,13 +2691,13 @@
                   "line": 268,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "target",
                 "flags": 0,
                 "id": 140,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               },
@@ -2707,13 +2707,13 @@
                   "line": 269,
                   "ch": 14
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "attribute",
                 "flags": 0,
                 "id": 141,
                 "type": {
                   "name": "string",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               },
@@ -2723,19 +2723,19 @@
                   "line": 270,
                   "ch": 20
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "descriptor",
                 "flags": 524288,
                 "id": 142,
                 "type": {
                   "name": "PropertyDescriptor",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -2746,7 +2746,7 @@
             "line": 314,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "StyleAttribute",
           "flags": 1,
           "id": 143,
@@ -2757,7 +2757,7 @@
               "line": 268,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 139,
@@ -2768,13 +2768,13 @@
                   "line": 268,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "target",
                 "flags": 0,
                 "id": 140,
                 "type": {
                   "name": "any",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               },
@@ -2784,13 +2784,13 @@
                   "line": 269,
                   "ch": 14
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "attribute",
                 "flags": 0,
                 "id": 141,
                 "type": {
                   "name": "string",
-                  "kind": 1002,
+                  "kind": 32,
                   "flags": 0
                 }
               },
@@ -2800,19 +2800,19 @@
                   "line": 270,
                   "ch": 20
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "descriptor",
                 "flags": 524288,
                 "id": 142,
                 "type": {
                   "name": "PropertyDescriptor",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -2823,7 +2823,7 @@
             "line": 321,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "getRegisteredComponents",
           "flags": 1,
           "id": 144,
@@ -2834,7 +2834,7 @@
               "line": 324,
               "ch": 7
             },
-            "kind": 1004,
+            "kind": 34,
             "name": "",
             "flags": 0,
             "children": [
@@ -2844,7 +2844,7 @@
                   "line": 324,
                   "ch": 9
                 },
-                "kind": 283,
+                "kind": 0,
                 "name": "",
                 "flags": 0
               }
@@ -2857,7 +2857,7 @@
             "line": 325,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "role",
           "flags": 1,
           "id": 145,
@@ -2868,7 +2868,7 @@
                 "line": 327,
                 "ch": 21
               },
-              "kind": 155,
+              "kind": 3,
               "name": "T",
               "flags": 0,
               "id": 146
@@ -2881,13 +2881,13 @@
                 "line": 327,
                 "ch": 42
               },
-              "kind": 156,
+              "kind": 9,
               "name": "roleName",
               "flags": 0,
               "id": 147,
               "type": {
                 "name": "string",
-                "kind": 1002,
+                "kind": 32,
                 "flags": 0
               }
             }
@@ -2898,7 +2898,7 @@
               "line": 328,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 148,
@@ -2909,20 +2909,20 @@
                   "line": 328,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "host",
                 "flags": 0,
                 "id": 149,
                 "type": {
                   "id": 146,
                   "name": "T",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "void",
-              "kind": 1002,
+              "kind": 32,
               "flags": 0
             }
           }
@@ -2933,7 +2933,7 @@
             "line": 335,
             "ch": 1
           },
-          "kind": 244,
+          "kind": 16,
           "name": "Host",
           "flags": 1,
           "id": 150,
@@ -2944,7 +2944,7 @@
                 "line": 337,
                 "ch": 21
               },
-              "kind": 156,
+              "kind": 9,
               "name": "{ $, children }",
               "flags": 0,
               "id": 151,
@@ -2954,7 +2954,7 @@
                   "line": 337,
                   "ch": 37
                 },
-                "kind": 1004,
+                "kind": 34,
                 "name": "",
                 "flags": 0,
                 "children": [
@@ -2964,13 +2964,13 @@
                       "line": 337,
                       "ch": 39
                     },
-                    "kind": 159,
+                    "kind": 10,
                     "name": "$",
                     "flags": 4,
                     "id": 152,
                     "type": {
                       "name": "Binding",
-                      "kind": 169
+                      "kind": 6
                     }
                   },
                   {
@@ -2979,13 +2979,13 @@
                       "line": 337,
                       "ch": 52
                     },
-                    "kind": 159,
+                    "kind": 10,
                     "name": "children",
                     "flags": 4,
                     "id": 153,
                     "type": {
                       "name": "any",
-                      "kind": 1002,
+                      "kind": 32,
                       "flags": 0
                     }
                   }
@@ -2999,7 +2999,7 @@
               "line": 339,
               "ch": 7
             },
-            "kind": 244,
+            "kind": 16,
             "name": "",
             "flags": 0,
             "id": 154,
@@ -3010,19 +3010,19 @@
                   "line": 339,
                   "ch": 9
                 },
-                "kind": 156,
+                "kind": 9,
                 "name": "host",
                 "flags": 0,
                 "id": 155,
                 "type": {
                   "name": "RenderContext",
-                  "kind": 169
+                  "kind": 6
                 }
               }
             ],
             "type": {
               "name": "RenderContext",
-              "kind": 169
+              "kind": 6
             }
           }
         }

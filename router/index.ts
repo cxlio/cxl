@@ -131,6 +131,7 @@ export class Route<T extends RouteElement> {
 	id: string;
 	path?: Fragment;
 	parent?: string;
+	redirectTo?: string;
 	definition: RouteDefinition<T>;
 	isDefault: boolean;
 
@@ -140,6 +141,7 @@ export class Route<T extends RouteElement> {
 		this.id = def.id || def.path;
 		this.isDefault = def.isDefault || false;
 		this.parent = def.parent;
+		this.redirectTo = def.redirectTo;
 		this.definition = def;
 	}
 
@@ -159,7 +161,7 @@ export class Route<T extends RouteElement> {
 	}
 }
 
-class RouteManager {
+export class RouteManager {
 	private routes: Route<any>[] = [];
 	defaultRoute?: Route<any>;
 
@@ -237,7 +239,8 @@ export const HashStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		location.hash = this.getHref(url);
+		const href = this.getHref(url);
+		if (location.hash !== href) location.hash = href;
 	},
 
 	deserialize() {
@@ -324,7 +327,7 @@ export class Router {
 		return route;
 	}
 
-	go(url: Url | string) {
+	go(url: Url | string): void {
 		const parsedUrl = typeof url === 'string' ? parseUrl(url) : url;
 		const path = parsedUrl.path;
 		const currentUrl = this.state?.url;
@@ -338,9 +341,17 @@ export class Router {
 		const route = this.routes.findRoute(path);
 
 		if (!route) throw new Error(`Path: "${path}" not found`);
-		const current = this.execute(route, route.path?.getArguments(path));
+
+		const args = route.path?.getArguments(path);
+
+		if (route.redirectTo)
+			return this.go(replaceParameters(route.redirectTo, args));
+
+		const current = this.execute(route, args);
+
 		if (!this.root)
 			throw new Error(`Route: "${path}" could not be created`);
+
 		this.state = {
 			url: parsedUrl,
 			route,
