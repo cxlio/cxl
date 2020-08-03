@@ -283,7 +283,8 @@ const FieldBase = (
 					...padding(0, 12, 4, 12),
 				},
 				$focused: { borderColor: 'primary' },
-				$outline: {
+				$invalid: { color: 'error' },
+				container$outline: {
 					borderColor: 'onSurface',
 					borderWidth: 1,
 					borderStyle: 'solid',
@@ -292,15 +293,14 @@ const FieldBase = (
 					paddingTop: 14,
 					paddingBottom: 12,
 				},
-				$outline$focused: {
+				container$outline$focused: {
 					boxShadow: boxShadow(0, 0, 0, 1, 'primary'),
 				},
-				$focused$outline: {
+				container$focused$outline: {
 					borderColor: 'primary',
 				},
-				$invalid: { color: 'error' },
-				$invalid$outline: { borderColor: 'error' },
-				$invalid$outline$focused: {
+				container$invalid$outline: { borderColor: 'error' },
+				container$invalid$outline$focused: {
 					boxShadow: boxShadow(0, 0, 0, 1, 'error'),
 				},
 				content: {
@@ -317,7 +317,9 @@ const FieldBase = (
 					bottom: 0,
 					backgroundColor: 'onSurface8',
 				},
-				mask$outline: { borderRadius: 4 },
+				mask$outline: {
+					borderRadius: 4,
+				},
 				mask$hover: {
 					filter: 'invert(0.15) saturate(1.5) brightness(1.1)',
 				},
@@ -336,6 +338,7 @@ const FieldBase = (
 					translateX: -4,
 					paddingLeft: 4,
 					paddingRight: 4,
+					height: 12,
 					backgroundColor: 'surface',
 					display: 'inline-block',
 				},
@@ -379,15 +382,16 @@ export class Label extends Component {}
  * @example
  * <cxl-field>
  *   <cxl-label>Input Label</cxl-label>
- *   <cxl-input required />
+ *   <cxl-input required></cxl-input>
  * </cxl-field>
  * <cxl-field floating>
  *   <cxl-label>Floating Label</cxl-label>
- *   <cxl-input />
+ *   <cxl-input></cxl-input>
  * </cxl-field>
  * <cxl-field outline>
  *   <cxl-label>Outlined Form Group</cxl-label>
- *   <cxl-input />
+ *   <cxl-input></cxl-input>
+ *   <cxl-field-help>Field Help Text</cxl-field-help>
  * </cxl-field>
  */
 @Augment<Field>(
@@ -396,7 +400,6 @@ export class Label extends Component {}
 		{{
 			$: { marginBottom: 16 },
 			$lastChild: { marginBottom: 0 },
-			$outline: { paddingTop: 2 },
 			line: { position: 'absolute', left: 0, right: 0 },
 			line$outline: { display: 'none' },
 			help: {
