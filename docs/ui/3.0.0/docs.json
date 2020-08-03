@@ -3723,7 +3723,7 @@
           "name": "FieldBase",
           "flags": 0,
           "id": 180,
-          "value": "(\n\t<Host>\n\t\t<Style>\n\t\t\t{{\n\t\t\t\t$: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tcolor: 'onSurface',\n\t\t\t\t\tdisplay: 'block',\n\t\t\t\t},\n\t\t\t\tcontainer: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\t...padding(0, 12, 4, 12),\n\t\t\t\t},\n\t\t\t\t$focused: { borderColor: 'primary' },\n\t\t\t\t$outline: {\n\t\t\t\t\tborderColor: 'onSurface',\n\t\t\t\t\tborderWidth: 1,\n\t\t\t\t\tborderStyle: 'solid',\n\t\t\t\t\tborderRadius: 4,\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t},\n\t\t\t\t$outline$focused: {\n\t\t\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'primary'),\n\t\t\t\t},\n\t\t\t\t$focused$outline: {\n\t\t\t\t\tborderColor: 'primary',\n\t\t\t\t},\n\t\t\t\t$invalid: { color: 'error' },\n\t\t\t\t$invalid$outline: { borderColor: 'error' },\n\t\t\t\t$invalid$outline$focused: {\n\t\t\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'error'),\n\t\t\t\t},\n\t\t\t\tcontent: {\n\t\t\t\t\tdisplay: 'flex',\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tfont: 'default',\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t},\n\t\t\t\tmask: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttop: 0,\n\t\t\t\t\tright: 0,\n\t\t\t\t\tleft: 0,\n\t\t\t\t\tbottom: 0,\n\t\t\t\t\tbackgroundColor: 'onSurface8',\n\t\t\t\t},\n\t\t\t\tcontainer$outline: {\n\t\t\t\t\tpaddingTop: 14,\n\t\t\t\t\tpaddingBottom: 12,\n\t\t\t\t},\n\t\t\t\tmask$outline: {\n\t\t\t\t\tborderRadius: 4,\n\t\t\t\t},\n\t\t\t\tmask$hover: {\n\t\t\t\t\tfilter: 'invert(0.15) saturate(1.5) brightness(1.1)',\n\t\t\t\t},\n\t\t\t\tmask$hover$disabled: { filter: 'none' },\n\t\t\t\tlabel: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tfont: 'caption',\n\t\t\t\t\tlineHeight: 10,\n\t\t\t\t\tverticalAlign: 'bottom',\n\t\t\t\t},\n\t\t\t\tlabel$focused: { color: 'primary' },\n\t\t\t\tlabel$invalid: { color: 'error' },\n\t\t\t\tlabel$outline: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttranslateY: -26,\n\t\t\t\t\ttranslateX: -4,\n\t\t\t\t\tpaddingLeft: 4,\n\t\t\t\t\tpaddingRight: 4,\n\t\t\t\t\tbackgroundColor: 'surface',\n\t\t\t\t\tdisplay: 'inline-block',\n\t\t\t\t},\n\t\t\t\tlabel$floating$novalue: {\n\t\t\t\t\tfont: 'default',\n\t\t\t\t\ttranslateY: 20,\n\t\t\t\t\topacity: 0.75,\n\t\t\t\t},\n\t\t\t\tlabel$leading: { paddingLeft: 24 },\n\t\t\t\tlabel$floating$novalue$outline: { translateY: 27 },\n\t\t\t}}\n\t\t</Style>\n\t\t<div className=\"container\">\n\t\t\t<div className=\"mask\"></div>\n\t\t\t<div className=\"label\">\n\t\t\t\t<Slot selector=\"cxl-label\" />\n\t\t\t</div>\n\t\t\t<div className=\"content\">\n\t\t\t\t<slot />\n\t\t\t</div>\n\t\t</div>\n\t</Host>\n)",
+          "value": "(\n\t<Host>\n\t\t<Style>\n\t\t\t{{\n\t\t\t\t$: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tcolor: 'onSurface',\n\t\t\t\t\tdisplay: 'block',\n\t\t\t\t},\n\t\t\t\tcontainer: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\t...padding(0, 12, 4, 12),\n\t\t\t\t},\n\t\t\t\t$focused: { borderColor: 'primary' },\n\t\t\t\t$invalid: { color: 'error' },\n\t\t\t\tcontainer$outline: {\n\t\t\t\t\tborderColor: 'onSurface',\n\t\t\t\t\tborderWidth: 1,\n\t\t\t\t\tborderStyle: 'solid',\n\t\t\t\t\tborderRadius: 4,\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t\tpaddingTop: 14,\n\t\t\t\t\tpaddingBottom: 12,\n\t\t\t\t},\n\t\t\t\tcontainer$outline$focused: {\n\t\t\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'primary'),\n\t\t\t\t},\n\t\t\t\tcontainer$focused$outline: {\n\t\t\t\t\tborderColor: 'primary',\n\t\t\t\t},\n\t\t\t\tcontainer$invalid$outline: { borderColor: 'error' },\n\t\t\t\tcontainer$invalid$outline$focused: {\n\t\t\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'error'),\n\t\t\t\t},\n\t\t\t\tcontent: {\n\t\t\t\t\tdisplay: 'flex',\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tfont: 'default',\n\t\t\t\t\tmarginTop: 2,\n\t\t\t\t},\n\t\t\t\tmask: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttop: 0,\n\t\t\t\t\tright: 0,\n\t\t\t\t\tleft: 0,\n\t\t\t\t\tbottom: 0,\n\t\t\t\t\tbackgroundColor: 'onSurface8',\n\t\t\t\t},\n\t\t\t\tmask$outline: {\n\t\t\t\t\tborderRadius: 4,\n\t\t\t\t},\n\t\t\t\tmask$hover: {\n\t\t\t\t\tfilter: 'invert(0.15) saturate(1.5) brightness(1.1)',\n\t\t\t\t},\n\t\t\t\tmask$hover$disabled: { filter: 'none' },\n\t\t\t\tlabel: {\n\t\t\t\t\tposition: 'relative',\n\t\t\t\t\tfont: 'caption',\n\t\t\t\t\tlineHeight: 10,\n\t\t\t\t\tverticalAlign: 'bottom',\n\t\t\t\t},\n\t\t\t\tlabel$focused: { color: 'primary' },\n\t\t\t\tlabel$invalid: { color: 'error' },\n\t\t\t\tlabel$outline: {\n\t\t\t\t\tposition: 'absolute',\n\t\t\t\t\ttranslateY: -26,\n\t\t\t\t\ttranslateX: -4,\n\t\t\t\t\tpaddingLeft: 4,\n\t\t\t\t\tpaddingRight: 4,\n\t\t\t\t\theight: 12,\n\t\t\t\t\tbackgroundColor: 'surface',\n\t\t\t\t\tdisplay: 'inline-block',\n\t\t\t\t},\n\t\t\t\tlabel$floating$novalue: {\n\t\t\t\t\tfont: 'default',\n\t\t\t\t\ttranslateY: 20,\n\t\t\t\t\topacity: 0.75,\n\t\t\t\t},\n\t\t\t\tlabel$leading: { paddingLeft: 24 },\n\t\t\t\tlabel$floating$novalue$outline: { translateY: 27 },\n\t\t\t}}\n\t\t</Style>\n\t\t<div className=\"container\">\n\t\t\t<div className=\"mask\"></div>\n\t\t\t<div className=\"label\">\n\t\t\t\t<Slot selector=\"cxl-label\" />\n\t\t\t</div>\n\t\t\t<div className=\"content\">\n\t\t\t\t<slot />\n\t\t\t</div>\n\t\t</div>\n\t</Host>\n)",
           "type": {
             "name": "JSXElement",
             "kind": 6,
@@ -3739,7 +3739,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 364,
+            "line": 363,
             "ch": 2
           },
           "kind": 35,
@@ -3765,7 +3765,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 379,
+            "line": 378,
             "ch": 39
           },
           "kind": 35,
@@ -3785,7 +3785,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 497,
+                "line": 496,
                 "ch": 38
               },
               "kind": 36,
@@ -3802,7 +3802,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 499,
+                "line": 498,
                 "ch": 17
               },
               "kind": 36,
@@ -3819,7 +3819,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 501,
+                "line": 500,
                 "ch": 33
               },
               "kind": 36,
@@ -3836,7 +3836,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 503,
+                "line": 502,
                 "ch": 17
               },
               "kind": 36,
@@ -3853,7 +3853,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 505,
+                "line": 504,
                 "ch": 18
               },
               "kind": 36,
@@ -3870,7 +3870,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 507,
+                "line": 506,
                 "ch": 17
               },
               "kind": 36,
@@ -3887,7 +3887,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 509,
+                "line": 508,
                 "ch": 17
               },
               "kind": 36,
@@ -3904,7 +3904,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 511,
+                "line": 510,
                 "ch": 17
               },
               "kind": 36,
@@ -3934,7 +3934,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 514,
+            "line": 513,
             "ch": 1
           },
           "kind": 35,
@@ -3954,7 +3954,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 546,
+                "line": 545,
                 "ch": 42
               },
               "kind": 36,
@@ -3984,7 +3984,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 549,
+            "line": 548,
             "ch": 1
           },
           "kind": 35,
@@ -4010,7 +4010,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 612,
+            "line": 611,
             "ch": 45
           },
           "kind": 35,
@@ -4021,7 +4021,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 639,
+                "line": 638,
                 "ch": 42
               },
               "kind": 36,
@@ -4038,7 +4038,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 641,
+                "line": 640,
                 "ch": 17
               },
               "kind": 36,
@@ -4071,7 +4071,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 645,
+            "line": 644,
             "ch": 1
           },
           "kind": 35,
@@ -4092,7 +4092,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 679,
+                "line": 678,
                 "ch": 37
               },
               "kind": 36,
@@ -4109,7 +4109,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 681,
+                "line": 680,
                 "ch": 22
               },
               "kind": 10,
@@ -4132,7 +4132,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 683,
+                "line": 682,
                 "ch": 33
               },
               "kind": 11,
@@ -4149,7 +4149,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 695,
+                "line": 694,
                 "ch": 2
               },
               "kind": 11,
@@ -4190,7 +4190,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 704,
+            "line": 703,
             "ch": 1
           },
           "kind": 35,
@@ -4211,7 +4211,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 738,
+                "line": 737,
                 "ch": 38
               },
               "kind": 36,
@@ -4227,7 +4227,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 740,
+                "line": 739,
                 "ch": 20
               },
               "kind": 10,
@@ -4258,7 +4258,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 743,
+            "line": 742,
             "ch": 1
           },
           "kind": 35,
@@ -4269,7 +4269,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 798,
+                "line": 797,
                 "ch": 39
               },
               "kind": 36,
@@ -4286,7 +4286,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 800,
+                "line": 799,
                 "ch": 19
               },
               "kind": 36,
@@ -4303,7 +4303,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 803,
+                "line": 802,
                 "ch": 18
               },
               "kind": 36,
@@ -4320,7 +4320,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 806,
+                "line": 805,
                 "ch": 17
               },
               "kind": 36,
@@ -4354,7 +4354,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 810,
+            "line": 809,
             "ch": 1
           },
           "kind": 35,
@@ -4375,7 +4375,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 846,
+                "line": 845,
                 "ch": 46
               },
               "kind": 36,
@@ -4391,7 +4391,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 848,
+                "line": 847,
                 "ch": 20
               },
               "kind": 10,
@@ -4422,7 +4422,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 853,
+            "line": 852,
             "ch": 5
           },
           "kind": 31,
@@ -4446,7 +4446,7 @@
           "id": 214,
           "source": {
             "fileName": "form.tsx",
-            "line": 853,
+            "line": 852,
             "ch": 39
           },
           "kind": 35,
@@ -4466,7 +4466,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 955,
+                "line": 954,
                 "ch": 38
               },
               "kind": 36,
@@ -4497,7 +4497,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 958,
+            "line": 957,
             "ch": 1
           },
           "kind": 35,
@@ -4508,7 +4508,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1025,
+                "line": 1024,
                 "ch": 43
               },
               "kind": 36,
@@ -4525,7 +4525,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1027,
+                "line": 1026,
                 "ch": 17
               },
               "kind": 36,
@@ -4540,7 +4540,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1030,
+                "line": 1029,
                 "ch": 18
               },
               "kind": 36,
@@ -4556,7 +4556,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1033,
+                "line": 1032,
                 "ch": 19
               },
               "kind": 36,
@@ -4589,7 +4589,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1037,
+            "line": 1036,
             "ch": 1
           },
           "kind": 35,
@@ -4610,7 +4610,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1135,
+                "line": 1134,
                 "ch": 42
               },
               "kind": 36,
@@ -4627,7 +4627,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1137,
+                "line": 1136,
                 "ch": 16
               },
               "kind": 36,
@@ -4643,7 +4643,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1140,
+                "line": 1139,
                 "ch": 19
               },
               "kind": 11,
@@ -4660,7 +4660,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1146,
+                "line": 1145,
                 "ch": 2
               },
               "kind": 11,
@@ -4691,7 +4691,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1152,
+            "line": 1151,
             "ch": 1
           },
           "kind": 35,
@@ -4712,7 +4712,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1235,
+                "line": 1234,
                 "ch": 39
               },
               "kind": 10,
@@ -4735,7 +4735,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1236,
+                "line": 1235,
                 "ch": 19
               },
               "kind": 36,
@@ -4752,7 +4752,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1238,
+                "line": 1237,
                 "ch": 17
               },
               "kind": 36,
@@ -4769,7 +4769,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1240,
+                "line": 1239,
                 "ch": 26
               },
               "kind": 36,
@@ -4800,7 +4800,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1243,
+            "line": 1242,
             "ch": 1
           },
           "kind": 16,
@@ -4811,7 +4811,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1245,
+                "line": 1244,
                 "ch": 21
               },
               "kind": 9,
@@ -4826,7 +4826,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1245,
+                "line": 1244,
                 "ch": 37
               },
               "kind": 9,
@@ -4871,7 +4871,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1248,
+            "line": 1247,
             "ch": 1
           },
           "kind": 16,
@@ -4882,7 +4882,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1250,
+                "line": 1249,
                 "ch": 21
               },
               "kind": 9,
@@ -4897,7 +4897,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1250,
+                "line": 1249,
                 "ch": 42
               },
               "kind": 9,
@@ -4926,7 +4926,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1259,
+            "line": 1258,
             "ch": 1
           },
           "kind": 16,
@@ -4937,7 +4937,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1261,
+                "line": 1260,
                 "ch": 26
               },
               "kind": 9,
@@ -4952,7 +4952,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1261,
+                "line": 1260,
                 "ch": 42
               },
               "kind": 9,
@@ -4981,7 +4981,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1272,
+            "line": 1271,
             "ch": 1
           },
           "kind": 35,
@@ -5002,7 +5002,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1303,
+                "line": 1302,
                 "ch": 41
               },
               "kind": 36,
@@ -5033,7 +5033,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1306,
+            "line": 1305,
             "ch": 1
           },
           "kind": 35,
@@ -5056,7 +5056,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1345,
+                "line": 1344,
                 "ch": 36
               },
               "kind": 36,
@@ -5073,7 +5073,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1347,
+                "line": 1346,
                 "ch": 18
               },
               "kind": 36,
@@ -5090,7 +5090,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1349,
+                "line": 1348,
                 "ch": 16
               },
               "kind": 10,
