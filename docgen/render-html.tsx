@@ -213,9 +213,9 @@ function Anchor(id: number) {
 function getSourceLink(src: Source) {
 	const url = application.repository;
 	if (url) {
-		if (url.startsWith('https://github.com')) {
+		if (url.indexOf('github.com') !== -1) {
 			const pos = src.sourceFile.getLineAndCharacterOfPosition(src.index);
-			return `${url}/${relative(
+			return `${url.replace(/\.git$/, '/blob/master')}/${relative(
 				process.cwd(),
 				src.sourceFile.fileName
 			)}#L${pos.line}`;
@@ -285,6 +285,10 @@ function DocSee(doc: DocumentationContent) {
 	);
 }
 
+function formatContent(text: string) {
+	return text.replace(/\r?\n\r?\n/g, '</p><p>');
+}
+
 function Documentation(node: Node) {
 	const docs = node.docs;
 
@@ -299,11 +303,11 @@ function Documentation(node: Node) {
 			if (doc.tag === 'param') return `<p>${doc.value}</p>`;
 			if (doc.tag === 'see') return DocSee(doc);
 
-			return `<p style="white-space: pre-wrap">${
+			return `<p>${formatContent(
 				doc.tag
 					? `${jsdocTitle(doc.tag)}: ${doc.value}`
 					: `${doc.value}`
-			}</p>`;
+			)}</p>`;
 		})
 		.join('');
 }
@@ -381,7 +385,8 @@ function getNodeCoef(a: Node) {
 		(a.kind === Kind.Module &&
 		(a.name === 'index.ts' || a.name === 'index.tsx')
 			? -10
-			: 0)
+			: 0) +
+		(a.kind === Kind.Namespace ? -5 : 0)
 	);
 }
 

@@ -75,9 +75,10 @@ export class DocGen extends Application {
 			await this.doClean(join(outputDir, pkgRepo.version));
 		}
 
-		if (!this.repository && pkgRepo)
-			this.repository =
-				typeof pkgRepo === 'string' ? pkgRepo : pkgRepo.url;
+		if (!this.repository && pkgRepo?.repository) {
+			const repo = pkgRepo.repository;
+			this.repository = typeof repo === 'string' ? repo : repo.url;
+		}
 
 		const json = build(this.tsconfig);
 		const theme = await import('./render-html');

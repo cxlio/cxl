@@ -75,7 +75,8 @@ export function routerOutlet(host: HTMLElement) {
 
 		if (url.hash)
 			host.querySelector(`a[name="${url.hash}"]`)?.scrollIntoView();
-		else host.parentElement?.scrollTo(0, 0);
+		else if (host.parentElement?.scrollTop)
+			host.parentElement.scrollTo(0, 0);
 	});
 }
 
