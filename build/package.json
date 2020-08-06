@@ -6,7 +6,7 @@
 	"license": "GPL-3.0",
 	"main": "index.js",
 	"scripts": {
-		"build-index": "tsc -b",
+		"build-index": "tsc -b && tsc -b tsconfig.amd.json",
 		"build": "node build"
 	},
 	"dependencies": {

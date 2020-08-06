@@ -266,9 +266,7 @@ function Example(doc: DocumentationContent) {
 	const { title, value } = parseExample(doc.value);
 	return `<cxl-t h5>${
 		title || translate('Example')
-	}</cxl-t><cxl-c pad16>${value}</cxl-c><cxl-t h6>Source</cxl-t>${Code(
-		value
-	)}`;
+	}</cxl-t><cxl-c>${value}</cxl-c><cxl-t h6>Source</cxl-t>${Code(value)}`;
 }
 
 function DocSee(doc: DocumentationContent) {
@@ -337,19 +335,21 @@ function MemberBody(c: Node) {
 
 	if (c.parameters?.length)
 		result +=
-			`<br/><cxl-t subtitle2>${translate('Parameters')}</cxl-t><ul>` +
+			`<cxl-t subtitle2>${translate('Parameters')}</cxl-t><ul>` +
 			c.parameters
 				.map(
 					p => `<li>${Parameter(p)}${ParameterDocumentation(p)}</li>`
 				)
 				.join('') +
-			'</ul><br/>';
+			'</ul>';
 
 	return result;
 }
 
 function MemberCard(c: Node) {
-	return `${c.id ? Anchor(c.id) : ''}<cxl-card><cxl-c pad16>
+	return `${
+		c.id ? Anchor(c.id) : ''
+	}<cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		${SourceLink(c)}${MemberBody(c)}
 		</cxl-c></cxl-card>`;
 }
@@ -442,9 +442,7 @@ function MemberGroupIndex({ kind, index }: Group) {
 function MemberBodyGroup({ body, kind }: Group) {
 	return body.length === 0
 		? ''
-		: `<br /><cxl-t h5>${groupTitle(kind)}</cxl-t>${body.join(
-				'<br />'
-		  )}<br />`;
+		: `<cxl-t h5>${groupTitle(kind)}</cxl-t>${body.join('')}`;
 }
 
 interface Group {

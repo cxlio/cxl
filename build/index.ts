@@ -20,7 +20,7 @@ import { file } from './file.js';
 export { file, files } from './file.js';
 export { concat } from '../rx/index.js';
 export { tsc } from './tsc.js';
-export { pkg, readme, bundle } from './package.js';
+export { AMD, pkg, readme, bundle } from './package.js';
 export { sh } from '../server';
 
 type Task = Observable<Output>;

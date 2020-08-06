@@ -319,6 +319,7 @@ const FieldBase = (
 				},
 				mask$outline: {
 					borderRadius: 4,
+					backgroundColor: 'surface',
 				},
 				mask$hover: {
 					filter: 'invert(0.15) saturate(1.5) brightness(1.1)',

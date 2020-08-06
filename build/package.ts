@@ -177,10 +177,7 @@ export function pkg() {
 		const output: Observable<Output>[] = [packageJson(p)];
 
 		output.push(file('README.md', 'README.md'));
-
-		if (!licenseId) throw new Error('license field is required.');
-
-		output.push(license(licenseId));
+		if (licenseId) output.push(license(licenseId));
 
 		return merge(...output);
 	});
@@ -195,19 +192,25 @@ export function publish() {
 function createBundle(
 	files: string[],
 	resolvedFiles: string[],
-	content: string[]
+	content: string[],
+	outFile: string
 ) {
 	const options: ts.CompilerOptions = {
 		lib: ['lib.es2017.d.ts'],
 		module: ts.ModuleKind.AMD,
 		allowJs: true,
 		declaration: false,
-		outDir: '.',
-		outFile: 'test.js',
+		baseUrl: process.cwd(),
+		outDir: process.cwd(),
+		outFile: outFile,
+		removeComments: true,
+		isolatedModules: true,
+		moduleResolution: ts.ModuleResolutionKind.NodeJs,
 		sourceMap: false,
 	};
 	const host = ts.createCompilerHost(options);
 	const oldGetSourceFile = host.getSourceFile;
+	const sourceFiles: ts.SourceFile[] = [];
 
 	host.getSourceFile = function (fn: string, target: ts.ScriptTarget) {
 		const i = resolvedFiles.indexOf(fn);
@@ -216,31 +219,44 @@ function createBundle(
 			const sf = ts.createSourceFile(
 				resolvedFiles[i],
 				content[i],
-				target,
-				true,
-				ts.ScriptKind.TS
+				target
 			);
 			sf.moduleName = files[i];
-			console.log(sf.referencedFiles);
+			sourceFiles.push(sf);
 			return sf;
 		}
-
 		return oldGetSourceFile.apply(this, arguments as any);
 	};
 
 	const program = ts.createProgram(resolvedFiles, options, host);
-	console.log(program.emit(undefined, (a, b) => console.log(a, b)));
+	const out: Output = {
+		path: outFile,
+		source: '',
+	};
+	program.emit(undefined, (_a, b) => (out.source += b));
+	return out;
 }
 
-export function bundle(files: string[], _out: string) {
+export function AMD() {
+	return defer<Output>(() =>
+		of({
+			path: 'amd.js',
+			source: readFileSync(__dirname + '/amd.js', 'utf8'),
+		})
+	);
+}
+
+export function bundle(files: Record<string, string>, outFile: string) {
 	return new Observable<Output>(subs => {
-		// const AMD = readFileSync(__dirname + '/amd.js');
-		const resolvedFiles = files.map(f => require.resolve(f));
+		const moduleNames = Object.keys(files);
+		const resolvedFiles = Object.values(files); //.map(f => require.resolve(f));
 		Promise.all(resolvedFiles.map(f => promises.readFile(f, 'utf8'))).then(
 			content => {
-				createBundle(files, resolvedFiles, content);
+				subs.next(
+					createBundle(moduleNames, resolvedFiles, content, outFile)
+				);
+				subs.complete();
 			}
 		);
-		subs.complete();
 	});
 }

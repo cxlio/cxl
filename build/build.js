@@ -2,8 +2,6 @@ const ts = require('typescript'),
 	fs = require('fs'),
 	cp = require('child_process');
 
-const AMD = fs.readFileSync('amd.js', 'utf8');
-
 function write(path, source) {
 	console.log(`Writing ${path}`);
 	fs.writeFileSync(path, source);
