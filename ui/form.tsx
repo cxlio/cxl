@@ -254,6 +254,7 @@ export class Checkbox extends InputBase {
 @Augment<Slider>(
 	'cxl-slider',
 	role('slider'),
+	FocusCircleStyle,
 	<Style>
 		{{
 			$: {
@@ -305,6 +306,7 @@ export class Checkbox extends InputBase {
 					)
 				}
 			>
+				<Focusable />
 				<div className="background">
 					<div
 						$={(el, host) =>
