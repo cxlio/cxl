@@ -1,0 +1,10 @@
+{
+	"name": "@cxl/drag",
+	"description": "Drag and Drop library",
+	"version": "0.1.0",
+	"license": "Apache-2.0",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/drag && node ../tester"
+	}
+}

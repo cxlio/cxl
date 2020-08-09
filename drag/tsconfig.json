@@ -1,0 +1,8 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/drag"
+	},
+	"references": [{ "path": "../rx" }, { "path": "../dom" }],
+	"files": ["index.ts"]
+}
