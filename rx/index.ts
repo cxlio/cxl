@@ -677,6 +677,21 @@ export function combineLatest<T extends any[]>(
 }
 
 /**
+ * Returns an Observable that mirrors the source Observable, but will call a
+ * specified function when the source terminates on complete or error.
+ */
+export function finalize<T>(fn: () => void): Operator<T, T> {
+	return operator<T, T>((subscriber: Subscriber<T>) => ({
+		next: (val: T) => subscriber.next(val),
+		error: (e: any) => subscriber.error(e),
+		complete() {
+			fn();
+			subscriber.complete();
+		},
+	}));
+}
+
+/**
  * Creates an Observable that emits no items to the Observer and immediately emits an error notification.
  */
 export function throwError(error: any) {
@@ -729,6 +744,7 @@ export interface Observable<T> {
 	defer(fn: () => Observable<T> | void): Observable<T>;
 	distinctUntilChanged(): Observable<T>;
 	filter(fn: (val: T) => boolean): Observable<T>;
+	finalize(fn: () => void): Observable<T>;
 	first(): Observable<T>;
 	map<T2>(mapFn: (val: T) => T2): Observable<T2>;
 	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
