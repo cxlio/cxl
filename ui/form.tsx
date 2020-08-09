@@ -18,6 +18,8 @@ import {
 	FocusHighlight,
 	Focusable,
 	Svg,
+	aria,
+	ariaValue,
 	ariaChecked,
 	focusable,
 	navigationList,
@@ -254,6 +256,8 @@ export class Checkbox extends InputBase {
 @Augment<Slider>(
 	'cxl-slider',
 	role('slider'),
+	aria('valuemax', '1'),
+	aria('valuemin', '0'),
 	FocusCircleStyle,
 	<Style>
 		{{
@@ -294,14 +298,22 @@ export class Checkbox extends InputBase {
 		}}
 	</Style>,
 	tpl(() => {
+		function bound(x: number) {
+			return x < 0 ? 0 : x > 1 ? 1 : x;
+		}
+
 		return (
 			<Host
 				$={(host: Slider) =>
 					merge(
 						dragInside(host).tap(
-							({ clientX }) =>
-								(host.value =
-									clientX < 0 ? 0 : clientX > 1 ? 1 : clientX)
+							ev => (host.value = bound(ev.clientX))
+						),
+						onKeypress(host, 'arrowleft').tap(
+							() => (host.value = bound(host.value - host.step))
+						),
+						onKeypress(host, 'arrowright').tap(
+							() => (host.value = bound(host.value + host.step))
 						)
 					)
 				}
@@ -309,12 +321,14 @@ export class Checkbox extends InputBase {
 				<Focusable />
 				<div className="background">
 					<div
-						$={(el, host) =>
-							get(host, 'value').tap(
-								val =>
-									(el.style.marginRight =
-										100 - val * 100 + '%')
-							)
+						$={(el, host: Slider) =>
+							get(host, 'value')
+								.tap(
+									val =>
+										(el.style.marginRight =
+											100 - val * 100 + '%')
+								)
+								.pipe(ariaValue(host, 'valuenow'))
 						}
 						className="line"
 					>

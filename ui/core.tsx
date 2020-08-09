@@ -13,7 +13,14 @@ import {
 	role,
 } from '../component/index.js';
 import { RenderContext, dom, normalizeChildren } from '../xdom/index.js';
-import { Observable, debounceTime, defer, merge, tap } from '../rx/index.js';
+import {
+	EMPTY,
+	Observable,
+	debounceTime,
+	defer,
+	merge,
+	tap,
+} from '../rx/index.js';
 import {
 	Style,
 	StyleSheet,
@@ -260,6 +267,12 @@ interface SelectableComponent extends Component {
 export function aria(prop: string, value: string) {
 	return (ctx: RenderContext) =>
 		ctx.bind(defer(() => ctx.setAttribute(`aria-${prop}`, value)));
+}
+
+export function ariaValue(host: Element, prop: string) {
+	return tap<string | number>(val =>
+		host.setAttribute('aria-' + prop, val.toString())
+	);
 }
 
 export function ariaProp(host: Element, prop: string) {
@@ -776,6 +789,7 @@ export class Spinner extends Component {}
 		<Style>
 			{{
 				$: { display: 'block', font: 'default', marginBottom: 8 },
+				$center: { textAlign: 'center' },
 				$inline: { display: 'inline', marginTop: 0, marginBottom: 0 },
 
 				$caption: { font: 'caption' },
@@ -812,6 +826,8 @@ export class T extends Component {
 	@StyleAttribute()
 	caption = false;
 	@StyleAttribute()
+	center = false;
+	@StyleAttribute()
 	subtitle = false;
 	@StyleAttribute()
 	subtitle2 = false;
@@ -819,71 +835,64 @@ export class T extends Component {
 	code = false;
 }
 
+/**
+ * @example
+ * <cxl-toggle>
+ *   <cxl-icon-button slot="trigger">
+ *     <cxl-icon icon="ellipsis-v"></cxl-icon>
+ *   </cxl-icon-button>
+ *   <cxl-menu>
+ *     <cxl-item>Features</cxl-item>
+ *     <cxl-item>Pricing</cxl-item>
+ *     <cxl-item>Docs</cxl-item>
+ *     <cxl-hr></cxl-hr>
+ *     <cxl-item>Log In</cxl-item>
+ *   </cxl-menu>
+ * </cxl-toggle>
+ */
 @Augment<Toggle>(
 	'cxl-toggle',
 	<Host>
-		<Focusable />
 		<Style>
 			{{
+				$: { position: 'relative', display: 'inline-block' },
 				popup: {
-					display: 'none',
-					height: 0,
-					elevation: 5,
+					scaleY: 0,
 					position: 'absolute',
+					animation: 'fadeOut',
+					transformOrigin: 'top',
+					top: 0,
 				},
-				$disabled: { pointerEvents: 'none' },
-				popup$opened: { display: 'block' },
+				popup$right: { right: 0 },
+				popup$opened: { scaleY: 1, animation: 'fadeIn' },
 			}}
 		</Style>
-		<slot />
+		<slot name="trigger" />
 		<div className="popup">
 			<slot />
 		</div>
 	</Host>,
-	bind(el => {
-		return onAction(el).pipe(
-			tap(ev => {
-				if (el.disabled) return;
-				el.opened = !el.opened;
-				ev.stopPropagation();
-			})
-		);
-	})
+	bind(el =>
+		merge(
+			get(el, 'opened')
+				.debounceTime()
+				.switchMap(() =>
+					el.opened
+						? on(window, 'click').tap(() => {
+								if (el.opened) el.opened = false;
+						  })
+						: EMPTY
+				),
+			onAction(el).tap(() => (el.opened = !el.opened))
+		)
+	)
 )
 export class Toggle extends Component {
 	@StyleAttribute()
-	disabled = false;
-	@Attribute()
-	touched = false;
-	@StyleAttribute()
 	opened = false;
+	@StyleAttribute()
+	right = false;
 }
-
-/*
-	component({
-		name: 'cxl-icon-toggle',
-		attributes: ['icon'],
-		extend: 'cxl-toggle',
-		template: `
-<span &="=opened:hide .focusCircle .focusCirclePrimary"></span>
-<cxl-icon &="=icon:@icon"></cxl-icon>
-<div &="id(popup) =opened:show .popup content(cxl-toggle-popup)"></div>
-	`,
-		styles: [
-			FocusCircleCSS,
-			{
-				$: {
-					paddingTop: 8,
-					paddingBottom: 8,
-					paddingLeft: 12,
-					paddingRight: 12,
-					cursor: 'pointer',
-					position: 'relative'
-				},
-				focusCircle: { left: -4 }
-			}
-		]
-	});*/
 
 @Augment(
 	role('button'),
@@ -1012,7 +1021,7 @@ function Head(p: { children: any }) {
 			rel="stylesheet"
 			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
 		/>
-		<style>{`body,html{padding:0;margin:0;height:100%}`}</style>
+		<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}`}</style>
 	</Head>
 )
 export class Meta extends Component {
@@ -1025,9 +1034,15 @@ export class Meta extends Component {
 @Augment(
 	'cxl-application',
 	<Host>
+		<Meta />
 		<Style>
 			{{
-				$: { display: 'flex', flexDirection: 'column', height: '100%' },
+				$: {
+					display: 'flex',
+					flexDirection: 'column',
+					height: '100%',
+					overflowX: 'hidden',
+				},
 				'@large': {
 					$permanent: { marginLeft: 288 },
 				},
