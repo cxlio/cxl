@@ -56,7 +56,7 @@ interface StrictStyleDefinition {
 	borderWidth: number;
 	borderRadius: Length;
 	borderStyle: 'solid' | 'none';
-	boxShadow: BoxShadow;
+	boxShadow: BoxShadow | 'none';
 	elevation: number;
 	fontSize: 'inherit';
 	translateX: Length;
@@ -104,6 +104,7 @@ interface StrictStyleDefinition {
 	transition: 'unset';
 	height: Length;
 	minHeight: Length;
+	minWidth: Length;
 	variables: Partial<VariableList>;
 	verticalAlign:
 		| 'top'
@@ -259,7 +260,7 @@ class RGBA {
 	}
 }
 
-function rgba(r: number, g: number, b: number, a?: number) {
+export function rgba(r: number, g: number, b: number, a?: number) {
 	return new RGBA(r, g, b, a);
 }
 
@@ -401,7 +402,7 @@ export const theme: Theme = {
 	},
 };
 
-export const ResetInverse = {
+export const ResetSurface = {
 	variables: {
 		surface: theme.colors.surface,
 		onSurface: theme.colors.onSurface,
@@ -519,6 +520,7 @@ const renderMap: StyleMap = {
 	backgroundColor: renderColor,
 	borderColor: renderColor,
 	boxShadow(_def, style, _prop, v: BoxShadow) {
+		if (typeof v === 'string') return (style.boxShadow = v);
 		style.boxShadow = `${toUnit(v.offsetX)} ${toUnit(v.offsetY)} ${toUnit(
 			v.blurRadius
 		)} ${toUnit(v.spread)} ${color(v.color)}`;
