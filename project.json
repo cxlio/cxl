@@ -34,6 +34,10 @@
 				"files": ["dts/index.ts"],
 				"tasks": "cd dts && npm run build"
 			},
+			"drag": {
+				"files": ["drag/index.ts"],
+				"tasks": "npm run build --prefix drag"
+			},
 			"rx": {
 				"files": ["rx/index.ts", "rx/tsconfig.json", "rx/test.html"],
 				"tasks": "cd rx && npm run build"
