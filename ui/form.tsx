@@ -37,6 +37,7 @@ import {
 } from '../dom/index.js';
 import { Style, border, boxShadow, padding } from '../css/index.js';
 import { be, defer, merge, of, tap } from '../rx/index.js';
+import { dragInside } from '../drag/index.js';
 
 const FocusCircleStyle = (
 	<Style>
@@ -243,6 +244,91 @@ export class Checkbox extends InputBase {
 	'true-value': any = true;
 	@Attribute()
 	'false-value': any = false;
+}
+
+/**
+ * @example
+ * <cxl-slider></cxl-slider>
+ * <cxl-slider value="0.5"></cxl-slider>
+ */
+@Augment<Slider>(
+	'cxl-slider',
+	role('slider'),
+	<Style>
+		{{
+			$: {
+				display: 'block',
+				paddingTop: 24,
+				paddingBottom: 24,
+				userSelect: 'none',
+				position: 'relative',
+				flexGrow: 1,
+				cursor: 'pointer',
+			},
+			knob: {
+				backgroundColor: 'primary',
+				width: 12,
+				height: 12,
+				display: 'inline-block',
+				borderRadius: 6,
+				position: 'absolute',
+				top: 19,
+			},
+			// $disabled: { state: 'disabled' },
+			focusCircle: { marginLeft: -4, marginTop: -8 },
+			background: {
+				backgroundColor: 'primaryLight',
+				height: 2,
+			},
+			line: {
+				backgroundColor: 'primary',
+				height: 2,
+				textAlign: 'right',
+			},
+			line$invalid$touched: { backgroundColor: 'error' },
+			knob$invalid$touched: { backgroundColor: 'error' },
+			background$invalid$touched: {
+				backgroundColor: 'error',
+			},
+		}}
+	</Style>,
+	tpl(() => {
+		return (
+			<Host
+				$={(host: Slider) =>
+					merge(
+						dragInside(host).tap(
+							({ clientX }) =>
+								(host.value =
+									clientX < 0 ? 0 : clientX > 1 ? 1 : clientX)
+						)
+					)
+				}
+			>
+				<div className="background">
+					<div
+						$={(el, host) =>
+							get(host, 'value').tap(
+								val =>
+									(el.style.marginRight =
+										100 - val * 100 + '%')
+							)
+						}
+						className="line"
+					>
+						<span className="focusCircle"></span>
+						<div className="knob"></div>
+					</div>
+				</div>
+			</Host>
+		);
+	})
+)
+export class Slider extends InputBase {
+	@Attribute()
+	step = 0.05;
+
+	value = 0;
 }
 
 @Augment<SubmitButton>(
