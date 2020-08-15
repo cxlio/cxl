@@ -569,20 +569,19 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
  *  returned will be used to continue the observable chain.
  *
  */
-export function catchError<T, T2>(
-	selector: (err: any, source: Observable<T>) => Observable<T2> | void
+export function catchError<T>(
+	selector: (err: any, source: Observable<T>) => Observable<T> | void
 ) {
 	function subscribe(source: Observable<T>, subscriber: Subscriber<T>) {
 		const subscription = source.subscribe(
 			subscriber.next.bind(subscriber),
 			(err: any) => {
-				let result: any;
 				try {
-					result = selector(err, source);
+					const result = selector(err, source);
+					if (result) subscribe(result, subscriber);
 				} catch (err2) {
 					return subscriber.error(err2);
 				}
-				subscribe(result, subscriber);
 			},
 			subscriber.complete.bind(subscriber)
 		);

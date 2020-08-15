@@ -9,6 +9,7 @@ import {
 	toPromise,
 } from './index.js';
 import combineLatestSuite from './test/combineLatest.js';
+import catchErrorSuite from './test/catchError.js';
 import concatSuite from './test/concat.js';
 import debounceTimeSuite from './test/debounceTime.js';
 import deferSuite from './test/defer.js';
@@ -33,6 +34,7 @@ function throwError(msg: string) {
 }
 
 export default suite('rx', [
+	catchErrorSuite,
 	deferSuite,
 	distinctUntilChangedSuite,
 	filterSuite,
