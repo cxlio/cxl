@@ -17,11 +17,12 @@ import { relative } from 'path';
 import hljs from 'highlight.js';
 import { existsSync, readFileSync } from 'fs';
 import MarkdownIt from 'markdown-it';
-import { ExtraDocumentation, escape, parseExample } from './render.js';
+import { DocsJson, Section, escape, parseExample } from './render.js';
 
 let application: DocGen;
 let index: Node[];
-let extraDocs: ExtraDocumentation[];
+let extraDocs: Section[];
+let extraFiles: File[];
 
 function TypeArguments(types?: Node[]): string {
 	return types
@@ -257,9 +258,9 @@ function Code(source: string, language?: string) {
 
 function Demo(doc: DocumentationContent): string {
 	const { title, value } = parseExample(doc.value);
-	return `<cxl-t h5>${title || translate('Demo')}</cxl-t><docgen-demo${
+	return `<cxl-t h5>${title || translate('Demo')}</cxl-t><doc-demo${
 		application.debug ? ' debug' : ''
-	}><!--${value}--></docgen-demo><cxl-t h6>Source</cxl-t>${Code(value)}`;
+	}><!--${value}--></doc-demo><cxl-t h6>Source</cxl-t>${Code(value)}`;
 }
 
 function Example(doc: DocumentationContent) {
@@ -617,10 +618,22 @@ function Item(title: string, href: string, icon?: string) {
 	return result;
 }
 
+function Extra(docs: Section[]) {
+	return docs
+		.map(docs => {
+			const title = docs.title
+				? `<cxl-c pad16><cxl-t subtitle>${docs.title}</cxl-t></cxl-c>`
+				: '';
+			const items = docs.items
+				.map(i => Item(i.title, i.file, i.icon))
+				.join('');
+			return `${title}${items}`;
+		})
+		.join('<cxl-hr></cxl-hr>');
+}
+
 function NavbarExtra() {
-	return `<cxl-c>${extraDocs.map(docs =>
-		Item(docs.title, docs.file.name, docs.icon)
-	)}</cxl-c><cxl-hr></cxl-hr>`;
+	return `${Extra(extraDocs)}<cxl-hr></cxl-hr>`;
 }
 
 function Navbar(pkg: any, out: Output) {
@@ -654,9 +667,7 @@ function Header(module: Output) {
 	}" />${SCRIPTS}</head>
 	<link rel="stylesheet" href="styles.css" />
 	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
-	<cxl-application permanent><title>${
-		pkg.name
-	}</title><cxl-meta></cxl-meta><cxl-appbar>
+	<cxl-application permanent><title>${pkg.name}</title><cxl-appbar>
 	${Navbar(pkg, module)}
 	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">${
 		pkg.name
@@ -712,11 +723,7 @@ function Module(module: Node) {
 	return result ? result.concat(Page(module)) : [Page(module)];
 }
 
-function ExtraDocument(
-	name: string,
-	title: string,
-	icon?: string
-): ExtraDocumentation {
+function Markdown(content: string) {
 	const md = new MarkdownIt({
 		highlight: Code,
 	});
@@ -734,14 +741,14 @@ function ExtraDocument(
 	rules.heading_close = () => `</cxl-t>`;
 	rules.code_block = (tokens, idx) => Code(tokens[idx].content);
 
-	return {
-		title,
-		icon,
-		file: {
-			name: 'index.html',
-			content: md.render(readFileSync(name, 'utf8')),
-		},
-	};
+	return md.render(content);
+}
+
+function renderDocsJson() {
+	const json: DocsJson = JSON.parse(readFileSync('docs.json', 'utf8'));
+
+	if (json.extra) extraDocs = json.extra;
+	else extraDocs = [];
 }
 
 function Route(file: File) {
@@ -750,20 +757,34 @@ function Route(file: File) {
 	} data-path="${file.name}">${file.content}</template>`;
 }
 
+function renderExtraFile(file: string, index = false) {
+	const content = readFileSync(file, 'utf8');
+	return {
+		name: index ? 'index.html' : file,
+		content: file.endsWith('.md') ? Markdown(content) : content,
+	};
+}
+
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
 	index = Object.values(output.index);
 	hljs.configure({ tabReplace: '    ' });
-	// Look for source documentation files
-	extraDocs = existsSync('README.md')
-		? [ExtraDocument('README.md', 'Home', 'home')]
-		: [];
+
+	if (existsSync('docs.json')) renderDocsJson();
+	else
+		extraDocs = existsSync('README.md')
+			? [{ items: [{ title: 'Home', file: 'README.md', index: true }] }]
+			: [];
+
+	extraFiles = extraDocs.flatMap(section =>
+		section.items.map(i => renderExtraFile(i.file, i.index))
+	);
 
 	const result: File[] = output.modules.flatMap(Module);
 	const header = Header(output);
 	const footer = '</cxl-page></cxl-application>';
 
-	result.push(...extraDocs.map(d => d.file));
+	result.push(...extraFiles);
 
 	let content = '<cxl-router-outlet></cxl-router-outlet><cxl-router>';
 

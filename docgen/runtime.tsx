@@ -6,15 +6,28 @@ import {
 	Host,
 	render,
 } from '../component/index.js';
-import { Button, Field, Input } from '../ui/index.js';
-import { Icon } from '../ui/icons.js';
 import { onChildrenMutation } from '../dom/index.js';
 import { Style, padding } from '../css/index.js';
 import { be } from '../rx/index.js';
 import '../ui/router.js';
 
 @Augment(
-	'docgen-demo',
+	'doc-example',
+	<Host>
+		<div
+			$={(div, host: DocExample) =>
+				onChildrenMutation(host).tap(() => {
+					const content = host.childNodes[0].textContent || '';
+					div.innerHTML = content;
+				})
+			}
+		></div>
+	</Host>
+)
+export class DocExample extends Component {}
+
+@Augment(
+	'doc-demo',
 	<Host>
 		<Style>
 			{{
@@ -52,7 +65,7 @@ import '../ui/router.js';
 			}}
 		</Style>
 	</Host>,
-	render((host: DocgenDemo) => {
+	render((host: DocDemo) => {
 		const content$ = be('');
 		function init(parent: HTMLIFrameElement) {
 			return onChildrenMutation(host).tap(() => {
@@ -79,7 +92,7 @@ import '../ui/router.js';
 		);
 	})
 )
-export class DocgenDemo extends Component {
+export class DocDemo extends Component {
 	@Attribute()
 	component = '';
 
@@ -88,32 +101,4 @@ export class DocgenDemo extends Component {
 	 */
 	@Attribute()
 	debug = false;
-}
-
-@Augment(
-	'docgen-search',
-	<Host>
-		<Style>
-			{{
-				$: { display: 'flex' },
-				input: { width: 200, display: 'none' },
-				input$opened: { display: 'block' },
-				'@medium': {
-					input: { display: 'block' },
-					button: { display: 'none' },
-				},
-			}}
-		</Style>
-		<Field>
-			<Input className="input" />
-			<Icon icon="search"></Icon>
-		</Field>
-		<Button className="button" flat primary>
-			<Icon icon="search"></Icon>
-		</Button>
-	</Host>
-)
-export class DocgenSearch extends Component {
-	@Attribute()
-	opened = false;
 }

@@ -1,9 +1,17 @@
-import type { File } from './index.js';
-
 export interface ExtraDocumentation {
 	title: string;
 	icon?: string;
-	file: File;
+	file: string;
+	index?: boolean;
+}
+
+export interface Section {
+	title?: string;
+	items: ExtraDocumentation[];
+}
+
+export interface DocsJson {
+	extra: Section[];
 }
 
 const ENTITIES_REGEX = /[&<]/g;
