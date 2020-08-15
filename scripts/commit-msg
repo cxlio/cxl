@@ -1,0 +1,9 @@
+#!/bin/bash
+
+file=`cat $1`
+regex="^(feat|fix|docs|style|refactor|test|revert)(\\(([a-z]+)\\))?: (.+)";
+
+if ! [[ $file =~ $regex ]]; then
+	echo "Invalid commit message. Format must match: ^(feat|fix|docs|style|refactor|test|revert)(\\(([a-z]+)\\))?: (.+)"
+	exit 1
+fi
