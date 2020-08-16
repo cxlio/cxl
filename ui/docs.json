@@ -1,0 +1,46 @@
+{
+	"extra": [
+		{
+			"items": [
+				{
+					"title": "Home",
+					"icon": "home",
+					"file": "README.md",
+					"index": true
+				},
+				{
+					"title": "Changelog",
+					"icon": "clipboard-list",
+					"file": "CHANGELOG.md"
+				}
+			]
+		},
+		{
+			"title": "Guides",
+			"items": [
+				{
+					"title": "Forms",
+					"icon": "window-restore",
+					"file": "docs/forms.html"
+				}
+			],
+			"other": [
+				{
+					"title": "Styles",
+					"icon": "palette",
+					"file": "docs/styles.html"
+				},
+				{
+					"title": "Layout",
+					"icon": "drafting-compass",
+					"file": "docs/layout.html"
+				},
+				{
+					"title": "Tables",
+					"icon": "table",
+					"file": "docs/tables.html"
+				}
+			]
+		}
+	]
+}
