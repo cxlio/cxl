@@ -375,7 +375,7 @@ function Link(node: Node, content?: string): string {
 	const href = getHref(node);
 
 	if (application.spa && href[0] !== '#')
-		return `<cxl-router-link href="${href}">${name}</cxl-router-link>`;
+		return `<cxl-a href="${href}">${name}</cxl-a>`;
 
 	return `<a href="${href}">${name}</a>`;
 }

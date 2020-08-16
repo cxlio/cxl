@@ -372,6 +372,9 @@ export class Router {
 		const parsed = parseUrl(url);
 		if (!this.state?.url) return false;
 		const current = this.state.url;
-		return parsed.path === current.path && parsed.hash === current.hash;
+		return (
+			parsed.path === current.path &&
+			(!parsed.hash || parsed.hash === current.hash)
+		);
 	}
 }

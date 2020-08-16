@@ -13,7 +13,13 @@ import {
 } from '../component/index.js';
 import { on, onAction, onLoad, trigger } from '../dom/index.js';
 import { portal, triggerEvent } from '../template/index.js';
-import { InversePrimary, ResetInverse, Style, padding } from '../css/index.js';
+import {
+	InversePrimary,
+	ResetSurface,
+	Style,
+	padding,
+	rgba,
+} from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
 import { IconButton, Svg, aria, ripple } from './core.js';
 import { Drawer } from './dialog.js';
@@ -57,18 +63,27 @@ import { Drawer } from './dialog.js';
 					font: 'title',
 					color: 'onSurface',
 					elevation: 2,
+					height: 56,
+				},
+				$transparent: {
+					boxShadow: 'none',
+					variables: {
+						surface: rgba(0, 0, 0, 0),
+					},
+				},
+				$extended: {
+					height: 128,
 				},
 				flex: {
 					display: 'flex',
 					alignItems: 'center',
-					height: 56,
-					...padding(4, 8, 4, 8),
+					height: '100%',
+					...padding(4, 16, 4, 16),
 					font: 'h6',
 				},
 				actions: { marginRight: -8 },
 				flex$extended: {
 					alignItems: 'start',
-					height: 128,
 					paddingBottom: 8,
 				},
 				$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
@@ -297,9 +312,9 @@ const MenuIcon = (
 				backgroundColor: 'surface',
 				color: 'onSurface',
 				cursor: 'pointer',
-				marginLeft: 4,
+				marginLeft: -8,
 			},
-			drawer: ResetInverse,
+			drawer: ResetSurface,
 			'@large': {
 				toggler$permanent: { display: 'none' },
 			},
@@ -359,18 +374,16 @@ export class Navbar extends Component {
 					color: 'onSurface',
 					paddingTop: 8,
 					paddingBottom: 8,
+					minWidth: 112,
+					...ResetSurface,
 				},
 				$dense: { paddingTop: 0, paddingBottom: 0 },
-				$closed: { scaleY: 0 },
 			}}
 		</Style>
 		<slot />
 	</Host>
 )
 export class Menu extends Component {
-	@StyleAttribute()
-	closed = false;
-
 	@StyleAttribute()
 	dense = false;
 }
@@ -382,6 +395,7 @@ export class Menu extends Component {
 		{{
 			$: {
 				display: 'block',
+				position: 'relative',
 				color: 'onSurface',
 				font: 'default',
 				lineHeight: 24,

@@ -31,7 +31,7 @@ function onTouchMove(touchId: number) {
 }
 
 function onTouchDrag(element: HTMLElement, handler?: DragHandler) {
-	return on(element, 'touchstart').switchMap(ev => {
+	return on(element, 'touchstart', { passive: true }).switchMap(ev => {
 		const touchId = getTouchId(ev);
 		const target = ev.currentTarget;
 
@@ -41,7 +41,7 @@ function onTouchDrag(element: HTMLElement, handler?: DragHandler) {
 		const { userSelect, transition } = style;
 		style.userSelect = style.transition = 'none';
 
-		ev.preventDefault();
+		// ev.preventDefault();
 		if (handler) handler.onStart(ev as any);
 
 		return new Observable<DragEvent>(subscriber => {
@@ -73,7 +73,6 @@ function onMouseDrag(element: HTMLElement, handler?: DragHandler) {
 		const { userSelect, transition } = style;
 		style.userSelect = style.transition = 'none';
 
-		ev.preventDefault();
 		if (handler) handler.onStart(ev as any);
 
 		return new Observable<DragEvent>(subscriber => {

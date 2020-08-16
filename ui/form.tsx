@@ -17,6 +17,7 @@ import {
 	Toggle,
 	FocusHighlight,
 	Focusable,
+	IconButton,
 	Svg,
 	aria,
 	ariaValue,
@@ -35,10 +36,10 @@ import {
 	onKeypress,
 	on,
 	onAction,
-	onChildrenMutation,
+	setAttribute,
 } from '../dom/index.js';
 import { Style, border, boxShadow, padding } from '../css/index.js';
-import { be, defer, merge, of, tap } from '../rx/index.js';
+import { EMPTY, Observable, be, defer, merge, of, tap } from '../rx/index.js';
 import { dragInside } from '../drag/index.js';
 
 const FocusCircleStyle = (
@@ -81,28 +82,18 @@ const FocusCircleStyle = (
 const Undefined = {};
 
 @Augment<InputBase>(
-	<Host
-		$={host =>
-			merge(
-				attributeChanged(host, 'invalid').pipe(
-					triggerEvent(host, 'invalid')
-				),
-				registable(host, 'form'),
-				get(host, 'disabled').tap(val =>
-					host.setAttribute('aria-disabled', val ? 'true' : 'false')
-				),
-				get(host, 'value').pipe(triggerEvent(host, 'change'))
-			)
-		}
-	>
-		<Style>
-			{{
-				$disabled: {
-					pointerEvents: 'none',
-				},
-			}}
-		</Style>
-	</Host>
+	bind(host =>
+		merge(
+			attributeChanged(host, 'invalid').pipe(
+				triggerEvent(host, 'invalid')
+			),
+			registable(host, 'form'),
+			get(host, 'disabled').tap(val =>
+				host.setAttribute('aria-disabled', val ? 'true' : 'false')
+			),
+			get(host, 'value').pipe(triggerEvent(host, 'change'))
+		)
+	)
 )
 export class InputBase extends Component {
 	@Attribute()
@@ -279,7 +270,6 @@ export class Checkbox extends InputBase {
 				position: 'absolute',
 				top: 19,
 			},
-			// $disabled: { state: 'disabled' },
 			focusCircle: { marginLeft: -4, marginTop: -8 },
 			background: {
 				backgroundColor: 'primaryLight',
@@ -293,7 +283,7 @@ export class Checkbox extends InputBase {
 			line$invalid$touched: { backgroundColor: 'error' },
 			knob$invalid$touched: { backgroundColor: 'error' },
 			background$invalid$touched: {
-				backgroundColor: 'error',
+				backgroundColor: 'errorLight',
 			},
 		}}
 	</Style>,
@@ -306,9 +296,9 @@ export class Checkbox extends InputBase {
 			<Host
 				$={(host: Slider) =>
 					merge(
-						dragInside(host).tap(
-							ev => (host.value = bound(ev.clientX))
-						),
+						dragInside(host).tap(ev => {
+							if (!host.disabled) host.value = bound(ev.clientX);
+						}),
 						onKeypress(host, 'arrowleft').tap(
 							() => (host.value = bound(host.value - host.step))
 						),
@@ -376,40 +366,45 @@ const FieldBase = (
 		<Style>
 			{{
 				$: {
-					position: 'relative',
 					color: 'onSurface',
+					position: 'relative',
 					display: 'block',
 				},
 				container: {
 					position: 'relative',
 					...padding(0, 12, 4, 12),
 				},
-				$focused: { borderColor: 'primary' },
 				$invalid: { color: 'error' },
+				$outline: { marginTop: -2 },
 				container$outline: {
 					borderColor: 'onSurface',
 					borderWidth: 1,
 					borderStyle: 'solid',
 					borderRadius: 4,
 					marginTop: 2,
-					paddingTop: 14,
+					paddingTop: 12,
 					paddingBottom: 12,
 				},
-				container$outline$focused: {
+				container$outline$focusWithin: {
 					boxShadow: boxShadow(0, 0, 0, 1, 'primary'),
 				},
-				container$focused$outline: {
+				container$focusWithin$outline: {
 					borderColor: 'primary',
 				},
 				container$invalid$outline: { borderColor: 'error' },
-				container$invalid$outline$focused: {
+				container$invalid$outline$focusWithin: {
 					boxShadow: boxShadow(0, 0, 0, 1, 'error'),
 				},
 				content: {
 					display: 'flex',
 					position: 'relative',
 					font: 'default',
-					marginTop: 2,
+					// marginBottom: 2,
+					marginTop: 4,
+					lineHeight: 20,
+				},
+				content$focusWithin: {
+					color: 'primary',
 				},
 				mask: {
 					position: 'absolute',
@@ -430,28 +425,31 @@ const FieldBase = (
 				label: {
 					position: 'relative',
 					font: 'caption',
+					marginLeft: -4,
+					paddingTop: 8,
+					paddingBottom: 2,
 					lineHeight: 10,
 					verticalAlign: 'bottom',
 				},
-				label$focused: { color: 'primary' },
+				label$focusWithin: { color: 'primary' },
 				label$invalid: { color: 'error' },
 				label$outline: {
 					position: 'absolute',
-					translateY: -26,
-					translateX: -4,
-					paddingLeft: 4,
-					paddingRight: 4,
-					height: 12,
+					translateY: -17,
+					paddingTop: 0,
+					height: 5,
 					backgroundColor: 'surface',
 					display: 'inline-block',
 				},
 				label$floating$novalue: {
 					font: 'default',
-					translateY: 20,
+					translateY: 21,
 					opacity: 0.75,
 				},
 				label$leading: { paddingLeft: 24 },
-				label$floating$novalue$outline: { translateY: 27 },
+				label$floating$novalue$outline: {
+					translateY: 9,
+				},
 			}}
 		</Style>
 		<div className="container">
@@ -466,18 +464,44 @@ const FieldBase = (
 	</Host>
 );
 
-@Augment(
+/*function connectable<T>(
+	host: Component,
+	parentTypeof: new () => T
+) {
+	return defer<T>(() =>
+		host.parentElement instanceof parentTypeof
+			? of(host.parentElement)
+			: EMPTY
+	);
+}*/
+
+function fieldInput(host: Component) {
+	return defer(() =>
+		host.parentNode instanceof Field
+			? (get(host.parentNode, 'input').filter(inp => !!inp) as Observable<
+					InputBase
+			  >)
+			: undefined
+	);
+}
+
+@Augment<Label>(
 	'cxl-label',
 	<Style>
 		{{
 			$: {
 				display: 'inline-block',
-				paddingTop: 8,
-				paddingBottom: 2,
+				paddingLeft: 4,
+				paddingRight: 4,
 			},
 		}}
 	</Style>,
-	<slot />
+	<slot />,
+	bind(host =>
+		fieldInput(host).raf(input =>
+			input.setAttribute('aria-label', host.textContent || '')
+		)
+	)
 )
 export class Label extends Component {}
 
@@ -518,75 +542,71 @@ export class Label extends Component {}
 			help$leading: { paddingLeft: 38 },
 			invalidMessage: { display: 'none', paddingTop: 4 },
 			invalidMessage$invalid: { display: 'block' },
-			// $inputdisabled: { filter: 'saturate(0)' },
+			$inputdisabled: {
+				filter: 'saturate(0)',
+				opacity: 0.48,
+				pointerEvents: 'none',
+			},
 		}}
 	</Style>,
 	FieldBase,
 	render(host => {
 		const invalid = be(false);
+		const focused = be(false);
 		const invalidMessage = be('');
-		const labelText = be('');
-		let input: InputBase;
 
 		function onRegister(ev: Event) {
 			if (ev.target) {
-				input = ev.target as InputBase;
-				if (!input.hasAttribute('aria-label') && labelText.value) {
-					input.setAttribute('aria-label', labelText.value);
-					input.focusElement?.setAttribute(
-						'aria-label',
-						labelText.value
-					);
-				}
+				host.input = ev.target as InputBase;
 			}
 		}
 
-		function update(ev: any) {
+		function update(ev?: any) {
+			const input = host.input;
 			if (input) {
 				invalid.next(input.touched && input.invalid);
 				host.inputdisabled = input.disabled;
 				host.invalid = invalid.value;
 				if (host.invalid) invalidMessage.next(input.validationMessage);
-
-				if (ev.type === 'focusable.focus') host.focused = true;
-				else if (ev.type === 'focusable.blur') host.focused = false;
+				if (!ev) return;
+				if (ev.type === 'focusable.focus') focused.next(true);
+				else if (ev.type === 'focusable.blur') focused.next(false);
 			}
 		}
 
 		function onChange() {
-			const value = input?.value;
+			const value = host.input?.value;
 			host.novalue = !value;
 		}
 
 		const hostBindings = merge(
-			labelText.tap(val => input?.setAttribute('aria-label', val)),
-			onChildrenMutation(host).tap(
-				ev =>
-					ev.type === 'added' &&
-					ev.value &&
-					ev.value.tagName === 'CXL-LABEL' &&
-					labelText.next(ev.value.innerText)
+			get(host, 'input').switchMap(input =>
+				input
+					? merge(
+							defer(update),
+							on(input, 'focusable.change').tap(update),
+							on(input, 'focusable.focus').tap(update),
+							on(input, 'focusable.blur').tap(update),
+							on(input, 'invalid').tap(update),
+							on(input, 'input').tap(onChange),
+							on(input, 'change').tap(onChange),
+							on(host, 'click').tap(
+								() =>
+									document.activeElement !== input &&
+									!focused.value &&
+									input?.focus()
+							)
+					  )
+					: EMPTY
 			),
-			on(host, 'form.register').pipe(tap(onRegister)),
-			on(host, 'focusable.change').pipe(tap(update)),
-			on(host, 'focusable.focus').pipe(tap(update)),
-			on(host, 'focusable.blur').pipe(tap(update)),
-			on(host, 'invalid').pipe(tap(update)),
-			on(host, 'input').tap(onChange),
-			on(host, 'change').tap(onChange),
-			on(host, 'click').tap(
-				() =>
-					document.activeElement !== input &&
-					!host.focused &&
-					input?.focus()
-			)
+			on(host, 'form.register').tap(onRegister)
 		);
 
 		return (
 			<Host $={() => hostBindings}>
 				<FocusLine
 					className="line"
-					focused={get(host, 'focused')}
+					focused={focused}
 					invalid={invalid}
 				/>
 				<div className="help">
@@ -607,13 +627,11 @@ export class Field extends Component {
 	@StyleAttribute()
 	floating = false;
 	@StyleAttribute()
-	focused = false;
-	@StyleAttribute()
 	leading = false;
 	@StyleAttribute()
-	hovered = false;
-	@StyleAttribute()
 	novalue = true;
+	@Attribute()
+	input?: InputBase;
 }
 
 /**
@@ -651,43 +669,31 @@ export class FieldHelp extends Component {
 	invalid = false;
 }
 
-/*	component(
-		{
-			update(ev) {
-				var el = ev.target;
-
-				if (el.touched) {
-					this.invalid = el.invalid;
-					this.error = el.$validity && el.$validity.message;
-				}
-			}
-		}
-	);*/
-/*@Augment(
+@Augment<Fieldset>(
+	'cxl-fieldset',
+	FieldBase,
+	bind(host =>
+		merge(on(host, 'invalid'), on(host, 'form.register')).tap(ev => {
+			const target = ev.target as InputBase;
+			if (target)
+				setAttribute(host, 'invalid', target.touched && target.invalid);
+		})
+	),
 	<Host>
-		<Style>{{
+		<Style>
+			{{
 				$: { marginBottom: 16 },
-					content: { display: 'block', marginTop: 16 },
-						content$outline: { marginTop: 0 }
-		}}</Style>
-		<FieldBase &="on(invalid):#update =invalid:@invalid =outline:@outline">
-			<LabelSlot><Slot selector="cxl-label" /></LabelSlot>
-			<FieldContent><slot /></FieldContent>
-		</FieldBase>
-		<div className="help">
-			<FieldHelp invalid &="=error:text:show"></FieldHelp>
-			<div &="=error:hide content(cxl-field-help)"></div>
-		</div>
+				mask: { display: 'none' },
+				content: { display: 'block', marginTop: 16 },
+				content$outline: { marginTop: 0, marginBottom: 0 },
+			}}
+		</Style>
 	</Host>
 )
 export class Fieldset extends Component {
-	static tagName = 'cxl-fieldset';
-	
 	@StyleAttribute()
-	outline = false;
-	
-	invalid = false;
-}*/
+	outline = true;
+}
 
 @Augment(
 	'cxl-field-toggle',
@@ -713,6 +719,22 @@ export class Fieldset extends Component {
 	</Host>
 )
 export class FieldToggle extends Component {}
+
+@Augment<FieldCounter>(
+	'cxl-field-counter',
+	render(host => (
+		<Host>
+			{fieldInput(host).switchMap(input =>
+				get(input, 'value').map(val => val?.length || 0)
+			)}
+			/{get(host, 'max')}
+		</Host>
+	))
+)
+export class FieldCounter extends Component {
+	@Attribute()
+	max = 100;
+}
 
 @Augment(
 	'cxl-focus-line',
@@ -817,32 +839,104 @@ export class Form extends Component {
 	'cxl-input',
 	role('textbox'),
 	bind(host => onKeypress(host, 'enter').tap(ev => ev.preventDefault())),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					flexGrow: 1,
-					overflowY: 'hidden',
-				},
-				input: {
-					color: 'inherit',
-					font: 'default',
-					minHeight: 22,
-					paddingTop: 4,
-					lineHeight: 18,
-					outline: 0,
-				},
-			}}
-		</Style>
-		<div className="input" $={$contentEditable}></div>
-	</Host>
+	<Style>
+		{{
+			$: {
+				display: 'block',
+				flexGrow: 1,
+				overflowY: 'hidden',
+			},
+			input: {
+				color: 'onSurface',
+				font: 'default',
+				minHeight: 20,
+				outline: 0,
+			},
+			$disabled: { pointerEvents: 'none' },
+		}}
+	</Style>,
+	<div className="input" $={$contentEditable}></div>
 )
 export class Input extends InputBase {
-	@Attribute()
-	maxlength?: number;
-
 	value = '';
+}
+
+@Augment<FieldInput>(
+	'cxl-field-input',
+	role('textbox'),
+	bind(host => onKeypress(host, 'enter').tap(ev => ev.preventDefault())),
+	<Style>
+		{{
+			$lastChild: { marginBottom: 0 },
+			$: { display: 'block', marginBottom: 16 },
+			input: {
+				color: 'onSurface',
+				font: 'default',
+				minHeight: 20,
+				outline: 0,
+				flexGrow: 1,
+			},
+			$disabled: { pointerEvents: 'none' },
+		}}
+	</Style>,
+	render(host => (
+		<Field
+			input={host}
+			floating={get(host, 'floating')}
+			outline={get(host, 'outline')}
+		>
+			<Label>{get(host, 'label')}</Label>
+			<div className="input" $={$contentEditable}></div>
+		</Field>
+	))
+)
+export class FieldInput extends InputBase {
+	@Attribute()
+	outline = false;
+
+	@Attribute()
+	floating = false;
+
+	@Attribute()
+	label = '';
+}
+
+@Augment<FieldTextArea>(
+	'cxl-field-textarea',
+	<Style>
+		{{
+			$: { display: 'block', marginBottom: 16 },
+			$lastChild: { marginBottom: 0 },
+			input: {
+				minHeight: 20,
+				lineHeight: 20,
+				color: 'onSurface',
+				outline: 'none',
+				flexGrow: 1,
+			},
+			$disabled: { pointerEvents: 'none' },
+		}}
+	</Style>,
+	render(host => (
+		<Field
+			input={host}
+			floating={get(host, 'floating')}
+			outline={get(host, 'outline')}
+		>
+			<Label>{get(host, 'label')}</Label>
+			<div $={$contentEditable} className="input"></div>
+		</Field>
+	))
+)
+export class FieldTextArea extends InputBase {
+	@Attribute()
+	outline = false;
+
+	@Attribute()
+	floating = false;
+
+	@Attribute()
+	label = '';
 }
 
 @Augment<Option>(
@@ -941,6 +1035,7 @@ export class Option extends Component {
 					height: 22,
 					backgroundColor: 'transparent',
 				},
+				$disabled: { pointerEvents: 'none' },
 			}}
 		</Style>
 		<input $={$valueProxy} className="input" type="password" />
@@ -1065,13 +1160,12 @@ export class Radio extends InputBase {
 	<Style>
 		{{
 			$: {
-				display: 'block',
+				display: 'none',
 				position: 'absolute',
 				elevation: 0,
 				right: -16,
 				left: -16,
 				overflowY: 'hidden',
-				opacity: 0,
 				transformOrigin: 'top',
 			},
 			$inline: {
@@ -1088,41 +1182,39 @@ export class Radio extends InputBase {
 	</Style>,
 	<slot />,
 	bind(host =>
-		merge(get(host, 'visible'), get(host, 'selected'), get(host, 'host'))
-			.debounceTime()
-			.tap(() => {
-				if (!host.host) return;
-				const option = host.selected;
-				const rect = host.host.getBoundingClientRect();
-				const minTop = 56;
-				const maxTop = rect.top - minTop;
+		merge(
+			get(host, 'visible'),
+			get(host, 'selected'),
+			get(host, 'host')
+		).raf(() => {
+			if (!host.host) return;
+			const option = host.selected;
+			const rect = host.host.getBoundingClientRect();
+			const minTop = 56;
+			const maxTop = rect.top - minTop;
 
-				let height: number;
-				let scrollTop = 0;
-				let marginTop = option ? option.offsetTop : 0;
+			let height: number;
+			let scrollTop = 0;
+			let marginTop = option ? option.offsetTop : 0;
 
-				if (marginTop > maxTop) {
-					scrollTop = marginTop - maxTop;
-					marginTop = maxTop;
-				}
+			if (marginTop > maxTop) {
+				scrollTop = marginTop - maxTop;
+				marginTop = maxTop;
+			}
 
-				height = host.scrollHeight - scrollTop;
-				const maxHeight = window.innerHeight - rect.bottom + marginTop;
+			height = host.scrollHeight - scrollTop;
+			const maxHeight = window.innerHeight - rect.bottom + marginTop;
 
-				if (height > maxHeight) height = maxHeight;
-				else if (height < minTop) height = minTop;
+			if (height > maxHeight) height = maxHeight;
+			else if (height < minTop) height = minTop;
 
-				const style = host.style;
+			const style = host.style;
 
-				style.transform = 'translateY(' + (-marginTop - 11) + 'px)';
-				style.height = height + 'px';
-				host.scrollTop = scrollTop;
-
-				if (style.opacity !== '1')
-					setTimeout(() => {
-						style.opacity = '1';
-					});
-			})
+			style.transform = 'translateY(' + (-marginTop - 13) + 'px)';
+			style.height = height + 'px';
+			style.display = 'block';
+			host.scrollTop = scrollTop;
+		})
 	)
 )
 export class SelectMenu extends Component {
@@ -1158,12 +1250,14 @@ export class SelectMenu extends Component {
 			if (el.selected) el.selected.selected = false;
 			if (selected) selected.selected = true;
 			el.selected = selected;
+			el.value = selected.value;
 		}
 
 		return (
 			<Host
-				$={el =>
+				$={(el: SelectBox) =>
 					merge(
+						focusable(el),
 						navigationList(
 							el,
 							'cxl-option:not([disabled])'
@@ -1180,7 +1274,6 @@ export class SelectMenu extends Component {
 					)
 				}
 			>
-				<Focusable />
 				<Style>
 					{{
 						$: {
@@ -1188,11 +1281,12 @@ export class SelectMenu extends Component {
 							cursor: 'pointer',
 							overflowY: 'hidden',
 							overflowX: 'hidden',
-							height: 22,
+							height: 20,
 							position: 'relative',
 							paddingRight: 16,
-							zIndex: 1,
+							flexGrow: 1,
 						},
+						$focus: { outline: 0 },
 						caret: {
 							position: 'absolute',
 							right: 0,
@@ -1216,6 +1310,7 @@ export class SelectMenu extends Component {
 						},
 						placeholder$opened: { display: 'none' },
 						$opened: { overflowY: 'visible', overflowX: 'visible' },
+						$disabled: { pointerEvents: 'none' },
 					}}
 				</Style>
 				<SelectMenu
@@ -1253,6 +1348,20 @@ export class SelectBox extends InputBase {
 		if (this.selected) this.selected.inactive = true;
 	}
 }
+
+/**
+ * @example
+ * <cxl-field floating>
+ *   <cxl-label>Multi Select Box with label</cxl-label>
+ *   <cxl-multiselect>
+ *     <cxl-option value="1">Option 1</cxl-option>
+ *     <cxl-option value="2">Option 2</cxl-option>
+ *     <cxl-option value="3">Option 3</cxl-option>
+ *   </cxl-multiselect>
+ * </cxl-field>
+ */
+@Augment('cxl-multiselect')
+export class MultiSelect extends SelectBox {}
 
 /**
  * @example
@@ -1310,7 +1419,6 @@ export class SelectBox extends InputBase {
 			}}
 		</Style>
 		<Focusable />
-		<slot />
 		<div className="switch">
 			<span className="background =checked:#update"></span>
 			<div className="knob">
@@ -1367,7 +1475,7 @@ function $contentEditable(el: HTMLElement, host: InputBase) {
 		get(host, 'value').tap(val => {
 			if (el.textContent !== val) el.textContent = val;
 		}),
-		get(host, 'disabled').tap(
+		get(host, 'disabled').raf(
 			val => (el.contentEditable = val ? 'false' : 'true')
 		),
 		on(el, 'input').tap(() => (host.value = el.textContent))
@@ -1398,6 +1506,7 @@ function $contentEditable(el: HTMLElement, host: InputBase) {
 					color: 'onSurface',
 					outline: 'none',
 				},
+				$disabled: { pointerEvents: 'none' },
 			}}
 		</Style>
 		<div $={$contentEditable} className="input"></div>
@@ -1452,4 +1561,50 @@ export class Fab extends Component {
 	static = false;
 
 	touched = false;
+}
+
+/**
+ * @demo
+ * <cxl-appbar>
+ *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+ *   <cxl-appbar-search></cxl-appbar-search>
+ * </cxl-appbar>
+ * @see Appbar
+ */
+@Augment(
+	'cxl-appbar-search',
+	<Host>
+		<Style>
+			{{
+				$: { display: 'flex' },
+				input: { width: 200, display: 'none', marginBottom: 0 },
+				input$opened: { display: 'block' },
+				'@medium': {
+					input: { display: 'block' },
+					button: { display: 'none' },
+				},
+			}}
+		</Style>
+		<Field className="input">
+			<Input />
+			<Svg
+				width={20}
+				viewBox="0 0 48 48"
+			>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
+		</Field>
+		<IconButton
+			$={(el, host) => onAction(el).tap(() => (host.opened = true))}
+			className="button"
+			flat
+		>
+			<Svg
+				width={24}
+				viewBox="0 0 48 48"
+			>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
+		</IconButton>
+	</Host>
+)
+export class AppbarSearch extends Component {
+	@Attribute()
+	opened = false;
 }

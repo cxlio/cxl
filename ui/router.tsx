@@ -4,7 +4,13 @@ import {
 	RouterState,
 	Strategy,
 } from '../router/index.js';
-import { Observable, Reference, combineLatest, merge } from '../rx/index.js';
+import {
+	Observable,
+	Reference,
+	combineLatest,
+	defer,
+	merge,
+} from '../rx/index.js';
 import {
 	Attribute,
 	Augment,
@@ -15,7 +21,6 @@ import {
 } from '../component/index.js';
 import { dom } from '../xdom/index.js';
 import {
-	on,
 	onAction,
 	onReady,
 	onHashChange,
@@ -85,6 +90,7 @@ export function routerStrategy(
 	strategy: Strategy = Strategies.query
 ) {
 	return merge(
+		defer(() => strategy$.next(strategy)),
 		getUrl.tap(() => router.go(strategy.deserialize())).catchError(o => o),
 		router$.tap(state => strategy.serialize(state.url))
 	);
@@ -156,10 +162,6 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 	'cxl-router-link',
 	<Style>
 		{{
-			$: {
-				textDecoration: 'underline',
-			},
-			$focusWithin: { outline: 'var(--cxl-primary) auto 1px;' },
 			link: {
 				outline: 0,
 				textDecoration: 'none',
@@ -170,11 +172,12 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 		className="link"
 		$={(el, host) =>
 			merge(
+				get(host, 'focusable').tap(val => (el.tabIndex = val ? 0 : -1)),
 				combineLatest(strategy$, get(host, 'href')).tap(
 					([strategy, val]) =>
 						val !== undefined && (el.href = strategy.getHref(val))
 				),
-				on(el, 'click').tap(ev => {
+				onAction(el).tap(ev => {
 					ev.preventDefault();
 					router.go(host.href);
 				})
@@ -187,6 +190,21 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 export class RouterLink extends Component {
 	@Attribute()
 	href?: string;
+	@Attribute()
+	focusable = false;
+}
+
+@Augment<RouterLink>(
+	'cxl-a',
+	<Style>
+		{{
+			$: { textDecoration: 'underline' },
+			$focusWithin: { outline: 'var(--cxl-primary) auto 1px;' },
+		}}
+	</Style>
+)
+export class A extends RouterLink {
+	focusable = true;
 }
 
 @Augment<RouterItem>(
@@ -258,7 +276,6 @@ export class RouterOutlet extends Component {}
 			onReady().switchMap(() =>
 				get(host, 'strategy').switchMap(strategyName => {
 					const strategy = Strategies[strategyName];
-					strategy$.next(strategy);
 					return routerStrategy(onLocation(), strategy);
 				})
 			)

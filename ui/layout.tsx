@@ -8,7 +8,7 @@ import {
 	update,
 	role,
 } from '../component/index.js';
-import { Style, margin, padding } from '../css/index.js';
+import { Style, margin, padding, pct } from '../css/index.js';
 import { dom } from '../xdom/index.js';
 import { operator } from '../rx/index.js';
 
@@ -19,6 +19,7 @@ const colStyles = ((r: any) => {
 		] = r.xs['$xs' + i] = {
 			display: 'block',
 			gridColumnEnd: 'span ' + i,
+			flexBasis: pct((100 / 12) * i),
 		};
 	return r;
 })({
@@ -57,7 +58,7 @@ function persistWithParameter(prefix: string) {
 				$: {
 					display: 'block',
 					gridColumnEnd: 'span 12',
-					flexShrink: 0,
+					flexShrink: 1,
 				},
 				$grow: { flexGrow: 1, flexShrink: 1 },
 				$fill: {
@@ -70,13 +71,26 @@ function persistWithParameter(prefix: string) {
 				...colStyles.xs,
 				$xs0: { display: 'none' },
 				'@small': {
-					$: { gridColumnEnd: 'auto' },
+					$: { gridColumnEnd: 'auto', flexShrink: 0 },
+					$small: { display: 'block' },
 					...colStyles.sm,
 					$sm0: { display: 'none' },
 				},
-				'@medium': { ...colStyles.md, $md0: { display: 'none' } },
-				'@large': { ...colStyles.lg, $lg0: { display: 'none' } },
-				'@xlarge': { ...colStyles.xl, $xl0: { display: 'none' } },
+				'@medium': {
+					...colStyles.md,
+					$md0: { display: 'none' },
+					$medium: { display: 'block' },
+				},
+				'@large': {
+					...colStyles.lg,
+					$lg0: { display: 'none' },
+					$large: { display: 'block' },
+				},
+				'@xlarge': {
+					...colStyles.xl,
+					$xl0: { display: 'none' },
+					$xlarge: { display: 'block' },
+				},
 
 				// Padding
 				$pad16: { ...padding(16) },
@@ -139,7 +153,8 @@ export class C extends Component {
 		<Style>
 			{{
 				$: {
-					...padding(16),
+					display: 'block',
+					...padding(32, 16, 32, 16),
 					position: 'relative',
 					flexGrow: 1,
 					overflowY: 'auto',
@@ -152,9 +167,9 @@ export class C extends Component {
 					$: padding(64),
 				},
 				'@xlarge': {
-					content: { width: 1200 },
-					content$center: {
-						...padding(0),
+					$: { width: 1200 },
+					$center: {
+						...padding(64, 0, 64, 0),
 						marginLeft: 'auto',
 						marginRight: 'auto',
 					},
@@ -204,18 +219,18 @@ export class Page extends Component {}
 
 /**
  * @example
-<cxl-card>
-<cxl-c flex pad16>
-	<cxl-avatar style="background:#ccc"></cxl-avatar>
-	<cxl-c style="margin-left: 24px">
-		<cxl-t subtitle>Card Title</cxl-t>
-		<cxl-t subtitle2>Secondary Text</cxl-t>
-	</cxl-c>
-</cxl-c>
-<cxl-c pad16>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</cxl-c>
-</cxl-card>
+ * <cxl-card>
+ *   <cxl-c flex pad16>
+ *     <cxl-avatar style="background:#ccc"></cxl-avatar>
+ *     <cxl-c style="margin-left: 24px">
+ *       <cxl-t subtitle>Card Title</cxl-t>
+ *       <cxl-t subtitle2>Secondary Text</cxl-t>
+ *     </cxl-c>
+ *   </cxl-c>
+ *   <cxl-c pad16>
+ *     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+ *   </cxl-c>
+ * </cxl-card>
  */
 @Augment(
 	'cxl-card',

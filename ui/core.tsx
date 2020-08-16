@@ -13,14 +13,7 @@ import {
 	role,
 } from '../component/index.js';
 import { RenderContext, dom, normalizeChildren } from '../xdom/index.js';
-import {
-	EMPTY,
-	Observable,
-	debounceTime,
-	defer,
-	merge,
-	tap,
-} from '../rx/index.js';
+import { EMPTY, Observable, defer, merge, tap } from '../rx/index.js';
 import {
 	Style,
 	StyleSheet,
@@ -43,16 +36,16 @@ export function prefix<T>(pre: string, obj: T) {
 	return result;
 }
 
+export const DisabledStyles = {
+	cursor: 'default',
+	filter: 'saturate(0)',
+	opacity: 0.38,
+	pointerEvents: 'none',
+};
+
 export const StateStyles = {
-	$focus: {
-		outline: 0,
-	},
-	$disabled: {
-		cursor: 'default',
-		filter: 'saturate(0)',
-		opacity: 0.38,
-		pointerEvents: 'none',
-	},
+	$focus: { outline: 0 },
+	$disabled: DisabledStyles,
 };
 
 function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
@@ -71,13 +64,9 @@ function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
 }
 
 export function ripple(element: any) {
-	return onAction(element).pipe(
-		debounceTime(),
-		tap(ev => {
-			ev.preventDefault();
-			if (!element.disabled) attachRipple(element, ev as any);
-		})
-	);
+	return onAction(element).raf(ev => {
+		if (!element.disabled) attachRipple(element, ev as any);
+	});
 }
 
 function findNextNode<T extends ChildNode>(
@@ -317,19 +306,20 @@ export function selectableHost<TargetT extends SelectableTarget>(
 			const value = host.value;
 
 			if (!options || (selected && selected.value === value)) return;
-			selected = undefined;
 
 			for (const o of options)
-				if (o.value === value || o.selected) {
+				if (o.value === value || o.selected || !selected) {
 					setSelected(o);
 				} else o.selected = false;
 		}
 
 		const subscription = merge(
-			registableHost<TargetT>(host, 'selectable').tap(val => {
-				options = val;
-				onChange();
-			}),
+			registableHost<TargetT>(host, 'selectable')
+				.raf()
+				.tap(val => {
+					options = val;
+					onChange();
+				}),
 			getAttribute(host, 'value').tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
 				if (ev.target && options?.has(ev.target as TargetT)) {
@@ -720,6 +710,7 @@ export function Svg(p: {
 			'http://www.w3.org/2000/svg',
 			'svg'
 		);
+		el.style.fill = 'var(--cxl-on-surface)';
 		el.innerHTML = p.children;
 		el.setAttribute('viewBox', p.viewBox);
 		if (p.width) el.setAttribute('width', p.width.toString());

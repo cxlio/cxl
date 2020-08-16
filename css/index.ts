@@ -26,6 +26,7 @@ export interface Colors {
 	secondary: BaseColor;
 	surface: BaseColor;
 	error: BaseColor;
+	errorLight: BaseColor;
 	onPrimary: BaseColor;
 	onPrimaryLight: BaseColor;
 	onSecondary: BaseColor;
@@ -360,6 +361,9 @@ export const theme: Theme = {
 		secondary: rgba(0xf9, 0xaa, 0x33),
 		surface: rgba(0xff, 0xff, 0xff),
 		error: rgba(0xb0, 0x00, 0x20),
+		get errorLight() {
+			return this.error.alpha(0.14);
+		},
 
 		onPrimary: rgba(0xff, 0xff, 0xff),
 		get onPrimaryLight() {

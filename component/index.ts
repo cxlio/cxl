@@ -18,54 +18,18 @@ type Renderable<T extends Component> = (ctx: T) => Node;
 type RenderFunction<T> = (node: T) => void;
 type Augmentation<T extends RenderContext> = (context: T) => Node | void;
 
+export interface AttributeEvent<T, K extends keyof T = keyof T> {
+	target: T;
+	attribute: K;
+	value: T[K];
+}
+
 const registeredComponents: Record<string, typeof Component> = {};
 const subscriber = {
 	error(e: any) {
 		throw e;
 	},
 };
-
-export class ComponentView<T> {
-	private bindings?: Observable<any>[];
-	private subscriptions?: Subscription[];
-	private rendered = false;
-	private connected = false;
-	attributes$ = new Subject<AttributeEvent<T>>();
-
-	constructor(public host: T, private render: (host: T) => void) {}
-
-	bind(binding: Observable<any>) {
-		if (this.connected)
-			throw new Error('Cannot add bindings to a connected view');
-
-		if (!this.bindings) this.bindings = [];
-		this.bindings.push(binding);
-	}
-
-	connect() {
-		if (!this.rendered) {
-			this.render(this.host);
-			this.rendered = true;
-		}
-
-		if (!this.connected) {
-			this.connected = true;
-
-			if (this.bindings)
-				this.subscriptions = this.bindings.map(b =>
-					b.subscribe(subscriber)
-				);
-		}
-	}
-
-	disconnect() {
-		if (this.subscriptions) {
-			this.subscriptions.forEach(s => s.unsubscribe());
-			this.subscriptions = undefined;
-		}
-		this.connected = false;
-	}
-}
 
 export abstract class Component extends HTMLElement {
 	static tagName: string;
@@ -78,10 +42,18 @@ export abstract class Component extends HTMLElement {
 	// EventMap
 	eventMap?: any;
 	jsxAttributes?: AttributeType<this>;
-	view = new ComponentView(this, this.render);
+
+	private bindings?: Observable<any>[];
+	private subscriptions?: Subscription[];
+	private rendered = false;
+	attributes$ = new Subject<AttributeEvent<any, any>>();
 
 	bind(binding: Observable<any>) {
-		this.view.bind(binding);
+		if (this.subscriptions)
+			throw new Error('Cannot add bindings to a connected view');
+
+		if (!this.bindings) this.bindings = [];
+		this.bindings.push(binding);
 	}
 
 	render(_node: this) {
@@ -89,11 +61,22 @@ export abstract class Component extends HTMLElement {
 	}
 
 	connectedCallback() {
-		this.view.connect();
+		if (!this.rendered) {
+			this.render(this);
+			this.rendered = true;
+		}
+
+		if (this.bindings)
+			this.subscriptions = this.bindings.map(b =>
+				b.subscribe(subscriber)
+			);
 	}
 
 	disconnectedCallback() {
-		this.view.disconnect();
+		if (this.subscriptions) {
+			this.subscriptions.forEach(s => s.unsubscribe());
+			this.subscriptions = undefined;
+		}
 	}
 
 	attributeChangedCallback(name: keyof this, oldValue: any, value: any) {
@@ -204,7 +187,7 @@ export function Slot({ selector }: { selector?: string }) {
 }
 
 export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
-	return concat(of(host), host.view.attributes$).pipe(tap(() => fn(host)));
+	return concat(of(host), host.attributes$).pipe(tap(() => fn(host)));
 }
 
 /**
@@ -218,7 +201,7 @@ export function attributeChanged<T extends Component, K extends keyof T>(
 	element: T,
 	attribute: K
 ): Observable<T[K]> {
-	return element.view.attributes$.pipe(
+	return element.attributes$.pipe(
 		filter(ev => ev.attribute === attribute),
 		map(() => element[attribute])
 	);
@@ -249,13 +232,7 @@ function getObservedAttributes(target: typeof Component) {
 	return (target.observedAttributes = result || []);
 }
 
-export interface AttributeEvent<T, K extends keyof T = keyof T> {
-	target: T;
-	attribute: K;
-	value: T[K];
-}
-
-const attributeOperator = tap<AttributeEvent<any>>(
+const attributeOperator = tap<AttributeEvent<any, any>>(
 	({ value, target, attribute }) => {
 		if (value === false && target.hasAttribute(attribute))
 			target.removeAttribute(attribute);
@@ -280,16 +257,16 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 
 		if (options?.persist || options?.persistOperator)
 			pushRender(target, (node: Component) => {
-				return node.view.bind(
+				return node.bind(
 					concat(
 						defer(() =>
-							of<AttributeEvent<any>>({
+							of<AttributeEvent<any, any>>({
 								attribute,
 								target: node,
 								value: (node as any)[attribute],
 							})
 						),
-						node.view.attributes$.pipe(
+						node.attributes$.pipe(
 							filter(ev => ev.attribute === attribute)
 						)
 					).pipe(options.persistOperator || attributeOperator)
@@ -303,7 +280,7 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 			set(value: any) {
 				if (this[prop] !== value) {
 					this[prop] = value;
-					this.view.attributes$.next({
+					this.attributes$.next({
 						target: this,
 						attribute,
 						value,

@@ -3,11 +3,12 @@
 	"name": "@cxl/cxl",
 	"version": "0.0.0",
 	"devDependencies": {
+		"@fortawesome/fontawesome-free": "5",
 		"@types/eslint": "^7.2.0",
 		"@types/markdown-it": "^10.0.1",
 		"@types/node": "^14.0.14",
 		"@types/puppeteer": "^3.0.1",
-		"@typescript-eslint/eslint-plugin": "^2.13.0",
+		"@typescript-eslint/eslint-plugin": "^2.34.0",
 		"@typescript-eslint/parser": "^2.13.0",
 		"eslint": "^7.3.1",
 		"firebase": "^7.17.1",
@@ -20,7 +21,11 @@
 	},
 	"scripts": {
 		"build": "node scripts/build-all.js",
+		"preinstall": "scripts/preinstall.sh",
 		"prepublishOnly": "node scripts/build-all.js && node scripts/build-readme",
 		"install": "cd build && node build"
+	},
+	"dependencies": {
+		"@fortawesome/fontawesome-free": "^5.14.0"
 	}
 }

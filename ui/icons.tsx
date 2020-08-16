@@ -1044,7 +1044,7 @@ export class Icon extends Component {
 		{{
 			$: {
 				paddingRight: 8,
-				lineHeight: 22,
+				lineHeight: 20,
 				width: 24,
 				textAlign: 'center',
 			},

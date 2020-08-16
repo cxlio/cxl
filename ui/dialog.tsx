@@ -267,10 +267,9 @@ export class DialogConfirm extends Component {
 					on(el, 'drawer.close').tap(() => (host.visible = false)),
 					on(el, 'click').tap(ev => ev.stopPropagation()),
 					get(host, 'visible')
-						.debounceTime(300)
+						.raf()
 						.tap(visible => {
-							if (!visible && el.scrollTop !== 0)
-								el.scrollTo(0, 0);
+							if (!visible) el.scrollTo(0, 0);
 						})
 				)
 			}

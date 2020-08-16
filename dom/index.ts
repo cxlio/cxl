@@ -84,7 +84,9 @@ export function onReady() {
 	return defer(() =>
 		document.readyState !== 'loading'
 			? of(true)
-			: on(window, 'DOMContentLoaded').map(() => true)
+			: on(window, 'DOMContentLoaded')
+					.first()
+					.map(() => true)
 	);
 }
 
@@ -433,6 +435,11 @@ export function onHistoryChange() {
 		pushSubject
 	);
 }
+
+/**
+ * requestAnimationFrame wrapper
+ */
+export const raf = requestAnimationFrame.bind(window);
 
 export function onLocation() {
 	return merge(onHashChange(), onHistoryChange()).map(() => window.location);
