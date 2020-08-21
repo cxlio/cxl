@@ -239,19 +239,26 @@ const Undefined = {};
  * A Reference is a behavior subject that does not require an initial value.
  */
 export class Reference<T> extends Subject<T> {
-	private value: T | typeof Undefined = Undefined;
+	private $value: T | typeof Undefined = Undefined;
+
+	get value(): T {
+		if (this.$value === Undefined)
+			throw new Error('Reference not initialized');
+		return this.$value as any;
+	}
+
 	constructor(value?: T) {
 		super();
-		if (arguments.length === 1 && value !== undefined) this.value = value;
+		if (arguments.length === 1) this.$value = value as T;
 	}
 
 	protected onSubscribe(subscription: Subscriber<T>) {
-		if (this.value !== Undefined) subscription.next(this.value as T);
+		if (this.$value !== Undefined) subscription.next(this.$value as T);
 		return super.onSubscribe(subscription);
 	}
 
 	next(val: T) {
-		this.value = val;
+		this.$value = val;
 		return super.next(val);
 	}
 }
@@ -713,7 +720,9 @@ export function be<T>(initialValue: T) {
  * Creates a new Reference object
  */
 export function ref<T>(initial?: T) {
-	return new Reference<T>(initial);
+	return arguments.length === 1
+		? new Reference<T>(initial)
+		: new Reference<T>();
 }
 
 const operators: any = {
