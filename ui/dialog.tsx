@@ -120,8 +120,6 @@ const DialogStyles = (
 	))
 )
 export class DialogAlert extends Component {
-	// '=modal:aria.prop(modal) =title-text:aria.prop(label)',
-
 	resolve?: () => void;
 
 	@Attribute()
@@ -375,7 +373,7 @@ export function alert(options: string | Partial<DialogAlert>) {
 
 	document.body.appendChild(modal);
 
-	return modal.promise;
+	return modal.promise.then(() => remove(modal));
 }
 
 /**
