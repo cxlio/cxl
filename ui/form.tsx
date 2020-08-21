@@ -91,7 +91,7 @@ const Undefined = {};
 			get(host, 'disabled').tap(val =>
 				host.setAttribute('aria-disabled', val ? 'true' : 'false')
 			),
-			get(host, 'value').pipe(triggerEvent(host, 'change'))
+			attributeChanged(host, 'value').pipe(triggerEvent(host, 'change'))
 		)
 	)
 )
@@ -679,16 +679,14 @@ export class FieldHelp extends Component {
 				setAttribute(host, 'invalid', target.touched && target.invalid);
 		})
 	),
-	<Host>
-		<Style>
-			{{
-				$: { marginBottom: 16 },
-				mask: { display: 'none' },
-				content: { display: 'block', marginTop: 16 },
-				content$outline: { marginTop: 0, marginBottom: 0 },
-			}}
-		</Style>
-	</Host>
+	<Style>
+		{{
+			$: { marginBottom: 16 },
+			mask: { display: 'none' },
+			content: { display: 'block', marginTop: 16 },
+			content$outline: { marginTop: 0, marginBottom: 0 },
+		}}
+	</Style>
 )
 export class Fieldset extends Component {
 	@StyleAttribute()
