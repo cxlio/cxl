@@ -2,7 +2,7 @@ import { Observable, from, map } from '../rx';
 import { basename, dirname, join, resolve } from 'path';
 import { colors } from './colors.js';
 import { exec } from 'child_process';
-import { promises as fs } from 'fs';
+import { readFileSync, promises as fs } from 'fs';
 
 require('source-map-support').install();
 
@@ -128,12 +128,39 @@ class ApplicationParameters {
 				process.exit(0);
 			},
 		},
+		{
+			name: 'config',
+			help: 'Use JSON config file',
+			shortcut: 'c',
+			handle(app: Application, fileName: string) {
+				app.parameters.parseJsonFile(fileName);
+			},
+		},
 	];
 
 	constructor(private app: Application) {}
 
 	register(...p: Parameter[]) {
 		this.parameters.push(...p);
+	}
+
+	parseJsonFile(fileName: string) {
+		try {
+			const json = JSON.parse(readFileSync(fileName, 'utf8'));
+			this.parseJson(json);
+		} catch (e) {
+			throw new Error(`Invalid configuration file "${fileName}"`);
+		}
+	}
+
+	parseJson(json: any) {
+		this.parameters.forEach(p => {
+			const paramName = p.name;
+			if (paramName in json) {
+				const optionValue = json[paramName];
+				(this.app as any)[paramName] = optionValue;
+			}
+		});
 	}
 
 	parse(args: string[]) {

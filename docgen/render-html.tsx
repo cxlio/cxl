@@ -17,7 +17,7 @@ import { relative } from 'path';
 import hljs from 'highlight.js';
 import { existsSync, readFileSync } from 'fs';
 import MarkdownIt from 'markdown-it';
-import { DocsJson, Section, escape, parseExample } from './render.js';
+import { Section, escape, parseExample } from './render.js';
 
 let application: DocGen;
 let index: Node[];
@@ -550,7 +550,7 @@ function ModuleBody(json: Node) {
 	);
 }
 
-function getHref(node: Node): string {
+export function getHref(node: Node): string {
 	if (
 		node.type &&
 		(node.kind === Kind.Reference || node.kind === Kind.Export)
@@ -744,13 +744,6 @@ function Markdown(content: string) {
 	return md.render(content);
 }
 
-function renderDocsJson() {
-	const json: DocsJson = JSON.parse(readFileSync('docs.json', 'utf8'));
-
-	if (json.extra) extraDocs = json.extra;
-	else extraDocs = [];
-}
-
 function Route(file: File) {
 	return `<template ${
 		file.name === 'index.html' ? 'data-default="true"' : ''
@@ -769,12 +762,11 @@ export function render(app: DocGen, output: Output): File[] {
 	application = app;
 	index = Object.values(output.index);
 	hljs.configure({ tabReplace: '    ' });
-
-	if (existsSync('docs.json')) renderDocsJson();
-	else
-		extraDocs = existsSync('README.md')
+	extraDocs =
+		app.extra ||
+		(existsSync('README.md')
 			? [{ items: [{ title: 'Home', file: 'README.md', index: true }] }]
-			: [];
+			: []);
 
 	extraFiles = extraDocs.flatMap(section =>
 		section.items.map(i => renderExtraFile(i.file, i.index))

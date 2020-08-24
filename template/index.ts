@@ -58,6 +58,14 @@ export function stopEvent<T extends Event>() {
 	return tap<T>((ev: T) => ev.stopPropagation());
 }
 
+export function show(el: HTMLElement) {
+	return tap<boolean>(val => (el.style.display = val ? '' : 'none'));
+}
+
+export function hide(el: HTMLElement) {
+	return tap<boolean>(val => (el.style.display = val ? 'none' : ''));
+}
+
 export function sync<T>(
 	getA: Observable<T>,
 	setA: (val: T) => void,
@@ -199,7 +207,7 @@ const sources: Sources<any> = {
 	get: (attr, pipe) => chain((_el, ctx) => getAttribute(ctx, attr), pipe),
 	onAction: pipe => chain(el => onAction(el), pipe),
 	on: (ev, pipe) => chain(el => on(el, ev), pipe),
-	call: (method, pipe) => chain((_e, ctx) => ctx.host[method](), pipe),
+	call: (method, pipe) => chain((_e, ctx) => ctx[method](), pipe),
 };
 
 export function tpl<HostT>(fn: (helper: Sources<HostT>) => Renderable<HostT>) {

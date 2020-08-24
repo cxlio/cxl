@@ -14,14 +14,7 @@ import {
 } from '../component/index.js';
 import { RenderContext, dom, normalizeChildren } from '../xdom/index.js';
 import { EMPTY, Observable, defer, merge, tap } from '../rx/index.js';
-import {
-	Style,
-	StyleSheet,
-	border,
-	padding,
-	pct,
-	theme,
-} from '../css/index.js';
+import { Style, StyleSheet, border, padding, pct } from '../css/index.js';
 import { getAttribute, stopEvent, triggerEvent } from '../template/index.js';
 import { on, onAction, remove, trigger } from '../dom/index.js';
 
@@ -444,7 +437,6 @@ const AVATAR_DEFAULT =
 					width: 40,
 					height: 40,
 					display: 'inline-block',
-					font: 'title',
 					lineHeight: 38,
 					textAlign: 'center',
 					overflowY: 'hidden',
@@ -526,7 +518,7 @@ export class Avatar extends Component {
 					color: 'onSecondary',
 					backgroundColor: 'secondary',
 				},
-				$little: { font: 'caption', lineHeight: 20, height: 20 },
+				$small: { font: 'caption', lineHeight: 20, height: 20 },
 				content: {
 					display: 'inline-block',
 					marginLeft: 12,
@@ -581,7 +573,7 @@ export class Chip extends Component {
 	@StyleAttribute()
 	secondary = false;
 	@StyleAttribute()
-	little = false;
+	small = false;
 
 	remove() {
 		remove(this);
@@ -719,30 +711,6 @@ export function Svg(p: {
 		return el;
 	};
 }
-
-theme.animation.spinnerstroke = {
-	keyframes: `
-0%      { stroke-dashoffset: $start;  transform: rotate(0); }
-12.5%   { stroke-dashoffset: $end;    transform: rotate(0); }
-12.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(72.5deg); }
-25%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(72.5deg); }
-25.0001%   { stroke-dashoffset: $start;  transform: rotate(270deg); }
-37.5%   { stroke-dashoffset: $end;    transform: rotate(270deg); }
-37.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(161.5deg); }
-50%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(161.5deg); }
-50.0001%  { stroke-dashoffset: $start;  transform: rotate(180deg); }
-62.5%   { stroke-dashoffset: $end;    transform: rotate(180deg); }
-62.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(251.5deg); }
-75%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(251.5deg); }
-75.0001%  { stroke-dashoffset: $start;  transform: rotate(90deg); }
-87.5%   { stroke-dashoffset: $end;    transform: rotate(90deg); }
-87.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(341.5deg); }
-100%    { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(341.5deg); }
-		`
-		.replace(/\$start/g, (282.743 * (1 - 0.05)).toString())
-		.replace(/\$end/g, (282.743 * (1 - 0.8)).toString()),
-	value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)',
-};
 
 /**
  * @example
@@ -1008,10 +976,6 @@ function Head(p: { children: any }) {
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="mobile-web-app-capable" content="yes" />
-		<link
-			rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
-		/>
 		<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}`}</style>
 	</Head>
 )

@@ -1,8 +1,9 @@
 import { Application, mkdirp, readJson, sh } from '../server';
-import { promises as fs } from 'fs';
+import { promises as fs, existsSync } from 'fs';
 import { join } from 'path';
 import { Node, build } from '../dts';
 import { render as renderJson } from './render-json';
+import type { Section } from './render';
 
 const RUNTIME_JS = __dirname + '/runtime.bundle.min.js';
 const STYLES_CSS = __dirname + '/styles.css';
@@ -24,6 +25,8 @@ export class DocGen extends Application {
 	spa = true;
 	tsconfig = 'tsconfig.json';
 	packageJson = 'package.json';
+	summary = false;
+	extra?: Section[];
 
 	setup() {
 		this.parameters.register(
@@ -36,14 +39,21 @@ export class DocGen extends Application {
 				type: 'string',
 			},
 			{
+				name: 'summary',
+				help: 'Render summary.json file',
+			},
+			{
 				name: 'tsconfig',
 				help:
 					'Location of tsconfig file to use. Defaults to ./tsconfig.json',
 				type: 'string',
 			},
+			{ name: 'extra', help: 'Extra documentation files' },
 			{ name: 'spa', help: 'Enable single page application mode' },
 			{ name: 'debug' }
 		);
+
+		if (existsSync('docs.json')) this.parameters.parseJsonFile('docs.json');
 	}
 
 	writeFile(file: File) {
@@ -83,6 +93,12 @@ export class DocGen extends Application {
 		const json = build(this.tsconfig);
 		const theme = await import('./render-html');
 		renderJson(this, json).map(f => this.writeFile(f));
+
+		if (this.summary) {
+			const summary = await import('./render-summary');
+			summary.render(this, json).map(f => this.writeFile(f));
+		}
+
 		await Promise.all(theme.render(this, json).map(f => this.writeFile(f)));
 		await this.writeFile({
 			name: 'styles.css',

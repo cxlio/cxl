@@ -3,31 +3,82 @@
 	The Following colors are used by the theme. Each of them are defined in a
 	variable prefixed by <code>--cxl-</code>
 </p>
-<br />
-<uid-palette></uid-palette>
-<br /><br />
-<cxl-t h4>States</cxl-t>
-<br />
-<uid-states></uid-states>
-<br /><br />
+<cxl-grid id="color-grid"></cxl-grid>
+
 <cxl-t h4>Typography</cxl-t>
-<br />
 <cxl-t
 	>The following <code>font-family</code> string is applied to all elements:
-	<docs-code &="=font:@source"></docs-code>
 	<p>
 		The <uid-link tag="cxl-t"></uid-link> component can be used to apply
 		styles to text. The <code>Roboto</code> font will not be automatically
 		included.
 	</p>
-	<br />
-	<uid-typography></uid-typography>
-	<br /><br />
+	<cxl-table id="typography-table">
+		<cxl-tr>
+			<cxl-th>Style Name</cxl-th>
+			<cxl-th>Weight</cxl-th>
+			<cxl-th>Size</cxl-th>
+			<cxl-th>Spacing</cxl-th>
+		</cxl-tr>
+	</cxl-table>
+
 	<cxl-t h4>Theme Variables</cxl-t>
 	<p>
 		The following CSS Variables can be modified to customize the look and
 		feel of the components in your application.
 	</p>
-	<br />
-	<uid-theme></uid-theme>
+	<cxl-table id="variables-table">
+		<cxl-tr>
+			<cxl-th>Variable</cxl-th>
+			<cxl-th>Value</cxl-th>
+		</cxl-tr>
+	</cxl-table>
 </cxl-t>
+
+<script>
+	(() => {
+		const variables = [];
+		const colorGrid = document.getElementById('color-grid');
+		const variablesTable = document.getElementById('variables-table');
+		const typographyTable = document.getElementById('typography-table');
+		const typography = document.createElement('cxl-t').constructor
+			.observedAttributes;
+
+		let colorsHtml = '';
+		let variablesHtml = variablesTable.innerHTML;
+
+		typographyTable.innerHTML += typography
+			.map(
+				t =>
+					`<cxl-tr><cxl-td><cxl-t ${t}>${t}</cxl-t></cxl-td>
+					<cxl-td></cxl-td>
+					</cxl-tr>`
+			)
+			.join('');
+
+		for (const styleSheet of document.styleSheets) {
+			try {
+				for (const cssRule of styleSheet.cssRules) {
+					if (cssRule.styleMap)
+						for (const [key, value] of cssRule.styleMap) {
+							if (key.indexOf && key.indexOf('--cxl-') === 0)
+								variables.push({
+									name: key,
+									value: value[0][0],
+								});
+						}
+				}
+			} catch (e) {}
+		}
+
+		variables.forEach(v => {
+			if (v.value.indexOf('rgba') === 0)
+				colorsHtml += `<cxl-c sm6 md4 xl3 flex><div style="height:72px;width:72px;background-color:var(${v.name})"></div><cxl-c pad16><cxl-t subtitle>${v.name}<cxl-t><cxl-t subtitle2>${v.value}</cxl-t></cxl-c></cxl-c>`;
+			else
+				variablesHtml += `<cxl-tr><cxl-td>${v.name}</cxl-td><cxl-td>${v.value}</cxl-td></cxl-tr>`;
+		});
+
+		colorGrid.innerHTML = colorsHtml;
+		variablesTable.innerHTML = variablesHtml;
+	})();
+</script>

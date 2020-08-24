@@ -1,0 +1,47 @@
+<cxl-t h3>Components</cxl-t>
+<cxl-input-chips id="input-chips"> </cxl-input-chips>
+
+<cxl-grid id="grid"> </cxl-grid>
+
+<script>
+	(() => {
+		const inputChips = document.getElementById('input-chips');
+		const grid = document.getElementById('grid');
+		const ComponentKind = 35;
+
+		function sortByName(a, b) {
+			return a.name > b.name ? 1 : -1;
+		}
+
+		function renderCard(node) {
+			const tagName = node.docs.tagName;
+			return `
+		<cxl-c sm4 md3><cxl-card><cxl-c pad16>
+			<cxl-t subtitle><cxl-a href="${node.href}">${node.name}</cxl-a></cxl-t>
+			<cxl-t subtitle2>&lt;${tagName}&gt;</cxl-t>
+		</cxl-c></cxl-card></cxl-c>
+			`;
+		}
+
+		function parseJson(res) {
+			let gridHtml = '';
+			let chipsHtml = '';
+
+			res.sort(sortByName).forEach(symbol => {
+				if (
+					symbol.kind === ComponentKind &&
+					symbol.docs &&
+					symbol.docs.tagName
+				) {
+					gridHtml += renderCard(symbol);
+				}
+			});
+
+			grid.innerHTML = gridHtml;
+		}
+
+		const summary = fetch('summary.json')
+			.then(res => res.json())
+			.then(parseJson);
+	})();
+</script>

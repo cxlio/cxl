@@ -577,7 +577,7 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
  *
  */
 export function catchError<T>(
-	selector: (err: any, source: Observable<T>) => Observable<T> | void
+	selector: (err: unknown, source: Observable<T>) => Observable<T> | void
 ) {
 	function subscribe(source: Observable<T>, subscriber: Subscriber<T>) {
 		const subscription = source.subscribe(
@@ -746,7 +746,7 @@ for (const p in operators) {
 
 export interface Observable<T> {
 	catchError<T2>(
-		selector: (err: any, source: Observable<T>) => Observable<T2> | void
+		selector: (err: unknown, source: Observable<T>) => Observable<T2> | void
 	): Observable<T2>;
 	debounceTime(time?: number): Observable<T>;
 	defer(fn: () => Observable<T> | void): Observable<T>;

@@ -174,6 +174,7 @@ export class C extends Component {
 						marginRight: 'auto',
 					},
 				},
+				$full: { width: 'auto' },
 			}}
 		</Style>
 		<slot />
@@ -182,6 +183,9 @@ export class C extends Component {
 export class Content extends Component {
 	@StyleAttribute()
 	center = false;
+
+	@StyleAttribute()
+	full = false;
 }
 
 @Augment(

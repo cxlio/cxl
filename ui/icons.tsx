@@ -6,8 +6,9 @@ import {
 	Attribute,
 	role,
 } from '../component/index.js';
-import { Style, registerFont, theme } from '../css/index.js';
+import { Style, registerFont } from '../css/index.js';
 import { getShadow } from '../dom/index.js';
+import { defaultTheme } from './theme.js';
 
 const icons = {
 	ad: '\uf641',
@@ -987,7 +988,13 @@ registerFont({
 	weight: '900',
 });
 
-theme.typography['icon'] = {
+declare module '../css/index.js' {
+	interface Typography {
+		icon?: CSSStyle;
+	}
+}
+
+defaultTheme.typography['icon'] = {
 	fontFamily: 'Font Awesome\\ 5 Free',
 	fontSize: 'inherit',
 };

@@ -91,7 +91,7 @@ export function routerStrategy(
 ) {
 	return merge(
 		defer(() => strategy$.next(strategy)),
-		getUrl.tap(() => router.go(strategy.deserialize())).catchError(o => o),
+		getUrl.tap(() => router.go(strategy.deserialize())),
 		router$.tap(state => strategy.serialize(state.url))
 	);
 }
@@ -268,18 +268,21 @@ export class RouterOutlet extends Component {}
 			});
 		}
 
-		return merge(
-			onChildrenMutation(host).tap(ev => {
-				if (ev.type === 'added' && ev.value.tagName === 'TEMPLATE')
-					register(ev.value);
-			}),
-			onReady().switchMap(() =>
+		return onReady().switchMap(() => {
+			for (const child of host.children)
+				if (child.tagName === 'TEMPLATE') register(child as any);
+
+			return merge(
+				onChildrenMutation(host).tap(ev => {
+					if (ev.type === 'added' && ev.value.tagName === 'TEMPLATE')
+						register(ev.value);
+				}),
 				get(host, 'strategy').switchMap(strategyName => {
 					const strategy = Strategies[strategyName];
 					return routerStrategy(onLocation(), strategy);
 				})
-			)
-		);
+			);
+		});
 	})
 )
 export class RouterComponent extends Component {

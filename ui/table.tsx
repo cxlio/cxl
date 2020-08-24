@@ -50,7 +50,6 @@ function onSort(el: HTMLElement, host: Th) {
 				$: {
 					display: 'table-cell',
 					flexGrow: 1,
-					font: 'body',
 					color: 'headerText',
 					paddingTop: 12,
 					paddingBottom: 12,

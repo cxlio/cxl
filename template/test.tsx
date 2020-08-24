@@ -69,7 +69,7 @@ export default suite('template', test => {
 		const id = 'cxl-test' + a.id;
 
 		connect<HTMLDivElement>(<div $={portal(id)} />, el => {
-			teleport(render(<span>Hello</span>).element, id)
+			teleport(render(<span>Hello</span>).element as HTMLSpanElement, id)
 				.subscribe()
 				.unsubscribe();
 			a.ok(el);

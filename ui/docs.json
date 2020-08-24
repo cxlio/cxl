@@ -1,4 +1,5 @@
 {
+	"summary": true,
 	"extra": [
 		{
 			"items": [
@@ -19,17 +20,22 @@
 			"title": "Guides",
 			"items": [
 				{
+					"title": "Components",
+					"icon": "cubes",
+					"file": "docs/components.html"
+				},
+				{
 					"title": "Forms",
 					"icon": "window-restore",
 					"file": "docs/forms.html"
-				}
-			],
-			"other": [
+				},
 				{
 					"title": "Styles",
 					"icon": "palette",
 					"file": "docs/styles.html"
-				},
+				}
+			],
+			"other": [
 				{
 					"title": "Layout",
 					"icon": "drafting-compass",

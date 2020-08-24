@@ -9,12 +9,6 @@
 -   Framework Agnostic
 -   Flexible Theming
 
-## Quick Start
-
-```html
-<script src=""></script>
-```
-
 ## Browser Support
 
 -   Chrome 49+
@@ -23,42 +17,32 @@
 -   iOS Webkit 10.3+
 -   Edge 17+
 
-## Example Code
+## Usage
+
+@cxl/ui does not depend on any third party framework or library. All components work in isolation.
+
+### Quick Start
+
+This is all you need to get started. This example uses the CDN version of the library. We recommend installing the npm package if you need more customization options.
 
 ```html
-<cxl-field>
-	<cxl-label>Password</cxl-label>
-	<cxl-password></cxl-password>
-</cxl-field>
-<cxl-field>
-	<cxl-label>Datepicker</cxl-label>
-	<cxl-datepicker></cxl-datepicker>
-</cxl-field>
-<cxl-field floating>
-	<cxl-label>Select Box</cxl-label>
-	<cxl-select>
-		<cxl-option value="1">Value 1</cxl-option>
-		<cxl-option value="2">Value 2</cxl-option>
-	</cxl-select>
-</cxl-field>
-<cxl-checkbox name="checkbox">Checkbox</cxl-checkbox>
-<cxl-fieldset>
-	<cxl-radio invalid name="form-radio">Radio Option 1</cxl-radio>
-	<cxl-radio invalid name="form-radio">Radio Option 2</cxl-radio>
-	<cxl-radio invalid name="form-radio">Radio Option 3</cxl-radio>
-</cxl-fieldset>
-<cxl-switch>Turn On</cxl-switch>
-<cxl-slider></cxl-slider>
-<cxl-field>
-	<cxl-label>Enter Comment</cxl-label>
-	<cxl-textarea></cxl-textarea>
-</cxl-field>
-<cxl-field>
-	<cxl-label>Multiselect</cxl-label>
-	<cxl-multiselect>
-		<cxl-option>Option 1</cxl-option>
-		<cxl-option>Option 2</cxl-option>
-		<cxl-option>Option 3</cxl-option>
-	</cxl-multiselect>
-</cxl-field>
+<!DOCTYPE html>
+<script src="https://coaxialhost.com/ui/bundle.min.js"></script>
+<cxl-application>
+	<cxl-navbar><cxl-item>Home</cxl-item></cxl-navbar>
+	<cxl-appbar>Your Application Title</cxl-appbar>
+	<cxl-content>
+		<cxl-t h1>Hello World</cxl-t>
+	</cxl-content>
+</cxl-application>
 ```
+
+### In-Depth Guides
+
+-   Forms
+-   Themes and Styling
+
+### Support
+
+-   Report any bugs or issues in our Github Issues page.
+-   Follow our twitter account for news and updates.

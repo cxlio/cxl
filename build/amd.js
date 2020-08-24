@@ -4,7 +4,6 @@ window.define =
 		define.amd = true;
 
 		function _require(path, resolve, reject) {
-			console.log(path, define.modules);
 			if (Array.isArray(path)) {
 				path = path[0];
 				return Promise.resolve()
@@ -29,8 +28,6 @@ window.define =
 			});
 		const moduleExports = (name && modules[name]) || {};
 		if (name) modules[name] = moduleExports;
-		/*const globalExports =
-				typeof exports === 'undefined' ? moduleExports : exports;*/
 
 		function findModule(name) {
 			if (name === 'exports') return moduleExports;

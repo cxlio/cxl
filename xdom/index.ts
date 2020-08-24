@@ -9,7 +9,7 @@ declare global {
 		interface ElementChildrenAttribute {
 			children: {};
 		}
-		type Element = JSXElement;
+		// type Element = JSXElement;
 		type IntrinsicElements = {
 			[P in keyof HTMLElementTagNameMap]: AttributeType<
 				HTMLElementTagNameMap[P]
@@ -20,7 +20,7 @@ declare global {
 
 export type AttributeType<T> =
 	| {
-			[K in keyof T]?: T[K] | Observable<T[K]> | Binding<T>;
+			[K in keyof T]?: T[K] | Observable<T[K]> | Binding<T, any, T[K]>;
 	  }
 	| {
 			$?: Binding<T>;

@@ -13,14 +13,9 @@ import {
 } from '../component/index.js';
 import { on, onAction, onLoad, trigger } from '../dom/index.js';
 import { portal, triggerEvent } from '../template/index.js';
-import {
-	InversePrimary,
-	ResetSurface,
-	Style,
-	padding,
-	rgba,
-} from '../css/index.js';
+import { Style, padding, rgba } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
+import { InversePrimary, ResetSurface } from './theme.js';
 import { IconButton, Svg, aria, ripple } from './core.js';
 import { Drawer } from './dialog.js';
 
@@ -60,7 +55,6 @@ import { Drawer } from './dialog.js';
 					...InversePrimary,
 					backgroundColor: 'surface',
 					flexShrink: 0,
-					font: 'title',
 					color: 'onSurface',
 					elevation: 2,
 					height: 56,

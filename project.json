@@ -23,7 +23,7 @@
 				"tasks": "npm run build --prefix db"
 			},
 			"docgen": {
-				"files": ["docgen/*.tsx"],
+				"files": ["docgen/*.tsx", "docgen/*.ts"],
 				"tasks": "cd docgen && npm run build"
 			},
 			"dom": {
