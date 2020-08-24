@@ -1,15 +1,15 @@
 type StyleDefinition = Partial<StrictStyleDefinition>;
-type CSSStyle = {
+type BaseColor = RGBA;
+
+export type CSSStyle = {
 	[P in keyof CSSStyleDeclaration]?: string | number;
 };
-type BaseColor = RGBA;
 export type Color = keyof Colors | BaseColor | 'inherit' | 'transparent';
 export type Percentage = '50%' | '100%' | CustomPercentage;
 export type Length = number | Percentage | 'auto';
 
-interface Typography {
+export interface Typography {
 	default: CSSStyle;
-	[name: string]: CSSStyle;
 }
 
 export interface Variables {
@@ -152,12 +152,12 @@ export interface Breakpoints {
 	xlarge: number;
 }
 
-interface AnimationDefinition {
+export interface AnimationDefinition {
 	keyframes: string;
 	value: string;
 }
 
-interface Animation {
+export interface Animation {
 	[name: string]: AnimationDefinition;
 }
 
@@ -168,6 +168,7 @@ export interface Theme {
 	variables: Variables;
 	breakpoints: Breakpoints;
 	globalStyles: Styles;
+	imports?: string[];
 }
 
 const PSEUDO = {
@@ -201,7 +202,7 @@ export function pct(n: number) {
 	return new CustomPercentage(n);
 }
 
-class RGBA {
+export class RGBA {
 	r: number;
 	g: number;
 	b: number;
@@ -261,186 +262,12 @@ class RGBA {
 	}
 }
 
-export function rgba(r: number, g: number, b: number, a?: number) {
-	return new RGBA(r, g, b, a);
-}
-
 const SNAKE_CSS: Record<string, string> = {
 		webkitOverflowScrolling: '-webkit-overflow-scrolling',
 	},
 	SNAKE_REGEX = /[A-Z]/g;
 
-export const theme: Theme = {
-	animation: {
-		spin: {
-			keyframes:
-				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-spin 2s infinite linear',
-		},
-		pulse: {
-			keyframes:
-				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-pulse 1s infinite steps(8)',
-		},
-		expand: {
-			keyframes:
-				'0% { transform: scale(0,0); } 100% { transform: scale(1,1); }',
-			value: 'cxl-expand var(--cxl-speed) 1 ease-in',
-		},
-		fadeIn: {
-			keyframes:
-				'0% { display: block; opacity: 0; } 100% { opacity: 1; }',
-			value: 'cxl-fadeIn var(--cxl-speed) linear forwards',
-		},
-		fadeOut: {
-			keyframes:
-				'0% { opacity: 1 } 100% { visibility:hidden; opacity: 0; }',
-			value: 'cxl-fadeOut var(--cxl-speed) linear both',
-		},
-		wait: {
-			keyframes: `
-0% { transform: translateX(0) scaleX(0) }
-33% { transform: translateX(0) scaleX(0.75)}
-66% { transform: translateX(75%) scaleX(0.25)}
-100%{ transform:translateX(100%) scaleX(0) }
-			`,
-			value: 'cxl-wait 1s infinite linear',
-		},
-	},
-	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
-	variables: {
-		// Animation speed
-		speed: '0.3s',
-		font: 'Roboto, sans-serif',
-		fontSize: '16px',
-		fontMonospace: 'monospace',
-	},
-	typography: {
-		default: {
-			fontWeight: 400,
-			fontFamily: 'var(--cxl-font)',
-			fontSize: 'var(--cxl-font-size)',
-			letterSpacing: 'normal',
-		},
-		caption: { fontSize: '12px', letterSpacing: '0.4px' },
-		h1: { fontWeight: 300, fontSize: '96px', letterSpacing: '-1.5px' },
-		h2: { fontWeight: 300, fontSize: '60px', letterSpacing: '-0.5px' },
-		h3: { fontSize: '48px' },
-		h4: { fontSize: '34px', letterSpacing: '0.25px' },
-		h5: { fontSize: '24px' },
-		h6: { fontSize: '20px', fontWeight: 400, letterSpacing: '0.15px' },
-		body2: { fontSize: '14px' },
-		subtitle: {
-			fontSize: '16px',
-			lineHeight: 1.375,
-			letterSpacing: '0.15px',
-		},
-		subtitle2: {
-			fontSize: '14px',
-			lineHeight: '18px',
-			letterSpacing: '0.1px',
-		},
-		button: {
-			fontSize: '14px',
-			fontWeight: 500,
-			lineHeight: '20px',
-			letterSpacing: '1.25px',
-			textTransform: 'uppercase',
-		},
-		code: { fontFamily: 'var(--cxl-font-monospace)' },
-		monospace: { fontFamily: 'var(--cxl-font-monospace)' },
-	},
-	colors: {
-		elevation: rgba(0, 0, 0, 0.26),
-		primary: rgba(0x15, 0x65, 0xc0),
-		// 0.14 opacity will pass accessibility contrast requirements
-		get primaryLight() {
-			return this.primary.alpha(0.14);
-		},
-
-		secondary: rgba(0xf9, 0xaa, 0x33),
-		surface: rgba(0xff, 0xff, 0xff),
-		error: rgba(0xb0, 0x00, 0x20),
-		get errorLight() {
-			return this.error.alpha(0.14);
-		},
-
-		onPrimary: rgba(0xff, 0xff, 0xff),
-		get onPrimaryLight() {
-			return this.primary;
-		},
-		onSecondary: rgba(0, 0, 0),
-		onSurface: rgba(0, 0, 0),
-
-		get onSurface8() {
-			return this.onSurface.alpha(0.08);
-		},
-		get onSurface12() {
-			return this.onSurface.alpha(0.12);
-		},
-		get onSurface87() {
-			return this.onSurface.alpha(0.87);
-		},
-		onError: rgba(0xff, 0xff, 0xff),
-
-		get background() {
-			return this.surface;
-		},
-		get link() {
-			return this.primary;
-		},
-		get headerText() {
-			return this.onSurface.alpha(0.6);
-		},
-		get divider() {
-			return this.onSurface.alpha(0.16);
-		},
-	},
-
-	globalStyles: {
-		'*': {
-			boxSizing: 'border-box',
-			transition:
-				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)',
-		} as any,
-	},
-};
-
-export const ResetSurface = {
-	variables: {
-		surface: theme.colors.surface,
-		onSurface: theme.colors.onSurface,
-		primary: theme.colors.primary,
-		onPrimary: theme.colors.onPrimary,
-		link: theme.colors.onSurface,
-		error: theme.colors.error,
-		onError: theme.colors.onError,
-	},
-};
-
-export const InversePrimary = {
-	variables: {
-		surface: theme.colors.primary,
-		onSurface: theme.colors.onPrimary,
-		primary: theme.colors.surface,
-		onPrimary: theme.colors.onSurface,
-		link: theme.colors.onPrimary,
-		error: rgba(0xff, 0x6e, 0x40),
-		onError: rgba(0, 0, 0),
-	},
-};
-
-export const DarkColors: Partial<Colors> = {
-	background: rgba(0x12, 0x12, 0x12),
-	surface: rgba(0x12, 0x12, 0x12),
-	onSurface: rgba(0xff, 0xff, 0xff),
-	error: rgba(0xcf, 0x66, 0x79),
-	onError: rgba(0, 0, 0),
-	primary: rgba(0xbb, 0x86, 0xfc),
-	secondary: rgba(0x03, 0xda, 0xc6),
-	onPrimary: rgba(0, 0, 0),
-	onSecondary: rgba(0, 0, 0),
-};
+let theme: Theme;
 
 type StyleMap = {
 	[key: string]: (
@@ -610,10 +437,14 @@ function parseRuleName(selector: string, name: string) {
 
 const rootStyles = document.createElement('STYLE');
 
-export function applyTheme() {
-	const { variables, colors } = theme;
+export function setTheme(newTheme: Theme) {
+	const { variables, colors, imports } = newTheme;
 
-	let result = ':root{background-color:var(--cxl-background);';
+	let result = '';
+	if (imports) imports.forEach(imp => (result += `@import url("${imp}");`));
+
+	result += ':root{background-color:var(--cxl-background);';
+
 	for (const i in colors)
 		result += `--cxl-${toSnake(i)}:${(colors as any)[i]};`;
 	for (const i in variables)
@@ -621,6 +452,7 @@ export function applyTheme() {
 
 	rootStyles.innerHTML = result + '}';
 	document.head.appendChild(rootStyles);
+	theme = newTheme;
 }
 
 function renderStyles(styles: Styles, selector = 'body') {
@@ -698,8 +530,11 @@ export class StyleSheet {
 }
 
 export function css(styles: Styles, global = false) {
-	const stylesheet = new StyleSheet({ styles, global });
-	return () => stylesheet.clone();
+	let stylesheet: StyleSheet;
+	return () => {
+		if (!stylesheet) stylesheet = new StyleSheet({ styles, global });
+		return stylesheet.clone();
+	};
 }
 
 export interface FontDefinition {
@@ -721,8 +556,7 @@ export function registerFont(def: FontDefinition) {
 }
 
 export function Style(p: { children: Styles }) {
-	const ss = new StyleSheet({ styles: p.children });
-	return ss.clone.bind(ss);
+	return css(p.children);
 }
 
 export function padding(
@@ -752,4 +586,6 @@ export function border(
 	return { borderTop, borderRight, borderBottom, borderLeft };
 }
 
-applyTheme();
+export function rgba(r: number, g: number, b: number, a?: number) {
+	return new RGBA(r, g, b, a);
+}
