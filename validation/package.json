@@ -1,0 +1,11 @@
+{
+	"name": "@cxl/validation",
+	"version": "0.0.1",
+	"description": "Input validation library",
+	"license": "Apache-2.0",
+	"private": true,
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "node ../dist/build && cd ../dist/validation && node ../tester"
+	}
+}

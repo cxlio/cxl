@@ -1,0 +1,8 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/validation"
+	},
+	"files": ["index.tsx"],
+	"references": [{ "path": "../rx" }]
+}
