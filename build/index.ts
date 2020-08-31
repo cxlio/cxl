@@ -117,7 +117,17 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 		{
 			target: 'docs',
 			outputDir: '.',
-			tasks: [docs(dirName), readme()],
+			tasks: [readme()],
+		},
+		{
+			target: 'docs-dev',
+			outputDir: '.',
+			tasks: [readme()],
+		},
+		{
+			target: 'docs',
+			outputDir: '.',
+			tasks: [docs(dirName)],
 		},
 		{
 			target: 'docs-dev',

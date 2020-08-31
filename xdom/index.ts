@@ -36,10 +36,6 @@ type ComponentFunction = (
 	children?: JSXElement[]
 ) => JSXElement;
 
-interface ComponentType {
-	create(): HTMLElement;
-}
-
 interface Component {
 	jsxAttributes?: any;
 }
@@ -205,8 +201,13 @@ export function dom<T extends keyof HTMLElementTagNameMap>(
 	...children: JSXElement[]
 ): JSXElement<HTMLElementTagNameMap[T]>;
 export function dom<T extends Component>(
-	elementType: ComponentType,
+	elementType: new () => T,
 	attributes?: T['jsxAttributes'],
+	...children: JSXElement[]
+): JSXElement<T>;
+export function dom<T>(
+	elementType: { create(): T },
+	attributes?: any,
 	...children: JSXElement[]
 ): JSXElement<T>;
 export function dom<T, T2>(
@@ -242,7 +243,10 @@ export class View<T> {
 	}
 }
 
-export function render<T>(tpl: JSXElement<T>, host?: RenderContext) {
+export function render<T extends Element>(
+	tpl: JSXElement<T>,
+	host?: RenderContext
+) {
 	const bindings: Observable<any>[] = [];
 	const ctx = host || (document.createElement('div') as any);
 	ctx.bind = (b: Observable<any>) => {
@@ -250,7 +254,7 @@ export function render<T>(tpl: JSXElement<T>, host?: RenderContext) {
 	};
 	const element = tpl(ctx);
 
-	return new View(element, bindings);
+	return new View<T>(element, bindings);
 }
 
 export function connect<T extends HTMLElement>(

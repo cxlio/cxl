@@ -25,6 +25,7 @@
 		"../ui/dialog.tsx",
 		"../ui/navigation.tsx",
 		"../ui/table.tsx",
+		"../ui/theme.tsx",
 		"../ui/router.tsx"
 	],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]

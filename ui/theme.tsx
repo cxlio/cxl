@@ -103,15 +103,14 @@ export const defaultTheme: Theme = {
 		h3: { fontSize: '48px' },
 		h4: { fontSize: '34px', letterSpacing: '0.25px' },
 		h5: { fontSize: '24px' },
-		h6: { fontSize: '20px', fontWeight: 400, letterSpacing: '0.15px' },
+		h6: { fontSize: '20px', fontWeight: 500, letterSpacing: '0.15px' },
 		subtitle: {
 			fontSize: '16px',
-			lineHeight: 1.375,
 			letterSpacing: '0.15px',
 		},
 		subtitle2: {
 			fontSize: '14px',
-			lineHeight: '18px',
+			fontWeight: 500,
 			letterSpacing: '0.1px',
 		},
 		button: {

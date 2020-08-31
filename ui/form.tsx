@@ -39,7 +39,7 @@ import {
 	setAttribute,
 } from '../dom/index.js';
 import { Style, border, boxShadow, padding } from '../css/index.js';
-import { EMPTY, Observable, be, defer, merge, of, tap } from '../rx/index.js';
+import { EMPTY, Observable, be, defer, merge, tap } from '../rx/index.js';
 import { dragInside } from '../drag/index.js';
 
 const FocusCircleStyle = (
@@ -91,11 +91,20 @@ const Undefined = {};
 			get(host, 'disabled').tap(val =>
 				host.setAttribute('aria-disabled', val ? 'true' : 'false')
 			),
+			get(host, 'value').tap(val =>
+				(host as any).internals?.setFormValue(val)
+			),
+			get(host, 'invalid').tap(val => {
+				if (val && !host.validationMessage)
+					host.setCustomValidity('Invalid value');
+			}),
 			attributeChanged(host, 'value').pipe(triggerEvent(host, 'change'))
 		)
 	)
 )
 export class InputBase extends Component {
+	static formAssociated = true;
+
 	@Attribute()
 	value: any;
 	@StyleAttribute()
@@ -107,7 +116,29 @@ export class InputBase extends Component {
 	@Attribute()
 	name?: string;
 
-	readonly validationMessage = '';
+	private internals: any;
+
+	constructor() {
+		super();
+		this.internals = (this as any).attachInternals?.();
+	}
+
+	protected formDisabledCallback(disabled: boolean) {
+		this.disabled = disabled;
+	}
+
+	get validationMessage(): string {
+		return this.internals?.validationMessage || '';
+	}
+
+	get validity(): ValidityState {
+		return this.internals?.validity || null;
+	}
+
+	setCustomValidity(msg: string) {
+		const invalid = (this.invalid = !!msg);
+		this.internals?.setValidity({ customError: invalid }, msg);
+	}
 
 	/**
 	 * Used by element that do not directly receive focus. ie Input, Textarea
@@ -464,17 +495,6 @@ const FieldBase = (
 	</Host>
 );
 
-/*function connectable<T>(
-	host: Component,
-	parentTypeof: new () => T
-) {
-	return defer<T>(() =>
-		host.parentElement instanceof parentTypeof
-			? of(host.parentElement)
-			: EMPTY
-	);
-}*/
-
 function fieldInput(host: Component) {
 	return defer(() =>
 		host.parentNode instanceof Field
@@ -544,7 +564,7 @@ export class Label extends Component {}
 			invalidMessage$invalid: { display: 'block' },
 			$inputdisabled: {
 				filter: 'saturate(0)',
-				opacity: 0.48,
+				opacity: 0.6,
 				pointerEvents: 'none',
 			},
 		}}
@@ -576,7 +596,7 @@ export class Label extends Component {}
 
 		function onChange() {
 			const value = host.input?.value;
-			host.novalue = !value;
+			host.novalue = !value || value.length === 0;
 		}
 
 		const hostBindings = merge(
@@ -958,7 +978,7 @@ export class FieldTextArea extends InputBase {
 					paddingBottom: 14,
 				},
 				box: {
-					display: 'inline-block',
+					display: 'none',
 					width: 20,
 					height: 20,
 					borderWidth: 2,
@@ -968,14 +988,14 @@ export class FieldTextArea extends InputBase {
 					borderStyle: 'solid',
 					color: 'transparent',
 				},
+				box$multiple: { display: 'inline-block' },
 				box$selected: {
 					borderColor: 'primary',
 					backgroundColor: 'primary',
 					color: 'onPrimary',
 				},
-				checkbox: { marginBottom: 0, marginRight: 8 },
 				content: { flexGrow: 1 },
-				$selected: {
+				$focused: {
 					backgroundColor: 'primaryLight',
 					color: 'onPrimaryLight',
 				},
@@ -985,6 +1005,13 @@ export class FieldTextArea extends InputBase {
 				},
 			}}
 		</Style>
+		<div className="box">
+			<span className="focusCircle focusCirclePrimary" />
+			<Svg
+				className="check"
+				viewBox="0 0 24 24"
+			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
+		</div>
 		<div className="content">
 			<slot />
 		</div>
@@ -1002,6 +1029,9 @@ export class Option extends Component {
 
 	@StyleAttribute()
 	inactive = false;
+
+	@StyleAttribute()
+	multiple = false;
 }
 
 /**
@@ -1158,114 +1188,41 @@ export class Radio extends InputBase {
 	<Style>
 		{{
 			$: {
-				display: 'none',
 				position: 'absolute',
+				opacity: 0,
 				elevation: 0,
 				right: -16,
 				left: -16,
 				overflowY: 'hidden',
 				transformOrigin: 'top',
-			},
-			$inline: {
-				position: 'static',
-				marginLeft: -16,
-				marginRight: -16,
+				pointerEvents: 'none',
 			},
 			$visible: {
 				elevation: 3,
+				opacity: 1,
 				overflowY: 'auto',
 				backgroundColor: 'surface',
+				pointerEvents: 'auto',
 			},
 		}}
 	</Style>,
-	<slot />,
-	bind(host =>
-		merge(
-			get(host, 'visible'),
-			get(host, 'selected'),
-			get(host, 'host')
-		).raf(() => {
-			if (!host.host) return;
-			const option = host.selected;
-			const rect = host.host.getBoundingClientRect();
-			const minTop = 56;
-			const maxTop = rect.top - minTop;
-
-			let height: number;
-			let scrollTop = 0;
-			let marginTop = option ? option.offsetTop : 0;
-
-			if (marginTop > maxTop) {
-				scrollTop = marginTop - maxTop;
-				marginTop = maxTop;
-			}
-
-			height = host.scrollHeight - scrollTop;
-			const maxHeight = window.innerHeight - rect.bottom + marginTop;
-
-			if (height > maxHeight) height = maxHeight;
-			else if (height < minTop) height = minTop;
-
-			const style = host.style;
-
-			style.transform = 'translateY(' + (-marginTop - 13) + 'px)';
-			style.height = height + 'px';
-			style.display = 'block';
-			host.scrollTop = scrollTop;
-		})
-	)
+	<slot />
 )
 export class SelectMenu extends Component {
 	@StyleAttribute()
 	visible = false;
-
-	@Attribute()
-	host?: Component;
-
-	@Attribute()
-	selected?: Option;
-
-	@StyleAttribute()
-	inline = false;
 }
 
-/**
- * @example
- * <cxl-field>
- *   <cxl-label>Select Box</cxl-label>
- *   <cxl-select>
- *     <cxl-option>Option 1</cxl-option>
- *     <cxl-option selected>Option 2</cxl-option>
- *     <cxl-option>Option 3</cxl-option>
- *   </cxl-select>
- * </cxl-field>
- */
-@Augment<SelectBox>(
-	'cxl-select',
+@Augment(
 	role('listbox'),
 	tpl(_ => {
-		function setSelected(el: SelectBox, selected: Option) {
-			if (el.selected) el.selected.selected = false;
-			if (selected) selected.selected = true;
-			el.selected = selected;
-			el.value = selected.value;
-		}
-
 		return (
 			<Host
-				$={(el: SelectBox) =>
+				$={(el: SelectBase) =>
 					merge(
 						focusable(el),
-						navigationList(
-							el,
-							'cxl-option:not([disabled])'
-						).tap(selected => setSelected(el, selected as Option)),
-						selectableHost(el).tap(selected => {
-							setSelected(el, selected as Option);
-							el.close();
-						}),
-						onAction(el).tap(() =>
-							el.opened ? el.close() : el.open()
+						registableHost<Option>(el, 'selectable').tap(options =>
+							el.setOptions(options)
 						),
 						on(el, 'blur').tap(() => el.close()),
 						onKeypress(el, 'escape').tap(() => el.close())
@@ -1275,7 +1232,7 @@ export class SelectMenu extends Component {
 				<Style>
 					{{
 						$: {
-							display: 'block',
+							display: 'inline-block',
 							cursor: 'pointer',
 							overflowY: 'hidden',
 							overflowX: 'hidden',
@@ -1293,47 +1250,123 @@ export class SelectMenu extends Component {
 							width: 20,
 							height: 20,
 						},
-						placeholder: {
-							color: 'onSurface',
-							lineHeight: 20,
-							paddingRight: 16,
-							paddingLeft: 16,
-							paddingTop: 14,
-							paddingBottom: 14,
-							position: 'absolute',
-							left: -16,
-							top: -11,
-							right: 0,
-							height: 48,
-						},
-						placeholder$opened: { display: 'none' },
 						$opened: { overflowY: 'visible', overflowX: 'visible' },
 						$disabled: { pointerEvents: 'none' },
+						placeholder: {
+							color: 'onSurface',
+							font: 'default',
+							marginRight: 12,
+						},
 					}}
 				</Style>
-				<SelectMenu
-					visible={(_el, host) => get(host, 'opened')}
-					host={(_el, host) => of(host)}
-					selected={(_el, host) => get(host, 'selected')}
-					className="selectMenu"
-				>
-					<slot />
-				</SelectMenu>
 				<Svg className="caret" viewBox="0 0 24 24">
 					{'<path d="M7 10l5 5 5-5z"></path>'}
 				</Svg>
-				<div className="placeholder"></div>
-				<div className="selectedText"></div>
 			</Host>
 		);
 	})
 )
-export class SelectBox extends InputBase {
+abstract class SelectBase extends InputBase {
 	@StyleAttribute()
 	opened = false;
 
 	@Attribute()
+	readonly options?: Set<Option>;
+
+	protected setOptions(options: Set<Option>) {
+		(this as any).options = options;
+	}
+
+	protected abstract setSelected(option: Option): void;
+	abstract open(): void;
+	abstract close(): void;
+}
+
+/**
+ * A form input component that allows the user to select a single option from a list
+ *
+ * @example
+ * <cxl-field>
+ *   <cxl-label>Select Box</cxl-label>
+ *   <cxl-select>
+ *     <cxl-option>Option 1</cxl-option>
+ *     <cxl-option selected>Option 2</cxl-option>
+ *     <cxl-option>Option 3</cxl-option>
+ *   </cxl-select>
+ * </cxl-field>
+ *
+ * @see MultiSelect
+ */
+@Augment<SelectBox>(
+	'cxl-select',
+	bind(host =>
+		merge(
+			navigationList(
+				host,
+				'cxl-option:not([disabled])',
+				'cxl-option:not([disabled])[selected]'
+			).tap(selected => host.setSelected(selected as Option)),
+			selectableHost(host).tap(selected =>
+				host.setSelected(selected as Option)
+			),
+			onAction(host).tap(() => !host.opened && host.open())
+		)
+	),
+	<SelectMenu
+		$={(el, host) =>
+			merge(get(host, 'opened'), get(host, 'selected')).raf(() =>
+				host.positionMenu(el)
+			)
+		}
+		visible={(_el, host) => get(host, 'opened')}
+	>
+		<slot />
+	</SelectMenu>,
+	render(host => <div className="placeholder">{host.selectedText$}</div>)
+)
+export class SelectBox extends SelectBase {
+	@Attribute()
 	selected?: Option;
+
+	protected selectedText$ = be('');
+
+	protected positionMenu(menu: SelectMenu) {
+		const option = this.selected;
+		const rect = this.getBoundingClientRect();
+		const menuTopPadding = 13;
+		const maxTranslateY = rect.top;
+
+		let height: number;
+		let scrollTop = 0;
+		let translateY = option ? option.offsetTop : 0;
+
+		if (translateY > maxTranslateY) {
+			scrollTop = translateY - menuTopPadding;
+			translateY = maxTranslateY;
+		}
+
+		height = menu.scrollHeight - scrollTop;
+		const maxHeight = window.innerHeight - rect.bottom + translateY;
+
+		if (height > maxHeight) height = maxHeight;
+		else if (height < rect.height) height = rect.height;
+
+		const style = menu.style;
+		style.transform =
+			'translateY(' + (-translateY - menuTopPadding) + 'px)';
+		style.height = height + 'px';
+		menu.scrollTop = scrollTop;
+	}
+
+	protected setSelected(option: Option) {
+		if (this.selected)
+			this.selected.selected = this.selected.focused = false;
+		option.selected = option.focused = true;
+		this.selected = option;
+		this.selectedText$.next(option.textContent || '');
+		this.value = option.value;
+		this.close();
+	}
 
 	open() {
 		if (this.disabled || this.opened) return;
@@ -1349,17 +1382,116 @@ export class SelectBox extends InputBase {
 
 /**
  * @example
- * <cxl-field floating>
+ * <cxl-field>
  *   <cxl-label>Multi Select Box with label</cxl-label>
- *   <cxl-multiselect>
- *     <cxl-option value="1">Option 1</cxl-option>
- *     <cxl-option value="2">Option 2</cxl-option>
+ *   <cxl-multiselect placeholder="(Select an Option)">
+ *     <cxl-option selected value="1">Option 1</cxl-option>
+ *     <cxl-option selected value="2">Option 2</cxl-option>
  *     <cxl-option value="3">Option 3</cxl-option>
  *   </cxl-multiselect>
  * </cxl-field>
  */
-@Augment('cxl-multiselect')
-export class MultiSelect extends SelectBox {}
+@Augment<MultiSelect>(
+	'cxl-multiselect',
+	<Host>
+		<Style>
+			{{
+				menu: { left: -12, right: -12, top: 26, height: 0 },
+				menu$opened: { height: 'auto' },
+			}}
+		</Style>
+		<SelectMenu
+			$={(el, host) =>
+				get(host, 'opened').raf(() => host.positionMenu(el))
+			}
+			className="menu"
+			visible={(_el, host) => get(host, 'opened')}
+		>
+			<slot />
+		</SelectMenu>
+	</Host>,
+	bind(host =>
+		merge(
+			onAction(host).tap(() => {
+				if (host.focusedOption) host.setSelected(host.focusedOption);
+				else host.open();
+			}),
+			selectableHost(host, true).tap(selected =>
+				host.setSelected(selected as Option)
+			),
+			navigationList(
+				host,
+				'cxl-option:not([disabled])',
+				'cxl-option[focused]'
+			).tap(selected => host.setFocusedOption(selected as Option))
+		)
+	),
+	render(host => <div className="placeholder">{host.selectedText$}</div>)
+)
+export class MultiSelect extends SelectBase {
+	/**
+	 * Placeholder value if nothing is selected.
+	 */
+	@Attribute()
+	placeholder = '';
+
+	selectedText$ = be('');
+	readonly selected: Set<Option> = new Set<Option>();
+	value: any[] = [];
+
+	protected focusedOption?: Option;
+
+	protected positionMenu(menu: SelectMenu) {
+		let height: number;
+		const rect = this.getBoundingClientRect();
+		height = menu.scrollHeight;
+		const maxHeight = window.innerHeight - rect.bottom;
+
+		if (height > maxHeight) height = maxHeight;
+		const style = menu.style;
+		style.height = height + 'px';
+	}
+
+	protected setOptions(options: Set<Option>) {
+		super.setOptions(options);
+		options.forEach(o => (o.multiple = true));
+	}
+
+	protected setSelected(option: Option) {
+		option.selected = !this.selected.has(option);
+		const method = option.selected ? 'add' : 'delete';
+		this.selected[method](option);
+		const selected = [...this.selected];
+		this.value = selected.map(o => o.value);
+		this.selectedText$.next(
+			selected.map(s => s.textContent).join(', ') || this.placeholder
+		);
+		if (this.opened) this.setFocusedOption(option);
+	}
+
+	protected setFocusedOption(option: Option) {
+		this.clearFocusedOption();
+		this.focusedOption = option;
+		option.focused = true;
+	}
+
+	protected clearFocusedOption() {
+		this.options?.forEach(o => (o.focused = false));
+		this.focusedOption = undefined;
+	}
+
+	open() {
+		if (this.disabled || this.opened) return;
+		this.opened = true;
+	}
+
+	close() {
+		if (this.opened) {
+			this.opened = false;
+			this.clearFocusedOption();
+		}
+	}
+}
 
 /**
  * @example
@@ -1480,12 +1612,12 @@ function $contentEditable(el: HTMLElement, host: InputBase) {
 	);
 }
 
-/** 
+/**
  * @example
-<cxl-field>
-	<cxl-label>Prefilled Text Area</cxl-label>
-	<cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></cxl-textarea>
-</cxl-field>
+ * <cxl-field>
+ *   <cxl-label>Prefilled Text Area</cxl-label>
+ *   <cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></cxl-textarea>
+ * </cxl-field>
  */
 @Augment<TextArea>(
 	'cxl-textarea',
@@ -1511,7 +1643,6 @@ function $contentEditable(el: HTMLElement, host: InputBase) {
 	</Host>
 )
 export class TextArea extends InputBase {
-	@Attribute()
 	value = '';
 }
 

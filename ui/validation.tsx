@@ -8,12 +8,12 @@ export function validate<T extends InputBase>(
 	...validators: ValidateFunction<T['value']>[]
 ) {
 	return get(el, 'value').tap(value => {
+		let message: string | boolean = true;
 		validators.find(validateFn => {
-			const message = validateFn(value);
-			el.invalid = message !== true;
-			if (message !== true)
-				return ((el as any).validationMessage = message);
+			message = validateFn(value);
+			return message !== true;
 		});
+		el.setCustomValidity(message === true ? '' : (message as any));
 	});
 }
 

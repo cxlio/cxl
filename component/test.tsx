@@ -30,8 +30,10 @@ export default suite('component', test => {
 		class Test extends Component {
 			static tagName = id;
 		}
-		const el = render(dom(Test));
+		const el = render(dom(id as any)).element;
 		a.ok(el);
+		a.equal(el.tagName, id.toUpperCase());
+		a.ok(el instanceof Test);
 	});
 
 	test('Component - template', a => {

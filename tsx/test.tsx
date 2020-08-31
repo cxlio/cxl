@@ -1,6 +1,15 @@
 import { suite } from '../spec/index.js';
-import { dom } from './index.js';
+import { AttributeType as AT, dom } from './index.js';
 import { Observable, be, of } from '../rx/index.js';
+
+/* eslint @typescript-eslint/no-namespace: 'off' */
+declare global {
+	namespace JSX {
+		type IntrinsicElements = {
+			[P in keyof HTMLElementTagNameMap]: AT<HTMLElementTagNameMap[P]>;
+		};
+	}
+}
 
 export default suite('component', test => {
 	test('NativeElement - empty', a => {

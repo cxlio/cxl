@@ -3,6 +3,7 @@ import { on } from '../dom/index.js';
 import { dom, connect } from '../xdom/index.js';
 import { getRegisteredComponents, Component } from '../component/index.js';
 import { tap } from '../rx/index.js';
+import type { InputBase } from './index.js';
 import './index.js';
 
 const Measure: Record<string, any> = {
@@ -14,6 +15,29 @@ const Measure: Record<string, any> = {
 		});
 	},
 };
+
+function testInvalid(test: ComponentTest<InputBase>) {
+	test.test('[invalid]', (a: Test) => {
+		const el = test.element();
+		a.equal(el.invalid, false, 'Should be valid by default');
+
+		if (el.validity) {
+			a.ok(el.validity.valid);
+			el.setCustomValidity('Custom Validation');
+			a.equal(el.invalid, true);
+			a.ok(el.matches(':invalid'));
+			a.ok(el.validity.customError);
+			a.ok(!el.validity.valid);
+			a.equal(el.validationMessage, 'Custom Validation');
+			el.setCustomValidity('');
+			a.equal(el.invalid, false);
+			a.ok(el.matches(':valid'));
+			a.ok(el.validity.valid);
+			a.ok(!el.validity.customError);
+			a.equal(el.validationMessage, '');
+		}
+	});
+}
 
 function testStringValue(test: ComponentTest) {
 	test.test('[value] string', (a: Test) => {
@@ -133,9 +157,18 @@ const attributeTest: Record<string, Tester> = {
 	value: testValue,
 	checked: testChecked,
 	touched: testTouched,
+	invalid: testInvalid,
 };
 
 function testAttributes(attributes: string[], a: ComponentTest) {
+	const set = new Set(attributes);
+
+	a.equal(
+		attributes.length,
+		set.size,
+		'Should not have duplicate attributes'
+	);
+
 	attributes.forEach(attr => {
 		a.ok(attr.toLowerCase() === attr, `${attr} should be lowercase`);
 		if (attr in attributeTest) (attributeTest as any)[attr](a);

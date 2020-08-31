@@ -2,10 +2,10 @@
 
 -   Lightweight and Fast
 -   Type Safe
--   Module Architecture
+-   Modular Architecture
 -   Open Source
 -   Responsive
--   Accessibility Focused
+-   Focus on Accessibility
 -   Framework Agnostic
 -   Flexible Theming
 
@@ -18,8 +18,6 @@
 -   Edge 17+
 
 ## Usage
-
-@cxl/ui does not depend on any third party framework or library. All components work in isolation.
 
 ### Quick Start
 
@@ -37,12 +35,7 @@ This is all you need to get started. This example uses the CDN version of the li
 </cxl-application>
 ```
 
-### In-Depth Guides
-
--   Forms
--   Themes and Styling
-
 ### Support
 
--   Report any bugs or issues in our Github Issues page.
--   Follow our twitter account for news and updates.
+-   Report any bugs or issues in our [Github Issues](https://github.com/cxlio/cxl/issues) page.
+-   Follow our [twitter](https://twitter.com/cxlhq) account for news and updates.

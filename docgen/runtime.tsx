@@ -9,6 +9,7 @@ import {
 import { onChildrenMutation } from '../dom/index.js';
 import { Style, padding } from '../css/index.js';
 import { be } from '../rx/index.js';
+import '../ui/index.js';
 import '../ui/router.js';
 
 @Augment(

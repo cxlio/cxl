@@ -90,73 +90,77 @@ function findNextNodeBySelector(
 		if (node.matches(selector)) return node;
 		node = node[direction] as T;
 	}
-	return undefined;
+	return null;
 }
 
-interface SelectableNode extends ParentNode, EventTarget {
-	selected?: Element;
-}
+interface SelectableNode extends ParentNode, EventTarget {}
 
 /**
  * Handles keyboard navigation, emits the next selected item.
  */
-export function navigationList(host: SelectableNode, selector: string) {
-	return on(host, 'keydown').map(ev => {
-		let el = host.selected;
-		const key = ev.key;
+export function navigationList(
+	host: SelectableNode,
+	selector: string,
+	startSelector: string
+) {
+	return on(host, 'keydown')
+		.map(ev => {
+			let el = host.querySelector(startSelector);
+			const key = ev.key;
 
-		function findByFirstChar(item: Node) {
-			return item.textContent?.[0].toLowerCase() === key;
-		}
+			function findByFirstChar(item: Node) {
+				return item.textContent?.[0].toLowerCase() === key;
+			}
 
-		switch (key) {
-			case 'ArrowDown':
-				if (el) el = findNextNodeBySelector(el, selector) || el;
-				else {
-					const first = host.firstElementChild;
+			switch (key) {
+				case 'ArrowDown':
+					if (el) el = findNextNodeBySelector(el, selector) || el;
+					else {
+						const first = host.firstElementChild;
 
-					if (first)
-						el = first.matches(selector)
-							? first
-							: findNextNodeBySelector(first, selector);
-				}
-				if (el) ev.preventDefault();
+						if (first)
+							el = first.matches(selector)
+								? first
+								: findNextNodeBySelector(first, selector);
+					}
+					if (el) ev.preventDefault();
 
-				break;
-			case 'ArrowUp':
-				if (el)
-					el =
-						findNextNodeBySelector(
-							el,
-							selector,
-							'previousElementSibling'
-						) || el;
-				else {
-					const first = host.lastElementChild;
+					break;
+				case 'ArrowUp':
+					if (el)
+						el =
+							findNextNodeBySelector(
+								el,
+								selector,
+								'previousElementSibling'
+							) || el;
+					else {
+						const first = host.lastElementChild;
 
-					if (first)
-						el = first.matches(selector)
-							? first
-							: findNextNodeBySelector(
-									first,
-									selector,
-									'previousElementSibling'
-							  );
-				}
-				if (el) ev.preventDefault();
-				break;
-			default:
-				if (/^\w$/.test(key)) {
-					const first = host.firstElementChild;
-					el =
-						(el && findNextNode(el, findByFirstChar)) ||
-						(first && findNextNode(first, findByFirstChar)) ||
-						undefined;
-					ev.preventDefault();
-				}
-		}
-		return el;
-	});
+						if (first)
+							el = first.matches(selector)
+								? first
+								: findNextNodeBySelector(
+										first,
+										selector,
+										'previousElementSibling'
+								  );
+					}
+					if (el) ev.preventDefault();
+					break;
+				default:
+					if (/^\w$/.test(key)) {
+						const first = host.firstElementChild;
+						el =
+							(el && findNextNode(el, findByFirstChar)) ||
+							(first && findNextNode(first, findByFirstChar)) ||
+							null;
+						ev.preventDefault();
+					}
+			}
+			return el;
+		})
+		.filter(el => !!el);
 }
 
 interface FocusableComponent extends Component {
@@ -281,37 +285,71 @@ interface SelectableTarget extends EventTarget {
 	selected: boolean;
 }
 
+interface SelectableHost<T> extends Element {
+	value: any;
+	options?: Set<T>;
+}
+
 /**
  * Handles element selection events. Emits everytime a new item is selected.
  */
 export function selectableHost<TargetT extends SelectableTarget>(
-	host: ValueElement
+	host: SelectableHost<TargetT>,
+	isMultiple = false
 ) {
 	return new Observable<TargetT>(subscriber => {
 		let selected: any;
-		let options: Set<TargetT>;
+		let options: Set<TargetT> | undefined;
 
 		function setSelected(option: TargetT) {
 			subscriber.next((selected = option));
 		}
 
-		function onChange() {
+		function onOptionsChange(newOptions: Set<TargetT>) {
+			const value = host.value;
+			let first: TargetT | null = null;
+			options = undefined;
+			for (const o of newOptions) {
+				first = first || o;
+				const isNotFound = value?.indexOf(o.value) === -1;
+				if (o.selected && (value === undefined || isNotFound))
+					setSelected(o);
+			}
+
+			if (!selected && first) setSelected(first);
+
+			options = newOptions;
+		}
+
+		function onChangeMultiple() {
+			const value = host.value;
+
+			if (!options) return;
+
+			for (const o of options) {
+				const isFound = value.indexOf(o.value) !== -1;
+				if (isFound) {
+					if (!o.selected) setSelected(o);
+				} else o.selected = false;
+			}
+		}
+
+		function onChangeSingle() {
 			const value = host.value;
 
 			if (!options || (selected && selected.value === value)) return;
 
 			for (const o of options)
-				if (o.value === value || o.selected || !selected) {
-					setSelected(o);
-				} else o.selected = false;
+				if (o.value === value || !selected) setSelected(o);
+				else o.selected = false;
 		}
 
+		const onChange = isMultiple ? onChangeMultiple : onChangeSingle;
 		const subscription = merge(
-			registableHost<TargetT>(host, 'selectable')
+			getAttribute(host, 'options')
 				.raf()
 				.tap(val => {
-					options = val;
-					onChange();
+					if (val) onOptionsChange(val);
 				}),
 			getAttribute(host, 'value').tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
@@ -873,10 +911,9 @@ export class Toggle extends Component {
 					backgroundColor: 'surface',
 					color: 'onSurface',
 					textAlign: 'center',
-					height: 36,
 				},
 
-				$big: { ...padding(16), font: 'h5', height: 52 },
+				$big: { ...padding(16), font: 'h5' },
 				$flat: {
 					elevation: 0,
 					paddingRight: 8,

@@ -1,4 +1,4 @@
-<cxl-t h4>Color</cxl-t>
+<cxl-t h4>Color Palette</cxl-t>
 <p>
 	The Following colors are used by the theme. Each of them are defined in a
 	variable prefixed by <code>--cxl-</code>
@@ -6,34 +6,32 @@
 <cxl-grid id="color-grid"></cxl-grid>
 
 <cxl-t h4>Typography</cxl-t>
-<cxl-t
-	>The following <code>font-family</code> string is applied to all elements:
-	<p>
-		The <uid-link tag="cxl-t"></uid-link> component can be used to apply
-		styles to text. The <code>Roboto</code> font will not be automatically
-		included.
-	</p>
-	<cxl-table id="typography-table">
-		<cxl-tr>
-			<cxl-th>Style Name</cxl-th>
-			<cxl-th>Weight</cxl-th>
-			<cxl-th>Size</cxl-th>
-			<cxl-th>Spacing</cxl-th>
-		</cxl-tr>
-	</cxl-table>
+<p>
+	The <cxl-a href="core--T.html">T</cxl-a> component can be used to apply
+	styles to text. The <code>Roboto</code> font is automatically imported by
+	the theme.
+</p>
+<cxl-table id="typography-table">
+	<cxl-tr>
+		<cxl-th>Style Name</cxl-th>
+		<cxl-th>Font Family</cxl-th>
+		<cxl-th>Weight</cxl-th>
+		<cxl-th>Size</cxl-th>
+		<cxl-th>Spacing</cxl-th>
+	</cxl-tr>
+</cxl-table>
 
-	<cxl-t h4>Theme Variables</cxl-t>
-	<p>
-		The following CSS Variables can be modified to customize the look and
-		feel of the components in your application.
-	</p>
-	<cxl-table id="variables-table">
-		<cxl-tr>
-			<cxl-th>Variable</cxl-th>
-			<cxl-th>Value</cxl-th>
-		</cxl-tr>
-	</cxl-table>
-</cxl-t>
+<cxl-t h4>Theme Variables</cxl-t>
+<p>
+	The following CSS Variables can be modified to customize the look and feel
+	of the components in your application.
+</p>
+<cxl-table id="variables-table">
+	<cxl-tr>
+		<cxl-th>Variable</cxl-th>
+		<cxl-th>Value</cxl-th>
+	</cxl-tr>
+</cxl-table>
 
 <script>
 	(() => {
@@ -73,7 +71,7 @@
 
 		variables.forEach(v => {
 			if (v.value.indexOf('rgba') === 0)
-				colorsHtml += `<cxl-c sm6 md4 xl3 flex><div style="height:72px;width:72px;background-color:var(${v.name})"></div><cxl-c pad16><cxl-t subtitle>${v.name}<cxl-t><cxl-t subtitle2>${v.value}</cxl-t></cxl-c></cxl-c>`;
+				colorsHtml += `<cxl-c sm6 md4 xl3 flex style="border:1px solid #ccc;"><div style="height:72px;width:72px;background-color:var(${v.name})"></div><cxl-c pad16><cxl-t subtitle>${v.name}<cxl-t><cxl-t subtitle2>${v.value}</cxl-t></cxl-c></cxl-c>`;
 			else
 				variablesHtml += `<cxl-tr><cxl-td>${v.name}</cxl-td><cxl-td>${v.value}</cxl-td></cxl-tr>`;
 		});

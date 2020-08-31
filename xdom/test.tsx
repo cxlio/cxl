@@ -1,5 +1,5 @@
 import { suite } from '../spec/index.js';
-import { dom, Fragment, JSXElement, render, connect } from './index.js';
+import { dom, JSXElement, render, connect } from './index.js';
 import { be, Subject, Observable, tap, map, of } from '../rx/index.js';
 
 export default suite('component', test => {
@@ -80,22 +80,6 @@ export default suite('component', test => {
 		a.equal(last && last.previousSibling, el.childNodes[1]);
 	});
 
-	test('Fragment', a => {
-		const tpl = (
-			<Fragment>
-				<div>Hello</div>
-				<span>World</span>!
-			</Fragment>
-		);
-		const frag = render(tpl).element as DocumentFragment;
-
-		a.ok(frag instanceof DocumentFragment);
-		a.equal(frag.childNodes.length, 3);
-		a.equal((frag.childNodes[0] as HTMLElement).tagName, 'DIV');
-		a.equal((frag.childNodes[1] as HTMLElement).tagName, 'SPAN');
-		a.equal(frag.childNodes[2].textContent, '!');
-	});
-
 	test('Component Class', a => {
 		class Test {
 			static create() {
@@ -146,28 +130,6 @@ export default suite('component', test => {
 		const child2 = child.childNodes[0] as HTMLElement;
 		a.equal(child2.tagName, 'SPAN');
 		a.equal(child2.textContent, 'World');
-	});
-
-	test('Component - Bindings', a => {
-		class Div {
-			static create() {
-				return new Div();
-			}
-			jsxAttributes?: { $: (node: HTMLElement) => Observable<any> };
-			title = '';
-		}
-
-		const view = render<Div>(
-			<Div $={el => of('blur').pipe(tap(ev => (el.title = ev)))} />
-		);
-		const el = view.element;
-		view.connect();
-
-		a.ok(el instanceof Div);
-		a.equal(el.title, 'blur');
-		a.equal((view as any).bindings.length, 1);
-
-		view.disconnect();
 	});
 
 	test('Bindings - Children', a => {

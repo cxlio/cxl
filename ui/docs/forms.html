@@ -1,21 +1,37 @@
-<cxl-t h4>Form Fields</cxl-t>
-<cxl-t h5>Anatomy</cxl-t>
+<cxl-t h4>Forms</cxl-t>
+
+<cxl-t h5>Guidelines</cxl-t>
+<p>
+	All form components follow the following guidelines:
+</p>
+<ul>
+	<li>Compatible with built-in form elements.</li>
+	<li>Accessibility.</li>
+</ul>
+
+<cxl-t h5>Form Fields</cxl-t>
 <doc-example
 	><!--
-<cxl-field leading>
-	<cxl-label>Field Label</cxl-label>
-	<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
-	<cxl-input value="Input Value"></cxl-input>
-	<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
-	<cxl-field-help>Helper Text</cxl-field-help>
-</cxl-field>
-<cxl-field outline>
-	<cxl-label>Field Label</cxl-label>
-	<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
-	<cxl-input value="Input Value"></cxl-input>
-	<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
-	<cxl-field-help>Helper Text</cxl-field-help>
-</cxl-field>
+<cxl-grid>
+	<cxl-c sm6>
+		<cxl-field leading>
+			<cxl-label>Field Label</cxl-label>
+			<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
+			<cxl-input value="Input Value"></cxl-input>
+			<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
+			<cxl-field-help>Helper Text</cxl-field-help>
+		</cxl-field>
+	</cxl-c>
+	<cxl-c sm6>
+		<cxl-field outline>
+			<cxl-label>Field Label</cxl-label>
+			<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
+			<cxl-input value="Input Value"></cxl-input>
+			<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
+			<cxl-field-help>Helper Text</cxl-field-help>
+		</cxl-field>
+	</cxl-c>
+</cxl-grid>
 --></doc-example>
 <cxl-t h5>States</cxl-t>
 <doc-example
@@ -125,9 +141,9 @@
 <cxl-t h6>Slider</cxl-t>
 <doc-example
 	><!--
-	<cxl-slider></cxl-slider>
-	<cxl-slider disabled></cxl-slider>
-	<cxl-slider invalid touched></cxl-slider>
+	<cxl-slider aria-label="test slider"></cxl-slider>
+	<cxl-slider aria-label="test slider 2" disabled></cxl-slider>
+	<cxl-slider aria-label="test slider 3" invalid touched></cxl-slider>
 --></doc-example>
 <cxl-t h5>Dropdown Menus</cxl-t>
 <doc-example
@@ -140,7 +156,7 @@
 		<cxl-option>Select Item Three</cxl-option>
 	</cxl-select>
 </cxl-field>
-<cxl-field>
+<cxl-field floating>
 	<cxl-label>Multiple Selection Menu</cxl-label>
 	<cxl-multiselect>
 		<cxl-option>Select Item One</cxl-option>
@@ -187,4 +203,19 @@
 <cxl-fieldset>
 	<cxl-checkbox touched invalid>Invalid Checkbox</cxl-checkbox>
 </cxl-fieldset>
+--></doc-example>
+
+<cxl-t h4>Validation</cxl-t>
+<doc-example
+	><!--
+<style>
+	#input1:invalid { outline: 2px solid red; }
+	#input1:valid { outline: 2px solid green; }
+</style>
+<form>
+<cxl-field>
+	<cxl-label>Invalid Field</cxl-label>
+	<cxl-input id="input1" invalid />
+</cxl-field>
+</form>
 --></doc-example>

@@ -15,7 +15,7 @@ import {
 } from './localization';
 import { relative } from 'path';
 import hljs from 'highlight.js';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import MarkdownIt from 'markdown-it';
 import { Section, escape, parseExample } from './render.js';
 
@@ -153,7 +153,7 @@ function SignatureParameters(parameters?: Node[]) {
 }
 
 function Chip(label: string) {
-	return `<cxl-chip little primary>${label}</cxl-chip> `;
+	return `<cxl-chip small primary>${label}</cxl-chip> `;
 }
 
 function NodeChips({ flags }: Node) {
@@ -636,10 +636,35 @@ function NavbarExtra() {
 	return `${Extra(extraDocs)}<cxl-hr></cxl-hr>`;
 }
 
+function findOtherVersions(outDir: string, currentVersion: string) {
+	try {
+		return readdirSync(outDir).filter(
+			d =>
+				d !== currentVersion && statSync(`${outDir}/${d}`).isDirectory()
+		);
+	} catch (e) {
+		return [];
+	}
+}
+
+function Versions(pkg: any) {
+	const otherVersions = findOtherVersions(
+		application.outputDir,
+		pkg?.version
+	);
+	const versions = pkg ? [pkg.version, ...otherVersions] : otherVersions;
+	return versions.length > 1
+		? `<cxl-select style="vertical-align:bottom">` +
+				versions.map(v => `<cxl-option>${v}</cxl-option>`) +
+				`</cxl-select>`
+		: `<small>${versions[0] || ''}</small>`;
+}
+
 function Navbar(pkg: any, out: Output) {
-	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h6>${pkg.name} <small>${
-		pkg?.version || ''
-	}</small></cxl-t></cxl-c>
+	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h6 inline style="margin-right:12px">${
+		pkg.name
+	}</cxl-t>${Versions(pkg)}
+	</cxl-c>
 		<cxl-hr></cxl-hr>
 		${extraDocs.length ? NavbarExtra() : ''}	
 		${out.modules.sort(sortNode).map(ModuleNavbar).join('')}

@@ -1026,12 +1026,12 @@
                   "kind": 6
                 }
               },
-              "value": "[\n\t\t{\n\t\t\tname: 'help',\n\t\t\tshortcut: 'h',\n\t\t\thandle(app: Application) {\n\t\t\t\tif (app.version) app.log(app.version);\n\t\t\t\tprocess.exit(0);\n\t\t\t},\n\t\t},\n\t]"
+              "value": "[\n\t\t{\n\t\t\tname: 'help',\n\t\t\tshortcut: 'h',\n\t\t\thandle(app: Application) {\n\t\t\t\tif (app.version) app.log(app.version);\n\t\t\t\tprocess.exit(0);\n\t\t\t},\n\t\t},\n\t\t{\n\t\t\tname: 'config',\n\t\t\thelp: 'Use JSON config file',\n\t\t\tshortcut: 'c',\n\t\t\thandle(app: Application, fileName: string) {\n\t\t\t\tapp.parameters.parseJsonFile(fileName);\n\t\t\t},\n\t\t},\n\t]"
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 130,
+                "line": 138,
                 "ch": 3
               },
               "kind": 14,
@@ -1042,7 +1042,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 132,
+                    "line": 140,
                     "ch": 13
                   },
                   "kind": 10,
@@ -1065,7 +1065,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 132,
+                "line": 140,
                 "ch": 41
               },
               "kind": 11,
@@ -1076,7 +1076,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 134,
+                    "line": 142,
                     "ch": 10
                   },
                   "kind": 9,
@@ -1086,7 +1086,7 @@
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 134,
+                      "line": 142,
                       "ch": 15
                     },
                     "kind": 15,
@@ -1109,28 +1109,96 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 136,
+                "line": 144,
                 "ch": 2
               },
               "kind": 11,
-              "name": "parse",
+              "name": "parseJsonFile",
               "flags": 4,
               "id": 59,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 138,
+                    "line": 146,
+                    "ch": 15
+                  },
+                  "kind": 9,
+                  "name": "fileName",
+                  "flags": 0,
+                  "id": 60,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 153,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "parseJson",
+              "flags": 4,
+              "id": 61,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 155,
+                    "ch": 11
+                  },
+                  "kind": 9,
+                  "name": "json",
+                  "flags": 0,
+                  "id": 62,
+                  "type": {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 163,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "parse",
+              "flags": 4,
+              "id": 63,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 165,
                     "ch": 7
                   },
                   "kind": 9,
                   "name": "args",
                   "flags": 0,
-                  "id": 60,
+                  "id": 64,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 138,
+                      "line": 165,
                       "ch": 12
                     },
                     "kind": 15,
@@ -1153,7 +1221,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 132,
+                "line": 140,
                 "ch": 13
               },
               "kind": 10,
@@ -1171,13 +1239,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 161,
+            "line": 188,
             "ch": 1
           },
           "kind": 16,
           "name": "readJson",
           "flags": 257,
-          "id": 61,
+          "id": 65,
           "docs": {
             "content": [
               {
@@ -1189,13 +1257,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 167,
+                "line": 194,
                 "ch": 31
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 62,
+              "id": 66,
               "value": "any"
             }
           ],
@@ -1206,7 +1274,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 169,
+                  "line": 196,
                   "ch": 11
                 },
                 "kind": 5,
@@ -1214,7 +1282,7 @@
                 "flags": 0,
                 "children": [
                   {
-                    "id": 62,
+                    "id": 66,
                     "name": "T",
                     "kind": 6
                   },
@@ -1231,13 +1299,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 167,
+                "line": 194,
                 "ch": 40
               },
               "kind": 9,
               "name": "fileName",
               "flags": 0,
-              "id": 63,
+              "id": 67,
               "docs": {
                 "content": [
                   {
@@ -1258,7 +1326,7 @@
           "id": 51,
           "source": {
             "fileName": "index.ts",
-            "line": 175,
+            "line": 202,
             "ch": 1
           },
           "kind": 8,
@@ -1268,13 +1336,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 177,
+                "line": 204,
                 "ch": 35
               },
               "kind": 10,
               "name": "name",
               "flags": 4,
-              "id": 64,
+              "id": 68,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1284,17 +1352,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 178,
+                "line": 205,
                 "ch": 15
               },
               "kind": 10,
               "name": "color",
               "flags": 4,
-              "id": 65,
+              "id": 69,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 179,
+                  "line": 206,
                   "ch": 7
                 },
                 "kind": 26,
@@ -1303,7 +1371,7 @@
                 "type": {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 179,
+                    "line": 206,
                     "ch": 13
                   },
                   "kind": 27,
@@ -1316,78 +1384,12 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 179,
+                "line": 206,
                 "ch": 38
               },
               "kind": 10,
               "name": "version",
               "flags": 4,
-              "id": 66,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 180,
-                "ch": 18
-              },
-              "kind": 10,
-              "name": "parameters",
-              "flags": 4,
-              "id": 67,
-              "value": "new ApplicationParameters(this)",
-              "type": {
-                "id": 53,
-                "name": "ApplicationParameters",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 181,
-                "ch": 46
-              },
-              "kind": 10,
-              "name": "package",
-              "flags": 4,
-              "id": 68,
-              "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 182,
-                "ch": 15
-              },
-              "kind": 10,
-              "name": "started",
-              "flags": 4,
-              "id": 69,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 183,
-                "ch": 17
-              },
-              "kind": 10,
-              "name": "coloredPrefix",
-              "flags": 8,
               "id": 70,
               "type": {
                 "name": "string",
@@ -1398,13 +1400,79 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 185,
+                "line": 207,
+                "ch": 18
+              },
+              "kind": 10,
+              "name": "parameters",
+              "flags": 4,
+              "id": 71,
+              "value": "new ApplicationParameters(this)",
+              "type": {
+                "id": 53,
+                "name": "ApplicationParameters",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 208,
+                "ch": 46
+              },
+              "kind": 10,
+              "name": "package",
+              "flags": 4,
+              "id": 72,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 209,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "started",
+              "flags": 4,
+              "id": 73,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 210,
+                "ch": 17
+              },
+              "kind": 10,
+              "name": "coloredPrefix",
+              "flags": 8,
+              "id": 74,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 212,
                 "ch": 32
               },
               "kind": 11,
               "name": "setup",
               "flags": 4,
-              "id": 71,
+              "id": 75,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -1415,24 +1483,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 189,
+                "line": 216,
                 "ch": 2
               },
               "kind": 11,
               "name": "log",
               "flags": 4,
-              "id": 72,
+              "id": 76,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 191,
+                    "line": 218,
                     "ch": 5
                   },
                   "kind": 9,
                   "name": "msg",
                   "flags": 0,
-                  "id": 73,
+                  "id": 77,
                   "type": {
                     "id": 12,
                     "name": "LogMessage",
@@ -1442,13 +1510,13 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 191,
+                    "line": 218,
                     "ch": 21
                   },
                   "kind": 9,
                   "name": "op",
                   "flags": 524288,
-                  "id": 74,
+                  "id": 78,
                   "type": {
                     "id": 7,
                     "name": "OperationFunction",
@@ -1478,24 +1546,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 199,
+                "line": 226,
                 "ch": 2
               },
               "kind": 11,
               "name": "handleError",
               "flags": 16,
-              "id": 75,
+              "id": 79,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 201,
+                    "line": 228,
                     "ch": 23
                   },
                   "kind": 9,
                   "name": "e",
                   "flags": 524288,
-                  "id": 76,
+                  "id": 80,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -1512,13 +1580,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 204,
+                "line": 231,
                 "ch": 2
               },
               "kind": 11,
               "name": "start",
               "flags": 260,
-              "id": 77,
+              "id": 81,
               "parameters": [],
               "type": {
                 "name": "Promise",
@@ -1535,17 +1603,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 235,
+                "line": 262,
                 "ch": 2
               },
               "kind": 11,
               "name": "run",
               "flags": 144,
-              "id": 78,
+              "id": 82,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 237,
+                  "line": 264,
                   "ch": 26
                 },
                 "kind": 5,
@@ -1595,7 +1663,7 @@
           "kind": 31,
           "name": "codes",
           "flags": 0,
-          "id": 79,
+          "id": 83,
           "value": "{\n\treset: [0, 0],\n\n\tbold: [1, 22],\n\tdim: [2, 22],\n\titalic: [3, 23],\n\tunderline: [4, 24],\n\tinverse: [7, 27],\n\thidden: [8, 28],\n\tstrikethrough: [9, 29],\n\n\tblack: [30, 39],\n\tred: [31, 39],\n\tgreen: [32, 39],\n\tyellow: [33, 39],\n\tblue: [34, 39],\n\tmagenta: [35, 39],\n\tcyan: [36, 39],\n\twhite: [37, 39],\n\tgray: [90, 39],\n\tgrey: [90, 39],\n\n\tbrightRed: [91, 39],\n\tbrightGreen: [92, 39],\n\tbrightYellow: [93, 39],\n\tbrightBlue: [94, 39],\n\tbrightMagenta: [95, 39],\n\tbrightCyan: [96, 39],\n\tbrightWhite: [97, 39],\n\n\tbgBlack: [40, 49],\n\tbgRed: [41, 49],\n\tbgGreen: [42, 49],\n\tbgYellow: [43, 49],\n\tbgBlue: [44, 49],\n\tbgMagenta: [45, 49],\n\tbgCyan: [46, 49],\n\tbgWhite: [47, 49],\n\tbgGray: [100, 49],\n\tbgGrey: [100, 49],\n\n\tbgBrightRed: [101, 49],\n\tbgBrightGreen: [102, 49],\n\tbgBrightYellow: [103, 49],\n\tbgBrightBlue: [104, 49],\n\tbgBrightMagenta: [105, 49],\n\tbgBrightCyan: [106, 49],\n\tbgBrightWhite: [107, 49],\n\n\t// legacy styles for colors pre v1.0.0\n\tblackBG: [40, 49],\n\tredBG: [41, 49],\n\tgreenBG: [42, 49],\n\tyellowBG: [43, 49],\n\tblueBG: [44, 49],\n\tmagentaBG: [45, 49],\n\tcyanBG: [46, 49],\n\twhiteBG: [47, 49]\n}",
           "type": {
             "source": {
@@ -1616,7 +1684,7 @@
                 "kind": 0,
                 "name": "reset",
                 "flags": 0,
-                "id": 80,
+                "id": 84,
                 "value": "[0, 0]",
                 "type": {
                   "name": "Array",
@@ -1639,7 +1707,7 @@
                 "kind": 0,
                 "name": "bold",
                 "flags": 0,
-                "id": 81,
+                "id": 85,
                 "value": "[1, 22]",
                 "type": {
                   "name": "Array",
@@ -1662,7 +1730,7 @@
                 "kind": 0,
                 "name": "dim",
                 "flags": 0,
-                "id": 82,
+                "id": 86,
                 "value": "[2, 22]",
                 "type": {
                   "name": "Array",
@@ -1685,7 +1753,7 @@
                 "kind": 0,
                 "name": "italic",
                 "flags": 0,
-                "id": 83,
+                "id": 87,
                 "value": "[3, 23]",
                 "type": {
                   "name": "Array",
@@ -1708,7 +1776,7 @@
                 "kind": 0,
                 "name": "underline",
                 "flags": 0,
-                "id": 84,
+                "id": 88,
                 "value": "[4, 24]",
                 "type": {
                   "name": "Array",
@@ -1731,7 +1799,7 @@
                 "kind": 0,
                 "name": "inverse",
                 "flags": 0,
-                "id": 85,
+                "id": 89,
                 "value": "[7, 27]",
                 "type": {
                   "name": "Array",
@@ -1754,7 +1822,7 @@
                 "kind": 0,
                 "name": "hidden",
                 "flags": 0,
-                "id": 86,
+                "id": 90,
                 "value": "[8, 28]",
                 "type": {
                   "name": "Array",
@@ -1777,7 +1845,7 @@
                 "kind": 0,
                 "name": "strikethrough",
                 "flags": 0,
-                "id": 87,
+                "id": 91,
                 "value": "[9, 29]",
                 "type": {
                   "name": "Array",
@@ -1800,7 +1868,7 @@
                 "kind": 0,
                 "name": "black",
                 "flags": 0,
-                "id": 88,
+                "id": 92,
                 "value": "[30, 39]",
                 "type": {
                   "name": "Array",
@@ -1823,7 +1891,7 @@
                 "kind": 0,
                 "name": "red",
                 "flags": 0,
-                "id": 89,
+                "id": 93,
                 "value": "[31, 39]",
                 "type": {
                   "name": "Array",
@@ -1846,7 +1914,7 @@
                 "kind": 0,
                 "name": "green",
                 "flags": 0,
-                "id": 90,
+                "id": 94,
                 "value": "[32, 39]",
                 "type": {
                   "name": "Array",
@@ -1869,7 +1937,7 @@
                 "kind": 0,
                 "name": "yellow",
                 "flags": 0,
-                "id": 91,
+                "id": 95,
                 "value": "[33, 39]",
                 "type": {
                   "name": "Array",
@@ -1892,7 +1960,7 @@
                 "kind": 0,
                 "name": "blue",
                 "flags": 0,
-                "id": 92,
+                "id": 96,
                 "value": "[34, 39]",
                 "type": {
                   "name": "Array",
@@ -1915,7 +1983,7 @@
                 "kind": 0,
                 "name": "magenta",
                 "flags": 0,
-                "id": 93,
+                "id": 97,
                 "value": "[35, 39]",
                 "type": {
                   "name": "Array",
@@ -1938,7 +2006,7 @@
                 "kind": 0,
                 "name": "cyan",
                 "flags": 0,
-                "id": 94,
+                "id": 98,
                 "value": "[36, 39]",
                 "type": {
                   "name": "Array",
@@ -1961,7 +2029,7 @@
                 "kind": 0,
                 "name": "white",
                 "flags": 0,
-                "id": 95,
+                "id": 99,
                 "value": "[37, 39]",
                 "type": {
                   "name": "Array",
@@ -1984,7 +2052,7 @@
                 "kind": 0,
                 "name": "gray",
                 "flags": 0,
-                "id": 96,
+                "id": 100,
                 "value": "[90, 39]",
                 "type": {
                   "name": "Array",
@@ -2007,7 +2075,7 @@
                 "kind": 0,
                 "name": "grey",
                 "flags": 0,
-                "id": 97,
+                "id": 101,
                 "value": "[90, 39]",
                 "type": {
                   "name": "Array",
@@ -2030,7 +2098,7 @@
                 "kind": 0,
                 "name": "brightRed",
                 "flags": 0,
-                "id": 98,
+                "id": 102,
                 "value": "[91, 39]",
                 "type": {
                   "name": "Array",
@@ -2053,7 +2121,7 @@
                 "kind": 0,
                 "name": "brightGreen",
                 "flags": 0,
-                "id": 99,
+                "id": 103,
                 "value": "[92, 39]",
                 "type": {
                   "name": "Array",
@@ -2076,7 +2144,7 @@
                 "kind": 0,
                 "name": "brightYellow",
                 "flags": 0,
-                "id": 100,
+                "id": 104,
                 "value": "[93, 39]",
                 "type": {
                   "name": "Array",
@@ -2099,7 +2167,7 @@
                 "kind": 0,
                 "name": "brightBlue",
                 "flags": 0,
-                "id": 101,
+                "id": 105,
                 "value": "[94, 39]",
                 "type": {
                   "name": "Array",
@@ -2122,7 +2190,7 @@
                 "kind": 0,
                 "name": "brightMagenta",
                 "flags": 0,
-                "id": 102,
+                "id": 106,
                 "value": "[95, 39]",
                 "type": {
                   "name": "Array",
@@ -2145,7 +2213,7 @@
                 "kind": 0,
                 "name": "brightCyan",
                 "flags": 0,
-                "id": 103,
+                "id": 107,
                 "value": "[96, 39]",
                 "type": {
                   "name": "Array",
@@ -2168,7 +2236,7 @@
                 "kind": 0,
                 "name": "brightWhite",
                 "flags": 0,
-                "id": 104,
+                "id": 108,
                 "value": "[97, 39]",
                 "type": {
                   "name": "Array",
@@ -2191,7 +2259,7 @@
                 "kind": 0,
                 "name": "bgBlack",
                 "flags": 0,
-                "id": 105,
+                "id": 109,
                 "value": "[40, 49]",
                 "type": {
                   "name": "Array",
@@ -2214,7 +2282,7 @@
                 "kind": 0,
                 "name": "bgRed",
                 "flags": 0,
-                "id": 106,
+                "id": 110,
                 "value": "[41, 49]",
                 "type": {
                   "name": "Array",
@@ -2237,7 +2305,7 @@
                 "kind": 0,
                 "name": "bgGreen",
                 "flags": 0,
-                "id": 107,
+                "id": 111,
                 "value": "[42, 49]",
                 "type": {
                   "name": "Array",
@@ -2260,7 +2328,7 @@
                 "kind": 0,
                 "name": "bgYellow",
                 "flags": 0,
-                "id": 108,
+                "id": 112,
                 "value": "[43, 49]",
                 "type": {
                   "name": "Array",
@@ -2283,7 +2351,7 @@
                 "kind": 0,
                 "name": "bgBlue",
                 "flags": 0,
-                "id": 109,
+                "id": 113,
                 "value": "[44, 49]",
                 "type": {
                   "name": "Array",
@@ -2306,7 +2374,7 @@
                 "kind": 0,
                 "name": "bgMagenta",
                 "flags": 0,
-                "id": 110,
+                "id": 114,
                 "value": "[45, 49]",
                 "type": {
                   "name": "Array",
@@ -2329,7 +2397,7 @@
                 "kind": 0,
                 "name": "bgCyan",
                 "flags": 0,
-                "id": 111,
+                "id": 115,
                 "value": "[46, 49]",
                 "type": {
                   "name": "Array",
@@ -2352,7 +2420,7 @@
                 "kind": 0,
                 "name": "bgWhite",
                 "flags": 0,
-                "id": 112,
+                "id": 116,
                 "value": "[47, 49]",
                 "type": {
                   "name": "Array",
@@ -2375,7 +2443,7 @@
                 "kind": 0,
                 "name": "bgGray",
                 "flags": 0,
-                "id": 113,
+                "id": 117,
                 "value": "[100, 49]",
                 "type": {
                   "name": "Array",
@@ -2398,7 +2466,7 @@
                 "kind": 0,
                 "name": "bgGrey",
                 "flags": 0,
-                "id": 114,
+                "id": 118,
                 "value": "[100, 49]",
                 "type": {
                   "name": "Array",
@@ -2421,7 +2489,7 @@
                 "kind": 0,
                 "name": "bgBrightRed",
                 "flags": 0,
-                "id": 115,
+                "id": 119,
                 "value": "[101, 49]",
                 "type": {
                   "name": "Array",
@@ -2444,7 +2512,7 @@
                 "kind": 0,
                 "name": "bgBrightGreen",
                 "flags": 0,
-                "id": 116,
+                "id": 120,
                 "value": "[102, 49]",
                 "type": {
                   "name": "Array",
@@ -2467,7 +2535,7 @@
                 "kind": 0,
                 "name": "bgBrightYellow",
                 "flags": 0,
-                "id": 117,
+                "id": 121,
                 "value": "[103, 49]",
                 "type": {
                   "name": "Array",
@@ -2490,7 +2558,7 @@
                 "kind": 0,
                 "name": "bgBrightBlue",
                 "flags": 0,
-                "id": 118,
+                "id": 122,
                 "value": "[104, 49]",
                 "type": {
                   "name": "Array",
@@ -2513,7 +2581,7 @@
                 "kind": 0,
                 "name": "bgBrightMagenta",
                 "flags": 0,
-                "id": 119,
+                "id": 123,
                 "value": "[105, 49]",
                 "type": {
                   "name": "Array",
@@ -2536,7 +2604,7 @@
                 "kind": 0,
                 "name": "bgBrightCyan",
                 "flags": 0,
-                "id": 120,
+                "id": 124,
                 "value": "[106, 49]",
                 "type": {
                   "name": "Array",
@@ -2559,7 +2627,7 @@
                 "kind": 0,
                 "name": "bgBrightWhite",
                 "flags": 0,
-                "id": 121,
+                "id": 125,
                 "value": "[107, 49]",
                 "type": {
                   "name": "Array",
@@ -2582,7 +2650,7 @@
                 "kind": 0,
                 "name": "blackBG",
                 "flags": 0,
-                "id": 122,
+                "id": 126,
                 "value": "[40, 49]",
                 "type": {
                   "name": "Array",
@@ -2605,7 +2673,7 @@
                 "kind": 0,
                 "name": "redBG",
                 "flags": 0,
-                "id": 123,
+                "id": 127,
                 "value": "[41, 49]",
                 "type": {
                   "name": "Array",
@@ -2628,7 +2696,7 @@
                 "kind": 0,
                 "name": "greenBG",
                 "flags": 0,
-                "id": 124,
+                "id": 128,
                 "value": "[42, 49]",
                 "type": {
                   "name": "Array",
@@ -2651,7 +2719,7 @@
                 "kind": 0,
                 "name": "yellowBG",
                 "flags": 0,
-                "id": 125,
+                "id": 129,
                 "value": "[43, 49]",
                 "type": {
                   "name": "Array",
@@ -2674,7 +2742,7 @@
                 "kind": 0,
                 "name": "blueBG",
                 "flags": 0,
-                "id": 126,
+                "id": 130,
                 "value": "[44, 49]",
                 "type": {
                   "name": "Array",
@@ -2697,7 +2765,7 @@
                 "kind": 0,
                 "name": "magentaBG",
                 "flags": 0,
-                "id": 127,
+                "id": 131,
                 "value": "[45, 49]",
                 "type": {
                   "name": "Array",
@@ -2720,7 +2788,7 @@
                 "kind": 0,
                 "name": "cyanBG",
                 "flags": 0,
-                "id": 128,
+                "id": 132,
                 "value": "[46, 49]",
                 "type": {
                   "name": "Array",
@@ -2743,7 +2811,7 @@
                 "kind": 0,
                 "name": "whiteBG",
                 "flags": 0,
-                "id": 129,
+                "id": 133,
                 "value": "[47, 49]",
                 "type": {
                   "name": "Array",
@@ -2769,7 +2837,7 @@
           "kind": 2,
           "name": "Colors",
           "flags": 0,
-          "id": 130,
+          "id": 134,
           "typeParameters": [
             {
               "source": {
@@ -2780,7 +2848,7 @@
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 131
+              "id": 135
             }
           ],
           "type": {
@@ -2803,7 +2871,7 @@
           "kind": 31,
           "name": "styles",
           "flags": 0,
-          "id": 132,
+          "id": 136,
           "type": {
             "name": "any",
             "kind": 32,
@@ -2820,9 +2888,9 @@
           "kind": 31,
           "name": "colors",
           "flags": 1,
-          "id": 133,
+          "id": 137,
           "type": {
-            "id": 130,
+            "id": 134,
             "name": "Colors",
             "kind": 6,
             "typeParameters": [

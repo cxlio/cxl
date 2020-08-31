@@ -106,3 +106,40 @@ export function dom(elementType: any, attributes?: any, ...children: any) {
 export function Head(p: { children: any }) {
 	renderChildren(document.head, p.children);
 }
+
+function renderChildrenString(children: any) {
+	if (!children) return '';
+
+	let result = '';
+
+	if (Array.isArray(children))
+		for (const child of children) result += renderChildrenString(child);
+	else result += children;
+
+	return result;
+}
+
+export function domString(
+	elementType: any,
+	attributes?: any,
+	...children: any
+) {
+	const tagName =
+		elementType.tagName || (typeof elementType === 'string' && elementType);
+
+	if (tagName) {
+		let attrStr = '';
+		for (const key in attributes) attrStr += ` ${key}="${attributes[key]}"`;
+
+		return `<${tagName}${attrStr}>${renderChildrenString(
+			children
+		)}</${tagName}>`;
+	}
+
+	if (children) {
+		if (attributes) attributes.children = children;
+		else attributes = { children };
+	}
+
+	return elementType(attributes);
+}
