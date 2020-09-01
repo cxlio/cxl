@@ -87,14 +87,13 @@ export const defaultTheme: Theme = {
 		// Animation speed
 		speed: '0.3s',
 		font: 'Roboto, sans-serif',
-		fontSize: '16px',
 		fontMonospace: 'monospace',
 	},
 	typography: {
 		default: {
 			fontWeight: 400,
 			fontFamily: 'var(--cxl-font)',
-			fontSize: 'var(--cxl-font-size)',
+			fontSize: '16px',
 			letterSpacing: 'normal',
 		},
 		caption: { fontSize: '12px', letterSpacing: '0.4px' },

@@ -12,12 +12,7 @@ export interface Typography {
 	default: CSSStyle;
 }
 
-export interface Variables {
-	speed: string;
-	font: string;
-	fontSize: string;
-	fontMonospace: string;
-}
+export type Variables = Record<string, string | { toString(): string }>;
 
 export interface Colors {
 	elevation: BaseColor;
