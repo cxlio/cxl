@@ -20,7 +20,7 @@
 		"typescript": "^3.9.2"
 	},
 	"scripts": {
-		"build": "node scripts/build-all.js",
+		"build": "node scripts/build-all.js && node scripts/build-readme",
 		"preinstall": "scripts/preinstall.sh",
 		"prepublishOnly": "node scripts/build-all.js && node scripts/build-readme",
 		"install": "cd build && node build"
