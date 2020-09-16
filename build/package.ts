@@ -1,10 +1,10 @@
-import { Observable, defer, merge, of } from '../rx';
+import { Observable, defer, merge, of } from '../rx/index.js';
 import { existsSync, readFileSync, promises } from 'fs';
 import { join } from 'path';
 import { file } from './file.js';
 import { execSync } from 'child_process';
 import { Output } from '../source/index.js';
-import { sh } from '../server';
+import { sh } from '../server/index.js';
 import * as ts from 'typescript';
 
 type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0';

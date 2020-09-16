@@ -23,6 +23,7 @@ module.exports = fs.readdir('.').then(async all => {
 	const start = Date.now();
 
 	await build('docgen');
+	await build('tester');
 
 	for (const dir of all) {
 		try {

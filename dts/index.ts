@@ -801,7 +801,7 @@ function serializeTypeQuery(node: ts.TypeQueryNode) {
 
 function serializeTuple(node: ts.TupleTypeNode) {
 	return createNode(node, {
-		children: node.elementTypes?.map(serialize),
+		children: node.elements.map(serialize),
 	});
 }
 
@@ -1064,7 +1064,7 @@ export function parse(
  *
  * @param tsconfig Path to tsconfig.json file
  */
-export function build(tsconfig = resolve('tsconfig.json')) {
+export function build(tsconfig = resolve('tsconfig.json')): Output {
 	config = parseTsConfig(tsconfig);
 	setup(config.fileNames, config.options);
 

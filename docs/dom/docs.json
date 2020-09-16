@@ -2859,7 +2859,7 @@
           "type": {
             "source": {
               "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
-              "line": 19811,
+              "line": 19851,
               "ch": 60
             },
             "kind": 16,
@@ -2875,7 +2875,7 @@
               {
                 "source": {
                   "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
-                  "line": 19812,
+                  "line": 19852,
                   "ch": 39
                 },
                 "kind": 9,
@@ -3081,8 +3081,13 @@
                     "kind": 6
                   },
                   {
+                    "source": {
+                      "fileName": "virtual.ts",
+                      "line": 9,
+                      "ch": 29
+                    },
+                    "kind": 23,
                     "name": "null",
-                    "kind": 32,
                     "flags": 0
                   }
                 ]
@@ -3161,8 +3166,13 @@
                     "kind": 6
                   },
                   {
+                    "source": {
+                      "fileName": "virtual.ts",
+                      "line": 18,
+                      "ch": 33
+                    },
+                    "kind": 23,
                     "name": "null",
-                    "kind": 32,
                     "flags": 0
                   }
                 ]

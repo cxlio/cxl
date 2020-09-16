@@ -18,7 +18,7 @@ buildCxl(
 		outputDir: '../dist/ui',
 		tasks: [
 			concat(
-				tsconfig('tsconfig.bundle.json'),
+				tsconfig('tsconfig.bundle.json', '../dist/ui'),
 				file('../dist/ui/icons.js').pipe(minify()),
 				file('../dist/ui/index.bundle.js').pipe(minify())
 			),

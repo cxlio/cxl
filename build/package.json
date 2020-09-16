@@ -1,13 +1,13 @@
 {
 	"name": "@cxl/build",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"private": true,
 	"description": "Build Tool",
 	"license": "GPL-3.0",
 	"main": "index.js",
 	"scripts": {
-		"build-index": "tsc -b && tsc -b tsconfig.amd.json",
-		"build": "node build"
+		"build-index": "../node_modules/typescript/bin/tsc -b && ../node_modules/typescript/bin/tsc -b tsconfig.amd.json",
+		"build": "node build.mjs"
 	},
 	"dependencies": {
 		"terser": "^4.6.13",
