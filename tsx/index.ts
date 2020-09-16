@@ -1,6 +1,7 @@
 import { Observable } from '../rx/index.js';
 
 /* eslint @typescript-eslint/no-namespace: 'off' */
+/* eslint @typescript-eslint/ban-types: 'off' */
 declare global {
 	namespace JSX {
 		interface ElementAttributesProperty {

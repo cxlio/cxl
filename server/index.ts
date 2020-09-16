@@ -1,4 +1,4 @@
-import { Observable, from, map } from '../rx';
+import { Observable, from, map } from '../rx/index.js';
 import { basename, dirname, join, resolve } from 'path';
 import { colors } from './colors.js';
 import { exec } from 'child_process';

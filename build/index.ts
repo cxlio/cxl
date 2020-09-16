@@ -1,5 +1,14 @@
 import * as Terser from 'terser';
-import { EMPTY, Observable, defer, operator, tap } from '../rx/index.js';
+import {
+	EMPTY,
+	Observable,
+	defer,
+	operator,
+	tap,
+	pipe,
+	reduce,
+	map,
+} from '../rx/index.js';
 import {
 	dirname,
 	join,
@@ -10,18 +19,17 @@ import {
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
 import { BASEDIR, Package, docs, pkg, readPackage, readme } from './package.js';
-import { tsbuild, tscVersion } from './tsc.js';
-import { Application } from '../server/index.js';
+import { BuildOptions, tsbuild, tscVersion } from './tsc.js';
+import { Application, sh } from '../server/index.js';
 import { ESLint } from 'eslint';
 import { execSync } from 'child_process';
-import { Output } from '../source';
+import { Output } from '../source/index.js';
 import { file } from './file.js';
 
 export { file, files } from './file.js';
 export { concat } from '../rx/index.js';
-export { tsc } from './tsc.js';
 export { AMD, pkg, readme, bundle } from './package.js';
-export { sh } from '../server';
+export { sh } from '../server/index.js';
 
 type Task = Observable<Output>;
 
@@ -47,7 +55,9 @@ function handleEslintResult(results: ESLint.LintResult[]) {
 		if (errorCount) {
 			hasErrors = true;
 			result.messages.forEach(r =>
-				console.log(`${file}#${r.line}:${r.column}: ${r.message}`)
+				console.error(
+					`${file}#${r.line}:${r.column}: ${r.message} (${r.ruleId})`
+				)
 			);
 		}
 	});
@@ -64,10 +74,10 @@ export function eslint(options?: any) {
 			// fix: true,
 			...options,
 		});
+		builder.log(`eslint ${ESLint.version}`);
 		builder.log(
 			`eslint`,
 			linter
-				//.lintFiles(['**/*.ts?(x)', '**/*.tsx'])
 				.lintFiles(['**/*.ts?(x)'])
 				.then(handleEslintResult)
 				.then(
@@ -78,9 +88,9 @@ export function eslint(options?: any) {
 	});
 }
 
-export function tsconfig(tsconfig = 'tsconfig.json') {
+export function tsconfig(tsconfig = 'tsconfig.json', options?: BuildOptions) {
 	return new Observable<Output>(subs => {
-		tsbuild(tsconfig, subs);
+		tsbuild(tsconfig, subs, options);
 		subs.complete();
 	});
 }
@@ -95,11 +105,21 @@ export function prepend(str: string) {
 	return tap((val: Output) => (val.source = str + val.source));
 }
 
+export function concatFile(outName: string) {
+	return pipe(
+		reduce<Output, string>((out, src) => out + src.source, ''),
+		map(source => ({ path: outName, source }))
+	);
+}
+
 export function buildCxl(...extra: BuildConfiguration[]) {
 	const packageJson = readPackage();
-	const dirName = packageJson.name.split('/')[1];
-	const outputDir = `../dist/${dirName}`;
+	const cwd = process.cwd();
+	const tsconfigFile = require(cwd + '/tsconfig.json');
+	const outputDir = tsconfigFile?.compilerOptions?.outDir;
+	if (!outputDir) throw new Error('No outDir field set in tsconfig.json');
 
+	const dirName = pathBasename(outputDir);
 	return build(
 		{
 			target: 'clean',
@@ -143,6 +163,14 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 					? file(`${outputDir}/index.js`).pipe(minify())
 					: EMPTY,
 				pkg(),
+				/*tsconfig('tsconfig.amd.json'),
+				packageJson.browser
+					? file(`${outputDir}/amd/index.js`).pipe(minify())
+					: EMPTY,
+				tsconfig('tsconfig.es6.json'),
+				packageJson.browser
+					? file(`${outputDir}/es6/index.js`).pipe(minify())
+					: EMPTY,*/
 			],
 		},
 		...extra
@@ -159,7 +187,6 @@ class Build {
 	private writeFile(result: Output) {
 		const outFile = join(this.outputDir, result.path);
 		const outputDir = dirname(outFile);
-
 		if (!existsSync(outputDir)) mkdirSync(outputDir);
 
 		writeFileSync(this.outputDir + '/' + result.path, result.source);
@@ -171,7 +198,7 @@ class Build {
 				`${join(this.outputDir, output.path)} ${kb(
 					(output.source || '').length
 				)}`,
-			task.pipe(tap(result => this.writeFile(result)))
+			task.tap(result => this.writeFile(result))
 		);
 	}
 
@@ -216,7 +243,6 @@ export class Builder extends Application {
 	async build(config: BuildConfiguration): Promise<void> {
 		try {
 			if (config.target && !process.argv.includes(config.target)) return;
-
 			await new Build(this, config).build();
 		} catch (e) {
 			this.handleError(e);
@@ -230,8 +256,12 @@ export async function build(...targets: BuildConfiguration[]) {
 	if (!targets) throw new Error('Invalid configuration');
 	if (!builder.started) await builder.start();
 
-	return targets.reduce(
-		(result, config) => result.then(() => builder.build(config)),
+	return await targets.reduce(
+		(result, config) =>
+			result.then(() => {
+				builder.build(config);
+			}),
+
 		Promise.resolve()
 	);
 }
@@ -246,6 +276,15 @@ export function getSourceMap(out: Output): Output | undefined {
 
 	if (path)
 		return { path: pathBasename(path), source: readFileSync(path, 'utf8') };
+}
+
+export function exec(cmd: string) {
+	return new Observable<void>(subs => {
+		builder.log(`sh ${cmd}`, sh(cmd)).then(
+			() => subs.complete(),
+			e => subs.error(e)
+		);
+	});
 }
 
 export function minify(config: MinifyConfig = {}) {

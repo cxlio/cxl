@@ -17,6 +17,7 @@ Collection of Libraries and Tools
 | @cxl/server        | [0.0.1](https://npmjs.com/package/@cxl/server/v/0.0.1) | GPL-3.0 | Application library       | [Docs](https://cxlio.github.io/cxl/server/0.0.1) |
 | @cxl/store        | [0.0.1](https://npmjs.com/package/@cxl/store/v/0.0.1) | GPL-3.0 | Store library       | [Docs](https://cxlio.github.io/cxl/store/0.0.1) |
 | @cxl/template        | [1.0.0](https://npmjs.com/package/@cxl/template/v/1.0.0) | GPL-3.0 | Reactive template library       | [Docs](https://cxlio.github.io/cxl/template/1.0.0) |
+| @cxl/tester        | [0.0.1](https://npmjs.com/package/@cxl/tester/v/0.0.1) | GPL-3.0 | Test runner tool       | [Docs](https://cxlio.github.io/cxl/tester/0.0.1) |
 | @cxl/tsx        | [0.0.1](https://npmjs.com/package/@cxl/tsx/v/0.0.1) | GPL-3.0 | TSX library       | [Docs](https://cxlio.github.io/cxl/tsx/0.0.1) |
 | @cxl/ui        | [3.0.0](https://npmjs.com/package/@cxl/ui/v/3.0.0) ([latest:2.2.0](https://npmjs.com/package/@cxl/ui/v/2.2.0)) | GPL-3.0 | Open Source collection of high-performance Web Components for rapid application development.       | [Docs](https://cxlio.github.io/cxl/ui/3.0.0) |
 | @cxl/worker        | [0.0.1](https://npmjs.com/package/@cxl/worker/v/0.0.1) | GPL-3.0 | Web Worker library       | [Docs](https://cxlio.github.io/cxl/worker/0.0.1) |

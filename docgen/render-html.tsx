@@ -761,7 +761,6 @@ function Markdown(content: string) {
 		h5: 'h6',
 	};
 
-	/* eslint-disable @typescript-eslint/camelcase */
 	rules.heading_open = (tokens, idx) => `<cxl-t ${map[tokens[idx].tag]}>`;
 	rules.heading_close = () => `</cxl-t>`;
 	rules.code_block = (tokens, idx) => Code(tokens[idx].content);

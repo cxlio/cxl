@@ -96,8 +96,30 @@ export class Subscriber<T> {
 /**
  * Used to stitch together functional operators into a chain.
  */
-export function pipe<T>(...operators: Operator<T>[]): Operator<T> {
-	return (source: Observable<T>) =>
+export function pipe<T, A, B>(
+	a: Operator<T, A>,
+	b: Operator<A, B>
+): Operator<T, B>;
+export function pipe<T, A, B, C>(
+	a: Operator<T, A>,
+	b: Operator<A, B>,
+	c: Operator<B, C>
+): Operator<T, C>;
+export function pipe<T, A, B, C, D>(
+	a: Operator<T, A>,
+	b: Operator<A, B>,
+	c: Operator<B, C>,
+	d: Operator<C, D>
+): Operator<T, D>;
+export function pipe<T, A, B, C, D, E>(
+	a: Operator<T, A>,
+	b: Operator<A, B>,
+	c: Operator<B, C>,
+	d: Operator<C, D>,
+	e: Operator<D, E>
+): Operator<T, E>;
+export function pipe(...operators: Operator<any>[]): Operator<any> {
+	return (source: Observable<any>) =>
 		operators.reduce((prev, fn) => fn(prev), source);
 }
 
@@ -402,6 +424,24 @@ export function map<T, T2>(mapFn: (val: T) => T2) {
 	});
 }
 
+export function reduce<T, T2>(
+	reduceFn: (acc: T2, val: T, i: number) => T2,
+	seed: T2
+) {
+	return operator<T, T2>(subscriber => {
+		let acc = seed;
+		let i = 0;
+		return {
+			next(val: T) {
+				acc = reduceFn(acc, val, i++);
+			},
+			complete() {
+				subscriber.next(acc);
+			},
+		};
+	});
+}
+
 export function debounceFunction<A extends any[], R>(
 	fn: (...a: A) => R,
 	delay?: number
@@ -577,7 +617,7 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
  *
  */
 export function catchError<T>(
-	selector: (err: unknown, source: Observable<T>) => Observable<T> | void
+	selector: (err: any, source: Observable<T>) => Observable<T> | void
 ) {
 	function subscribe(source: Observable<T>, subscriber: Subscriber<T>) {
 		const subscription = source.subscribe(
@@ -726,16 +766,18 @@ export function ref<T>(initial?: T) {
 }
 
 const operators: any = {
-	map,
-	tap,
-	filter,
+	catchError,
 	debounceTime,
 	distinctUntilChanged,
-	mergeMap,
-	switchMap,
-	catchError,
+	filter,
+	finalize,
 	first,
+	map,
+	mergeMap,
+	reduce,
+	switchMap,
 	take,
+	tap,
 };
 
 for (const p in operators) {
@@ -746,17 +788,20 @@ for (const p in operators) {
 
 export interface Observable<T> {
 	catchError<T2>(
-		selector: (err: unknown, source: Observable<T>) => Observable<T2> | void
+		selector: (err: any, source: Observable<T>) => Observable<T2> | void
 	): Observable<T2>;
 	debounceTime(time?: number): Observable<T>;
-	defer(fn: () => Observable<T> | void): Observable<T>;
 	distinctUntilChanged(): Observable<T>;
 	filter(fn: (val: T) => boolean): Observable<T>;
 	finalize(fn: () => void): Observable<T>;
 	first(): Observable<T>;
 	map<T2>(mapFn: (val: T) => T2): Observable<T2>;
 	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
+	reduce<T2>(
+		reduceFn: (acc: T2, val: T, i: number) => T2,
+		seed: T2
+	): Observable<T2>;
 	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
-	tap(tapFn: (val: T) => void): Observable<T>;
 	take(howMany: number): Observable<T>;
+	tap(tapFn: (val: T) => void): Observable<T>;
 }

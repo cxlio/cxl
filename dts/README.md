@@ -2,7 +2,7 @@
 	
 [![npm version](https://badge.fury.io/js/%40cxl%2Fdts.svg)](https://badge.fury.io/js/%40cxl%2Fdts)
 
-Generate a simplified AST from typescript source code
+Generate symbol information from typescript source code
 
 ## Project Details
 

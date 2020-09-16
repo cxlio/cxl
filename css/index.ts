@@ -280,7 +280,7 @@ function toUnit(n: Length) {
 }
 
 function color(val: Color) {
-	return val in theme.colors
+	return typeof val === 'string' && val in theme.colors
 		? `var(--cxl-${toSnake(val.toString())})`
 		: val.toString();
 }

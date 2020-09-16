@@ -1,4 +1,4 @@
-import { Observable, defer, from } from '../rx';
+import { Observable, defer, from } from '../rx/index.js';
 import { Output } from '../source/index.js';
 import { promises } from 'fs';
 import { resolve } from 'path';

@@ -1,6 +1,6 @@
-const ts = require('typescript'),
-	fs = require('fs'),
-	cp = require('child_process');
+import ts from 'typescript';
+import fs from 'fs';
+import cp from 'child_process';
 
 function write(path, source) {
 	console.log(`Writing ${path}`);

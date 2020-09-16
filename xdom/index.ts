@@ -1,5 +1,6 @@
 import { Observable, Subscription, from, tap } from '../rx/index.js';
 
+/* eslint @typescript-eslint/ban-types: 'off' */
 /* eslint @typescript-eslint/no-namespace: 'off' */
 declare global {
 	namespace JSX {
