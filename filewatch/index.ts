@@ -1,217 +1,150 @@
-import { posix as path } from 'path';
-import { Observable } from '../rx/index.js';
-import * as fs from 'fs';
-
-const WATCHERS = {};
+import { posix as fsPath } from 'path';
+import { promises as fs, Stats, watch as fsWatch } from 'fs';
+import { Observable, Subscriber, merge, of } from '../rx/index.js';
 
 export enum EventType {
 	Change = 'change',
-	Rename = 'rename',
 	Remove = 'remove',
 }
 
-export class FileEvent {
-	constructor(type: FileEventType, path: string) {
-		this.type = type;
-		this.path = path;
-	}
-
-	trigger(subscriber) {
-		const ev = this.type;
-
-		fs.stat(this.path, (err, s) => {
-			if (err) {
-				if (ev === EventType.Change || ev === EventType.Rename)
-					this.type = EventType.Remove;
-				else return subscriber.error(err);
-			}
-
-			this.stat = s;
-			subscriber.next(this);
-		});
-	}
+export interface FileEvent {
+	type: EventType;
+	path: string;
+	stat?: Stats;
 }
 
-class Poller extends Observable {
-	constructor(public interval: number) {
-		super();
-	}
-
-	$decelerate(nochange) {
-		if (nochange > 100) this.interval = 10000;
-		else if (nochange > 30) this.interval = 5000;
-		else if (nochange > 5) this.interval = 2000;
-		else this.interval = 1000;
-	}
+export interface WatchOptions {
+	delay: number;
+	pollInterval: number;
 }
 
-class FilePoller {
-	constructor(path: string, callback) {
-		this.path = path;
-		this.callback = callback;
-		this.interval = 1000;
-		// Number of times we polled and there was no change. Use by decelerate function
-		this.nochange = 0;
-		this.$history = {};
-		this.$isDirectory = false;
-		this.$statSync();
-		this.$schedule();
-	}
+function poll(path: string, baseInterval = 1000) {
+	return new Observable<Stats | undefined>(subs => {
+		let nochange = 0,
+			previous: Stats,
+			interval = baseInterval,
+			timeout: NodeJS.Timeout;
 
-	$decelerate(nochange) {
-		if (nochange > 100) this.interval = 10000;
-		else if (nochange > 30) this.interval = 5000;
-		else if (nochange > 5) this.interval = 2000;
-		else this.interval = 1000;
-	}
+		function next() {
+			fs.stat(path).then(
+				stat => {
+					if (!previous || previous.mtimeMs !== stat.mtimeMs) {
+						nochange = 0;
+						subs.next(stat);
+					} else nochange++;
 
-	$schedule() {
-		this.$timeout = setTimeout(() => this.$poll(), this.interval);
-	}
-
-	$statSync(file) {
-		const stat = (this.$history[file || '.'] = fs.statSync(
-			this.path + (file ? '/' + file : '')
-		));
-
-		if (!file && stat.isDirectory())
-			fs.readdirSync(this.path).forEach(d => this.$statSync(d));
-	}
-
-	$stat(file, onDone) {
-		const filepath = this.path + (file ? '/' + file : '');
-
-		file = file || '.';
-
-		fs.stat(filepath, (err, stat) => {
-			const current = this.$history[file];
-
-			if (this.$checkChanged(current, stat)) {
-				this.changes++;
-				this.callback(file === '.' ? '' : file);
-			}
-
-			if (file === '.' && stat.isDirectory()) this.$pollDir(onDone);
-			else if (onDone) onDone();
-
-			this.$history[file] = stat;
-		});
-	}
-
-	$checkChanged(oldStat, stat) {
-		// TODO
-		return (
-			!oldStat ||
-			!stat ||
-			oldStat.ino !== stat.ino ||
-			oldStat.mtime.getTime() !== stat.mtime.getTime()
-		);
-	}
-
-	$pollDir(onDone) {
-		fs.readdir(this.path, (err, list) => {
-			if (list) list.forEach(l => this.$stat(l));
-			// TODO Wait for child stats
-			if (onDone) onDone();
-		});
-	}
-
-	$poll() {
-		this.changes = 0;
-		this.$stat('', () => {
-			this.nochange = this.changes ? 0 : this.nochange + 1;
-			this.$decelerate(this.nochange);
-			this.$schedule();
-		});
-	}
-
-	destroy() {
-		if (this.$timeout) clearTimeout(this.$timeout);
-	}
-}
-
-export class FileWatch extends Observable<FileEvent> {
-	static getCount() {
-		return Object.keys(WATCHERS).length;
-	}
-
-	$getPath() {
-		return this.path;
-	}
-
-	$onChange(subscriber, ev, filename) {
-		const full = this.$getPath(filename),
-			id = full,
-			timeout = this.$events[id],
-			event = new FileEvent(ev, full, subscriber);
-		if (timeout) clearTimeout(timeout);
-
-		this.$events[id] = setTimeout(() => {
-			event.trigger(subscriber);
-			delete this.$events[id];
-		}, this.delay);
-	}
-
-	$createFSWatcher(subscriber, path) {
-		const onChange = this.$onChange.bind(this, subscriber),
-			onError = subscriber.error,
-			w = (this.$watcher = fs.watch(path));
-		w.on('change', onChange);
-		w.on('error', onError);
-
-		return function () {
-			w.removeListener('change', onChange);
-			w.removeListener('error', onError);
-
-			if (w.listenerCount('change') === 0) {
-				delete WATCHERS[path];
-				w.close();
-			}
-		};
-	}
-
-	$createPoller(subscriber, path) {
-		const onChange = file => {
-				this.$onChange(subscriber, 'change', file);
-			},
-			poller = new FilePoller(path, onChange);
-		return function () {
-			poller.destroy();
-		};
-	}
-
-	$createWatcher(subscriber) {
-		const path = this.path;
-
-		try {
-			return this.$createFSWatcher(subscriber, path);
-		} catch (e) {
-			return this.$createPoller(subscriber, path);
+					previous = stat;
+					schedule();
+				},
+				err => {
+					if (err?.code !== 'ENOENT') subs.error(err);
+					else schedule();
+				}
+			);
 		}
-	}
 
-	doSubscribe(subscriber) {
-		if (!this.$watcher) this.$unsubscribe = this.$createWatcher(subscriber);
+		function schedule() {
+			if (nochange > 100) {
+				nochange = 101;
+				interval = baseInterval * 10;
+			} else if (nochange > 30) interval = baseInterval * 5;
+			else if (nochange > 5) interval = baseInterval * 2;
+			else interval = baseInterval;
+			timeout = setTimeout(next, interval);
+		}
 
-		return this.$unsubscribe;
-	}
-
-	constructor(filename) {
-		const id = path.normalize(filename);
-
-		if (WATCHERS[id]) return WATCHERS[id];
-
-		super(subscriber => this.doSubscribe(subscriber));
-
-		WATCHERS[id] = this;
-		this.path = id;
-		this.delay = 250;
-		this.$events = {};
-	}
+		next();
+		return () => timeout && clearTimeout(timeout);
+	});
 }
 
-export class DirectoryWatch extends FileWatch {
-	$getPath(filename) {
-		return path.join(this.path, filename);
-	}
+function onWatchChange(
+	basePath: string,
+	eventPath: string,
+	subs: Subscriber<FileEvent>
+) {
+	fs.stat(basePath).then(
+		stat => {
+			if (eventPath && stat.isDirectory())
+				onWatchChange(fsPath.join(basePath, eventPath), '', subs);
+			else subs.next({ type: EventType.Change, path: basePath, stat });
+		},
+		err => {
+			if (err.code === 'ENOENT') {
+				const event = { path: basePath, type: EventType.Remove };
+				if (eventPath) subs.error({ code: DowngradeError, event });
+				else subs.next(event);
+			} else subs.error(err);
+		}
+	);
+}
+
+function createWatcher(path: string, options: WatchOptions) {
+	return new Observable<FileEvent>(subs => {
+		const events: Record<string, NodeJS.Timeout> = {};
+
+		function onChange(_: any, eventFile: string | Buffer) {
+			if (events[path]) clearTimeout(events[path]);
+			events[path] = setTimeout(() => {
+				onWatchChange(path, eventFile.toString(), subs);
+				delete events[path];
+			}, options.delay);
+		}
+
+		const w = fsWatch(path, { encoding: 'utf8' });
+		w.on('change', onChange);
+		w.on('error', e => subs.error(e));
+		return () => w.close();
+	});
+}
+
+const DowngradeError = {};
+const UpgradeError = {};
+
+function createPoller(path: string, options: WatchOptions) {
+	return poll(path, options.pollInterval).map(stat => {
+		if (stat) {
+			throw {
+				code: UpgradeError,
+				event: { path, type: EventType.Change, stat },
+			};
+		} else return { path, type: EventType.Remove };
+	});
+}
+
+function catchWatchError(fullpath: string, options: WatchOptions) {
+	return function result(err: any): any {
+		const code = err?.code;
+		if (code === UpgradeError) {
+			return merge(
+				createWatcher(fullpath, options).catchError(result),
+				of(err.event)
+			);
+		} else if (code === DowngradeError) {
+			return merge(
+				createPoller(fullpath, options).catchError(result),
+				of(err.event)
+			);
+		} else if (code === 'ENOENT') {
+			return createPoller(fullpath, options).catchError(result);
+		} else throw err;
+	};
+}
+
+export function watch(
+	filename: string,
+	options?: Partial<WatchOptions>
+): Observable<FileEvent> {
+	const fullpath = fsPath.resolve(filename);
+	const newOptions = Object.assign(
+		{
+			delay: 250,
+			pollInterval: 1000,
+		},
+		options
+	);
+
+	return createWatcher(fullpath, newOptions).catchError(
+		catchWatchError(fullpath, newOptions)
+	);
 }

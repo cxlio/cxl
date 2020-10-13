@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/router/amd"
+	},
+	"files": ["index.ts", "debug.ts"],
+	"references": [{ "path": "../debug" }]
+}

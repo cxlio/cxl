@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/dom/amd"
+	},
+	"files": ["index.ts", "virtual.ts"],
+	"references": [{ "path": "../rx/tsconfig.amd.json" }]
+}
