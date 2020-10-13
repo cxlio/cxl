@@ -7,15 +7,15 @@ window.define =
 			if (Array.isArray(path)) {
 				path = path[0];
 				return Promise.resolve()
-					.then(function () {
-						return require(path);
-					})
+					.then(() => _require(path))
 					.then(resolve, reject);
-			} else
-				return typeof require !== 'undefined'
-					? require(path)
-					: define.modules[path];
+			} else {
+				const module = define.modules[path];
+				if (!module) throw new Error(`Module "${path}" not found`);
+				return module;
+			}
 		}
+		window.require = window.require || _require;
 		if (arguments.length === 2 && Array.isArray(name)) {
 			module = injects;
 			injects = name;

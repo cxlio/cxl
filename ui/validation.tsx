@@ -1,5 +1,5 @@
 import { get } from '../component/index.js';
-import type { InputBase } from './form.js';
+import type { InputBase } from './input-base.js';
 
 export type ValidateFunction<T> = (val: T) => string | true;
 

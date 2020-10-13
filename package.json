@@ -3,7 +3,7 @@
 	"name": "@cxl/cxl",
 	"version": "0.0.0",
 	"devDependencies": {
-		"@fortawesome/fontawesome-free": "5",
+		"@fortawesome/fontawesome-free": "^5.14.0",
 		"@types/eslint": "^7.2.0",
 		"@types/markdown-it": "^10.0.1",
 		"@types/node": "^14.10.2",
@@ -24,8 +24,5 @@
 		"preinstall": "scripts/preinstall.sh",
 		"prepublishOnly": "node scripts/build-all.js && node scripts/build-readme",
 		"install": "cd build && node build.mjs"
-	},
-	"dependencies": {
-		"@fortawesome/fontawesome-free": "^5.14.0"
 	}
 }

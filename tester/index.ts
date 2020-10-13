@@ -1,6 +1,7 @@
 import { Result, Test } from '../spec/index.js';
 import { colors } from '../server/colors.js';
 import { Application } from '../server/index.js';
+import { getSourceMap, positionToIndex } from '../source/index.js';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as path from 'path';
 
@@ -51,23 +52,84 @@ class TestReport {
 	}
 }
 
+interface CoverageEntry {
+	url: string;
+	ranges: any[];
+	length: number;
+	used: number;
+}
+
+interface CoverageReport {
+	[file: string]: CoverageEntry;
+}
+
+function calculateCoverage(entry: CoverageEntry) {
+	let used = 0;
+	const ranges = entry.ranges;
+	for (const range of ranges) used += range.end - range.start - 1;
+	entry.used = used;
+	console.log(`${entry.url}: ${((used / entry.length) * 100).toFixed(2)}%`);
+}
+
 function generateCoverageReport([js]: any, sources: Output[]) {
-	const report: any = {};
+	const report: CoverageReport = {};
+	const mappedRanges = [];
+	const mappedSources: any = {};
 
 	for (const entry of js) {
-		const total = entry.text.length;
 		const sourceFile = sources.find(src => entry.text.includes(src.source));
 
-		if (!sourceFile) continue;
+		if (!sourceFile || sourceFile.path[0] === '.') continue;
 
-		const url = sourceFile ? sourceFile.path : entry.url;
-		let used = 0;
+		const total = sourceFile.source.length;
+		const url = sourceFile.path;
+		const offset = entry.text.indexOf(sourceFile.source);
+		const sourceMap = getSourceMap(sourceFile.path);
+		const sourceEntry = (report[url] = {
+			url,
+			ranges: offset
+				? entry.ranges.flatMap((r: any) => ({
+						start: r.start - offset < 0 ? 0 : r.start - offset,
+						end:
+							r.end - offset > total ? total - 1 : r.end - offset,
+				  }))
+				: entry.ranges,
+			length: total,
+			used: 0,
+		});
 
-		report[url] = entry.ranges;
+		if (sourceMap) {
+			for (const range of sourceEntry.ranges) {
+				const mappedRange = sourceMap.translateRange(
+					sourceFile.source,
+					range
+				);
+				if (mappedRange) mappedRanges.push(mappedRange);
+			}
+		}
+	}
 
-		for (const range of entry.ranges) used += range.end - range.start - 1;
+	const cwd = process.cwd();
 
-		console.log(`${url}: ${((used / total) * 100).toFixed(2)}%`);
+	for (const range of mappedRanges) {
+		const url = path.relative(cwd, range.start.source);
+		const entry =
+			report[url] ||
+			(report[url] = {
+				url,
+				ranges: [],
+				length: (mappedSources[url] = readFileSync(url, 'utf8')).length,
+				used: 0,
+			});
+		const source = mappedSources[url];
+		entry.ranges.push({
+			start: positionToIndex(source, range.start),
+			end: positionToIndex(source, range.end),
+		});
+	}
+
+	for (const entry of Object.values(report)) {
+		calculateCoverage(entry);
 	}
 
 	return report;

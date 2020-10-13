@@ -458,6 +458,8 @@ const AVATAR_DEFAULT =
 	"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 0 26 26' %3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E";
 
 /**
+ * Avatars are circular components that usually wrap an image or icon.
+ * They can be used to represent a person or an object.
  * @example
  * <cxl-avatar></cxl-avatar>
  * <cxl-avatar big></cxl-avatar>
@@ -525,6 +527,7 @@ export class Avatar extends Component {
 }
 
 /**
+ * Chips are compact elements that represent an input, attribute, or action.
  * @example
  * <cxl-chip>Single Chip</cxl-chip>
  * <cxl-chip removable>Removable Chip</cxl-chip>
@@ -620,6 +623,9 @@ export class Chip extends Component {
 }
 
 /**
+ * Chips represent complex entities in small blocks. A chip can contain several
+ * different elements such as avatars, text, and icons.
+ *
  * @example
  * <cxl-icon icon="envelope"></cxl-icon><cxl-badge top over>5</cxl-badge>
  * <cxl-icon icon="shopping-cart"></cxl-icon><cxl-badge secondary top over>5</cxl-badge>
@@ -688,7 +694,6 @@ export class Hr extends Component {}
 
 /**
  * Linear progress indicators display progress by animating an indicator along the length of a fixed, visible track.
- * The behavior of the indicator is dependent on whether the progress of a process is known.
  * @example
  * <cxl-progress></cxl-progress><br/>
  * <cxl-progress value="0.5"></cxl-progress>
@@ -751,6 +756,8 @@ export function Svg(p: {
 }
 
 /**
+ * Spinners are used to indicate that the app is performing an action that the user needs to wait on.
+ *
  * @example
  * <cxl-spinner></cxl-spinner>
  */
@@ -796,6 +803,7 @@ export class Spinner extends Component {}
 				$h4: { font: 'h4', marginTop: 30, marginBottom: 30 },
 				$h5: { font: 'h5', marginTop: 24, marginBottom: 24 },
 				$h6: { font: 'h6', marginTop: 16, marginBottom: 16 },
+				$body2: { font: 'body2' },
 				$button: { font: 'button' },
 				$subtitle: { font: 'subtitle', marginBottom: 0 },
 				$subtitle2: { font: 'subtitle2', opacity: 0.73 },
@@ -945,7 +953,7 @@ export class Toggle extends Component {
 
 				$active: { elevation: 3 },
 				$active$disabled: { elevation: 1 },
-				$active$flat$disabled: { elevation: 0 },
+				$active$flat: { elevation: 0 },
 				'@large': {
 					$flat: { paddingLeft: 12, paddingRight: 12 },
 				},
@@ -973,6 +981,7 @@ export class ButtonBase extends Component {
 }
 
 /**
+ * Buttons allow users to take actions, and make choices, with a single tap.
  * @example
  * <cxl-button primary><cxl-icon icon="upload"></cxl-icon> Upload</cxl-button>
  * <cxl-button secondary>Secondary</cxl-button>

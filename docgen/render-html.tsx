@@ -23,6 +23,7 @@ let application: DocGen;
 let index: Node[];
 let extraDocs: Section[];
 let extraFiles: File[];
+let userScripts: File[];
 
 function TypeArguments(types?: Node[]): string {
 	return types
@@ -258,16 +259,14 @@ function Code(source: string, language?: string) {
 
 function Demo(doc: DocumentationContent): string {
 	const { title, value } = parseExample(doc.value);
+
 	return `<cxl-t h5>${title || translate('Demo')}</cxl-t><doc-demo${
 		application.debug ? ' debug' : ''
-	}><!--${value}--></doc-demo><cxl-t h6>Source</cxl-t>${Code(value)}`;
+	}><!--${value}--></doc-demo>`;
 }
 
 function Example(doc: DocumentationContent) {
-	const { title, value } = parseExample(doc.value);
-	return `<cxl-t h5>${
-		title || translate('Example')
-	}</cxl-t><cxl-c>${value}</cxl-c><cxl-t h6>Source</cxl-t>${Code(value)}`;
+	return Demo(doc);
 }
 
 function DocSee(doc: DocumentationContent) {
@@ -328,7 +327,7 @@ function InheritedFrom(symbol?: Node) {
 }
 
 function MemberBody(c: Node) {
-	let result = `<cxl-t style="font-weight: 500" code subtitle>${Signature(
+	let result = `<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>${Signature(
 		c
 	)}</cxl-t>${InheritedFrom()}`;
 
@@ -679,12 +678,32 @@ function ModuleFooter(_p: Node) {
 	return ``;
 }
 
+function getRuntimeScripts() {
+	const docgenConfig = {
+		userScripts: userScripts.map(f => f.name),
+	};
+	return (
+		`<script>window.docgen=${JSON.stringify(docgenConfig)};</script>` +
+		(application.debug
+			? `<script src="../../dist/tester/require-browser.js"></script>
+	<script>require('../../dist/ui/index.js');require('../../dist/ui/icons.js');require('../../dist/docgen/runtime.js')</script>`
+			: `<script src="runtime.bundle.min.js"></script>`)
+	);
+}
+
+function getUserScripts() {
+	let id = 0;
+	return (
+		application.scripts?.map(path => ({
+			name: `us${id++}.js`,
+			content: readFileSync(path, 'utf8'),
+		})) || []
+	);
+}
+
 function Header(module: Output) {
 	const pkg = application.modulePackage;
-	const SCRIPTS = application.debug
-		? `<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui/index.js');require('../../dist/ui/icons.js');require('../../dist/docgen/runtime.js')</script>`
-		: `<script src="runtime.bundle.min.js"></script>`;
+	const SCRIPTS = getRuntimeScripts();
 
 	return `<!DOCTYPE html>
 	<head><meta name="description" content="Documentation for ${
@@ -784,6 +803,7 @@ function renderExtraFile(file: string, index = false) {
 
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
+	userScripts = getUserScripts();
 	index = Object.values(output.index);
 	hljs.configure({ tabReplace: '    ' });
 	extraDocs =
@@ -816,6 +836,7 @@ export function render(app: DocGen, output: Output): File[] {
 				name: 'index.html',
 				content: header + content + '</cxl-router>' + footer,
 			},
+			...userScripts,
 		];
 	}
 

@@ -222,6 +222,7 @@ export class Content extends Component {
 export class Page extends Component {}
 
 /**
+ * Cards contain content and actions about a single subject.
  * @example
  * <cxl-card>
  *   <cxl-c flex pad16>

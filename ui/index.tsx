@@ -5,3 +5,5 @@ export * from './form.js';
 export * from './layout.js';
 export * from './navigation.js';
 export * from './table.js';
+export * from './calendar.js';
+export * from './input-base.js';

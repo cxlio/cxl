@@ -1,7 +1,6 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"types": ["node"],
 		"outDir": "../dist/dom"
 	},
 	"files": ["index.ts", "virtual.ts"],

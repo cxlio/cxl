@@ -14,9 +14,6 @@ type PickObservable<T> = {
 
 export type Operator<T, T2 = T> = (observable: Observable<T>) => Observable<T2>;
 
-declare function setTimeout(fn: () => any, n?: number): number;
-declare function clearTimeout(n: number): void;
-
 export interface Observer<T> {
 	next?: NextFunction<T>;
 	error?: ErrorFunction;
@@ -424,6 +421,10 @@ export function map<T, T2>(mapFn: (val: T) => T2) {
 	});
 }
 
+export function is<T>(equalTo: T) {
+	return operator<T, boolean>(subs => (val: T) => subs.next(val === equalTo));
+}
+
 export function reduce<T, T2>(
 	reduceFn: (acc: T2, val: T, i: number) => T2,
 	seed: T2
@@ -772,6 +773,7 @@ const operators: any = {
 	filter,
 	finalize,
 	first,
+	is,
 	map,
 	mergeMap,
 	reduce,
@@ -795,6 +797,7 @@ export interface Observable<T> {
 	filter(fn: (val: T) => boolean): Observable<T>;
 	finalize(fn: () => void): Observable<T>;
 	first(): Observable<T>;
+	is(equalTo: T): Observable<boolean>;
 	map<T2>(mapFn: (val: T) => T2): Observable<T2>;
 	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	reduce<T2>(

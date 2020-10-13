@@ -164,8 +164,6 @@ export class DialogAlert extends Component {
 	))
 )
 export class DialogConfirm extends Component {
-	//				'role(alertdialog) =modal:aria.prop(modal) =title-text:aria.prop(label)',
-
 	resolve?: () => void;
 	reject?: () => void;
 
@@ -188,14 +186,16 @@ export class DialogConfirm extends Component {
 }
 
 /**
+ * Drawers are surfaces containing supplementary content that are anchored
+ * to the left or right edge of the screen.
  * @demo
  * <cxl-drawer right permanent visible>
-	<cxl-c pad16>
-		<cxl-t h6>Right Drawer Title</cxl-t>
-		<cxl-t>Right Drawer Content</cxl-t>
-	</cxl-c>
-</cxl-drawer>
-*/
+ *   <cxl-c pad16>
+ *     <cxl-t h6>Right Drawer Title</cxl-t>
+ *     <cxl-t>Right Drawer Content</cxl-t>
+ *   </cxl-c>
+ * </cxl-drawer>
+ */
 @Augment(
 	'cxl-drawer',
 	<Host>
@@ -289,6 +289,7 @@ export class Drawer extends Component {
 }
 
 /**
+ * Snackbars provide brief messages about app processes at the bottom of the screen.
  * @example
  * <cxl-snackbar>Snackbar Content</cxl-snackbar>
  */
@@ -306,6 +307,7 @@ export class Drawer extends Component {
 				backgroundColor: 'onSurface87',
 				color: 'surface',
 				marginBottom: 16,
+				font: 'default',
 			},
 
 			'@small': { $: { display: 'inline-block' } },

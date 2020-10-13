@@ -26,7 +26,7 @@ import { execSync } from 'child_process';
 import { Output } from '../source/index.js';
 import { file } from './file.js';
 
-export { file, files } from './file.js';
+export { file, files, copyDir } from './file.js';
 export { concat } from '../rx/index.js';
 export { AMD, pkg, readme, bundle } from './package.js';
 export { sh } from '../server/index.js';
@@ -163,16 +163,40 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 					? file(`${outputDir}/index.js`).pipe(minify())
 					: EMPTY,
 				pkg(),
-				/*tsconfig('tsconfig.amd.json'),
-				packageJson.browser
-					? file(`${outputDir}/amd/index.js`).pipe(minify())
-					: EMPTY,
-				tsconfig('tsconfig.es6.json'),
-				packageJson.browser
-					? file(`${outputDir}/es6/index.js`).pipe(minify())
-					: EMPTY,*/
 			],
 		},
+		...(existsSync('tsconfig.amd.json')
+			? [
+					{
+						target: 'package',
+						outputDir: outputDir + '/amd',
+						tasks: [
+							tsconfig('tsconfig.amd.json'),
+							packageJson.browser
+								? file(`${outputDir}/amd/index.js`).pipe(
+										minify()
+								  )
+								: EMPTY,
+						],
+					},
+			  ]
+			: []),
+		...(existsSync('tsconfig.es6.json')
+			? [
+					{
+						target: 'package',
+						outputDir: outputDir + '/es6',
+						tasks: [
+							tsconfig('tsconfig.es6.json'),
+							packageJson.browser
+								? file(`${outputDir}/es6/index.js`).pipe(
+										minify()
+								  )
+								: EMPTY,
+						],
+					},
+			  ]
+			: []),
 		...extra
 	);
 }

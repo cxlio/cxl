@@ -1,8 +1,14 @@
 const fs = require('fs').promises;
 const path = require('path').posix;
 const cp = require('child_process');
+
+cp.execSync('npm run build --prefix build');
+
 const { sh } = require('../dist/build');
 const { readJson } = require('../dist/server');
+const stats = {
+	packages: [],
+};
 
 async function build(dir) {
 	const pkg = await readJson(path.join(dir, 'package.json'));
@@ -16,6 +22,12 @@ async function build(dir) {
 		: `npm run package`;
 
 	console.log(`Building ${pkg.name}`);
+
+	stats.packages.push({
+		name: pkg.name,
+		package: pkg,
+	});
+
 	await sh(cmd, { cwd: dir, stdio: 'ignore' });
 }
 
@@ -34,5 +46,7 @@ module.exports = fs.readdir('.').then(async all => {
 			process.exit(1);
 		}
 	}
-	console.log(`Finished in ${Date.now() - start}ms`);
+	stats.totalTime = Date.now() - start;
+	await fs.writeFile('./dist/stats.json', JSON.stringify(stats), 'utf8');
+	console.log(`Finished in ${stats.totalTime}ms`);
 });

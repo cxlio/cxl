@@ -1,13 +1,11 @@
 ## Features
 
--   Lightweight and Fast
--   Type Safe
--   Modular Architecture
--   Open Source
--   Responsive
--   Focus on Accessibility
--   Framework Agnostic
--   Flexible Theming
+-   Lightweight and Fast.
+-   Modular Architecture.
+-   Focus on Accessibility.
+-   No dependecies.
+-   Framework Agnostic.
+-   Flexible Theming.
 
 ## Browser Support
 

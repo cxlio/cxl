@@ -174,7 +174,7 @@ export class AppbarTitle extends Component {
 				backgroundColor: 'surface',
 				font: 'button',
 				color: 'onSurface',
-				lineHeight: 20,
+				lineHeight: 18,
 				textDecoration: 'none',
 				textAlign: 'center',
 				display: 'block',
@@ -208,6 +208,7 @@ export class Tab extends Component {
 }
 
 /**
+ * Tabs organize content across different screens, data sets, and other interactions.
  * @example
 <cxl-tabs>
 	<cxl-tab selected>Tab 1</cxl-tab>
@@ -234,7 +235,7 @@ export class Tab extends Component {
 				selected: {
 					transformOrigin: 'left',
 					backgroundColor: 'secondary',
-					height: 4,
+					height: 2,
 					width: 100,
 					scaleX: 0,
 					display: 'none',
@@ -291,6 +292,9 @@ const MenuIcon = (
 	>{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
 );
 
+/**
+ * Navigation drawers provide access to destinations in your app.
+ */
 @Augment<Navbar>(
 	'cxl-navbar',
 	role('navigation'),
@@ -346,6 +350,7 @@ export class Navbar extends Component {
 }
 
 /**
+ * Menus display a list of choices on temporary surfaces.
  * @example
  * <cxl-menu>
  *   <cxl-item disabled>Option disabled</cxl-item>

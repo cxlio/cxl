@@ -5,7 +5,6 @@ import {
 	Component,
 	Host,
 	Slot,
-	attributeChanged,
 	bind,
 	render,
 	get,
@@ -21,10 +20,8 @@ import {
 	Svg,
 	aria,
 	ariaValue,
-	ariaChecked,
 	focusable,
 	navigationList,
-	registable,
 	registableHost,
 	selectable,
 	selectableHost,
@@ -39,238 +36,12 @@ import {
 	setAttribute,
 } from '../dom/index.js';
 import { Style, border, boxShadow, padding } from '../css/index.js';
-import { EMPTY, Observable, be, defer, merge, tap } from '../rx/index.js';
+import { EMPTY, Observable, be, defer, merge } from '../rx/index.js';
 import { dragInside } from '../drag/index.js';
-
-const FocusCircleStyle = (
-	<Style>
-		{{
-			focusCircle: {
-				position: 'absolute',
-				width: 48,
-				height: 48,
-				backgroundColor: 'elevation',
-				borderRadius: 24,
-				opacity: 0,
-				scaleX: 0,
-				scaleY: 0,
-				display: 'inline-block',
-				translateX: -14,
-				translateY: -14,
-			},
-			focusCirclePrimary: { backgroundColor: 'primary' },
-			focusCircle$invalid$touched: { backgroundColor: 'error' },
-			focusCircle$hover: {
-				scaleX: 1,
-				scaleY: 1,
-				translateX: -14,
-				translateY: -14,
-				opacity: 0.14,
-			},
-			focusCircle$focus: {
-				scaleX: 1,
-				scaleY: 1,
-				translateX: -14,
-				translateY: -14,
-				opacity: 0.25,
-			},
-			focusCircle$disabled: { scaleX: 0, scaleY: 0 },
-		}}
-	</Style>
-);
-
-const Undefined = {};
-
-@Augment<InputBase>(
-	bind(host =>
-		merge(
-			attributeChanged(host, 'invalid').pipe(
-				triggerEvent(host, 'invalid')
-			),
-			registable(host, 'form'),
-			get(host, 'disabled').tap(val =>
-				host.setAttribute('aria-disabled', val ? 'true' : 'false')
-			),
-			get(host, 'value').tap(val =>
-				(host as any).internals?.setFormValue(val)
-			),
-			get(host, 'invalid').tap(val => {
-				if (val && !host.validationMessage)
-					host.setCustomValidity('Invalid value');
-			}),
-			attributeChanged(host, 'value').pipe(triggerEvent(host, 'change'))
-		)
-	)
-)
-export class InputBase extends Component {
-	static formAssociated = true;
-
-	@Attribute()
-	value: any;
-	@StyleAttribute()
-	invalid = false;
-	@StyleAttribute()
-	disabled = false;
-	@StyleAttribute()
-	touched = false;
-	@Attribute()
-	name?: string;
-
-	private internals: any;
-
-	constructor() {
-		super();
-		this.internals = (this as any).attachInternals?.();
-	}
-
-	protected formDisabledCallback(disabled: boolean) {
-		this.disabled = disabled;
-	}
-
-	get validationMessage(): string {
-		return this.internals?.validationMessage || '';
-	}
-
-	get validity(): ValidityState {
-		return this.internals?.validity || null;
-	}
-
-	setCustomValidity(msg: string) {
-		const invalid = (this.invalid = !!msg);
-		this.internals?.setValidity({ customError: invalid }, msg);
-	}
-
-	/**
-	 * Used by element that do not directly receive focus. ie Input, Textarea
-	 */
-	focusElement?: HTMLElement;
-
-	focus() {
-		if (this.focusElement) this.focusElement.focus();
-		else super.focus();
-	}
-}
+import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
 
 /**
- * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.
- * @example
- * <cxl-checkbox>Checkbox Label</cxl-checkbox>
- * <cxl-checkbox checked>Checkbox Label</cxl-checkbox>
- * <cxl-checkbox indeterminate>Checkbox Indeterminate</cxl-checkbox>
- * <cxl-checkbox indeterminate checked>Checkbox Checked Indeterminate</cxl-checkbox>
- */
-@Augment<Checkbox>(
-	'cxl-checkbox',
-	role('checkbox'),
-	bind(host => {
-		const update = tap<any>(
-			() =>
-				(host.value = host.indeterminate
-					? undefined
-					: host.checked
-					? host['true-value']
-					: host['false-value'])
-		);
-		return merge(
-			onAction(host).tap(ev => {
-				if (host.disabled) return;
-				if (host.indeterminate) {
-					host.checked = false;
-					host.indeterminate = false;
-				} else host.checked = !host.checked;
-
-				ev.preventDefault();
-			}),
-			get(host, 'value').tap(val => {
-				if (val !== Undefined)
-					host.checked = val === host['true-value'];
-			}),
-			get(host, 'checked').pipe(ariaChecked(host), update),
-			get(host, 'indeterminate').pipe(update),
-			get(host, 'true-value').pipe(update),
-			get(host, 'false-value').pipe(update)
-		);
-	}),
-	FocusCircleStyle,
-	<Host>
-		<Focusable />
-		<Style>
-			{{
-				$: {
-					marginRight: 16,
-					marginLeft: 0,
-					position: 'relative',
-					cursor: 'pointer',
-					paddingTop: 12,
-					paddingBottom: 12,
-					display: 'block',
-					paddingLeft: 28,
-					lineHeight: 20,
-				},
-				$inline: { display: 'inline-block' },
-				$invalid$touched: { color: 'error' },
-				box: {
-					display: 'inline-block',
-					width: 20,
-					height: 20,
-					borderWidth: 2,
-					borderColor: 'onSurface',
-					borderStyle: 'solid',
-					top: 11,
-					left: 0,
-					position: 'absolute',
-					color: 'transparent',
-				},
-				check: { display: 'none' },
-				minus: { display: 'none' },
-				check$checked: { display: 'initial' },
-				check$indeterminate: { display: 'none' },
-				minus$indeterminate: { display: 'initial' },
-				box$checked: {
-					borderColor: 'primary',
-					backgroundColor: 'primary',
-					color: 'onPrimary',
-				},
-				box$indeterminate: {
-					borderColor: 'primary',
-					backgroundColor: 'primary',
-					color: 'onPrimary',
-				},
-				box$invalid$touched: { borderColor: 'error' },
-				focusCircle: { top: -2, left: -2 },
-			}}
-		</Style>
-		<div className="box">
-			<span className="focusCircle focusCirclePrimary" />
-			<Svg
-				className="check"
-				viewBox="0 0 24 24"
-			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
-			<Svg
-				className="minus"
-				viewBox="0 0 24 24"
-			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M19 13H5v-2h14v2z" />`}</Svg>
-		</div>
-		<slot />
-	</Host>
-)
-export class Checkbox extends InputBase {
-	value: any = Undefined;
-
-	@StyleAttribute()
-	checked = false;
-	@StyleAttribute()
-	indeterminate = false;
-	@StyleAttribute()
-	inline = false;
-
-	@Attribute()
-	'true-value': any = true;
-	@Attribute()
-	'false-value': any = false;
-}
-
-/**
+ * Sliders allow users to make selections from a range of values.
  * @example
  * <cxl-slider></cxl-slider>
  * <cxl-slider value="0.5"></cxl-slider>
@@ -578,6 +349,7 @@ export class Label extends Component {}
 		function onRegister(ev: Event) {
 			if (ev.target) {
 				host.input = ev.target as InputBase;
+				onChange();
 			}
 		}
 
@@ -847,6 +619,8 @@ export class Form extends Component {
 }
 
 /**
+ * Input fields let users enter and edit text.
+ * @see FieldInput
  * @example
  * <cxl-field>
  * 	<cxl-label>Email Address</cxl-label>
@@ -1038,7 +812,7 @@ export class Option extends Component {
  * @example
  * <cxl-field floating>
  *   <cxl-label>Email Address</cxl-label>
- *   <cxl-password value="password"></cxl-input>
+ *   <cxl-password value="password"></cxl-password>
  * </cxl-field>
  */
 @Augment<PasswordInput>(
@@ -1079,10 +853,12 @@ export class PasswordInput extends InputBase {
 const radioElements = new Set<Radio>();
 
 /**
+ * Radio buttons allow the user to select one option from a set.
+ * Use radio buttons when the user needs to see all available options.
  * @example
-<cxl-radio name="test" value="1">Radio Button 1</cxl-radio>
-<cxl-radio name="test" value="2" checked>Radio Button 2</cxl-radio>
-<cxl-radio name="test" value="3">Radio Button 3</cxl-radio>
+ * <cxl-radio name="test" value="1">Radio Button 1</cxl-radio>
+ * <cxl-radio name="test" value="2" checked>Radio Button 2</cxl-radio>
+ * <cxl-radio name="test" value="3">Radio Button 3</cxl-radio>
  */
 @Augment<Radio>(
 	'cxl-radio',
@@ -1100,6 +876,7 @@ const radioElements = new Set<Radio>();
 					paddingTop: 12,
 					paddingBottom: 12,
 					display: 'block',
+					font: 'default',
 				},
 				$inline: { display: 'inline-block' },
 				$invalid$touched: { color: 'error' },
@@ -1122,7 +899,7 @@ const radioElements = new Set<Radio>();
 					height: 20,
 					display: 'inline-block',
 					borderColor: 'onSurface',
-					marginRight: 8,
+					marginRight: 16,
 					borderRadius: 10,
 					borderStyle: 'solid',
 					color: 'primary',
@@ -1381,6 +1158,7 @@ export class SelectBox extends SelectBase {
 }
 
 /**
+ * A form input component that allows the user to select multiple option from a dropdown list
  * @example
  * <cxl-field>
  *   <cxl-label>Multi Select Box with label</cxl-label>
@@ -1494,6 +1272,7 @@ export class MultiSelect extends SelectBase {
 }
 
 /**
+ * Switches toggle the state of a single item on or off.
  * @example
  * <cxl-switch></cxl-switch>
  */
@@ -1613,6 +1392,7 @@ function $contentEditable(el: HTMLElement, host: InputBase) {
 }
 
 /**
+ * Text fields let users enter and edit text that spans in multiple lines.
  * @example
  * <cxl-field>
  *   <cxl-label>Prefilled Text Area</cxl-label>
@@ -1698,6 +1478,7 @@ export class Fab extends Component {
  *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
  *   <cxl-appbar-search></cxl-appbar-search>
  * </cxl-appbar>
+ * @beta
  * @see Appbar
  */
 @Augment(
@@ -1706,21 +1487,23 @@ export class Fab extends Component {
 		<Style>
 			{{
 				$: { display: 'flex' },
-				input: { width: 200, display: 'none', marginBottom: 0 },
-				input$opened: { display: 'block' },
+				$opened: {
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					right: 0,
+					backgroundColor: 'surface',
+				},
+				input: { display: 'none', marginBottom: 0 },
+				input$opened: {
+					display: 'block',
+				},
 				'@medium': {
-					input: { display: 'block' },
+					input: { width: 200, display: 'block', position: 'static' },
 					button: { display: 'none' },
 				},
 			}}
 		</Style>
-		<Field className="input">
-			<Input />
-			<Svg
-				width={20}
-				viewBox="0 0 48 48"
-			>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
-		</Field>
 		<IconButton
 			$={(el, host) => onAction(el).tap(() => (host.opened = true))}
 			className="button"
@@ -1731,9 +1514,16 @@ export class Fab extends Component {
 				viewBox="0 0 48 48"
 			>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
 		</IconButton>
+		<Field className="input">
+			<Input />
+			<Svg
+				width={20}
+				viewBox="0 0 48 48"
+			>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
+		</Field>
 	</Host>
 )
 export class AppbarSearch extends Component {
-	@Attribute()
+	@StyleAttribute()
 	opened = false;
 }

@@ -27,12 +27,18 @@ export class DocGen extends Application {
 	packageJson = 'package.json';
 	summary = false;
 	extra?: Section[];
+	scripts?: string[];
 
 	setup() {
 		this.parameters.register(
 			{ name: 'repository', type: 'string' },
 			{ name: 'clean', help: 'Remove all files from output directory' },
 			{ name: 'outputDir', shortcut: 'o', type: 'string' },
+			{
+				name: 'scripts',
+				help:
+					'Extra scripts to include in the documentation html output',
+			},
 			{
 				name: 'packageJson',
 				help: 'Location of package.json. Defaults to ./package.json',

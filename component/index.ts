@@ -112,7 +112,11 @@ export function augment<T extends Component>(
 export function registerComponent(tagName: string, ctor: any) {
 	if (!ctor.tagName) ctor.tagName = tagName;
 	registeredComponents[tagName] = ctor;
-	customElements.define(tagName, ctor);
+	try {
+		customElements.define(tagName, ctor);
+	} catch (e) {
+		console.warn(`Component ${tagName} already registered`);
+	}
 }
 
 export function Augment<T extends Component>(): (ctor: any) => void;

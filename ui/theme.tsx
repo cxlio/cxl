@@ -13,6 +13,7 @@ declare module '../css/index.js' {
 		h4: CSSStyle;
 		h5: CSSStyle;
 		h6: CSSStyle;
+		body2: CSSStyle;
 		subtitle: CSSStyle;
 		subtitle2: CSSStyle;
 		button: CSSStyle;
@@ -103,6 +104,7 @@ export const defaultTheme: Theme = {
 		h4: { fontSize: '34px', letterSpacing: '0.25px' },
 		h5: { fontSize: '24px' },
 		h6: { fontSize: '20px', fontWeight: 500, letterSpacing: '0.15px' },
+		body2: { fontSize: '14px', letterSpacing: '0.25px' },
 		subtitle: {
 			fontSize: '16px',
 			letterSpacing: '0.15px',

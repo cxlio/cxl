@@ -4,13 +4,21 @@ import {
 	Attribute,
 	Component,
 	Host,
+	get,
 	render,
 } from '../component/index.js';
-import { onChildrenMutation } from '../dom/index.js';
+import { onAction, onChildrenMutation } from '../dom/index.js';
 import { Style, padding } from '../css/index.js';
-import { be } from '../rx/index.js';
-import '../ui/index.js';
+import { EMPTY, be } from '../rx/index.js';
+import '../ui/theme.js';
 import '../ui/router.js';
+import { Tabs, Tab } from '../ui/navigation.js';
+
+declare const docgen: { userScripts: string[] };
+
+const UserScripts = docgen.userScripts
+	.map(src => `<script src="${src}"></script>`)
+	.join('');
 
 @Augment(
 	'doc-example',
@@ -36,6 +44,7 @@ export class DocExample extends Component {}
 					display: 'block',
 				},
 				parent: {
+					display: 'none',
 					backgroundColor: 'onSurface12',
 				},
 				container: {
@@ -45,7 +54,7 @@ export class DocExample extends Component {}
 					marginRight: 'auto',
 					backgroundColor: 'background',
 					width: '100%',
-					height: 180,
+					height: 220,
 					overflowX: 'hidden',
 					overflowY: 'hidden',
 				},
@@ -53,49 +62,99 @@ export class DocExample extends Component {}
 					container: {
 						width: 320,
 					},
+					desktop: {
+						width: '100%',
+						marginTop: -16,
+						height: 236,
+					},
 					parent: {
-						...padding(16),
-						paddingBottom: 0,
+						paddingTop: 16,
 					},
 				},
 				source: {
+					display: 'none',
 					font: 'monospace',
 					...padding(16),
+					height: 236,
 					whiteSpace: 'pre-wrap',
+					overflowY: 'auto',
+				},
+				visible: { display: 'block' },
+				toolbar: {
+					textAlign: 'right',
 				},
 			}}
 		</Style>
 	</Host>,
 	render((host: DocDemo) => {
 		const content$ = be('');
+		const view = get(host, 'view');
+		const iframeClass = be('container');
+
 		function init(parent: HTMLIFrameElement) {
 			return onChildrenMutation(host).tap(() => {
 				const doc = parent.contentDocument;
-				const content = host.childNodes[0].textContent || '';
-				if (!doc) return;
+				const content = host.childNodes[0]?.textContent?.trim() || '';
+				if (!doc) return EMPTY;
 				doc.open();
 				doc.write(
-					(host.debug
-						? `<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui/index.js');require('../../dist/ui/icons.js');require('../../dist/docgen/runtime.js')</script>`
-						: `<script src="runtime.bundle.min.js"></script>`) +
-						`<cxl-meta></cxl-meta>${content}`
+					`<style>body{margin:16px;}</style>${UserScripts}${content}`
 				);
 				doc.close();
 				content$.next(content);
 			});
 		}
 
+		function updateView(val: string) {
+			const isDesktop = val === 'desktop';
+			iframeClass.next(isDesktop ? 'container desktop' : 'container');
+		}
+
 		return (
-			<div className="parent">
-				<iframe title="Demo" $={init} className="container" />
-			</div>
+			<Host $={() => get(host, 'view').tap(updateView)}>
+				<Tabs>
+					<Tab
+						$={el =>
+							onAction(el).tap(() => (host.view = 'desktop'))
+						}
+						selected={view.is('desktop')}
+					>
+						Desktop
+					</Tab>
+					<Tab
+						$={el => onAction(el).tap(() => (host.view = 'mobile'))}
+						selected={view.is('mobile')}
+					>
+						Mobile
+					</Tab>
+					<Tab
+						$={el => onAction(el).tap(() => (host.view = 'source'))}
+						selected={view.is('source')}
+					>
+						Source
+					</Tab>
+				</Tabs>
+				<div
+					className={view.map(v =>
+						v === 'source' ? 'parent' : 'parent visible'
+					)}
+				>
+					<iframe title="Demo" $={init} className={iframeClass} />
+				</div>
+				<div
+					className={view.map(v =>
+						v === 'source' ? 'source visible' : 'source'
+					)}
+				>
+					{content$}
+				</div>
+			</Host>
 		);
 	})
 )
 export class DocDemo extends Component {
 	@Attribute()
-	component = '';
+	view: 'desktop' | 'mobile' | 'source' = 'desktop';
 
 	/**
 	 * Enable debug mode

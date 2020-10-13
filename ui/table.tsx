@@ -15,7 +15,7 @@ import { dom } from '../xdom/index.js';
 import { tap, merge } from '../rx/index.js';
 import { on, onAction } from '../dom/index.js';
 
-import { Checkbox } from './form.js';
+import { Checkbox } from './checkbox.js';
 import { registable, ariaProp } from './core.js';
 
 function onHeaderAction(el: Th) {
@@ -99,6 +99,7 @@ export class Th extends Component {
 }
 
 /**
+ * Data tables display sets of data across rows and columns.
  * @example
 <cxl-table>
 	<cxl-tr>
@@ -125,6 +126,7 @@ export class Th extends Component {
 				$: {
 					display: 'block',
 					width: '100%',
+					font: 'default',
 					overflowX: 'auto',
 					...border(1, 1, 0, 1),
 					borderStyle: 'solid',

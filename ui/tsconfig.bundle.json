@@ -7,22 +7,17 @@
 		"module": "amd"
 	},
 	"include": [
-		"core.tsx",
-		"form.tsx",
-		"index.tsx",
-		"icons.tsx",
-		"layout.tsx",
-		"table.tsx",
-		"theme.tsx",
-		"dialog.tsx",
-		"navigation.tsx",
+		"*.tsx",
 		"../rx/index.ts",
+		"../tsx/index.ts",
 		"../xdom/index.ts",
 		"../component/index.ts",
 		"../template/index.ts",
 		"../css/index.ts",
 		"../dom/index.ts",
-		"../drag/index.ts"
+		"../drag/index.ts",
+		"../router/index.ts"
 	],
+	"exclude": ["test.tsx"],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }
