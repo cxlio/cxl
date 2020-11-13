@@ -4,5 +4,5 @@
 		"outDir": "../dist/xdom"
 	},
 	"files": ["test.tsx"],
-	"references": [{ "path": "." }, { "path": "../spec" }]
+	"references": [{ "path": "tsconfig.json" }, { "path": "../spec" }]
 }

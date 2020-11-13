@@ -5,7 +5,8 @@
 	"description": "Database library",
 	"license": "Apache-2.0",
 	"scripts": {
-		"build": "node ../dist/build"
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/db && node ../tester --node"
 	},
 	"dependencies": {
 		"firebase": "^7.17.1"

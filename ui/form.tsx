@@ -3,10 +3,8 @@ import {
 	Augment,
 	Attribute,
 	Component,
-	Host,
 	Slot,
 	bind,
-	render,
 	get,
 	role,
 } from '../component/index.js';
@@ -26,8 +24,8 @@ import {
 	selectable,
 	selectableHost,
 } from './core.js';
-import { dom } from '../xdom/index.js';
-import { onValue, tpl, triggerEvent } from '../template/index.js';
+import { dom } from '../tsx/index.js';
+import { onValue, triggerEvent } from '../template/index.js';
 import {
 	trigger,
 	onKeypress,
@@ -35,7 +33,7 @@ import {
 	onAction,
 	setAttribute,
 } from '../dom/index.js';
-import { Style, border, boxShadow, padding } from '../css/index.js';
+import { border, css, boxShadow, padding } from '../css/index.js';
 import { EMPTY, Observable, be, defer, merge } from '../rx/index.js';
 import { dragInside } from '../drag/index.js';
 import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
@@ -52,68 +50,65 @@ import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
 	aria('valuemax', '1'),
 	aria('valuemin', '0'),
 	FocusCircleStyle,
-	<Style>
-		{{
-			$: {
-				display: 'block',
-				paddingTop: 24,
-				paddingBottom: 24,
-				userSelect: 'none',
-				position: 'relative',
-				flexGrow: 1,
-				cursor: 'pointer',
-			},
-			knob: {
-				backgroundColor: 'primary',
-				width: 12,
-				height: 12,
-				display: 'inline-block',
-				borderRadius: 6,
-				position: 'absolute',
-				top: 19,
-			},
-			focusCircle: { marginLeft: -4, marginTop: -8 },
-			background: {
-				backgroundColor: 'primaryLight',
-				height: 2,
-			},
-			line: {
-				backgroundColor: 'primary',
-				height: 2,
-				textAlign: 'right',
-			},
-			line$invalid$touched: { backgroundColor: 'error' },
-			knob$invalid$touched: { backgroundColor: 'error' },
-			background$invalid$touched: {
-				backgroundColor: 'errorLight',
-			},
-		}}
-	</Style>,
-	tpl(() => {
+	css({
+		$: {
+			display: 'block',
+			paddingTop: 24,
+			paddingBottom: 24,
+			userSelect: 'none',
+			position: 'relative',
+			flexGrow: 1,
+			cursor: 'pointer',
+		},
+		knob: {
+			backgroundColor: 'primary',
+			width: 12,
+			height: 12,
+			display: 'inline-block',
+			borderRadius: 6,
+			position: 'absolute',
+			top: 19,
+		},
+		focusCircle: { marginLeft: -4, marginTop: -8 },
+		background: {
+			backgroundColor: 'primaryLight',
+			height: 2,
+		},
+		line: {
+			backgroundColor: 'primary',
+			height: 2,
+			textAlign: 'right',
+		},
+		line$invalid$touched: { backgroundColor: 'error' },
+		knob$invalid$touched: { backgroundColor: 'error' },
+		background$invalid$touched: {
+			backgroundColor: 'errorLight',
+		},
+	}),
+	Focusable(),
+	host => {
 		function bound(x: number) {
 			return x < 0 ? 0 : x > 1 ? 1 : x;
 		}
+		host.bind(
+			merge(
+				dragInside(host).tap(ev => {
+					if (!host.disabled) host.value = bound(ev.clientX);
+				}),
+				onKeypress(host, 'arrowleft').tap(
+					() => (host.value = bound(host.value - host.step))
+				),
+				onKeypress(host, 'arrowright').tap(
+					() => (host.value = bound(host.value + host.step))
+				)
+			)
+		);
 
 		return (
-			<Host
-				$={(host: Slider) =>
-					merge(
-						dragInside(host).tap(ev => {
-							if (!host.disabled) host.value = bound(ev.clientX);
-						}),
-						onKeypress(host, 'arrowleft').tap(
-							() => (host.value = bound(host.value - host.step))
-						),
-						onKeypress(host, 'arrowright').tap(
-							() => (host.value = bound(host.value + host.step))
-						)
-					)
-				}
-			>
-				<Focusable />
+			<>
 				<div className="background">
 					<div
-						$={(el, host: Slider) =>
+						$={el =>
 							get(host, 'value')
 								.tap(
 									val =>
@@ -128,9 +123,9 @@ import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
 						<div className="knob"></div>
 					</div>
 				</div>
-			</Host>
+			</>
 		);
-	})
+	}
 )
 export class Slider extends InputBase {
 	@Attribute()
@@ -141,119 +136,117 @@ export class Slider extends InputBase {
 
 @Augment<SubmitButton>(
 	'cxl-submit',
-	<Host>
-		<Style>
-			{{
-				icon: {
-					animation: 'spin',
-					marginRight: 8,
-					display: 'none',
-					width: 16,
-					height: 16,
-				},
-				icon$disabled: { display: 'inline-block' },
-			}}
-		</Style>
-		<Spinner className="icon" />
-		<slot />
-	</Host>,
+	css({
+		icon: {
+			animation: 'spin',
+			marginRight: 8,
+			display: 'none',
+			width: 16,
+			height: 16,
+		},
+		icon$disabled: { display: 'inline-block' },
+	}),
+	_ => (
+		<>
+			<Spinner className="icon" />
+			<slot />
+		</>
+	),
 	bind(el => onAction(el).pipe(triggerEvent(el, 'form.submit')))
 )
 export class SubmitButton extends ButtonBase {
 	primary = true;
 }
 
-const FieldBase = (
-	<Host>
-		<Style>
-			{{
-				$: {
-					color: 'onSurface',
-					position: 'relative',
-					display: 'block',
-				},
-				container: {
-					position: 'relative',
-					...padding(0, 12, 4, 12),
-				},
-				$invalid: { color: 'error' },
-				$outline: { marginTop: -2 },
-				container$outline: {
-					borderColor: 'onSurface',
-					borderWidth: 1,
-					borderStyle: 'solid',
-					borderRadius: 4,
-					marginTop: 2,
-					paddingTop: 12,
-					paddingBottom: 12,
-				},
-				container$outline$focusWithin: {
-					boxShadow: boxShadow(0, 0, 0, 1, 'primary'),
-				},
-				container$focusWithin$outline: {
-					borderColor: 'primary',
-				},
-				container$invalid$outline: { borderColor: 'error' },
-				container$invalid$outline$focusWithin: {
-					boxShadow: boxShadow(0, 0, 0, 1, 'error'),
-				},
-				content: {
-					display: 'flex',
-					position: 'relative',
-					font: 'default',
-					// marginBottom: 2,
-					marginTop: 4,
-					lineHeight: 20,
-				},
-				content$focusWithin: {
-					color: 'primary',
-				},
-				mask: {
-					position: 'absolute',
-					top: 0,
-					right: 0,
-					left: 0,
-					bottom: 0,
-					backgroundColor: 'onSurface8',
-				},
-				mask$outline: {
-					borderRadius: 4,
-					backgroundColor: 'surface',
-				},
-				mask$hover: {
-					filter: 'invert(0.15) saturate(1.5) brightness(1.1)',
-				},
-				mask$hover$disabled: { filter: 'none' },
-				label: {
-					position: 'relative',
-					font: 'caption',
-					marginLeft: -4,
-					paddingTop: 8,
-					paddingBottom: 2,
-					lineHeight: 10,
-					verticalAlign: 'bottom',
-				},
-				label$focusWithin: { color: 'primary' },
-				label$invalid: { color: 'error' },
-				label$outline: {
-					position: 'absolute',
-					translateY: -17,
-					paddingTop: 0,
-					height: 5,
-					backgroundColor: 'surface',
-					display: 'inline-block',
-				},
-				label$floating$novalue: {
-					font: 'default',
-					translateY: 21,
-					opacity: 0.75,
-				},
-				label$leading: { paddingLeft: 24 },
-				label$floating$novalue$outline: {
-					translateY: 9,
-				},
-			}}
-		</Style>
+const FieldBase = [
+	css({
+		$: {
+			color: 'onSurface',
+			position: 'relative',
+			display: 'block',
+		},
+		container: {
+			position: 'relative',
+			...padding(0, 12, 4, 12),
+		},
+		$invalid: { color: 'error' },
+		$outline: { marginTop: -2 },
+		container$outline: {
+			borderColor: 'onSurface',
+			borderWidth: 1,
+			borderStyle: 'solid',
+			borderRadius: 4,
+			marginTop: 2,
+			paddingTop: 12,
+			paddingBottom: 12,
+		},
+		container$outline$focusWithin: {
+			boxShadow: boxShadow(0, 0, 0, 1, 'primary'),
+		},
+		container$focusWithin$outline: {
+			borderColor: 'primary',
+		},
+		container$invalid$outline: { borderColor: 'error' },
+		container$invalid$outline$focusWithin: {
+			boxShadow: boxShadow(0, 0, 0, 1, 'error'),
+		},
+		content: {
+			display: 'flex',
+			position: 'relative',
+			font: 'default',
+			// marginBottom: 2,
+			marginTop: 4,
+			lineHeight: 20,
+		},
+		content$focusWithin: {
+			color: 'primary',
+		},
+		mask: {
+			position: 'absolute',
+			top: 0,
+			right: 0,
+			left: 0,
+			bottom: 0,
+			backgroundColor: 'onSurface8',
+		},
+		mask$outline: {
+			borderRadius: 4,
+			backgroundColor: 'surface',
+		},
+		mask$hover: {
+			filter: 'invert(0.15) saturate(1.5) brightness(1.1)',
+		},
+		mask$hover$disabled: { filter: 'none' },
+		label: {
+			position: 'relative',
+			font: 'caption',
+			marginLeft: -4,
+			paddingTop: 8,
+			paddingBottom: 2,
+			lineHeight: 10,
+			verticalAlign: 'bottom',
+		},
+		label$focusWithin: { color: 'primary' },
+		label$invalid: { color: 'error' },
+		label$outline: {
+			position: 'absolute',
+			translateY: -17,
+			paddingTop: 0,
+			height: 5,
+			backgroundColor: 'surface',
+			display: 'inline-block',
+		},
+		label$floating$novalue: {
+			font: 'default',
+			translateY: 21,
+			opacity: 0.75,
+		},
+		label$leading: { paddingLeft: 24 },
+		label$floating$novalue$outline: {
+			translateY: 9,
+		},
+	}),
+	(_: Component) => (
 		<div className="container">
 			<div className="mask"></div>
 			<div className="label">
@@ -263,8 +256,8 @@ const FieldBase = (
 				<slot />
 			</div>
 		</div>
-	</Host>
-);
+	),
+];
 
 function fieldInput(host: Component) {
 	return defer(() =>
@@ -278,16 +271,14 @@ function fieldInput(host: Component) {
 
 @Augment<Label>(
 	'cxl-label',
-	<Style>
-		{{
-			$: {
-				display: 'inline-block',
-				paddingLeft: 4,
-				paddingRight: 4,
-			},
-		}}
-	</Style>,
-	<slot />,
+	css({
+		$: {
+			display: 'inline-block',
+			paddingLeft: 4,
+			paddingRight: 4,
+		},
+	}),
+	Slot,
 	bind(host =>
 		fieldInput(host).raf(input =>
 			input.setAttribute('aria-label', host.textContent || '')
@@ -314,34 +305,32 @@ export class Label extends Component {}
  */
 @Augment<Field>(
 	'cxl-field',
-	<Style>
-		{{
-			$: { marginBottom: 16 },
-			$lastChild: { marginBottom: 0 },
-			line: { position: 'absolute', left: 0, right: 0 },
-			line$outline: { display: 'none' },
-			help: {
-				font: 'caption',
-				position: 'relative',
-				display: 'flex',
-				paddingTop: 4,
-				flexGrow: 1,
-				paddingLeft: 12,
-				paddingRight: 12,
-			},
-			counter: { textAlign: 'right' },
-			help$leading: { paddingLeft: 38 },
-			invalidMessage: { display: 'none', paddingTop: 4 },
-			invalidMessage$invalid: { display: 'block' },
-			$inputdisabled: {
-				filter: 'saturate(0)',
-				opacity: 0.6,
-				pointerEvents: 'none',
-			},
-		}}
-	</Style>,
-	FieldBase,
-	render(host => {
+	css({
+		$: { marginBottom: 16 },
+		$lastChild: { marginBottom: 0 },
+		line: { position: 'absolute', left: 0, right: 0 },
+		line$outline: { display: 'none' },
+		help: {
+			font: 'caption',
+			position: 'relative',
+			display: 'flex',
+			paddingTop: 4,
+			flexGrow: 1,
+			paddingLeft: 12,
+			paddingRight: 12,
+		},
+		counter: { textAlign: 'right' },
+		help$leading: { paddingLeft: 38 },
+		invalidMessage: { display: 'none', paddingTop: 4 },
+		invalidMessage$invalid: { display: 'block' },
+		$inputdisabled: {
+			filter: 'saturate(0)',
+			opacity: 0.6,
+			pointerEvents: 'none',
+		},
+	}),
+	...FieldBase,
+	host => {
 		const invalid = be(false);
 		const focused = be(false);
 		const invalidMessage = be('');
@@ -371,31 +360,33 @@ export class Label extends Component {}
 			host.novalue = !value || value.length === 0;
 		}
 
-		const hostBindings = merge(
-			get(host, 'input').switchMap(input =>
-				input
-					? merge(
-							defer(update),
-							on(input, 'focusable.change').tap(update),
-							on(input, 'focusable.focus').tap(update),
-							on(input, 'focusable.blur').tap(update),
-							on(input, 'invalid').tap(update),
-							on(input, 'input').tap(onChange),
-							on(input, 'change').tap(onChange),
-							on(host, 'click').tap(
-								() =>
-									document.activeElement !== input &&
-									!focused.value &&
-									input?.focus()
-							)
-					  )
-					: EMPTY
-			),
-			on(host, 'form.register').tap(onRegister)
+		host.bind(
+			merge(
+				get(host, 'input').switchMap(input =>
+					input
+						? merge(
+								defer(update),
+								on(input, 'focusable.change').tap(update),
+								on(input, 'focusable.focus').tap(update),
+								on(input, 'focusable.blur').tap(update),
+								on(input, 'invalid').tap(update),
+								on(input, 'input').tap(onChange),
+								on(input, 'change').tap(onChange),
+								on(host, 'click').tap(
+									() =>
+										document.activeElement !== input &&
+										!focused.value &&
+										input?.focus()
+								)
+						  )
+						: EMPTY
+				),
+				on(host, 'form.register').tap(onRegister)
+			)
 		);
 
 		return (
-			<Host $={() => hostBindings}>
+			<>
 				<FocusLine
 					className="line"
 					focused={focused}
@@ -405,9 +396,9 @@ export class Label extends Component {}
 					<Slot selector="cxl-field-help" />
 					<div className="invalidMessage">{invalidMessage}</div>
 				</div>
-			</Host>
+			</>
 		);
-	})
+	}
 )
 export class Field extends Component {
 	@StyleAttribute()
@@ -442,19 +433,17 @@ export class Field extends Component {
  */
 @Augment(
 	'cxl-field-help',
-	<Style>
-		{{
-			$: {
-				display: 'block',
-				lineHeight: 12,
-				paddingTop: 4,
-				font: 'caption',
-				verticalAlign: 'bottom',
-			},
-			$invalid: { color: 'error' },
-		}}
-	</Style>,
-	<slot />
+	css({
+		$: {
+			display: 'block',
+			lineHeight: 12,
+			paddingTop: 4,
+			font: 'caption',
+			verticalAlign: 'bottom',
+		},
+		$invalid: { color: 'error' },
+	}),
+	Slot
 )
 export class FieldHelp extends Component {
 	@StyleAttribute()
@@ -463,7 +452,7 @@ export class FieldHelp extends Component {
 
 @Augment<Fieldset>(
 	'cxl-fieldset',
-	FieldBase,
+	...FieldBase,
 	bind(host =>
 		merge(on(host, 'invalid'), on(host, 'form.register')).tap(ev => {
 			const target = ev.target as InputBase;
@@ -471,14 +460,12 @@ export class FieldHelp extends Component {
 				setAttribute(host, 'invalid', target.touched && target.invalid);
 		})
 	),
-	<Style>
-		{{
-			$: { marginBottom: 16 },
-			mask: { display: 'none' },
-			content: { display: 'block', marginTop: 16 },
-			content$outline: { marginTop: 0, marginBottom: 0 },
-		}}
-	</Style>
+	css({
+		$: { marginBottom: 16 },
+		mask: { display: 'none' },
+		content: { display: 'block', marginTop: 16 },
+		content$outline: { marginTop: 0, marginBottom: 0 },
+	})
 )
 export class Fieldset extends Component {
 	@StyleAttribute()
@@ -488,39 +475,36 @@ export class Fieldset extends Component {
 @Augment(
 	'cxl-field-toggle',
 	FocusCircleStyle,
-	<Host>
-		<Style>
-			{{
-				$: {
-					paddingTop: 8,
-					paddingBottom: 8,
-					paddingLeft: 12,
-					paddingRight: 12,
-					cursor: 'pointer',
-					position: 'relative',
-				},
-				focusCircle: { left: -4 },
-			}}
-		</Style>
-		<span className="focusCircle focusCirclePrimary"></span>
-		<Toggle>
-			<slot />
-		</Toggle>
-	</Host>
+	css({
+		$: {
+			paddingTop: 8,
+			paddingBottom: 8,
+			paddingLeft: 12,
+			paddingRight: 12,
+			cursor: 'pointer',
+			position: 'relative',
+		},
+		focusCircle: { left: -4 },
+	}),
+	_ => (
+		<>
+			<span className="focusCircle focusCirclePrimary"></span>
+			<Toggle>
+				<slot />
+			</Toggle>
+		</>
+	)
 )
 export class FieldToggle extends Component {}
 
-@Augment<FieldCounter>(
-	'cxl-field-counter',
-	render(host => (
-		<Host>
-			{fieldInput(host).switchMap(input =>
-				get(input, 'value').map(val => val?.length || 0)
-			)}
-			/{get(host, 'max')}
-		</Host>
-	))
-)
+@Augment<FieldCounter>('cxl-field-counter', host => (
+	<>
+		{fieldInput(host).switchMap(input =>
+			get(input, 'value').map(val => val?.length || 0)
+		)}
+		/{get(host, 'max')}
+	</>
+))
 export class FieldCounter extends Component {
 	@Attribute()
 	max = 100;
@@ -528,28 +512,26 @@ export class FieldCounter extends Component {
 
 @Augment(
 	'cxl-focus-line',
-	<Style>
-		{{
-			$: {
-				display: 'block',
-				height: 2,
-				borderWidth: 0,
-				borderTop: 1,
-				borderStyle: 'solid',
-				borderColor: 'onSurface',
-			},
-			$invalid: { borderColor: 'error' },
-			line: {
-				backgroundColor: 'primary',
-				marginTop: -1,
-				scaleX: 0,
-				height: 2,
-			},
-			line$focused: { scaleX: 1 },
-			line$invalid: { backgroundColor: 'error' },
-		}}
-	</Style>,
-	<div className="line" />
+	css({
+		$: {
+			display: 'block',
+			height: 2,
+			borderWidth: 0,
+			borderTop: 1,
+			borderStyle: 'solid',
+			borderColor: 'onSurface',
+		},
+		$invalid: { borderColor: 'error' },
+		line: {
+			backgroundColor: 'primary',
+			marginTop: -1,
+			scaleX: 0,
+			height: 2,
+		},
+		line$focused: { scaleX: 1 },
+		line$invalid: { backgroundColor: 'error' },
+	}),
+	_ => <div className="line" />
 )
 export class FocusLine extends Component {
 	@StyleAttribute()
@@ -589,7 +571,7 @@ export class FocusLine extends Component {
 			})
 		)
 	),
-	<slot />
+	Slot
 )
 export class Form extends Component {
 	@Attribute()
@@ -631,23 +613,21 @@ export class Form extends Component {
 	'cxl-input',
 	role('textbox'),
 	bind(host => onKeypress(host, 'enter').tap(ev => ev.preventDefault())),
-	<Style>
-		{{
-			$: {
-				display: 'block',
-				flexGrow: 1,
-				overflowY: 'hidden',
-			},
-			input: {
-				color: 'onSurface',
-				font: 'default',
-				minHeight: 20,
-				outline: 0,
-			},
-			$disabled: { pointerEvents: 'none' },
-		}}
-	</Style>,
-	<div className="input" $={$contentEditable}></div>
+	css({
+		$: {
+			display: 'block',
+			flexGrow: 1,
+			overflowY: 'hidden',
+		},
+		input: {
+			color: 'onSurface',
+			font: 'default',
+			minHeight: 20,
+			outline: 0,
+		},
+		$disabled: { pointerEvents: 'none' },
+	}),
+	$ => <div $={el => $contentEditable(el, $)} className="input" />
 )
 export class Input extends InputBase {
 	value = '';
@@ -657,30 +637,28 @@ export class Input extends InputBase {
 	'cxl-field-input',
 	role('textbox'),
 	bind(host => onKeypress(host, 'enter').tap(ev => ev.preventDefault())),
-	<Style>
-		{{
-			$lastChild: { marginBottom: 0 },
-			$: { display: 'block', marginBottom: 16 },
-			input: {
-				color: 'onSurface',
-				font: 'default',
-				minHeight: 20,
-				outline: 0,
-				flexGrow: 1,
-			},
-			$disabled: { pointerEvents: 'none' },
-		}}
-	</Style>,
-	render(host => (
+	css({
+		$lastChild: { marginBottom: 0 },
+		$: { display: 'block', marginBottom: 16 },
+		input: {
+			color: 'onSurface',
+			font: 'default',
+			minHeight: 20,
+			outline: 0,
+			flexGrow: 1,
+		},
+		$disabled: { pointerEvents: 'none' },
+	}),
+	host => (
 		<Field
 			input={host}
 			floating={get(host, 'floating')}
 			outline={get(host, 'outline')}
 		>
 			<Label>{get(host, 'label')}</Label>
-			<div className="input" $={$contentEditable}></div>
+			<div className="input" $={el => $contentEditable(el, host)}></div>
 		</Field>
-	))
+	)
 )
 export class FieldInput extends InputBase {
 	@Attribute()
@@ -695,30 +673,28 @@ export class FieldInput extends InputBase {
 
 @Augment<FieldTextArea>(
 	'cxl-field-textarea',
-	<Style>
-		{{
-			$: { display: 'block', marginBottom: 16 },
-			$lastChild: { marginBottom: 0 },
-			input: {
-				minHeight: 20,
-				lineHeight: 20,
-				color: 'onSurface',
-				outline: 'none',
-				flexGrow: 1,
-			},
-			$disabled: { pointerEvents: 'none' },
-		}}
-	</Style>,
-	render(host => (
+	css({
+		$: { display: 'block', marginBottom: 16 },
+		$lastChild: { marginBottom: 0 },
+		input: {
+			minHeight: 20,
+			lineHeight: 20,
+			color: 'onSurface',
+			outline: 'none',
+			flexGrow: 1,
+		},
+		$disabled: { pointerEvents: 'none' },
+	}),
+	host => (
 		<Field
 			input={host}
 			floating={get(host, 'floating')}
 			outline={get(host, 'outline')}
 		>
 			<Label>{get(host, 'label')}</Label>
-			<div $={$contentEditable} className="input"></div>
+			<div $={el => $contentEditable(el, host)} className="input"></div>
 		</Field>
-	))
+	)
 )
 export class FieldTextArea extends InputBase {
 	@Attribute()
@@ -736,60 +712,60 @@ export class FieldTextArea extends InputBase {
 	role('option'),
 	bind(selectable),
 	bind(host => get(host, 'value').pipe(triggerEvent(host, 'change'))),
-	<Host>
-		<Style>
-			{{
-				$: {
-					cursor: 'pointer',
-					color: 'onSurface',
-					lineHeight: 20,
-					paddingRight: 16,
-					display: 'flex',
-					backgroundColor: 'surface',
-					paddingLeft: 16,
-					font: 'default',
-					paddingTop: 14,
-					paddingBottom: 14,
-				},
-				box: {
-					display: 'none',
-					width: 20,
-					height: 20,
-					borderWidth: 2,
-					borderColor: 'onSurface',
-					marginRight: 12,
-					lineHeight: 16,
-					borderStyle: 'solid',
-					color: 'transparent',
-				},
-				box$multiple: { display: 'inline-block' },
-				box$selected: {
-					borderColor: 'primary',
-					backgroundColor: 'primary',
-					color: 'onPrimary',
-				},
-				content: { flexGrow: 1 },
-				$focused: {
-					backgroundColor: 'primaryLight',
-					color: 'onPrimaryLight',
-				},
-				$inactive: {
-					backgroundColor: 'transparent',
-					color: 'onSurface',
-				},
-			}}
-		</Style>
-		<div className="box">
-			<span className="focusCircle focusCirclePrimary" />
-			<Svg
-				className="check"
-				viewBox="0 0 24 24"
-			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
-		</div>
-		<div className="content">
-			<slot />
-		</div>
-	</Host>
+	css({
+		$: {
+			cursor: 'pointer',
+			color: 'onSurface',
+			lineHeight: 20,
+			paddingRight: 16,
+			display: 'flex',
+			backgroundColor: 'surface',
+			paddingLeft: 16,
+			font: 'default',
+			paddingTop: 14,
+			paddingBottom: 14,
+		},
+		box: {
+			display: 'none',
+			width: 20,
+			height: 20,
+			borderWidth: 2,
+			borderColor: 'onSurface',
+			marginRight: 12,
+			lineHeight: 16,
+			borderStyle: 'solid',
+			color: 'transparent',
+		},
+		box$multiple: { display: 'inline-block' },
+		box$selected: {
+			borderColor: 'primary',
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		content: { flexGrow: 1 },
+		$focused: {
+			backgroundColor: 'primaryLight',
+			color: 'onPrimaryLight',
+		},
+		$inactive: {
+			backgroundColor: 'transparent',
+			color: 'onSurface',
+		},
+	}),
+	_ => (
+		<>
+			<div className="box">
+				<span className="focusCircle focusCirclePrimary" />
+				<Svg
+					className="check"
+					viewBox="0 0 24 24"
+				>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
+			</div>
+			<div className="content">
+				<slot />
+			</div>
+		</>
+	)
 )
 export class Option extends Component {
 	@Attribute()
@@ -818,30 +794,28 @@ export class Option extends Component {
 @Augment<PasswordInput>(
 	'cxl-password',
 	role('textbox'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					flexGrow: 1,
-					lineHeight: 22,
-				},
-				input: {
-					display: 'block',
-					...border(0),
-					...padding(0),
-					font: 'default',
-					color: 'onSurface',
-					outline: 0,
-					width: '100%',
-					height: 22,
-					backgroundColor: 'transparent',
-				},
-				$disabled: { pointerEvents: 'none' },
-			}}
-		</Style>
-		<input $={$valueProxy} className="input" type="password" />
-	</Host>
+	css({
+		$: {
+			display: 'block',
+			flexGrow: 1,
+			lineHeight: 22,
+		},
+		input: {
+			display: 'block',
+			...border(0),
+			...padding(0),
+			font: 'default',
+			color: 'onSurface',
+			outline: 0,
+			width: '100%',
+			height: 22,
+			backgroundColor: 'transparent',
+		},
+		$disabled: { pointerEvents: 'none' },
+	}),
+	$ => (
+		<input $={el => $valueProxy(el, $)} className="input" type="password" />
+	)
 )
 export class PasswordInput extends InputBase {
 	@Attribute()
@@ -864,59 +838,59 @@ const radioElements = new Set<Radio>();
 	'cxl-radio',
 	role('radio'),
 	FocusCircleStyle,
-	<Host>
-		<Focusable />
-		<Style>
-			{{
-				$: {
-					position: 'relative',
-					cursor: 'pointer',
-					marginRight: 16,
-					marginLeft: 0,
-					paddingTop: 12,
-					paddingBottom: 12,
-					display: 'block',
-					font: 'default',
-				},
-				$inline: { display: 'inline-block' },
-				$invalid$touched: { color: 'error' },
-				content: { lineHeight: 20 },
-				circle: {
-					borderRadius: 10,
-					width: 10,
-					height: 10,
-					display: 'inline-block',
-					backgroundColor: 'primary',
-					scaleX: 0,
-					scaleY: 0,
-					marginTop: 3,
-				},
-				circle$checked: { scaleX: 1, scaleY: 1 },
-				circle$invalid$touched: { backgroundColor: 'error' },
-				box: {
-					borderWidth: 2,
-					width: 20,
-					height: 20,
-					display: 'inline-block',
-					borderColor: 'onSurface',
-					marginRight: 16,
-					borderRadius: 10,
-					borderStyle: 'solid',
-					color: 'primary',
-					lineHeight: 16,
-					textAlign: 'center',
-				},
-				box$checked: { borderColor: 'primary' },
-				box$invalid$touched: { borderColor: 'error' },
-				box$checked$invalid$touched: { color: 'error' },
-			}}
-		</Style>
-		<div className="focusCircle focusCirclePrimary" />
-		<div className="box">
-			<span className="circle"></span>
-		</div>
-		<slot />
-	</Host>,
+	Focusable(),
+	css({
+		$: {
+			position: 'relative',
+			cursor: 'pointer',
+			marginRight: 16,
+			marginLeft: 0,
+			paddingTop: 12,
+			paddingBottom: 12,
+			display: 'block',
+			font: 'default',
+		},
+		$inline: { display: 'inline-block' },
+		$invalid$touched: { color: 'error' },
+		content: { lineHeight: 20 },
+		circle: {
+			borderRadius: 10,
+			width: 10,
+			height: 10,
+			display: 'inline-block',
+			backgroundColor: 'primary',
+			scaleX: 0,
+			scaleY: 0,
+			marginTop: 3,
+		},
+		circle$checked: { scaleX: 1, scaleY: 1 },
+		circle$invalid$touched: { backgroundColor: 'error' },
+		box: {
+			borderWidth: 2,
+			width: 20,
+			height: 20,
+			display: 'inline-block',
+			borderColor: 'onSurface',
+			marginRight: 16,
+			borderRadius: 10,
+			borderStyle: 'solid',
+			color: 'primary',
+			lineHeight: 16,
+			textAlign: 'center',
+		},
+		box$checked: { borderColor: 'primary' },
+		box$invalid$touched: { borderColor: 'error' },
+		box$checked$invalid$touched: { color: 'error' },
+	}),
+	_ => (
+		<>
+			<div className="focusCircle focusCirclePrimary" />
+			<div className="box">
+				<span className="circle"></span>
+			</div>
+			<slot />
+		</>
+	),
 	bind(host => {
 		let registered = false;
 
@@ -962,86 +936,80 @@ export class Radio extends InputBase {
 
 @Augment<SelectMenu>(
 	'cxl-select-menu',
-	<Style>
-		{{
-			$: {
-				position: 'absolute',
-				opacity: 0,
-				elevation: 0,
-				right: -16,
-				left: -16,
-				overflowY: 'hidden',
-				transformOrigin: 'top',
-				pointerEvents: 'none',
-			},
-			$visible: {
-				elevation: 3,
-				opacity: 1,
-				overflowY: 'auto',
-				backgroundColor: 'surface',
-				pointerEvents: 'auto',
-			},
-		}}
-	</Style>,
-	<slot />
+	css({
+		$: {
+			position: 'absolute',
+			opacity: 0,
+			elevation: 0,
+			right: -16,
+			left: -16,
+			overflowY: 'hidden',
+			transformOrigin: 'top',
+			pointerEvents: 'none',
+		},
+		$visible: {
+			elevation: 3,
+			opacity: 1,
+			overflowY: 'auto',
+			backgroundColor: 'surface',
+			pointerEvents: 'auto',
+		},
+	}),
+	Slot
 )
 export class SelectMenu extends Component {
 	@StyleAttribute()
 	visible = false;
 }
 
-@Augment(
+@Augment<SelectBase>(
 	role('listbox'),
-	tpl(_ => {
-		return (
-			<Host
-				$={(el: SelectBase) =>
-					merge(
-						focusable(el),
-						registableHost<Option>(el, 'selectable').tap(options =>
-							el.setOptions(options)
-						),
-						on(el, 'blur').tap(() => el.close()),
-						onKeypress(el, 'escape').tap(() => el.close())
-					)
-				}
-			>
-				<Style>
-					{{
-						$: {
-							display: 'inline-block',
-							cursor: 'pointer',
-							overflowY: 'hidden',
-							overflowX: 'hidden',
-							height: 20,
-							position: 'relative',
-							paddingRight: 16,
-							flexGrow: 1,
-						},
-						$focus: { outline: 0 },
-						caret: {
-							position: 'absolute',
-							right: 0,
-							top: 0,
-							lineHeight: 20,
-							width: 20,
-							height: 20,
-						},
-						$opened: { overflowY: 'visible', overflowX: 'visible' },
-						$disabled: { pointerEvents: 'none' },
-						placeholder: {
-							color: 'onSurface',
-							font: 'default',
-							marginRight: 12,
-						},
-					}}
-				</Style>
-				<Svg className="caret" viewBox="0 0 24 24">
-					{'<path d="M7 10l5 5 5-5z"></path>'}
-				</Svg>
-			</Host>
+	css({
+		$: {
+			display: 'inline-block',
+			cursor: 'pointer',
+			overflowY: 'hidden',
+			overflowX: 'hidden',
+			height: 20,
+			position: 'relative',
+			paddingRight: 16,
+			flexGrow: 1,
+		},
+		$focus: { outline: 0 },
+		caret: {
+			position: 'absolute',
+			right: 0,
+			top: 0,
+			lineHeight: 20,
+			width: 20,
+			height: 20,
+		},
+		$opened: { overflowY: 'visible', overflowX: 'visible' },
+		$disabled: { pointerEvents: 'none' },
+		placeholder: {
+			color: 'onSurface',
+			font: 'default',
+			marginRight: 12,
+		},
+	}),
+
+	el => {
+		el.bind(
+			merge(
+				focusable(el),
+				registableHost<Option>(el, 'selectable').tap(options =>
+					el.setOptions(options)
+				),
+				on(el, 'blur').tap(() => el.close()),
+				onKeypress(el, 'escape').tap(() => el.close())
+			)
 		);
-	})
+		return (
+			<Svg className="caret" viewBox="0 0 24 24">
+				{'<path d="M7 10l5 5 5-5z"></path>'}
+			</Svg>
+		);
+	}
 )
 abstract class SelectBase extends InputBase {
 	@StyleAttribute()
@@ -1089,17 +1057,19 @@ abstract class SelectBase extends InputBase {
 			onAction(host).tap(() => !host.opened && host.open())
 		)
 	),
-	<SelectMenu
-		$={(el, host) =>
-			merge(get(host, 'opened'), get(host, 'selected')).raf(() =>
-				host.positionMenu(el)
-			)
-		}
-		visible={(_el, host) => get(host, 'opened')}
-	>
-		<slot />
-	</SelectMenu>,
-	render(host => <div className="placeholder">{host.selectedText$}</div>)
+	host => (
+		<SelectMenu
+			$={el =>
+				merge(get(host, 'opened'), get(host, 'selected')).raf(() =>
+					host.positionMenu(el)
+				)
+			}
+			visible={get(host, 'opened')}
+		>
+			<slot />
+		</SelectMenu>
+	),
+	host => <div className="placeholder">{host.selectedText$}</div>
 )
 export class SelectBox extends SelectBase {
 	@Attribute()
@@ -1171,23 +1141,19 @@ export class SelectBox extends SelectBase {
  */
 @Augment<MultiSelect>(
 	'cxl-multiselect',
-	<Host>
-		<Style>
-			{{
-				menu: { left: -12, right: -12, top: 26, height: 0 },
-				menu$opened: { height: 'auto' },
-			}}
-		</Style>
+	css({
+		menu: { left: -12, right: -12, top: 26, height: 0 },
+		menu$opened: { height: 'auto' },
+	}),
+	host => (
 		<SelectMenu
-			$={(el, host) =>
-				get(host, 'opened').raf(() => host.positionMenu(el))
-			}
+			$={el => get(host, 'opened').raf(() => host.positionMenu(el))}
 			className="menu"
-			visible={(_el, host) => get(host, 'opened')}
+			visible={get(host, 'opened')}
 		>
 			<slot />
 		</SelectMenu>
-	</Host>,
+	),
 	bind(host =>
 		merge(
 			onAction(host).tap(() => {
@@ -1204,7 +1170,7 @@ export class SelectBox extends SelectBase {
 			).tap(selected => host.setFocusedOption(selected as Option))
 		)
 	),
-	render(host => <div className="placeholder">{host.selectedText$}</div>)
+	host => <div className="placeholder">{host.selectedText$}</div>
 )
 export class MultiSelect extends SelectBase {
 	/**
@@ -1280,61 +1246,59 @@ export class MultiSelect extends SelectBase {
 	'cxl-switch',
 	role('switch'),
 	FocusCircleStyle,
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'flex',
-					cursor: 'pointer',
-					paddingTop: 12,
-					paddingBottom: 12,
-				},
-				$inline: { display: 'inline-flex' },
-				content: { flexGrow: 1 },
-				switch: {
-					position: 'relative',
-					width: 46,
-					height: 20,
-					userSelect: 'none',
-				},
-				background: {
-					position: 'absolute',
-					display: 'block',
-					left: 10,
-					top: 2,
-					height: 16,
-					borderRadius: 8,
-					width: 26,
-					backgroundColor: 'divider',
-				},
+	css({
+		$: {
+			display: 'flex',
+			cursor: 'pointer',
+			paddingTop: 12,
+			paddingBottom: 12,
+		},
+		$inline: { display: 'inline-flex' },
+		content: { flexGrow: 1 },
+		switch: {
+			position: 'relative',
+			width: 46,
+			height: 20,
+			userSelect: 'none',
+		},
+		background: {
+			position: 'absolute',
+			display: 'block',
+			left: 10,
+			top: 2,
+			height: 16,
+			borderRadius: 8,
+			width: 26,
+			backgroundColor: 'divider',
+		},
 
-				knob: {
-					width: 20,
-					height: 20,
-					borderRadius: 10,
-					backgroundColor: 'surface',
-					position: 'absolute',
-					elevation: 1,
-				},
+		knob: {
+			width: 20,
+			height: 20,
+			borderRadius: 10,
+			backgroundColor: 'surface',
+			position: 'absolute',
+			elevation: 1,
+		},
 
-				background$checked: { backgroundColor: 'primaryLight' },
-				knob$checked: {
-					translateX: 24,
-					backgroundColor: 'primary',
-				},
-				knob$invalid$touched: { backgroundColor: 'error' },
-				content$invalid$touched: { color: 'error' },
-				focusCircle$checked: { backgroundColor: 'primary' },
-			}}
-		</Style>
-		<Focusable />
+		background$checked: { backgroundColor: 'primaryLight' },
+		knob$checked: {
+			translateX: 24,
+			backgroundColor: 'primary',
+		},
+		knob$invalid$touched: { backgroundColor: 'error' },
+		content$invalid$touched: { color: 'error' },
+		focusCircle$checked: { backgroundColor: 'primary' },
+	}),
+	Focusable(),
+	_ => (
 		<div className="switch">
 			<span className="background =checked:#update"></span>
 			<div className="knob">
 				<span className="focusCircle"></span>
 			</div>
 		</div>
-	</Host>,
+	),
 	bind(host => {
 		return merge(
 			onAction(host).tap(() => {
@@ -1402,25 +1366,21 @@ function $contentEditable(el: HTMLElement, host: InputBase) {
 @Augment<TextArea>(
 	'cxl-textarea',
 	role('textarea'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					position: 'relative',
-					flexGrow: 1,
-				},
-				input: {
-					minHeight: 20,
-					lineHeight: 20,
-					color: 'onSurface',
-					outline: 'none',
-				},
-				$disabled: { pointerEvents: 'none' },
-			}}
-		</Style>
-		<div $={$contentEditable} className="input"></div>
-	</Host>
+	css({
+		$: {
+			display: 'block',
+			position: 'relative',
+			flexGrow: 1,
+		},
+		input: {
+			minHeight: 20,
+			lineHeight: 20,
+			color: 'onSurface',
+			outline: 'none',
+		},
+		$disabled: { pointerEvents: 'none' },
+	}),
+	$ => <div $={el => $contentEditable(el, $)} className="input"></div>
 )
 export class TextArea extends InputBase {
 	value = '';
@@ -1433,35 +1393,32 @@ export class TextArea extends InputBase {
  */
 @Augment(
 	'cxl-fab',
-	<Host>
-		<Focusable />
-		<Style>
-			{{
-				$: {
-					display: 'inline-block',
-					elevation: 2,
-					backgroundColor: 'secondary',
-					color: 'onSecondary',
-					position: 'fixed',
-					width: 56,
-					height: 56,
-					bottom: 16,
-					right: 24,
-					borderRadius: 56,
-					textAlign: 'center',
-					paddingTop: 20,
-					cursor: 'pointer',
-					font: 'h6',
-					paddingBottom: 20,
-					lineHeight: 16,
-				},
-				$static: { position: 'static' },
-				$focus: { elevation: 4 },
-			}}
-		</Style>
-		<Style>{FocusHighlight}</Style>
-		<slot />
-	</Host>
+	Focusable(),
+	css({
+		$: {
+			display: 'inline-block',
+			elevation: 2,
+			backgroundColor: 'secondary',
+			color: 'onSecondary',
+			position: 'fixed',
+			width: 56,
+			height: 56,
+			bottom: 16,
+			right: 24,
+			borderRadius: 56,
+			textAlign: 'center',
+			paddingTop: 20,
+			cursor: 'pointer',
+			font: 'h6',
+			paddingBottom: 20,
+			lineHeight: 16,
+		},
+		'@small': { $: { bottom: 'auto', translateY: -28 } },
+		$static: { position: 'static' },
+		$focus: { elevation: 4 },
+	}),
+	css(FocusHighlight),
+	Slot
 )
 export class Fab extends Component {
 	@StyleAttribute()
@@ -1481,47 +1438,52 @@ export class Fab extends Component {
  * @beta
  * @see Appbar
  */
-@Augment(
+@Augment<AppbarSearch>(
 	'cxl-appbar-search',
-	<Host>
-		<Style>
-			{{
-				$: { display: 'flex' },
-				$opened: {
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					right: 0,
-					backgroundColor: 'surface',
-				},
-				input: { display: 'none', marginBottom: 0 },
-				input$opened: {
-					display: 'block',
-				},
-				'@medium': {
-					input: { width: 200, display: 'block', position: 'static' },
-					button: { display: 'none' },
-				},
-			}}
-		</Style>
-		<IconButton
-			$={(el, host) => onAction(el).tap(() => (host.opened = true))}
-			className="button"
-			flat
-		>
-			<Svg
-				width={24}
-				viewBox="0 0 48 48"
-			>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
-		</IconButton>
-		<Field className="input">
-			<Input />
-			<Svg
-				width={20}
-				viewBox="0 0 48 48"
-			>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
-		</Field>
-	</Host>
+	css({
+		$: { display: 'flex', position: 'relative' },
+		$opened: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			backgroundColor: 'surface',
+		},
+		input: { display: 'none', marginBottom: 0 },
+		input$opened: {
+			display: 'block',
+		},
+		'@medium': {
+			input: {
+				width: 200,
+				display: 'block',
+				position: 'relative',
+			},
+			button: { display: 'none' },
+		},
+	}),
+	host => (
+		<>
+			{' '}
+			<IconButton
+				$={el => onAction(el).tap(() => (host.opened = true))}
+				className="button"
+				flat
+			>
+				<Svg
+					width={24}
+					viewBox="0 0 48 48"
+				>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
+			</IconButton>
+			<Field className="input">
+				<Input />
+				<Svg
+					width={20}
+					viewBox="0 0 48 48"
+				>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
+			</Field>
+		</>
+	)
 )
 export class AppbarSearch extends Component {
 	@StyleAttribute()

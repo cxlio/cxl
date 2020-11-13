@@ -36,7 +36,7 @@ export interface Url {
 }
 
 export interface Strategy {
-	getHref(url: Url): string;
+	getHref(url: Url | string): string;
 	serialize(url: Url): void;
 	deserialize(): Url;
 }

@@ -1,4 +1,3 @@
-import { dom } from '../xdom/index.js';
 import {
 	Augment,
 	Attribute,
@@ -9,46 +8,42 @@ import {
 	get,
 } from '../component/index.js';
 import { merge } from '../rx/index.js';
-import { Style } from '../css/index.js';
+import { css } from '../css/index.js';
 import { triggerEvent } from '../template/index.js';
 import { registable } from './core.js';
 
-export const FocusCircleStyle = (
-	<Style>
-		{{
-			focusCircle: {
-				position: 'absolute',
-				width: 48,
-				height: 48,
-				backgroundColor: 'elevation',
-				borderRadius: 24,
-				opacity: 0,
-				scaleX: 0,
-				scaleY: 0,
-				display: 'inline-block',
-				translateX: -14,
-				translateY: -14,
-			},
-			focusCirclePrimary: { backgroundColor: 'primary' },
-			focusCircle$invalid$touched: { backgroundColor: 'error' },
-			focusCircle$hover: {
-				scaleX: 1,
-				scaleY: 1,
-				translateX: -14,
-				translateY: -14,
-				opacity: 0.14,
-			},
-			focusCircle$focus: {
-				scaleX: 1,
-				scaleY: 1,
-				translateX: -14,
-				translateY: -14,
-				opacity: 0.25,
-			},
-			focusCircle$disabled: { scaleX: 0, scaleY: 0 },
-		}}
-	</Style>
-);
+export const FocusCircleStyle = css({
+	focusCircle: {
+		position: 'absolute',
+		width: 48,
+		height: 48,
+		backgroundColor: 'elevation',
+		borderRadius: 24,
+		opacity: 0,
+		scaleX: 0,
+		scaleY: 0,
+		display: 'inline-block',
+		translateX: -14,
+		translateY: -14,
+	},
+	focusCirclePrimary: { backgroundColor: 'primary' },
+	focusCircle$invalid$touched: { backgroundColor: 'error' },
+	focusCircle$hover: {
+		scaleX: 1,
+		scaleY: 1,
+		translateX: -14,
+		translateY: -14,
+		opacity: 0.14,
+	},
+	focusCircle$focus: {
+		scaleX: 1,
+		scaleY: 1,
+		translateX: -14,
+		translateY: -14,
+		opacity: 0.25,
+	},
+	focusCircle$disabled: { scaleX: 0, scaleY: 0 },
+});
 
 export const Undefined = {};
 

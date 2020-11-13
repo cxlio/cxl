@@ -39,13 +39,12 @@ export default suite('component', test => {
 	test('Component - template', a => {
 		const id = 'cxl-test' + a.id;
 		@Augment(
+			id,
 			<div>
 				<slot></slot>
 			</div>
 		)
-		class Test extends Component {
-			static tagName = id;
-		}
+		class Test extends Component {}
 
 		const tpl = <Test>Hello World</Test>;
 

@@ -1,5 +1,6 @@
 {
 	"extends": "../tsconfig.json",
+	"ignore": true,
 	"compilerOptions": {
 		"outDir": "../dist/docgen",
 		"outFile": "../dist/docgen/runtime.bundle.js",
@@ -11,7 +12,7 @@
 		"../ui/meta.ts",
 		"../rx/index.ts",
 		"../css/index.ts",
-		"../xdom/index.ts",
+		"../tsx/index.ts",
 		"../template/index.ts",
 		"../dom/index.ts",
 		"../component/index.ts",

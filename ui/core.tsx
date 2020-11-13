@@ -2,21 +2,20 @@ import {
 	Attribute,
 	Augment,
 	Component,
-	Host,
 	Slot,
 	StyleAttribute,
 	attributeChanged,
 	bind,
 	get,
 	onUpdate,
-	render,
 	role,
 } from '../component/index.js';
-import { RenderContext, dom, normalizeChildren } from '../xdom/index.js';
+import { dom } from '../tsx/index.js';
 import { EMPTY, Observable, defer, merge, tap } from '../rx/index.js';
-import { Style, StyleSheet, border, padding, pct } from '../css/index.js';
+import { StyleSheet, border, css, padding, pct } from '../css/index.js';
 import { getAttribute, stopEvent, triggerEvent } from '../template/index.js';
 import { on, onAction, remove, trigger } from '../dom/index.js';
+import { InversePrimary, ResetSurface } from './theme.js';
 
 export const FocusHighlight = {
 	$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
@@ -73,8 +72,6 @@ function findNextNode<T extends ChildNode>(
 		if (fn(node)) return node;
 		node = node[direction] as T;
 	}
-
-	return undefined;
 }
 
 function findNextNodeBySelector(
@@ -214,7 +211,7 @@ const stateStyles = new StyleSheet({ styles: StateStyles });
  * Adds focusable functionality to input components.
  */
 export function Focusable() {
-	return (host: RenderContext) => {
+	return (host: Component) => {
 		host.bind(focusable(host as FocusableComponent));
 		return stateStyles.clone();
 	};
@@ -251,7 +248,7 @@ interface SelectableComponent extends Component {
 }
 
 export function aria(prop: string, value: string) {
-	return (ctx: RenderContext) =>
+	return (ctx: Component) =>
 		ctx.bind(defer(() => ctx.setAttribute(`aria-${prop}`, value)));
 }
 
@@ -378,38 +375,36 @@ export function selectable<T extends SelectableComponent>(host: T) {
 
 @Augment<Ripple>(
 	'cxl-ripple',
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					position: 'absolute',
-					overflowX: 'hidden',
-					overflowY: 'hidden',
-					top: 0,
-					left: 0,
-					right: 0,
-					bottom: 0,
-					pointerEvents: 'none',
-				},
-				ripple: {
-					position: 'relative',
-					borderRadius: pct(100),
-					scaleX: 0,
-					scaleY: 0,
-					backgroundColor: 'onSurface',
-					opacity: 0.16,
-					animation: 'expand',
-					animationDuration: '0.4s',
-				},
-				ripple$primary: { backgroundColor: 'primary' },
-				ripple$secondary: { backgroundColor: 'secondary' },
-			}}
-		</Style>
+	css({
+		$: {
+			display: 'block',
+			position: 'absolute',
+			overflowX: 'hidden',
+			overflowY: 'hidden',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+			pointerEvents: 'none',
+		},
+		ripple: {
+			position: 'relative',
+			borderRadius: pct(100),
+			scaleX: 0,
+			scaleY: 0,
+			backgroundColor: 'onSurface',
+			opacity: 0.16,
+			animation: 'expand',
+			animationDuration: '0.4s',
+		},
+		ripple$primary: { backgroundColor: 'primary' },
+		ripple$secondary: { backgroundColor: 'secondary' },
+	}),
+	ctx => (
 		<div
-			$={(el, ctx) => {
+			$={el => {
 				return merge(
-					onUpdate(ctx as Ripple, host => {
+					onUpdate(ctx, host => {
 						const style = el.style;
 						style.left = host.x - host.radius + 'px';
 						style.top = host.y - host.radius + 'px';
@@ -420,7 +415,7 @@ export function selectable<T extends SelectableComponent>(host: T) {
 			}}
 			className="ripple"
 		></div>
-	</Host>
+	)
 )
 export class Ripple extends Component {
 	@Attribute()
@@ -438,19 +433,15 @@ export class Ripple extends Component {
 @Augment(
 	'cxl-ripple-container',
 	bind(ripple),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					position: 'relative',
-					overflowX: 'hidden',
-					overflowY: 'hidden',
-				},
-			}}
-		</Style>
-		<slot />
-	</Host>
+	css({
+		$: {
+			display: 'block',
+			position: 'relative',
+			overflowX: 'hidden',
+			overflowY: 'hidden',
+		},
+	}),
+	() => <slot />
 )
 export class RippleContainer extends Component {}
 
@@ -468,52 +459,46 @@ const AVATAR_DEFAULT =
 @Augment<Avatar>(
 	'cxl-avatar',
 	role('img'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					borderRadius: 32,
-					backgroundColor: 'surface',
-					width: 40,
-					height: 40,
-					display: 'inline-block',
-					lineHeight: 38,
-					textAlign: 'center',
-					overflowY: 'hidden',
-				},
-				$little: {
-					width: 32,
-					height: 32,
-					font: 'default',
-					lineHeight: 30,
-				},
-				$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
-				image: {
-					width: pct(100),
-					height: pct(100),
-					borderRadius: 32,
-				},
-			}}
-		</Style>
-	</Host>,
-	render(node => (
-		<Host>
+	css({
+		$: {
+			borderRadius: 32,
+			backgroundColor: 'surface',
+			width: 40,
+			height: 40,
+			display: 'inline-block',
+			lineHeight: 38,
+			textAlign: 'center',
+			overflowY: 'hidden',
+		},
+		$little: {
+			width: 32,
+			height: 32,
+			font: 'default',
+			lineHeight: 30,
+		},
+		$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
+		image: {
+			width: pct(100),
+			height: pct(100),
+			borderRadius: 32,
+		},
+	}),
+	node => (
+		<>
 			<img
 				$={img =>
-					get(node, 'src').pipe(
-						tap(src => {
-							img.src = src || AVATAR_DEFAULT;
-							img.style.display =
-								src || !node.text ? 'block' : 'none';
-						})
-					)
+					get(node, 'src').tap(src => {
+						img.src = src || AVATAR_DEFAULT;
+						img.style.display =
+							src || !node.text ? 'block' : 'none';
+					})
 				}
 				className="image"
 				alt="avatar"
 			/>
 			{get(node, 'text')}
-		</Host>
-	))
+		</>
+	)
 )
 export class Avatar extends Component {
 	@StyleAttribute()
@@ -537,59 +522,61 @@ export class Avatar extends Component {
  */
 @Augment<Chip>(
 	'cxl-chip',
-	<Host>
-		<Focusable />
-		<Style>
-			{{
-				$: {
-					borderRadius: 16,
-					font: 'subtitle2',
-					backgroundColor: 'onSurface12',
-					display: 'inline-flex',
-					color: 'onSurface',
-					lineHeight: 32,
-					height: 32,
-					verticalAlign: 'top',
-				},
-				$primary: {
-					color: 'onPrimary',
-					backgroundColor: 'primary',
-				},
-				$secondary: {
-					color: 'onSecondary',
-					backgroundColor: 'secondary',
-				},
-				$small: { font: 'caption', lineHeight: 20, height: 20 },
-				content: {
-					display: 'inline-block',
-					marginLeft: 12,
-					paddingRight: 12,
-				},
-				avatar: { display: 'inline-block' },
-				remove: {
-					display: 'none',
-					marginRight: 12,
-					cursor: 'pointer',
-				},
-				remove$removable: {
-					display: 'inline-block',
-				},
-				...FocusHighlight,
-			}}
-		</Style>
-		<span className="avatar">
-			<Slot selector="cxl-avatar" />
-		</span>
-		<span className="content">
-			<slot></slot>
-		</span>
+	Focusable(),
+	css({
+		$: {
+			borderRadius: 16,
+			font: 'subtitle2',
+			backgroundColor: 'onSurface12',
+			display: 'inline-flex',
+			color: 'onSurface',
+			lineHeight: 32,
+			height: 32,
+			verticalAlign: 'top',
+		},
+		$primary: {
+			color: 'onPrimary',
+			backgroundColor: 'primary',
+		},
+		$secondary: {
+			color: 'onSecondary',
+			backgroundColor: 'secondary',
+		},
+		$small: { font: 'caption', lineHeight: 20, height: 20 },
+		content: {
+			display: 'inline-block',
+			marginLeft: 12,
+			paddingRight: 12,
+		},
+		avatar: { display: 'inline-block' },
+		remove: {
+			display: 'none',
+			marginRight: 12,
+			cursor: 'pointer',
+		},
+		remove$removable: {
+			display: 'inline-block',
+		},
+		...FocusHighlight,
+	}),
+	() => (
+		<>
+			<span className="avatar">
+				<Slot selector="cxl-avatar" />
+			</span>
+			<span className="content">
+				<slot></slot>
+			</span>
+		</>
+	),
+	host => (
 		<span
-			$={(el, host) => on(el, 'click').pipe(tap(() => host.remove()))}
+			$={el => on(el, 'click').tap(() => host.remove())}
 			className="remove"
 		>
 			x
 		</span>
-	</Host>,
+	),
 	bind(host =>
 		on(host, 'keydown').pipe(
 			tap(ev => {
@@ -633,33 +620,29 @@ export class Chip extends Component {
  */
 @Augment(
 	'cxl-badge',
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'inline-block',
-					position: 'relative',
-					width: 22,
-					height: 22,
-					lineHeight: 22,
-					font: 'caption',
-					borderRadius: 11,
-					color: 'onPrimary',
-					backgroundColor: 'primary',
-					textAlign: 'center',
-					verticalAlign: 'top',
-				},
-				$secondary: {
-					color: 'onSecondary',
-					backgroundColor: 'secondary',
-				},
-				$error: { color: 'onError', backgroundColor: 'error' },
-				$top: { translateY: -11 },
-				$over: { marginLeft: -8 },
-			}}
-		</Style>
-		<slot></slot>
-	</Host>
+	css({
+		$: {
+			display: 'inline-block',
+			position: 'relative',
+			width: 22,
+			height: 22,
+			lineHeight: 22,
+			font: 'caption',
+			borderRadius: 11,
+			color: 'onPrimary',
+			backgroundColor: 'primary',
+			textAlign: 'center',
+			verticalAlign: 'top',
+		},
+		$secondary: {
+			color: 'onSecondary',
+			backgroundColor: 'secondary',
+		},
+		$error: { color: 'onError', backgroundColor: 'error' },
+		$top: { translateY: -11 },
+		$over: { marginLeft: -8 },
+	}),
+	() => <slot />
 )
 export class Badge extends Component {
 	@Attribute()
@@ -678,17 +661,13 @@ export class Badge extends Component {
 @Augment(
 	'cxl-hr',
 	role('separator'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					height: 1,
-					backgroundColor: 'divider',
-				},
-			}}
-		</Style>
-	</Host>
+	css({
+		$: {
+			display: 'block',
+			height: 1,
+			backgroundColor: 'divider',
+		},
+	})
 )
 export class Hr extends Component {}
 
@@ -700,18 +679,16 @@ export class Hr extends Component {}
  */
 @Augment<Progress>(
 	'cxl-progress',
-	<Style>
-		{{
-			$: { backgroundColor: 'primaryLight', height: 4 },
-			indicator: {
-				backgroundColor: 'primary',
-				height: 4,
-				transformOrigin: 'left',
-			},
-			indeterminate: { animation: 'wait' },
-		}}
-	</Style>,
-	render(host => (
+	css({
+		$: { backgroundColor: 'primaryLight', height: 4 },
+		indicator: {
+			backgroundColor: 'primary',
+			height: 4,
+			transformOrigin: 'left',
+		},
+		indeterminate: { animation: 'wait' },
+	}),
+	host => (
 		<div
 			className="indicator"
 			$={el =>
@@ -725,7 +702,7 @@ export class Hr extends Component {}
 				)
 			}
 		></div>
-	)),
+	),
 	role('progressbar')
 )
 export class Progress extends Component {
@@ -740,19 +717,14 @@ export function Svg(p: {
 	height?: number;
 	children: string;
 }) {
-	return () => {
-		const el = document.createElementNS(
-			'http://www.w3.org/2000/svg',
-			'svg'
-		);
-		el.style.fill = 'var(--cxl-on-surface)';
-		el.innerHTML = p.children;
-		el.setAttribute('viewBox', p.viewBox);
-		if (p.width) el.setAttribute('width', p.width.toString());
-		if (p.height) el.setAttribute('height', p.height.toString());
-		if (p.className) el.setAttribute('class', p.className);
-		return el;
-	};
+	const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	el.style.fill = 'var(--cxl-on-surface)';
+	el.innerHTML = p.children;
+	el.setAttribute('viewBox', p.viewBox);
+	if (p.width) el.setAttribute('width', p.width.toString());
+	if (p.height) el.setAttribute('height', p.height.toString());
+	if (p.className) el.setAttribute('class', p.className);
+	return el;
 }
 
 /**
@@ -763,19 +735,17 @@ export function Svg(p: {
  */
 @Augment(
 	'cxl-spinner',
-	<Host>
-		<Style>
-			{{
-				$: {
-					animation: 'spin',
-					display: 'inline-block',
-					width: 48,
-					height: 48,
-				},
-				circle: { animation: 'spinnerstroke' },
-				svg: { width: pct(100), height: pct(100) },
-			}}
-		</Style>
+	css({
+		$: {
+			animation: 'spin',
+			display: 'inline-block',
+			width: 48,
+			height: 48,
+		},
+		circle: { animation: 'spinnerstroke' },
+		svg: { width: pct(100), height: pct(100) },
+	}),
+	_ => (
 		<Svg viewBox="0 0 100 100" className="svg">{`<circle
 				cx="50%"
 				cy="50%"
@@ -783,37 +753,33 @@ export function Svg(p: {
 				style="stroke:var(--cxl-primary);fill:transparent;transition:stroke-dashoffset var(--cxl-speed);stroke-width:10%;transform-origin:center;stroke-dasharray:282.743px"
 				class="circle"
 			/>`}</Svg>
-	</Host>
+	)
 )
 export class Spinner extends Component {}
 
 @Augment(
 	'cxl-t',
-	<Host>
-		<Style>
-			{{
-				$: { display: 'block', font: 'default', marginBottom: 8 },
-				$center: { textAlign: 'center' },
-				$inline: { display: 'inline', marginTop: 0, marginBottom: 0 },
+	css({
+		$: { display: 'block', font: 'default', marginBottom: 8 },
+		$center: { textAlign: 'center' },
+		$inline: { display: 'inline', marginTop: 0, marginBottom: 0 },
 
-				$caption: { font: 'caption' },
-				$h1: { font: 'h1', marginTop: 32, marginBottom: 64 },
-				$h2: { font: 'h2', marginTop: 24, marginBottom: 48 },
-				$h3: { font: 'h3', marginTop: 24, marginBottom: 32 },
-				$h4: { font: 'h4', marginTop: 30, marginBottom: 30 },
-				$h5: { font: 'h5', marginTop: 24, marginBottom: 24 },
-				$h6: { font: 'h6', marginTop: 16, marginBottom: 16 },
-				$body2: { font: 'body2' },
-				$button: { font: 'button' },
-				$subtitle: { font: 'subtitle', marginBottom: 0 },
-				$subtitle2: { font: 'subtitle2', opacity: 0.73 },
-				$code: { font: 'code' },
-				$firstChild: { marginTop: 0 },
-				$lastChild: { marginBottom: 0 },
-			}}
-		</Style>
-		<slot />
-	</Host>
+		$caption: { font: 'caption' },
+		$h1: { font: 'h1', marginTop: 32, marginBottom: 64 },
+		$h2: { font: 'h2', marginTop: 24, marginBottom: 48 },
+		$h3: { font: 'h3', marginTop: 24, marginBottom: 32 },
+		$h4: { font: 'h4', marginTop: 30, marginBottom: 30 },
+		$h5: { font: 'h5', marginTop: 24, marginBottom: 24 },
+		$h6: { font: 'h6', marginTop: 16, marginBottom: 16 },
+		$body2: { font: 'body2' },
+		$button: { font: 'button' },
+		$subtitle: { font: 'subtitle', marginBottom: 0 },
+		$subtitle2: { font: 'subtitle2', opacity: 0.73 },
+		$code: { font: 'code' },
+		$firstChild: { marginTop: 0 },
+		$lastChild: { marginBottom: 0 },
+	}),
+	_ => <slot />
 )
 export class T extends Component {
 	@StyleAttribute()
@@ -838,6 +804,8 @@ export class T extends Component {
 	subtitle2 = false;
 	@StyleAttribute()
 	code = false;
+	@StyleAttribute()
+	inline = false;
 }
 
 /**
@@ -857,26 +825,26 @@ export class T extends Component {
  */
 @Augment<Toggle>(
 	'cxl-toggle',
-	<Host>
-		<Style>
-			{{
-				$: { position: 'relative', display: 'inline-block' },
-				popup: {
-					scaleY: 0,
-					position: 'absolute',
-					animation: 'fadeOut',
-					transformOrigin: 'top',
-					top: 0,
-				},
-				popup$right: { right: 0 },
-				popup$opened: { scaleY: 1, animation: 'fadeIn' },
-			}}
-		</Style>
-		<slot name="trigger" />
-		<div className="popup">
-			<slot />
-		</div>
-	</Host>,
+	css({
+		$: { position: 'relative', display: 'inline-block' },
+		popup: {
+			scaleY: 0,
+			position: 'absolute',
+			animation: 'fadeOut',
+			transformOrigin: 'top',
+			top: 0,
+		},
+		popup$right: { right: 0 },
+		popup$opened: { scaleY: 1, animation: 'fadeIn' },
+	}),
+	_ => (
+		<>
+			<slot name="trigger" />
+			<div className="popup">
+				<slot />
+			</div>
+		</>
+	),
 	bind(el =>
 		merge(
 			get(el, 'opened')
@@ -901,66 +869,62 @@ export class Toggle extends Component {
 
 @Augment(
 	role('button'),
-	<Host>
-		<Focusable />
-		<Style>
-			{{
-				$: {
-					elevation: 1,
-					paddingTop: 8,
-					paddingBottom: 8,
-					paddingRight: 16,
-					paddingLeft: 16,
-					cursor: 'pointer',
-					display: 'inline-block',
-					font: 'button',
-					borderRadius: 2,
-					userSelect: 'none',
-					backgroundColor: 'surface',
-					color: 'onSurface',
-					textAlign: 'center',
-				},
+	Focusable(),
+	css({
+		$: {
+			elevation: 1,
+			paddingTop: 8,
+			paddingBottom: 8,
+			paddingRight: 16,
+			paddingLeft: 16,
+			cursor: 'pointer',
+			display: 'inline-block',
+			font: 'button',
+			borderRadius: 2,
+			userSelect: 'none',
+			backgroundColor: 'surface',
+			color: 'onSurface',
+			textAlign: 'center',
+		},
 
-				$big: { ...padding(16), font: 'h5' },
-				$flat: {
-					elevation: 0,
-					paddingRight: 8,
-					paddingLeft: 8,
-				},
-				$outline: {
-					backgroundColor: 'surface',
-					elevation: 0,
-					...border(1),
-					borderStyle: 'solid',
-					borderColor: 'onSurface',
-				},
-				$outline$primary: {
-					color: 'primary',
-					borderColor: 'primary',
-				},
-				$outline$secondary: {
-					color: 'secondary',
-					borderColor: 'secondary',
-				},
-				$primary: {
-					backgroundColor: 'primary',
-					color: 'onPrimary',
-				},
-				$secondary: {
-					backgroundColor: 'secondary',
-					color: 'onSecondary',
-				},
+		$big: { ...padding(16), font: 'h5' },
+		$flat: {
+			elevation: 0,
+			paddingRight: 8,
+			paddingLeft: 8,
+		},
+		$outline: {
+			backgroundColor: 'surface',
+			elevation: 0,
+			...border(1),
+			borderStyle: 'solid',
+			borderColor: 'onSurface',
+		},
+		$outline$primary: {
+			color: 'primary',
+			borderColor: 'primary',
+		},
+		$outline$secondary: {
+			color: 'secondary',
+			borderColor: 'secondary',
+		},
+		$primary: {
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		$secondary: {
+			backgroundColor: 'secondary',
+			color: 'onSecondary',
+		},
 
-				$active: { elevation: 3 },
-				$active$disabled: { elevation: 1 },
-				$active$flat: { elevation: 0 },
-				'@large': {
-					$flat: { paddingLeft: 12, paddingRight: 12 },
-				},
-			}}
-		</Style>
-		<Style>{FocusHighlight}</Style>
-	</Host>,
+		$active: { elevation: 3 },
+		$active$disabled: { elevation: 1 },
+		$active$flat: { elevation: 0 },
+		'@large': {
+			$flat: { paddingLeft: 12, paddingRight: 12 },
+		},
+	}),
+	css(FocusHighlight),
 	bind(ripple)
 )
 export class ButtonBase extends Component {
@@ -989,41 +953,41 @@ export class ButtonBase extends Component {
  * <cxl-button flat>Flat Button</cxl-button>
  * <cxl-button outline>With Outline</cxl-button>
  */
-@Augment('cxl-button', <slot />)
+@Augment('cxl-button', Slot)
 export class Button extends ButtonBase {}
 
 @Augment(
 	'cxl-icon-button',
-	<Style>
-		{{
-			$: {
-				fontSize: 'inherit',
-				elevation: 0,
-				paddingLeft: 8,
-				paddingRight: 8,
-			},
-		}}
-	</Style>,
-	<slot />
+	css({
+		$: {
+			fontSize: 'inherit',
+			elevation: 0,
+			paddingLeft: 8,
+			paddingRight: 8,
+		},
+	}),
+	Slot
 )
 export class IconButton extends ButtonBase {}
 
-function Head(p: { children: any }) {
-	const children = normalizeChildren(p.children);
-	return (ctx: RenderContext) => {
-		const head = ctx.ownerDocument.head;
-		children.forEach(child => head.appendChild(child(ctx)));
+/**
+ * Adds nodes to head on component rendering
+ */
+export function head(...nodes: Node[]) {
+	return (host: Node) => {
+		const head = host.ownerDocument?.head || document.head;
+		nodes.forEach(child => head.appendChild(child));
 	};
 }
 
 @Augment(
 	'cxl-meta',
-	<Head>
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="mobile-web-app-capable" content="yes" />
-		<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}`}</style>
-	</Head>
+	head(
+		<meta name="viewport" content="width=device-width, initial-scale=1" />,
+		<meta name="apple-mobile-web-app-capable" content="yes" />,
+		<meta name="mobile-web-app-capable" content="yes" />,
+		<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}a,a:active,a:visited{color:var(--cxl-link)}`}</style>
+	)
 )
 export class Meta extends Component {
 	connectedCallback() {
@@ -1034,22 +998,31 @@ export class Meta extends Component {
 
 @Augment(
 	'cxl-application',
-	<Host>
-		<Meta />
-		<Style>
-			{{
-				$: {
-					display: 'flex',
-					flexDirection: 'column',
-					height: '100%',
-					overflowX: 'hidden',
-				},
-				'@large': {
-					$permanent: { marginLeft: 288 },
-				},
-			}}
-		</Style>
-		<slot />
-	</Host>
+	css({
+		$: {
+			display: 'flex',
+			flexDirection: 'column',
+			height: '100%',
+			overflowX: 'hidden',
+		},
+		'@large': {
+			$permanent: { marginLeft: 288 },
+		},
+	}),
+	_ => <Meta />,
+	Slot
 )
 export class Application extends Component {}
+
+@Augment(
+	'cxl-surface',
+	css({
+		$primary: InversePrimary,
+		$: ResetSurface,
+	}),
+	Slot
+)
+export class Surface extends Component {
+	@StyleAttribute()
+	primary = false;
+}

@@ -1,10 +1,16 @@
 {
 	"name": "@cxl/server",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Application library",
 	"license": "GPL-3.0",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "node ../dist/build && cd ../dist/server && node ../tester --node"
+	},
+	"dependencies": {
+		"source-map-support": "0.5.19"
+	},
+	"peerDependencies": {
+		"@cxl/rx": "0.1.0"
 	}
 }

@@ -1,6 +1,5 @@
-import type { AttributeType, Binding, RenderContext } from '../xdom/index.js';
-import { normalizeChildren } from '../xdom/index.js';
-import { ChildrenObserver, MutationEvent, getShadow } from '../dom/index.js';
+import type { AttributeType } from '../tsx/index.js';
+import { getShadow } from '../dom/index.js';
 import {
 	Observable,
 	Operator,
@@ -9,14 +8,15 @@ import {
 	concat,
 	defer,
 	filter,
+	from,
+	isInterop,
 	map,
 	of,
 	tap,
 } from '../rx/index.js';
 
-type Renderable<T extends Component> = (ctx: T) => Node;
 type RenderFunction<T> = (node: T) => void;
-type Augmentation<T extends RenderContext> = (context: T) => Node | void;
+type Augmentation<T extends Component> = (host: T) => Node | void;
 
 export interface AttributeEvent<T, K extends keyof T = keyof T> {
 	target: T;
@@ -31,6 +31,27 @@ const subscriber = {
 	},
 };
 
+export class Bindings {
+	private subscriptions?: Subscription[];
+	private bindings?: Observable<any>[];
+
+	bind(binding: Observable<any>) {
+		if (!this.bindings) this.bindings = [];
+		this.bindings.push(binding);
+	}
+
+	connect() {
+		if (!this.subscriptions && this.bindings)
+			this.subscriptions = this.bindings.map(b =>
+				b.subscribe(subscriber)
+			);
+	}
+	disconnect() {
+		this.subscriptions?.forEach(s => s.unsubscribe());
+		this.subscriptions = undefined;
+	}
+}
+
 export abstract class Component extends HTMLElement {
 	static tagName: string;
 	static observedAttributes: string[];
@@ -39,44 +60,30 @@ export abstract class Component extends HTMLElement {
 		return document.createElement(this.tagName);
 	}
 
+	private $$bindings?: Bindings;
+	private render?: (node: this) => void;
+
 	// EventMap
 	eventMap?: any;
 	jsxAttributes?: AttributeType<this>;
-
-	private bindings?: Observable<any>[];
-	private subscriptions?: Subscription[];
-	private rendered = false;
 	attributes$ = new Subject<AttributeEvent<any, any>>();
 
-	bind(binding: Observable<any>) {
-		if (this.subscriptions)
-			throw new Error('Cannot add bindings to a connected view');
-
-		if (!this.bindings) this.bindings = [];
-		this.bindings.push(binding);
-	}
-
-	render(_node: this) {
-		// TODO
+	bind(obs: Observable<any>) {
+		if (!this.$$bindings) this.$$bindings = new Bindings();
+		this.$$bindings.bind(obs);
 	}
 
 	connectedCallback() {
-		if (!this.rendered) {
+		if (this.render) {
 			this.render(this);
-			this.rendered = true;
+			delete this.render;
 		}
 
-		if (this.bindings)
-			this.subscriptions = this.bindings.map(b =>
-				b.subscribe(subscriber)
-			);
+		if (this.$$bindings) this.$$bindings.connect();
 	}
 
 	disconnectedCallback() {
-		if (this.subscriptions) {
-			this.subscriptions.forEach(s => s.unsubscribe());
-			this.subscriptions = undefined;
-		}
+		if (this.$$bindings) this.$$bindings.disconnect();
 	}
 
 	attributeChangedCallback(name: keyof this, oldValue: any, value: any) {
@@ -96,6 +103,12 @@ export function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
 	};
 }
 
+export function appendShadow(host: Component, child: Node) {
+	const shadow = getShadow(host);
+	if (child instanceof Node) shadow.appendChild(child);
+	if (isInterop(child)) host.bind(from(child));
+}
+
 export function augment<T extends Component>(
 	constructor: new () => T,
 	decorators: Augmentation<T>[]
@@ -103,8 +116,7 @@ export function augment<T extends Component>(
 	pushRender<T>(constructor.prototype, node => {
 		for (const d of decorators) {
 			const result = d(node);
-			if (result instanceof Node && result !== node)
-				getShadow(node).appendChild(result);
+			if (result && result !== node) appendShadow(node, result);
 		}
 	});
 }
@@ -140,15 +152,6 @@ export function Augment(...augs: any[]) {
 	};
 }
 
-export function render<T extends Component>(
-	renderFn: (node: T) => Renderable<T>
-) {
-	return (host: T) => {
-		const child = renderFn(host)(host);
-		if (child !== host) getShadow(host).appendChild(child);
-	};
-}
-
 export function bind<T extends Component>(
 	bindFn: (node: T) => Observable<any>
 ) {
@@ -162,32 +165,6 @@ export function connect<T extends Component>(bindFn: (node: T) => void) {
 				bindFn(host);
 			})
 		);
-}
-
-export function Slot({ selector }: { selector?: string }) {
-	function handleEvent(ev: MutationEvent) {
-		const node = ev.value;
-		if (
-			ev.type === 'added' &&
-			selector &&
-			node instanceof HTMLElement &&
-			node.matches(selector)
-		)
-			node.slot = selector;
-	}
-
-	return (host: RenderContext) => {
-		const slot = document.createElement('slot');
-		if (selector) {
-			slot.name = selector;
-			const observer = new ChildrenObserver(host);
-			for (const node of host.children)
-				if (node.matches(selector)) node.slot = selector;
-			host.bind(observer.pipe(tap(handleEvent)));
-		}
-
-		return slot;
-	};
 }
 
 export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
@@ -306,8 +283,8 @@ export function getRegisteredComponents() {
 	return { ...registeredComponents };
 }
 
-export function role<T extends Component>(roleName: string) {
-	return (host: T) =>
+export function role(roleName: string) {
+	return (host: Component) =>
 		host.bind(
 			defer(() => {
 				const el = host as any;
@@ -316,16 +293,6 @@ export function role<T extends Component>(roleName: string) {
 		);
 }
 
-export function Host({ $, children }: { $?: Binding; children?: any }) {
-	const normalizedChildren = normalizeChildren(children);
-	return (host: RenderContext) => {
-		if ($) host.bind($(host, host));
-
-		const shadow = host.shadowRoot || host.attachShadow({ mode: 'open' });
-		normalizedChildren.forEach(c => {
-			const el = c(host);
-			if (el) shadow.appendChild(el);
-		});
-		return host;
-	};
+export function Slot() {
+	return document.createElement('slot');
 }

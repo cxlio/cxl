@@ -120,7 +120,7 @@ function getPublishedVersion(p: Package) {
 	try {
 		return execSync(`npm show ${p.name}@${p.version} version`, {
 			encoding: 'utf8',
-			stdio: ['ignore', 'inherit', 'ignore'],
+			//stdio: ['ignore', 'inherit', 'ignore'],
 		}).trim();
 	} catch (e) {
 		return;
@@ -183,7 +183,6 @@ export function pkg() {
 		const p = readPackage();
 		const licenseId = p.license;
 		const isPublished = getPublishedVersion(p);
-
 		if (isPublished) throw new Error(`Package version already published.`);
 
 		const output: Observable<Output>[] = [packageJson(p)];

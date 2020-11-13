@@ -1,10 +1,19 @@
 import { ComponentTest, Test, spec } from '../spec/index.js';
 import { on } from '../dom/index.js';
-import { dom, connect } from '../xdom/index.js';
+import { dom, observe } from '../tsx/index.js';
 import { getRegisteredComponents, Component } from '../component/index.js';
 import { tap } from '../rx/index.js';
 import type { InputBase } from './index.js';
 import './index.js';
+
+async function connect<T extends Node>(el: T, callback: (el: T) => any) {
+	const subscriptions = observe(el).subscribe();
+	try {
+		await callback(el);
+	} finally {
+		subscriptions.unsubscribe();
+	}
+}
 
 const Measure: Record<string, any> = {
 	'CXL-APPBAR'(test: ComponentTest) {
@@ -201,7 +210,7 @@ export default spec('ui', a => {
 			return on(el, 'click').pipe(tap(() => (clickHandled = true)));
 		}
 
-		connect(<div $={ripple}>Container</div>, el => {
+		connect(<div $={ripple}>Container</div>, (el: any) => {
 			a.dom.appendChild(el);
 			a.ok(el);
 			el.click();

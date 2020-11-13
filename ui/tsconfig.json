@@ -6,7 +6,6 @@
 	"include": ["*.tsx"],
 	"exclude": ["test.tsx"],
 	"references": [
-		{ "path": "../xdom" },
 		{ "path": "../tsx" },
 		{ "path": "../component" },
 		{ "path": "../template" },

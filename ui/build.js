@@ -11,7 +11,10 @@ const {
 buildCxl(
 	{
 		outputDir: '../dist/ui',
-		tasks: [file('test.html', 'test.html')],
+		tasks: [
+			file('test.html', 'test.html'),
+			file('sandbox.html', 'sandbox.html'),
+		],
 	},
 	{
 		target: 'package',

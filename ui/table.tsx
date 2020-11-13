@@ -1,33 +1,27 @@
-import { Style, border } from '../css/index.js';
+import { border, css } from '../css/index.js';
 import { triggerEvent } from '../template/index.js';
 import {
 	Component,
 	Augment,
 	Attribute,
-	Host,
 	StyleAttribute,
 	bind,
 	get,
-	render,
 	role,
 } from '../component/index.js';
-import { dom } from '../xdom/index.js';
-import { tap, merge } from '../rx/index.js';
+import { dom } from '../tsx/index.js';
+import { tap } from '../rx/index.js';
 import { on, onAction } from '../dom/index.js';
 
 import { Checkbox } from './checkbox.js';
 import { registable, ariaProp } from './core.js';
 
 function onHeaderAction(el: Th) {
-	return merge(
-		onAction(el).pipe(
-			tap(() => {
-				const sort = el['sort-order'];
-				el['sort-order'] =
-					sort === 'asc' ? 'desc' : sort === 'desc' ? 'none' : 'asc';
-			})
-		)
-	);
+	return onAction(el).tap(() => {
+		const sort = el['sort-order'];
+		el['sort-order'] =
+			sort === 'asc' ? 'desc' : sort === 'desc' ? 'none' : 'asc';
+	});
 }
 
 function onSort(el: HTMLElement, host: Th) {
@@ -42,48 +36,49 @@ function onSort(el: HTMLElement, host: Th) {
 	);
 }
 
-@Augment(
+@Augment<Th>(
 	'cxl-th',
-	<Host $={onHeaderAction}>
-		<Style>
-			{{
-				$: {
-					display: 'table-cell',
-					flexGrow: 1,
-					color: 'headerText',
-					paddingTop: 12,
-					paddingBottom: 12,
-					paddingLeft: 16,
-					paddingRight: 16,
-					...border(0, 0, 1, 0),
-					borderStyle: 'solid',
-					borderColor: 'divider',
-					lineHeight: 24,
-					whiteSpace: 'nowrap',
-				},
-				sortIcon: {
-					display: 'none',
-					marginLeft: -18,
-					marginRight: 8,
-					scaleY: 0,
-					scaleX: 0,
-				},
-				$sortable: { cursor: 'pointer' },
-				$sortable$hover: { color: 'onSurface' },
-				sortIcon$sortable: { display: 'inline-block' },
-				asc: { rotate: 0, scaleX: 1, scaleY: 1 },
-				desc: {
-					rotate: 180,
-					scaleX: 1,
-					scaleY: 1,
-				},
-			}}
-		</Style>
-		<slot />
-		<div $={onSort} className="sortIcon">
-			{'\u25BC'}
-		</div>
-	</Host>
+	bind(onHeaderAction),
+	css({
+		$: {
+			display: 'table-cell',
+			flexGrow: 1,
+			color: 'headerText',
+			paddingTop: 12,
+			paddingBottom: 12,
+			paddingLeft: 16,
+			paddingRight: 16,
+			...border(0, 0, 1, 0),
+			borderStyle: 'solid',
+			borderColor: 'divider',
+			lineHeight: 24,
+			whiteSpace: 'nowrap',
+		},
+		sortIcon: {
+			display: 'none',
+			marginLeft: -18,
+			marginRight: 8,
+			scaleY: 0,
+			scaleX: 0,
+		},
+		$sortable: { cursor: 'pointer' },
+		$sortable$hover: { color: 'onSurface' },
+		sortIcon$sortable: { display: 'inline-block' },
+		asc: { rotate: 0, scaleX: 1, scaleY: 1 },
+		desc: {
+			rotate: 180,
+			scaleX: 1,
+			scaleY: 1,
+		},
+	}),
+	$ => (
+		<>
+			<slot />
+			<div $={el => onSort(el, $)} className="sortIcon">
+				{'\u25BC'}
+			</div>
+		</>
+	)
 )
 export class Th extends Component {
 	eventType?: 'datatable.sort';
@@ -120,59 +115,51 @@ export class Th extends Component {
 @Augment(
 	'cxl-table',
 	role('table'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					width: '100%',
-					font: 'default',
-					overflowX: 'auto',
-					...border(1, 1, 0, 1),
-					borderStyle: 'solid',
-					borderColor: 'divider',
-					borderRadius: 4,
-				},
-				'@small': { $: { display: 'table' } },
-			}}
-		</Style>
-		<slot />
-	</Host>
+	css({
+		$: {
+			display: 'block',
+			width: '100%',
+			font: 'default',
+			overflowX: 'auto',
+			...border(1, 1, 0, 1),
+			borderStyle: 'solid',
+			borderColor: 'divider',
+			borderRadius: 4,
+		},
+		'@small': { $: { display: 'table' } },
+	}),
+	_ => <slot />
 )
 export class Table extends Component {}
 
 @Augment(
 	role('table-cell'),
-	<Style>
-		{{
-			$: {
-				display: 'table-cell',
-				paddingTop: 12,
-				paddingBottom: 12,
-				paddingLeft: 16,
-				paddingRight: 16,
-				flexGrow: 1,
-				...border(0, 0, 1, 0),
-				borderStyle: 'solid',
-				borderColor: 'divider',
-			},
-			$primary: { backgroundColor: 'primary', color: 'onPrimary' },
-			$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
-		}}
-	</Style>
+	css({
+		$: {
+			display: 'table-cell',
+			paddingTop: 12,
+			paddingBottom: 12,
+			paddingLeft: 16,
+			paddingRight: 16,
+			flexGrow: 1,
+			...border(0, 0, 1, 0),
+			borderStyle: 'solid',
+			borderColor: 'divider',
+		},
+		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
+		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
+	})
 )
 class Cell extends Component {}
 
-@Augment('cxl-td', <slot />)
+@Augment('cxl-td', () => <slot />)
 export class Td extends Cell {}
 
 @Augment<CheckboxCell>(
-	<Style>
-		{{
-			$: { width: 48 },
-			checkbox: { paddingTop: 0, paddingBottom: 0 },
-		}}
-	</Style>,
+	css({
+		$: { width: 48 },
+		checkbox: { paddingTop: 0, paddingBottom: 0 },
+	}),
 	bind(host =>
 		get(host, 'checked').pipe(
 			ariaProp(host, 'checked'),
@@ -180,16 +167,18 @@ export class Td extends Cell {}
 			triggerEvent(host, host.selectEvent)
 		)
 	),
-	render(host => (
-		<Checkbox
-			$={el =>
-				on(el, 'change').pipe(tap(() => (host.checked = el.checked)))
-			}
-			checked={get(host, 'checked')}
-			className="checkbox"
-		/>
-	)),
-	<slot />
+	host => (
+		<>
+			<Checkbox
+				$={el =>
+					on(el, 'change').tap(() => (host.checked = el.checked))
+				}
+				checked={get(host, 'checked')}
+				className="checkbox"
+			/>
+			<slot />
+		</>
+	)
 )
 export class CheckboxCell extends Cell {
 	readonly selectEvent: string = 'datatable.select';
@@ -220,15 +209,11 @@ export class CheckboxTh extends CheckboxCell {
 			ev => (host.selected = (ev.target as CheckboxCell)?.checked)
 		)
 	),
-	<Host>
-		<Style>
-			{{
-				$: { display: 'table-row' },
-				$selected: { backgroundColor: 'primaryLight' },
-			}}
-		</Style>
-		<slot />
-	</Host>
+	css({
+		$: { display: 'table-row' },
+		$selected: { backgroundColor: 'primaryLight' },
+	}),
+	_ => <slot />
 )
 export class Tr extends Component {
 	@StyleAttribute()
@@ -237,42 +222,36 @@ export class Tr extends Component {
 
 @Augment(
 	'cxl-table-header',
-	<Style>
-		{{
-			$: {
-				font: 'h6',
-				lineHeight: 36,
-				paddingTop: 16,
-				paddingBottom: 16,
-				paddingLeft: 16,
-				paddingRight: 16,
-			},
-		}}
-	</Style>,
-	<slot />
+	css({
+		$: {
+			font: 'h6',
+			lineHeight: 36,
+			paddingTop: 16,
+			paddingBottom: 16,
+			paddingLeft: 16,
+			paddingRight: 16,
+		},
+	}),
+	_ => <slot />
 )
 export class TableHeader extends Component {}
 
 @Augment<TableSelectedCount>(
-	<Host>
-		<Style>
-			{{
-				$: {
-					font: 'subtitle',
-					lineHeight: 36,
-					height: 68,
-					backgroundColor: 'primaryLight',
-					color: 'onPrimaryLight',
-					display: 'flex',
-				},
-			}}
-		</Style>
-	</Host>,
-	render(host => (
+	css({
+		$: {
+			font: 'subtitle',
+			lineHeight: 36,
+			height: 68,
+			backgroundColor: 'primaryLight',
+			color: 'onPrimaryLight',
+			display: 'flex',
+		},
+	}),
+	host => (
 		<div>
 			{get(host, 'selected').pipe(tap(selected => selected?.length || 0))}
 		</div>
-	))
+	)
 )
 export class TableSelectedCount extends Component {
 	@Attribute()

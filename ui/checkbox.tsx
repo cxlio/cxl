@@ -1,8 +1,7 @@
-import { dom } from '../xdom/index.js';
+import { dom } from '../tsx/index.js';
 import {
 	Augment,
 	Attribute,
-	Host,
 	StyleAttribute,
 	bind,
 	get,
@@ -11,7 +10,7 @@ import {
 import { Focusable, Svg, ariaChecked } from './core.js';
 import { tap, merge } from '../rx/index.js';
 import { FocusCircleStyle, InputBase } from './input-base.js';
-import { Style } from '../css/index.js';
+import { css } from '../css/index.js';
 import { onAction } from '../dom/index.js';
 
 const Undefined = {};
@@ -57,66 +56,66 @@ const Undefined = {};
 		);
 	}),
 	FocusCircleStyle,
-	<Host>
-		<Focusable />
-		<Style>
-			{{
-				$: {
-					font: 'default',
-					position: 'relative',
-					cursor: 'pointer',
-					paddingTop: 12,
-					paddingBottom: 12,
-					display: 'block',
-					paddingLeft: 36,
-					lineHeight: 20,
-				},
-				$inline: { display: 'inline-block' },
-				$invalid$touched: { color: 'error' },
-				box: {
-					display: 'inline-block',
-					width: 20,
-					height: 20,
-					borderWidth: 2,
-					borderColor: 'onSurface',
-					borderStyle: 'solid',
-					top: 11,
-					left: 0,
-					position: 'absolute',
-					color: 'transparent',
-				},
-				check: { display: 'none' },
-				minus: { display: 'none' },
-				check$checked: { display: 'initial' },
-				check$indeterminate: { display: 'none' },
-				minus$indeterminate: { display: 'initial' },
-				box$checked: {
-					borderColor: 'primary',
-					backgroundColor: 'primary',
-					color: 'onPrimary',
-				},
-				box$indeterminate: {
-					borderColor: 'primary',
-					backgroundColor: 'primary',
-					color: 'onPrimary',
-				},
-				box$invalid$touched: { borderColor: 'error' },
-				focusCircle: { top: -2, left: -2 },
-			}}
-		</Style>
-		<div className="box">
-			<span className="focusCircle focusCirclePrimary" />
-			<Svg
-				className="check"
-				viewBox="0 0 24 24"
-			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
-			<Svg
-				className="minus"
-				viewBox="0 0 24 24"
-			>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M19 13H5v-2h14v2z" />`}</Svg>
-		</div>
-		<slot />
-	</Host>
+	Focusable(),
+	css({
+		$: {
+			font: 'default',
+			position: 'relative',
+			cursor: 'pointer',
+			paddingTop: 12,
+			paddingBottom: 12,
+			display: 'block',
+			paddingLeft: 36,
+			lineHeight: 20,
+		},
+		$inline: { display: 'inline-block' },
+		$invalid$touched: { color: 'error' },
+		box: {
+			display: 'inline-block',
+			width: 20,
+			height: 20,
+			borderWidth: 2,
+			borderColor: 'onSurface',
+			borderStyle: 'solid',
+			top: 11,
+			left: 0,
+			position: 'absolute',
+			color: 'transparent',
+		},
+		check: { display: 'none' },
+		minus: { display: 'none' },
+		check$checked: { display: 'initial' },
+		check$indeterminate: { display: 'none' },
+		minus$indeterminate: { display: 'initial' },
+		box$checked: {
+			borderColor: 'primary',
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		box$indeterminate: {
+			borderColor: 'primary',
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		box$invalid$touched: { borderColor: 'error' },
+		focusCircle: { top: -2, left: -2 },
+	}),
+	_ => (
+		<>
+			<div className="box">
+				<span className="focusCircle focusCirclePrimary" />
+				<Svg
+					className="check"
+					viewBox="0 0 24 24"
+				>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
+				<Svg
+					className="minus"
+					viewBox="0 0 24 24"
+				>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M19 13H5v-2h14v2z" />`}</Svg>
+			</div>
+			<slot />
+		</>
+	)
 )
 export class Checkbox extends InputBase {
 	value: any = Undefined;

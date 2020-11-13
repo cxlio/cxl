@@ -3,15 +3,20 @@ import {
 	StyleAttribute,
 	Augment,
 	Component,
-	Host,
 	connect,
 	role,
 	get,
 } from '../component/index.js';
-import { Style, padding, pct } from '../css/index.js';
-import { dom } from '../xdom/index.js';
-import { tpl } from '../template/index.js';
-import { createElement, insert, on, trigger, remove } from '../dom/index.js';
+import { css, padding, pct } from '../css/index.js';
+import { dom } from '../tsx/index.js';
+import {
+	createElement,
+	insert,
+	on,
+	onAction,
+	trigger,
+	remove,
+} from '../dom/index.js';
 import { merge } from '../rx/index.js';
 import { T, Button } from './core.js';
 
@@ -20,22 +25,18 @@ import { T, Button } from './core.js';
  */
 @Augment(
 	'cxl-backdrop',
-	<Host>
-		<Style>
-			{{
-				$: {
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					bottom: 0,
-					right: 0,
-					backgroundColor: 'elevation',
-					elevation: 5,
-				},
-			}}
-		</Style>
-		<slot></slot>
-	</Host>
+	css({
+		$: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			bottom: 0,
+			right: 0,
+			backgroundColor: 'elevation',
+			elevation: 5,
+		},
+	}),
+	() => <slot></slot>
 )
 export class Backdrop extends Component {}
 
@@ -52,49 +53,43 @@ export class Backdrop extends Component {}
 @Augment(
 	'cxl-dialog',
 	role('dialog'),
-	<Host>
-		<Style>
-			{{
-				content: {
-					backgroundColor: 'surface',
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					right: 0,
-					bottom: 0,
-					overflowY: 'auto',
-					color: 'onSurface',
-				},
-				'@small': {
-					content: {
-						elevation: 12,
-						translateY: pct(-50),
-						top: pct(50),
-						bottom: 'auto',
-						width: pct(80),
-						marginLeft: 'auto',
-						marginRight: 'auto',
-					},
-				},
-			}}
-		</Style>
+	css({
+		content: {
+			backgroundColor: 'surface',
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+			overflowY: 'auto',
+			color: 'onSurface',
+		},
+		'@small': {
+			content: {
+				elevation: 12,
+				translateY: pct(-50),
+				top: pct(50),
+				bottom: 'auto',
+				width: pct(80),
+				marginLeft: 'auto',
+				marginRight: 'auto',
+			},
+		},
+	}),
+	() => (
 		<Backdrop>
 			<div className="content">
 				<slot></slot>
 			</div>
 		</Backdrop>
-	</Host>
+	)
 )
 export class Dialog extends Component {}
 
-const DialogStyles = (
-	<Style>
-		{{
-			content: padding(16),
-			footer: padding(8),
-		}}
-	</Style>
-);
+const DialogStyles = css({
+	content: padding(16),
+	footer: padding(8),
+});
 
 /**
  * @demo
@@ -105,22 +100,22 @@ const DialogStyles = (
 	'cxl-dialog-alert',
 	role('alertdialog'),
 	DialogStyles,
-	tpl(({ onAction, get, call }) => (
+	$ => (
 		<Dialog>
 			<div className="content">
-				<T h5>{get('title-text')}</T>
-				<T>{get('message')}</T>
+				<T h5>{get($, 'title-text')}</T>
+				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={onAction(call('resolve'))}>
-					{get('action')}
+				<Button flat $={onAction($).tap(() => $.resolve())}>
+					{get($, 'action')}
 				</Button>
 			</div>
 		</Dialog>
-	))
+	)
 )
 export class DialogAlert extends Component {
-	resolve?: () => void;
+	resolve!: () => void;
 
 	@Attribute()
 	'title-text' = '';
@@ -146,26 +141,26 @@ export class DialogAlert extends Component {
 	'cxl-dialog-confirm',
 	role('alertdialog'),
 	DialogStyles,
-	tpl(({ onAction, get, call }) => (
+	$ => (
 		<Dialog>
 			<div className="content">
-				<T h5>{get('title-text')}</T>
-				<T>{get('message')}</T>
+				<T h5>{get($, 'title-text')}</T>
+				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={onAction(call('reject'))}>
-					{get('cancel-text')}
+				<Button flat $={onAction($).tap(() => $.reject())}>
+					{get($, 'cancel-text')}
 				</Button>
-				<Button flat $={onAction(call('resolve'))}>
-					{get('action')}
+				<Button flat $={onAction($).tap(() => $.resolve())}>
+					{get($, 'action')}
 				</Button>
 			</div>
 		</Dialog>
-	))
+	)
 )
 export class DialogConfirm extends Component {
-	resolve?: () => void;
-	reject?: () => void;
+	resolve!: () => void;
+	reject!: () => void;
 
 	@Attribute()
 	'cancel-text' = 'Cancel';
@@ -196,86 +191,88 @@ export class DialogConfirm extends Component {
  *   </cxl-c>
  * </cxl-drawer>
  */
-@Augment(
+@Augment<Drawer>(
 	'cxl-drawer',
-	<Host>
-		<Style>
-			{{
-				drawer: {
-					backgroundColor: 'surface',
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					width: pct(85),
-					bottom: 0,
-					opacity: 0,
-					color: 'onSurface',
-					overflowY: 'auto',
-					elevation: 5,
-					translateX: pct(-105),
-					animation: 'fadeOut',
-				},
-				drawer$right: { left: '100%', width: 0, translateX: 0 },
-				drawer$right$visible: { translateX: pct(-100), width: 320 },
-				drawer$visible: {
-					translateX: 0,
-					animation: 'fadeIn',
-					display: 'block',
-				},
-				backdrop: {
-					width: 0,
-					opacity: 0,
-				},
-				backdrop$visible: { width: '100%', opacity: 1 },
+	css({
+		drawer: {
+			backgroundColor: 'surface',
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			width: pct(85),
+			bottom: 0,
+			opacity: 0,
+			color: 'onSurface',
+			overflowY: 'auto',
+			elevation: 5,
+			translateX: pct(-105),
+			animation: 'fadeOut',
+		},
+		drawer$right: { left: '100%', width: 0, translateX: 0 },
+		drawer$right$visible: { translateX: pct(-100), width: 320 },
+		drawer$visible: {
+			translateX: 0,
+			animation: 'fadeIn',
+			display: 'block',
+		},
+		backdrop: {
+			width: 0,
+			opacity: 0,
+		},
+		backdrop$visible: { width: '100%', opacity: 1 },
 
-				'@small': {
-					drawer: { width: 288 },
-				},
-				'@large': {
-					drawer$permanent: {
-						translateX: 0,
-						opacity: 1,
-						transition: 'unset',
-						animation: 'none',
-					},
-					backdrop$visible$permanent: { width: 0 },
-					backdrop$visible$right: { width: '100%' },
-				},
-				'@xlarge': {
-					drawer$right$permanent: {
-						translateX: pct(-100),
-						width: 320,
-					},
-					backdrop$visible$permanent$right: { width: 0 },
-				},
-			}}
-		</Style>
-		<Backdrop
-			className="backdrop"
-			$={(el, host) =>
-				on(el, 'click').tap(() => {
-					trigger(host, 'backdrop.click');
-					host.visible = false;
-				})
-			}
-		/>
-		<div
-			$={(el, host: Drawer) =>
-				merge(
-					on(el, 'drawer.close').tap(() => (host.visible = false)),
-					on(el, 'click').tap(ev => ev.stopPropagation()),
-					get(host, 'visible')
-						.raf()
-						.tap(visible => {
-							if (!visible) el.scrollTo(0, 0);
-						})
-				)
-			}
-			className="drawer"
-		>
-			<slot />
-		</div>
-	</Host>
+		'@small': {
+			drawer: { width: 288 },
+		},
+		'@large': {
+			drawer$permanent: {
+				translateX: 0,
+				opacity: 1,
+				transition: 'unset',
+				animation: 'none',
+			},
+			backdrop$visible$permanent: { width: 0 },
+			backdrop$visible$right: { width: '100%' },
+		},
+		'@xlarge': {
+			drawer$right$permanent: {
+				translateX: pct(-100),
+				width: 320,
+			},
+			backdrop$visible$permanent$right: { width: 0 },
+		},
+	}),
+	host => (
+		<>
+			<Backdrop
+				className="backdrop"
+				$={el =>
+					on(el, 'click').tap(() => {
+						trigger(host, 'backdrop.click');
+						host.visible = false;
+					})
+				}
+			/>
+			<div
+				$={el =>
+					merge(
+						on(el, 'drawer.close').tap(
+							() => (host.visible = false)
+						),
+						on(el, 'click').tap(ev => ev.stopPropagation()),
+						get(host, 'visible')
+							.raf()
+							.tap(visible => {
+								if (!visible) el.scrollTo(0, 0);
+							})
+					)
+				}
+				className="drawer"
+			>
+				<slot />
+			</div>
+		</>
+	)
 )
 export class Drawer extends Component {
 	@StyleAttribute()
@@ -295,25 +292,23 @@ export class Drawer extends Component {
  */
 @Augment<Snackbar>(
 	'cxl-snackbar',
-	<Style>
-		{{
-			$: {
-				display: 'block',
-				opacity: 0,
-				scaleX: 0.5,
-				scaleY: 0.5,
-				...padding(16),
-				elevation: 3,
-				backgroundColor: 'onSurface87',
-				color: 'surface',
-				marginBottom: 16,
-				font: 'default',
-			},
+	css({
+		$: {
+			display: 'block',
+			opacity: 0,
+			scaleX: 0.5,
+			scaleY: 0.5,
+			...padding(16),
+			elevation: 3,
+			backgroundColor: 'onSurface87',
+			color: 'surface',
+			marginBottom: 16,
+			font: 'default',
+		},
 
-			'@small': { $: { display: 'inline-block' } },
-		}}
-	</Style>,
-	<slot />,
+		'@small': { $: { display: 'inline-block' } },
+	}),
+	() => <slot />,
 	connect(host => {
 		requestAnimationFrame(() => {
 			host.style.opacity = '1';
@@ -328,21 +323,17 @@ export class Snackbar extends Component {
 
 @Augment(
 	'cxl-snackbar-container',
-	<Host>
-		<Style>
-			{{
-				$: {
-					position: 'fixed',
-					left: 16,
-					bottom: 16,
-					right: 16,
-					textAlign: 'center',
-				},
-				$left: { textAlign: 'left' },
-				$right: { textAlign: 'right' },
-			}}
-		</Style>
-	</Host>
+	css({
+		$: {
+			position: 'fixed',
+			left: 16,
+			bottom: 16,
+			right: 16,
+			textAlign: 'center',
+		},
+		$left: { textAlign: 'left' },
+		$right: { textAlign: 'right' },
+	})
 )
 export class SnackbarContainer extends Component {
 	queue: Snackbar[] = [];

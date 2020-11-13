@@ -15,6 +15,7 @@
 		"skipLibCheck": true,
 		"jsx": "react",
 		"jsxFactory": "dom",
+		"jsxFragmentFactory": "dom",
 		"typeRoots": ["node_modules/@types"]
 	},
 	"files": []

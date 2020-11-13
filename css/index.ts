@@ -438,7 +438,7 @@ export function setTheme(newTheme: Theme) {
 	let result = '';
 	if (imports) imports.forEach(imp => (result += `@import url("${imp}");`));
 
-	result += ':root{background-color:var(--cxl-background);';
+	result += ':root{';
 
 	for (const i in colors)
 		result += `--cxl-${toSnake(i)}:${(colors as any)[i]};`;
@@ -512,16 +512,18 @@ export class StyleSheet {
 	}
 
 	private render() {
-		const native = (this.native = document.createElement('style'));
-
-		native.innerHTML =
-			(this.global
-				? ''
-				: renderStyles(theme.globalStyles, this.selector)) +
-			renderStyles(this.styles, this.selector);
-
-		return native;
+		return (this.native = render(this.styles, this.selector, this.global));
 	}
+}
+
+export function render(styles: Styles, selector = ':host', global = false) {
+	const result = document.createElement('style');
+
+	result.innerHTML =
+		(global ? '' : renderStyles(theme.globalStyles, selector)) +
+		renderStyles(styles, selector);
+
+	return result;
 }
 
 export function css(styles: Styles, global = false) {

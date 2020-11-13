@@ -20,10 +20,18 @@ export interface Observer<T> {
 	complete?: CompleteFunction;
 }
 
-type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
+export interface Subscribable<T> {
+	subscribe(observer: Observer<T>): Subscription;
+}
 
 // Used for observable interoperability
-const observableSymbol = (Symbol as any).observable || '@@observable';
+export const observableSymbol = '@@observable';
+
+export interface InteropObservable<T> {
+	[observableSymbol]: () => Subscribable<T>;
+}
+
+type NextObserver<T> = NextFunction<T> | Observer<T> | undefined;
 
 function getObserver<T>(
 	next?: NextObserver<T>,
@@ -326,13 +334,25 @@ export function defer<T>(fn: () => Observable<T> | void) {
 	});
 }
 
+export function isInterop<T>(obs: any): obs is InteropObservable<T> {
+	return !!obs[observableSymbol];
+}
+
+function fromSubscribable<T>(obs: Subscribable<T>) {
+	return new Observable<T>(subs => {
+		const subscription = obs.subscribe(subs);
+		return () => subscription.unsubscribe();
+	});
+}
+
 /**
  * Creates an Observable from an Array, an array-like object, a Promise, an iterable object, or an Observable-like object.
  */
 export function from<T>(
-	input: Array<T> | Promise<T> | Observable<T>
+	input: Array<T> | Promise<T> | Observable<T> | InteropObservable<T>
 ): Observable<T> {
 	if (input instanceof Observable) return input;
+	if (isInterop(input)) return fromSubscribable(input[observableSymbol]());
 
 	return new Observable<T>(subs => {
 		if (Array.isArray(input)) {
@@ -808,3 +828,14 @@ export interface Observable<T> {
 	take(howMany: number): Observable<T>;
 	tap(tapFn: (val: T) => void): Observable<T>;
 }
+
+interface InsertEvent<T> {
+	type: 'insert';
+	item: T;
+}
+
+interface EmptyEvent {
+	type: 'empty';
+}
+
+export type ListEvent<T> = InsertEvent<T> | EmptyEvent;

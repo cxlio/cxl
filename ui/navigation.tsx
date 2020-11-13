@@ -1,26 +1,25 @@
-import { dom } from '../xdom/index.js';
+import { dom } from '../tsx/index.js';
 import {
 	Augment,
 	Attribute,
 	Component,
-	Host,
 	Slot,
 	StyleAttribute,
 	bind,
 	get,
-	render,
 	role,
 } from '../component/index.js';
 import { on, onAction, onLoad, trigger } from '../dom/index.js';
 import { portal, triggerEvent } from '../template/index.js';
-import { Style, padding, rgba } from '../css/index.js';
+import { css, padding, rgba } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
 import { InversePrimary, ResetSurface } from './theme.js';
 import { IconButton, Svg, aria, ripple } from './core.js';
 import { Drawer } from './dialog.js';
 
 /**
- * The top app bar provides content and actions related to the current screen. It’s used for branding, screen titles, navigation, and actions.
+ * The top app bar provides content and actions related to the current screen.
+ * It’s used for branding, screen titles, navigation, and actions.
  *
  * @demo
  * <cxl-appbar>
@@ -47,65 +46,62 @@ import { Drawer } from './dialog.js';
 	'cxl-appbar',
 	role('heading'),
 	aria('level', '1'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-					...InversePrimary,
-					backgroundColor: 'surface',
-					flexShrink: 0,
-					color: 'onSurface',
-					elevation: 2,
-					height: 56,
-				},
-				$transparent: {
-					boxShadow: 'none',
-					variables: {
-						surface: rgba(0, 0, 0, 0),
-					},
-				},
-				$extended: {
-					height: 128,
-				},
-				flex: {
-					display: 'flex',
-					alignItems: 'center',
-					height: '100%',
-					...padding(4, 16, 4, 16),
-					font: 'h6',
-				},
-				actions: { marginRight: -8 },
-				flex$extended: {
-					alignItems: 'start',
-					paddingBottom: 8,
-				},
-				$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
-				'@xlarge': {
-					flex$center: {
-						width: 1200,
-						marginLeft: 'auto',
-						marginRight: 'auto',
-						paddingRight: 0,
-						paddingLeft: 0,
-					},
-					tabs$center: {
-						width: 1200,
-						marginLeft: 'auto',
-						marginRight: 'auto',
-					},
-				},
-			}}
-		</Style>
-		<div className="flex">
-			<slot></slot>
-			<div $={portal('cxl-appbar-actions')} />
-		</div>
-		<div className="tabs">
-			<Slot selector="cxl-tabs"></Slot>
-			<div $={portal('cxl-appbar-tabs')} />
-		</div>
-	</Host>
+	css({
+		$: {
+			display: 'block',
+			...InversePrimary,
+			backgroundColor: 'surface',
+			flexShrink: 0,
+			color: 'onSurface',
+			elevation: 2,
+		},
+		$transparent: {
+			boxShadow: 'none',
+			variables: {
+				surface: rgba(0, 0, 0, 0),
+			},
+		},
+		flex: {
+			display: 'flex',
+			alignItems: 'center',
+			height: 56,
+			...padding(4, 16, 4, 16),
+			font: 'h6',
+		},
+		actions: { marginRight: -8 },
+		flex$extended: {
+			alignItems: 'start',
+			paddingBottom: 8,
+			height: 128,
+		},
+		$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
+		'@xlarge': {
+			flex$center: {
+				width: 1200,
+				marginLeft: 'auto',
+				marginRight: 'auto',
+				paddingRight: 0,
+				paddingLeft: 0,
+			},
+			tabs$center: {
+				width: 1200,
+				marginLeft: 'auto',
+				marginRight: 'auto',
+			},
+		},
+	}),
+	() => (
+		<>
+			<div className="flex">
+				<slot></slot>
+				<div $={portal('cxl-appbar-actions')} />
+			</div>
+			<div className="tabs">
+				<Slot selector="cxl-tabs"></Slot>
+				<div $={portal('cxl-appbar-tabs')} />
+			</div>
+		</>
+	)
 )
 export class Appbar extends Component {
 	/**
@@ -127,23 +123,18 @@ export class Appbar extends Component {
  */
 @Augment(
 	'cxl-appbar-title',
-	<Host>
-		<Style>
-			{{
-				$: {
-					flexGrow: 1,
-					marginTop: 8,
-					marginBottom: 8,
-					paddingLeft: 16,
-					paddingRight: 16,
-					lineHeight: 28,
-					textDecoration: 'none',
-					alignSelf: 'flex-end',
-				},
-			}}
-		</Style>
-		<slot />
-	</Host>
+	css({
+		$: {
+			flexGrow: 1,
+			marginBottom: 12,
+			lineHeight: 24,
+			paddingLeft: 16,
+			paddingRight: 16,
+			textDecoration: 'none',
+			alignSelf: 'flex-end',
+		},
+	}),
+	() => <slot />
 )
 export class AppbarTitle extends Component {
 	@StyleAttribute()
@@ -162,36 +153,34 @@ export class AppbarTitle extends Component {
 @Augment<Tab>(
 	'cxl-tab',
 	role('tab'),
-	<Style>
-		{{
-			$: { flexShrink: 0, flexGrow: 1 },
-			'@small': {
-				$: { display: 'inline-block' },
-			},
-			link: {
-				...padding(16),
-				paddingBottom: 12,
-				backgroundColor: 'surface',
-				font: 'button',
-				color: 'onSurface',
-				lineHeight: 18,
-				textDecoration: 'none',
-				textAlign: 'center',
-				display: 'block',
-				outline: 0,
-			},
-			$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
-			$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
-		}}
-	</Style>,
-	render(host => (
+	css({
+		$: { flexShrink: 0, flexGrow: 1 },
+		'@small': {
+			$: { display: 'inline-block' },
+		},
+		link: {
+			...padding(16),
+			paddingBottom: 12,
+			backgroundColor: 'surface',
+			font: 'button',
+			color: 'onSurface',
+			lineHeight: 18,
+			textDecoration: 'none',
+			textAlign: 'center',
+			display: 'block',
+			outline: 0,
+		},
+		$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
+		$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
+	}),
+	host => (
 		<a
 			className="link"
 			href={get(host, 'href').map(val => val || 'javascript:')}
 		>
 			<slot />
 		</a>
-	)),
+	),
 	bind(ripple),
 	bind(host =>
 		get(host, 'selected').tap(val => {
@@ -220,36 +209,34 @@ export class Tab extends Component {
 @Augment<Tabs>(
 	'cxl-tabs',
 	role('tablist'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					backgroundColor: 'surface',
-					color: 'onSurface',
-					display: 'block',
-					flexShrink: 0,
-					position: 'relative',
-					cursor: 'pointer',
-					overflowX: 'auto',
-				},
-				selected: {
-					transformOrigin: 'left',
-					backgroundColor: 'secondary',
-					height: 2,
-					width: 100,
-					scaleX: 0,
-					display: 'none',
-				},
-				content: { display: 'flex' },
-				'@small': {
-					content: { display: 'block' },
-				},
-			}}
-		</Style>
+	css({
+		$: {
+			backgroundColor: 'surface',
+			color: 'onSurface',
+			display: 'block',
+			flexShrink: 0,
+			position: 'relative',
+			cursor: 'pointer',
+			overflowX: 'auto',
+		},
+		selected: {
+			transformOrigin: 'left',
+			backgroundColor: 'secondary',
+			height: 2,
+			width: 100,
+			scaleX: 0,
+			display: 'none',
+		},
+		content: { display: 'flex' },
+		'@small': {
+			content: { display: 'block' },
+		},
+	}),
+	() => (
 		<div className="content">
 			<slot />
 		</div>
-	</Host>,
+	),
 	bind(el => {
 		return merge(
 			on(el, 'cxl-tab.selected').tap(ev => {
@@ -258,7 +245,7 @@ export class Tab extends Component {
 			})
 		);
 	}),
-	render(host => (
+	host => (
 		<div
 			className="selected"
 			$={el =>
@@ -278,7 +265,7 @@ export class Tab extends Component {
 				)
 			}
 		/>
-	))
+	)
 )
 export class Tabs extends Component {
 	@Attribute()
@@ -298,28 +285,24 @@ const MenuIcon = (
 @Augment<Navbar>(
 	'cxl-navbar',
 	role('navigation'),
-	<Style>
-		{{
-			$: {
-				display: 'inline-block',
-				marginTop: 8,
-				marginBottom: 8,
-				overflowScrolling: 'touch',
-			},
-			toggler: {
-				backgroundColor: 'surface',
-				color: 'onSurface',
-				cursor: 'pointer',
-				marginLeft: -8,
-			},
-			drawer: ResetSurface,
-			'@large': {
-				toggler$permanent: { display: 'none' },
-			},
-		}}
-	</Style>,
-	render(host => (
-		<Host>
+	css({
+		$: {
+			display: 'inline-block',
+			overflowScrolling: 'touch',
+		},
+		toggler: {
+			backgroundColor: 'surface',
+			color: 'onSurface',
+			cursor: 'pointer',
+			marginLeft: -8,
+		},
+		drawer: ResetSurface,
+		'@large': {
+			toggler$permanent: { display: 'none' },
+		},
+	}),
+	host => (
+		<>
 			<IconButton
 				$={el =>
 					onAction(el).tap(() => {
@@ -338,8 +321,8 @@ const MenuIcon = (
 			>
 				<slot />
 			</Drawer>
-		</Host>
-	))
+		</>
+	)
 )
 export class Navbar extends Component {
 	@StyleAttribute()
@@ -362,25 +345,21 @@ export class Navbar extends Component {
  */
 @Augment(
 	'cxl-menu',
-	<Host>
-		<Style>
-			{{
-				$: {
-					elevation: 1,
-					display: 'inline-block',
-					backgroundColor: 'surface',
-					overflowY: 'auto',
-					color: 'onSurface',
-					paddingTop: 8,
-					paddingBottom: 8,
-					minWidth: 112,
-					...ResetSurface,
-				},
-				$dense: { paddingTop: 0, paddingBottom: 0 },
-			}}
-		</Style>
-		<slot />
-	</Host>
+	css({
+		$: {
+			elevation: 1,
+			display: 'inline-block',
+			backgroundColor: 'surface',
+			overflowY: 'auto',
+			color: 'onSurface',
+			paddingTop: 8,
+			paddingBottom: 8,
+			minWidth: 112,
+			...ResetSurface,
+		},
+		$dense: { paddingTop: 0, paddingBottom: 0 },
+	}),
+	() => <slot />
 )
 export class Menu extends Component {
 	@StyleAttribute()
@@ -390,29 +369,27 @@ export class Menu extends Component {
 @Augment<Item>(
 	'cxl-item',
 	bind(ripple),
-	<Style>
-		{{
-			$: {
-				display: 'block',
-				position: 'relative',
-				color: 'onSurface',
-				font: 'default',
-				lineHeight: 24,
-				paddingRight: 16,
-				paddingLeft: 16,
-				paddingTop: 12,
-				paddingBottom: 12,
-				alignItems: 'center',
-				backgroundColor: 'surface',
-			},
-			$selected: {
-				backgroundColor: 'primaryLight',
-				color: 'onPrimaryLight',
-			},
-		}}
-	</Style>,
+	css({
+		$: {
+			display: 'block',
+			position: 'relative',
+			color: 'onSurface',
+			font: 'default',
+			lineHeight: 24,
+			paddingRight: 16,
+			paddingLeft: 16,
+			paddingTop: 12,
+			paddingBottom: 12,
+			alignItems: 'center',
+			backgroundColor: 'surface',
+		},
+		$selected: {
+			backgroundColor: 'primaryLight',
+			color: 'onPrimaryLight',
+		},
+	}),
 	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
-	<slot />
+	() => <slot />
 )
 export class Item extends Component {
 	@StyleAttribute()

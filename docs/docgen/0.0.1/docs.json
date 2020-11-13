@@ -959,13 +959,39 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 24,
-            "ch": 23
+            "line": 25,
+            "ch": 3
+          },
+          "kind": 1,
+          "name": "userScripts",
+          "flags": 0,
+          "id": 51,
+          "type": {
+            "source": {
+              "fileName": "render-html.tsx",
+              "line": 25,
+              "ch": 16
+            },
+            "kind": 15,
+            "name": "Array",
+            "flags": 0,
+            "type": {
+              "id": 3,
+              "name": "File",
+              "kind": 6
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "render-html.tsx",
+            "line": 25,
+            "ch": 24
           },
           "kind": 16,
           "name": "TypeArguments",
           "flags": 0,
-          "id": 51,
+          "id": 52,
           "type": {
             "name": "string",
             "kind": 32,
@@ -975,17 +1001,17 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 26,
+                "line": 27,
                 "ch": 23
               },
               "kind": 9,
               "name": "types",
               "flags": 524288,
-              "id": 52,
+              "id": 53,
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 26,
+                  "line": 27,
                   "ch": 30
                 },
                 "kind": 15,
@@ -1002,24 +1028,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 40,
+            "line": 41,
             "ch": 1
           },
           "kind": 16,
           "name": "ConditionalType",
           "flags": 0,
-          "id": 53,
+          "id": 54,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 42,
+                "line": 43,
                 "ch": 25
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 54,
+              "id": 55,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1035,24 +1061,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 49,
+            "line": 50,
             "ch": 1
           },
           "kind": 16,
           "name": "ClassType",
           "flags": 0,
-          "id": 55,
+          "id": 56,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 51,
+                "line": 52,
                 "ch": 19
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 56,
+              "id": 57,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1068,24 +1094,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 69,
+            "line": 70,
             "ch": 1
           },
           "kind": 16,
           "name": "FunctionType",
           "flags": 0,
-          "id": 57,
+          "id": 58,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 71,
+                "line": 72,
                 "ch": 22
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 58,
+              "id": 59,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1101,24 +1127,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 76,
+            "line": 77,
             "ch": 1
           },
           "kind": 16,
           "name": "Property",
           "flags": 0,
-          "id": 59,
+          "id": 60,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 78,
+                "line": 79,
                 "ch": 18
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 60,
+              "id": 61,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1134,24 +1160,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 80,
+            "line": 81,
             "ch": 1
           },
           "kind": 16,
           "name": "ObjectType",
           "flags": 0,
-          "id": 61,
+          "id": 62,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 82,
+                "line": 83,
                 "ch": 20
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 62,
+              "id": 63,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1167,24 +1193,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 84,
+            "line": 85,
             "ch": 1
           },
           "kind": 16,
           "name": "renderType",
           "flags": 0,
-          "id": 63,
+          "id": 64,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 86,
+                "line": 87,
                 "ch": 20
               },
               "kind": 9,
               "name": "type",
               "flags": 0,
-              "id": 64,
+              "id": 65,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1200,13 +1226,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 128,
+            "line": 129,
             "ch": 1
           },
           "kind": 16,
           "name": "Type",
           "flags": 0,
-          "id": 65,
+          "id": 66,
           "type": {
             "name": "string",
             "kind": 32,
@@ -1216,13 +1242,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 130,
+                "line": 131,
                 "ch": 14
               },
               "kind": 9,
               "name": "type",
               "flags": 524288,
-              "id": 66,
+              "id": 67,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1233,24 +1259,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 134,
+            "line": 135,
             "ch": 1
           },
           "kind": 16,
           "name": "SignatureValue",
           "flags": 0,
-          "id": 67,
+          "id": 68,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 136,
+                "line": 137,
                 "ch": 24
               },
               "kind": 9,
               "name": "val",
               "flags": 524288,
-              "id": 68,
+              "id": 69,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1267,24 +1293,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 139,
+            "line": 140,
             "ch": 1
           },
           "kind": 16,
           "name": "Parameter",
           "flags": 0,
-          "id": 69,
+          "id": 70,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 141,
+                "line": 142,
                 "ch": 19
               },
               "kind": 9,
               "name": "p",
               "flags": 0,
-              "id": 70,
+              "id": 71,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1300,28 +1326,28 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 146,
+            "line": 147,
             "ch": 1
           },
           "kind": 16,
           "name": "SignatureParameters",
           "flags": 0,
-          "id": 71,
+          "id": 72,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 148,
+                "line": 149,
                 "ch": 29
               },
               "kind": 9,
               "name": "parameters",
               "flags": 524288,
-              "id": 72,
+              "id": 73,
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 148,
+                  "line": 149,
                   "ch": 41
                 },
                 "kind": 15,
@@ -1343,24 +1369,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 152,
+            "line": 153,
             "ch": 1
           },
           "kind": 16,
           "name": "Chip",
           "flags": 0,
-          "id": 73,
+          "id": 74,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 154,
+                "line": 155,
                 "ch": 14
               },
               "kind": 9,
               "name": "label",
               "flags": 0,
-              "id": 74,
+              "id": 75,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1377,24 +1403,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 156,
+            "line": 157,
             "ch": 1
           },
           "kind": 16,
           "name": "NodeChips",
           "flags": 0,
-          "id": 75,
+          "id": 76,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 158,
+                "line": 159,
                 "ch": 19
               },
               "kind": 9,
               "name": "{ flags }",
               "flags": 0,
-              "id": 76,
+              "id": 77,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1410,24 +1436,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 169,
+            "line": 170,
             "ch": 1
           },
           "kind": 16,
           "name": "SignatureType",
           "flags": 0,
-          "id": 77,
+          "id": 78,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 171,
+                "line": 172,
                 "ch": 23
               },
               "kind": 9,
               "name": "{ type, kind, name }",
               "flags": 0,
-              "id": 78,
+              "id": 79,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1443,24 +1469,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 181,
+            "line": 182,
             "ch": 1
           },
           "kind": 16,
           "name": "SignatureName",
           "flags": 0,
-          "id": 79,
+          "id": 80,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 183,
+                "line": 184,
                 "ch": 23
               },
               "kind": 9,
               "name": "{ flags, name }",
               "flags": 0,
-              "id": 80,
+              "id": 81,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1476,24 +1502,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 185,
+            "line": 186,
             "ch": 1
           },
           "kind": 16,
           "name": "IndexSignature",
           "flags": 0,
-          "id": 81,
+          "id": 82,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 187,
+                "line": 188,
                 "ch": 24
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 82,
+              "id": 83,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1509,13 +1535,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 190,
+            "line": 191,
             "ch": 1
           },
           "kind": 16,
           "name": "Signature",
           "flags": 0,
-          "id": 83,
+          "id": 84,
           "docs": {
             "content": [
               {
@@ -1532,13 +1558,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 195,
+                "line": 196,
                 "ch": 19
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 84,
+              "id": 85,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1549,24 +1575,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 206,
+            "line": 207,
             "ch": 1
           },
           "kind": 16,
           "name": "Anchor",
           "flags": 0,
-          "id": 85,
+          "id": 86,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 208,
+                "line": 209,
                 "ch": 16
               },
               "kind": 9,
               "name": "id",
               "flags": 0,
-              "id": 86,
+              "id": 87,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -1583,24 +1609,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 211,
+            "line": 212,
             "ch": 1
           },
           "kind": 16,
           "name": "getSourceLink",
           "flags": 0,
-          "id": 87,
+          "id": 88,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 213,
+                "line": 214,
                 "ch": 23
               },
               "kind": 9,
               "name": "src",
               "flags": 0,
-              "id": 88,
+              "id": 89,
               "type": {
                 "name": "Source",
                 "kind": 6
@@ -1616,24 +1642,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 226,
+            "line": 227,
             "ch": 1
           },
           "kind": 16,
           "name": "getSource",
           "flags": 0,
-          "id": 89,
+          "id": 90,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 228,
+                "line": 229,
                 "ch": 19
               },
               "kind": 9,
               "name": "source",
               "flags": 0,
-              "id": 90,
+              "id": 91,
               "type": {
                 "name": "Source",
                 "kind": 6
@@ -1649,24 +1675,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 232,
+            "line": 233,
             "ch": 1
           },
           "kind": 16,
           "name": "SourceLink",
           "flags": 0,
-          "id": 91,
+          "id": 92,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 234,
+                "line": 235,
                 "ch": 20
               },
               "kind": 9,
               "name": "{ source }",
               "flags": 0,
-              "id": 92,
+              "id": 93,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1682,24 +1708,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 240,
+            "line": 241,
             "ch": 1
           },
           "kind": 16,
           "name": "Code",
           "flags": 0,
-          "id": 93,
+          "id": 94,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 242,
+                "line": 243,
                 "ch": 14
               },
               "kind": 9,
               "name": "source",
               "flags": 0,
-              "id": 94,
+              "id": 95,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1709,13 +1735,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 242,
+                "line": 243,
                 "ch": 29
               },
               "kind": 9,
               "name": "language",
               "flags": 524288,
-              "id": 95,
+              "id": 96,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1732,13 +1758,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 256,
+            "line": 257,
             "ch": 1
           },
           "kind": 16,
           "name": "Demo",
           "flags": 0,
-          "id": 96,
+          "id": 97,
           "type": {
             "name": "string",
             "kind": 32,
@@ -1748,13 +1774,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 258,
+                "line": 259,
                 "ch": 14
               },
               "kind": 9,
               "name": "doc",
               "flags": 0,
-              "id": 97,
+              "id": 98,
               "type": {
                 "name": "DocumentationContent",
                 "kind": 6
@@ -1765,24 +1791,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 263,
+            "line": 265,
             "ch": 1
           },
           "kind": 16,
           "name": "Example",
           "flags": 0,
-          "id": 98,
+          "id": 99,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 265,
+                "line": 267,
                 "ch": 17
               },
               "kind": 9,
               "name": "doc",
               "flags": 0,
-              "id": 99,
+              "id": 100,
               "type": {
                 "name": "DocumentationContent",
                 "kind": 6
@@ -1798,24 +1824,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 270,
+            "line": 269,
             "ch": 1
           },
           "kind": 16,
           "name": "DocSee",
           "flags": 0,
-          "id": 100,
+          "id": 101,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 272,
+                "line": 271,
                 "ch": 16
               },
               "kind": 9,
               "name": "doc",
               "flags": 0,
-              "id": 101,
+              "id": 102,
               "type": {
                 "name": "DocumentationContent",
                 "kind": 6
@@ -1831,24 +1857,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 284,
+            "line": 283,
             "ch": 1
           },
           "kind": 16,
           "name": "formatContent",
           "flags": 0,
-          "id": 102,
+          "id": 103,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 286,
+                "line": 285,
                 "ch": 23
               },
               "kind": 9,
               "name": "text",
               "flags": 0,
-              "id": 103,
+              "id": 104,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1865,24 +1891,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 288,
+            "line": 287,
             "ch": 1
           },
           "kind": 16,
           "name": "Documentation",
           "flags": 0,
-          "id": 104,
+          "id": 105,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 290,
+                "line": 289,
                 "ch": 23
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 105,
+              "id": 106,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1898,24 +1924,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 311,
+            "line": 310,
             "ch": 1
           },
           "kind": 16,
           "name": "ModuleDocumentation",
           "flags": 0,
-          "id": 106,
+          "id": 107,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 313,
+                "line": 312,
                 "ch": 29
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 107,
+              "id": 108,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1931,24 +1957,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 315,
+            "line": 314,
             "ch": 1
           },
           "kind": 16,
           "name": "ParameterDocumentation",
           "flags": 0,
-          "id": 108,
+          "id": 109,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 317,
+                "line": 316,
                 "ch": 32
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 109,
+              "id": 110,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1964,24 +1990,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 319,
+            "line": 318,
             "ch": 1
           },
           "kind": 16,
           "name": "InheritedFrom",
           "flags": 0,
-          "id": 110,
+          "id": 111,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 321,
+                "line": 320,
                 "ch": 23
               },
               "kind": 9,
               "name": "symbol",
               "flags": 524288,
-              "id": 111,
+              "id": 112,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1997,24 +2023,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 327,
+            "line": 326,
             "ch": 1
           },
           "kind": 16,
           "name": "MemberBody",
           "flags": 0,
-          "id": 112,
+          "id": 113,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 329,
+                "line": 328,
                 "ch": 20
               },
               "kind": 9,
               "name": "c",
               "flags": 0,
-              "id": 113,
+              "id": 114,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2030,24 +2056,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 347,
+            "line": 346,
             "ch": 1
           },
           "kind": 16,
           "name": "MemberCard",
           "flags": 0,
-          "id": 114,
+          "id": 115,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 349,
+                "line": 348,
                 "ch": 20
               },
               "kind": 9,
               "name": "c",
               "flags": 0,
-              "id": 115,
+              "id": 116,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2063,28 +2089,28 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 355,
+            "line": 354,
             "ch": 1
           },
           "kind": 16,
           "name": "ExtendedBy",
           "flags": 0,
-          "id": 116,
+          "id": 117,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 357,
+                "line": 356,
                 "ch": 20
               },
               "kind": 9,
               "name": "extendedBy",
               "flags": 524288,
-              "id": 117,
+              "id": 118,
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 357,
+                  "line": 356,
                   "ch": 32
                 },
                 "kind": 15,
@@ -2106,13 +2132,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 363,
+            "line": 362,
             "ch": 1
           },
           "kind": 16,
           "name": "Link",
           "flags": 0,
-          "id": 118,
+          "id": 119,
           "type": {
             "name": "string",
             "kind": 32,
@@ -2122,13 +2148,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 365,
+                "line": 364,
                 "ch": 14
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 119,
+              "id": 120,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2137,13 +2163,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 365,
+                "line": 364,
                 "ch": 25
               },
               "kind": 9,
               "name": "content",
               "flags": 524288,
-              "id": 120,
+              "id": 121,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2155,24 +2181,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 380,
+            "line": 379,
             "ch": 1
           },
           "kind": 16,
           "name": "getNodeCoef",
           "flags": 0,
-          "id": 121,
+          "id": 122,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 382,
+                "line": 381,
                 "ch": 21
               },
               "kind": 9,
               "name": "a",
               "flags": 0,
-              "id": 122,
+              "id": 123,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2188,24 +2214,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 391,
+            "line": 390,
             "ch": 1
           },
           "kind": 16,
           "name": "sortNode",
           "flags": 0,
-          "id": 123,
+          "id": 124,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 393,
+                "line": 392,
                 "ch": 18
               },
               "kind": 9,
               "name": "a",
               "flags": 0,
-              "id": 124,
+              "id": 125,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2214,13 +2240,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 393,
+                "line": 392,
                 "ch": 26
               },
               "kind": 9,
               "name": "b",
               "flags": 0,
-              "id": 125,
+              "id": 126,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2236,24 +2262,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 396,
+            "line": 395,
             "ch": 1
           },
           "kind": 16,
           "name": "ModuleTitle",
           "flags": 0,
-          "id": 126,
+          "id": 127,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 398,
+                "line": 397,
                 "ch": 21
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 127,
+              "id": 128,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2269,24 +2295,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 411,
+            "line": 410,
             "ch": 1
           },
           "kind": 16,
           "name": "getImportUrl",
           "flags": 0,
-          "id": 128,
+          "id": 129,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 413,
+                "line": 412,
                 "ch": 22
               },
               "kind": 9,
               "name": "source",
               "flags": 0,
-              "id": 129,
+              "id": 130,
               "type": {
                 "name": "Source",
                 "kind": 6
@@ -2302,24 +2328,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 418,
+            "line": 417,
             "ch": 1
           },
           "kind": 16,
           "name": "ImportStatement",
           "flags": 0,
-          "id": 130,
+          "id": 131,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 420,
+                "line": 419,
                 "ch": 25
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 131,
+              "id": 132,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2335,24 +2361,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 429,
+            "line": 428,
             "ch": 1
           },
           "kind": 16,
           "name": "MemberIndexLink",
           "flags": 0,
-          "id": 132,
+          "id": 133,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 431,
+                "line": 430,
                 "ch": 25
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 133,
+              "id": 134,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2368,26 +2394,26 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 435,
+            "line": 434,
             "ch": 1
           },
           "kind": 16,
           "name": "MemberGroupIndex",
           "flags": 0,
-          "id": 134,
+          "id": 135,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 437,
+                "line": 436,
                 "ch": 26
               },
               "kind": 9,
               "name": "{ kind, index }",
               "flags": 0,
-              "id": 135,
+              "id": 136,
               "type": {
-                "id": 136,
+                "id": 137,
                 "name": "Group",
                 "kind": 6
               }
@@ -2402,26 +2428,26 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 440,
+            "line": 439,
             "ch": 1
           },
           "kind": 16,
           "name": "MemberBodyGroup",
           "flags": 0,
-          "id": 137,
+          "id": 138,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 442,
+                "line": 441,
                 "ch": 25
               },
               "kind": 9,
               "name": "{ body, kind }",
               "flags": 0,
-              "id": 138,
+              "id": 139,
               "type": {
-                "id": 136,
+                "id": 137,
                 "name": "Group",
                 "kind": 6
               }
@@ -2434,10 +2460,10 @@
           }
         },
         {
-          "id": 136,
+          "id": 137,
           "source": {
             "fileName": "render-html.tsx",
-            "line": 446,
+            "line": 445,
             "ch": 1
           },
           "kind": 4,
@@ -2447,13 +2473,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 448,
+                "line": 447,
                 "ch": 17
               },
               "kind": 10,
               "name": "kind",
               "flags": 4,
-              "id": 139,
+              "id": 140,
               "type": {
                 "name": "Kind",
                 "kind": 6
@@ -2462,17 +2488,17 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 449,
+                "line": 448,
                 "ch": 12
               },
               "kind": 10,
               "name": "index",
               "flags": 4,
-              "id": 140,
+              "id": 141,
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 450,
+                  "line": 449,
                   "ch": 7
                 },
                 "kind": 15,
@@ -2488,17 +2514,17 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 450,
+                "line": 449,
                 "ch": 17
               },
               "kind": 10,
               "name": "body",
               "flags": 4,
-              "id": 141,
+              "id": 142,
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 451,
+                  "line": 450,
                   "ch": 6
                 },
                 "kind": 15,
@@ -2516,24 +2542,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 452,
+            "line": 451,
             "ch": 1
           },
           "kind": 16,
           "name": "getMemberGroups",
           "flags": 0,
-          "id": 142,
+          "id": 143,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 454,
+                "line": 453,
                 "ch": 25
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 143,
+              "id": 144,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2542,13 +2568,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 454,
+                "line": 453,
                 "ch": 36
               },
               "kind": 9,
               "name": "indexOnly",
               "flags": 0,
-              "id": 144,
+              "id": 145,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -2559,13 +2585,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 454,
+                "line": 453,
                 "ch": 55
               },
               "kind": 9,
               "name": "sort",
               "flags": 0,
-              "id": 145,
+              "id": 146,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -2579,7 +2605,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 136,
+                "id": 137,
                 "name": "Group",
                 "kind": 6
               }
@@ -2589,13 +2615,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 490,
+            "line": 489,
             "ch": 1
           },
           "kind": 16,
           "name": "MemberInherited",
           "flags": 0,
-          "id": 146,
+          "id": 147,
           "type": {
             "name": "string",
             "kind": 32,
@@ -2605,13 +2631,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 492,
+                "line": 491,
                 "ch": 25
               },
               "kind": 9,
               "name": "type",
               "flags": 0,
-              "id": 147,
+              "id": 148,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2622,24 +2648,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 515,
+            "line": 514,
             "ch": 1
           },
           "kind": 16,
           "name": "TagName",
           "flags": 0,
-          "id": 148,
+          "id": 149,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 517,
+                "line": 516,
                 "ch": 17
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 149,
+              "id": 150,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2655,24 +2681,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 521,
+            "line": 520,
             "ch": 1
           },
           "kind": 16,
           "name": "Members",
           "flags": 0,
-          "id": 150,
+          "id": 151,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 523,
+                "line": 522,
                 "ch": 17
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 151,
+              "id": 152,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2688,24 +2714,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 541,
+            "line": 540,
             "ch": 1
           },
           "kind": 16,
           "name": "ModuleBody",
           "flags": 0,
-          "id": 152,
+          "id": 153,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 543,
+                "line": 542,
                 "ch": 20
               },
               "kind": 9,
               "name": "json",
               "flags": 0,
-              "id": 153,
+              "id": 154,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2721,13 +2747,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 550,
+            "line": 549,
             "ch": 1
           },
           "kind": 16,
           "name": "getHref",
           "flags": 1,
-          "id": 154,
+          "id": 155,
           "type": {
             "name": "string",
             "kind": 32,
@@ -2737,13 +2763,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 552,
+                "line": 551,
                 "ch": 24
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 155,
+              "id": 156,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2754,24 +2780,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 564,
+            "line": 563,
             "ch": 1
           },
           "kind": 16,
           "name": "declarationFilter",
           "flags": 0,
-          "id": 156,
+          "id": 157,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 566,
+                "line": 565,
                 "ch": 27
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 157,
+              "id": 158,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2809,13 +2835,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 573,
+            "line": 572,
             "ch": 5
           },
           "kind": 31,
           "name": "IconMap",
           "flags": 0,
-          "id": 158,
+          "id": 159,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -2837,24 +2863,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 581,
+            "line": 580,
             "ch": 2
           },
           "kind": 16,
           "name": "NodeIcon",
           "flags": 0,
-          "id": 159,
+          "id": 160,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 583,
+                "line": 582,
                 "ch": 18
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 160,
+              "id": 161,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2870,24 +2896,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 589,
+            "line": 588,
             "ch": 1
           },
           "kind": 16,
           "name": "ModuleNavbar",
           "flags": 0,
-          "id": 161,
+          "id": 162,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 591,
+                "line": 590,
                 "ch": 22
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 162,
+              "id": 163,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -2903,38 +2929,22 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 606,
+            "line": 605,
             "ch": 1
           },
           "kind": 16,
           "name": "Item",
           "flags": 0,
-          "id": 163,
+          "id": 164,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 608,
+                "line": 607,
                 "ch": 14
               },
               "kind": 9,
               "name": "title",
-              "flags": 0,
-              "id": 164,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "render-html.tsx",
-                "line": 608,
-                "ch": 28
-              },
-              "kind": 9,
-              "name": "href",
               "flags": 0,
               "id": 165,
               "type": {
@@ -2946,13 +2956,29 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 608,
+                "line": 607,
+                "ch": 28
+              },
+              "kind": 9,
+              "name": "href",
+              "flags": 0,
+              "id": 166,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "render-html.tsx",
+                "line": 607,
                 "ch": 42
               },
               "kind": 9,
               "name": "icon",
               "flags": 524288,
-              "id": 166,
+              "id": 167,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2969,28 +2995,28 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 618,
+            "line": 617,
             "ch": 1
           },
           "kind": 16,
           "name": "Extra",
           "flags": 0,
-          "id": 167,
+          "id": 168,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 620,
+                "line": 619,
                 "ch": 15
               },
               "kind": 9,
               "name": "docs",
               "flags": 0,
-              "id": 168,
+              "id": 169,
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 620,
+                  "line": 619,
                   "ch": 20
                 },
                 "kind": 15,
@@ -3013,13 +3039,13 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 632,
+            "line": 631,
             "ch": 1
           },
           "kind": 16,
           "name": "NavbarExtra",
           "flags": 0,
-          "id": 169,
+          "id": 170,
           "parameters": [],
           "type": {
             "name": "string",
@@ -3030,24 +3056,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 636,
+            "line": 635,
             "ch": 1
           },
           "kind": 16,
           "name": "findOtherVersions",
           "flags": 0,
-          "id": 170,
+          "id": 171,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 638,
+                "line": 637,
                 "ch": 27
               },
               "kind": 9,
               "name": "outDir",
               "flags": 0,
-              "id": 171,
+              "id": 172,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3057,13 +3083,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 638,
+                "line": 637,
                 "ch": 42
               },
               "kind": 9,
               "name": "currentVersion",
               "flags": 0,
-              "id": 172,
+              "id": 173,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3086,24 +3112,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 647,
+            "line": 646,
             "ch": 1
           },
           "kind": 16,
           "name": "Versions",
           "flags": 0,
-          "id": 173,
+          "id": 174,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 649,
+                "line": 648,
                 "ch": 18
               },
               "kind": 9,
               "name": "pkg",
               "flags": 0,
-              "id": 174,
+              "id": 175,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -3120,24 +3146,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 660,
+            "line": 659,
             "ch": 1
           },
           "kind": 16,
           "name": "Navbar",
           "flags": 0,
-          "id": 175,
+          "id": 176,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 662,
+                "line": 661,
                 "ch": 16
               },
               "kind": 9,
               "name": "pkg",
               "flags": 0,
-              "id": 176,
+              "id": 177,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -3147,13 +3173,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 662,
+                "line": 661,
                 "ch": 25
               },
               "kind": 9,
               "name": "out",
               "flags": 0,
-              "id": 177,
+              "id": 178,
               "type": {
                 "name": "Output",
                 "kind": 6
@@ -3169,24 +3195,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 671,
+            "line": 670,
             "ch": 1
           },
           "kind": 16,
           "name": "ModuleHeader",
           "flags": 0,
-          "id": 178,
+          "id": 179,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 673,
+                "line": 672,
                 "ch": 22
               },
               "kind": 9,
               "name": "_p",
               "flags": 0,
-              "id": 179,
+              "id": 180,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -3202,24 +3228,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 675,
+            "line": 674,
             "ch": 1
           },
           "kind": 16,
           "name": "ModuleFooter",
           "flags": 0,
-          "id": 180,
+          "id": 181,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 677,
+                "line": 676,
                 "ch": 22
               },
               "kind": 9,
               "name": "_p",
               "flags": 0,
-              "id": 181,
+              "id": 182,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -3235,38 +3261,80 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 679,
+            "line": 678,
             "ch": 1
           },
           "kind": 16,
           "name": "getRuntimeScripts",
           "flags": 0,
-          "id": 182,
+          "id": 183,
           "parameters": [],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "render-html.tsx",
+            "line": 691,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "getUserScripts",
+          "flags": 0,
+          "id": 184,
+          "parameters": [],
+          "type": {
+            "name": "Array",
+            "kind": 6,
+            "typeParameters": [
               {
-                "name": "\"<script src=\\\"../../dist/tester/require-browser.js\\\"></script>\\n\\t<script>require('../../dist/ui/index.js');require('../../dist/ui/icons.js');require('../../dist/docgen/runtime.js')</script>\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
+                "source": {
+                  "fileName": "render-html.tsx",
+                  "line": 696,
+                  "ch": 36
                 },
-                "flags": 0
-              },
-              {
-                "name": "\"<script src=\\\"runtime.bundle.min.js\\\"></script>\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
+                "kind": 34,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "render-html.tsx",
+                      "line": 696,
+                      "ch": 37
+                    },
+                    "kind": 0,
+                    "name": "name",
+                    "flags": 0,
+                    "id": 185,
+                    "value": "`us${id++}.js`",
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "render-html.tsx",
+                      "line": 697,
+                      "ch": 24
+                    },
+                    "kind": 0,
+                    "name": "content",
+                    "flags": 0,
+                    "id": 186,
+                    "value": "readFileSync(path, 'utf8')",
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -3274,75 +3342,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 686,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "UserScript",
-          "flags": 0,
-          "id": 183,
-          "parameters": [
-            {
-              "source": {
-                "fileName": "render-html.tsx",
-                "line": 688,
-                "ch": 20
-              },
-              "kind": 9,
-              "name": "src",
-              "flags": 0,
-              "id": 184,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ],
-          "type": {
-            "name": "string",
-            "kind": 32,
-            "flags": 0
-          }
-        },
-        {
-          "source": {
-            "fileName": "render-html.tsx",
-            "line": 693,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "getUserScripts",
-          "flags": 0,
-          "id": 185,
-          "parameters": [],
-          "type": {
-            "name": "string",
-            "kind": 32,
-            "flags": 0
-          }
-        },
-        {
-          "source": {
-            "fileName": "render-html.tsx",
-            "line": 697,
+            "line": 701,
             "ch": 1
           },
           "kind": 16,
           "name": "Header",
           "flags": 0,
-          "id": 186,
+          "id": 187,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 699,
+                "line": 703,
                 "ch": 16
               },
               "kind": 9,
               "name": "module",
               "flags": 0,
-              "id": 187,
+              "id": 188,
               "type": {
                 "name": "Output",
                 "kind": 6
@@ -3358,24 +3375,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 714,
+            "line": 718,
             "ch": 1
           },
           "kind": 16,
           "name": "escapeFileName",
           "flags": 0,
-          "id": 188,
+          "id": 189,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 716,
+                "line": 720,
                 "ch": 24
               },
               "kind": 9,
               "name": "name",
               "flags": 0,
-              "id": 189,
+              "id": 190,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3385,13 +3402,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 716,
+                "line": 720,
                 "ch": 37
               },
               "kind": 9,
               "name": "replaceExt",
               "flags": 0,
-              "id": 190,
+              "id": 191,
               "value": "'.html'",
               "type": {
                 "name": "string",
@@ -3409,24 +3426,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 718,
+            "line": 722,
             "ch": 1
           },
           "kind": 16,
           "name": "getPageName",
           "flags": 0,
-          "id": 191,
+          "id": 192,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 720,
+                "line": 724,
                 "ch": 21
               },
               "kind": 9,
               "name": "page",
               "flags": 0,
-              "id": 192,
+              "id": 193,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -3442,24 +3459,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 738,
+            "line": 742,
             "ch": 1
           },
           "kind": 16,
           "name": "Page",
           "flags": 0,
-          "id": 193,
+          "id": 194,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 740,
+                "line": 744,
                 "ch": 14
               },
               "kind": 9,
               "name": "p",
               "flags": 0,
-              "id": 194,
+              "id": 195,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -3469,7 +3486,7 @@
           "type": {
             "source": {
               "fileName": "render-html.tsx",
-              "line": 741,
+              "line": 745,
               "ch": 7
             },
             "kind": 34,
@@ -3479,13 +3496,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 741,
+                  "line": 745,
                   "ch": 9
                 },
                 "kind": 0,
                 "name": "name",
                 "flags": 0,
-                "id": 195,
+                "id": 196,
                 "value": "getPageName(p)",
                 "type": {
                   "name": "string",
@@ -3496,13 +3513,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 742,
+                  "line": 746,
                   "ch": 23
                 },
                 "kind": 0,
                 "name": "node",
                 "flags": 0,
-                "id": 196,
+                "id": 197,
                 "value": "p",
                 "type": {
                   "name": "Node",
@@ -3512,13 +3529,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 743,
+                  "line": 747,
                   "ch": 10
                 },
                 "kind": 0,
                 "name": "content",
                 "flags": 0,
-                "id": 197,
+                "id": 198,
                 "value": "ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p)",
                 "type": {
                   "name": "string",
@@ -3529,13 +3546,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 741,
+                  "line": 745,
                   "ch": 9
                 },
                 "kind": 0,
                 "name": "name",
                 "flags": 0,
-                "id": 195,
+                "id": 196,
                 "value": "getPageName(p)",
                 "type": {
                   "name": "string",
@@ -3546,13 +3563,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 742,
+                  "line": 746,
                   "ch": 23
                 },
                 "kind": 0,
                 "name": "node",
                 "flags": 0,
-                "id": 196,
+                "id": 197,
                 "value": "p",
                 "type": {
                   "name": "Node",
@@ -3562,13 +3579,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 743,
+                  "line": 747,
                   "ch": 10
                 },
                 "kind": 0,
                 "name": "content",
                 "flags": 0,
-                "id": 197,
+                "id": 198,
                 "value": "ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p)",
                 "type": {
                   "name": "string",
@@ -3582,24 +3599,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 746,
+            "line": 750,
             "ch": 1
           },
           "kind": 16,
           "name": "hasOwnPage",
           "flags": 0,
-          "id": 198,
+          "id": 199,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 748,
+                "line": 752,
                 "ch": 20
               },
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 199,
+              "id": 200,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -3615,24 +3632,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 758,
+            "line": 762,
             "ch": 1
           },
           "kind": 16,
           "name": "Module",
           "flags": 0,
-          "id": 200,
+          "id": 201,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 760,
+                "line": 764,
                 "ch": 16
               },
               "kind": 9,
               "name": "module",
               "flags": 0,
-              "id": 201,
+              "id": 202,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -3646,7 +3663,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 741,
+                  "line": 745,
                   "ch": 7
                 },
                 "kind": 34,
@@ -3656,13 +3673,13 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 741,
+                      "line": 745,
                       "ch": 9
                     },
                     "kind": 0,
                     "name": "name",
                     "flags": 0,
-                    "id": 195,
+                    "id": 196,
                     "value": "getPageName(p)",
                     "type": {
                       "name": "string",
@@ -3673,13 +3690,13 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 742,
+                      "line": 746,
                       "ch": 23
                     },
                     "kind": 0,
                     "name": "node",
                     "flags": 0,
-                    "id": 196,
+                    "id": 197,
                     "value": "p",
                     "type": {
                       "name": "Node",
@@ -3689,13 +3706,13 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 743,
+                      "line": 747,
                       "ch": 10
                     },
                     "kind": 0,
                     "name": "content",
                     "flags": 0,
-                    "id": 197,
+                    "id": 198,
                     "value": "ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p)",
                     "type": {
                       "name": "string",
@@ -3706,13 +3723,13 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 741,
+                      "line": 745,
                       "ch": 9
                     },
                     "kind": 0,
                     "name": "name",
                     "flags": 0,
-                    "id": 195,
+                    "id": 196,
                     "value": "getPageName(p)",
                     "type": {
                       "name": "string",
@@ -3723,13 +3740,13 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 742,
+                      "line": 746,
                       "ch": 23
                     },
                     "kind": 0,
                     "name": "node",
                     "flags": 0,
-                    "id": 196,
+                    "id": 197,
                     "value": "p",
                     "type": {
                       "name": "Node",
@@ -3739,13 +3756,13 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 743,
+                      "line": 747,
                       "ch": 10
                     },
                     "kind": 0,
                     "name": "content",
                     "flags": 0,
-                    "id": 197,
+                    "id": 198,
                     "value": "ModuleHeader(p) + ModuleBody(p) + ModuleFooter(p)",
                     "type": {
                       "name": "string",
@@ -3761,24 +3778,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 763,
+            "line": 767,
             "ch": 1
           },
           "kind": 16,
           "name": "Markdown",
           "flags": 0,
-          "id": 202,
+          "id": 203,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 765,
+                "line": 769,
                 "ch": 18
               },
               "kind": 9,
               "name": "content",
               "flags": 0,
-              "id": 203,
+              "id": 204,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3795,24 +3812,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 783,
+            "line": 787,
             "ch": 1
           },
           "kind": 16,
           "name": "Route",
           "flags": 0,
-          "id": 204,
+          "id": 205,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 785,
+                "line": 789,
                 "ch": 15
               },
               "kind": 9,
               "name": "file",
               "flags": 0,
-              "id": 205,
+              "id": 206,
               "type": {
                 "id": 3,
                 "name": "File",
@@ -3829,24 +3846,24 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 789,
+            "line": 793,
             "ch": 1
           },
           "kind": 16,
           "name": "renderExtraFile",
           "flags": 0,
-          "id": 206,
+          "id": 207,
           "parameters": [
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 791,
+                "line": 795,
                 "ch": 25
               },
               "kind": 9,
               "name": "file",
               "flags": 0,
-              "id": 207,
+              "id": 208,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3856,13 +3873,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 791,
+                "line": 795,
                 "ch": 38
               },
               "kind": 9,
               "name": "index",
               "flags": 0,
-              "id": 208,
+              "id": 209,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3874,7 +3891,7 @@
           "type": {
             "source": {
               "fileName": "render-html.tsx",
-              "line": 793,
+              "line": 797,
               "ch": 7
             },
             "kind": 34,
@@ -3884,13 +3901,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 793,
+                  "line": 797,
                   "ch": 9
                 },
                 "kind": 0,
                 "name": "name",
                 "flags": 0,
-                "id": 209,
+                "id": 210,
                 "value": "index ? 'index.html' : file",
                 "type": {
                   "name": "string",
@@ -3901,13 +3918,13 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 794,
+                  "line": 798,
                   "ch": 36
                 },
                 "kind": 0,
                 "name": "content",
                 "flags": 0,
-                "id": 210,
+                "id": 211,
                 "value": "file.endsWith('.md') ? Markdown(content) : content",
                 "type": {
                   "name": "string",
@@ -3921,17 +3938,17 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 797,
+            "line": 801,
             "ch": 1
           },
           "kind": 16,
           "name": "render",
           "flags": 1,
-          "id": 211,
+          "id": 212,
           "type": {
             "source": {
               "fileName": "render-html.tsx",
-              "line": 799,
+              "line": 803,
               "ch": 52
             },
             "kind": 15,
@@ -3947,13 +3964,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 799,
+                "line": 803,
                 "ch": 23
               },
               "kind": 9,
               "name": "app",
               "flags": 0,
-              "id": 212,
+              "id": 213,
               "type": {
                 "id": 7,
                 "name": "DocGen",
@@ -3963,13 +3980,13 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 799,
+                "line": 803,
                 "ch": 35
               },
               "kind": 9,
               "name": "output",
               "flags": 0,
-              "id": 213,
+              "id": 214,
               "type": {
                 "name": "Output",
                 "kind": 6
@@ -3998,7 +4015,7 @@
           "kind": 31,
           "name": "cwd",
           "flags": 0,
-          "id": 214,
+          "id": 215,
           "value": "process.cwd()",
           "type": {
             "name": "string",
@@ -4015,7 +4032,7 @@
           "kind": 16,
           "name": "serialize",
           "flags": 0,
-          "id": 215,
+          "id": 216,
           "parameters": [
             {
               "source": {
@@ -4026,7 +4043,7 @@
               "kind": 9,
               "name": "key",
               "flags": 0,
-              "id": 216,
+              "id": 217,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -4042,7 +4059,7 @@
               "kind": 9,
               "name": "value",
               "flags": 0,
-              "id": 217,
+              "id": 218,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -4065,7 +4082,7 @@
           "kind": 16,
           "name": "render",
           "flags": 1,
-          "id": 218,
+          "id": 219,
           "type": {
             "source": {
               "fileName": "render-json.ts",
@@ -4091,7 +4108,7 @@
               "kind": 9,
               "name": "_app",
               "flags": 0,
-              "id": 219,
+              "id": 220,
               "type": {
                 "id": 7,
                 "name": "DocGen",
@@ -4107,7 +4124,7 @@
               "kind": 9,
               "name": "output",
               "flags": 0,
-              "id": 220,
+              "id": 221,
               "type": {
                 "name": "Output",
                 "kind": 6
@@ -4136,7 +4153,7 @@
           "kind": 16,
           "name": "declarationFilter",
           "flags": 0,
-          "id": 221,
+          "id": 222,
           "parameters": [
             {
               "source": {
@@ -4147,7 +4164,7 @@
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 222,
+              "id": 223,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -4191,7 +4208,7 @@
           "kind": 16,
           "name": "render",
           "flags": 1,
-          "id": 223,
+          "id": 224,
           "type": {
             "source": {
               "fileName": "render-summary.ts",
@@ -4217,7 +4234,7 @@
               "kind": 9,
               "name": "_app",
               "flags": 0,
-              "id": 224,
+              "id": 225,
               "type": {
                 "id": 7,
                 "name": "DocGen",
@@ -4233,7 +4250,7 @@
               "kind": 9,
               "name": "output",
               "flags": 0,
-              "id": 225,
+              "id": 226,
               "type": {
                 "name": "Output",
                 "kind": 6
@@ -4262,7 +4279,7 @@
           "kind": 31,
           "name": "KindMap",
           "flags": 0,
-          "id": 226,
+          "id": 227,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -4289,7 +4306,7 @@
           "kind": 31,
           "name": "GroupTitle",
           "flags": 0,
-          "id": 227,
+          "id": 228,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -4317,7 +4334,7 @@
           "kind": 31,
           "name": "content",
           "flags": 0,
-          "id": 228,
+          "id": 229,
           "value": "{\n\tMembers: 'Members',\n\tAPI: 'API',\n\t'Inherited from': 'Inherited from',\n\tUnknown: 'Unknown',\n\tParameters: 'Parameters',\n\tExample: 'Example',\n\tDemo: 'Demo',\n}",
           "type": {
             "source": {
@@ -4338,7 +4355,7 @@
                 "kind": 0,
                 "name": "Members",
                 "flags": 0,
-                "id": 229,
+                "id": 230,
                 "value": "'Members'",
                 "type": {
                   "name": "string",
@@ -4355,7 +4372,7 @@
                 "kind": 0,
                 "name": "API",
                 "flags": 0,
-                "id": 230,
+                "id": 231,
                 "value": "'API'",
                 "type": {
                   "name": "string",
@@ -4372,7 +4389,7 @@
                 "kind": 0,
                 "name": "'Inherited from'",
                 "flags": 0,
-                "id": 231,
+                "id": 232,
                 "value": "'Inherited from'",
                 "type": {
                   "name": "string",
@@ -4389,7 +4406,7 @@
                 "kind": 0,
                 "name": "Unknown",
                 "flags": 0,
-                "id": 232,
+                "id": 233,
                 "value": "'Unknown'",
                 "type": {
                   "name": "string",
@@ -4406,7 +4423,7 @@
                 "kind": 0,
                 "name": "Parameters",
                 "flags": 0,
-                "id": 233,
+                "id": 234,
                 "value": "'Parameters'",
                 "type": {
                   "name": "string",
@@ -4423,7 +4440,7 @@
                 "kind": 0,
                 "name": "Example",
                 "flags": 0,
-                "id": 234,
+                "id": 235,
                 "value": "'Example'",
                 "type": {
                   "name": "string",
@@ -4440,7 +4457,7 @@
                 "kind": 0,
                 "name": "Demo",
                 "flags": 0,
-                "id": 235,
+                "id": 236,
                 "value": "'Demo'",
                 "type": {
                   "name": "string",
@@ -4460,7 +4477,7 @@
           "kind": 31,
           "name": "jsdocMap",
           "flags": 0,
-          "id": 236,
+          "id": 237,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -4488,7 +4505,7 @@
           "kind": 16,
           "name": "groupTitle",
           "flags": 1,
-          "id": 237,
+          "id": 238,
           "parameters": [
             {
               "source": {
@@ -4499,7 +4516,7 @@
               "kind": 9,
               "name": "kind",
               "flags": 0,
-              "id": 238,
+              "id": 239,
               "type": {
                 "name": "Kind",
                 "kind": 6
@@ -4521,7 +4538,7 @@
           "kind": 16,
           "name": "kindToString",
           "flags": 1,
-          "id": 239,
+          "id": 240,
           "parameters": [
             {
               "source": {
@@ -4532,7 +4549,7 @@
               "kind": 9,
               "name": "kind",
               "flags": 0,
-              "id": 240,
+              "id": 241,
               "type": {
                 "name": "Kind",
                 "kind": 6
@@ -4554,7 +4571,7 @@
           "kind": 16,
           "name": "translate",
           "flags": 1,
-          "id": 241,
+          "id": 242,
           "parameters": [
             {
               "source": {
@@ -4565,7 +4582,7 @@
               "kind": 9,
               "name": "key",
               "flags": 0,
-              "id": 242,
+              "id": 243,
               "type": {
                 "source": {
                   "fileName": "localization.tsx",
@@ -4603,7 +4620,7 @@
           "kind": 16,
           "name": "jsdocTitle",
           "flags": 1,
-          "id": 243,
+          "id": 244,
           "parameters": [
             {
               "source": {
@@ -4614,7 +4631,7 @@
               "kind": 9,
               "name": "tag",
               "flags": 0,
-              "id": 244,
+              "id": 245,
               "type": {
                 "name": "string",
                 "kind": 32,

@@ -1,12 +1,5 @@
-import { dom } from '../xdom/index.js';
-import {
-	Augment,
-	Component,
-	Host,
-	Attribute,
-	role,
-} from '../component/index.js';
-import { Style, registerFont } from '../css/index.js';
+import { Augment, Component, Attribute, role } from '../component/index.js';
+import { css, registerFont } from '../css/index.js';
 import { getShadow } from '../dom/index.js';
 import { defaultTheme } from './theme.js';
 
@@ -1001,21 +994,17 @@ defaultTheme.typography['icon'] = {
 
 @Augment(
 	role('img'),
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'inline-block',
-					font: 'icon',
-				},
-				$round: {
-					borderRadius: 1,
-					textAlign: 'center',
-				},
-				$outline: { borderWidth: 1 },
-			}}
-		</Style>
-	</Host>
+	css({
+		$: {
+			display: 'inline-block',
+			font: 'icon',
+		},
+		$round: {
+			borderRadius: 1,
+			textAlign: 'center',
+		},
+		$outline: { borderWidth: 1 },
+	})
 )
 export class Icon extends Component {
 	static tagName = 'cxl-icon';
@@ -1047,17 +1036,15 @@ export class Icon extends Component {
 }
 
 @Augment(
-	<Style>
-		{{
-			$: {
-				paddingRight: 8,
-				lineHeight: 20,
-				width: 24,
-				textAlign: 'center',
-			},
-			$trailing: { paddingRight: 0, paddingLeft: 8 },
-		}}
-	</Style>
+	css({
+		$: {
+			paddingRight: 8,
+			lineHeight: 20,
+			width: 24,
+			textAlign: 'center',
+		},
+		$trailing: { paddingRight: 0, paddingLeft: 8 },
+	})
 )
 export class FieldIcon extends Icon {
 	static tagName = 'cxl-field-icon';

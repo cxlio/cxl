@@ -1,44 +1,54 @@
-function require(path) {
-	function normalizePath(basePath) {
-		const a = document.createElement('a');
-		a.href = basePath || '';
-		return a.pathname;
-	}
-	const mods = require.modules;
+(() => {
+	'use strict';
 
-	if (require.replace) path = require.replace(path);
-	// Handle packages
-	if (path[0] !== '.') {
-		if (!mods[path]) throw new Error(`Module "${path}" not found.`);
-		return mods[path];
+	function appendScript(__src) {
+		const exports = {},
+			module = { exports: exports };
+		eval(__src);
+		return module;
 	}
 
-	const xhr = new XMLHttpRequest();
-	let url = require.base + (path.endsWith('.js') ? path : path + '.js');
+	function require(path) {
+		function normalizePath(basePath) {
+			const a = document.createElement('a');
+			a.href = basePath || '';
+			return a.pathname;
+		}
 
-	xhr.open('GET', url, false);
-	xhr.send();
+		const mods = require.modules;
 
-	if (xhr.status === 404) {
-		url = require.base + path + '/index.js';
+		if (require.replace) path = require.replace(path);
+		// Handle packages
+		if (path[0] !== '.') {
+			if (!mods[path]) throw new Error(`Module "${path}" not found.`);
+			return mods[path];
+		}
+
+		let url = require.base + (path.endsWith('.js') ? path : path + '.js');
+		const xhr = new XMLHttpRequest();
 		xhr.open('GET', url, false);
 		xhr.send();
+
+		if (xhr.status === 404) {
+			url = url.replace(/\.js$/, '/index.js');
+			xhr.open('GET', url, false);
+			xhr.send();
+		}
+		const id = xhr.responseURL;
+		const source = xhr.responseText + '\n//# sourceURL=' + id;
+
+		if (mods[id]) return mods[id];
+
+		const oldBase = require.base;
+		const baseMatch = /(.*\/).*/.exec(url);
+		require.base = baseMatch ? normalizePath(baseMatch[1]) : '';
+		const module = appendScript(source);
+		require.base = oldBase;
+		mods[id] = module.exports;
+		return module.exports;
 	}
-	const id = xhr.responseURL;
-	const response = xhr.responseText + '\n//# sourceURL=' + id;
-	if (mods[id]) return mods[id];
+	require.modules = {};
+	require.base = '';
 
-	const oldBase = require.base;
-	const baseMatch = /(.*\/).*/.exec(url);
-	require.base = baseMatch ? normalizePath(baseMatch[1]) : '';
-
-	const exports = {},
-		module = { exports: exports };
-	new Function('module', 'exports', response)(module, exports);
-
-	require.base = oldBase;
-	mods[id] = module.exports;
-	return module.exports;
-}
-require.modules = {};
-require.base = '';
+	window.require = require;
+})();

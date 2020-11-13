@@ -1,13 +1,13 @@
-import { suite } from '../spec/index.js';
-import { AttributeType as AT, dom } from './index.js';
-import { Observable, be, of } from '../rx/index.js';
+import { Test, suite } from '../spec/index.js';
+import { dom, getBindings } from './index.js';
+import { Observable, be, of, from } from '../rx/index.js';
 
-/* eslint @typescript-eslint/no-namespace: 'off' */
-declare global {
-	namespace JSX {
-		type IntrinsicElements = {
-			[P in keyof HTMLElementTagNameMap]: AT<HTMLElementTagNameMap[P]>;
-		};
+async function connect(el: any, callback: (el: any[]) => any) {
+	const subscriptions = from(el).subscribe();
+	try {
+		await callback(getBindings(el) || []);
+	} finally {
+		subscriptions.unsubscribe();
 	}
 }
 
@@ -47,7 +47,7 @@ export default suite('component', test => {
 			<div title="Hello World" tabIndex={10}>
 				content
 			</div>
-		);
+		) as HTMLDivElement;
 
 		a.ok(el, 'Element was created');
 		a.equal(el.tagName, 'DIV');
@@ -63,7 +63,7 @@ export default suite('component', test => {
 					<b>2</b>
 					<i>3</i>
 				</div>
-			),
+			) as HTMLDivElement,
 			first = el.firstChild,
 			last = el.lastChild;
 
@@ -79,22 +79,6 @@ export default suite('component', test => {
 		a.equal(first && first.nextSibling, el.childNodes[1]);
 		a.equal(last && last.previousSibling, el.childNodes[1]);
 	});
-
-	/*test('Fragment', a => {
-		const tpl = (
-			<Fragment>
-				<div>Hello</div>
-				<span>World</span>!
-			</Fragment>
-		);
-		const frag = tpl as DocumentFragment;
-
-		a.ok(frag instanceof DocumentFragment);
-		a.equal(frag.childNodes.length, 3);
-		a.equal((frag.childNodes[0] as HTMLElement).tagName, 'DIV');
-		a.equal((frag.childNodes[1] as HTMLElement).tagName, 'SPAN');
-		a.equal(frag.childNodes[2].textContent, '!');
-	});*/
 
 	test('Component Class', a => {
 		class Test {
@@ -148,24 +132,36 @@ export default suite('component', test => {
 		a.equal(child2.textContent, 'World');
 	});
 
+	test('Component - Function Binding', a => {
+		let el3: any;
+		function check(el2: any) {
+			el3 = el2;
+			a.equal(el2.tagName, 'DIV');
+			return of('hello');
+		}
+		const el = <div $={check}></div>;
+		a.equal(el, el3);
+	});
+
 	test('Component - Bindings', a => {
 		class Div {
 			static create() {
 				return new Div();
 			}
+			bindings?: any[];
 			jsxAttributes?: { $: (node: Div) => Observable<any> };
 			title = '';
-			bind(obs: any) {
-				obs.subscribe().unsubscribe();
-			}
 		}
 
 		const el = (
 			<Div $={el => of('blur').tap(ev => (el.title = ev))} />
-		) as Div;
+		) as any;
 
 		a.ok(el instanceof Div);
-		a.equal(el.title, 'blur');
+		connect(el, bindings => {
+			a.equal(el.title, 'blur');
+			a.equal(bindings.length, 1);
+		});
 	});
 
 	test('Bindings - Children', a => {
@@ -197,44 +193,65 @@ export default suite('component', test => {
 		a.ok(child);
 	});
 
-	test('Bindings - Set Attribute', a => {
+	test('Bindings - Set Attribute', (a: Test) => {
 		const checked = be(true);
-
-		class Div {
-			static create() {
-				return new Div();
-			}
-
-			jsxAttributes?: { className: Observable<string> };
-			className = '';
-
-			bind(obs: any) {
-				obs.subscribe();
-			}
-		}
-
 		const el = (
-			<Div className={checked.map(val => (val ? 'minus' : 'check'))} />
-		) as Div;
+			<div className={checked.map(val => (val ? 'minus' : 'check'))} />
+		) as HTMLDivElement;
 
 		a.ok(el);
-		a.equal(el.className, 'minus');
-		checked.next(false);
-		a.equal(el.className, 'check');
-		checked.next(true);
-		a.equal(el.className, 'minus');
+		connect(el, bindings => {
+			a.assert(bindings);
+			a.equal(bindings.length, 1);
+			a.equal(el.className, 'minus');
+			checked.next(false);
+			a.equal(el.className, 'check');
+			checked.next(true);
+			a.equal(el.className, 'minus');
+		});
 	});
 
-	/*test('Bindings - Expression', a => {
-		const world = of('World');
-		const el = <div>Hello {world}</div>;
+	test('Bindings - Expression', async a => {
+		const world = be('World');
+		const el = (
+			<div>
+				Hello {world}
+				{world}
+			</div>
+		) as HTMLDivElement;
 		a.ok(el);
-		a.equal(el.childNodes.length, 2);
-		a.equal(el.textContent, 'Hello World');
-	});*/
+		a.equal(el.childNodes.length, 3);
+		await connect(el, bindings => {
+			a.equal(bindings?.length, 2);
+			a.equal(el.innerText, 'Hello WorldWorld');
+			world.next('Universe');
+			a.equal(el.innerText, 'Hello UniverseUniverse');
+		});
+		world.next('Galaxy');
+		a.equal(el.innerText, 'Hello UniverseUniverse');
+	});
+
+	test('Fragment', async a => {
+		const val = be('hello');
+		const frag = (
+			<>
+				<div />
+				<span />
+				{val}
+			</>
+		);
+		a.ok(frag);
+		a.equal(frag.childNodes.length, 3);
+		await connect(frag, bindings => {
+			a.equal(bindings?.length, 1);
+			a.equal(frag.childNodes[2].nodeValue, 'hello');
+		});
+		val.next('world');
+		a.equal(frag.childNodes[2].nodeValue, 'hello');
+	});
 
 	test('Empty Attribute', a => {
-		const el = <div draggable />;
+		const el = (<div draggable />) as any;
 		a.ok(el.draggable, 'Must set attribute to true');
 	});
 });

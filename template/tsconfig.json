@@ -7,7 +7,8 @@
 	"references": [
 		{ "path": "../rx" },
 		{ "path": "../dom" },
-		{ "path": "../xdom" },
+		{ "path": "../tsx" },
+		{ "path": "../css" },
 		{ "path": "../component" }
 	]
 }

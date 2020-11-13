@@ -2,35 +2,37 @@ import { Observable, Subscription, from, tap } from '../rx/index.js';
 
 /* eslint @typescript-eslint/ban-types: 'off' */
 /* eslint @typescript-eslint/no-namespace: 'off' */
-declare global {
-	namespace JSX {
-		interface ElementAttributesProperty {
-			jsxAttributes: any;
+/*declare global {
+	namespace dom {
+		namespace JSX {
+			interface ElementAttributesProperty {
+				jsxAttributes: any;
+			}
+			interface ElementChildrenAttribute {
+				children: {};
+			}
+			type Element = (host?: RenderContext) => Node;
+			type IntrinsicElements = {
+				[P in keyof HTMLElementTagNameMap]: AttributeType<
+					HTMLElementTagNameMap[P]
+				>;
+			};
 		}
-		interface ElementChildrenAttribute {
-			children: {};
-		}
-		// type Element = JSXElement;
-		type IntrinsicElements = {
-			[P in keyof HTMLElementTagNameMap]: AttributeType<
-				HTMLElementTagNameMap[P]
-			>;
-		};
 	}
-}
+}*/
 
 export type AttributeType<T> =
 	| {
-			[K in keyof T]?: T[K] | Observable<T[K]> | Binding<T, any, T[K]>;
+			[K in keyof T]?: T[K] | Observable<T[K]> | Binding<T, T[K]>;
 	  }
 	| {
-			$?: Binding<T>;
+			$?: Binding<T> | Observable<any>;
 			children?: any;
 	  };
 
-export type Binding<ElementT = any, HostT = any, DataT = any> = (
+export type Binding<ElementT = any, DataT = any> = (
 	el: ElementT,
-	ctx: HostT
+	ctx: any
 ) => Observable<DataT>;
 type ComponentFunction = (
 	attributes?: any,

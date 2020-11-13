@@ -79,7 +79,7 @@
 			},
 
 			"ui": {
-				"files": ["ui/*.tsx", "ui/build.js"],
+				"files": ["ui/*.tsx", "ui/build.js", "ui/*.html"],
 				"tasks": "cd ui && npm run build"
 			},
 			"server": {

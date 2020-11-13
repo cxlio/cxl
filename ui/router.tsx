@@ -12,14 +12,13 @@ import {
 	merge,
 } from '../rx/index.js';
 import {
-	Attribute,
 	Augment,
+	Attribute,
 	Component,
 	augment,
 	bind,
 	get,
 } from '../component/index.js';
-import { dom } from '../xdom/index.js';
 import {
 	onAction,
 	onReady,
@@ -28,9 +27,10 @@ import {
 	onLocation,
 } from '../dom/index.js';
 import { AppbarTitle, Item } from './navigation.js';
-import { list, triggerEvent } from '../template/index.js';
+import { dom } from '../tsx/index.js';
+import { each, triggerEvent } from '../template/index.js';
 import { StateStyles } from './core.js';
-import { Style } from '../css/index.js';
+import { css } from '../css/index.js';
 
 const router$ = new Reference<RouterState>();
 const strategy$ = new Reference<Strategy>();
@@ -48,7 +48,7 @@ export function Route(path: string | RouteOptions) {
 		const options = typeof path === 'string' ? { path } : path;
 		router.route({
 			...options,
-			render: dom(ctor),
+			render: () => dom(ctor),
 		});
 	};
 }
@@ -59,7 +59,7 @@ export function DefaultRoute(path: string | RouteOptions = '') {
 		router.route({
 			...options,
 			isDefault: true,
-			render: dom(ctor),
+			render: () => dom(ctor),
 		});
 	};
 }
@@ -145,7 +145,7 @@ export function RouterTitle() {
 
 	return (
 		<AppbarTitle>
-			{list(routes, (route: any) => (
+			{each(routes, (route: any) => (
 				<span>{route.routeTitle || ''}</span>
 			))}
 		</AppbarTitle>
@@ -160,32 +160,35 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 
 @Augment<RouterLink>(
 	'cxl-router-link',
-	<Style>
-		{{
-			link: {
-				outline: 0,
-				textDecoration: 'none',
-			},
-		}}
-	</Style>,
-	<a
-		className="link"
-		$={(el, host) =>
-			merge(
-				get(host, 'focusable').tap(val => (el.tabIndex = val ? 0 : -1)),
-				combineLatest(strategy$, get(host, 'href')).tap(
-					([strategy, val]) =>
-						val !== undefined && (el.href = strategy.getHref(val))
-				),
-				onAction(el).tap(ev => {
-					ev.preventDefault();
-					router.go(host.href);
-				})
-			)
-		}
-	>
-		<slot />
-	</a>
+	host => (
+		<a
+			className="link"
+			$={el =>
+				merge(
+					get(host, 'focusable').tap(
+						val => (el.tabIndex = val ? 0 : -1)
+					),
+					combineLatest(strategy$, get(host, 'href')).tap(
+						([strategy, val]) =>
+							val !== undefined &&
+							(el.href = strategy.getHref(val))
+					),
+					onAction(el).tap(ev => {
+						ev.preventDefault();
+						if (host.href) router.go(host.href);
+					})
+				)
+			}
+		>
+			<slot />
+		</a>
+	),
+	css({
+		link: {
+			outline: 0,
+			textDecoration: 'none',
+		},
+	})
 )
 export class RouterLink extends Component {
 	@Attribute()
@@ -196,12 +199,10 @@ export class RouterLink extends Component {
 
 @Augment<RouterLink>(
 	'cxl-a',
-	<Style>
-		{{
-			$: { textDecoration: 'underline' },
-			$focusWithin: { outline: 'var(--cxl-primary) auto 1px;' },
-		}}
-	</Style>
+	css({
+		$: { textDecoration: 'underline' },
+		$focusWithin: { outline: 'var(--cxl-primary) auto 1px;' },
+	})
 )
 export class A extends RouterLink {
 	focusable = true;
@@ -209,32 +210,32 @@ export class A extends RouterLink {
 
 @Augment<RouterItem>(
 	'cxl-router-item',
-	<Style>
-		{{
-			$: {
-				display: 'block',
-			},
-			link: {
-				outline: 0,
-				textDecoration: 'none',
-			},
-			$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
-			$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
-			...StateStyles,
-		}}
-	</Style>,
-	<RouterLink className="link" href={(_el, host) => get(host, 'href')}>
-		<Item
-			$={(el, host: RouterItem) =>
-				router$.tap(() => {
-					if (host.href !== undefined)
-						el.selected = router.isActiveUrl(host.href);
-				})
-			}
-		>
-			<slot />
-		</Item>
-	</RouterLink>,
+	host => (
+		<RouterLink className="link" href={get(host, 'href')}>
+			<Item
+				$={el =>
+					router$.tap(() => {
+						if (host.href !== undefined)
+							el.selected = router.isActiveUrl(host.href);
+					})
+				}
+			>
+				<slot />
+			</Item>
+		</RouterLink>
+	),
+	css({
+		$: {
+			display: 'block',
+		},
+		link: {
+			outline: 0,
+			textDecoration: 'none',
+		},
+		$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
+		$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
+		...StateStyles,
+	}),
 	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
 	bind(host =>
 		get(host, 'disabled').tap(value =>

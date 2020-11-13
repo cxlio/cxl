@@ -1,9 +1,8 @@
 {
 	"name": "@cxl/filewatch",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "File watcher library",
 	"license": "Apache-2.0",
-	"private": true,
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/filewatch && node ../tester --node"
