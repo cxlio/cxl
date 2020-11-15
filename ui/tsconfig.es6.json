@@ -19,7 +19,6 @@
 		"validation.tsx"
 	],
 	"references": [
-		{ "path": "../xdom/tsconfig.es6.json" },
 		{ "path": "../tsx/tsconfig.es6.json" },
 		{ "path": "../component/tsconfig.es6.json" },
 		{ "path": "../template/tsconfig.es6.json" },

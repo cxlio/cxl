@@ -6,7 +6,7 @@
 	"references": [
 		{ "path": "tsconfig.json" },
 		{ "path": "../spec" },
-		{ "path": "../xdom" }
+		{ "path": "../tsx" }
 	],
 	"files": ["test.tsx"]
 }

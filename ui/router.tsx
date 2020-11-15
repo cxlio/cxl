@@ -69,7 +69,7 @@ export function routeIsActive(path: string) {
 }
 
 export function routerOutlet(host: HTMLElement) {
-	let currentRoute: Element;
+	let currentRoute: Node;
 	return router$.tap(state => {
 		const { url, root } = state;
 		if (root.parentNode !== host) host.appendChild(root);

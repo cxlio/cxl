@@ -36,6 +36,8 @@ export class Bindings {
 	private bindings?: Observable<any>[];
 
 	bind(binding: Observable<any>) {
+		if (this.subscriptions)
+			throw new Error('Cannot bind connected component.');
 		if (!this.bindings) this.bindings = [];
 		this.bindings.push(binding);
 	}
@@ -61,7 +63,7 @@ export abstract class Component extends HTMLElement {
 	}
 
 	private $$bindings?: Bindings;
-	private render?: (node: this) => void;
+	private render?: (node: any) => void;
 
 	// EventMap
 	eventMap?: any;

@@ -13,7 +13,12 @@ import {
 import { dom } from '../tsx/index.js';
 import { EMPTY, Observable, defer, merge, tap } from '../rx/index.js';
 import { StyleSheet, border, css, padding, pct } from '../css/index.js';
-import { getAttribute, stopEvent, triggerEvent } from '../template/index.js';
+import {
+	getAttribute,
+	slot,
+	stopEvent,
+	triggerEvent,
+} from '../template/index.js';
 import { on, onAction, remove, trigger } from '../dom/index.js';
 import { InversePrimary, ResetSurface } from './theme.js';
 
@@ -559,10 +564,10 @@ export class Avatar extends Component {
 		},
 		...FocusHighlight,
 	}),
-	() => (
+	_ => (
 		<>
 			<span className="avatar">
-				<Slot selector="cxl-avatar" />
+				<slot $={slot('cxl-avatar')} />
 			</span>
 			<span className="content">
 				<slot></slot>
@@ -1004,13 +1009,18 @@ export class Meta extends Component {
 			flexDirection: 'column',
 			height: '100%',
 			overflowX: 'hidden',
+			zIndex: 0,
 		},
 		'@large': {
 			$permanent: { marginLeft: 288 },
 		},
 	}),
-	_ => <Meta />,
-	Slot
+	_ => (
+		<>
+			<Meta />
+			<slot />
+		</>
+	)
 )
 export class Application extends Component {}
 

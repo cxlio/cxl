@@ -25,7 +25,7 @@ import {
 	selectableHost,
 } from './core.js';
 import { dom } from '../tsx/index.js';
-import { onValue, triggerEvent } from '../template/index.js';
+import { onValue, slot, triggerEvent } from '../template/index.js';
 import {
 	trigger,
 	onKeypress,
@@ -246,11 +246,11 @@ const FieldBase = [
 			translateY: 9,
 		},
 	}),
-	(_: Component) => (
+	() => (
 		<div className="container">
 			<div className="mask"></div>
 			<div className="label">
-				<Slot selector="cxl-label" />
+				<slot $={slot('cxl-label')} />
 			</div>
 			<div className="content">
 				<slot />
@@ -393,7 +393,7 @@ export class Label extends Component {}
 					invalid={invalid}
 				/>
 				<div className="help">
-					<Slot selector="cxl-field-help" />
+					<slot $={slot('cxl-field-help')} />
 					<div className="invalidMessage">{invalidMessage}</div>
 				</div>
 			</>
@@ -1400,11 +1400,6 @@ export class TextArea extends InputBase {
 			elevation: 2,
 			backgroundColor: 'secondary',
 			color: 'onSecondary',
-			position: 'fixed',
-			width: 56,
-			height: 56,
-			bottom: 16,
-			right: 24,
 			borderRadius: 56,
 			textAlign: 'center',
 			paddingTop: 20,
@@ -1412,9 +1407,15 @@ export class TextArea extends InputBase {
 			font: 'h6',
 			paddingBottom: 20,
 			lineHeight: 16,
+			width: 56,
 		},
-		'@small': { $: { bottom: 'auto', translateY: -28 } },
-		$static: { position: 'static' },
+		'@small': { $fixed: { bottom: 'auto', top: 32 } },
+		$fixed: {
+			position: 'fixed',
+			height: 56,
+			bottom: 16,
+			right: 24,
+		},
 		$focus: { elevation: 4 },
 	}),
 	css(FocusHighlight),
@@ -1424,7 +1425,7 @@ export class Fab extends Component {
 	@StyleAttribute()
 	disabled = false;
 	@StyleAttribute()
-	static = false;
+	fixed = false;
 
 	touched = false;
 }

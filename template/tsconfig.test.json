@@ -6,7 +6,7 @@
 	"files": ["test.tsx"],
 	"references": [
 		{ "path": "." },
-		{ "path": "../xdom" },
+		{ "path": "../tsx" },
 		{ "path": "../tester" }
 	]
 }

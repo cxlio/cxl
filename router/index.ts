@@ -7,7 +7,7 @@ const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 
 type Dictionary = Record<string, string>;
 type RouteArguments = { [key: string]: any };
-type RouteElement = Element;
+type RouteElement = Node;
 
 interface RouteInstances {
 	[key: string]: RouteElement;
@@ -15,8 +15,8 @@ interface RouteInstances {
 
 export interface RouterState {
 	url: Url;
-	root: Element;
-	current: Element;
+	root: Node;
+	current: Node;
 	route: Route<RouteElement>;
 }
 

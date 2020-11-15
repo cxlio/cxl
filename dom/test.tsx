@@ -1,15 +1,15 @@
-import { dom, render } from '../xdom/index.js';
+import { dom } from '../tsx/index.js';
 import { empty, setAttribute, setContent } from './index.js';
 import { suite } from '../spec/index.js';
 
 export default suite('dom', test => {
 	test('empty(Element)', a => {
-		const el = render(
+		const el = (
 			<div>
 				content
 				<span />
 			</div>
-		).element;
+		) as Element;
 
 		a.equal(el.childNodes.length, 2);
 		empty(el);
@@ -17,7 +17,7 @@ export default suite('dom', test => {
 	});
 
 	test('setContent(Element, Element|TextNode)', a => {
-		const el = render(<div />).element;
+		const el = (<div />) as Element;
 
 		a.equal(el.childNodes.length, 0);
 		setContent(el, document.createElement('span'));
@@ -29,7 +29,7 @@ export default suite('dom', test => {
 	});
 
 	test('setAttribute(Element, string, any)', a => {
-		const el = render(<div />).element;
+		const el = (<div />) as Element;
 
 		setAttribute(el, 'test-attribute', 'value');
 		a.equal(el.getAttribute('test-attribute'), 'value');

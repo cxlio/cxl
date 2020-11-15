@@ -166,7 +166,7 @@ export function portal(id: string) {
 	};
 }
 
-export function teleport(el: HTMLElement, portalName: string) {
+export function teleport(el: ChildNode, portalName: string) {
 	return new Observable<void>(() => {
 		const placeholder = document.createTextNode('');
 		el.replaceWith(placeholder);
@@ -199,15 +199,13 @@ export function list<T>(
 	renderFn: (item: T) => Node
 ) {
 	const marker = new Marker();
-	return (host: Component) => {
-		host.bind(
-			source.tap(ev => {
-				if (ev.type === 'insert') marker.insert(renderFn(ev.item));
-				else if (ev.type === 'empty') marker.empty();
-			})
-		);
-		return marker.node;
-	};
+	return bindNode(
+		marker.node,
+		source.tap(ev => {
+			if (ev.type === 'insert') marker.insert(renderFn(ev.item));
+			else if (ev.type === 'empty') marker.empty();
+		})
+	);
 }
 
 export function each<T>(source: Observable<T[]>, renderFn: (item: T) => Node) {
@@ -222,20 +220,27 @@ export function each<T>(source: Observable<T[]>, renderFn: (item: T) => Node) {
 	);
 }
 
-export function slot(host: Component, selector: string) {
-	return merge(
+export function getHost(el: Node): Component {
+	const result = (el.getRootNode() as any).host;
+	if (!result) throw new Error('No host found.');
+	return result;
+}
+
+export function slot(selector: string) {
+	return (el: HTMLSlotElement) =>
 		defer(() => {
+			const host = getHost(el);
+			el.name = selector;
 			for (const node of host.children)
 				if (node.matches(selector)) node.slot = selector;
-		}),
-		onChildrenMutation(host).tap(ev => {
-			const node = ev.value;
-			if (
-				ev.type === 'added' &&
-				node instanceof HTMLElement &&
-				node.matches(selector)
-			)
-				node.slot = selector;
-		})
-	);
+			return onChildrenMutation(host).tap(ev => {
+				const node = ev.value;
+				if (
+					ev.type === 'added' &&
+					node instanceof HTMLElement &&
+					node.matches(selector)
+				)
+					node.slot = selector;
+			});
+		});
 }

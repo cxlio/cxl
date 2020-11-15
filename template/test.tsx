@@ -1,7 +1,16 @@
 import { be, merge, tap } from '../rx';
-import { connect, dom, render } from '../xdom';
+import { dom, observe } from '../tsx';
 import { getAttribute, portal, teleport } from './index.js';
 import { suite } from '../spec/index.js';
+
+async function connect<T extends Node>(el: any, callback: (el: T) => any) {
+	const subscriptions = observe(el).subscribe();
+	try {
+		await callback(el);
+	} finally {
+		subscriptions.unsubscribe();
+	}
+}
 
 export default suite('template', test => {
 	test('bindings - get', a => {
@@ -38,8 +47,8 @@ export default suite('template', test => {
 			/>,
 			el => {
 				a.ok(!first);
+				a.dom.appendChild(el);
 				el.title = 'title';
-				return a.promise;
 			}
 		);
 	});
@@ -65,11 +74,11 @@ export default suite('template', test => {
 		el.setAttribute('title', 'true');
 	});
 
-	test('portal', a => {
+	test('portal', async a => {
 		const id = 'cxl-test' + a.id;
 
-		connect<HTMLDivElement>(<div $={portal(id)} />, el => {
-			teleport(render(<span>Hello</span>).element as HTMLSpanElement, id)
+		await connect<HTMLDivElement>(<div $={portal(id)} />, el => {
+			teleport((<span>Hello</span>) as HTMLSpanElement, id)
 				.subscribe()
 				.unsubscribe();
 			a.ok(el);

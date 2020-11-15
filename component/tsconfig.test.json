@@ -4,9 +4,5 @@
 		"outDir": "../dist/component"
 	},
 	"files": ["test.tsx"],
-	"references": [
-		{ "path": "." },
-		{ "path": "../xdom" },
-		{ "path": "../tester" }
-	]
+	"references": [{ "path": "." }, { "path": "../tester" }]
 }

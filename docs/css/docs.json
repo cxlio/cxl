@@ -4626,19 +4626,19 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 524,
+            "line": 516,
             "ch": 1
           },
           "kind": 16,
-          "name": "css",
+          "name": "render",
           "flags": 1,
           "id": 249,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 526,
-                "ch": 20
+                "line": 518,
+                "ch": 23
               },
               "kind": 9,
               "name": "styles",
@@ -4653,13 +4653,80 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 526,
+                "line": 518,
+                "ch": 38
+              },
+              "kind": 9,
+              "name": "selector",
+              "flags": 0,
+              "id": 251,
+              "value": "':host'",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 518,
+                "ch": 58
+              },
+              "kind": 9,
+              "name": "global",
+              "flags": 0,
+              "id": 252,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "HTMLStyleElement",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 526,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "css",
+          "flags": 1,
+          "id": 253,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 528,
+                "ch": 20
+              },
+              "kind": 9,
+              "name": "styles",
+              "flags": 0,
+              "id": 254,
+              "type": {
+                "id": 107,
+                "name": "Styles",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 528,
                 "ch": 35
               },
               "kind": 9,
               "name": "global",
               "flags": 0,
-              "id": 251,
+              "id": 255,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -4671,13 +4738,13 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 528,
+              "line": 530,
               "ch": 7
             },
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 252,
+            "id": 256,
             "parameters": [],
             "type": {
               "name": "Node",
@@ -4688,24 +4755,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 532,
+            "line": 534,
             "ch": 1
           },
           "kind": 4,
           "name": "FontDefinition",
           "flags": 1,
-          "id": 253,
+          "id": 257,
           "children": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 534,
+                "line": 536,
                 "ch": 33
               },
               "kind": 10,
               "name": "family",
               "flags": 4,
-              "id": 254,
+              "id": 258,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -4715,13 +4782,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 535,
+                "line": 537,
                 "ch": 16
               },
               "kind": 10,
               "name": "url",
               "flags": 4,
-              "id": 255,
+              "id": 259,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -4731,13 +4798,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 536,
+                "line": 538,
                 "ch": 13
               },
               "kind": 10,
               "name": "weight",
               "flags": 4,
-              "id": 256,
+              "id": 260,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -4749,26 +4816,26 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 538,
+            "line": 540,
             "ch": 1
           },
           "kind": 16,
           "name": "registerFont",
           "flags": 1,
-          "id": 257,
+          "id": 261,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 540,
+                "line": 542,
                 "ch": 29
               },
               "kind": 9,
               "name": "def",
               "flags": 0,
-              "id": 258,
+              "id": 262,
               "type": {
-                "id": 253,
+                "id": 257,
                 "name": "FontDefinition",
                 "kind": 6
               }
@@ -4782,96 +4849,28 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 550,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "Style",
-          "flags": 1,
-          "id": 259,
-          "parameters": [
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 552,
-                "ch": 22
-              },
-              "kind": 9,
-              "name": "p",
-              "flags": 0,
-              "id": 260,
-              "type": {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 552,
-                  "ch": 24
-                },
-                "kind": 34,
-                "name": "",
-                "flags": 0,
-                "children": [
-                  {
-                    "source": {
-                      "fileName": "index.ts",
-                      "line": 552,
-                      "ch": 26
-                    },
-                    "kind": 10,
-                    "name": "children",
-                    "flags": 4,
-                    "id": 261,
-                    "type": {
-                      "id": 107,
-                      "name": "Styles",
-                      "kind": 6
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "type": {
-            "source": {
-              "fileName": "index.ts",
-              "line": 528,
-              "ch": 7
-            },
-            "kind": 16,
-            "name": "",
-            "flags": 0,
-            "id": 252,
-            "parameters": [],
-            "type": {
-              "name": "Node",
-              "kind": 6
-            }
-          }
-        },
-        {
-          "source": {
-            "fileName": "index.ts",
-            "line": 554,
+            "line": 552,
             "ch": 1
           },
           "kind": 16,
           "name": "padding",
           "flags": 1,
-          "id": 262,
+          "id": 263,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 556,
+                "line": 554,
                 "ch": 24
               },
               "kind": 9,
               "name": "paddingTop",
               "flags": 0,
-              "id": 263,
+              "id": 264,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 557,
+                  "line": 555,
                   "ch": 12
                 },
                 "kind": 5,
@@ -4886,7 +4885,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 557,
+                      "line": 555,
                       "ch": 21
                     },
                     "kind": 23,
@@ -4899,45 +4898,11 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 557,
+                "line": 555,
                 "ch": 29
               },
               "kind": 9,
               "name": "paddingRight",
-              "flags": 0,
-              "id": 264,
-              "value": "paddingTop",
-              "type": {
-                "name": "",
-                "flags": 0,
-                "kind": 5,
-                "children": [
-                  {
-                    "name": "number",
-                    "kind": 32,
-                    "flags": 0
-                  },
-                  {
-                    "name": "\"auto\"",
-                    "kind": 23,
-                    "type": {
-                      "name": "string",
-                      "kind": 32,
-                      "flags": 0
-                    },
-                    "flags": 0
-                  }
-                ]
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 558,
-                "ch": 27
-              },
-              "kind": 9,
-              "name": "paddingBottom",
               "flags": 0,
               "id": 265,
               "value": "paddingTop",
@@ -4967,13 +4932,47 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 559,
+                "line": 556,
+                "ch": 27
+              },
+              "kind": 9,
+              "name": "paddingBottom",
+              "flags": 0,
+              "id": 266,
+              "value": "paddingTop",
+              "type": {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "\"auto\"",
+                    "kind": 23,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 557,
                 "ch": 28
               },
               "kind": 9,
               "name": "paddingLeft",
               "flags": 0,
-              "id": 266,
+              "id": 267,
               "value": "paddingTop",
               "type": {
                 "name": "",
@@ -5002,7 +5001,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 562,
+              "line": 560,
               "ch": 7
             },
             "kind": 34,
@@ -5012,44 +5011,11 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 562,
+                  "line": 560,
                   "ch": 9
                 },
                 "kind": 0,
                 "name": "paddingTop",
-                "flags": 0,
-                "id": 267,
-                "type": {
-                  "name": "",
-                  "flags": 0,
-                  "kind": 5,
-                  "children": [
-                    {
-                      "name": "number",
-                      "kind": 32,
-                      "flags": 0
-                    },
-                    {
-                      "name": "\"auto\"",
-                      "kind": 23,
-                      "type": {
-                        "name": "string",
-                        "kind": 32,
-                        "flags": 0
-                      },
-                      "flags": 0
-                    }
-                  ]
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 562,
-                  "ch": 21
-                },
-                "kind": 0,
-                "name": "paddingRight",
                 "flags": 0,
                 "id": 268,
                 "type": {
@@ -5078,11 +5044,11 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 562,
-                  "ch": 35
+                  "line": 560,
+                  "ch": 21
                 },
                 "kind": 0,
-                "name": "paddingBottom",
+                "name": "paddingRight",
                 "flags": 0,
                 "id": 269,
                 "type": {
@@ -5111,13 +5077,46 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 562,
+                  "line": 560,
+                  "ch": 35
+                },
+                "kind": 0,
+                "name": "paddingBottom",
+                "flags": 0,
+                "id": 270,
+                "type": {
+                  "name": "",
+                  "flags": 0,
+                  "kind": 5,
+                  "children": [
+                    {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    {
+                      "name": "\"auto\"",
+                      "kind": 23,
+                      "type": {
+                        "name": "string",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "flags": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 560,
                   "ch": 50
                 },
                 "kind": 0,
                 "name": "paddingLeft",
                 "flags": 0,
-                "id": 270,
+                "id": 271,
                 "type": {
                   "name": "",
                   "flags": 0,
@@ -5147,28 +5146,28 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 563,
+            "line": 561,
             "ch": 1
           },
           "kind": 16,
           "name": "margin",
           "flags": 1,
-          "id": 271,
+          "id": 272,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 565,
+                "line": 563,
                 "ch": 23
               },
               "kind": 9,
               "name": "marginTop",
               "flags": 0,
-              "id": 272,
+              "id": 273,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 566,
+                  "line": 564,
                   "ch": 11
                 },
                 "kind": 5,
@@ -5183,7 +5182,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 566,
+                      "line": 564,
                       "ch": 20
                     },
                     "kind": 23,
@@ -5196,45 +5195,11 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 566,
+                "line": 564,
                 "ch": 28
               },
               "kind": 9,
               "name": "marginRight",
-              "flags": 0,
-              "id": 273,
-              "value": "marginTop",
-              "type": {
-                "name": "",
-                "flags": 0,
-                "kind": 5,
-                "children": [
-                  {
-                    "name": "number",
-                    "kind": 32,
-                    "flags": 0
-                  },
-                  {
-                    "name": "\"auto\"",
-                    "kind": 23,
-                    "type": {
-                      "name": "string",
-                      "kind": 32,
-                      "flags": 0
-                    },
-                    "flags": 0
-                  }
-                ]
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 567,
-                "ch": 25
-              },
-              "kind": 9,
-              "name": "marginBottom",
               "flags": 0,
               "id": 274,
               "value": "marginTop",
@@ -5264,13 +5229,47 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 568,
+                "line": 565,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "marginBottom",
+              "flags": 0,
+              "id": 275,
+              "value": "marginTop",
+              "type": {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "\"auto\"",
+                    "kind": 23,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 566,
                 "ch": 26
               },
               "kind": 9,
               "name": "marginLeft",
               "flags": 0,
-              "id": 275,
+              "id": 276,
               "value": "marginTop",
               "type": {
                 "name": "",
@@ -5299,7 +5298,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 571,
+              "line": 569,
               "ch": 7
             },
             "kind": 34,
@@ -5309,44 +5308,11 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 571,
+                  "line": 569,
                   "ch": 9
                 },
                 "kind": 0,
                 "name": "marginTop",
-                "flags": 0,
-                "id": 276,
-                "type": {
-                  "name": "",
-                  "flags": 0,
-                  "kind": 5,
-                  "children": [
-                    {
-                      "name": "number",
-                      "kind": 32,
-                      "flags": 0
-                    },
-                    {
-                      "name": "\"auto\"",
-                      "kind": 23,
-                      "type": {
-                        "name": "string",
-                        "kind": 32,
-                        "flags": 0
-                      },
-                      "flags": 0
-                    }
-                  ]
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 571,
-                  "ch": 20
-                },
-                "kind": 0,
-                "name": "marginRight",
                 "flags": 0,
                 "id": 277,
                 "type": {
@@ -5375,11 +5341,11 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 571,
-                  "ch": 33
+                  "line": 569,
+                  "ch": 20
                 },
                 "kind": 0,
-                "name": "marginBottom",
+                "name": "marginRight",
                 "flags": 0,
                 "id": 278,
                 "type": {
@@ -5408,13 +5374,46 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 571,
+                  "line": 569,
+                  "ch": 33
+                },
+                "kind": 0,
+                "name": "marginBottom",
+                "flags": 0,
+                "id": 279,
+                "type": {
+                  "name": "",
+                  "flags": 0,
+                  "kind": 5,
+                  "children": [
+                    {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    {
+                      "name": "\"auto\"",
+                      "kind": 23,
+                      "type": {
+                        "name": "string",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "flags": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 569,
                   "ch": 47
                 },
                 "kind": 0,
                 "name": "marginLeft",
                 "flags": 0,
-                "id": 279,
+                "id": 280,
                 "type": {
                   "name": "",
                   "flags": 0,
@@ -5444,28 +5443,28 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 572,
+            "line": 570,
             "ch": 1
           },
           "kind": 16,
           "name": "border",
           "flags": 1,
-          "id": 280,
+          "id": 281,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 574,
+                "line": 572,
                 "ch": 23
               },
               "kind": 9,
               "name": "borderTop",
               "flags": 0,
-              "id": 281,
+              "id": 282,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 575,
+                  "line": 573,
                   "ch": 11
                 },
                 "kind": 5,
@@ -5480,7 +5479,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 575,
+                      "line": 573,
                       "ch": 20
                     },
                     "kind": 23,
@@ -5493,45 +5492,11 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 575,
+                "line": 573,
                 "ch": 28
               },
               "kind": 9,
               "name": "borderRight",
-              "flags": 0,
-              "id": 282,
-              "value": "borderTop",
-              "type": {
-                "name": "",
-                "flags": 0,
-                "kind": 5,
-                "children": [
-                  {
-                    "name": "number",
-                    "kind": 32,
-                    "flags": 0
-                  },
-                  {
-                    "name": "\"auto\"",
-                    "kind": 23,
-                    "type": {
-                      "name": "string",
-                      "kind": 32,
-                      "flags": 0
-                    },
-                    "flags": 0
-                  }
-                ]
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 576,
-                "ch": 25
-              },
-              "kind": 9,
-              "name": "borderBottom",
               "flags": 0,
               "id": 283,
               "value": "borderTop",
@@ -5561,13 +5526,47 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 577,
+                "line": 574,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "borderBottom",
+              "flags": 0,
+              "id": 284,
+              "value": "borderTop",
+              "type": {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "\"auto\"",
+                    "kind": 23,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 575,
                 "ch": 26
               },
               "kind": 9,
               "name": "borderLeft",
               "flags": 0,
-              "id": 284,
+              "id": 285,
               "value": "borderTop",
               "type": {
                 "name": "",
@@ -5596,7 +5595,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 580,
+              "line": 578,
               "ch": 7
             },
             "kind": 34,
@@ -5606,44 +5605,11 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 580,
+                  "line": 578,
                   "ch": 9
                 },
                 "kind": 0,
                 "name": "borderTop",
-                "flags": 0,
-                "id": 285,
-                "type": {
-                  "name": "",
-                  "flags": 0,
-                  "kind": 5,
-                  "children": [
-                    {
-                      "name": "number",
-                      "kind": 32,
-                      "flags": 0
-                    },
-                    {
-                      "name": "\"auto\"",
-                      "kind": 23,
-                      "type": {
-                        "name": "string",
-                        "kind": 32,
-                        "flags": 0
-                      },
-                      "flags": 0
-                    }
-                  ]
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 580,
-                  "ch": 20
-                },
-                "kind": 0,
-                "name": "borderRight",
                 "flags": 0,
                 "id": 286,
                 "type": {
@@ -5672,11 +5638,11 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 580,
-                  "ch": 33
+                  "line": 578,
+                  "ch": 20
                 },
                 "kind": 0,
-                "name": "borderBottom",
+                "name": "borderRight",
                 "flags": 0,
                 "id": 287,
                 "type": {
@@ -5705,13 +5671,46 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 580,
+                  "line": 578,
+                  "ch": 33
+                },
+                "kind": 0,
+                "name": "borderBottom",
+                "flags": 0,
+                "id": 288,
+                "type": {
+                  "name": "",
+                  "flags": 0,
+                  "kind": 5,
+                  "children": [
+                    {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    {
+                      "name": "\"auto\"",
+                      "kind": 23,
+                      "type": {
+                        "name": "string",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "flags": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 578,
                   "ch": 47
                 },
                 "kind": 0,
                 "name": "borderLeft",
                 "flags": 0,
-                "id": 288,
+                "id": 289,
                 "type": {
                   "name": "",
                   "flags": 0,
@@ -5741,38 +5740,22 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 581,
+            "line": 579,
             "ch": 1
           },
           "kind": 16,
           "name": "rgba",
           "flags": 1,
-          "id": 289,
+          "id": 290,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 583,
+                "line": 581,
                 "ch": 21
               },
               "kind": 9,
               "name": "r",
-              "flags": 0,
-              "id": 290,
-              "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 583,
-                "ch": 31
-              },
-              "kind": 9,
-              "name": "g",
               "flags": 0,
               "id": 291,
               "type": {
@@ -5784,11 +5767,11 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 583,
-                "ch": 42
+                "line": 581,
+                "ch": 31
               },
               "kind": 9,
-              "name": "b",
+              "name": "g",
               "flags": 0,
               "id": 292,
               "type": {
@@ -5800,13 +5783,29 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 583,
+                "line": 581,
+                "ch": 42
+              },
+              "kind": 9,
+              "name": "b",
+              "flags": 0,
+              "id": 293,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 581,
                 "ch": 53
               },
               "kind": 9,
               "name": "a",
               "flags": 524288,
-              "id": 293,
+              "id": 294,
               "type": {
                 "name": "number",
                 "kind": 32,

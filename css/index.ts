@@ -519,7 +519,7 @@ export class StyleSheet {
 export function render(styles: Styles, selector = ':host', global = false) {
 	const result = document.createElement('style');
 
-	result.innerHTML =
+	result.textContent =
 		(global ? '' : renderStyles(theme.globalStyles, selector)) +
 		renderStyles(styles, selector);
 
@@ -550,10 +550,6 @@ export function registerFont(def: FontDefinition) {
 	document.head.appendChild(style);
 
 	return style;
-}
-
-export function Style(p: { children: Styles }) {
-	return css(p.children);
 }
 
 export function padding(

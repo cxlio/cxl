@@ -1,14 +1,7 @@
-import { dom } from '../xdom/index.js';
-import {
-	Augment,
-	Attribute,
-	Component,
-	Host,
-	get,
-	render,
-} from '../component/index.js';
+import { dom } from '../tsx/index.js';
+import { Augment, Attribute, Component, get } from '../component/index.js';
 import { onAction, onChildrenMutation } from '../dom/index.js';
-import { Style, padding } from '../css/index.js';
+import { css, padding } from '../css/index.js';
 import { EMPTY, be } from '../rx/index.js';
 import '../ui/theme.js';
 import '../ui/router.js';
@@ -20,73 +13,66 @@ const UserScripts = docgen.userScripts
 	.map(src => `<script src="${src}"></script>`)
 	.join('');
 
-@Augment(
-	'doc-example',
-	<Host>
-		<div
-			$={(div, host: DocExample) =>
-				onChildrenMutation(host).tap(() => {
-					const content = host.childNodes[0].textContent || '';
-					div.innerHTML = content;
-				})
-			}
-		></div>
-	</Host>
-)
+@Augment('doc-example', host => (
+	<div
+		$={div =>
+			onChildrenMutation(host).tap(() => {
+				const content = host.childNodes[0].textContent || '';
+				div.innerHTML = content;
+			})
+		}
+	/>
+))
 export class DocExample extends Component {}
 
-@Augment(
+@Augment<DocDemo>(
 	'doc-demo',
-	<Host>
-		<Style>
-			{{
-				$: {
-					display: 'block',
-				},
-				parent: {
-					display: 'none',
-					backgroundColor: 'onSurface12',
-				},
-				container: {
-					display: 'block',
-					borderStyle: 'none',
-					marginLeft: 'auto',
-					marginRight: 'auto',
-					backgroundColor: 'background',
-					width: '100%',
-					height: 220,
-					overflowX: 'hidden',
-					overflowY: 'hidden',
-				},
-				'@small': {
-					container: {
-						width: 320,
-					},
-					desktop: {
-						width: '100%',
-						marginTop: -16,
-						height: 236,
-					},
-					parent: {
-						paddingTop: 16,
-					},
-				},
-				source: {
-					display: 'none',
-					font: 'monospace',
-					...padding(16),
-					height: 236,
-					whiteSpace: 'pre-wrap',
-					overflowY: 'auto',
-				},
-				visible: { display: 'block' },
-				toolbar: {
-					textAlign: 'right',
-				},
-			}}
-		</Style>
-	</Host>,
-	render((host: DocDemo) => {
+	css({
+		$: {
+			display: 'block',
+		},
+		parent: {
+			display: 'none',
+			backgroundColor: 'onSurface12',
+		},
+		container: {
+			display: 'block',
+			borderStyle: 'none',
+			marginLeft: 'auto',
+			marginRight: 'auto',
+			backgroundColor: 'background',
+			width: '100%',
+			height: 220,
+			overflowX: 'hidden',
+			overflowY: 'hidden',
+		},
+		'@small': {
+			container: {
+				width: 320,
+			},
+			desktop: {
+				width: '100%',
+				marginTop: -16,
+				height: 236,
+			},
+			parent: {
+				paddingTop: 16,
+			},
+		},
+		source: {
+			display: 'none',
+			font: 'monospace',
+			...padding(16),
+			height: 236,
+			whiteSpace: 'pre-wrap',
+			overflowY: 'auto',
+		},
+		visible: { display: 'block' },
+		toolbar: {
+			textAlign: 'right',
+		},
+	}),
+	host => {
 		const content$ = be('');
 		const view = get(host, 'view');
 		const iframeClass = be('container');
@@ -110,8 +96,10 @@ export class DocExample extends Component {}
 			iframeClass.next(isDesktop ? 'container desktop' : 'container');
 		}
 
+		host.bind(get(host, 'view').tap(updateView));
+
 		return (
-			<Host $={() => get(host, 'view').tap(updateView)}>
+			<>
 				<Tabs>
 					<Tab
 						$={el =>
@@ -148,9 +136,9 @@ export class DocExample extends Component {}
 				>
 					{content$}
 				</div>
-			</Host>
+			</>
 		);
-	})
+	}
 )
 export class DocDemo extends Component {
 	@Attribute()

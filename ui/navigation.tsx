@@ -3,14 +3,13 @@ import {
 	Augment,
 	Attribute,
 	Component,
-	Slot,
 	StyleAttribute,
 	bind,
 	get,
 	role,
 } from '../component/index.js';
 import { on, onAction, onLoad, trigger } from '../dom/index.js';
-import { portal, triggerEvent } from '../template/index.js';
+import { portal, slot, triggerEvent } from '../template/index.js';
 import { css, padding, rgba } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
 import { InversePrimary, ResetSurface } from './theme.js';
@@ -90,14 +89,14 @@ import { Drawer } from './dialog.js';
 			},
 		},
 	}),
-	() => (
+	_ => (
 		<>
 			<div className="flex">
 				<slot></slot>
 				<div $={portal('cxl-appbar-actions')} />
 			</div>
 			<div className="tabs">
-				<Slot selector="cxl-tabs"></Slot>
+				<slot $={slot('cxl-tabs')} />
 				<div $={portal('cxl-appbar-tabs')} />
 			</div>
 		</>

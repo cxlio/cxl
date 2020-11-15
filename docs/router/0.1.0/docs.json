@@ -200,7 +200,7 @@
           "flags": 0,
           "id": 10,
           "type": {
-            "name": "Element",
+            "name": "Node",
             "kind": 6
           }
         },
@@ -208,7 +208,7 @@
           "source": {
             "fileName": "index.ts",
             "line": 9,
-            "ch": 28
+            "ch": 25
           },
           "kind": 4,
           "name": "RouteInstances",
@@ -287,7 +287,7 @@
               "flags": 4,
               "id": 16,
               "type": {
-                "name": "Element",
+                "name": "Node",
                 "kind": 6
               }
             },
@@ -295,14 +295,14 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 17,
-                "ch": 15
+                "ch": 12
               },
               "kind": 10,
               "name": "current",
               "flags": 4,
               "id": 17,
               "type": {
-                "name": "Element",
+                "name": "Node",
                 "kind": 6
               }
             },
@@ -310,7 +310,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 18,
-                "ch": 18
+                "ch": 15
               },
               "kind": 10,
               "name": "route",
@@ -615,9 +615,26 @@
                   "flags": 0,
                   "id": 37,
                   "type": {
-                    "id": 15,
-                    "name": "Url",
-                    "kind": 6
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 38,
+                      "ch": 13
+                    },
+                    "kind": 5,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 15,
+                        "name": "Url",
+                        "kind": 6
+                      },
+                      {
+                        "name": "string",
+                        "kind": 32,
+                        "flags": 0
+                      }
+                    ]
                   }
                 }
               ]
@@ -626,7 +643,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 38,
-                "ch": 27
+                "ch": 36
               },
               "kind": 11,
               "name": "serialize",
@@ -1976,7 +1993,7 @@
                 }
               ],
               "type": {
-                "name": "Element",
+                "name": "Node",
                 "kind": 6
               }
             },
@@ -2067,7 +2084,7 @@
                 }
               ],
               "type": {
-                "name": "Element",
+                "name": "Node",
                 "kind": 6
               }
             },
@@ -2176,7 +2193,7 @@
                 }
               ],
               "type": {
-                "name": "Element",
+                "name": "Node",
                 "kind": 6
               }
             },

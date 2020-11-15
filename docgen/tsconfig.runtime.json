@@ -8,14 +8,12 @@
 		"module": "amd"
 	},
 	"include": [
-		"runtime.tsx",
-		"../ui/meta.ts",
 		"../rx/index.ts",
 		"../css/index.ts",
 		"../tsx/index.ts",
-		"../template/index.ts",
 		"../dom/index.ts",
 		"../component/index.ts",
+		"../template/index.ts",
 		"../router/index.ts",
 		"../ui/core.tsx",
 		"../ui/theme.tsx",
@@ -26,7 +24,8 @@
 		"../ui/table.tsx",
 		"../ui/input-base.tsx",
 		"../ui/checkbox.tsx",
-		"../ui/router.tsx"
+		"../ui/router.tsx",
+		"runtime.tsx"
 	],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

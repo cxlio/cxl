@@ -1,9 +1,0 @@
-{
-	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"module": "es6",
-		"outDir": "../dist/xdom/es6"
-	},
-	"files": ["index.ts"],
-	"references": [{ "path": "../rx/tsconfig.es6.json" }]
-}

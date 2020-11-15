@@ -1,5 +1,5 @@
 import { Router } from './index.js';
-import { dom } from '../xdom/index.js';
+import { dom } from '../tsx/index.js';
 import { suite } from '../spec/index.js';
 
 export default suite('router', test => {
@@ -7,7 +7,7 @@ export default suite('router', test => {
 		const router = new Router();
 		router.route({
 			path: 'test',
-			render: <div>Hello World</div>,
+			render: () => <div>Hello World</div>,
 		});
 
 		router.go('test');
@@ -21,7 +21,7 @@ export default suite('router', test => {
 		router.route({
 			id: 'test',
 			path: 'test/:title',
-			render: <div>Hello World</div>,
+			render: () => <div>Hello World</div>,
 		});
 
 		router.go('test/hello');

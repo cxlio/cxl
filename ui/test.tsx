@@ -48,6 +48,25 @@ function testInvalid(test: ComponentTest<InputBase>) {
 	});
 }
 
+function testSlot(slot: HTMLSlotElement, test: ComponentTest) {
+	const name = slot.name;
+	test.test(`<slot name=${name}>`, (a: Test) => {
+		const done = a.async();
+		const el = test.element();
+		const child = document.createElement(name);
+
+		a.assert(el.shadowRoot, 'Element has a shadow root');
+		const newSlot = el.shadowRoot.querySelector(`slot[name="${name}"]`);
+
+		a.assert(newSlot);
+		el.appendChild(child);
+		newSlot.addEventListener('slotchange', () => {
+			a.equal(child.slot, name);
+			done();
+		});
+	});
+}
+
 function testStringValue(test: ComponentTest) {
 	test.test('[value] string', (a: Test) => {
 		a.dom.innerHTML = `<${test.tagName} value="initial" />`;
@@ -194,6 +213,9 @@ function testComponent(def: typeof Component, a: ComponentTest) {
 	if (el.getAttribute('role') === 'button') testButton(a);
 	if (attributes) testAttributes(attributes, a);
 	if (el.tagName in Measure) Measure[el.tagName](a);
+
+	const slots = el.shadowRoot?.querySelectorAll('slot[name^="cxl-"]');
+	if (slots?.length) slots.forEach(s => testSlot(s as any, a));
 }
 
 export default spec('ui', a => {

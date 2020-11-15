@@ -54,13 +54,14 @@ function initBindings(node: Bindable) {
 	return bindings;
 }
 
-function bind(
-	host: Bindable,
-	binding: Observable<any> | Observable<any>[]
-): void {
+function bind(host: Bindable, binding: Observable<any>): void {
 	const nodeBindings = initBindings(host);
-	if (Array.isArray(binding)) nodeBindings.push(...binding);
-	else nodeBindings.push(binding);
+	nodeBindings.push(binding);
+}
+
+function bindArray(host: Bindable, binding: Observable<any>[]) {
+	const nodeBindings = initBindings(host);
+	nodeBindings.push(...binding);
 }
 
 function expression(host: Bindable, binding: Observable<any>) {
@@ -82,7 +83,7 @@ function renderChildren(host: Node, children: any) {
 	else if (children instanceof Node) {
 		host.appendChild(children);
 		if ((children as any)[$$bindings])
-			bind(host, (children as any)[$$bindings]);
+			bindArray(host, (children as any)[$$bindings]);
 	} else if (typeof children === 'function')
 		renderChildren(host, children(host));
 	else host.appendChild(document.createTextNode(children));
