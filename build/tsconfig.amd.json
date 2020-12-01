@@ -3,6 +3,7 @@
 		"allowJs": true,
 		"declaration": true,
 		"outFile": "../dist/build/amd.js",
+		"bundledPackageName": "@cxl/build/amd.js",
 		"composite": true
 	},
 	"files": ["amd.js"]

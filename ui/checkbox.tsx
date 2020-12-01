@@ -6,12 +6,13 @@ import {
 	bind,
 	get,
 	role,
+	staticTemplate,
 } from '../component/index.js';
 import { Focusable, Svg, ariaChecked } from './core.js';
 import { tap, merge } from '../rx/index.js';
 import { FocusCircleStyle, InputBase } from './input-base.js';
-import { css } from '../css/index.js';
 import { onAction } from '../dom/index.js';
+import { Style } from '../template/index.js';
 
 const Undefined = {};
 
@@ -56,52 +57,54 @@ const Undefined = {};
 		);
 	}),
 	FocusCircleStyle,
-	Focusable(),
-	css({
-		$: {
-			font: 'default',
-			position: 'relative',
-			cursor: 'pointer',
-			paddingTop: 12,
-			paddingBottom: 12,
-			display: 'block',
-			paddingLeft: 36,
-			lineHeight: 20,
-		},
-		$inline: { display: 'inline-block' },
-		$invalid$touched: { color: 'error' },
-		box: {
-			display: 'inline-block',
-			width: 20,
-			height: 20,
-			borderWidth: 2,
-			borderColor: 'onSurface',
-			borderStyle: 'solid',
-			top: 11,
-			left: 0,
-			position: 'absolute',
-			color: 'transparent',
-		},
-		check: { display: 'none' },
-		minus: { display: 'none' },
-		check$checked: { display: 'initial' },
-		check$indeterminate: { display: 'none' },
-		minus$indeterminate: { display: 'initial' },
-		box$checked: {
-			borderColor: 'primary',
-			backgroundColor: 'primary',
-			color: 'onPrimary',
-		},
-		box$indeterminate: {
-			borderColor: 'primary',
-			backgroundColor: 'primary',
-			color: 'onPrimary',
-		},
-		box$invalid$touched: { borderColor: 'error' },
-		focusCircle: { top: -2, left: -2 },
-	}),
-	_ => (
+	Focusable,
+	staticTemplate(() => (
 		<>
+			<Style>
+				{{
+					$: {
+						font: 'default',
+						position: 'relative',
+						cursor: 'pointer',
+						paddingTop: 12,
+						paddingBottom: 12,
+						display: 'block',
+						paddingLeft: 36,
+						lineHeight: 20,
+					},
+					$inline: { display: 'inline-block' },
+					$invalid$touched: { color: 'error' },
+					box: {
+						display: 'inline-block',
+						width: 20,
+						height: 20,
+						borderWidth: 2,
+						borderColor: 'onSurface',
+						borderStyle: 'solid',
+						top: 11,
+						left: 0,
+						position: 'absolute',
+						color: 'transparent',
+					},
+					check: { display: 'none' },
+					minus: { display: 'none' },
+					check$checked: { display: 'initial' },
+					check$indeterminate: { display: 'none' },
+					minus$indeterminate: { display: 'initial' },
+					box$checked: {
+						borderColor: 'primary',
+						backgroundColor: 'primary',
+						color: 'onPrimary',
+					},
+					box$indeterminate: {
+						borderColor: 'primary',
+						backgroundColor: 'primary',
+						color: 'onPrimary',
+					},
+					box$invalid$touched: { borderColor: 'error' },
+					focusCircle: { top: -2, left: -2 },
+				}}
+			</Style>
 			<div className="box">
 				<span className="focusCircle focusCirclePrimary" />
 				<Svg
@@ -115,7 +118,7 @@ const Undefined = {};
 			</div>
 			<slot />
 		</>
-	)
+	))
 )
 export class Checkbox extends InputBase {
 	value: any = Undefined;

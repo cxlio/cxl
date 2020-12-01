@@ -2,7 +2,6 @@ import {
 	AttributeObserver,
 	setContent as domSetContent,
 	on,
-	onChildrenMutation,
 	trigger,
 } from '../dom/index.js';
 import {
@@ -12,17 +11,21 @@ import {
 	concat,
 	debounceTime,
 	defer,
-	filter,
 	map,
 	merge,
 	of,
 	tap,
 } from '../rx/index.js';
-import { Component } from '../component/index.js';
-import { bindNode } from '../tsx/index.js';
+import { Bindable, NativeChildren, dom } from '../tsx/index.js';
+import { Styles, render as renderCSS } from '../css/index.js';
+import { staticTemplate } from '../component/index.js';
 
 interface ElementWithValue<T> extends HTMLElement {
 	value: T;
+}
+
+function isObservedAttribute(el: any, attr: any) {
+	return (el.constructor as any).observedAttributes?.includes(attr);
 }
 
 export function getAttribute<T extends Node, K extends keyof T>(
@@ -30,12 +33,13 @@ export function getAttribute<T extends Node, K extends keyof T>(
 	name: K
 ) {
 	const attr$ = (el as any).attributes$;
-	const observer = attr$
-		? attr$.pipe(filter((ev: any) => ev.attribute === name))
-		: new AttributeObserver(el).pipe(filter(ev => ev.value === name));
+	const observer =
+		attr$ && isObservedAttribute(el, name)
+			? attr$.filter((ev: any) => ev.attribute === name)
+			: new AttributeObserver(el).filter(ev => ev.value === name);
 	return concat<Observable<T[K]>[]>(
 		defer(() => of(el[name])),
-		observer.pipe(map(() => el[name]))
+		observer.map(() => el[name])
 	);
 }
 
@@ -199,48 +203,51 @@ export function list<T>(
 	renderFn: (item: T) => Node
 ) {
 	const marker = new Marker();
-	return bindNode(
-		marker.node,
-		source.tap(ev => {
-			if (ev.type === 'insert') marker.insert(renderFn(ev.item));
-			else if (ev.type === 'empty') marker.empty();
-		})
-	);
+	return (host: Bindable) => {
+		host.bind(
+			source.tap(ev => {
+				if (ev.type === 'insert') marker.insert(renderFn(ev.item));
+				else if (ev.type === 'empty') marker.empty();
+			})
+		);
+		return marker.node;
+	};
+}
+
+export function render<T>(source: Observable<T>, renderFn: (item: T) => Node) {
+	const marker = new Marker();
+
+	return (host: Bindable) => {
+		host.bind(
+			source.tap(item => {
+				marker.empty();
+				marker.insert(renderFn(item));
+			})
+		);
+
+		return marker.node;
+	};
 }
 
 export function each<T>(source: Observable<T[]>, renderFn: (item: T) => Node) {
 	const marker = new Marker();
 
-	return bindNode(
-		marker.node,
-		source.tap(arr => {
-			marker.empty();
-			arr.forEach(item => marker.insert(renderFn(item)));
-		})
-	);
+	return (host: Bindable) => {
+		host.bind(
+			source.tap(arr => {
+				marker.empty();
+				for (const item of arr) marker.insert(renderFn(item));
+			})
+		);
+
+		return marker.node;
+	};
 }
 
-export function getHost(el: Node): Component {
-	const result = (el.getRootNode() as any).host;
-	if (!result) throw new Error('No host found.');
-	return result;
+export function Style(p: { children: Styles }) {
+	return renderCSS(p.children);
 }
 
-export function slot(selector: string) {
-	return (el: HTMLSlotElement) =>
-		defer(() => {
-			const host = getHost(el);
-			el.name = selector;
-			for (const node of host.children)
-				if (node.matches(selector)) node.slot = selector;
-			return onChildrenMutation(host).tap(ev => {
-				const node = ev.value;
-				if (
-					ev.type === 'added' &&
-					node instanceof HTMLElement &&
-					node.matches(selector)
-				)
-					node.slot = selector;
-			});
-		});
+export function Static(p: { children: NativeChildren }): any {
+	return staticTemplate(() => dom(dom, undefined, p.children));
 }

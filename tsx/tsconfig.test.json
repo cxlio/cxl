@@ -1,7 +1,7 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"outDir": "../dist/xdom"
+		"outDir": "../dist/tsx"
 	},
 	"files": ["test.tsx"],
 	"references": [{ "path": "tsconfig.json" }, { "path": "../spec" }]

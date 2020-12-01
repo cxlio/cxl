@@ -1,18 +1,12 @@
 import { ComponentTest, Test, spec } from '../spec/index.js';
 import { on } from '../dom/index.js';
-import { dom, observe } from '../tsx/index.js';
+import { dom } from '../tsx/index.js';
 import { getRegisteredComponents, Component } from '../component/index.js';
 import { tap } from '../rx/index.js';
-import type { InputBase } from './index.js';
-import './index.js';
+import { InputBase, Span } from './index.js';
 
 async function connect<T extends Node>(el: T, callback: (el: T) => any) {
-	const subscriptions = observe(el).subscribe();
-	try {
-		await callback(el);
-	} finally {
-		subscriptions.unsubscribe();
-	}
+	await callback(el);
 }
 
 const Measure: Record<string, any> = {
@@ -58,12 +52,13 @@ function testSlot(slot: HTMLSlotElement, test: ComponentTest) {
 		a.assert(el.shadowRoot, 'Element has a shadow root');
 		const newSlot = el.shadowRoot.querySelector(`slot[name="${name}"]`);
 
-		a.assert(newSlot);
-		el.appendChild(child);
+		a.ok(el.isConnected);
+		a.assert(newSlot, 'Slot was created');
 		newSlot.addEventListener('slotchange', () => {
 			a.equal(child.slot, name);
 			done();
 		});
+		el.appendChild(child);
 	});
 }
 
@@ -129,7 +124,7 @@ function testTouched(test: ComponentTest<FocusableElement>) {
 		const c = test.element();
 		a.equal(c.touched, false);
 		c.focus();
-		a.ok(c.matches(':focus-within'), 'Element is focused');
+		a.ok(c.matches(':focus-within'), 'Element should be focused');
 
 		const unfocus = document.createElement('input');
 		a.dom.appendChild(unfocus);
@@ -232,7 +227,7 @@ export default spec('ui', a => {
 			return on(el, 'click').pipe(tap(() => (clickHandled = true)));
 		}
 
-		connect(<div $={ripple}>Container</div>, (el: any) => {
+		connect(<Span $={ripple}>Container</Span>, (el: any) => {
 			a.dom.appendChild(el);
 			a.ok(el);
 			el.click();

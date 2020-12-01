@@ -3,6 +3,7 @@ import {
 	Augment,
 	Component,
 	Slot,
+	Span,
 	StyleAttribute,
 	attributeChanged,
 	bind,
@@ -10,28 +11,19 @@ import {
 	onUpdate,
 	role,
 } from '../component/index.js';
-import { dom } from '../tsx/index.js';
+import { Bindable, dom, expression } from '../tsx/index.js';
 import { EMPTY, Observable, defer, merge, tap } from '../rx/index.js';
 import { StyleSheet, border, css, padding, pct } from '../css/index.js';
-import {
-	getAttribute,
-	slot,
-	stopEvent,
-	triggerEvent,
-} from '../template/index.js';
+import { getAttribute, stopEvent, triggerEvent } from '../template/index.js';
 import { on, onAction, remove, trigger } from '../dom/index.js';
 import { InversePrimary, ResetSurface } from './theme.js';
+
+export { Span } from '../component/index.js';
 
 export const FocusHighlight = {
 	$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
 	$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 };
-
-export function prefix<T>(pre: string, obj: T) {
-	const result: any = {};
-	for (const key in obj) result[pre + key] = obj[key];
-	return result;
-}
 
 export const DisabledStyles = {
 	cursor: 'default',
@@ -189,12 +181,17 @@ export function focusableEvents<T extends FocusableComponent>(
 	);
 }
 
+export function disabledAttribute<T extends FocusableComponent>(host: T) {
+	return get(host, 'disabled').tap(value =>
+		host.setAttribute('aria-disabled', value ? 'true' : 'false')
+	);
+}
+
 export function focusableDisabled<T extends FocusableComponent>(
 	host: T,
 	element: HTMLElement = host
 ) {
-	return get(host, 'disabled').tap(value => {
-		host.setAttribute('aria-disabled', value ? 'true' : 'false');
+	return disabledAttribute(host).tap(value => {
 		if (value) element.removeAttribute('tabindex');
 		else element.tabIndex = 0;
 	});
@@ -215,11 +212,9 @@ const stateStyles = new StyleSheet({ styles: StateStyles });
 /**
  * Adds focusable functionality to input components.
  */
-export function Focusable() {
-	return (host: Component) => {
-		host.bind(focusable(host as FocusableComponent));
-		return stateStyles.clone();
-	};
+export function Focusable(host: Bindable) {
+	host.bind(focusable(host as FocusableComponent));
+	return stateStyles.clone();
 }
 
 export function registable<T extends Component>(host: T, id: string) {
@@ -252,8 +247,8 @@ interface SelectableComponent extends Component {
 	selected: boolean;
 }
 
-export function aria(prop: string, value: string) {
-	return (ctx: Component) =>
+export function aria<T extends Component>(prop: string, value: string) {
+	return (ctx: T) =>
 		ctx.bind(defer(() => ctx.setAttribute(`aria-${prop}`, value)));
 }
 
@@ -394,6 +389,7 @@ export function selectable<T extends SelectableComponent>(host: T) {
 		},
 		ripple: {
 			position: 'relative',
+			display: 'block',
 			borderRadius: pct(100),
 			scaleX: 0,
 			scaleY: 0,
@@ -406,20 +402,20 @@ export function selectable<T extends SelectableComponent>(host: T) {
 		ripple$secondary: { backgroundColor: 'secondary' },
 	}),
 	ctx => (
-		<div
-			$={el => {
-				return merge(
+		<Span
+			$={el =>
+				merge(
 					onUpdate(ctx, host => {
 						const style = el.style;
 						style.left = host.x - host.radius + 'px';
 						style.top = host.y - host.radius + 'px';
 						style.width = style.height = host.radius * 2 + 'px';
 					}),
-					on(el, 'animationend').pipe(tap(() => remove(ctx)))
-				);
-			}}
+					on(el, 'animationend').tap(() => remove(ctx))
+				)
+			}
 			className="ripple"
-		></div>
+		/>
 	)
 )
 export class Ripple extends Component {
@@ -490,18 +486,20 @@ const AVATAR_DEFAULT =
 	}),
 	node => (
 		<>
-			<img
-				$={img =>
+			{() => {
+				const el = (
+					<img className="image" alt="avatar" />
+				) as HTMLImageElement;
+
+				node.bind(
 					get(node, 'src').tap(src => {
-						img.src = src || AVATAR_DEFAULT;
-						img.style.display =
-							src || !node.text ? 'block' : 'none';
+						el.src = src || AVATAR_DEFAULT;
+						el.style.display = src || !node.text ? 'block' : 'none';
 					})
-				}
-				className="image"
-				alt="avatar"
-			/>
-			{get(node, 'text')}
+				);
+				return el;
+			}}
+			{expression(node, get(node, 'text'))}
 		</>
 	)
 )
@@ -527,7 +525,7 @@ export class Avatar extends Component {
  */
 @Augment<Chip>(
 	'cxl-chip',
-	Focusable(),
+	Focusable,
 	css({
 		$: {
 			borderRadius: 16,
@@ -564,23 +562,23 @@ export class Avatar extends Component {
 		},
 		...FocusHighlight,
 	}),
-	_ => (
+	$ => (
 		<>
 			<span className="avatar">
-				<slot $={slot('cxl-avatar')} />
+				<$.Slot selector="cxl-avatar" />
 			</span>
 			<span className="content">
-				<slot></slot>
+				<slot />
 			</span>
 		</>
 	),
 	host => (
-		<span
+		<Span
 			$={el => on(el, 'click').tap(() => host.remove())}
 			className="remove"
 		>
 			x
-		</span>
+		</Span>
 	),
 	bind(host =>
 		on(host, 'keydown').pipe(
@@ -687,6 +685,7 @@ export class Hr extends Component {}
 	css({
 		$: { backgroundColor: 'primaryLight', height: 4 },
 		indicator: {
+			display: 'block',
 			backgroundColor: 'primary',
 			height: 4,
 			transformOrigin: 'left',
@@ -694,7 +693,7 @@ export class Hr extends Component {}
 		indeterminate: { animation: 'wait' },
 	}),
 	host => (
-		<div
+		<Span
 			className="indicator"
 			$={el =>
 				get(host, 'value').pipe(
@@ -706,7 +705,7 @@ export class Hr extends Component {}
 					})
 				)
 			}
-		></div>
+		/>
 	),
 	role('progressbar')
 )
@@ -726,9 +725,9 @@ export function Svg(p: {
 	el.style.fill = 'var(--cxl-on-surface)';
 	el.innerHTML = p.children;
 	el.setAttribute('viewBox', p.viewBox);
-	if (p.width) el.setAttribute('width', p.width.toString());
-	if (p.height) el.setAttribute('height', p.height.toString());
-	if (p.className) el.setAttribute('class', p.className);
+	if (p.width !== undefined) el.setAttribute('width', p.width.toString());
+	if (p.height !== undefined) el.setAttribute('height', p.height.toString());
+	if (p.className !== undefined) el.setAttribute('class', p.className);
 	return el;
 }
 
@@ -874,7 +873,7 @@ export class Toggle extends Component {
 
 @Augment(
 	role('button'),
-	Focusable(),
+	Focusable,
 	css({
 		$: {
 			elevation: 1,

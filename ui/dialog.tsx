@@ -18,7 +18,7 @@ import {
 	remove,
 } from '../dom/index.js';
 import { merge } from '../rx/index.js';
-import { T, Button } from './core.js';
+import { T, Button, Span } from './core.js';
 
 /**
  * A backdrop appears behind all other surfaces in an app, displaying contextual and actionable content.
@@ -126,7 +126,7 @@ export class DialogAlert extends Component {
 	@Attribute()
 	action = 'Ok';
 
-	readonly promise = new Promise(resolve => {
+	readonly promise = new Promise<void>(resolve => {
 		this.resolve = resolve;
 	});
 }
@@ -174,7 +174,7 @@ export class DialogConfirm extends Component {
 	@Attribute()
 	action = 'Ok';
 
-	readonly promise = new Promise((resolve, reject) => {
+	readonly promise = new Promise<void>((resolve, reject) => {
 		this.resolve = resolve;
 		this.reject = reject;
 	});
@@ -253,7 +253,7 @@ export class DialogConfirm extends Component {
 					})
 				}
 			/>
-			<div
+			<Span
 				$={el =>
 					merge(
 						on(el, 'drawer.close').tap(
@@ -270,7 +270,7 @@ export class DialogConfirm extends Component {
 				className="drawer"
 			>
 				<slot />
-			</div>
+			</Span>
 		</>
 	)
 )

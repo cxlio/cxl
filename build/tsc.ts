@@ -10,6 +10,7 @@ import {
 	InvalidatedProject,
 	createSolutionBuilder,
 	createSolutionBuilderHost,
+	sys,
 } from 'typescript';
 import { Subscriber } from '../rx';
 export { version as tscVersion, BuildOptions } from 'typescript';
@@ -63,7 +64,7 @@ export function tsbuild(
 	const outputDir = tsconfigJson.compilerOptions?.outDir;
 	if (!outputDir) throw new Error(`No outDir field set in ${tsconfig}`);
 
-	const host = createSolutionBuilderHost();
+	const host = createSolutionBuilderHost(sys);
 	const builder = createSolutionBuilder(host, [tsconfig], defaultOptions);
 	let program: InvalidatedProject<any> | undefined;
 

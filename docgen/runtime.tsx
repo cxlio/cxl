@@ -1,20 +1,25 @@
 import { dom } from '../tsx/index.js';
 import { Augment, Attribute, Component, get } from '../component/index.js';
 import { onAction, onChildrenMutation } from '../dom/index.js';
-import { css, padding } from '../css/index.js';
-import { EMPTY, be } from '../rx/index.js';
+import { border, css, padding } from '../css/index.js';
+import { be } from '../rx/index.js';
 import '../ui/theme.js';
 import '../ui/router.js';
+import { Span } from '../ui/core.js';
 import { Tabs, Tab } from '../ui/navigation.js';
+import { SelectBox, Option } from '../ui/select.js';
+import { onValue } from '../template/index.js';
 
-declare const docgen: { userScripts: string[] };
+import type { RuntimeConfig } from './render.js';
 
-const UserScripts = docgen.userScripts
-	.map(src => `<script src="${src}"></script>`)
-	.join('');
+declare const docgen: RuntimeConfig;
+
+const UserScripts =
+	docgen.userScripts?.map(src => `<script src="${src}"></script>`).join('') ||
+	'';
 
 @Augment('doc-example', host => (
-	<div
+	<Span
 		$={div =>
 			onChildrenMutation(host).tap(() => {
 				const content = host.childNodes[0].textContent || '';
@@ -24,6 +29,27 @@ const UserScripts = docgen.userScripts
 	/>
 ))
 export class DocExample extends Component {}
+
+@Augment<DocVersionSelect>(
+	'doc-version-select',
+	css({
+		select: { verticalAlign: 'bottom' },
+	}),
+	$ => (
+		<SelectBox $={el => onValue(el).tap($.onValue)} className="select">
+			{docgen.versions?.map(v => (
+				<Option selected={docgen.activeVersion === v} value={v}>
+					{v}
+				</Option>
+			))}
+		</SelectBox>
+	)
+)
+export class DocVersionSelect extends Component {
+	onValue(version: string) {
+		if (version !== docgen.activeVersion) window.location.href = version;
+	}
+}
 
 @Augment<DocDemo>(
 	'doc-demo',
@@ -42,28 +68,26 @@ export class DocExample extends Component {}
 			marginRight: 'auto',
 			backgroundColor: 'background',
 			width: '100%',
-			height: 220,
+			height: 160,
 			overflowX: 'hidden',
 			overflowY: 'hidden',
 		},
 		'@small': {
 			container: {
 				width: 320,
+				...border(16, 0, 0, 0),
+				borderColor: 'onSurface12',
+				borderStyle: 'solid',
 			},
 			desktop: {
 				width: '100%',
-				marginTop: -16,
-				height: 236,
-			},
-			parent: {
-				paddingTop: 16,
+				...border(0),
 			},
 		},
 		source: {
 			display: 'none',
 			font: 'monospace',
 			...padding(16),
-			height: 236,
 			whiteSpace: 'pre-wrap',
 			overflowY: 'auto',
 		},
@@ -79,14 +103,13 @@ export class DocExample extends Component {}
 
 		function init(parent: HTMLIFrameElement) {
 			return onChildrenMutation(host).tap(() => {
-				const doc = parent.contentDocument;
 				const content = host.childNodes[0]?.textContent?.trim() || '';
-				if (!doc) return EMPTY;
-				doc.open();
-				doc.write(
-					`<style>body{margin:16px;}</style>${UserScripts}${content}`
-				);
-				doc.close();
+				parent.srcdoc = `<style>body{padding:16px;margin:0;}</style>${UserScripts}${content}`;
+				parent.onload = () => {
+					const height = parent.contentDocument?.body.scrollHeight;
+					if (height && height > 160)
+						parent.style.height = height + 'px';
+				};
 				content$.next(content);
 			});
 		}
@@ -97,6 +120,9 @@ export class DocExample extends Component {}
 		}
 
 		host.bind(get(host, 'view').tap(updateView));
+		const iframeEl = (<iframe title="Demo" />) as HTMLIFrameElement;
+		host.bind(init(iframeEl));
+		host.bind(iframeClass.tap(val => (iframeEl.className = val)));
 
 		return (
 			<>
@@ -122,20 +148,20 @@ export class DocExample extends Component {}
 						Source
 					</Tab>
 				</Tabs>
-				<div
+				<Span
 					className={view.map(v =>
 						v === 'source' ? 'parent' : 'parent visible'
 					)}
 				>
-					<iframe title="Demo" $={init} className={iframeClass} />
-				</div>
-				<div
+					{iframeEl}
+				</Span>
+				<Span
 					className={view.map(v =>
 						v === 'source' ? 'source visible' : 'source'
 					)}
 				>
 					{content$}
-				</div>
+				</Span>
 			</>
 		);
 	}

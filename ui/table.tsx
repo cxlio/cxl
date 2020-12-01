@@ -14,7 +14,7 @@ import { tap } from '../rx/index.js';
 import { on, onAction } from '../dom/index.js';
 
 import { Checkbox } from './checkbox.js';
-import { registable, ariaProp } from './core.js';
+import { T, Span, registable, ariaProp } from './core.js';
 
 function onHeaderAction(el: Th) {
 	return onAction(el).tap(() => {
@@ -74,9 +74,9 @@ function onSort(el: HTMLElement, host: Th) {
 	$ => (
 		<>
 			<slot />
-			<div $={el => onSort(el, $)} className="sortIcon">
+			<Span $={el => onSort(el, $)} className="sortIcon">
 				{'\u25BC'}
-			</div>
+			</Span>
 		</>
 	)
 )
@@ -248,9 +248,7 @@ export class TableHeader extends Component {}
 		},
 	}),
 	host => (
-		<div>
-			{get(host, 'selected').pipe(tap(selected => selected?.length || 0))}
-		</div>
+		<T>{get(host, 'selected').tap(selected => selected?.length || 0)}</T>
 	)
 )
 export class TableSelectedCount extends Component {

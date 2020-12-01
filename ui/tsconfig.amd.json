@@ -7,7 +7,6 @@
 	"include": ["*.tsx"],
 	"exclude": ["test.tsx"],
 	"references": [
-		{ "path": "../xdom/tsconfig.amd.json" },
 		{ "path": "../tsx/tsconfig.amd.json" },
 		{ "path": "../component/tsconfig.amd.json" },
 		{ "path": "../template/tsconfig.amd.json" },

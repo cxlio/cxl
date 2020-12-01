@@ -2858,8 +2858,8 @@
           "value": "requestAnimationFrame.bind(window)",
           "type": {
             "source": {
-              "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
-              "line": 19851,
+              "fileName": "../../typescript/lib/lib.dom.d.ts",
+              "line": 19902,
               "ch": 60
             },
             "kind": 16,
@@ -2874,8 +2874,8 @@
             "parameters": [
               {
                 "source": {
-                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
-                  "line": 19852,
+                  "fileName": "../../typescript/lib/lib.dom.d.ts",
+                  "line": 19903,
                   "ch": 39
                 },
                 "kind": 9,

@@ -535,6 +535,7 @@ export default suite('dts', test => {
 			 function fn() { }
 		`);
 
+		a.assert(fn, 'Documentation generated');
 		a.assert(fn.docs);
 		a.assert(fn.docs.content);
 		a.equal(fn.docs.content.length, 1);

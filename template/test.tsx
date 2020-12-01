@@ -1,15 +1,11 @@
-import { be, merge, tap } from '../rx';
-import { dom, observe } from '../tsx';
+import { be, merge } from '../rx/index.js';
+import { dom } from '../tsx/index.js';
 import { getAttribute, portal, teleport } from './index.js';
+import { Span } from '../component/index.js';
 import { suite } from '../spec/index.js';
 
 async function connect<T extends Node>(el: any, callback: (el: T) => any) {
-	const subscriptions = observe(el).subscribe();
-	try {
-		await callback(el);
-	} finally {
-		subscriptions.unsubscribe();
-	}
+	await callback(el);
 }
 
 export default suite('template', test => {
@@ -36,18 +32,18 @@ export default suite('template', test => {
 		}
 
 		connect<HTMLInputElement>(
-			<input
+			<Span
 				title="test"
 				$={el =>
 					merge(
-						getAttribute(el, 'title').pipe(tap(onTitle)),
-						value.pipe(tap(onValue))
+						getAttribute(el, 'title').tap(onTitle),
+						value.tap(onValue)
 					)
 				}
 			/>,
 			el => {
-				a.ok(!first);
 				a.dom.appendChild(el);
+				a.ok(!first);
 				el.title = 'title';
 			}
 		);
@@ -56,18 +52,16 @@ export default suite('template', test => {
 	test('getAttribute - native', a => {
 		const done = a.async();
 		const el = document.createElement('div');
-		const obs = getAttribute(el, 'title').pipe(
-			tap(value => {
-				el.setAttribute('aria-disabled', value ? 'true' : 'false');
-				if (value) el.removeAttribute('tabindex');
-				else el.tabIndex = 0;
+		const obs = getAttribute(el, 'title').tap(value => {
+			el.setAttribute('aria-disabled', value ? 'true' : 'false');
+			if (value) el.removeAttribute('tabindex');
+			else el.tabIndex = 0;
 
-				if (value === 'true') {
-					subs.unsubscribe();
-					done();
-				}
-			})
-		);
+			if (value === 'true') {
+				subs.unsubscribe();
+				done();
+			}
+		});
 		const subs = obs.subscribe();
 		a.equal(el.getAttribute('aria-disabled'), 'false');
 		a.equal(el.tabIndex, 0);
@@ -77,7 +71,7 @@ export default suite('template', test => {
 	test('portal', async a => {
 		const id = 'cxl-test' + a.id;
 
-		await connect<HTMLDivElement>(<div $={portal(id)} />, el => {
+		await connect<HTMLDivElement>(<Span $={portal(id)} />, el => {
 			teleport((<span>Hello</span>) as HTMLSpanElement, id)
 				.subscribe()
 				.unsubscribe();

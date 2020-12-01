@@ -335,7 +335,7 @@ function getNodeDocs(node: ts.Node, result: Node): Documentation {
 
 	tsLocal.getJSDocTags(node).forEach(doc => {
 		const tag = doc.tagName.escapedText as string;
-		const value = doc.comment;
+		const value = doc.comment || (doc as any).name?.getText();
 
 		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
 

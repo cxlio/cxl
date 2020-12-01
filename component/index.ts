@@ -1,5 +1,5 @@
-import type { AttributeType } from '../tsx/index.js';
-import { getShadow } from '../dom/index.js';
+import { AttributeType, Children, renderChildren } from '../tsx/index.js';
+import { getShadow, onChildrenMutation } from '../dom/index.js';
 import {
 	Observable,
 	Operator,
@@ -8,8 +8,6 @@ import {
 	concat,
 	defer,
 	filter,
-	from,
-	isInterop,
 	map,
 	of,
 	tap,
@@ -64,18 +62,42 @@ export abstract class Component extends HTMLElement {
 
 	private $$bindings?: Bindings;
 	private render?: (node: any) => void;
+	protected jsxAttributes!: AttributeType<this>;
+	protected attributes$ = new Subject<AttributeEvent<any, any>>();
 
-	// EventMap
-	eventMap?: any;
-	jsxAttributes?: AttributeType<this>;
-	attributes$ = new Subject<AttributeEvent<any, any>>();
+	Shadow = (p: { children: Children }) => {
+		renderChildren(this, p.children, getShadow(this));
+		return this;
+	};
+
+	Slot = (p: { selector: string }) => {
+		const el = document.createElement('slot');
+		const selector = (el.name = p.selector);
+		this.bind(
+			defer(() => {
+				for (const node of this.children)
+					if (node.matches(selector)) node.slot = selector;
+				return onChildrenMutation(this).tap(ev => {
+					const node = ev.value;
+					if (
+						ev.type === 'added' &&
+						node instanceof HTMLElement &&
+						node.matches(selector)
+					)
+						node.slot = selector;
+				});
+			})
+		);
+
+		return el;
+	};
 
 	bind(obs: Observable<any>) {
 		if (!this.$$bindings) this.$$bindings = new Bindings();
 		this.$$bindings.bind(obs);
 	}
 
-	connectedCallback() {
+	protected connectedCallback() {
 		if (this.render) {
 			this.render(this);
 			delete this.render;
@@ -84,11 +106,15 @@ export abstract class Component extends HTMLElement {
 		if (this.$$bindings) this.$$bindings.connect();
 	}
 
-	disconnectedCallback() {
+	protected disconnectedCallback() {
 		if (this.$$bindings) this.$$bindings.disconnect();
 	}
 
-	attributeChangedCallback(name: keyof this, oldValue: any, value: any) {
+	protected attributeChangedCallback(
+		name: keyof this,
+		oldValue: any,
+		value: any
+	) {
 		if (oldValue !== value) {
 			const actualValue =
 				value === '' ? true : value === null ? false : value;
@@ -105,10 +131,9 @@ export function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
 	};
 }
 
-export function appendShadow(host: Component, child: Node) {
+export function appendShadow<T extends Component>(host: T, child: Node) {
 	const shadow = getShadow(host);
-	if (child instanceof Node) shadow.appendChild(child);
-	if (isInterop(child)) host.bind(from(child));
+	shadow.appendChild(child);
 }
 
 export function augment<T extends Component>(
@@ -169,8 +194,12 @@ export function connect<T extends Component>(bindFn: (node: T) => void) {
 		);
 }
 
+function attributes$(host: Component): Observable<AttributeEvent<any, any>> {
+	return (host as any).attributes$;
+}
+
 export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
-	return concat(of(host), host.attributes$).pipe(tap(() => fn(host)));
+	return concat(of(host), attributes$(host)).pipe(tap(() => fn(host)));
 }
 
 /**
@@ -184,7 +213,7 @@ export function attributeChanged<T extends Component, K extends keyof T>(
 	element: T,
 	attribute: K
 ): Observable<T[K]> {
-	return element.attributes$.pipe(
+	return attributes$(element).pipe(
 		filter(ev => ev.attribute === attribute),
 		map(() => element[attribute])
 	);
@@ -249,7 +278,7 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 								value: (node as any)[attribute],
 							})
 						),
-						node.attributes$.pipe(
+						attributes$(node).pipe(
 							filter(ev => ev.attribute === attribute)
 						)
 					).pipe(options.persistOperator || attributeOperator)
@@ -285,8 +314,8 @@ export function getRegisteredComponents() {
 	return { ...registeredComponents };
 }
 
-export function role(roleName: string) {
-	return (host: Component) =>
+export function role<T extends Component>(roleName: string) {
+	return (host: T) =>
 		host.bind(
 			defer(() => {
 				const el = host as any;
@@ -295,6 +324,16 @@ export function role(roleName: string) {
 		);
 }
 
+@Augment('cxl-span')
+export class Span extends Component {}
+
 export function Slot() {
 	return document.createElement('slot');
+}
+
+export function staticTemplate(template: () => Node) {
+	let rendered: Node;
+	return () => {
+		return (rendered || (rendered = template())).cloneNode(true);
+	};
 }

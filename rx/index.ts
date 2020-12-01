@@ -384,9 +384,9 @@ export function of<T>(...values: T[]): Observable<T> {
  */
 export function toPromise<T>(observable: Observable<T>) {
 	return new Promise<T>((resolve, reject) => {
-		let value: T | undefined;
+		let value: T;
 		observable.subscribe(
-			(val?: T) => (value = val),
+			(val: T) => (value = val),
 			(e: ObservableError) => reject(e),
 			() => resolve(value)
 		);
@@ -814,7 +814,7 @@ export interface Observable<T> {
 	): Observable<T2>;
 	debounceTime(time?: number): Observable<T>;
 	distinctUntilChanged(): Observable<T>;
-	filter(fn: (val: T) => boolean): Observable<T>;
+	filter<T2 = T>(fn: (val: T) => boolean): Observable<T2>;
 	finalize(fn: () => void): Observable<T>;
 	first(): Observable<T>;
 	is(equalTo: T): Observable<boolean>;

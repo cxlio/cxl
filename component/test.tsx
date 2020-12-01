@@ -16,8 +16,11 @@ export default suite('component', test => {
 	test('Component - empty', a => {
 		class TestComponent extends Component {
 			static tagName = 'div';
+			bind() {
+				/* */
+			}
 		}
-		const element = dom(TestComponent);
+		const element = <TestComponent />;
 		a.ok(element);
 		a.ok(element instanceof HTMLDivElement);
 	});

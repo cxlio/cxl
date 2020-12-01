@@ -1,10 +1,11 @@
-import { EMPTY, Observable, merge, observableSymbol } from '../rx/index.js';
+import { Observable } from '../rx/index.js';
 
 /* eslint @typescript-eslint/no-namespace: 'off' */
 /* eslint @typescript-eslint/ban-types: 'off' */
 declare global {
 	namespace dom {
 		namespace JSX {
+			type ElementClass = Bindable;
 			interface ElementAttributesProperty {
 				jsxAttributes: any;
 			}
@@ -13,58 +14,61 @@ declare global {
 			}
 			type Element = Node;
 			type IntrinsicElements = {
-				[P in keyof HTMLElementTagNameMap]: AttributeType<
+				[P in keyof HTMLElementTagNameMap]: NativeType<
 					HTMLElementTagNameMap[P]
 				>;
 			};
+			/*	type IntrinsicClassAttributes<T> = {
+				[K in keyof Omit<T, 'children'>]?:
+					| T[K]
+					| Observable<T[K]>
+					| Binding<T, T[K]>;
+			} & {
+				$?: Binding<T, any> | Observable<any>;
+				children?: Children;
+			};*/
 		}
 	}
 }
 
-export const $$bindings = Symbol('bindings');
 export type Binding<T, DataT> = (el: T) => Observable<DataT>;
-export type NodeBindings = Observable<any>[];
+export type Child =
+	| string
+	| Node
+	| number
+	| ((host: Bindable) => Node)
+	| Observable<any>;
+export type Children = Child | Child[];
+export type NativeChild = string | number | Node;
+export type NativeChildren = NativeChild | NativeChild[];
 
-export type AttributeType<T> =
-	| {
-			[K in keyof T]?: T[K] | Observable<T[K]> | Binding<T, T[K]>;
-	  }
-	| {
-			$?: Binding<T, any> | Observable<any>;
-			children?: any;
-	  };
+export type NativeType<T> = {
+	[K in keyof Omit<T, 'children'>]?: T[K];
+} & {
+	//	$?: (el: T) => void;
+	children?: NativeChildren;
+};
 
-interface Bindable extends Node {
-	[$$bindings]?: NodeBindings;
-	[observableSymbol]?: () => Observable<void>;
-}
+export type AttributeType<T> = {
+	[K in keyof Omit<T, 'children'>]?:
+		| T[K]
+		| Observable<T[K]>
+		| Binding<T, T[K]>;
+} & {
+	$?: Binding<T, any> | Observable<any>;
+	children?: Children;
+};
 
-function toObservable(this: Bindable) {
-	return this[$$bindings] ? merge(...this[$$bindings]) : EMPTY;
-}
-
-function initBindings(node: Bindable) {
-	let bindings = node[$$bindings];
-
-	if (!bindings) {
-		node[observableSymbol] = toObservable;
-		bindings = node[$$bindings] = [];
-	}
-
-	return bindings;
+export interface Bindable extends Node {
+	bind(binding: Observable<any>): void;
 }
 
 function bind(host: Bindable, binding: Observable<any>): void {
-	const nodeBindings = initBindings(host);
-	nodeBindings.push(binding);
+	if (!host.bind) throw new Error('Element not bindable');
+	host.bind(binding);
 }
 
-function bindArray(host: Bindable, binding: Observable<any>[]) {
-	const nodeBindings = initBindings(host);
-	nodeBindings.push(...binding);
-}
-
-function expression(host: Bindable, binding: Observable<any>) {
+export function expression(host: Bindable, binding: Observable<any>) {
 	const result = document.createTextNode('');
 	bind(
 		host,
@@ -73,23 +77,24 @@ function expression(host: Bindable, binding: Observable<any>) {
 	return result;
 }
 
-function renderChildren(host: Node, children: any) {
+export function renderChildren(
+	host: Bindable,
+	children: Children,
+	appendTo: Node = host
+) {
 	if (!children) return;
 
 	if (Array.isArray(children))
-		for (const child of children) renderChildren(host, child);
+		for (const child of children) renderChildren(host, child, appendTo);
 	else if (children instanceof Observable)
-		host.appendChild(expression(host, children));
-	else if (children instanceof Node) {
-		host.appendChild(children);
-		if ((children as any)[$$bindings])
-			bindArray(host, (children as any)[$$bindings]);
-	} else if (typeof children === 'function')
-		renderChildren(host, children(host));
-	else host.appendChild(document.createTextNode(children));
+		appendTo.appendChild(expression(host, children));
+	else if (children instanceof Node) appendTo.appendChild(children);
+	else if (typeof children === 'function')
+		renderChildren(host, children(host), appendTo);
+	else appendTo.appendChild(document.createTextNode(children as any));
 }
 
-function renderAttributes(host: Node, attributes: any) {
+function renderAttributes(host: Bindable, attributes: any) {
 	for (const attr in attributes) {
 		const value = (attributes as any)[attr];
 
@@ -98,39 +103,37 @@ function renderAttributes(host: Node, attributes: any) {
 				host,
 				attr === '$' ? value : value.tap(v => ((host as any)[attr] = v))
 			);
-		else if (typeof value === 'function') bind(host, value(host));
+		else if (typeof value === 'function')
+			bind(
+				host,
+				attr === '$'
+					? value(host)
+					: value(host).tap((v: any) => ((host as any)[attr] = v))
+			);
 		else (host as any)[attr] = value;
 	}
 }
 
-function renderElement(element: Node, attributes: any, children: any) {
-	renderAttributes(element, attributes);
-	renderChildren(element, children);
+function renderElement(element: Bindable, attributes: any, children: any) {
+	if (attributes) renderAttributes(element, attributes);
+	if (children) renderChildren(element, children);
 	return element;
 }
 
-function renderNativeElement(tagName: string, attributes: any, children: any) {
-	return renderElement(document.createElement(tagName), attributes, children);
+function renderNative(element: Node, attributes: any, children: any) {
+	for (const attr in attributes) {
+		if (attr === '$') attributes[attr](element);
+		else (element as any)[attr] = attributes[attr];
+	}
+	if (children) renderChildren(element as any, children);
+	return element;
 }
 
-interface ComponentConstructor<T extends HTMLElement> {
+interface ComponentConstructor<T extends Bindable> {
 	create(): T;
 }
 
-export function bindNode(node: Node, binding: Observable<any>) {
-	bind(node, binding);
-	return node;
-}
-
-export function observe(node: Bindable) {
-	return toObservable.call(node);
-}
-
-export function getBindings(node: Bindable) {
-	return node[$$bindings];
-}
-
-export function dom<T extends HTMLElement>(
+export function dom<T extends Bindable>(
 	elementType: ComponentConstructor<T>,
 	attributes?: AttributeType<T>,
 	...children: any[]
@@ -142,7 +145,7 @@ export function dom<T, T2>(
 ): T;
 export function dom<K extends keyof HTMLElementTagNameMap>(
 	elementType: K,
-	attributes?: AttributeType<HTMLElementTagNameMap[K]>,
+	attributes?: NativeType<HTMLElementTagNameMap[K]>,
 	...children: any[]
 ): HTMLElementTagNameMap[K];
 export function dom(
@@ -152,7 +155,7 @@ export function dom(
 ): Node {
 	// Support for TSX Fragments
 	if (elementType === dom)
-		return renderElement(
+		return renderNative(
 			document.createDocumentFragment(),
 			undefined,
 			children
@@ -161,7 +164,11 @@ export function dom(
 	if (elementType.create)
 		return renderElement(elementType.create(), attributes, children);
 	if (!elementType.apply)
-		return renderNativeElement(elementType, attributes, children);
+		return renderNative(
+			document.createElement(elementType),
+			attributes,
+			children
+		);
 
 	if (children) {
 		children = children.length > 1 ? children : children[0];
@@ -171,3 +178,5 @@ export function dom(
 
 	return elementType(attributes);
 }
+
+export default dom;

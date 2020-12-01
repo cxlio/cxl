@@ -2,6 +2,7 @@
 	"extends": "../tsconfig.json",
 	"ignore": true,
 	"compilerOptions": {
+		"bundledPackageName": "@cxl/docgen-runtime",
 		"outDir": "../dist/docgen",
 		"outFile": "../dist/docgen/runtime.bundle.js",
 		"rootDir": "..",
@@ -25,7 +26,11 @@
 		"../ui/input-base.tsx",
 		"../ui/checkbox.tsx",
 		"../ui/router.tsx",
+		"../ui/select.tsx",
 		"runtime.tsx"
 	],
-	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
+	"references": [
+		{ "path": "../build/tsconfig.amd.json", "prepend": true },
+		{ "path": "tsconfig.json" }
+	]
 }

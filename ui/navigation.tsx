@@ -9,11 +9,11 @@ import {
 	role,
 } from '../component/index.js';
 import { on, onAction, onLoad, trigger } from '../dom/index.js';
-import { portal, slot, triggerEvent } from '../template/index.js';
+import { portal, triggerEvent } from '../template/index.js';
 import { css, padding, rgba } from '../css/index.js';
 import { EMPTY, merge } from '../rx/index.js';
 import { InversePrimary, ResetSurface } from './theme.js';
-import { IconButton, Svg, aria, ripple } from './core.js';
+import { IconButton, Span, Svg, aria, ripple } from './core.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -89,15 +89,15 @@ import { Drawer } from './dialog.js';
 			},
 		},
 	}),
-	_ => (
+	host => (
 		<>
 			<div className="flex">
 				<slot></slot>
-				<div $={portal('cxl-appbar-actions')} />
+				<Span $={portal('cxl-appbar-actions')} />
 			</div>
 			<div className="tabs">
-				<slot $={slot('cxl-tabs')} />
-				<div $={portal('cxl-appbar-tabs')} />
+				<host.Slot selector="cxl-tabs" />
+				<Span $={portal('cxl-appbar-tabs')} />
 			</div>
 		</>
 	)
@@ -172,14 +172,18 @@ export class AppbarTitle extends Component {
 		$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
 		$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 	}),
-	host => (
-		<a
-			className="link"
-			href={get(host, 'href').map(val => val || 'javascript:')}
-		>
-			<slot />
-		</a>
-	),
+	host => {
+		const el = (
+			<a className="link">
+				<slot />
+			</a>
+		) as HTMLAnchorElement;
+
+		host.bind(
+			get(host, 'href').tap(val => (el.href = val || 'javascript:'))
+		);
+		return el;
+	},
 	bind(ripple),
 	bind(host =>
 		get(host, 'selected').tap(val => {
@@ -236,16 +240,14 @@ export class Tab extends Component {
 			<slot />
 		</div>
 	),
-	bind(el => {
-		return merge(
-			on(el, 'cxl-tab.selected').tap(ev => {
-				if (el.selected) el.selected.selected = false;
-				if (ev.target instanceof Tab) el.selected = ev.target;
-			})
-		);
-	}),
+	bind(el =>
+		on(el, 'cxl-tab.selected').tap(ev => {
+			if (el.selected) el.selected.selected = false;
+			if (ev.target instanceof Tab) el.selected = ev.target;
+		})
+	),
 	host => (
-		<div
+		<Span
 			className="selected"
 			$={el =>
 				onLoad().switchMap(() =>

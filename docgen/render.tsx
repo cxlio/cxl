@@ -5,6 +5,12 @@ export interface ExtraDocumentation {
 	index?: boolean;
 }
 
+export interface RuntimeConfig {
+	activeVersion: string;
+	userScripts: string[];
+	versions: string[];
+}
+
 export interface Section {
 	title?: string;
 	items: ExtraDocumentation[];

@@ -1,13 +1,30 @@
 import { Test, suite } from '../spec/index.js';
-import { dom, getBindings } from './index.js';
-import { Observable, be, of, from } from '../rx/index.js';
+import dom from './index.js';
+import { Observable, be, of, merge } from '../rx/index.js';
 
-async function connect(el: any, callback: (el: any[]) => any) {
-	const subscriptions = from(el).subscribe();
+class Span extends HTMLElement {
+	jsxAttributes!: {
+		$?: (self: Span) => void;
+		className?: any;
+		children?: any;
+	};
+	static create() {
+		const host = document.createElement('span') as any;
+		(host as any).bindings = [];
+		host.bind = (binding: any) => host.bindings.push(binding);
+		return host;
+	}
+	bind() {
+		// Do Nothing
+	}
+}
+
+async function connect(el: any, callback: () => any) {
+	const subscription = merge(...(el.bindings || [])).subscribe();
 	try {
-		await callback(getBindings(el) || []);
+		await callback();
 	} finally {
-		subscriptions.unsubscribe();
+		subscription.unsubscribe();
 	}
 }
 
@@ -28,7 +45,7 @@ export default suite('component', test => {
 				<a>Hello</a>
 				<b>World</b>
 				{10}
-				{true}
+				{'true'}
 			</div>
 		) as HTMLDivElement;
 
@@ -81,7 +98,7 @@ export default suite('component', test => {
 	});
 
 	test('Component Class', a => {
-		class Test {
+		class Test extends Node {
 			static create() {
 				return document.createElement('div');
 			}
@@ -90,6 +107,9 @@ export default suite('component', test => {
 				tabIndex: number;
 				children: string;
 			};
+			bind() {
+				/* */
+			}
 		}
 
 		const el = (
@@ -136,31 +156,20 @@ export default suite('component', test => {
 		let el3: any;
 		function check(el2: any) {
 			el3 = el2;
-			a.equal(el2.tagName, 'DIV');
+			a.equal(el2.tagName, 'SPAN');
 			return of('hello');
 		}
-		const el = <div $={check}></div>;
+		const el = <Span $={check} />;
 		a.equal(el, el3);
 	});
 
 	test('Component - Bindings', a => {
-		class Div {
-			static create() {
-				return new Div();
-			}
-			bindings?: any[];
-			jsxAttributes?: { $: (node: Div) => Observable<any> };
-			title = '';
-		}
-
 		const el = (
-			<Div $={el => of('blur').tap(ev => (el.title = ev))} />
+			<Span $={el => of('blur').tap(ev => (el.title = ev))} />
 		) as any;
 
-		a.ok(el instanceof Div);
-		connect(el, bindings => {
+		connect(el, () => {
 			a.equal(el.title, 'blur');
-			a.equal(bindings.length, 1);
 		});
 	});
 
@@ -196,13 +205,11 @@ export default suite('component', test => {
 	test('Bindings - Set Attribute', (a: Test) => {
 		const checked = be(true);
 		const el = (
-			<div className={checked.map(val => (val ? 'minus' : 'check'))} />
+			<Span className={checked.map(val => (val ? 'minus' : 'check'))} />
 		) as HTMLDivElement;
 
 		a.ok(el);
-		connect(el, bindings => {
-			a.assert(bindings);
-			a.equal(bindings.length, 1);
+		connect(el, () => {
 			a.equal(el.className, 'minus');
 			checked.next(false);
 			a.equal(el.className, 'check');
@@ -214,15 +221,14 @@ export default suite('component', test => {
 	test('Bindings - Expression', async a => {
 		const world = be('World');
 		const el = (
-			<div>
+			<Span>
 				Hello {world}
 				{world}
-			</div>
+			</Span>
 		) as HTMLDivElement;
 		a.ok(el);
 		a.equal(el.childNodes.length, 3);
-		await connect(el, bindings => {
-			a.equal(bindings?.length, 2);
+		await connect(el, () => {
 			a.equal(el.innerText, 'Hello WorldWorld');
 			world.next('Universe');
 			a.equal(el.innerText, 'Hello UniverseUniverse');
@@ -237,17 +243,16 @@ export default suite('component', test => {
 			<>
 				<div />
 				<span />
-				{val}
+				<Span>{val}</Span>
 			</>
 		);
 		a.ok(frag);
 		a.equal(frag.childNodes.length, 3);
-		await connect(frag, bindings => {
-			a.equal(bindings?.length, 1);
-			a.equal(frag.childNodes[2].nodeValue, 'hello');
+		await connect(frag.childNodes[2], () => {
+			a.equal(frag.childNodes[2].textContent, 'hello');
 		});
 		val.next('world');
-		a.equal(frag.childNodes[2].nodeValue, 'hello');
+		a.equal(frag.childNodes[2].textContent, 'hello');
 	});
 
 	test('Empty Attribute', a => {

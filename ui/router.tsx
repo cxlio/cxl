@@ -15,6 +15,7 @@ import {
 	Augment,
 	Attribute,
 	Component,
+	Span,
 	augment,
 	bind,
 	get,
@@ -109,7 +110,8 @@ export function setDocumentTitle() {
 	});
 }
 
-export function Router(
+export function initializeRouter(
+	host: Component,
 	strategy: 'hash' | 'query' | 'path' | Strategy = Strategies.query,
 	getUrl?: Observable<any>
 ) {
@@ -119,15 +121,20 @@ export function Router(
 		getUrl ||
 		(strategyObj === Strategies.hash ? onHashChange() : onLocation());
 
+	return merge(
+		routerStrategy(getter, strategyObj),
+		routerOutlet(host),
+		setDocumentTitle()
+	);
+}
+
+export function Router(
+	strategy: 'hash' | 'query' | 'path' | Strategy = Strategies.query,
+	getUrl?: Observable<any>
+) {
 	return (ctor: any) => {
 		augment(ctor, [
-			bind((host: Component) =>
-				merge(
-					routerStrategy(getter, strategyObj),
-					routerOutlet(host),
-					setDocumentTitle()
-				)
-			),
+			bind((host: Component) => initializeRouter(host, strategy, getUrl)),
 		]);
 	};
 }
@@ -146,7 +153,7 @@ export function RouterTitle() {
 	return (
 		<AppbarTitle>
 			{each(routes, (route: any) => (
-				<span>{route.routeTitle || ''}</span>
+				<Span>{route.routeTitle || ''}</Span>
 			))}
 		</AppbarTitle>
 	);
@@ -160,29 +167,27 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 
 @Augment<RouterLink>(
 	'cxl-router-link',
-	host => (
-		<a
-			className="link"
-			$={el =>
-				merge(
-					get(host, 'focusable').tap(
-						val => (el.tabIndex = val ? 0 : -1)
-					),
-					combineLatest(strategy$, get(host, 'href')).tap(
-						([strategy, val]) =>
-							val !== undefined &&
-							(el.href = strategy.getHref(val))
-					),
-					onAction(el).tap(ev => {
-						ev.preventDefault();
-						if (host.href) router.go(host.href);
-					})
-				)
-			}
-		>
-			<slot />
-		</a>
-	),
+	host => {
+		const el = (
+			<a className="link">
+				<slot />
+			</a>
+		) as HTMLAnchorElement;
+		host.bind(
+			merge(
+				get(host, 'focusable').tap(val => (el.tabIndex = val ? 0 : -1)),
+				combineLatest(strategy$, get(host, 'href')).tap(
+					([strategy, val]) =>
+						val !== undefined && (el.href = strategy.getHref(val))
+				),
+				onAction(el).tap(ev => {
+					ev.preventDefault();
+					if (host.href) router.go(host.href);
+				})
+			)
+		);
+		return el;
+	},
 	css({
 		link: {
 			outline: 0,

@@ -17,13 +17,13 @@ import { relative } from 'path';
 import hljs from 'highlight.js';
 import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import MarkdownIt from 'markdown-it';
-import { Section, escape, parseExample } from './render.js';
+import { Section, escape, parseExample, RuntimeConfig } from './render.js';
 
 let application: DocGen;
 let index: Node[];
 let extraDocs: Section[];
 let extraFiles: File[];
-let userScripts: File[];
+let docgenConfig: RuntimeConfig;
 
 function TypeArguments(types?: Node[]): string {
 	return types
@@ -646,23 +646,17 @@ function findOtherVersions(outDir: string, currentVersion: string) {
 	}
 }
 
-function Versions(pkg: any) {
-	const otherVersions = findOtherVersions(
-		application.outputDir,
-		pkg?.version
-	);
-	const versions = pkg ? [pkg.version, ...otherVersions] : otherVersions;
+function Versions() {
+	const versions = docgenConfig.versions || [];
 	return versions.length > 1
-		? `<cxl-select style="vertical-align:bottom">` +
-				versions.map(v => `<cxl-option>${v}</cxl-option>`) +
-				`</cxl-select>`
+		? `<doc-version-select></doc-version-select>`
 		: `<small>${versions[0] || ''}</small>`;
 }
 
 function Navbar(pkg: any, out: Output) {
 	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h6 inline style="margin-right:12px">${
 		pkg.name
-	}</cxl-t>${Versions(pkg)}
+	}</cxl-t>${Versions()}
 	</cxl-c>
 		<cxl-hr></cxl-hr>
 		${extraDocs.length ? NavbarExtra() : ''}	
@@ -679,9 +673,6 @@ function ModuleFooter(_p: Node) {
 }
 
 function getRuntimeScripts() {
-	const docgenConfig = {
-		userScripts: userScripts.map(f => f.name),
-	};
 	return (
 		`<script>window.docgen=${JSON.stringify(docgenConfig)};</script>` +
 		(application.debug
@@ -801,11 +792,30 @@ function renderExtraFile(file: string, index = false) {
 	};
 }
 
+function initRuntimeConfig(app: DocGen) {
+	const pkg = app.modulePackage;
+	const userScripts = getUserScripts();
+
+	const otherVersions = findOtherVersions(
+		application.outputDir,
+		pkg?.version
+	);
+
+	docgenConfig = {
+		activeVersion: pkg?.version || '',
+		userScripts: userScripts.map(f => f.name),
+		versions: pkg ? [pkg.version, ...otherVersions] : otherVersions,
+	};
+
+	return userScripts;
+}
+
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
-	userScripts = getUserScripts();
 	index = Object.values(output.index);
 	hljs.configure({ tabReplace: '    ' });
+	const userScripts = initRuntimeConfig(app);
+
 	extraDocs =
 		app.extra ||
 		(existsSync('README.md')

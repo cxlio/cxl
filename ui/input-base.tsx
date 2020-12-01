@@ -54,9 +54,6 @@ export const Undefined = {};
 				triggerEvent(host, 'invalid')
 			),
 			registable(host, 'form'),
-			get(host, 'disabled').tap(val =>
-				host.setAttribute('aria-disabled', val ? 'true' : 'false')
-			),
 			get(host, 'value').tap(val =>
 				(host as any).internals?.setFormValue(val)
 			),
