@@ -14,7 +14,9 @@ import {
 } from '../rx/index.js';
 
 type RenderFunction<T> = (node: T) => void;
-type Augmentation<T extends Component> = (host: T) => Node | void;
+type Augmentation<T extends Component> = (
+	host: T
+) => Node | Observable<any> | void;
 
 export interface AttributeEvent<T, K extends keyof T = keyof T> {
 	target: T;
@@ -131,9 +133,13 @@ export function pushRender<T>(proto: T, renderFn: RenderFunction<T>) {
 	};
 }
 
-export function appendShadow<T extends Component>(host: T, child: Node) {
+export function appendShadow<T extends Component>(
+	host: T,
+	child: Node | Observable<any>
+) {
 	const shadow = getShadow(host);
-	shadow.appendChild(child);
+	if (child instanceof Node) shadow.appendChild(child);
+	else host.bind(child);
 }
 
 export function augment<T extends Component>(
@@ -246,7 +252,10 @@ function getObservedAttributes(target: typeof Component) {
 
 const attributeOperator = tap<AttributeEvent<any, any>>(
 	({ value, target, attribute }) => {
-		if (value === false && target.hasAttribute(attribute))
+		if (
+			(value === false || value === undefined) &&
+			target.hasAttribute(attribute)
+		)
 			target.removeAttribute(attribute);
 		else if (typeof value === 'string')
 			target.setAttribute(attribute, value);

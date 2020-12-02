@@ -76,12 +76,12 @@ export function sync<T>(
 	);
 }
 
-export function syncAttribute<T extends Node>(A: T, B: T, attr: keyof T) {
+export function syncAttribute(A: Node, B: Node, attr: string) {
 	return sync(
-		getAttribute(A, attr),
-		val => ((B as any)[attr] = val),
-		getAttribute(B, attr),
-		val => (A[attr] = val)
+		getAttribute(A, attr as any),
+		val => ((A as any)[attr] = val),
+		getAttribute(B, attr as any),
+		val => ((B as any)[attr] = val)
 	);
 }
 
@@ -170,12 +170,10 @@ export function portal(id: string) {
 	};
 }
 
-export function teleport(el: ChildNode, portalName: string) {
+export function teleport(el: Node, portalName: string) {
 	return new Observable<void>(() => {
-		const placeholder = document.createTextNode('');
-		el.replaceWith(placeholder);
 		portals.get(portalName)?.appendChild(el);
-		return () => placeholder.replaceWith(el);
+		return () => el.parentElement?.removeChild(el);
 	});
 }
 

@@ -7,9 +7,11 @@ import {
 	bind,
 	get,
 	role,
+	staticTemplate,
 } from '../component/index.js';
 import {
 	ButtonBase,
+	DisabledStyles,
 	Spinner,
 	Span,
 	Toggle,
@@ -19,13 +21,19 @@ import {
 	Svg,
 	aria,
 	ariaValue,
+	focusDelegate,
 	focusable,
 	navigationList,
 	registableHost,
 	selectableHost,
 } from './core.js';
 import { dom, expression } from '../tsx/index.js';
-import { onValue, triggerEvent } from '../template/index.js';
+import {
+	onValue,
+	syncAttribute,
+	triggerEvent,
+	teleport,
+} from '../template/index.js';
 import {
 	trigger,
 	onKeypress,
@@ -38,6 +46,7 @@ import { EMPTY, Observable, be, defer, merge } from '../rx/index.js';
 import { dragInside } from '../drag/index.js';
 import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
+import { Appbar, AppbarContextual } from './navigation.js';
 
 /**
  * Sliders allow users to make selections from a range of values.
@@ -1173,6 +1182,13 @@ export class Fab extends Component {
 	touched = false;
 }
 
+const SearchIcon = staticTemplate(() => (
+	<Svg
+		width={24}
+		viewBox="0 0 48 48"
+	>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
+));
+
 /**
  * @demo
  * <cxl-appbar>
@@ -1187,48 +1203,91 @@ export class Fab extends Component {
 	css({
 		$: { display: 'flex', position: 'relative' },
 		$opened: {
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			right: 0,
 			backgroundColor: 'surface',
 		},
-		input: { display: 'none', marginBottom: 0 },
+		input: { display: 'none', marginBottom: 0, position: 'relative' },
 		input$opened: {
 			display: 'block',
 		},
+		button$opened: { display: 'none' },
 		'@medium': {
 			input: {
 				width: 200,
 				display: 'block',
-				position: 'relative',
 			},
 			button: { display: 'none' },
 		},
+		$disabled: DisabledStyles,
 	}),
-	host => (
-		<>
-			<IconButton
-				$={el => onAction(el).tap(() => (host.opened = true))}
-				className="button"
-				flat
+	$ => {
+		let inputEl: Input;
+
+		function onContextual(val: boolean) {
+			if (val) requestAnimationFrame(() => inputEl.focus());
+		}
+
+		return teleport(
+			<AppbarContextual
+				$={el => get(el, 'visible').tap(onContextual)}
+				name="search"
 			>
-				<Svg
-					width={24}
-					viewBox="0 0 48 48"
-				>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
-			</IconButton>
-			<Field className="input">
-				<Input />
-				<Svg
-					width={20}
-					viewBox="0 0 48 48"
-				>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
-			</Field>
-		</>
-	)
+				<Field className="input">
+					<Input
+						$={el => syncAttribute($, (inputEl = el), 'value')}
+					/>
+					<SearchIcon />
+				</Field>
+			</AppbarContextual>,
+			'cxl-appbar'
+		);
+	},
+	host => {
+		return (
+			<>
+				<IconButton
+					$={el =>
+						merge(
+							onAction((host.mobileIcon = el)).tap(() =>
+								host.open()
+							),
+							on(el, 'blur').tap(() => (host.touched = true))
+						)
+					}
+					className="button"
+				>
+					<SearchIcon />
+				</IconButton>
+				<Field className="input">
+					<Input
+						$={el =>
+							merge(
+								syncAttribute(host, el, 'value'),
+								focusDelegate(host, (host.desktopInput = el))
+							)
+						}
+					/>
+					<SearchIcon />
+				</Field>
+			</>
+		);
+	}
 )
-export class AppbarSearch extends Component {
+export class AppbarSearch extends InputBase {
 	@StyleAttribute()
 	opened = false;
+
+	protected desktopInput?: Input;
+	protected mobileIcon?: IconButton;
+
+	value = '';
+
+	open() {
+		const appbar: Appbar | null = this.parentElement as Appbar;
+		if (appbar) appbar.contextual = 'search';
+	}
+
+	focus() {
+		if (this.desktopInput?.offsetParent) this.desktopInput.focus();
+		else if (this.mobileIcon?.offsetParent) this.mobileIcon.focus();
+	}
 }

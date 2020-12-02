@@ -60,6 +60,7 @@ import { Drawer } from './dialog.js';
 				surface: rgba(0, 0, 0, 0),
 			},
 		},
+		grow: { flexGrow: 1 },
 		flex: {
 			display: 'flex',
 			alignItems: 'center',
@@ -88,16 +89,46 @@ import { Drawer } from './dialog.js';
 				marginRight: 'auto',
 			},
 		},
+		contextual: {
+			display: 'none',
+		},
+		flex$contextual: {
+			display: 'none',
+		},
+		contextual$contextual: {
+			display: 'flex',
+		},
 	}),
+	portal('cxl-appbar'),
+	$ =>
+		get($, 'contextual').tap(val =>
+			$.querySelectorAll<AppbarContextual>(
+				'cxl-appbar-contextual'
+			).forEach(el => (el.visible = el.name === val))
+		),
 	host => (
 		<>
 			<div className="flex">
-				<slot></slot>
-				<Span $={portal('cxl-appbar-actions')} />
+				<slot />
+				<Span className="actions" $={portal('cxl-appbar-actions')} />
+			</div>
+			<div className="flex contextual">
+				<IconButton
+					$={el =>
+						onAction(el).tap(() => (host.contextual = undefined))
+					}
+				>
+					<Svg
+						viewBox="0 0 24 24"
+						height={24}
+					>{`<path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>`}</Svg>
+				</IconButton>
+				<div className="grow">
+					<host.Slot selector="cxl-appbar-contextual" />
+				</div>
 			</div>
 			<div className="tabs">
 				<host.Slot selector="cxl-tabs" />
-				<Span $={portal('cxl-appbar-tabs')} />
 			</div>
 		</>
 	)
@@ -115,6 +146,22 @@ export class Appbar extends Component {
 
 	@StyleAttribute()
 	center = false;
+
+	@StyleAttribute()
+	contextual?: string;
+}
+
+@Augment(
+	'cxl-appbar-contextual',
+	css({ $: { display: 'none' }, $visible: { display: 'block' } }),
+	_ => <slot />
+)
+export class AppbarContextual extends Component {
+	@Attribute()
+	name?: string;
+
+	@StyleAttribute()
+	visible = false;
 }
 
 /**

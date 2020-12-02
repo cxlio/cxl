@@ -209,6 +209,23 @@ export function focusable<T extends FocusableComponent>(
 
 const stateStyles = new StyleSheet({ styles: StateStyles });
 
+const disabledCss = css({ $disabled: DisabledStyles });
+
+interface DisableElement extends HTMLElement {
+	disabled: boolean;
+}
+
+export function focusDelegate<T extends FocusableComponent>(
+	host: T,
+	delegate: DisableElement
+) {
+	host.Shadow({ children: disabledCss });
+	return merge(
+		disabledAttribute(host).tap(val => (delegate.disabled = val)),
+		focusableEvents(host, delegate)
+	);
+}
+
 /**
  * Adds focusable functionality to input components.
  */
