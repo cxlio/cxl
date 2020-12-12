@@ -1,5 +1,6 @@
 import { collection, db } from './index.js';
 import { suite, Test } from '../spec/index.js';
+import { merge } from '../rx/index.js';
 import * as firebase from 'firebase';
 
 interface Schema {
@@ -31,11 +32,28 @@ export default suite('db', test => {
 
 	test('observe', a => {
 		const done = a.async();
-		const ref = db<string>('fb/test/module');
+		const ref = db<Schema>('fb').ref('test').ref('module');
+		let count = 0;
 		a.equal(ref.path, 'fb/test/module');
-		ref.first().subscribe(val => {
+		merge(ref, ref).subscribe(val => {
 			a.equal(val, 'fb');
-			done();
+			if (++count === 2) done();
+		});
+	});
+
+	test('observe - multiple subscriptions', a => {
+		const done = a.async();
+		const ref = db<Schema>('fb').ref('test').ref('module');
+		const obs = ref.first();
+		let count = 0;
+		a.equal(ref.path, 'fb/test/module');
+		obs.subscribe(val => {
+			a.equal(val, 'fb');
+			if (++count === 2) done();
+		});
+		obs.subscribe(val => {
+			a.equal(val, 'fb');
+			if (++count === 2) done();
 		});
 	});
 

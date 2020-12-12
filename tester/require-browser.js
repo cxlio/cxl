@@ -19,12 +19,13 @@
 
 		if (require.replace) path = require.replace(path);
 		// Handle packages
-		if (path[0] !== '.') {
+		if (path[0] !== '.' && path[0] !== '/') {
 			if (!mods[path]) throw new Error(`Module "${path}" not found.`);
 			return mods[path];
 		}
 
-		let url = require.base + (path.endsWith('.js') ? path : path + '.js');
+		const actualPath = path.endsWith('.js') ? path : path + '.js';
+		let url = path[0] === '/' ? actualPath : require.base + actualPath;
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', url, false);
 		xhr.send();

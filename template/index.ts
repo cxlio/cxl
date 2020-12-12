@@ -182,7 +182,9 @@ class Marker {
 	node = document.createComment('marker');
 
 	insert(content: Node, nextNode: Node = this.node) {
-		this.children.push(content);
+		if (content instanceof DocumentFragment) {
+			this.children.push(...content.childNodes);
+		} else this.children.push(content);
 		this.node.parentNode?.insertBefore(content, nextNode);
 	}
 

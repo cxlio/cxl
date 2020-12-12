@@ -3,12 +3,15 @@ import {
 	Strategies,
 	RouterState,
 	Strategy,
+	getElementRoute,
+	replaceParameters,
 } from '../router/index.js';
 import {
 	Observable,
 	Reference,
 	combineLatest,
 	defer,
+	of,
 	merge,
 } from '../rx/index.js';
 import {
@@ -26,8 +29,9 @@ import {
 	onHashChange,
 	onChildrenMutation,
 	onLocation,
+	on,
 } from '../dom/index.js';
-import { AppbarTitle, Item } from './navigation.js';
+import { AppbarTitle, Item, Tab } from './navigation.js';
 import { dom } from '../tsx/index.js';
 import { each, triggerEvent } from '../template/index.js';
 import { StateStyles } from './core.js';
@@ -98,16 +102,22 @@ export function routerStrategy(
 }
 
 export function setDocumentTitle() {
-	return router$.tap(state => {
-		const title = [];
-		let current: any = state.current;
+	return router$
+		.switchMap(state => {
+			const result = [];
+			let current: any = state.current;
 
-		do {
-			if (current.routeTitle) title.unshift(current.routeTitle);
-		} while ((current = current.parentNode));
+			do {
+				const title = current.routeTitle;
+				if (title)
+					result.unshift(
+						title instanceof Observable ? title : of(title)
+					);
+			} while ((current = current.parentNode));
 
-		document.title = title.join(' - ');
-	});
+			return combineLatest(...result);
+		})
+		.tap(title => (document.title = title.join(' - ')));
 }
 
 export function initializeRouter(
@@ -139,24 +149,42 @@ export function Router(
 	};
 }
 
-export function RouterTitle() {
-	const routes = router$.map(state => {
-		const result = [];
-		let route: any = state.current;
-		do {
-			if (route.routeTitle) result.push(route);
-		} while ((route = route.parentNode));
+const routeTitles = router$.map(state => {
+	const result = [];
+	let route: any = state.current;
+	do {
+		if (route.routeTitle)
+			result.unshift({
+				title: route.routeTitle,
+				first: route === state.current,
+				path: routePath(route),
+			});
+	} while ((route = route.parentNode));
 
-		return result;
-	});
+	return result;
+});
 
-	return (
-		<AppbarTitle>
-			{each(routes, (route: any) => (
-				<Span>{route.routeTitle || ''}</Span>
-			))}
-		</AppbarTitle>
+function routePath(routeEl: HTMLElement) {
+	const route = getElementRoute(routeEl);
+	return replaceParameters(
+		route.path?.toString() || '',
+		router.state?.arguments || {}
 	);
+}
+
+export function RouterTitle() {
+	function renderLink(route: any) {
+		return route.first ? (
+			<Span>{route.title}</Span>
+		) : (
+			<>
+				<RouterLink href={route.path}>{route.title}</RouterLink>
+				&nbsp;/&nbsp;
+			</>
+		);
+	}
+
+	return <AppbarTitle>{each(routeTitles, renderLink)}</AppbarTitle>;
 }
 
 function renderTemplate(tpl: HTMLTemplateElement) {
@@ -192,6 +220,7 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 		link: {
 			outline: 0,
 			textDecoration: 'none',
+			color: 'link',
 		},
 	})
 )
@@ -200,6 +229,25 @@ export class RouterLink extends Component {
 	href?: string;
 	@Attribute()
 	focusable = false;
+}
+
+@Augment<RouterTab>('cxl-router-tab', $ => (
+	<RouterLink href={get($, 'href')}>
+		<Tab
+			$={el =>
+				on(el, 'cxl-tab.selected')
+					.map(() => el)
+					.pipe(triggerEvent($, 'cxl-tab.selected'))
+			}
+			selected={get($, 'href').switchMap(routeIsActive)}
+		>
+			<slot />
+		</Tab>
+	</RouterLink>
+))
+export class RouterTab extends Component {
+	@Attribute()
+	href = '';
 }
 
 @Augment<RouterLink>(
@@ -241,12 +289,11 @@ export class A extends RouterLink {
 		$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 		...StateStyles,
 	}),
-	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
-	bind(host =>
+	host => onAction(host).pipe(triggerEvent(host, 'drawer.close')),
+	host =>
 		get(host, 'disabled').tap(value =>
 			host.setAttribute('aria-disabled', value ? 'true' : 'false')
 		)
-	)
 )
 export class RouterItem extends Component {
 	@Attribute()
@@ -295,61 +342,3 @@ export class RouterComponent extends Component {
 	@Attribute()
 	strategy: 'hash' | 'path' | 'query' = 'query';
 }
-
-/*
-	component(
-		{
-			name: 'cxl-router-title',
-			bindings: 'route.change:#render',
-			template: `
-<x &=".responsive">
-	<a &=".link =href4:attribute(href) =title4:show:text"></a><x &=".link =title4:show">&gt;</x>
-	<a &=".link =href3:attribute(href) =title3:show:text"></a><x &=".link =title3:show">&gt;</x>
-	<a &=".link =href2:attribute(href) =title2:show:text"></a><x &=".link =title2:show">&gt;</x>
-	<a &=".link =href1:attribute(href) =title1:show:text"></a><x &=".link =title1:show">&gt;</x>
-</x>
-<a &=".link =href0:attribute(href) =title0:text"></a>
-	`,
-			styles: {
-				$: { lineHeight: 22, flexGrow: 1, font: 'title' },
-				link: {
-					display: 'inline-block',
-					textDecoration: 'none',
-					color: 'onPrimary',
-					marginRight: 4
-				},
-				responsive: { display: 'none' },
-				responsive$medium: { display: 'inline-block' }
-			}
-		},
-		{
-			render() {
-				var current = cxl.router.current,
-					i = 0,
-					title,
-					windowTitle,
-					path;
-
-				this.title0 = this.title1 = this.title2 = this.title3 = this.title4 = null;
-				this.href0 = this.href1 = this.href2 = this.href3 = this.href4 =
-					'';
-
-				do {
-					title = current.$$routeTitle;
-
-					if (title) {
-						windowTitle = windowTitle
-							? windowTitle + ' - ' + title
-							: title;
-						this['title' + i] = title;
-						path = cxl.router.getPath(current.$cxlRoute.id);
-						this['href' + i] = path ? '#' + path : false;
-						i++;
-					}
-
-					if (windowTitle) document.title = windowTitle;
-				} while ((current = current.parentNode));
-			}
-		}
-	);
-*/

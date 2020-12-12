@@ -158,7 +158,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			target: 'package',
 			outputDir,
 			tasks: [
-				eslint(),
+				eslint({ resolvePluginsRelativeTo: __dirname }),
 				packageJson.browser
 					? file(`${outputDir}/index.js`).pipe(minify())
 					: EMPTY,

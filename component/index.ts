@@ -102,7 +102,7 @@ export abstract class Component extends HTMLElement {
 	protected connectedCallback() {
 		if (this.render) {
 			this.render(this);
-			delete this.render;
+			this.render = undefined;
 		}
 
 		if (this.$$bindings) this.$$bindings.connect();

@@ -525,13 +525,16 @@ export function debounceTime<T>(time?: number) {
  * emitting values only from the most recently projected Observable.
  */
 export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
-	let lastSubscription: Subscription;
+	return operator<T, T2>(subscriber => {
+		let lastSubscription: Subscription;
+		return (val: T) => {
+			if (lastSubscription) lastSubscription.unsubscribe();
 
-	return operator<T, T2>(subscriber => (val: T) => {
-		if (lastSubscription) lastSubscription.unsubscribe();
-
-		const newObservable = project(val);
-		lastSubscription = newObservable.subscribe(val => subscriber.next(val));
+			const newObservable = project(val);
+			lastSubscription = newObservable.subscribe(val =>
+				subscriber.next(val)
+			);
+		};
 	});
 }
 
@@ -704,6 +707,39 @@ export function merge<R extends Observable<any>[]>(
 
 		return () => subscriptions.forEach(s => s.unsubscribe());
 	}) as any;
+}
+
+/**
+ * Combines multiple Observables to create an Observable whose values are calculated from the values, in order, of each of its input Observables.
+ */
+export function zip<T extends any[]>(
+	...observables: T
+): Observable<PickObservable<T>> {
+	return new Observable<any>(subs => {
+		const latest: any[] = [];
+		let count = 0,
+			opened = observables.length;
+
+		const subscriptions = observables.map((o, i) => {
+			return o.subscribe({
+				next(val: any) {
+					latest[i] = val;
+					if (++count === opened) {
+						subs.next(latest.slice(0));
+						count = 0;
+					}
+				},
+				error(e: any) {
+					subs.error(e);
+				},
+				complete() {
+					if (--opened === 0) subs.complete();
+				},
+			});
+		});
+
+		return () => subscriptions.forEach(s => s.unsubscribe());
+	});
 }
 
 /**

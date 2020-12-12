@@ -5,6 +5,8 @@ const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	splatParam = /\*\w+/g,
 	escapeRegExp = /[-{}[\]+?.,\\^$|#\s]/g;
 
+const routeSymbol = '@@cxlRoute';
+
 type Dictionary = Record<string, string>;
 type RouteArguments = { [key: string]: any };
 type RouteElement = Node;
@@ -17,6 +19,7 @@ export interface RouterState {
 	url: Url;
 	root: Node;
 	current: Node;
+	arguments?: RouteArguments;
 	route: Route<RouteElement>;
 }
 
@@ -147,6 +150,7 @@ export class Route<T extends RouteElement> {
 
 	createElement(args: Partial<T>) {
 		const el = this.definition.render();
+		(el as any)[routeSymbol] = this;
 		for (const a in args) el[a] = args[a] as any;
 		return el;
 	}
@@ -184,6 +188,10 @@ export class RouteManager {
 }
 
 const URL_REGEX = /([^#]+)(?:#(.+))?/;
+
+export function getElementRoute<T extends RouteElement>(el: T): Route<T> {
+	return (el as any)[routeSymbol];
+}
 
 export function parseUrl(url: string): Url {
 	const match = URL_REGEX.exec(url);
@@ -262,7 +270,7 @@ export class Router {
 
 	constructor(private callbackFn?: (state: RouterState) => void) {}
 
-	private findRoute(id: string, args: any) {
+	private findRoute(id: string, args: RouteArguments) {
 		const route = this.instances[id];
 		let i: string;
 
@@ -354,6 +362,7 @@ export class Router {
 
 		this.state = {
 			url: parsedUrl,
+			arguments: args,
 			route,
 			current,
 			root: this.root,

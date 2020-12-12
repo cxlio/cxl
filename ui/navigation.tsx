@@ -98,6 +98,9 @@ import { Drawer } from './dialog.js';
 		contextual$contextual: {
 			display: 'flex',
 		},
+		back: {
+			marginLeft: -8,
+		},
 	}),
 	portal('cxl-appbar'),
 	$ =>
@@ -114,6 +117,7 @@ import { Drawer } from './dialog.js';
 			</div>
 			<div className="flex contextual">
 				<IconButton
+					className="back"
 					$={el =>
 						onAction(el).tap(() => (host.contextual = undefined))
 					}
@@ -174,8 +178,7 @@ export class AppbarContextual extends Component {
 			flexGrow: 1,
 			marginBottom: 12,
 			lineHeight: 24,
-			paddingLeft: 16,
-			paddingRight: 16,
+			marginRight: 16,
 			textDecoration: 'none',
 			alignSelf: 'flex-end',
 		},
@@ -200,13 +203,10 @@ export class AppbarTitle extends Component {
 	'cxl-tab',
 	role('tab'),
 	css({
-		$: { flexShrink: 0, flexGrow: 1 },
-		'@small': {
-			$: { display: 'inline-block' },
-		},
-		link: {
-			...padding(16),
-			paddingBottom: 12,
+		$: {
+			flexShrink: 0,
+			flexGrow: 1,
+			...padding(16, 16, 12, 16),
 			backgroundColor: 'surface',
 			font: 'button',
 			color: 'onSurface',
@@ -216,32 +216,20 @@ export class AppbarTitle extends Component {
 			display: 'block',
 			outline: 0,
 		},
+		'@small': {
+			$: { display: 'inline-block' },
+		},
 		$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
 		$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 	}),
-	host => {
-		const el = (
-			<a className="link">
-				<slot />
-			</a>
-		) as HTMLAnchorElement;
-
-		host.bind(
-			get(host, 'href').tap(val => (el.href = val || 'javascript:'))
-		);
-		return el;
-	},
-	bind(ripple),
-	bind(host =>
+	ripple,
+	_ => <slot />,
+	host =>
 		get(host, 'selected').tap(val => {
 			if (val) trigger(host, 'cxl-tab.selected');
 		})
-	)
 )
 export class Tab extends Component {
-	@Attribute()
-	href?: string;
-
 	@Attribute()
 	selected = false;
 }
@@ -291,6 +279,8 @@ export class Tab extends Component {
 		on(el, 'cxl-tab.selected').tap(ev => {
 			if (el.selected) el.selected.selected = false;
 			if (ev.target instanceof Tab) el.selected = ev.target;
+			else if ((ev as any).detail instanceof Tab)
+				el.selected = (ev as any).detail;
 		})
 	),
 	host => (
@@ -343,6 +333,7 @@ const MenuIcon = (
 			color: 'onSurface',
 			cursor: 'pointer',
 			marginLeft: -8,
+			marginRight: 16,
 		},
 		drawer: ResetSurface,
 		'@large': {

@@ -163,22 +163,22 @@ export class C extends Component {
 			overflowScrolling: 'touch',
 		},
 		'@medium': {
-			$: padding(32),
+			$: padding(24, 32, 24, 32),
 		},
 		'@large': {
-			$: padding(64),
+			$: padding(32, 64, 32, 64),
 		},
 		'@xlarge': {
-			$: { width: 1200 },
-			$center: {
-				...padding(64, 0, 64, 0),
-				marginLeft: 'auto',
-				marginRight: 'auto',
-			},
+			container: { width: 1200 },
+			container$center: margin(64, 'auto', 64, 'auto'),
 		},
-		$full: { width: 'auto' },
+		container$full: { width: 'auto' },
 	}),
-	_ => <slot />
+	_ => (
+		<div className="container">
+			<slot />
+		</div>
+	)
 )
 export class Content extends Component {
 	@StyleAttribute()
@@ -255,6 +255,7 @@ export class Card extends Component {}
 	role('list'),
 	css({
 		$: {
+			display: 'block',
 			paddingTop: 8,
 			paddingBottom: 8,
 			marginLeft: -16,

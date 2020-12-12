@@ -1038,7 +1038,10 @@ export class Meta extends Component {
 		</>
 	)
 )
-export class Application extends Component {}
+export class Application extends Component {
+	@StyleAttribute()
+	permanent = false;
+}
 
 @Augment(
 	'cxl-surface',
