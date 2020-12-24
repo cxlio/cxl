@@ -42,7 +42,7 @@ let PACKAGE: Package;
 
 function verifyFields(fields: string[], pkg: any) {
 	for (const f of fields)
-		if (!pkg[f]) throw new Error(`Field ${f} missing in package.json`);
+		if (!pkg[f]) throw new Error(`Field "${f}" missing in package.json`);
 }
 
 export function readPackage(base: string = BASEDIR) {
@@ -58,12 +58,12 @@ export function readPackage(base: string = BASEDIR) {
 }
 
 export function docs(dirName: string, devMode = false) {
-	const branch = 'master';
+	const docgen = join(__dirname, '../docgen');
 	return new Observable<any>(subs => {
 		sh(
-			`node ../dist/docgen --clean ${
+			`node ${docgen} --clean ${
 				devMode ? '--debug' : ''
-			} -o ../docs/${dirName} --repository "https://github.com/cxlio/cxl/tree/${branch}/${dirName}"`
+			} -o ../docs/${dirName} ` //--repository "https://github.com/cxlio/cxl/tree/${branch}/${dirName}"`
 		).then(
 			out => (console.log(out), subs.complete()),
 			e => subs.error(e)

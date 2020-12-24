@@ -12,7 +12,7 @@ import {
 	createSolutionBuilderHost,
 	sys,
 } from 'typescript';
-import { Subscriber } from '../rx';
+import { Observable, Subscriber } from '../rx';
 export { version as tscVersion, BuildOptions } from 'typescript';
 
 interface Output {
@@ -35,9 +35,8 @@ function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
 export function buildDiagnostics(program: Program | BuilderProgram) {
 	return [
 		...program.getConfigFileParsingDiagnostics(),
-		...program.getSyntacticDiagnostics(),
-		...program.getSemanticDiagnostics(),
 		...program.getOptionsDiagnostics(),
+		...program.getGlobalDiagnostics(),
 	];
 }
 
@@ -78,4 +77,11 @@ export function tsbuild(
 		if (status !== ExitStatus.Success)
 			throw `${program.project}: Typescript compilation failed`;
 	}
+}
+
+export function tsconfig(tsconfig = 'tsconfig.json', options?: BuildOptions) {
+	return new Observable<Output>(subs => {
+		tsbuild(tsconfig, subs, options);
+		subs.complete();
+	});
 }

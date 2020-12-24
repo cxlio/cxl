@@ -9,5 +9,13 @@
 		{ "path": "../server" },
 		{ "path": "../source" }
 	],
-	"files": ["index.ts", "tsc.ts", "package.ts", "file.ts"]
+	"files": [
+		"index.ts",
+		"tsc.ts",
+		"package.ts",
+		"file.ts",
+		"cxl.ts",
+		"builder.ts",
+		"lint.ts"
+	]
 }
