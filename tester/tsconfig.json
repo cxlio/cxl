@@ -5,7 +5,14 @@
 		"types": ["node"],
 		"typeRoots": ["../node_modules/@types"]
 	},
-	"files": ["index.ts"],
+	"files": [
+		"index.ts",
+		"report.ts",
+		"runner-node.ts",
+		"runner-puppeteer.ts",
+		"report-stdout.ts",
+		"report-html.ts"
+	],
 	"references": [
 		{ "path": "../rx" },
 		{ "path": "../server" },
