@@ -54,7 +54,7 @@ export function positionToIndex(source: string, pos: Position) {
 	const len = source.length;
 
 	for (let i = 0; i < len; i++) {
-		if (source[i] === '\n' && --line === 0) return i + pos.column;
+		if (source[i] === '\n' && --line === 0) return i + pos.column + 1;
 	}
 	console.log(pos);
 	throw new Error('Invalid Position');
@@ -62,12 +62,12 @@ export function positionToIndex(source: string, pos: Position) {
 
 function indexToPosOne(
 	source: string,
-	index: number,
-	bias = SourceMapConsumer.GREATEST_LOWER_BOUND
+	index: number
+	//bias = SourceMapConsumer.GREATEST_LOWER_BOUND
 ) {
-	const result: any = indexToPosition(source, index);
+	const result = indexToPosition(source, index);
 	result.line++;
-	result.bias = bias;
+	//result.bias = bias;
 	return result;
 }
 

@@ -1,6 +1,11 @@
 import { colors } from '../server/colors.js';
 
-import { Report, TestReport, TestResult } from './report.js';
+import {
+	Report,
+	TestReport,
+	TestResult,
+	TestCoverageReport,
+} from './report.js';
 
 function printError(name: string, fail: TestResult) {
 	const msg = fail.message;
@@ -24,6 +29,17 @@ function printTest(test: TestReport) {
 	return failures;
 }
 
+function printCoverage(coverage: TestCoverageReport[]) {
+	console.log('Coverage Report:');
+	for (const cov of coverage) {
+		const pct = ((cov.blockCovered / cov.blockTotal) * 100).toFixed(2);
+		console.log(
+			`${cov.url}: ${pct}% (${cov.blockTotal}/${cov.blockCovered})`
+		);
+	}
+}
+
 export default function generate(report: Report) {
-	return printTest(report.testReport);
+	printCoverage(report.coverage);
+	printTest(report.testReport);
 }

@@ -1,5 +1,5 @@
 import { Observable, Subject, operator, toPromise } from '../index.js';
-import { Test } from '../../spec/index.js';
+import { TestApi } from '../../spec/index.js';
 
 interface Log {
 	events: string;
@@ -66,7 +66,7 @@ export function logEvents(observable: Observable<any>) {
 	return result;
 }
 
-export function expectLog(a: Test, obs: Observable<any>, events: string) {
+export function expectLog(a: TestApi, obs: Observable<any>, events: string) {
 	return logEvents(obs).then(result => {
 		a.equal(result.events, events);
 		return result;

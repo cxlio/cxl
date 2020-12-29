@@ -57,6 +57,8 @@ function inspect(val: any) {
 }
 
 export class TestApi {
+	readonly id = lastTestId++;
+	
 	constructor(private $test: Test) {}
 
 	/**
@@ -188,7 +190,6 @@ export class TestApi {
 }
 
 export class Test {
-	readonly id = lastTestId++;
 	name: string;
 	promise?: Promise<any>;
 	results: Result[] = [];
@@ -292,7 +293,7 @@ function spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
 
 	const spyFn: T[K] = function (this: any, ...args: any) {
 		called++;
-		const result = (originalFn as any).apply(this, arguments);
+		const result = (originalFn as any).apply(this, args);
 		sub.next((spy.lastEvent = { called, arguments: args, result }));
 		return result;
 	} as any;
@@ -348,7 +349,7 @@ export function suite(
 	suiteFn: SuiteFn | any[]
 ) {
 	if (Array.isArray(suiteFn)) {
-		const result = new Test(nameOrConfig, () => {});
+		const result = new Test(nameOrConfig, () => { /* nop */ });
 		suiteFn.forEach(test => result.addTest(test));
 	} else return new Test(nameOrConfig, ctx => suiteFn(ctx.test.bind(ctx)));
 }

@@ -16,7 +16,7 @@ Collection of Libraries and Tools
 | @cxl/router        | [0.1.0](https://npmjs.com/package/@cxl/router/v/0.1.0) | GPL-3.0 | Router library       | [Docs](https://cxlio.github.io/cxl/router/0.1.0) |
 | @cxl/rx        | [0.2.0](https://npmjs.com/package/@cxl/rx/v/0.2.0) ([latest:0.1.0](https://npmjs.com/package/@cxl/rx/v/0.1.0)) | Apache-2.0 | Lightweight reactiveX implementation       | [Docs](https://cxlio.github.io/cxl/rx/0.2.0) |
 | @cxl/server        | [0.0.2](https://npmjs.com/package/@cxl/server/v/0.0.2) ([latest:0.0.1](https://npmjs.com/package/@cxl/server/v/0.0.1)) | GPL-3.0 | Application library       | [Docs](https://cxlio.github.io/cxl/server/0.0.2) |
-| @cxl/spec        | [0.0.1](https://npmjs.com/package/@cxl/spec/v/0.0.1) | Apache-2.0 | Testing Library       | [Docs](https://cxlio.github.io/cxl/spec/0.0.1) |
+| @cxl/spec        | [0.0.2](https://npmjs.com/package/@cxl/spec/v/0.0.2) ([latest:0.0.1](https://npmjs.com/package/@cxl/spec/v/0.0.1)) | Apache-2.0 | Testing Library       | [Docs](https://cxlio.github.io/cxl/spec/0.0.2) |
 | @cxl/store        | [0.0.1](https://npmjs.com/package/@cxl/store/v/0.0.1) | GPL-3.0 | Store library       | [Docs](https://cxlio.github.io/cxl/store/0.0.1) |
 | @cxl/template        | [1.0.0](https://npmjs.com/package/@cxl/template/v/1.0.0) | GPL-3.0 | Reactive template library       | [Docs](https://cxlio.github.io/cxl/template/1.0.0) |
 | @cxl/tester        | [0.0.1](https://npmjs.com/package/@cxl/tester/v/0.0.1) | GPL-3.0 | Test runner tool       | [Docs](https://cxlio.github.io/cxl/tester/0.0.1) |

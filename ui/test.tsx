@@ -187,7 +187,8 @@ const attributeTest: Record<string, Tester> = {
 	invalid: testInvalid,
 };
 
-function testAttributes(attributes: string[], a: TestApi) {
+function testAttributes(ctor: typeof Component, a: TestApi) {
+	const attributes = ctor.observedAttributes;
 	const set = new Set(attributes);
 
 	a.equal(
@@ -198,7 +199,7 @@ function testAttributes(attributes: string[], a: TestApi) {
 
 	attributes.forEach(attr => {
 		a.ok(attr.toLowerCase() === attr, `${attr} should be lowercase`);
-		if (attr in attributeTest) (attributeTest as any)[attr](a);
+		if (attr in attributeTest) (attributeTest as any)[attr](ctor, a);
 	});
 }
 
@@ -210,7 +211,7 @@ function testComponent(def: typeof Component, a: TestApi) {
 	a.equal(el.tagName, def.tagName.toUpperCase());
 
 	if (el.getAttribute('role') === 'button') testButton(def, a);
-	if (attributes) testAttributes(attributes, a);
+	if (attributes) testAttributes(def, a);
 	if (el.tagName in Measure) Measure[el.tagName](a);
 
 	const slots = el.shadowRoot?.querySelectorAll('slot[name^="cxl-"]');

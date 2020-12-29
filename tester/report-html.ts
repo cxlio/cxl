@@ -1,7 +1,8 @@
 import { readFile, writeFile } from 'fs/promises';
-import { Report, TestCoverage } from './report.js';
+import { Report, TestCoverageReport } from './report.js';
 
 const STYLES = `<style>
+	body { font-size: 16px; }
 	em.covered { background-color: #a5d6a7 }
 	em { background-color: #ef9a9a; }
 </style>`;
@@ -14,26 +15,33 @@ const HEADER = `<!DOCTYPE html>
 	</cxl-navbar>
 </cxl-appbar><cxl-meta></cxl-meta>`;
 
-async function renderSource(test: TestCoverage) {
+type Tag = { offset: number; text: string };
+
+async function renderSource(test: TestCoverageReport) {
 	const source = await readFile(test.url);
 	let index = 0;
-	let output = `<h2>${test.url}</h2><pre>`;
+	let output = `<h2>${test.url} <small>(${test.blockCovered}/${test.blockTotal})</small></h2><pre>`;
+	const tags: Tag[] = [];
 
 	test.functions.forEach(fn => {
-		if (!fn.isBlockCoverage)
-			fn.ranges.forEach(range => {
-				if (index >= range.endOffset) return;
-
-				const start = Math.max(range.startOffset, index);
-				output +=
-					source.slice(index, start) +
-					`<em class="${range.count ? 'covered' : ''}">${source.slice(
-						range.startOffset,
-						range.endOffset
-					)}</em>`;
-				index = range.endOffset;
-			});
+		fn.ranges.forEach(range => {
+			tags.push(
+				{
+					offset: range.startOffset,
+					text: `<em class="${range.count ? 'covered' : ''}">`,
+				},
+				{ offset: range.endOffset, text: '</em>' }
+			);
+		});
 	});
+
+	tags.sort((a, b) => a.offset - b.offset);
+
+	for (const tag of tags) {
+		output += source.slice(index, tag.offset) + tag.text;
+		index = tag.offset;
+	}
+
 	output += source.slice(index);
 
 	return `${output}</pre>`;

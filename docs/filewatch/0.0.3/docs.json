@@ -604,6 +604,13 @@
           "name": "watch",
           "flags": 1,
           "id": 33,
+          "docs": {
+            "content": [
+              {
+                "value": "Watches a file or a directory for changes."
+              }
+            ]
+          },
           "type": {
             "name": "Observable",
             "kind": 6,
@@ -619,7 +626,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 133,
+                "line": 136,
                 "ch": 22
               },
               "kind": 9,
@@ -635,7 +642,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 134,
+                "line": 137,
                 "ch": 18
               },
               "kind": 9,

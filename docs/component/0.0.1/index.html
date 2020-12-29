@@ -3,7 +3,7 @@
 	<link rel="stylesheet" href="styles.css" />
 	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
 	<cxl-application permanent><title>@cxl/component</title><cxl-appbar>
-	<cxl-navbar permanent><cxl-c pad16><cxl-t h6 inline style="margin-right:12px">@cxl/component</cxl-t><small>0.0.1</small>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">@cxl/component</cxl-t><small>0.0.1</small>
 	</cxl-c>
 		<cxl-hr></cxl-hr>
 		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
@@ -47,12 +47,12 @@
 		</cxl-c></cxl-card><a name="s30"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> $$bindings: <cxl-a href="index--Bindings.html">Bindings</cxl-a></cxl-t>
 		</cxl-c></cxl-card><a name="s36"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>Shadow: (p: { children: Children }) => <cxl-a href="index--Component.html">Component</cxl-a> = <pre><code class="hljs">(p: { <span class="hljs-attr">children</span>: Children }) =&gt; {
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>Shadow: (p: { children: Children }) => <cxl-a href="index--Component.html">Component</cxl-a> = <pre><code class="hljs">(p: { children: Children }) =&gt; {
 		renderChildren(<span class="hljs-built_in">this</span>, p.children, getShadow(<span class="hljs-built_in">this</span>));
 		<span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>;
 	}</code></pre></cxl-t>
 		</cxl-c></cxl-card><a name="s40"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>Slot: (p: { selector: string }) => HTMLSlotElement = <pre><code class="hljs">(p: { <span class="hljs-attr">selector</span>: <span class="hljs-built_in">string</span> }) =&gt; {
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>Slot: (p: { selector: string }) => HTMLSlotElement = <pre><code class="hljs">(p: { selector: <span class="hljs-built_in">string</span> }) =&gt; {
 		<span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;slot&#x27;</span>);
 		<span class="hljs-keyword">const</span> selector = (el.name = p.selector);
 		<span class="hljs-built_in">this</span>.bind(

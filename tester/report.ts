@@ -33,12 +33,48 @@ export type Coverage = TestCoverage[];
 export interface Report {
 	success: boolean;
 	testReport: TestReport;
-	coverage: TestCoverage[];
+	coverage: TestCoverageReport[];
 }
 
 export interface TestCoverage {
 	url: string;
 	functions: FunctionCoverage[];
+}
+
+export interface TestCoverageReport {
+	url: string;
+	functions: FunctionCoverage[];
+	functionTotal?: number;
+	functionCovered?: number;
+	blockTotal: number;
+	blockCovered: number;
+}
+
+function calculateCoverage(coverage: TestCoverage[]) {
+	const result: TestCoverageReport[] = [];
+
+	for (const cov of coverage) {
+		let blockTotal = 0;
+		let blockCovered = 0;
+
+		for (const fnCov of cov.functions) {
+			for (const range of fnCov.ranges) {
+				const len = range.endOffset - range.startOffset;
+				blockTotal += len;
+				if (range.count) blockCovered += len;
+				else blockCovered -= len;
+			}
+		}
+
+		result.push({
+			url: cov.url,
+			functions: cov.functions,
+			blockTotal,
+			blockCovered,
+		});
+	}
+
+	return result;
 }
 
 function translateRanges(
@@ -50,7 +86,6 @@ function translateRanges(
 	const sourcesMap: any = {};
 
 	functions.forEach(cov => {
-		if (cov.isBlockCoverage) return;
 		cov.ranges.forEach(range => {
 			const newRange = sourceMap.translateRange(source, {
 				start: range.startOffset,
@@ -115,7 +150,7 @@ function generateCoverageReport(coverage: Coverage) {
 		}
 	});
 
-	return filtered;
+	return calculateCoverage(filtered);
 }
 
 function renderTestReport(test: Test): TestReport {

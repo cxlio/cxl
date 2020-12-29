@@ -9,10 +9,10 @@ import {
 	ScriptTarget,
 	parse,
 } from './index.js';
-import { Test, suite } from '../spec/index.js';
+import { TestApi, suite } from '../spec/index.js';
 
 export default suite('dts', test => {
-	test('single literal const', (a: Test) => {
+	test('single literal const', (a: TestApi) => {
 		const [out] = parse('export const x = 10;');
 		a.ok(out.id);
 		a.equal(out.kind, Kind.Constant);
@@ -22,7 +22,7 @@ export default suite('dts', test => {
 		a.equal(out.value, '10');
 	});
 
-	test('multiple literal const', (a: Test) => {
+	test('multiple literal const', (a: TestApi) => {
 		const [x, y] = parse('export const x = "hello", y = 10;');
 
 		a.ok(x.id);
@@ -43,7 +43,7 @@ export default suite('dts', test => {
 		a.equal(y.value, '10');
 	});
 
-	test('const reference', (a: Test) => {
+	test('const reference', (a: TestApi) => {
 		const [x, y] = parse('export const x = "hello", y = x;');
 		a.ok(x.id);
 		a.ok(y.id);
@@ -57,14 +57,14 @@ export default suite('dts', test => {
 		a.ok(y.source);
 	});
 
-	test('function - empty', (a: Test) => {
+	test('function - empty', (a: TestApi) => {
 		const [fn] = parse('function fn() { return true; }');
 		a.equal(fn.name, 'fn');
 		a.equal(fn.type, BooleanType);
 		a.ok(fn.source);
 	});
 
-	test('function - optional parameter', (a: Test) => {
+	test('function - optional parameter', (a: TestApi) => {
 		const [fn] = parse('function fn(p?: any) { return true; }');
 		a.equal(fn.name, 'fn');
 		a.equal(fn.type, BooleanType);
@@ -74,7 +74,7 @@ export default suite('dts', test => {
 		a.equal(p.flags, Flags.Optional);
 	});
 
-	test('function - parameters', (a: Test) => {
+	test('function - parameters', (a: TestApi) => {
 		const [fn] = parse(
 			'function fn(_a: boolean, b="test") { return true; }'
 		);
@@ -91,7 +91,7 @@ export default suite('dts', test => {
 		a.equal(b.name, 'b');
 	});
 
-	test('function - rest parameters', (a: Test) => {
+	test('function - rest parameters', (a: TestApi) => {
 		const [fn] = parse('function fn(...p: string[]) { return "hello"; }');
 		a.equal(fn.name, 'fn');
 		a.equal(fn.kind, Kind.Function);
@@ -105,7 +105,7 @@ export default suite('dts', test => {
 		a.equal(p.type.type, StringType);
 	});
 
-	test('function - signatures', (a: Test) => {
+	test('function - signatures', (a: TestApi) => {
 		const [fn1, fn2, fn] = parse(`
 			function fn(_a: string);
 			function fn(_a: boolean);
@@ -117,7 +117,7 @@ export default suite('dts', test => {
 		a.equal(fn.type, NumberType);
 	});
 
-	test('function - infered type', (a: Test) => {
+	test('function - infered type', (a: TestApi) => {
 		const [fn] = parse(`function fn() { return () => true; }`);
 
 		a.assert(fn.type);
@@ -146,7 +146,7 @@ export default suite('dts', test => {
 		}
 	});
 
-	test('type declaration - union type', (a: Test) => {
+	test('type declaration - union type', (a: TestApi) => {
 		const [type] = parse(
 			'export type Operator = boolean | string | number'
 		);
@@ -165,28 +165,28 @@ export default suite('dts', test => {
 		a.equal(t3, NumberType);
 	});
 
-	test('interface - empty', (a: Test) => {
-		const [kls] = parse('interface Test { }');
+	test('interface - empty', (a: TestApi) => {
+		const [kls] = parse('interface TestApi { }');
 
 		a.ok(kls);
-		a.equal(kls.name, 'Test');
+		a.equal(kls.name, 'TestApi');
 		a.equal(kls.kind, Kind.Interface);
 		a.ok(kls.source);
 	});
 
-	test('interface - multiple properties', (a: Test) => {
+	test('interface - multiple properties', (a: TestApi) => {
 		const [kls] = parse(
-			`interface Test { m1: string; m2: number, m3: boolean }`
+			`interface TestApi { m1: string; m2: number, m3: boolean }`
 		);
 
 		a.ok(kls);
-		a.equal(kls.name, 'Test');
+		a.equal(kls.name, 'TestApi');
 		a.equal(kls.kind, Kind.Interface);
 		a.assert(kls.children);
 		a.equal(kls.children.length, 3);
 	});
 
-	test('interface - multiple inheritance', (a: Test) => {
+	test('interface - multiple inheritance', (a: TestApi) => {
 		const [A, B, C] = parse(`
 			interface A { }
 			interface B { }
@@ -204,15 +204,15 @@ export default suite('dts', test => {
 		a.equal(C.kind, Kind.Interface);
 	});
 
-	test('class declaration - empty class', (a: Test) => {
-		const [kls] = parse('class Test { }');
+	test('class declaration - empty class', (a: TestApi) => {
+		const [kls] = parse('class TestApi { }');
 
 		a.ok(kls);
-		a.equal(kls.name, 'Test');
+		a.equal(kls.name, 'TestApi');
 		a.ok(kls.source);
 	});
 
-	test('class - method overload', (a: Test) => {
+	test('class - method overload', (a: TestApi) => {
 		const [A] = parse(`class A {
 			m1(a: string): void;
 			m1(b: boolean): boolean;
@@ -235,13 +235,13 @@ export default suite('dts', test => {
 		a.equal(m3.parameters[0].name, 'c');
 	});
 
-	test('class declaration', (a: Test) => {
-		const [kls] = parse(`class Test<T> extends Set<T> {
+	test('class declaration', (a: TestApi) => {
+		const [kls] = parse(`class TestApi<T> extends Set<T> {
 			member: T;
 		}`);
 
 		a.ok(kls);
-		a.equal(kls.name, 'Test');
+		a.equal(kls.name, 'TestApi');
 		a.equal(kls.kind, Kind.Class);
 		a.assert(kls.typeParameters);
 		const [T] = kls.typeParameters;
@@ -264,7 +264,7 @@ export default suite('dts', test => {
 		a.equal(Tm.kind, Kind.TypeParameter);*/
 	});
 
-	test('class constructor', (a: Test) => {
+	test('class constructor', (a: TestApi) => {
 		const [kls] = parse(
 			`class Kls { constructor(public t: string, s: boolean) { } }`
 		);
@@ -281,7 +281,7 @@ export default suite('dts', test => {
 		a.equal(t.kind, Kind.Property);
 	});
 
-	test('class implements interface', (a: Test) => {
+	test('class implements interface', (a: TestApi) => {
 		const [A, B, C] = parse(`
 			interface A { }
 			interface B { }
@@ -310,7 +310,7 @@ export default suite('dts', test => {
 		a.equal(BType.name, 'B');
 	});
 
-	test('class decorators - cxl Augment', (a: Test) => {
+	test('class decorators - cxl Augment', (a: TestApi) => {
 		const [role, A, B] = parse(
 			`
 			function role(str: string) { }
@@ -327,7 +327,7 @@ export default suite('dts', test => {
 		a.equal(B.docs.tagName, 'cxl-test');
 	});
 
-	test('class extends class and implements interface', (a: Test) => {
+	test('class extends class and implements interface', (a: TestApi) => {
 		const [A, B, C] = parse(`
 			interface A { }
 			class B { }
@@ -345,7 +345,7 @@ export default suite('dts', test => {
 		a.equal(C.kind, Kind.Class);
 	});
 
-	test('class access modifier', (a: Test) => {
+	test('class access modifier', (a: TestApi) => {
 		const [A] = parse(`
 			class A { static s1; public readonly m1 = 'str'; private m2 = 10; protected m3 = false; }
 		`);
@@ -364,7 +364,7 @@ export default suite('dts', test => {
 		a.ok(m3.flags & Flags.Protected);
 	});
 
-	test('class members', (a: Test) => {
+	test('class members', (a: TestApi) => {
 		const [A] = parse(
 			`
 			class A { m1 = 'str'; m2() { } get m3() { return undefined; } set m3(val) {} m4 = new Set<any>(); }
@@ -393,7 +393,7 @@ export default suite('dts', test => {
 		a.equal(m5.type.type.flags, Flags.DefaultLibrary);
 	});
 
-	test('class method', (a: Test) => {
+	test('class method', (a: TestApi) => {
 		const [Alias, A] = parse(`
 			type Alias = Set<any>;
 			class A { m1(): Alias { return new Set<any>(); } }
@@ -406,7 +406,7 @@ export default suite('dts', test => {
 		a.equal(m1.type.type, Alias);
 	});
 
-	test('class - computed property name', (a: Test) => {
+	test('class - computed property name', (a: TestApi) => {
 		const [name, A] = parse(`
 			const name = 'm1';
 			class A { [name]() { return true; } }
@@ -417,7 +417,7 @@ export default suite('dts', test => {
 		a.equal(A.children[0].name, '[name]');
 	});
 
-	test('class methods', (a: Test) => {
+	test('class methods', (a: TestApi) => {
 		const [A] = parse(`
 			abstract class A {
 				m1() { return 'hello'; }
@@ -444,7 +444,7 @@ export default suite('dts', test => {
 		a.equal(m4.kind, Kind.Constructor);
 	});
 
-	test('class abstract', (a: Test) => {
+	test('class abstract', (a: TestApi) => {
 		const [A] = parse(`
 			abstract class A { abstract m1 = 'str'; }
 		`);
@@ -462,7 +462,7 @@ export default suite('dts', test => {
 		a.equal(m1.name, 'm1');
 	});
 
-	test('export clause', (a: Test) => {
+	test('export clause', (a: TestApi) => {
 		const [A, B] = parse(`
 			const A = 'test';
 			export { A };
@@ -475,7 +475,7 @@ export default suite('dts', test => {
 		a.ok(A.flags & Flags.Export);
 	});
 
-	test('JSOoc comments', (a: Test) => {
+	test('JSOoc comments', (a: TestApi) => {
 		const [A] = parse(`
 			/**
 			 * Function Description
@@ -506,7 +506,7 @@ export default suite('dts', test => {
 		a.equal(p2.docs.content?.[0].value, 'param2');
 	});
 
-	test('JSDOC - example', (a: Test) => {
+	test('JSDOC - example', (a: TestApi) => {
 		const [A] = parse(`
 			/**
 			 * Content
@@ -527,7 +527,7 @@ export default suite('dts', test => {
 		a.equal(c3.value, '<div>Example 2</div>');
 	});
 
-	test('JSDOC - see', (a: Test) => {
+	test('JSDOC - see', (a: TestApi) => {
 		const [fn] = parse(`
 			/**
 			 * @see A
@@ -545,7 +545,7 @@ export default suite('dts', test => {
 		a.equal(see.value, 'A');
 	});
 
-	test('type alias - function', (a: Test) => {
+	test('type alias - function', (a: TestApi) => {
 		const [A] = parse(`type A<T> = (val: T) => void;`);
 		a.assert(A.type);
 		const type = A.type;
@@ -555,7 +555,7 @@ export default suite('dts', test => {
 		a.equal(type.type, VoidType);
 	});
 
-	test('type alias - exported', (a: Test) => {
+	test('type alias - exported', (a: TestApi) => {
 		const [A] = parse(`export type A<T> = (val: T) => void;`);
 		a.assert(A.type);
 		a.equal(A.kind, Kind.TypeAlias);
@@ -566,7 +566,7 @@ export default suite('dts', test => {
 		a.equal(type.type, VoidType);
 	});
 
-	test('type alias - Record', (a: Test) => {
+	test('type alias - Record', (a: TestApi) => {
 		const [A] = parse(`type A = Record<keyof Map<any, any>, typeof Set>;`);
 		a.assert(A.type);
 		a.equal(A.kind, Kind.TypeAlias);
@@ -581,7 +581,7 @@ export default suite('dts', test => {
 		a.equal(p2.name, 'Set');
 	});
 
-	test('constructor type', (a: Test) => {
+	test('constructor type', (a: TestApi) => {
 		const [A] = parse(`function fn(ctor: new (a: string)=>boolean) {}`);
 		a.assert(A.parameters);
 		const type = A.parameters[0].type;
@@ -592,7 +592,7 @@ export default suite('dts', test => {
 		a.equal(type.type, BooleanType);
 	});
 
-	test('tuple type', (a: Test) => {
+	test('tuple type', (a: TestApi) => {
 		const [A] = parse(`let A:[string, boolean, ...number[]];`);
 		a.assert(A.type);
 		a.assert(A.type.children);
@@ -603,7 +603,7 @@ export default suite('dts', test => {
 		a.ok(t3.flags & Flags.Rest);
 	});
 
-	test('function - full', (a: Test) => {
+	test('function - full', (a: TestApi) => {
 		const [A] = parse(`/**
  * Catches errors on the observable.
  *
@@ -642,7 +642,7 @@ export function catchError<T, T2>(
 		a.equal(u2, VoidType);
 	});
 
-	test('conditional type', (a: Test) => {
+	test('conditional type', (a: TestApi) => {
 		const [A] = parse(`
 function concat<R extends Set<any>[]>(
 	...observables: R
@@ -654,7 +654,7 @@ function concat<R extends Set<any>[]>(
 		a.equal(A.type.kind, Kind.ConditionalType);
 	});
 
-	test('Type Reference', (a: Test) => {
+	test('Type Reference', (a: TestApi) => {
 		const [Operator, map] = parse(`
 class Operator<T> { };
 function op<T>() { return new Operator<T>(); }
@@ -669,7 +669,7 @@ function op<T>() { return new Operator<T>(); }
 		a.equal(map.type.typeParameters[0].type, map.typeParameters[0]);
 	});
 
-	test('Type Reference - Type Alias', (a: Test) => {
+	test('Type Reference - Type Alias', (a: TestApi) => {
 		const [Operator, operator, map] = parse(`
 type Operator<T> = Set<T>;
 export function operator<T>(): Operator<T> { return new Set<T> }
@@ -686,7 +686,7 @@ function map<T>() {	return operator<T>(); }
 		a.equal(map.type.typeParameters[0].type, map.typeParameters[0]);
 	});
 
-	test('Enum', (a: Test) => {
+	test('Enum', (a: TestApi) => {
 		const [E] = parse('enum E { One, Two=3 }');
 		a.assert(E.children);
 		a.equal(E.children.length, 2);
@@ -697,7 +697,7 @@ function map<T>() {	return operator<T>(); }
 		a.equal(E.children[1].kind, Kind.Property);
 	});
 
-	test('object literal type', (a: Test) => {
+	test('object literal type', (a: TestApi) => {
 		const [fn] = parse(`function fn(p: { children: Set<any> }) { }`);
 		a.assert(fn.parameters);
 		const [p] = fn.parameters;
@@ -710,7 +710,7 @@ function map<T>() {	return operator<T>(); }
 		a.equal(children.type.name, 'Set');
 	});
 
-	test('object literal infered type', (a: Test) => {
+	test('object literal infered type', (a: TestApi) => {
 		const [fn] = parse(
 			`function fn(four: string) { return { one: 1, two: new Set(), three() {return true}, four }; }`
 		);
@@ -730,7 +730,7 @@ function map<T>() {	return operator<T>(); }
 		a.equal(four.type, StringType);
 	});
 
-	test('index signature', (a: Test) => {
+	test('index signature', (a: TestApi) => {
 		const [A] = parse(`interface A { [key: string]: boolean; }`);
 		a.assert(A.children);
 		const key = A.children[0];
@@ -740,7 +740,7 @@ function map<T>() {	return operator<T>(); }
 		a.equal(key.parameters[0].type, StringType);
 	});
 
-	test('export', (a: Test) => {
+	test('export', (a: TestApi) => {
 		const [A, B] = parse(`function B() { } export { Set as A, B }`);
 		a.equal(A.name, 'A');
 		a.equal(B.name, 'B');
@@ -749,7 +749,7 @@ function map<T>() {	return operator<T>(); }
 		a.equal(A.kind, Kind.Export);
 	});
 
-	test('interface extends class', (a: Test) => {
+	test('interface extends class', (a: TestApi) => {
 		const [A, B] = parse(
 			`export class A<T> { m1?: boolean; } export interface A<T> { m2: string; }`
 		);
@@ -761,7 +761,7 @@ function map<T>() {	return operator<T>(); }
 		a.equal(A.children[1].name, 'm2');
 	});
 
-	test('@internal', (a: Test) => {
+	test('@internal', (a: TestApi) => {
 		const [A, B] = parse(
 			`/* @internal */
 				export class B { }
@@ -776,7 +776,7 @@ function map<T>() {	return operator<T>(); }
 
 	test(
 		'method spread parameters',
-		(a: Test) => {
+		(a: TestApi) => {
 			const [A] = parse(`class A { test(...args) { } }`);
 			a.equal(A.name, 'A');
 			a.assert(A.children);
@@ -789,7 +789,7 @@ function map<T>() {	return operator<T>(); }
 		true
 	);
 
-	test('function spread parameters', (a: Test) => {
+	test('function spread parameters', (a: TestApi) => {
 		const [A] = parse(`function test(...args) { }`);
 		a.equal(A.name, 'test');
 		a.assert(A.parameters);

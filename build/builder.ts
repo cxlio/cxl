@@ -1,10 +1,9 @@
 import { dirname, join, resolve } from 'path';
-import { existsSync, writeFileSync } from 'fs';
-import { mkdir, utimes } from 'fs/promises';
+import { existsSync, mkdirSync, utimesSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 
 import { Application, sh } from '../server/index.js';
-import { Observable, from } from '../rx/index.js';
+import { Observable } from '../rx/index.js';
 import { Output } from '../source/index.js';
 import { tscVersion } from './tsc.js';
 import { BASEDIR, Package, readPackage } from './package.js';
@@ -27,13 +26,13 @@ class Build {
 		this.outputDir = config.outputDir || '.';
 	}
 
-	private async writeOutput(result: Output) {
+	private writeOutput(result: Output) {
 		const outFile = resolve(this.outputDir, result.path);
 		const source = result.source;
 		const outputDir = dirname(outFile);
-		if (!existsSync(outputDir)) await mkdir(outputDir);
+		if (!existsSync(outputDir)) mkdirSync(outputDir);
 		writeFileSync(outFile, source);
-		if (result.mtime) await utimes(outFile, result.mtime, result.mtime);
+		if (result.mtime) utimesSync(outFile, result.mtime, result.mtime);
 		return result;
 	}
 
@@ -43,7 +42,7 @@ class Build {
 				`${join(this.outputDir, output.path)} ${kb(
 					(output.source || '').length
 				)}`,
-			task.switchMap(result => from(this.writeOutput(result)))
+			task.tap(result => this.writeOutput(result))
 		);
 	}
 

@@ -1,4 +1,4 @@
-import { Test, suite } from '../spec/index.js';
+import { TestApi, suite } from '../spec/index.js';
 import dom from './index.js';
 import { Observable, be, of, merge } from '../rx/index.js';
 
@@ -98,7 +98,7 @@ export default suite('component', test => {
 	});
 
 	test('Component Class', a => {
-		class Test extends Node {
+		class TestApi extends Node {
 			static create() {
 				return document.createElement('div');
 			}
@@ -113,9 +113,9 @@ export default suite('component', test => {
 		}
 
 		const el = (
-			<Test title="hello" tabIndex={10}>
+			<TestApi title="hello" tabIndex={10}>
 				Hello World
-			</Test>
+			</TestApi>
 		) as HTMLDivElement;
 		a.equal(el.tagName, 'DIV');
 		a.equal(el.title, 'hello');
@@ -123,22 +123,22 @@ export default suite('component', test => {
 	});
 
 	test('Component Function', a => {
-		function TestChild({ children }: { children: any }) {
+		function TestApiChild({ children }: { children: any }) {
 			return <h1>{children}</h1>;
 		}
 
-		function Test(p: { title: string; children: any }) {
+		function TestApi(p: { title: string; children: any }) {
 			return (
 				<div title={p.title}>
-					<TestChild>{p.children}</TestChild>
+					<TestApiChild>{p.children}</TestApiChild>
 				</div>
 			);
 		}
 
 		const el = (
-			<Test title="hello">
+			<TestApi title="hello">
 				<span>World</span>
-			</Test>
+			</TestApi>
 		) as HTMLDivElement;
 
 		a.equal(el.tagName, 'DIV');
@@ -202,7 +202,7 @@ export default suite('component', test => {
 		a.ok(child);
 	});
 
-	test('Bindings - Set Attribute', (a: Test) => {
+	test('Bindings - Set Attribute', (a: TestApi) => {
 		const checked = be(true);
 		const el = (
 			<Span className={checked.map(val => (val ? 'minus' : 'check'))} />
