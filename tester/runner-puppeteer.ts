@@ -1,4 +1,4 @@
-import { Browser, Page, Request, launch } from 'puppeteer';
+import { Browser, CoverageEntry, Page, Request, launch } from 'puppeteer';
 import { readFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
 import { Test } from '../spec/index.js';
@@ -107,6 +107,30 @@ async function cjsRunner(page: Page, sources: Output[], app: TestRunner) {
 	}, entry);
 }
 
+function Range(startOffset: number, endOffset: number, count: number) {
+	return {
+		startOffset,
+		endOffset,
+		count,
+	};
+}
+
+function generateRanges(entry: CoverageEntry) {
+	const result = [];
+	let index = 0;
+
+	for (const range of entry.ranges) {
+		if (range.start > index) result.push(Range(index, range.start, 0));
+		result.push(Range(range.start, range.end, 1));
+		index = range.end;
+	}
+
+	if (index < entry.text.length) {
+		result.push(Range(index, entry.text.length, 0));
+	}
+	return result;
+}
+
 async function generateCoverage(
 	page: Page,
 	sources: Output[]
@@ -119,12 +143,8 @@ async function generateCoverage(
 			functions: [
 				{
 					functionName: '',
-					ranges: entry.ranges.map(r => ({
-						startOffset: r.start,
-						endOffset: r.end,
-						count: 0,
-					})),
-					isBlockCoverage: false,
+					ranges: generateRanges(entry),
+					isBlockCoverage: true,
 				},
 			],
 		};
