@@ -166,9 +166,12 @@ const routeTitles = router$.map(state => {
 
 function routePath(routeEl: HTMLElement) {
 	const route = getElementRoute(routeEl);
-	return replaceParameters(
-		route.path?.toString() || '',
-		router.state?.arguments || {}
+	return (
+		route &&
+		replaceParameters(
+			route.path?.toString() || '',
+			router.state?.arguments || {}
+		)
 	);
 }
 

@@ -50,6 +50,7 @@ function translateRanges(
 	const sourcesMap: any = {};
 
 	functions.forEach(cov => {
+		if (cov.isBlockCoverage) return;
 		cov.ranges.forEach(range => {
 			const newRange = sourceMap.translateRange(source, {
 				start: range.startOffset,

@@ -30,7 +30,11 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 		},
 		{
 			outputDir,
-			tasks: [tsconfig('tsconfig.test.json')],
+			tasks: [
+				file('index.html', 'index.html').catchError(() => EMPTY),
+				file('debug.html', 'debug.html').catchError(() => EMPTY),
+				tsconfig('tsconfig.test.json'),
+			],
 		},
 		{
 			target: 'docs',

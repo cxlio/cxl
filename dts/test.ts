@@ -773,4 +773,27 @@ function map<T>() {	return operator<T>(); }
 		a.ok(A.flags & Flags.Internal);
 		a.ok(!(B.flags & Flags.Internal));
 	});
+
+	test(
+		'method spread parameters',
+		(a: Test) => {
+			const [A] = parse(`class A { test(...args) { } }`);
+			a.equal(A.name, 'A');
+			a.assert(A.children);
+			a.equal(A.children.length, 1);
+			const test = A.children[0];
+			a.equal(test.name, 'test');
+			a.assert(test.parameters);
+			a.equal(test.parameters[0].name, 'args');
+		},
+		true
+	);
+
+	test('function spread parameters', (a: Test) => {
+		const [A] = parse(`function test(...args) { }`);
+		a.equal(A.name, 'test');
+		a.assert(A.parameters);
+		a.equal(A.parameters.length, 1);
+		a.equal(A.parameters[0].name, 'args');
+	});
 });

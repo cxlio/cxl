@@ -229,14 +229,20 @@ export function render<T>(source: Observable<T>, renderFn: (item: T) => Node) {
 	};
 }
 
-export function each<T>(source: Observable<T[]>, renderFn: (item: T) => Node) {
+export function each<T>(
+	source: Observable<T[]>,
+	renderFn: (item: T) => Node,
+	empty?: () => Node
+) {
 	const marker = new Marker();
 
 	return (host: Bindable) => {
 		host.bind(
 			source.tap(arr => {
 				marker.empty();
-				for (const item of arr) marker.insert(renderFn(item));
+				if (arr.length)
+					for (const item of arr) marker.insert(renderFn(item));
+				else if (empty) marker.insert(empty());
 			})
 		);
 

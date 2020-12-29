@@ -149,6 +149,41 @@ export class C extends Component {
 
 	@StyleAttribute()
 	primary = false;
+
+	@StyleAttribute()
+	secondary = false;
+}
+
+/**
+ * @beta
+ */
+@Augment<Layout>(
+	'cxl-layout',
+	css({
+		$: {
+			display: 'block',
+			...margin(0, 16, 0, 16),
+		},
+		'@medium': {
+			$: margin(0, 32, 0, 32),
+		},
+		'@large': {
+			$: margin(0, 64, 0, 64),
+		},
+		'@xlarge': {
+			$: { width: 1200 },
+			$center: margin(0, 'auto', 0, 'auto'),
+		},
+		container$full: { width: 'auto' },
+	}),
+	_ => <slot />
+)
+export class Layout extends Component {
+	@StyleAttribute()
+	center = false;
+
+	@StyleAttribute()
+	full = false;
 }
 
 @Augment(
@@ -156,17 +191,20 @@ export class C extends Component {
 	css({
 		$: {
 			display: 'block',
-			...padding(32, 16, 32, 16),
 			position: 'relative',
 			flexGrow: 1,
 			overflowY: 'auto',
 			overflowScrolling: 'touch',
 		},
+		container: {
+			...margin(32, 16, 32, 16),
+			//overflowX: 'hidden',
+		},
 		'@medium': {
-			$: padding(24, 32, 24, 32),
+			container: margin(24, 32, 24, 32),
 		},
 		'@large': {
-			$: padding(32, 64, 32, 64),
+			container: margin(32, 64, 32, 64),
 		},
 		'@xlarge': {
 			container: { width: 1200 },
@@ -175,9 +213,13 @@ export class C extends Component {
 		container$full: { width: 'auto' },
 	}),
 	_ => (
-		<div className="container">
-			<slot />
-		</div>
+		<>
+			<slot name="header" />
+			<div className="container">
+				<slot />
+			</div>
+			<slot name="footer" />
+		</>
 	)
 )
 export class Content extends Component {

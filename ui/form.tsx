@@ -48,6 +48,8 @@ import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
 import { Appbar, AppbarContextual } from './navigation.js';
 
+export { SelectBox, Option } from './select.js';
+
 /**
  * Sliders allow users to make selections from a range of values.
  * @example
@@ -271,9 +273,9 @@ const FieldBase = [
 function fieldInput<T extends Component>(host: T) {
 	return defer(() =>
 		host.parentNode instanceof Field
-			? (get(host.parentNode, 'input').filter(inp => !!inp) as Observable<
-					InputBase
-			  >)
+			? (get(host.parentNode, 'input').filter(
+					inp => !!inp
+			  ) as Observable<InputBase>)
 			: undefined
 	);
 }

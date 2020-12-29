@@ -50,18 +50,18 @@
 		</cxl-c></cxl-card><a name="s54"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<a title="See Source" style="float:right;color:var(--cxl-onSurface87)" href="https://github.com/cxlio/cxl/tree/master/server/index.ts#L120"><cxl-icon icon="code"></cxl-icon></a><cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>readonly</cxl-chip> parameters: <cxl-a href="index--Parameter.html">Parameter</cxl-a>[] = <pre><code class="hljs">[
 		{
-			name: <span class="hljs-string">&#x27;help&#x27;</span>,
-			shortcut: <span class="hljs-string">&#x27;h&#x27;</span>,
-			handle(app: Application) {
+			<span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;help&#x27;</span>,
+			<span class="hljs-attr">shortcut</span>: <span class="hljs-string">&#x27;h&#x27;</span>,
+			<span class="hljs-function"><span class="hljs-title">handle</span>(<span class="hljs-params">app: Application</span>)</span> {
 				<span class="hljs-keyword">if</span> (app.version) app.log(app.version);
 				process.exit(<span class="hljs-number">0</span>);
 			},
 		},
 		{
-			name: <span class="hljs-string">&#x27;config&#x27;</span>,
-			help: <span class="hljs-string">&#x27;Use JSON config file&#x27;</span>,
-			shortcut: <span class="hljs-string">&#x27;c&#x27;</span>,
-			handle(app: Application, fileName: <span class="hljs-built_in">string</span>) {
+			<span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;config&#x27;</span>,
+			<span class="hljs-attr">help</span>: <span class="hljs-string">&#x27;Use JSON config file&#x27;</span>,
+			<span class="hljs-attr">shortcut</span>: <span class="hljs-string">&#x27;c&#x27;</span>,
+			<span class="hljs-function"><span class="hljs-title">handle</span>(<span class="hljs-params">app: Application, fileName: <span class="hljs-built_in">string</span></span>)</span> {
 				app.parameters.parseJsonFile(fileName);
 			},
 		},

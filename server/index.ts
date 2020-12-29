@@ -21,6 +21,10 @@ type OperationFunction<T> = (() => Promise<T>) | Promise<T> | Observable<T>;
 type Operation = Observable<OperationResult>;
 type LogMessage<T = any> = string | ((p: T) => string) | Error;
 
+process.on('unhandledRejection', up => {
+	throw up;
+});
+
 function operation<T>(fn: OperationFunction<T>): Operation {
 	let start = hrtime();
 	const result = from(typeof fn === 'function' ? fn() : fn);

@@ -1,7 +1,42 @@
-type TestFn<T = Test> = (test: T) => void | Promise<any>;
+import { subject, toPromise } from '../rx/index.js';
+
+export type Measurements = Record<string, any>;
+
+type EventType = 'afterAll' | 'afterEach' | 'beforeAll' | 'beforeEach';
+type TestEvent = { type: EventType; promises: Promise<any>[] };
+
+type TestFn<T = TestApi> = (test: T) => void | Promise<any>;
 type SuiteFn<T = TestFn> = (
 	suiteFn: (name: string, testFn: T, only?: boolean) => void
 ) => void;
+
+type FunctionsOf<T> = {
+	[K in keyof T]: T[K] extends (...args: any) => any ? T[K] : never;
+};
+
+type ParametersOf<T, K extends keyof T> = Parameters<FunctionsOf<T>[K]>;
+
+interface Spy<EventT> {
+	lastEvent?: EventT;
+	destroy(): void;
+	then(
+		resolve: (ev: EventT) => void,
+		reject: (e: any) => void
+	): Promise<EventT>;
+}
+
+interface SpyFn<ParametersT, ResultT> {
+	/// Number of times the function was called.
+	called: number;
+	arguments: ParametersT;
+	result: ResultT;
+}
+
+interface SpyProp<T> {
+	setCount: number;
+	getCount: number;
+	value: T;
+}
 
 export interface Result {
 	success: boolean;
@@ -21,44 +56,36 @@ function inspect(val: any) {
 	return val;
 }
 
-export class Test {
-	readonly id = lastTestId++;
-	name: string;
-	promise?: Promise<any>;
-	results: Result[] = [];
-	tests: Test[] = [];
-	only: Test[] = [];
-	timeout = 5 * 1000;
-	private domContainer?: Element;
-	private completed = false;
-
-	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
-		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
-		else this.name = nameOrConfig.name;
-	}
+export class TestApi {
+	constructor(private $test: Test) {}
 
 	/**
 	 * Returns a connected dom element. Cleaned up after test completion.
 	 */
-	get dom(): Element {
-		const el = this.domContainer || document.createElement('DIV');
-		if (!this.domContainer)
-			document.body.appendChild((this.domContainer = el));
+	get dom() {
+		const el = this.$test.domContainer || document.createElement('DIV');
+		if (!this.$test.domContainer)
+			document.body.appendChild((this.$test.domContainer = el));
 
 		return el;
 	}
 
-	log(...args: any[]) {
-		console.log(...args);
+	afterAll(fn: () => Promise<any> | void) {
+		this.$test.events.subscribe(ev => {
+			if (ev.type === 'afterAll') {
+				const result = fn();
+				if (result) ev.promises.push(result);
+			}
+		});
 	}
 
 	ok(condition: any, message = 'Assertion failed') {
-		this.results.push({ success: !!condition, message });
+		this.$test.results.push({ success: !!condition, message });
 	}
 
 	assert(condition: any, message = 'Assertion Failed'): asserts condition {
 		if (!condition) throw new Error(message);
-		this.results.push({ success: !!condition, message });
+		this.$test.results.push({ success: !!condition, message });
 	}
 
 	equal<T>(a: T, b: T, desc?: string) {
@@ -69,110 +96,19 @@ export class Test {
 	}
 
 	ran(n: number) {
+		const results = this.$test.results;
 		return this.ok(
-			n === this.results.length,
-			`Expected ${n} assertions, instead got ${this.results.length}`
+			n === results.length,
+			`Expected ${n} assertions, instead got ${results.length}`
 		);
-	}
-
-	protected pushError(e: Error | string) {
-		this.results.push(
-			e instanceof Error
-				? { success: false, message: e.message, stack: e.stack }
-				: { success: false, message: e }
-		);
-	}
-
-	doTimeout(promise: Promise<any>, time = this.timeout) {
-		return new Promise<void>((resolve, reject) => {
-			const timeoutId = setTimeout(() => {
-				reject(new Error('Async test timed out'));
-			}, time);
-
-			promise.then(() => {
-				if (this.completed)
-					reject(new Error('Test was already completed.'));
-				this.completed = true;
-				clearTimeout(timeoutId);
-				resolve();
-			}, reject);
-		});
 	}
 
 	async() {
 		let result: () => void;
-		this.promise = this.doTimeout(
+		this.$test.promise = this.$test.doTimeout(
 			new Promise<void>(resolve => (result = resolve))
 		);
 		return () => result();
-	}
-
-	/**
-	 * Create a component test
-	 */
-	component<T extends HTMLElement>(
-		tagName: string,
-		testFn: TestFn<ComponentTest<T>>
-	) {
-		this.tests.push(new ComponentTest(tagName, testFn));
-	}
-
-	test(name: string, testFn: TestFn, only = false) {
-		this.tests.push(new Test(name, testFn));
-		if (only) this.only.push(new Test(name, testFn));
-	}
-
-	addTest(test: Test) {
-		this.tests.push(test);
-	}
-
-	async run(): Promise<Result[]> {
-		try {
-			const result = this.testFn(this);
-			const promise = result ? this.doTimeout(result) : this.promise;
-			await promise;
-			if (promise && this.completed === false)
-				throw new Error('Never completed');
-			if (this.only.length)
-				await Promise.all(this.only.map(test => test.run()));
-			else if (this.tests.length)
-				await Promise.all(this.tests.map(test => test.run()));
-			if (this.domContainer && this.domContainer.parentNode)
-				this.domContainer.parentNode.removeChild(this.domContainer);
-		} catch (e) {
-			this.pushError(e);
-		} finally {
-			this.domContainer = undefined;
-		}
-
-		return this.results;
-	}
-
-	toJSON(): any {
-		return {
-			name: this.name,
-			results: this.results,
-			tests: this.tests.map(r => r.toJSON()),
-			only: this.only.map(r => r.toJSON()),
-		};
-	}
-}
-
-export type Measurements = Record<string, any>;
-
-/**
- * special suite for Web Components
- */
-export class ComponentTest<T extends HTMLElement = HTMLElement> extends Test {
-	constructor(public tagName: string, fn: TestFn<ComponentTest<T>>) {
-		super(tagName, fn as TestFn);
-	}
-
-	/** Returns a connected element */
-	element(tagName = this.tagName): T {
-		const el = document.createElement(tagName) as T;
-		this.dom.appendChild(el);
-		return el;
 	}
 
 	measure(measurements: Measurements) {
@@ -197,9 +133,48 @@ export class ComponentTest<T extends HTMLElement = HTMLElement> extends Test {
 		}
 	}
 
-	testEvent(name: string, trigger: (el: T) => void) {
+	/**
+	 * You can use testOnly instead of test to specify which tests are the only ones
+	 * you want to run in that test file.
+	 */
+	testOnly(name: string, testFn: TestFn) {
+		this.$test.tests.push(new Test(name, testFn));
+		this.$test.only.push(new Test(name, testFn));
+	}
+
+	test(name: string, testFn: TestFn) {
+		this.$test.tests.push(new Test(name, testFn));
+	}
+
+	spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
+		const spy = spyFn(object, method);
+		this.$test.events.subscribe({
+			complete: spy.destroy,
+		});
+		return spy;
+	}
+
+	spyProp<T, K extends keyof T>(object: T, prop: K) {
+		const spy = spyProp(object, prop);
+		this.$test.events.subscribe({
+			complete: spy.destroy,
+		});
+		return spy;
+	}
+
+	/** Returns a connected element */
+	element<T extends HTMLElement>(tagName: string): T {
+		const el = document.createElement(tagName) as T;
+		this.dom.appendChild(el);
+		return el;
+	}
+
+	testEvent<T extends HTMLElement>(
+		el: T,
+		name: string,
+		trigger: (el: T) => void
+	) {
 		this.test(`on${name}`, a => {
-			const el = this.element();
 			const resolve = a.async();
 			function handler(ev: Event) {
 				a.equal(ev.type, name, `"${name}" event fired`);
@@ -212,17 +187,168 @@ export class ComponentTest<T extends HTMLElement = HTMLElement> extends Test {
 	}
 }
 
+export class Test {
+	readonly id = lastTestId++;
+	name: string;
+	promise?: Promise<any>;
+	results: Result[] = [];
+	tests: Test[] = [];
+	only: Test[] = [];
+	timeout = 5 * 1000;
+	domContainer?: Element;
+	events = subject<TestEvent>();
+	private completed = false;
+
+	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
+		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
+		else this.name = nameOrConfig.name;
+	}
+
+	pushError(e: Error | string) {
+		this.results.push(
+			e instanceof Error
+				? { success: false, message: e.message, stack: e.stack }
+				: { success: false, message: e }
+		);
+	}
+
+	doTimeout(promise: Promise<any>, time = this.timeout) {
+		return new Promise<void>((resolve, reject) => {
+			const timeoutId = setTimeout(() => {
+				reject(new Error('Async test timed out'));
+			}, time);
+
+			promise.then(() => {
+				if (this.completed)
+					reject(new Error('Test was already completed.'));
+				this.completed = true;
+				clearTimeout(timeoutId);
+				resolve();
+			}, reject);
+		});
+	}
+
+	addTest(test: Test) {
+		this.tests.push(test);
+	}
+
+	async emit(type: EventType) {
+		const ev: TestEvent = { type, promises: [] };
+		this.events.next(ev);
+		if (ev.promises) await Promise.all(ev.promises);
+	}
+
+	async run(): Promise<Result[]> {
+		try {
+			const testApi = new TestApi(this);
+			const result = this.testFn(testApi);
+			const promise = result ? this.doTimeout(result) : this.promise;
+			await promise;
+			if (promise && this.completed === false)
+				throw new Error('Never completed');
+			if (this.only.length)
+				await Promise.all(this.only.map(test => test.run()));
+			else if (this.tests.length)
+				await Promise.all(this.tests.map(test => test.run()));
+			if (this.domContainer && this.domContainer.parentNode)
+				this.domContainer.parentNode.removeChild(this.domContainer);
+		} catch (e) {
+			this.pushError(e);
+		} finally {
+			this.domContainer = undefined;
+			await this.emit('afterAll');
+		}
+
+		this.events.complete();
+		return this.results;
+	}
+
+	toJSON(): any {
+		return {
+			name: this.name,
+			results: this.results,
+			tests: this.tests.map(r => r.toJSON()),
+			only: this.only.map(r => r.toJSON()),
+		};
+	}
+}
+
+function spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
+	const sub = subject<SpyFn<ParametersOf<T, K>, T[K]>>();
+	const originalFn: T[K] = object[method];
+	const spy: Spy<SpyFn<ParametersOf<T, K>, T[K]>> = {
+		destroy() {
+			object[method] = originalFn;
+			sub.complete();
+		},
+		then(resolve: any, reject: any) {
+			return toPromise(sub.first()).then(ev => {
+				resolve(ev);
+				return ev;
+			}, reject);
+		},
+	};
+	let called = 0;
+
+	const spyFn: T[K] = function (this: any, ...args: any) {
+		called++;
+		const result = (originalFn as any).apply(this, arguments);
+		sub.next((spy.lastEvent = { called, arguments: args, result }));
+		return result;
+	} as any;
+	object[method] = spyFn;
+
+	return spy;
+}
+
+function spyProp<T, K extends keyof T>(object: T, prop: K) {
+	let value: T[K] = object[prop];
+	let setCount = 0;
+	let getCount = 0;
+	const sub = subject<SpyProp<T[K]>>();
+	const result: Spy<SpyProp<T[K]>> = {
+		destroy() {
+			sub.complete();
+			Object.defineProperty(object, prop, { configurable: true, value });
+		},
+		then(resolve: any, reject: any) {
+			return toPromise(sub.first()).then(ev => {
+				resolve(ev);
+				return ev;
+			}, reject);
+		},
+	};
+
+	Object.defineProperty(object, prop, {
+		configurable: true,
+		get() {
+			getCount++;
+			sub.next((result.lastEvent = { setCount, getCount, value }));
+			return value;
+		},
+		set(newValue: T[K]) {
+			setCount++;
+			value = newValue;
+			sub.next((result.lastEvent = { setCount, getCount, value }));
+		},
+	});
+
+	return result;
+}
+
 export function spec(name: string | TestConfig, fn: TestFn) {
 	return new Test(name, fn);
 }
 
+/**
+ * @deprecated Use spec instead.
+ */
 export function suite(
 	nameOrConfig: string | TestConfig,
 	suiteFn: SuiteFn | any[]
 ) {
-	return new Test(nameOrConfig, context => {
-		if (Array.isArray(suiteFn))
-			suiteFn.forEach(test => context.addTest(test));
-		else suiteFn(context.test.bind(context));
-	});
+	if (Array.isArray(suiteFn)) {
+		const result = new Test(nameOrConfig, () => {});
+		suiteFn.forEach(test => result.addTest(test));
+	} else return new Test(nameOrConfig, ctx => suiteFn(ctx.test.bind(ctx)));
 }

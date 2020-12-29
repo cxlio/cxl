@@ -11,13 +11,13 @@
 		"@typescript-eslint/eslint-plugin": "^4.1.1",
 		"@typescript-eslint/parser": "^4.1.1",
 		"eslint": "^7.14.0",
-		"firebase": "^7.17.1",
+		"firebase": "^7.24.0",
 		"highlight.js": "^10.1.1",
 		"markdown-it": "^11.0.0",
 		"puppeteer": "^5.2.0",
 		"source-map-support": "0.5.19",
 		"terser": "^4.6.13",
-		"typescript": "file:../typescript"
+		"typescript": "^4.2.0-dev.20201211"
 	},
 	"scripts": {
 		"build": "node scripts/build-all.js && node scripts/build-readme",

@@ -15,11 +15,20 @@ interface RawSourceMap {
 export interface Output {
 	path: string;
 	source: string;
+	mtime?: number;
 }
 
 export interface Position {
 	line: number;
 	column: number;
+}
+
+/**
+ * Source code range, starts at 0.
+ */
+export interface Range {
+	start: number;
+	end: number;
 }
 
 const SOURCEMAP_REGEX = /\/\/# sourceMappingURL=(.+)/;
@@ -75,22 +84,18 @@ export class SourceMap {
 		this.map = new SourceMapConsumer(this.raw);
 	}
 
-	translateRange(source: string, range: { start: number; end: number }) {
+	translateRange(source: string, range: Range) {
 		const sourceMap = this.map;
 		const start = sourceMap.originalPositionFor(
 			indexToPosOne(source, range.start)
 		);
 		const end = sourceMap.originalPositionFor(
-			indexToPosOne(
-				source,
-				range.end,
-				SourceMapConsumer.LEAST_UPPER_BOUND
-			)
+			indexToPosOne(source, range.end)
 		);
 		if (start.source === null || end.source === null) {
-			console.log(start, end, range);
 			return;
 		}
+
 		start.source = resolve(this.dir, start.source);
 		start.line--;
 		end.source = resolve(this.dir, end.source);

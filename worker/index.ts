@@ -33,8 +33,6 @@ parentPort.on('message', ev => {
 `
 	: `onmessage=function(message) { const ev=message.data,id=ev.id;${SHARED_RUNTIME}}`;
 
-declare const require: any;
-
 type WorkerFunction = (payload: any, subscriber: Subscriber<any>) => void;
 
 interface InternalMessage<T> {

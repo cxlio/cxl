@@ -1,5 +1,9 @@
 {
 	"name": "@cxl/source",
 	"version": "0.0.1",
-	"private": true
+	"description": "Source file management library",
+	"private": true,
+	"scripts": {
+		"build": "node ../dist/build"
+	}
 }

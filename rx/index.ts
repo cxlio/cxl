@@ -141,6 +141,10 @@ export class Observable<T> {
 		if (subscribe) this.__subscribe = subscribe;
 	}
 
+	then<E, R>(resolve: (val: T) => R, reject?: (e: E) => R): Promise<R> {
+		return toPromise(this).then(resolve, reject);
+	}
+
 	pipe<A>(a: Operator<T, A>): Observable<A>;
 	pipe<A, B>(a: Operator<T, A>, b: Operator<A, B>): Observable<B>;
 	pipe<A, B, C>(
@@ -463,7 +467,7 @@ export function reduce<T, T2>(
 	});
 }
 
-export function debounceFunction<A extends any[], R>(
+export function debounce<A extends any[], R>(
 	fn: (...a: A) => R,
 	delay?: number
 ) {
@@ -814,7 +818,21 @@ export function be<T>(initialValue: T) {
 }
 
 /**
- * Creates a new Reference object
+ * Creates a new Observable
+ */
+export function observable<T>(subscribe: SubscribeFunction<T>) {
+	return new Observable<T>(subscribe);
+}
+
+/**
+ * Creates a new Subject
+ */
+export function subject<T>() {
+	return new Subject<T>();
+}
+
+/**
+ * Creates a new Reference object. A reference is a Behavior Subject that does not require an initial value.
  */
 export function ref<T>(initial?: T) {
 	return arguments.length === 1

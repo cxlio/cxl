@@ -2,8 +2,8 @@ import { readFile, writeFile } from 'fs/promises';
 import { Report, TestCoverage } from './report.js';
 
 const STYLES = `<style>
-	em.covered { background-color: #c3c; }
-	em { background-color: #3cc; }
+	em.covered { background-color: #a5d6a7 }
+	em { background-color: #ef9a9a; }
 </style>`;
 
 const HEADER = `<!DOCTYPE html>
@@ -27,7 +27,7 @@ async function renderSource(test: TestCoverage) {
 				const start = Math.max(range.startOffset, index);
 				output +=
 					source.slice(index, start) +
-					`<em class="${range.count ? '' : 'covered'}">${source.slice(
+					`<em class="${range.count ? 'covered' : ''}">${source.slice(
 						range.startOffset,
 						range.endOffset
 					)}</em>`;

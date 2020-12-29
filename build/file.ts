@@ -70,7 +70,7 @@ export function files(sources: string[]) {
 	});
 }
 
-function matchStat(fromPath: string, toPath: string) {
+export function matchStat(fromPath: string, toPath: string) {
 	return Promise.all([fs.stat(fromPath), fs.stat(toPath)]).then(
 		([fromStat, toStat]) =>
 			fromStat.mtime.getTime() === toStat.mtime.getTime(),
@@ -83,13 +83,9 @@ function matchStat(fromPath: string, toPath: string) {
  */
 export function copyDir(fromPath: string, toPath: string) {
 	return defer(() =>
-		from(
-			matchStat(fromPath, toPath).then(
-				hasChanged =>
-					hasChanged &&
-					sh(`mkdir -p ${toPath} && cp -R ${fromPath}/* ${toPath}`)
-			)
-		).mergeMap(() => EMPTY)
+		from(sh(`rsync -au --delete ${fromPath}/* ${toPath}`)).mergeMap(
+			() => EMPTY
+		)
 	);
 }
 

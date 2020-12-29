@@ -824,6 +824,8 @@ export class T extends Component {
 	@StyleAttribute()
 	subtitle2 = false;
 	@StyleAttribute()
+	body2 = false;
+	@StyleAttribute()
 	code = false;
 	@StyleAttribute()
 	inline = false;
@@ -1055,3 +1057,17 @@ export class Surface extends Component {
 	@StyleAttribute()
 	primary = false;
 }
+
+@Augment(
+	'cxl-toolbar',
+	css({
+		$: {
+			display: 'flex',
+			alignItems: 'center',
+			height: 56,
+			...padding(4, 16, 4, 16),
+		},
+	}),
+	Slot
+)
+export class Toolbar extends Component {}

@@ -110,12 +110,12 @@ class Fragment {
 			// Don't decode the search params.
 			const p =
 				i === params.length - 1
-					? param || null
+					? param || ''
 					: param
 					? decodeURIComponent(param)
-					: null;
+					: '';
 
-			if (p) result[this.parameters[i]] = p;
+			result[this.parameters[i]] = p;
 		});
 
 		return this._extractQuery(fragment, result);
@@ -189,7 +189,9 @@ export class RouteManager {
 
 const URL_REGEX = /([^#]+)(?:#(.+))?/;
 
-export function getElementRoute<T extends RouteElement>(el: T): Route<T> {
+export function getElementRoute<T extends RouteElement>(
+	el: T
+): Route<T> | undefined {
 	return (el as any)[routeSymbol];
 }
 

@@ -90,8 +90,12 @@
 				"files": ["spec/*.ts"],
 				"tasks": "npm run build --prefix spec"
 			},
+			"source": {
+				"files": ["source/*.ts"],
+				"tasks": "npm run build --prefix source"
+			},
 			"tester": {
-				"files": ["tester/index.ts", "tester/*.js"],
+				"files": ["tester/*.ts"],
 				"tasks": "npm run build --prefix tester"
 			}
 		}

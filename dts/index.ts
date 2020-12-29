@@ -176,6 +176,8 @@ export const NumberType = createBaseType('number'),
 const dtsNode = Symbol('dtsNode');
 
 let currentIndex: Index;
+let currentSourceFile: ts.SourceFile | undefined;
+let currentNode: ts.Node | undefined;
 let program: ts.Program;
 let compilerHost: ts.CompilerHost;
 let config: ts.ParsedCommandLine;
@@ -389,10 +391,34 @@ function serializeTypeParameter(node: ts.TypeParameterDeclaration) {
 	return result;
 }
 
+function error(msg: string, ...extra: any[]): never {
+	if (currentSourceFile) {
+		console.error(currentSourceFile.fileName);
+		if (currentNode)
+			console.error(
+				tsLocal.getLineAndCharacterOfPosition(
+					currentSourceFile,
+					currentNode.pos
+				)
+			);
+	}
+	if (extra.length) console.error(...extra);
+	throw new Error(msg);
+}
+
+function serializeUnknownSymbol(symbol: ts.Symbol): Node {
+	const result = {
+		name: symbol.name,
+		kind: Kind.Unknown,
+		flags: 0,
+	};
+	return result;
+}
+
 function serializeParameter(symbol: ts.Symbol) {
 	const node = symbol.valueDeclaration as ts.ParameterDeclaration;
 
-	if (!node) throw new Error('Invalid Parameter');
+	if (!node) return serializeUnknownSymbol(symbol);
 
 	const result = serializeDeclarationWithType(node);
 
@@ -413,7 +439,7 @@ function getSymbolReference(
 
 	if (tsLocal.isExportSpecifier(node)) {
 		const local = typeChecker.getExportSpecifierLocalTargetSymbol(node);
-		if (!local) throw new Error('Invalid Symbol');
+		if (!local) error('Invalid Symbol');
 		const result = getSymbolReference(local);
 		result.name = symbol.getName();
 		return result;
@@ -929,6 +955,7 @@ function setup(
 }
 
 function visit(n: ts.Node, parent: Node): void {
+	currentNode = n;
 	if (tsLocal.isVariableStatement(n)) {
 		pushChildren(parent, n.declarationList.declarations.map(serialize));
 	} else
@@ -996,6 +1023,8 @@ function parseSourceFile(sourceFile: ts.SourceFile) {
 		name: relative(process.cwd(), sourceFile.fileName),
 	});
 	const symbol = typeChecker.getSymbolAtLocation(sourceFile);
+
+	currentSourceFile = sourceFile;
 
 	if (symbol) {
 		typeChecker

@@ -131,6 +131,9 @@ function catchWatchError(fullpath: string, options: WatchOptions) {
 	};
 }
 
+/**
+ * Watches a file or a directory for changes.
+ */
 export function watch(
 	filename: string,
 	options?: Partial<WatchOptions>

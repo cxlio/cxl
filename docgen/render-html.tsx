@@ -654,7 +654,7 @@ function Versions() {
 }
 
 function Navbar(pkg: any, out: Output) {
-	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h6 inline style="margin-right:12px">${
+	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">${
 		pkg.name
 	}</cxl-t>${Versions()}
 	</cxl-c>
