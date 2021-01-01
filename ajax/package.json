@@ -8,5 +8,6 @@
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/ajax && node ../tester"
-	}
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

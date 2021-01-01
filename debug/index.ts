@@ -19,7 +19,7 @@ type Return<T> = T extends (...args: any) => any ? ReturnType<T> : never;
 export function override<T, K extends keyof T>(
 	obj: T,
 	fn: K,
-	pre: T[K] extends Function ? T[K] : never,
+	pre: T[K] extends (...arg: any) => any ? T[K] : never,
 	post?: (this: T, result: Return<T[K]>, ...args: any[]) => void
 ) {
 	const old = obj && obj[fn];

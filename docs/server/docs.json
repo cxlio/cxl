@@ -2909,6 +2909,869 @@
           "value": "styles"
         }
       ]
+    },
+    {
+      "source": {
+        "fileName": "program.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "program.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 2,
+            "ch": 37
+          },
+          "kind": 2,
+          "name": "OperationFunction",
+          "flags": 0,
+          "id": 138,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 4,
+                "ch": 23
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 139
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "program.ts",
+              "line": 4,
+              "ch": 27
+            },
+            "kind": 5,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 4,
+                  "ch": 27
+                },
+                "kind": 19,
+                "name": "",
+                "flags": 0,
+                "id": 140,
+                "type": {
+                  "source": {
+                    "fileName": "program.ts",
+                    "line": 4,
+                    "ch": 29
+                  },
+                  "kind": 17,
+                  "name": "",
+                  "flags": 0,
+                  "id": 141,
+                  "type": {
+                    "name": "Promise",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 139,
+                        "name": "T",
+                        "kind": 6
+                      }
+                    ]
+                  },
+                  "parameters": []
+                }
+              },
+              {
+                "name": "Promise",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 139,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              },
+              {
+                "name": "Observable",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 139,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 4,
+            "ch": 76
+          },
+          "kind": 2,
+          "name": "LogMessage",
+          "flags": 0,
+          "id": 142,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 6,
+                "ch": 16
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 143,
+              "value": "any"
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "program.ts",
+              "line": 6,
+              "ch": 26
+            },
+            "kind": 5,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 6,
+                  "ch": 35
+                },
+                "kind": 19,
+                "name": "",
+                "flags": 0,
+                "id": 144,
+                "type": {
+                  "source": {
+                    "fileName": "program.ts",
+                    "line": 6,
+                    "ch": 37
+                  },
+                  "kind": 17,
+                  "name": "",
+                  "flags": 0,
+                  "id": 145,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  "parameters": [
+                    {
+                      "source": {
+                        "fileName": "program.ts",
+                        "line": 6,
+                        "ch": 38
+                      },
+                      "kind": 9,
+                      "name": "p",
+                      "flags": 0,
+                      "id": 146,
+                      "type": {
+                        "id": 143,
+                        "name": "T",
+                        "kind": 6
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Error",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 6,
+            "ch": 63
+          },
+          "kind": 4,
+          "name": "Parameter",
+          "flags": 0,
+          "id": 147,
+          "children": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 8,
+                "ch": 21
+              },
+              "kind": 10,
+              "name": "name",
+              "flags": 4,
+              "id": 148,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 9,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "shortcut",
+              "flags": 4,
+              "id": 149,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 10,
+                "ch": 19
+              },
+              "kind": 10,
+              "name": "rest",
+              "flags": 4,
+              "id": 150,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 11,
+                "ch": 16
+              },
+              "kind": 10,
+              "name": "type",
+              "flags": 4,
+              "id": 151,
+              "type": {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 13,
+                  "ch": 7
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "program.ts",
+                      "line": 13,
+                      "ch": 7
+                    },
+                    "kind": 23,
+                    "name": "'string'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "program.ts",
+                      "line": 13,
+                      "ch": 18
+                    },
+                    "kind": 23,
+                    "name": "'boolean'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "program.ts",
+                      "line": 13,
+                      "ch": 30
+                    },
+                    "kind": 23,
+                    "name": "'number'",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 13,
+                "ch": 40
+              },
+              "kind": 10,
+              "name": "help",
+              "flags": 4,
+              "id": 152,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 14,
+                "ch": 15
+              },
+              "kind": 11,
+              "name": "handle",
+              "flags": 0,
+              "id": 153,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "program.ts",
+                    "line": 15,
+                    "ch": 9
+                  },
+                  "kind": 9,
+                  "name": "value",
+                  "flags": 0,
+                  "id": 154,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 16,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "ProgramConfiguration",
+          "flags": 0,
+          "id": 155,
+          "children": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 25,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "name",
+              "flags": 4,
+              "id": 156,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 26,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "parameters",
+              "flags": 4,
+              "id": 157,
+              "type": {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 27,
+                  "ch": 13
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 147,
+                  "name": "Parameter",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 27,
+                "ch": 26
+              },
+              "kind": 10,
+              "name": "logColor",
+              "flags": 4,
+              "id": 158,
+              "type": {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 28,
+                  "ch": 11
+                },
+                "kind": 26,
+                "name": "",
+                "flags": 0,
+                "type": {
+                  "source": {
+                    "fileName": "program.ts",
+                    "line": 28,
+                    "ch": 17
+                  },
+                  "kind": 27,
+                  "name": "colors",
+                  "flags": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 29,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Package",
+          "flags": 0,
+          "id": 159,
+          "children": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 31,
+                "ch": 19
+              },
+              "kind": 10,
+              "name": "name",
+              "flags": 4,
+              "id": 160,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 33,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Logger",
+          "flags": 0,
+          "id": 161,
+          "children": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 35,
+                "ch": 18
+              },
+              "kind": 0,
+              "name": "",
+              "flags": 0
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 37,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Program",
+          "flags": 0,
+          "id": 162,
+          "children": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 39,
+                "ch": 19
+              },
+              "kind": 10,
+              "name": "name",
+              "flags": 4,
+              "id": 163,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 40,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "pkg",
+              "flags": 4,
+              "id": 164,
+              "type": {
+                "id": 159,
+                "name": "Package",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 41,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "log",
+              "flags": 4,
+              "id": 165,
+              "type": {
+                "id": 161,
+                "name": "Logger",
+                "kind": 6
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 43,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "readJson",
+          "flags": 257,
+          "id": 166,
+          "docs": {
+            "content": [
+              {
+                "value": "Read and parse a JSON file, ignores errors."
+              }
+            ]
+          },
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 49,
+                "ch": 31
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 167,
+              "value": "any"
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 51,
+                  "ch": 11
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 167,
+                    "name": "T",
+                    "kind": 6
+                  },
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 49,
+                "ch": 40
+              },
+              "kind": 9,
+              "name": "fileName",
+              "flags": 0,
+              "id": 168,
+              "docs": {
+                "content": [
+                  {
+                    "tag": "param",
+                    "value": "Path of file to parse"
+                  }
+                ]
+              },
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 57,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "logError",
+          "flags": 0,
+          "id": 169,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 59,
+                "ch": 18
+              },
+              "kind": 9,
+              "name": "prefix",
+              "flags": 0,
+              "id": 170,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 59,
+                "ch": 33
+              },
+              "kind": 9,
+              "name": "error",
+              "flags": 0,
+              "id": 171,
+              "type": {
+                "name": "Error",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 62,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "log",
+          "flags": 0,
+          "id": 172,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 114,
+                "ch": 13
+              },
+              "kind": 9,
+              "name": "prefix",
+              "flags": 0,
+              "id": 173,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 114,
+                "ch": 28
+              },
+              "kind": 9,
+              "name": "msg",
+              "flags": 0,
+              "id": 174,
+              "type": {
+                "id": 142,
+                "name": "LogMessage",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "program.ts",
+            "line": 121,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "program",
+          "flags": 1,
+          "id": 175,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 123,
+                "ch": 24
+              },
+              "kind": 9,
+              "name": "name",
+              "flags": 0,
+              "id": 176,
+              "type": {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 124,
+                  "ch": 6
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "id": 155,
+                    "name": "ProgramConfiguration",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "program.ts",
+                "line": 124,
+                "ch": 37
+              },
+              "kind": 9,
+              "name": "startFn",
+              "flags": 0,
+              "id": 177,
+              "type": {
+                "source": {
+                  "fileName": "program.ts",
+                  "line": 125,
+                  "ch": 9
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 178,
+                "type": {
+                  "name": "void",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "program.ts",
+                      "line": 125,
+                      "ch": 11
+                    },
+                    "kind": 9,
+                    "name": "p",
+                    "flags": 0,
+                    "id": 179,
+                    "type": {
+                      "id": 162,
+                      "name": "Program",
+                      "kind": 6
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "program.ts",
+              "line": 129,
+              "ch": 7
+            },
+            "kind": 16,
+            "name": "",
+            "flags": 256,
+            "id": 180,
+            "parameters": [],
+            "type": {
+              "name": "Promise",
+              "kind": 6,
+              "typeParameters": [
+                {
+                  "name": "void",
+                  "kind": 32,
+                  "flags": 0
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

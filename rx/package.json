@@ -10,5 +10,6 @@
 		"test": "npm run build && cd ../dist/rx && node ../tester"
 	},
 	"homepage": "https://cxlio.github.io/cxl/rx",
-	"repository": "https://github.com/cxlio/cxl/tree/master/rx"
+	"repository": "https://github.com/cxlio/cxl/tree/master/rx",
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

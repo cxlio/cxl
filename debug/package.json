@@ -2,5 +2,11 @@
 	"name": "@cxl/debug",
 	"version": "0.0.1",
 	"private": true,
-	"description": "Debug utilities"
+	"description": "Debug utilities",
+	"scripts": {
+		"test": "npm run build && cd ../dist/debug && node ../tester",
+		"build": "node ../dist/build"
+	},
+	"license": "GPL-3.0",
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

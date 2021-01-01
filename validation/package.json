@@ -6,6 +6,7 @@
 	"private": true,
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "node ../dist/build && cd ../dist/validation && node ../tester"
-	}
+		"test": "npm run build && cd ../dist/validation && node ../tester"
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

@@ -12,5 +12,6 @@
 	"scripts": {
 		"build": "node build",
 		"test": "npm run build && cd ../dist/docgen && node ../tester --node"
-	}
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

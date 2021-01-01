@@ -8,7 +8,7 @@ function write(path, source) {
 }
 
 cp.execSync('mkdir -p ../dist/build');
-cp.execSync('npm run build-index', { encoding: 'utf8' });
+cp.execSync('npm run build-index && npm run build-test', { encoding: 'utf8' });
 cp.execSync('cp amd.js license* ../dist/build');
 
 const amdConfig = JSON.parse(fs.readFileSync('./tsconfig.amd.json'));

@@ -5,6 +5,7 @@
 	"license": "GPL-3.0",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "node ../dist/build && cd ../dist/tsx && node ../tester"
-	}
+		"test": "npm run build && cd ../dist/tsx && node ../tester"
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

@@ -3,5 +3,10 @@
 	"version": "0.0.1",
 	"description": "String diff tool",
 	"license": "Apache-2.0",
-	"private": true
+	"private": true,
+	"scripts": {
+		"test": "npm run build && cd ../dist/diff && node ../tester",
+		"build": "node ../dist/build"
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

@@ -6,12 +6,13 @@
 	"private": true,
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "node ../dist/build && cd ../dist/server && node ../tester --node"
+		"test": "npm run build && cd ../dist/server && node ../tester --node"
 	},
 	"dependencies": {
 		"source-map-support": "0.5.19"
 	},
 	"peerDependencies": {
 		"@cxl/rx": "0.1.0"
-	}
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

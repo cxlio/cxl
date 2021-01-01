@@ -7,10 +7,13 @@
 	"main": "index.js",
 	"scripts": {
 		"build-index": "../node_modules/typescript/bin/tsc -b && ../node_modules/typescript/bin/tsc -b tsconfig.amd.json",
-		"build": "node build.mjs"
+		"build-test": "tsc -b tsconfig.test.json",
+		"build": "node build.mjs",
+		"test": "npm run build && cd ../dist/build && node ../tester --node"
 	},
 	"dependencies": {
 		"terser": "^4.6.13",
 		"typescript": "^3.7.4"
-	}
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

@@ -5,6 +5,7 @@
 	"license": "Apache-2.0",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "cd ../dist/spec && node ../tester --node"
-	}
+		"test": "npm run build && cd ../dist/spec && node ../tester --node"
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

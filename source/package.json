@@ -4,6 +4,9 @@
 	"description": "Source file management library",
 	"private": true,
 	"scripts": {
-		"build": "node ../dist/build"
-	}
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/source && node ../tester --node"
+	},
+	"license": "GPL-3.0",
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

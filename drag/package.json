@@ -6,5 +6,6 @@
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/drag && node ../tester"
-	}
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

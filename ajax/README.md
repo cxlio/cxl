@@ -1,5 +1,5 @@
-# @cxl/ajax
-
+# @cxl/ajax 
+	
 [![npm version](https://badge.fury.io/js/%40cxl%2Fajax.svg)](https://badge.fury.io/js/%40cxl%2Fajax)
 
 ajax helper
@@ -12,4 +12,5 @@ ajax helper
 
 ## Installation
 
-    npm install @cxl/ajax
+	npm install @cxl/ajax
+

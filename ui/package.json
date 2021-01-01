@@ -7,9 +7,10 @@
 	"scripts": {
 		"build": "node build",
 		"build-icons": "node build-icons",
-		"test": "node build && cd ../dist/ui && node ../tester"
+		"test": "npm run build && cd ../dist/ui && node ../tester"
 	},
 	"dependencies": {
 		"typescript": "^4.1.2"
-	}
+	},
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }
