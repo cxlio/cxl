@@ -6,7 +6,7 @@
 	"license": "GPL-3.0",
 	"main": "index.js",
 	"scripts": {
-		"build-index": "../node_modules/typescript/bin/tsc -b && ../node_modules/typescript/bin/tsc -b tsconfig.amd.json",
+		"build-index": "tsc -b && tsc -b tsconfig.amd.json",
 		"build-test": "tsc -b tsconfig.test.json",
 		"build": "node build.mjs",
 		"test": "npm run build && cd ../dist/build && node ../tester --node"
