@@ -36,7 +36,7 @@ async function run() {
 
 	try {
 		await exec(`git clone . ${dest}`);
-		await exec(`npm install --prefix build`, { cwd: dest });
+		await exec(`npm install --production`, { cwd: dest });
 		await exec(`npm run build --prefix build`, { cwd: dest });
 		const projects = findProjects(dest);
 	} finally {

@@ -2,11 +2,15 @@
 	"private": true,
 	"name": "@cxl/cxl",
 	"version": "0.0.0",
+	"dependencies": {
+		"@types/node": "^14.10.2",
+		"terser": "^4.6.13",
+		"typescript": "^4.2.0-dev.20201211"
+	},
 	"devDependencies": {
 		"@fortawesome/fontawesome-free": "^5.14.0",
 		"@types/eslint": "^7.2.0",
 		"@types/markdown-it": "^10.0.1",
-		"@types/node": "^14.10.2",
 		"@types/puppeteer": "^3.0.1",
 		"@typescript-eslint/eslint-plugin": "^4.1.1",
 		"@typescript-eslint/parser": "^4.1.1",
@@ -16,14 +20,11 @@
 		"markdown-it": "^11.0.0",
 		"puppeteer": "^5.2.0",
 		"source-map-support": "0.5.19",
-		"terser": "^4.6.13",
-		"source-map": "^0.7.3",
-		"typescript": "^4.2.0-dev.20201211"
+		"source-map": "^0.7.3"
 	},
 	"scripts": {
 		"build": "node scripts/lint-project && node scripts/build-all.js && node scripts/build-readme",
 		"preinstall": "scripts/preinstall.sh",
-		"prepublishOnly": "node scripts/build-all.js && node scripts/build-readme",
-		"install": "cd build && node build.mjs"
+		"prepublishOnly": "node scripts/build-all.js && node scripts/build-readme"
 	}
 }
