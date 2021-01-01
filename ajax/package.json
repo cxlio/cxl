@@ -6,6 +6,7 @@
 	"homepage": "https://cxlio.github.io/cxl/ajax",
 	"private": true,
 	"scripts": {
-		"build": "node ../dist/build"
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/ajax && node ../tester"
 	}
 }

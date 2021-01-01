@@ -22,10 +22,10 @@ export class Reference<T> extends Observable<T> {
 		return ref$.set(val);
 	}
 
-	then<R>(resolve: (val: T) => R, reject: (e: any) => void) {
+	/*then<R>(resolve: (val: T) => R, reject: (e: any) => void) {
 		const ref$ = firebase.database().ref(this.path);
 		return ref$.once('value').then(snap => resolve(snap.val()), reject);
-	}
+	}*/
 
 	ref<K extends keyof T>(key: K) {
 		return new Reference<T[K]>(this.path, key.toString());

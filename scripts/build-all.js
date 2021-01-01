@@ -15,7 +15,7 @@ async function build(dir) {
 
 	if (!pkg) return;
 
-	if (pkg.private) return console.log(`Ignoring private package ${pkg.name}`);
+	// if (pkg.private) return console.log(`Ignoring private package ${pkg.name}`);
 
 	const cmd = !pkg.scripts?.package
 		? `npm run test && npm run build -- docs package`
@@ -23,12 +23,19 @@ async function build(dir) {
 
 	console.log(`Building ${pkg.name}`);
 
+	const start = Date.now();
+	await sh(cmd, { cwd: dir, stdio: 'ignore' });
+	const buildTime = Date.now() - start;
+	const testReport = await readJson(
+		path.join('dist', dir, 'test-report.json')
+	);
+
 	stats.packages.push({
 		name: pkg.name,
 		package: pkg,
+		testReport,
+		buildTime,
 	});
-
-	await sh(cmd, { cwd: dir, stdio: 'ignore' });
 }
 
 module.exports = fs.readdir('.').then(async all => {

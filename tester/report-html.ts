@@ -1,4 +1,5 @@
 import { readFile, writeFile } from 'fs/promises';
+import { escapeHtml } from '../source/index.js';
 import { Report, TestCoverageReport } from './report.js';
 
 const STYLES = `<style>
@@ -18,7 +19,7 @@ const HEADER = `<!DOCTYPE html>
 type Tag = { offset: number; text: string };
 
 async function renderSource(test: TestCoverageReport) {
-	const source = await readFile(test.url);
+	const source = await readFile(test.url, 'utf8');
 	let index = 0;
 	let output = `<h2>${test.url} <small>(${test.blockCovered}/${test.blockTotal})</small></h2><pre>`;
 	const tags: Tag[] = [];
@@ -38,7 +39,7 @@ async function renderSource(test: TestCoverageReport) {
 	tags.sort((a, b) => a.offset - b.offset);
 
 	for (const tag of tags) {
-		output += source.slice(index, tag.offset) + tag.text;
+		output += escapeHtml(source.slice(index, tag.offset)) + tag.text;
 		index = tag.offset;
 	}
 

@@ -3,6 +3,6 @@
 	"compilerOptions": {
 		"outDir": "../dist/source"
 	},
-	"files": [],
+	"files": ["test.ts"],
 	"references": [{ "path": "." }, { "path": "../tester" }]
 }

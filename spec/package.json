@@ -4,6 +4,7 @@
 	"description": "Testing Library",
 	"license": "Apache-2.0",
 	"scripts": {
-		"build": "node ../dist/build"
+		"build": "node ../dist/build",
+		"test": "cd ../dist/spec && node ../tester --node"
 	}
 }

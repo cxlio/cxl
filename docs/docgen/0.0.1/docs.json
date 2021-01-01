@@ -4212,41 +4212,24 @@
         {
           "source": {
             "fileName": "render-json.ts",
-            "line": 4,
-            "ch": 5
-          },
-          "kind": 31,
-          "name": "cwd",
-          "flags": 0,
-          "id": 220,
-          "value": "process.cwd()",
-          "type": {
-            "name": "string",
-            "kind": 32,
-            "flags": 0
-          }
-        },
-        {
-          "source": {
-            "fileName": "render-json.ts",
-            "line": 4,
-            "ch": 26
+            "line": 2,
+            "ch": 32
           },
           "kind": 16,
           "name": "serialize",
           "flags": 0,
-          "id": 221,
+          "id": 220,
           "parameters": [
             {
               "source": {
                 "fileName": "render-json.ts",
-                "line": 6,
+                "line": 4,
                 "ch": 19
               },
               "kind": 9,
               "name": "key",
               "flags": 0,
-              "id": 222,
+              "id": 221,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -4256,13 +4239,13 @@
             {
               "source": {
                 "fileName": "render-json.ts",
-                "line": 6,
+                "line": 4,
                 "ch": 31
               },
               "kind": 9,
               "name": "value",
               "flags": 0,
-              "id": 223,
+              "id": 222,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -4285,7 +4268,7 @@
           "kind": 16,
           "name": "render",
           "flags": 1,
-          "id": 224,
+          "id": 223,
           "type": {
             "source": {
               "fileName": "render-json.ts",
@@ -4311,7 +4294,7 @@
               "kind": 9,
               "name": "_app",
               "flags": 0,
-              "id": 225,
+              "id": 224,
               "type": {
                 "id": 7,
                 "name": "DocGen",
@@ -4327,7 +4310,7 @@
               "kind": 9,
               "name": "output",
               "flags": 0,
-              "id": 226,
+              "id": 225,
               "type": {
                 "name": "Output",
                 "kind": 6
@@ -4356,7 +4339,7 @@
           "kind": 16,
           "name": "declarationFilter",
           "flags": 0,
-          "id": 227,
+          "id": 226,
           "parameters": [
             {
               "source": {
@@ -4367,7 +4350,7 @@
               "kind": 9,
               "name": "node",
               "flags": 0,
-              "id": 228,
+              "id": 227,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -4411,7 +4394,7 @@
           "kind": 16,
           "name": "render",
           "flags": 1,
-          "id": 229,
+          "id": 228,
           "type": {
             "source": {
               "fileName": "render-summary.ts",
@@ -4437,7 +4420,7 @@
               "kind": 9,
               "name": "_app",
               "flags": 0,
-              "id": 230,
+              "id": 229,
               "type": {
                 "id": 7,
                 "name": "DocGen",
@@ -4453,7 +4436,7 @@
               "kind": 9,
               "name": "output",
               "flags": 0,
-              "id": 231,
+              "id": 230,
               "type": {
                 "name": "Output",
                 "kind": 6
@@ -4482,7 +4465,7 @@
           "kind": 31,
           "name": "KindMap",
           "flags": 0,
-          "id": 232,
+          "id": 231,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -4509,7 +4492,7 @@
           "kind": 31,
           "name": "GroupTitle",
           "flags": 0,
-          "id": 233,
+          "id": 232,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -4537,7 +4520,7 @@
           "kind": 31,
           "name": "content",
           "flags": 0,
-          "id": 234,
+          "id": 233,
           "value": "{\n\tMembers: 'Members',\n\tAPI: 'API',\n\t'Inherited from': 'Inherited from',\n\tUnknown: 'Unknown',\n\tParameters: 'Parameters',\n\tExample: 'Example',\n\tDemo: 'Demo',\n}",
           "type": {
             "source": {
@@ -4558,7 +4541,7 @@
                 "kind": 0,
                 "name": "Members",
                 "flags": 0,
-                "id": 235,
+                "id": 234,
                 "value": "'Members'",
                 "type": {
                   "name": "string",
@@ -4575,7 +4558,7 @@
                 "kind": 0,
                 "name": "API",
                 "flags": 0,
-                "id": 236,
+                "id": 235,
                 "value": "'API'",
                 "type": {
                   "name": "string",
@@ -4592,7 +4575,7 @@
                 "kind": 0,
                 "name": "'Inherited from'",
                 "flags": 0,
-                "id": 237,
+                "id": 236,
                 "value": "'Inherited from'",
                 "type": {
                   "name": "string",
@@ -4609,7 +4592,7 @@
                 "kind": 0,
                 "name": "Unknown",
                 "flags": 0,
-                "id": 238,
+                "id": 237,
                 "value": "'Unknown'",
                 "type": {
                   "name": "string",
@@ -4626,7 +4609,7 @@
                 "kind": 0,
                 "name": "Parameters",
                 "flags": 0,
-                "id": 239,
+                "id": 238,
                 "value": "'Parameters'",
                 "type": {
                   "name": "string",
@@ -4643,7 +4626,7 @@
                 "kind": 0,
                 "name": "Example",
                 "flags": 0,
-                "id": 240,
+                "id": 239,
                 "value": "'Example'",
                 "type": {
                   "name": "string",
@@ -4660,7 +4643,7 @@
                 "kind": 0,
                 "name": "Demo",
                 "flags": 0,
-                "id": 241,
+                "id": 240,
                 "value": "'Demo'",
                 "type": {
                   "name": "string",
@@ -4680,7 +4663,7 @@
           "kind": 31,
           "name": "jsdocMap",
           "flags": 0,
-          "id": 242,
+          "id": 241,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -4708,7 +4691,7 @@
           "kind": 16,
           "name": "groupTitle",
           "flags": 1,
-          "id": 243,
+          "id": 242,
           "parameters": [
             {
               "source": {
@@ -4719,7 +4702,7 @@
               "kind": 9,
               "name": "kind",
               "flags": 0,
-              "id": 244,
+              "id": 243,
               "type": {
                 "name": "Kind",
                 "kind": 6
@@ -4741,7 +4724,7 @@
           "kind": 16,
           "name": "kindToString",
           "flags": 1,
-          "id": 245,
+          "id": 244,
           "parameters": [
             {
               "source": {
@@ -4752,7 +4735,7 @@
               "kind": 9,
               "name": "kind",
               "flags": 0,
-              "id": 246,
+              "id": 245,
               "type": {
                 "name": "Kind",
                 "kind": 6
@@ -4774,7 +4757,7 @@
           "kind": 16,
           "name": "translate",
           "flags": 1,
-          "id": 247,
+          "id": 246,
           "parameters": [
             {
               "source": {
@@ -4785,7 +4768,7 @@
               "kind": 9,
               "name": "key",
               "flags": 0,
-              "id": 248,
+              "id": 247,
               "type": {
                 "source": {
                   "fileName": "localization.tsx",
@@ -4823,7 +4806,7 @@
           "kind": 16,
           "name": "jsdocTitle",
           "flags": 1,
-          "id": 249,
+          "id": 248,
           "parameters": [
             {
               "source": {
@@ -4834,7 +4817,7 @@
               "kind": 9,
               "name": "tag",
               "flags": 0,
-              "id": 250,
+              "id": 249,
               "type": {
                 "name": "string",
                 "kind": 32,

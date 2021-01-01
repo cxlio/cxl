@@ -2,7 +2,7 @@
 	
 [![npm version](https://badge.fury.io/js/%40cxl%2Fcss.svg)](https://badge.fury.io/js/%40cxl%2Fcss)
 
-CSS in Typescript
+Type Safe CSS
 
 ## Project Details
 

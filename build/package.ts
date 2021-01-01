@@ -16,6 +16,7 @@ export interface Package {
 	license: License;
 	files: string[];
 	main: string;
+	bin?: string;
 	browser?: string;
 	homepage: string;
 	private: boolean;
@@ -105,6 +106,7 @@ function packageJson(p: any) {
 				browser: p.browser,
 				homepage: p.homepage,
 				bugs: p.bugs,
+				bin: p.bin,
 				repository: p.repository && getRepo(p.repository),
 				dependencies: p.dependencies,
 				peerDependencies: p.peerDependencies,

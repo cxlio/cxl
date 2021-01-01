@@ -4,12 +4,13 @@
 	"description": "Documentation generator for typescript",
 	"homepage": "https://cxlio.github.io/cxl/docgen",
 	"license": "GPL-3.0",
+	"bin": "index.js",
 	"dependencies": {
 		"highlight.js": "^10.1.1",
 		"markdown-it": "^11.0.0"
 	},
 	"scripts": {
 		"build": "node build",
-		"docs": "rm -rf ../docs/docgen && node ../dist/docgen -o ../docs/docgen --repository \"https://github.com/cxlio/cxl/tree/`git rev-parse --abbrev-ref HEAD`/docgen\""
+		"test": "npm run build && cd ../dist/docgen && node ../tester --node"
 	}
 }

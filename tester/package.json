@@ -4,7 +4,8 @@
 	"description": "Test runner tool",
 	"license": "GPL-3.0",
 	"scripts": {
-		"build": "node build"
+		"build": "node build",
+		"test": "cd ../dist/tester && node ../tester --node"
 	},
 	"dependencies": {
 		"puppeteer": "^5.0.0",

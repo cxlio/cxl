@@ -5,6 +5,6 @@
 		"lib": ["es2015"],
 		"types": ["node"]
 	},
-	"files": ["index.ts", "colors.ts"],
+	"files": ["index.ts", "colors.ts", "program.ts"],
 	"references": [{ "path": "../rx" }]
 }

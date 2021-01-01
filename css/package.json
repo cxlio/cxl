@@ -1,10 +1,11 @@
 {
 	"name": "@cxl/css",
 	"version": "0.0.1",
-	"description": "CSS in Typescript",
+	"description": "Type Safe CSS",
 	"homepage": "https://cxlio.github.io/cxl/css",
 	"license": "GPL-3.0",
 	"scripts": {
-		"build": "node ../dist/build"
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/css && node ../tester"
 	}
 }

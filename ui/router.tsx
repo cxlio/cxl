@@ -234,20 +234,26 @@ export class RouterLink extends Component {
 	focusable = false;
 }
 
-@Augment<RouterTab>('cxl-router-tab', $ => (
-	<RouterLink href={get($, 'href')}>
-		<Tab
-			$={el =>
-				on(el, 'cxl-tab.selected')
-					.map(() => el)
-					.pipe(triggerEvent($, 'cxl-tab.selected'))
-			}
-			selected={get($, 'href').switchMap(routeIsActive)}
-		>
-			<slot />
-		</Tab>
-	</RouterLink>
-))
+@Augment<RouterTab>(
+	'cxl-router-tab',
+	css({
+		$: { flexGrow: 1 },
+	}),
+	$ => (
+		<RouterLink href={get($, 'href')}>
+			<Tab
+				$={el =>
+					on(el, 'cxl-tab.selected')
+						.map(() => el)
+						.pipe(triggerEvent($, 'cxl-tab.selected'))
+				}
+				selected={get($, 'href').switchMap(routeIsActive)}
+			>
+				<slot />
+			</Tab>
+		</RouterLink>
+	)
+)
 export class RouterTab extends Component {
 	@Attribute()
 	href = '';

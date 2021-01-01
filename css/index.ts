@@ -58,6 +58,7 @@ interface StrictStyleDefinition {
 	translateX: Length;
 	translateY: Length;
 	translateZ: Length;
+	gap: Length;
 	gridColumnEnd: string;
 	prepend: string;
 	rotate: number;
@@ -80,6 +81,9 @@ interface StrictStyleDefinition {
 	transformOrigin: string;
 	overflowScrolling: string;
 	lineHeight: number;
+	listStyleImage: string;
+	listStylePosition: 'inside' | 'outside';
+	listStyleType: 'none' | 'inherit' | 'initial' | 'unset';
 	width: Length;
 	top: Length;
 	left: Length;
@@ -92,8 +96,20 @@ interface StrictStyleDefinition {
 	justifyContent: string;
 	pointerEvents: string;
 	cursor: string;
-	display: string;
-	position: string;
+	display:
+		| 'block'
+		| 'inline'
+		| 'table'
+		| 'flex'
+		| 'grid'
+		| 'table-row'
+		| 'table-cell'
+		| 'contents'
+		| 'none'
+		| 'initial'
+		| 'inline-flex'
+		| 'inline-block';
+	position: 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 	userSelect: string;
 	textAlign: string;
 	textDecoration: string;
@@ -111,6 +127,7 @@ interface StrictStyleDefinition {
 		| 'text-top'
 		| 'text-bottom'
 		| 'baseline';
+	willChange: 'transform';
 	whiteSpace: 'nowrap' | 'pre-wrap';
 	zIndex: number;
 }
@@ -423,6 +440,9 @@ export function style(def: StyleDefinition) {
 function parseRuleName(selector: string, name: string) {
 	if (name === '$') return selector;
 	if (name === '*') return `${selector},${selector} *`;
+	// Style <a> tags.
+	if (name === '@a') return `a`;
+
 	const [className, ...states] = name.split('$');
 	const sel = states.length
 		? '(' + states.map(s => (PSEUDO as any)[s] || `[${s}]`).join('') + ')'
@@ -526,11 +546,11 @@ export function render(styles: Styles, selector = ':host', global = false) {
 	return result;
 }
 
-export function css(styles: Styles, global = false) {
-	let stylesheet: StyleSheet;
+export function css(styles: Styles, selector = ':host', global = false) {
+	let stylesheet: HTMLStyleElement;
 	return () => {
-		if (!stylesheet) stylesheet = new StyleSheet({ styles, global });
-		return stylesheet.clone();
+		if (!stylesheet) stylesheet = render(styles, selector, global);
+		return stylesheet.cloneNode(true);
 	};
 }
 

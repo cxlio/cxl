@@ -1,5 +1,5 @@
 import { collection, db } from './index.js';
-import { suite, Test } from '../spec/index.js';
+import { suite, TestApi } from '../spec/index.js';
 import { merge } from '../rx/index.js';
 import * as firebase from 'firebase';
 
@@ -57,7 +57,7 @@ export default suite('db', test => {
 		});
 	});
 
-	test('variable', async (a: Test) => {
+	test('variable', async (a: TestApi) => {
 		const db$ = db<Schema>('fb');
 		const ref = db$.ref('test').ref('variable');
 		let newVal = `test-${a.id}`;
@@ -69,7 +69,7 @@ export default suite('db', test => {
 		a.equal(val, newVal);
 	});
 
-	test('collection - initial subscription', (a: Test) => {
+	test('collection - initial subscription', (a: TestApi) => {
 		const done = a.async();
 		const db$ = db<Schema>('fb');
 		const ref = db$.ref('test').ref('collection');

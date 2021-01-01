@@ -174,6 +174,7 @@ export const defaultTheme: Theme = {
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap',
 	],
 	globalStyles: {
+		'@a': { color: 'link' },
 		'*': {
 			boxSizing: 'border-box',
 			transition:
@@ -212,6 +213,7 @@ export const InversePrimary = {
 		link: onPrimary,
 		error: rgba(0xff, 0x6e, 0x40),
 		onError: rgba(0, 0, 0),
+		divider: rgba(0xff, 0xff, 0xff, 0.48),
 	},
 };
 

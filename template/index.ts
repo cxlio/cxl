@@ -214,8 +214,13 @@ export function list<T>(
 	};
 }
 
-export function render<T>(source: Observable<T>, renderFn: (item: T) => Node) {
+export function render<T>(
+	source: Observable<T>,
+	renderFn: (item: T) => Node,
+	loading?: () => Node
+) {
 	const marker = new Marker();
+	if (loading) marker.insert(loading());
 
 	return (host: Bindable) => {
 		host.bind(

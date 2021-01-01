@@ -3,6 +3,7 @@
 	"version": "0.0.2",
 	"description": "Application library",
 	"license": "GPL-3.0",
+	"private": true,
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "node ../dist/build && cd ../dist/server && node ../tester --node"

@@ -3,5 +3,6 @@
 	"compilerOptions": {
 		"outDir": "../dist/ajax"
 	},
-	"files": ["index.ts"]
+	"files": ["index.ts"],
+	"references": [{ "path": "../rx/tsconfig.json" }]
 }

@@ -1,6 +1,6 @@
 import { dirname, resolve } from 'path';
 import { readFileSync } from 'fs';
-import { SourceMapConsumer } from 'source-map';
+import { MappingItem, SourceMapConsumer } from 'source-map';
 
 interface RawSourceMap {
 	version: string;
@@ -53,6 +53,8 @@ export function positionToIndex(source: string, pos: Position) {
 	let line = pos.line;
 	const len = source.length;
 
+	if (pos.line === 0) return pos.column;
+
 	for (let i = 0; i < len; i++) {
 		if (source[i] === '\n' && --line === 0) return i + pos.column + 1;
 	}
@@ -60,15 +62,27 @@ export function positionToIndex(source: string, pos: Position) {
 	throw new Error('Invalid Position');
 }
 
-function indexToPosOne(
-	source: string,
-	index: number
-	//bias = SourceMapConsumer.GREATEST_LOWER_BOUND
-) {
+function indexToPosOne(source: string, index: number) {
 	const result = indexToPosition(source, index);
 	result.line++;
-	//result.bias = bias;
 	return result;
+}
+
+export function translateRange(
+	sourceMap: SourceMap,
+	source: string,
+	range: Range
+) {
+	const map = sourceMap.map;
+	const start = map.originalPositionFor(indexToPosOne(source, range.start));
+	const end = map.originalPositionFor(indexToPosOne(source, range.end));
+
+	if (start.source === null || end.source === null) return;
+
+	start.line--;
+	end.line--;
+
+	return { start, end };
 }
 
 export class SourceMap {
@@ -76,12 +90,15 @@ export class SourceMap {
 	dir: string;
 	map: SourceMapConsumer;
 	raw: RawSourceMap;
+	mappings: MappingItem[];
 
 	constructor(path: string) {
 		this.path = resolve(path);
 		this.dir = dirname(this.path);
 		this.raw = JSON.parse(readFileSync(this.path, 'utf8'));
 		this.map = new SourceMapConsumer(this.raw);
+		this.mappings = [];
+		this.map.eachMapping(m => this.mappings.push(m));
 	}
 
 	translateRange(source: string, range: Range) {
@@ -92,9 +109,21 @@ export class SourceMap {
 		const end = sourceMap.originalPositionFor(
 			indexToPosOne(source, range.end)
 		);
-		if (start.source === null || end.source === null) {
-			return;
-		}
+
+		/*if (start.source === null && end.source !== null) {
+			// const firstMap = this.mappings.find(m => m.source === end.source);
+			const firstMap = this.mappings.findIndex(m => m.source === end.source && m.generatedLine > end.line );
+			if (firstMap) {
+				start = {
+					source: firstMap.source,
+					column: firstMap.originalColumn,
+					line: firstMap.originalLine,
+					name: firstMap.name,
+				};
+				console.log(start);
+			} else return;
+		}*/
+		if (start.source === null || end.source === null) return;
 
 		start.source = resolve(this.dir, start.source);
 		start.line--;
@@ -116,33 +145,15 @@ export function getSourceMap(sourcePath: string) {
 	return filePath ? new SourceMap(filePath) : undefined;
 }
 
-export class SourceFile {
-	path: string;
+const ENTITIES_REGEX = /[&<>]/g,
+	ENTITIES_MAP = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+	};
 
-	constructor(
-		path: string,
-		private $source?: string,
-		private $sourceMap?: SourceMap
-	) {
-		this.path = resolve(path);
-	}
-
-	get source(): string {
-		return this.$source || (this.$source = readFileSync(this.path, 'utf8'));
-	}
-
-	get sourceMap(): SourceMap | undefined {
-		return this.$sourceMap || (this.$sourceMap = this.readSourceMap());
-	}
-
-	private readSourceMap() {
-		const filePath = getSourceMapPath(this.source, dirname(this.path));
-		return filePath ? new SourceMap(filePath) : undefined;
-	}
-
-	getLineAndColumn(index: number) {
-		return indexToPosition(this.source, index);
-	}
-
-	getIndex(_line: number, _column: number) {}
+export function escapeHtml(str: string) {
+	return (
+		str && str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e] || '')
+	);
 }

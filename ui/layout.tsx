@@ -120,6 +120,12 @@ export class C extends Component {
 	@StyleAttribute()
 	flex = false;
 
+	/**
+	 * Apply vertical flex style
+	 */
+	@StyleAttribute()
+	vflex = false;
+
 	@StyleAttribute()
 	grow = false;
 
@@ -195,6 +201,7 @@ export class Layout extends Component {
 			flexGrow: 1,
 			overflowY: 'auto',
 			overflowScrolling: 'touch',
+			willChange: 'transform',
 		},
 		container: {
 			...margin(32, 16, 32, 16),
@@ -335,7 +342,7 @@ export class Grid extends Component {
 	rows?: number;
 
 	@Attribute()
-	columns = 'repeat(12, 1fr)';
+	columns = 'repeat(12, minmax(0,1fr))';
 
 	@Attribute()
 	gap = 16;

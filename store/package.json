@@ -5,6 +5,7 @@
 	"types": "index.d.ts",
 	"license": "GPL-3.0",
 	"description": "Store library",
+	"private": true,
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "node ../dist/build && cd ../dist/store && node ../tester"

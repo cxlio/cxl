@@ -1,9 +1,8 @@
-const { build, tsconfig, typescript, pkg, file } = require('../dist/build');
+const { buildCxl, tsconfig, typescript, pkg, file } = require('../dist/build');
 
-build({
+buildCxl({
 	outputDir: '../dist/tester',
 	tasks: [
-		tsconfig('tsconfig.json'),
 		tsconfig('tsconfig.browser.json'),
 		file('require.js', 'require.js'),
 		file('require-browser.js', 'require-browser.js'),

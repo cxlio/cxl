@@ -1,8 +1,0 @@
-{
-	"name": "@cxl/test",
-	"version": "0.0.0",
-	"private": true,
-	"scripts": {
-		"test": "node build && cd ../dist/test && node ../tester index.js --coverage"
-	}
-}

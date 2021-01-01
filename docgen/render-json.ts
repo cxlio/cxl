@@ -2,9 +2,9 @@ import type { DocGen, File } from './index.js';
 import { Kind, Output } from '../dts/index.js';
 import { relative } from 'path';
 
-const cwd = process.cwd();
-
 function serialize(key: string, value: any) {
+	const cwd = process.cwd();
+
 	if (key === 'source') {
 		const pos = value.sourceFile.getLineAndCharacterOfPosition(value.index);
 		return {
