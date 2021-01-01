@@ -5,6 +5,7 @@
 	"dependencies": {
 		"@types/node": "^14.10.2",
 		"@types/eslint": "^7.2.0",
+		"@types/puppeteer": "^3.0.1",
 		"eslint": "^7.14.0",
 		"puppeteer": "^5.2.0",
 		"source-map": "^0.7.3",
@@ -14,7 +15,6 @@
 	"devDependencies": {
 		"@fortawesome/fontawesome-free": "^5.14.0",
 		"@types/markdown-it": "^10.0.1",
-		"@types/puppeteer": "^3.0.1",
 		"@typescript-eslint/eslint-plugin": "^4.1.1",
 		"@typescript-eslint/parser": "^4.1.1",
 		"firebase": "^7.24.0",
