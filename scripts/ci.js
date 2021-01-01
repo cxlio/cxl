@@ -6,7 +6,9 @@ const cp = require('child_process');
 function exec(cmd, options) {
 	console.log(cmd);
 	return new Promise((resolve, reject) =>
-		cp.exec(cmd, options, (e, val) => (e ? reject(e) : resolve(val)))
+		cp.exec(cmd, options, (e, val, err) =>
+			e ? reject(err + val) : resolve(val)
+		)
 	);
 }
 
@@ -42,7 +44,10 @@ async function run() {
 		await exec(`git clone . ${dest}`);
 		await exec(`npm install --production`, { cwd: dest });
 		await exec(`npm run build --prefix build`, { cwd: dest });
-		await exec(`npm run build --prefix tester`, { cwd: dest });
+		await exec(`npm run build --prefix tester`, {
+			cwd: dest,
+			stdio: 'inherit',
+		});
 		const projects = await findProjects(dest);
 
 		await Promise.all(projects.map(dir => buildProject(dest, dir)));
