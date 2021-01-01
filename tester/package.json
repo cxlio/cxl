@@ -8,12 +8,9 @@
 		"test": "npm run build && cd ../dist/tester && node ../tester --node"
 	},
 	"dependencies": {
-		"puppeteer": "^5.0.0",
-		"source-map-support": "*",
-		"source-map": "*"
-	},
-	"devDependencies": {
-		"@types/puppeteer": "^2.0.0"
+		"puppeteer": "^5.2.0",
+		"source-map-support": "0.5.19",
+		"source-map": "^0.7.3"
 	},
 	"peerDependencies": {
 		"@cxl/server": "*",

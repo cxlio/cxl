@@ -15,8 +15,6 @@ async function build(dir) {
 
 	if (!pkg) return;
 
-	// if (pkg.private) return console.log(`Ignoring private package ${pkg.name}`);
-
 	const cmd = !pkg.scripts?.package
 		? `npm run test && npm run build -- docs package`
 		: `npm run package`;

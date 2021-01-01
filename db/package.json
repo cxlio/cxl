@@ -9,7 +9,7 @@
 		"test": "npm run build && cd ../dist/db && node ../tester --node"
 	},
 	"dependencies": {
-		"firebase": "^7.17.1"
+		"firebase": "^7.24.0"
 	},
 	"peerDependencies": {
 		"@cxl/rx": "*"
