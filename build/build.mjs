@@ -1,4 +1,3 @@
-import ts from 'typescript';
 import fs from 'fs';
 import cp from 'child_process';
 
