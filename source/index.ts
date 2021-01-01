@@ -1,16 +1,6 @@
 import { dirname, resolve } from 'path';
 import { readFileSync } from 'fs';
-import { MappingItem, SourceMapConsumer } from 'source-map';
-
-interface RawSourceMap {
-	version: string;
-	file: string;
-	sourceRoot: string;
-	sources: string[];
-	sourcesContent: string[];
-	names: string[];
-	mappings: string;
-}
+import { MappingItem, SourceMapConsumer, RawSourceMap } from 'source-map';
 
 export interface Output {
 	path: string;
@@ -29,6 +19,17 @@ export interface Position {
 export interface Range {
 	start: number;
 	end: number;
+}
+
+export interface SourcePosition {
+	source: string;
+	line: number;
+	column: number;
+}
+
+export interface RangePosition {
+	start: SourcePosition;
+	end: SourcePosition;
 }
 
 const SOURCEMAP_REGEX = /\/\/# sourceMappingURL=(.+)/;
@@ -68,7 +69,7 @@ function indexToPosOne(source: string, index: number) {
 	return result;
 }
 
-export function translateRange(
+/*export function translateRange(
 	sourceMap: SourceMap,
 	source: string,
 	range: Range
@@ -77,18 +78,18 @@ export function translateRange(
 	const start = map.originalPositionFor(indexToPosOne(source, range.start));
 	const end = map.originalPositionFor(indexToPosOne(source, range.end));
 
-	if (start.source === null || end.source === null) return;
+	if (start.line === null || end.line === null) return;
 
 	start.line--;
 	end.line--;
 
 	return { start, end };
-}
+}*/
 
 export class SourceMap {
 	path: string;
 	dir: string;
-	map: SourceMapConsumer;
+	map?: SourceMapConsumer;
 	raw: RawSourceMap;
 	mappings: MappingItem[];
 
@@ -96,13 +97,19 @@ export class SourceMap {
 		this.path = resolve(path);
 		this.dir = dirname(this.path);
 		this.raw = JSON.parse(readFileSync(this.path, 'utf8'));
-		this.map = new SourceMapConsumer(this.raw);
 		this.mappings = [];
-		this.map.eachMapping(m => this.mappings.push(m));
 	}
 
-	translateRange(source: string, range: Range) {
+	async load() {
+		this.map = await new SourceMapConsumer(this.raw);
+		this.map.eachMapping(m => this.mappings.push(m));
+		return this;
+	}
+
+	translateRange(source: string, range: Range): RangePosition | undefined {
 		const sourceMap = this.map;
+		if (!sourceMap) throw new Error('Sourcemap not initialized');
+
 		const start = sourceMap.originalPositionFor(
 			indexToPosOne(source, range.start)
 		);
@@ -110,27 +117,15 @@ export class SourceMap {
 			indexToPosOne(source, range.end)
 		);
 
-		/*if (start.source === null && end.source !== null) {
-			// const firstMap = this.mappings.find(m => m.source === end.source);
-			const firstMap = this.mappings.findIndex(m => m.source === end.source && m.generatedLine > end.line );
-			if (firstMap) {
-				start = {
-					source: firstMap.source,
-					column: firstMap.originalColumn,
-					line: firstMap.originalLine,
-					name: firstMap.name,
-				};
-				console.log(start);
-			} else return;
-		}*/
 		if (start.source === null || end.source === null) return;
+		if (start.line === null || end.line === null) return;
 
 		start.source = resolve(this.dir, start.source);
 		start.line--;
 		end.source = resolve(this.dir, end.source);
 		end.line--;
 
-		return { start, end };
+		return { start, end } as any;
 	}
 }
 
@@ -142,7 +137,7 @@ export function getSourceMapPath(source: string, cwd: string) {
 export function getSourceMap(sourcePath: string) {
 	const source = readFileSync(sourcePath, 'utf8');
 	const filePath = getSourceMapPath(source, dirname(sourcePath));
-	return filePath ? new SourceMap(filePath) : undefined;
+	return filePath ? new SourceMap(filePath).load() : undefined;
 }
 
 const ENTITIES_REGEX = /[&<>]/g,

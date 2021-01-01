@@ -126,16 +126,16 @@ function translateRanges(
 	return result;
 }
 
-function generateCoverageReport(coverage: Coverage) {
+async function generateCoverageReport(coverage: Coverage) {
 	const cwd = process.cwd();
 	const filtered: TestCoverage[] = [];
 
-	coverage.forEach(script => {
+	for (const script of coverage) {
 		const url = script.url.replace(/^file:\/\//, '');
 		const dir = dirname(url);
 
 		if (dir.startsWith(cwd)) {
-			const sourceMap = getSourceMap(url);
+			const sourceMap = await getSourceMap(url);
 			const relativeUrl = relative(cwd, url);
 
 			filtered.push({
@@ -148,7 +148,7 @@ function generateCoverageReport(coverage: Coverage) {
 					...translateRanges(sourceMap, url, script.functions)
 				);
 		}
-	});
+	}
 
 	return calculateCoverage(filtered);
 }
@@ -181,9 +181,12 @@ function renderTestReport(test: Test): TestReport {
 	};
 }
 
-export function generateReport(suite: Test, v8Coverage: Coverage): Report {
+export async function generateReport(
+	suite: Test,
+	v8Coverage: Coverage
+): Promise<Report> {
 	const testReport = renderTestReport(suite);
-	const coverage = generateCoverageReport(v8Coverage);
+	const coverage = await generateCoverageReport(v8Coverage);
 	return {
 		success: testReport.failureCount === 0,
 		testReport,
