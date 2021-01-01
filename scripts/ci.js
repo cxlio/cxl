@@ -33,8 +33,8 @@ async function findProjects(rootPath) {
 	return result;
 }
 
-async function buildProject(rootDir, dir) {
-	await exec(`npm run build --prefix ${dir}`, { cwd: rootDir });
+async function testProject(rootDir, dir) {
+	await exec(`npm test --prefix dist/${dir}`, { cwd: rootDir });
 }
 
 async function run() {
@@ -42,15 +42,15 @@ async function run() {
 
 	try {
 		await exec(`git clone . ${dest}`);
-		await exec(`npm install --production`, { cwd: dest });
-		await exec(`npm run build --prefix build`, { cwd: dest });
-		await exec(`npm run build --prefix tester`, {
-			cwd: dest,
-			stdio: 'inherit',
-		});
-		const projects = await findProjects(dest);
+		await exec(`npm install`, { cwd: dest });
+		await exec(`node scripts/build-all`, { cwd: dest });
 
-		await Promise.all(projects.map(dir => buildProject(dest, dir)));
+		// Clean node_modules
+		await exec(`rm -rf node_modules`, { cwd: dest });
+		await exec(`npm install --prefix dist/tester`);
+
+		const projects = await findProjects(dest);
+		await Promise.all(projects.map(dir => testProject(dest, dir)));
 	} finally {
 		await exec(`rm -rf ${dest}`);
 	}
