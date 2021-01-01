@@ -25,10 +25,14 @@ async function findProjects(rootPath) {
 			(await fs.stat(projectPath)).isDirectory() &&
 			(await exists(`${projectPath}/package.json`))
 		)
-			result.push(projectPath);
+			result.push(dirname);
 	}
 
 	return result;
+}
+
+async function buildProject(rootDir, dir) {
+	await exec(`npm run build --prefix ${dir}`, { cwd: rootDir });
 }
 
 async function run() {
@@ -38,7 +42,10 @@ async function run() {
 		await exec(`git clone . ${dest}`);
 		await exec(`npm install --production`, { cwd: dest });
 		await exec(`npm run build --prefix build`, { cwd: dest });
-		const projects = findProjects(dest);
+		await exec(`npm run build --prefix tester`, { cwd: dest });
+		const projects = await findProjects(dest);
+
+		await Promise.all(projects.map(dir => buildProject(dest, dir)));
 	} finally {
 		await exec(`rm -rf ${dest}`);
 	}
