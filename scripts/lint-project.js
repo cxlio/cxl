@@ -3,6 +3,10 @@
  */
 const path = require('path');
 const fs = require('fs').promises;
+const cp = require('child_process');
+
+cp.execSync('npm run build --prefix build');
+
 const { readJson } = require('../dist/server');
 const { program } = require('../dist/server/program');
 
@@ -26,7 +30,7 @@ function Result(id, valid, message) {
 }
 
 const fixes = {
-	package: async ({ projectPath, dir }) => {
+	package: async ({ projectPath, dir, rootPkg }) => {
 		let hasChanges = false;
 		const pkgPath = `${projectPath}/package.json`;
 		const pkg = await readJson(pkgPath);
@@ -38,8 +42,10 @@ const fixes = {
 		if (!pkg.scripts.build) pkg.scripts.build = `node ../dist/build`;
 
 		if (!pkg.license) pkg.license = 'GPL-3.0';
-		if (!pkg.bugs) pkg.bugs = BugsUrl;
+		if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
 		if (pkg.devDependencies) delete pkg.devDependencies;
+		if (pkg.peerDependencies) delete pkg.peerDependencies;
+		if (pkg.browser) pkg.browser = 'amd/index.min.js';
 
 		if (!pkg.scripts.test.startsWith(testScript)) {
 			const testerArgs =
@@ -86,6 +92,32 @@ const fixes = {
 
 		if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
 	},
+
+	'tsconfig.references': async ({ projectPath, baseDir }) => {
+		const pkgPath = `${projectPath}/package.json`;
+		const pkg = await readJson(pkgPath);
+		const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
+		const oldPackage = JSON.stringify(pkg, null, '\t');
+
+		for (const ref of tsconfig.references) {
+			const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
+			if (refName) {
+				const refPkg = `@cxl/${refName}`;
+				if (!pkg.dependencies) pkg.dependencies = {};
+
+				if (!pkg.dependencies[refName]) {
+					const pkgVersion = (
+						await readJson(`${baseDir}/${refName}/package.json`)
+					)?.version;
+					if (pkgVersion) pkg.dependencies[refPkg] = `~${pkgVersion}`;
+				}
+			}
+		}
+
+		const newPackage = JSON.stringify(pkg, null, '\t');
+
+		if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
+	},
 };
 
 function exists(filepath) {
@@ -118,19 +150,32 @@ const rules = [
 						`Field "scripts" required in package.json`
 					),
 			  ],
-	({ pkg }) =>
+	({ pkg, dir, rootPkg }) => [
 		Result(
 			'package',
 			licenses.includes(pkg.license),
 			`Valid license "${pkg.license}" required.`
 		),
-	({ pkg }) =>
 		Result(
 			'package',
 			!pkg.devDependencies,
-			`Project package.json must not have devDependencies.`
+			`Package should not have devDependencies.`
 		),
-	({ pkg, dir }) =>
+		Result(
+			'package',
+			!pkg.peerDependencies,
+			`Package should not have peerDependencies.`
+		),
+		Result(
+			'package',
+			!pkg.browser || pkg.browser === 'amd/index.min.js',
+			`Package "browser" property should use minified amd version`
+		),
+		Result(
+			'package',
+			pkg.bugs === rootPkg.bugs,
+			`Package "bugs" property must match root package`
+		),
 		Result(
 			'package',
 			pkg?.scripts?.test?.startsWith(
@@ -138,6 +183,8 @@ const rules = [
 			),
 			`Valid test script in package.json`
 		),
+	],
+
 	async ({ projectPath }) =>
 		Result(
 			'tsconfig.test',
@@ -162,7 +209,7 @@ const rules = [
 			result.push(
 				Result(
 					'dependencies',
-					rootValue,
+					name.startsWith(rootPkg.name) || rootValue,
 					`Dependency "${name}" must be included in root package.json`
 				),
 				Result(
@@ -172,7 +219,7 @@ const rules = [
 				),
 				Result(
 					'dependencies',
-					rootValue === pkgValue,
+					name.startsWith(rootPkg.name) || rootValue === pkgValue,
 					`Conflicting versions "${name}". root: ${rootValue}, dep: ${pkgValue}`
 				)
 			);
@@ -180,7 +227,7 @@ const rules = [
 
 		return result;
 	},
-	({ pkg }) => {
+	/*({ pkg, rootPkg }) => {
 		const result = [];
 
 		for (const name in pkg.peerDependencies) {
@@ -189,11 +236,41 @@ const rules = [
 			result.push(
 				Result(
 					'peerDependencies',
+					!name.startsWith(rootPkg.name),
+					`Local package "${name}" should not be a peerDependency.`
+				),
+				Result(
+					'peerDependencies',
 					pkgValue !== '*',
 					`Peer Dependency "${name}" must be a valid version. pkg:${pkgValue}`
 				)
 			);
 		}
+
+		return result;
+	},*/
+	async ({ projectPath, pkg }) => {
+		const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
+		const result = [
+			Result('tsconfig', tsconfig, 'tsconfig.json should be present'),
+		];
+		const references = tsconfig?.references;
+
+		if (references)
+			for (const ref of references) {
+				const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
+
+				if (refName) {
+					const refPkg = `@cxl/${refName}`;
+					result.push(
+						Result(
+							'tsconfig.references',
+							pkg.dependencies?.[refPkg],
+							`reference ${refPkg} should be declared as dependency`
+						)
+					);
+				}
+			}
 
 		return result;
 	},
@@ -240,7 +317,7 @@ async function verifyProject(dir, rootPkg) {
 	const pkg = await readJson(`${projectPath}/package.json`);
 	if (!pkg) return [];
 
-	const data = { projectPath, dir, pkg, rootPkg };
+	const data = { projectPath, dir, pkg, rootPkg, baseDir };
 	const results = (await Promise.all(rules.map(rule => rule(data)))).flat();
 
 	// Collect dependencies
