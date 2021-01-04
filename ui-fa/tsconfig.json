@@ -1,0 +1,13 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-fa"
+	},
+	"files": ["index.ts"],
+	"references": [
+		{ "path": "../component" },
+		{ "path": "../css" },
+		{ "path": "../dom" },
+		{ "path": "../ui" }
+	]
+}

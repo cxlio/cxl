@@ -4,6 +4,13 @@
 		"module": "amd",
 		"outDir": "../dist/router/amd"
 	},
-	"files": ["index.ts", "debug.ts"],
-	"references": [{ "path": "../debug" }]
+	"files": [
+		"index.ts",
+		"debug.ts"
+	],
+	"references": [
+		{
+			"path": "../debug/tsconfig.amd.json"
+		}
+	]
 }

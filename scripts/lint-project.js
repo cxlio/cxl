@@ -303,7 +303,9 @@ async function lintTsconfig({ projectPath, pkg, dir }) {
 	};
 }
 
-async function fixTsconfigAmd({ projectPath, baseDir, dir }) {
+async function fixTsconfigAmd({ projectPath, baseDir, dir, pkg }) {
+	if (!pkg.browser) return;
+
 	const baseTsconfig = await readJson(`${projectPath}/tsconfig.json`);
 	let tsconfig = (await readJson(`${projectPath}/tsconfig.amd.json`)) || {};
 	const outDir = `../dist/${dir}/amd`;
@@ -321,14 +323,19 @@ async function fixTsconfigAmd({ projectPath, baseDir, dir }) {
 		return { path: `${refName}/tsconfig.amd.json` };
 	});
 
-	/*await fs.writeFile(
+	await fs.writeFile(
 		`${projectPath}/tsconfig.amd.json`,
 		JSON.stringify(tsconfig, null, '\t')
-	);*/
-	console.log(tsconfig);
+	);
 }
 
 async function lintTsconfigAmd({ projectPath, pkg, dir }) {
+	if (!pkg.browser)
+		return {
+			id: 'tsconfig.amd',
+			rules: [],
+		};
+
 	const tsconfig = await readJson(`${projectPath}/tsconfig.amd.json`);
 	const baseTsconfig = await readJson(`${projectPath}/tsconfig.json`);
 	const references = tsconfig?.references;

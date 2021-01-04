@@ -4,11 +4,24 @@
 		"module": "amd",
 		"outDir": "../dist/template/amd"
 	},
-	"files": ["index.ts"],
+	"files": [
+		"index.ts"
+	],
 	"references": [
-		{ "path": "../rx/tsconfig.amd.json" },
-		{ "path": "../dom/tsconfig.amd.json" },
-		{ "path": "../css/tsconfig.amd.json" },
-		{ "path": "../component/tsconfig.amd.json" }
+		{
+			"path": "../rx/tsconfig.amd.json"
+		},
+		{
+			"path": "../dom/tsconfig.amd.json"
+		},
+		{
+			"path": "../tsx/tsconfig.amd.json"
+		},
+		{
+			"path": "../css/tsconfig.amd.json"
+		},
+		{
+			"path": "../component/tsconfig.amd.json"
+		}
 	]
 }
