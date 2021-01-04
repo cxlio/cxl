@@ -14,7 +14,7 @@
           "source": {
             "fileName": "index.ts",
             "line": 0,
-            "ch": 52
+            "ch": 45
           },
           "kind": 2,
           "name": "Measurements",
@@ -2821,21 +2821,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "undefined",
-                "kind": 32,
-                "flags": 0
-              },
-              {
-                "id": 58,
-                "name": "Test",
-                "kind": 6
-              }
-            ]
+            "id": 58,
+            "name": "Test",
+            "kind": 6
           }
         }
       ]

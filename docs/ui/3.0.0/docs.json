@@ -90,9 +90,61 @@
             }
           ],
           "type": {
-            "name": "string",
-            "kind": 32,
-            "flags": 0
+            "name": "",
+            "flags": 0,
+            "kind": 5,
+            "children": [
+              {
+                "name": "\"btn\"",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              },
+              {
+                "name": "\"btn  \"",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              },
+              {
+                "name": "\"btn  outside\"",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              },
+              {
+                "name": "\"btn today \"",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              },
+              {
+                "name": "\"btn today outside\"",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              }
+            ]
           }
         },
         {

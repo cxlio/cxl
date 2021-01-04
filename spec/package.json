@@ -10,5 +10,6 @@
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/spec && node ../tester --node"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/spec"
 }

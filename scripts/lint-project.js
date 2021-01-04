@@ -18,7 +18,7 @@ const requiredPackageFields = [
 	'version',
 	'description',
 	'license',
-	//	'homepage',
+	'homepage',
 	'bugs',
 ];
 const requiredPackageScripts = ['build', 'test'];
@@ -46,11 +46,26 @@ async function fixDependencies({ projectPath, rootPkg }) {
 	if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
 }
 
-async function fixTsconfig({ projectPath, baseDir }) {
+async function fixTsconfig({ projectPath, baseDir, dir }) {
 	const pkgPath = `${projectPath}/package.json`;
 	const pkg = await readJson(pkgPath);
-	const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
+	let tsconfig = await readJson(`${projectPath}/tsconfig.json`);
 	const oldPackage = JSON.stringify(pkg, null, '\t');
+
+	if (!tsconfig) {
+		tsconfig = {
+			extends: '../tsconfig.json',
+			compilerOptions: {
+				outDir: `../dist/${dir}`,
+			},
+			files: [],
+			references: [],
+		};
+		await fs.writeFile(
+			`${projectPath}/tsconfig.json`,
+			JSON.stringify(tsconfig, null, '\t')
+		);
+	}
 
 	for (const ref of tsconfig.references) {
 		const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
@@ -74,6 +89,8 @@ async function fixTsconfig({ projectPath, baseDir }) {
 
 async function fixTest({ projectPath, dir }) {
 	const path = `${projectPath}/tsconfig.test.json`;
+	const testPath = `${projectPath}/test.ts`;
+
 	if (!(await exists(path))) {
 		await fs.writeFile(
 			path,
@@ -85,6 +102,21 @@ async function fixTest({ projectPath, dir }) {
 	"files": ["test.ts"],
 	"references": [{ "path": "." }, { "path": "../spec" }]
 }
+`
+		);
+	}
+
+	if (!(await exists(testPath))) {
+		await fs.writeFile(
+			testPath,
+			`import { spec } from '@cxl/spec';
+import {  } from './index.js';
+
+export default spec('${dir}', s => {
+	s.test('should load', a => {
+		a.ok(get);
+	});
+});
 `
 		);
 	}
@@ -105,9 +137,12 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	const oldPackage = JSON.stringify(pkg, null, '\t');
 	const testScript = `npm run build && cd ../dist/${dir} && node ../tester`;
 
+	if (!pkg.name === `${rootPkg.name}${dir}`)
+		pkg.name = `${rootPkg.name}${dir}`;
 	if (!pkg.scripts) pkg.scripts = {};
 	if (!pkg.scripts.test) pkg.scripts.test = testScript;
 	if (!pkg.scripts.build) pkg.scripts.build = `node ../dist/build`;
+	if (!pkg.homepage) pkg.homepage = `${rootPkg.homepage}/${dir}`;
 
 	if (!pkg.license) pkg.license = 'GPL-3.0';
 	if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
@@ -144,7 +179,12 @@ function lintPackage({ pkg, dir, rootPkg }) {
 		rules.push(
 			rule('scripts' in pkg, `Field "scripts" required in package.json`)
 		);
+
 	rules.push(
+		rule(
+			pkg.name === `${rootPkg.name}${dir}`,
+			`Package name should be valid.`
+		),
 		rule(
 			licenses.includes(pkg.license),
 			`Valid license "${pkg.license}" required.`
@@ -226,9 +266,19 @@ function lintDependencies({ rootPkg, pkg }) {
 	};
 }
 
-async function lintTsconfig({ projectPath, pkg }) {
+async function lintTsconfig({ projectPath, pkg, dir }) {
 	const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
-	const rules = [rule(tsconfig, 'tsconfig.json should be present')];
+	const rules = [
+		rule(tsconfig, 'tsconfig.json should be present'),
+		rule(
+			tsconfig?.compilerOptions,
+			'tsconfig.json should have compilerOptions'
+		),
+		rule(
+			tsconfig?.compilerOptions?.outDir === `../dist/${dir}`,
+			'tsconfig.json should have a valid outDir compiler option'
+		),
+	];
 	const references = tsconfig?.references;
 
 	if (references)
@@ -249,6 +299,77 @@ async function lintTsconfig({ projectPath, pkg }) {
 	return {
 		id: 'tsconfig',
 		fix: fixTsconfig,
+		rules,
+	};
+}
+
+async function fixTsconfigAmd({ projectPath, baseDir, dir }) {
+	const baseTsconfig = await readJson(`${projectPath}/tsconfig.json`);
+	let tsconfig = (await readJson(`${projectPath}/tsconfig.amd.json`)) || {};
+	const outDir = `../dist/${dir}/amd`;
+
+	if (!tsconfig.extends) tsconfig.extends = '../tsconfig.json';
+	if (!tsconfig.compilerOptions) tsconfig.compilerOptions = {};
+	if (tsconfig.compilerOptions.module !== 'amd')
+		tsconfig.compilerOptions.module = 'amd';
+	if (tsconfig.compilerOptions.outDir !== outDir)
+		tsconfig.compilerOptions.outDir = outDir;
+	if (!tsconfig.files) tsconfig.files = baseTsconfig.files;
+
+	tsconfig.references = baseTsconfig.references?.map(ref => {
+		const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
+		return { path: `${refName}/tsconfig.amd.json` };
+	});
+
+	/*await fs.writeFile(
+		`${projectPath}/tsconfig.amd.json`,
+		JSON.stringify(tsconfig, null, '\t')
+	);*/
+	console.log(tsconfig);
+}
+
+async function lintTsconfigAmd({ projectPath, pkg, dir }) {
+	const tsconfig = await readJson(`${projectPath}/tsconfig.amd.json`);
+	const baseTsconfig = await readJson(`${projectPath}/tsconfig.json`);
+	const references = tsconfig?.references;
+	const expectedReferences = baseTsconfig.references?.map(ref => {
+		const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
+		return { path: `${refName}/tsconfig.amd.json` };
+	});
+
+	const rules = [
+		rule(tsconfig, 'tsconfig.amd.json should be present'),
+		rule(
+			tsconfig?.compilerOptions,
+			'tsconfig.amd.json should have compilerOptions'
+		),
+		rule(
+			tsconfig?.compilerOptions?.outDir === `../dist/${dir}/amd`,
+			'tsconfig.amd.json should have a valid outDir compiler option'
+		),
+		rule(
+			tsconfig?.compilerOptions?.module === 'amd',
+			'tsconfig.amd.json should have a module set as amd'
+		),
+		rule(
+			tsconfig?.files?.join('|') === baseTsconfig.files?.join('|'),
+			'tsconfig.amd.json files should match base tsconfig.json'
+		),
+		rule(
+			!baseTsconfig.references || references,
+			'tsconfig.amd.json should have references if base tsconfig.json has them'
+		),
+		rule(
+			!expectedReferences ||
+				JSON.stringify(references) ===
+					JSON.stringify(expectedReferences),
+			'tsconfig.amd.json should match base tsconfig references'
+		),
+	];
+
+	return {
+		id: 'tsconfig.amd',
+		fix: fixTsconfigAmd,
 		rules,
 	};
 }
@@ -292,6 +413,7 @@ const linters = [
 	lintDependencies,
 	lintTsconfig,
 	lintImports,
+	lintTsconfigAmd,
 ];
 
 async function verifyProject(dir, rootPkg) {
@@ -331,16 +453,15 @@ program('verify', async ({ log }) => {
 	for (const result of results) {
 		for (const rule of result.rules) {
 			if (!rule.valid) {
-				hasErrors = true;
+				result.hasErrors = hasErrors = true;
 				error(result.data?.dir || 'root', rule.message);
-
-				if (result.fix)
-					fixes.push(() => {
-						log(`${result.data?.dir}: Attempting fix`);
-						result.fix(result.data);
-					});
 			}
 		}
+		if (result.hasErrors && result.fix)
+			fixes.push(() => {
+				log(`${result.data?.dir}: Attempting fix for "${result.id}"`);
+				result.fix(result.data);
+			});
 	}
 
 	for (const fix of fixes) await fix();

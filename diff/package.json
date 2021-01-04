@@ -8,5 +8,6 @@
 		"test": "npm run build && cd ../dist/diff && node ../tester",
 		"build": "node ../dist/build"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/diff"
 }

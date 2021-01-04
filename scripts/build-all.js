@@ -16,7 +16,7 @@ async function build(dir) {
 	if (!pkg) return;
 
 	const cmd = !pkg.scripts?.package
-		? `npm run build package`
+		? `npm test && npm run build docs package`
 		: `npm run package`;
 
 	console.log(`Building ${pkg.name}`);

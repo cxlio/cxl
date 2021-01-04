@@ -77,9 +77,31 @@
           "id": 4,
           "value": "IS_NODE\n\t? `\nconst { parentPort } = require('worker_threads'); \nparentPort.on('message', ev => {\n\tconst id=ev.id,postMessage=parentPort.postMessage.bind(parentPort);\n\t${SHARED_RUNTIME}\n});\n`\n\t: `onmessage=function(message) { const ev=message.data,id=ev.id;${SHARED_RUNTIME}}`",
           "type": {
-            "name": "string",
-            "kind": 32,
-            "flags": 0
+            "name": "",
+            "flags": 0,
+            "kind": 5,
+            "children": [
+              {
+                "name": "\"\\nconst { parentPort } = require('worker_threads'); \\nparentPort.on('message', ev => {\\n\\tconst id=ev.id,postMessage=parentPort.postMessage.bind(parentPort);\\n\\t\\n\\tconst subscriber = {\\n\\t\\tnext(val) {\\n\\t\\t\\tpostMessage({ id, type: 'next', payload: val });\\n\\t\\t},\\n\\t\\terror(val) {\\n\\t\\t\\tpostMessage({ id, type: ...",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              },
+              {
+                "name": "\"onmessage=function(message) { const ev=message.data,id=ev.id;\\n\\tconst subscriber = {\\n\\t\\tnext(val) {\\n\\t\\t\\tpostMessage({ id, type: 'next', payload: val });\\n\\t\\t},\\n\\t\\terror(val) {\\n\\t\\t\\tpostMessage({ id, type: 'error', payload: val });\\n\\t\\t},\\n\\t\\tcomplete(val) {\\n\\t\\t\\tpostMessage({ id, type: 'complete' });...",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              }
+            ]
           }
         },
         {
