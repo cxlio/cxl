@@ -1,5 +1,5 @@
-import { border, css } from '../css/index.js';
-import { triggerEvent } from '../template/index.js';
+import { border, css } from '@cxl/css';
+import { triggerEvent } from '@cxl/template';
 import {
 	Component,
 	Augment,
@@ -8,10 +8,10 @@ import {
 	bind,
 	get,
 	role,
-} from '../component/index.js';
-import { dom } from '../tsx/index.js';
-import { tap } from '../rx/index.js';
-import { on, onAction } from '../dom/index.js';
+} from '@cxl/component';
+import { dom } from '@cxl/tsx';
+import { tap } from '@cxl/rx';
+import { on, onAction } from '@cxl/dom';
 
 import { Checkbox } from './checkbox.js';
 import { T, Span, registable, ariaProp } from './core.js';

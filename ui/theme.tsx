@@ -1,4 +1,4 @@
-import { Colors, Theme, setTheme, rgba } from '../css/index.js';
+import { Colors, Theme, setTheme, rgba } from '@cxl/css';
 
 declare module '../css/index.js' {
 	interface Animation {

@@ -6,9 +6,9 @@ import {
 	connect,
 	role,
 	get,
-} from '../component/index.js';
-import { css, padding, pct } from '../css/index.js';
-import { dom } from '../tsx/index.js';
+} from '@cxl/component';
+import { css, padding, pct } from '@cxl/css';
+import { dom } from '@cxl/tsx';
 import {
 	createElement,
 	insert,
@@ -16,8 +16,8 @@ import {
 	onAction,
 	trigger,
 	remove,
-} from '../dom/index.js';
-import { merge } from '../rx/index.js';
+} from '@cxl/dom';
+import { merge } from '@cxl/rx';
 import { T, Button, Span } from './core.js';
 
 /**

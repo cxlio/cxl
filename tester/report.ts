@@ -175,6 +175,12 @@ function renderTestReport(test: Test): TestReport {
 		};
 	});
 
+	const tests = (test.only.length ? test.only : test.tests).map(child => {
+		const result = renderTestReport(child);
+		failureCount += result.failureCount;
+		return result;
+	});
+
 	if (results.length === 0 && test.tests.length === 0) {
 		failureCount++;
 		results.push({ success: false, message: 'No assertions found' });
@@ -184,9 +190,7 @@ function renderTestReport(test: Test): TestReport {
 		name: test.name,
 		failureCount,
 		results,
-		tests: (test.only.length ? test.only : test.tests).map(child =>
-			renderTestReport(child)
-		),
+		tests,
 	};
 }
 

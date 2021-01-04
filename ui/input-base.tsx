@@ -6,10 +6,10 @@ import {
 	attributeChanged,
 	bind,
 	get,
-} from '../component/index.js';
-import { merge } from '../rx/index.js';
-import { css } from '../css/index.js';
-import { triggerEvent } from '../template/index.js';
+} from '@cxl/component';
+import { merge } from '@cxl/rx';
+import { css } from '@cxl/css';
+import { triggerEvent } from '@cxl/template';
 import { registable } from './core.js';
 
 export const FocusCircleStyle = css({

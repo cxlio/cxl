@@ -7,10 +7,10 @@ import {
 	StyleAttribute,
 	update,
 	role,
-} from '../component/index.js';
-import { css, margin, padding, pct } from '../css/index.js';
-import { dom } from '../tsx/index.js';
-import { operator } from '../rx/index.js';
+} from '@cxl/component';
+import { css, margin, padding, pct } from '@cxl/css';
+import { dom } from '@cxl/tsx';
+import { operator } from '@cxl/rx';
 import { InversePrimary } from './theme.js';
 
 const colStyles = ((r: any) => {

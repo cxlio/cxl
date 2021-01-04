@@ -255,27 +255,32 @@ async function lintTsconfig({ projectPath, pkg }) {
 
 const MATCH_REGEX = /(.+):(.+)/g;
 
-function lintImports({ dir }) {
+async function lintImports({ dir }) {
 	const result = cp.spawnSync('git', ['grep', `"from '\\.\\.\\/"`, dir], {
 		shell: true,
 		encoding: 'utf8',
 	});
 	const imports = result.stdout.trim();
+	const violations = [];
+
+	let match;
+	while ((match = MATCH_REGEX.exec(imports))) {
+		const [, file, line] = match;
+		const newLine = line.replace(/'\.\.\/([^/]+)\/index\.js/, "'@cxl/$1");
+		if (newLine !== line) {
+			violations.push({ file, line, newLine });
+			const contents = await fs.readFile(file, 'utf8');
+			await fs.writeFile(file, contents.replace(line, newLine));
+		}
+	}
+
 	return {
 		id: 'imports',
-		rules: [rule(imports.length === 0, 'Should not have local imports')],
+		rules: [rule(violations.length === 0, 'Should not have local imports')],
 		async fix() {
-			let match;
-			while ((match = MATCH_REGEX.exec(imports))) {
-				const [, file, line] = match;
-				const newLine = line.replace(
-					/'\.\.\/([^/]+)\/index\.js/,
-					"'@cxl/$1"
-				);
-				if (newLine !== line) {
-					const contents = await fs.readFile(file, 'utf8');
-					await fs.writeFile(file, contents.replace(line, newLine));
-				}
+			for (const v of violations) {
+				const contents = await fs.readFile(v.file, 'utf8');
+				await fs.writeFile(v.file, contents.replace(v.line, v.newLine));
 			}
 		},
 	};

@@ -1,4 +1,4 @@
-import { dom } from '../tsx/index.js';
+import { dom } from '@cxl/tsx';
 import {
 	Augment,
 	Attribute,
@@ -7,11 +7,11 @@ import {
 	bind,
 	get,
 	role,
-} from '../component/index.js';
-import { on, onAction, onLoad, trigger } from '../dom/index.js';
-import { portal, triggerEvent } from '../template/index.js';
-import { css, padding, rgba } from '../css/index.js';
-import { EMPTY, merge } from '../rx/index.js';
+} from '@cxl/component';
+import { on, onAction, onLoad, trigger } from '@cxl/dom';
+import { portal, triggerEvent } from '@cxl/template';
+import { css, padding, rgba } from '@cxl/css';
+import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
 import { IconButton, Span, Svg, aria, ripple } from './core.js';
 import { Drawer } from './dialog.js';

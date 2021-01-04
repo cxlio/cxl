@@ -30,14 +30,15 @@ export class TestRunner extends Application {
 
 	async run() {
 		const report = await (this.node ? runNode(this) : runPuppeteer(this));
-
 		if (report) {
 			printReportV2(report);
 			await writeFile('test-report.json', JSON.stringify(report));
 			await renderHtml(report);
 		}
+
+		if (!report.success) process.exitCode = 1;
 	}
 }
 
 const app = new TestRunner();
-app.start().then(() => process.exit(0));
+app.start().then(() => process.exit());

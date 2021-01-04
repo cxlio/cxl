@@ -62,10 +62,10 @@ export default suite('db', test => {
 		const ref = db$.ref('test').ref('variable');
 		let newVal = `test-${a.id}`;
 		await ref.next(newVal);
-		let val = await ref;
+		let val = await ref.first();
 		a.equal(val, newVal);
 		await ref.next((newVal += newVal));
-		val = await ref;
+		val = await ref.first();
 		a.equal(val, newVal);
 	});
 

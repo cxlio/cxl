@@ -72,12 +72,14 @@ export default suite('template', test => {
 		const id = 'cxl-test' + a.id;
 
 		await connect<HTMLDivElement>(<Span $={portal(id)} />, el => {
-			teleport((<span>Hello</span>) as HTMLSpanElement, id)
-				.subscribe()
-				.unsubscribe();
+			const subs = teleport(
+				(<span>Hello</span>) as HTMLSpanElement,
+				id
+			).subscribe();
 			a.ok(el);
 			a.equal(el.childNodes.length, 1);
 			a.equal(el.childNodes[0]?.textContent, 'Hello');
+			subs.unsubscribe();
 		});
 	});
 });

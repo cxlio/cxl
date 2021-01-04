@@ -10,15 +10,15 @@ import {
 	get,
 	onUpdate,
 	role,
-} from '../component/index.js';
-import { Bindable, dom, expression } from '../tsx/index.js';
-import { EMPTY, Observable, defer, merge, tap } from '../rx/index.js';
-import { StyleSheet, border, css, padding, pct } from '../css/index.js';
-import { getAttribute, stopEvent, triggerEvent } from '../template/index.js';
-import { on, onAction, remove, trigger } from '../dom/index.js';
+} from '@cxl/component';
+import { Bindable, dom, expression } from '@cxl/tsx';
+import { EMPTY, Observable, defer, merge, tap } from '@cxl/rx';
+import { StyleSheet, border, css, padding, pct } from '@cxl/css';
+import { getAttribute, stopEvent, triggerEvent } from '@cxl/template';
+import { on, onAction, remove, trigger } from '@cxl/dom';
 import { InversePrimary, ResetSurface } from './theme.js';
 
-export { Span } from '../component/index.js';
+export { Span } from '@cxl/component';
 
 export const FocusHighlight = {
 	$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },

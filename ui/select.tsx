@@ -1,4 +1,4 @@
-import { dom, expression } from '../tsx/index.js';
+import { dom, expression } from '@cxl/tsx';
 import {
 	Augment,
 	Attribute,
@@ -8,11 +8,11 @@ import {
 	bind,
 	get,
 	role,
-} from '../component/index.js';
-import { css } from '../css/index.js';
-import { be, merge } from '../rx/index.js';
-import { on, onAction, onKeypress } from '../dom/index.js';
-import { triggerEvent } from '../template/index.js';
+} from '@cxl/component';
+import { css } from '@cxl/css';
+import { be, merge } from '@cxl/rx';
+import { on, onAction, onKeypress } from '@cxl/dom';
+import { triggerEvent } from '@cxl/template';
 import { InputBase } from './input-base.js';
 import {
 	Svg,

@@ -8,7 +8,7 @@ import {
 	get,
 	role,
 	staticTemplate,
-} from '../component/index.js';
+} from '@cxl/component';
 import {
 	ButtonBase,
 	DisabledStyles,
@@ -27,23 +27,23 @@ import {
 	registableHost,
 	selectableHost,
 } from './core.js';
-import { dom, expression } from '../tsx/index.js';
+import { dom, expression } from '@cxl/tsx';
 import {
 	onValue,
 	syncAttribute,
 	triggerEvent,
 	teleport,
-} from '../template/index.js';
+} from '@cxl/template';
 import {
 	trigger,
 	onKeypress,
 	on,
 	onAction,
 	setAttribute,
-} from '../dom/index.js';
-import { border, css, boxShadow, padding } from '../css/index.js';
-import { EMPTY, Observable, be, defer, merge } from '../rx/index.js';
-import { dragInside } from '../drag/index.js';
+} from '@cxl/dom';
+import { border, css, boxShadow, padding } from '@cxl/css';
+import { EMPTY, Observable, be, defer, merge } from '@cxl/rx';
+import { dragInside } from '@cxl/drag';
 import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
 import { Appbar, AppbarContextual } from './navigation.js';

@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"description": "TSX library",
 	"license": "GPL-3.0",
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/tsx && node ../tester"

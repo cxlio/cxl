@@ -1,4 +1,4 @@
-import { get } from '../component/index.js';
+import { get } from '@cxl/component';
 import type { InputBase } from './input-base.js';
 
 export type ValidateFunction<T> = (val: T) => string | true;

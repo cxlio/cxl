@@ -5,7 +5,7 @@ import {
 	Strategy,
 	getElementRoute,
 	replaceParameters,
-} from '../router/index.js';
+} from '@cxl/router';
 import {
 	Observable,
 	Reference,
@@ -13,7 +13,7 @@ import {
 	defer,
 	of,
 	merge,
-} from '../rx/index.js';
+} from '@cxl/rx';
 import {
 	Augment,
 	Attribute,
@@ -22,7 +22,7 @@ import {
 	augment,
 	bind,
 	get,
-} from '../component/index.js';
+} from '@cxl/component';
 import {
 	onAction,
 	onReady,
@@ -30,12 +30,12 @@ import {
 	onChildrenMutation,
 	onLocation,
 	on,
-} from '../dom/index.js';
+} from '@cxl/dom';
 import { AppbarTitle, Item, Tab } from './navigation.js';
-import { dom } from '../tsx/index.js';
-import { each, triggerEvent } from '../template/index.js';
+import { dom } from '@cxl/tsx';
+import { each, triggerEvent } from '@cxl/template';
 import { StateStyles } from './core.js';
-import { css } from '../css/index.js';
+import { css } from '@cxl/css';
 
 const router$ = new Reference<RouterState>();
 const strategy$ = new Reference<Strategy>();

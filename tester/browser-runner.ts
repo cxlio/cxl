@@ -1,4 +1,4 @@
-import { Result, Test } from '../spec/index.js';
+import { Result, Test } from '@cxl/spec';
 
 let output = '';
 

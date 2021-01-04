@@ -1,7 +1,7 @@
-import { TestApi, spec } from '../spec/index.js';
-import { on } from '../dom/index.js';
-import { dom } from '../tsx/index.js';
-import { getRegisteredComponents, Component } from '../component/index.js';
+import { TestApi, spec } from '@cxl/spec';
+import { on } from '@cxl/dom';
+import { dom } from '@cxl/tsx';
+import { getRegisteredComponents, Component } from '@cxl/component';
 import { InputBase, Span } from './index.js';
 
 async function connect<T extends Node>(el: T, callback: (el: T) => any) {

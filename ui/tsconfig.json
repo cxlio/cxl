@@ -6,6 +6,7 @@
 	"include": ["*.tsx"],
 	"exclude": ["test.tsx"],
 	"references": [
+		{ "path": "../rx" },
 		{ "path": "../tsx" },
 		{ "path": "../component" },
 		{ "path": "../template" },

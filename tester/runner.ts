@@ -1,6 +1,6 @@
 import { Result, Test } from './index.js';
 import { colors } from '../server/colors.js';
-import { Application, ApplicationArguments } from '../server/index.js';
+import { Application, ApplicationArguments } from '@cxl/server';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as path from 'path';
 

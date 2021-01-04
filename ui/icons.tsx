@@ -1,6 +1,6 @@
-import { Augment, Component, Attribute, role } from '../component/index.js';
-import { css, registerFont } from '../css/index.js';
-import { getShadow } from '../dom/index.js';
+import { Augment, Component, Attribute, role } from '@cxl/component';
+import { css, registerFont } from '@cxl/css';
+import { getShadow } from '@cxl/dom';
 import { defaultTheme } from './theme.js';
 
 const icons = {

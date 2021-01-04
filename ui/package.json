@@ -4,20 +4,21 @@
 	"description": "High-performance Web Components for rapid application development.",
 	"license": "GPL-3.0",
 	"homepage": "https://cxlio.github.io/cxl/ui",
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node build",
 		"build-icons": "node build-icons",
 		"test": "npm run build && cd ../dist/ui && node ../tester"
 	},
 	"dependencies": {
-		"typescript": "^4.2.0-dev.20210102",
 		"@cxl/tsx": "~0.0.1",
 		"@cxl/component": "~0.0.1",
 		"@cxl/template": "~1.0.0",
 		"@cxl/css": "~0.0.1",
 		"@cxl/router": "~0.1.0",
 		"@cxl/dom": "~0.0.1",
-		"@cxl/drag": "~0.1.0"
+		"@cxl/drag": "~0.1.0",
+		"@cxl/rx": "~0.2.0"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }
