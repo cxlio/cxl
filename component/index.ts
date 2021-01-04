@@ -1,5 +1,5 @@
-import { AttributeType, Children, renderChildren } from '../tsx/index.js';
-import { getShadow, onChildrenMutation } from '../dom/index.js';
+import { AttributeType, Children, renderChildren } from '@cxl/tsx';
+import { getShadow, onChildrenMutation } from '@cxl/dom';
 import {
 	Observable,
 	Operator,
@@ -11,7 +11,7 @@ import {
 	map,
 	of,
 	tap,
-} from '../rx/index.js';
+} from '@cxl/rx';
 
 type RenderFunction<T> = (node: T) => void;
 type Augmentation<T extends Component> = (

@@ -10,7 +10,14 @@
 		"test": "npm run build && cd ../dist/ui && node ../tester"
 	},
 	"dependencies": {
-		"typescript": "^4.2.0-dev.20201211"
+		"typescript": "^4.2.0-dev.20210102",
+		"@cxl/tsx": "~0.0.1",
+		"@cxl/component": "~0.0.1",
+		"@cxl/template": "~1.0.0",
+		"@cxl/css": "~0.0.1",
+		"@cxl/router": "~0.1.0",
+		"@cxl/dom": "~0.0.1",
+		"@cxl/drag": "~0.1.0"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }

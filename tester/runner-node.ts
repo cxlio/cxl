@@ -1,8 +1,8 @@
 import { resolve } from 'path';
 import * as inspector from 'inspector';
 
-import { Application } from '../server/index.js';
-import { Test } from '../spec/index.js';
+import type { Test } from '@cxl/spec';
+import type { TestRunner } from './index.js';
 
 import { Coverage, generateReport } from './report.js';
 
@@ -27,7 +27,13 @@ async function recordCoverage(
 	return coverage.result as Coverage;
 }
 
-export default async function runNode(entryFile: string, app: Application) {
+function runSuite(suitePath: string) {
+	const suite = require(suitePath).default as Test;
+	return suite.run().then(() => suite);
+}
+
+export default async function runNode(app: TestRunner) {
+	const entryFile = app.entryFile;
 	const session = new inspector.Session();
 	app.log(`Node ${process.version}`);
 	const suitePath = resolve(entryFile);
@@ -36,10 +42,14 @@ export default async function runNode(entryFile: string, app: Application) {
 
 	let result!: Test;
 
-	const coverage = await recordCoverage(session, () => {
-		const suite = (result = require(suitePath).default as Test);
-		return suite.run();
-	});
-
-	return generateReport(result, coverage);
+	if (app.ignoreCoverage) {
+		const suite = await runSuite(suitePath);
+		return generateReport(suite);
+	} else {
+		const coverage = await recordCoverage(session, () => {
+			const suite = (result = require(suitePath).default as Test);
+			return suite.run();
+		});
+		return generateReport(result, coverage);
+	}
 }

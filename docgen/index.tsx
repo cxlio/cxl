@@ -1,7 +1,9 @@
-import { Application, mkdirp, readJson, sh } from '../server';
 import { promises as fs, existsSync } from 'fs';
 import { join } from 'path';
-import { Node, build } from '../dts';
+
+import { Application, mkdirp, readJson, sh } from '@cxl/server';
+import { Node, build } from '@cxl/dts';
+
 import { render as renderJson } from './render-json';
 import type { Section } from './render';
 

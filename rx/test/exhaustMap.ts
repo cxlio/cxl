@@ -1,6 +1,6 @@
 import { cold, logEvents } from './util';
 import { exhaustMap } from '../index';
-import { suite } from '../../spec';
+import { suite } from '@cxl/spec';
 
 export default suite('exhaustMap', test => {
 	/*test('should map-and-flatten each item to an Observable', a => {

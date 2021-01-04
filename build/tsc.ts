@@ -12,7 +12,7 @@ import {
 	createSolutionBuilderHost,
 	sys,
 } from 'typescript';
-import { Observable, Subscriber } from '../rx';
+import { Observable, Subscriber } from '@cxl/rx';
 export { version as tscVersion, BuildOptions } from 'typescript';
 
 interface Output {

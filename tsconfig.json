@@ -16,7 +16,10 @@
 		"jsx": "react",
 		"jsxFactory": "dom",
 		"jsxFragmentFactory": "dom",
-		"typeRoots": ["node_modules/@types"]
+		"typeRoots": ["node_modules/@types"],
+		"paths": {
+			"@cxl/*": ["./*"]
+		}
 	},
 	"files": []
 }

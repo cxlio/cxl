@@ -1,4 +1,4 @@
-import { Observable, Subject, Subscriber, operator } from '../rx';
+import { Observable, Subject, Subscriber, operator } from '@cxl/rx';
 
 declare const process: any;
 

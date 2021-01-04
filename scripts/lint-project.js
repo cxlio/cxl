@@ -25,45 +25,59 @@ const requiredPackageScripts = ['build', 'test'];
 const licenses = ['GPL-3.0', 'GPL-3.0-only', 'Apache-2.0'];
 const dependencies = [];
 
-function Result(id, valid, message) {
-	return { id, valid, message };
+function Result(id, valid, message, fix) {
+	return { id, valid, message, fix };
 }
 
-const fixes = {
-	package: async ({ projectPath, dir, rootPkg }) => {
-		let hasChanges = false;
-		const pkgPath = `${projectPath}/package.json`;
-		const pkg = await readJson(pkgPath);
-		const oldPackage = JSON.stringify(pkg, null, '\t');
-		const testScript = `npm run build && cd ../dist/${dir} && node ../tester`;
+async function fixDependencies({ projectPath, rootPkg }) {
+	const pkgPath = `${projectPath}/package.json`;
+	const pkg = await readJson(pkgPath);
+	const oldPackage = JSON.stringify(pkg, null, '\t');
 
-		if (!pkg.scripts) pkg.scripts = {};
-		if (!pkg.scripts.test) pkg.scripts.test = testScript;
-		if (!pkg.scripts.build) pkg.scripts.build = `node ../dist/build`;
+	for (const name in pkg.dependencies) {
+		const rootValue =
+			rootPkg.devDependencies?.[name] || rootPkg.dependencies?.[name];
+		if (rootValue && pkg.dependencies[name] !== rootValue)
+			pkg.dependencies[name] = rootValue;
+	}
 
-		if (!pkg.license) pkg.license = 'GPL-3.0';
-		if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
-		if (pkg.devDependencies) delete pkg.devDependencies;
-		if (pkg.peerDependencies) delete pkg.peerDependencies;
-		if (pkg.browser) pkg.browser = 'amd/index.min.js';
+	const newPackage = JSON.stringify(pkg, null, '\t');
 
-		if (!pkg.scripts.test.startsWith(testScript)) {
-			const testerArgs =
-				/node \.\.\/tester(\s+.+)/.exec(pkg.scripts.test)?.[1] || '';
-			pkg.scripts.test = `${testScript}${testerArgs}`;
+	if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
+}
+
+async function fixTsconfig({ projectPath, baseDir }) {
+	const pkgPath = `${projectPath}/package.json`;
+	const pkg = await readJson(pkgPath);
+	const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
+	const oldPackage = JSON.stringify(pkg, null, '\t');
+
+	for (const ref of tsconfig.references) {
+		const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
+		if (refName) {
+			const refPkg = `@cxl/${refName}`;
+			if (!pkg.dependencies) pkg.dependencies = {};
+
+			if (!pkg.dependencies[refName]) {
+				const pkgVersion = (
+					await readJson(`${baseDir}/${refName}/package.json`)
+				)?.version;
+				if (pkgVersion) pkg.dependencies[refPkg] = `~${pkgVersion}`;
+			}
 		}
+	}
 
-		const newPackage = JSON.stringify(pkg, null, '\t');
+	const newPackage = JSON.stringify(pkg, null, '\t');
 
-		if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
-	},
+	if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
+}
 
-	'tsconfig.test': async ({ projectPath, dir }) => {
-		const path = `${projectPath}/tsconfig.test.json`;
-		if (!(await exists(path))) {
-			await fs.writeFile(
-				path,
-				`{
+async function fixTest({ projectPath, dir }) {
+	const path = `${projectPath}/tsconfig.test.json`;
+	if (!(await exists(path))) {
+		await fs.writeFile(
+			path,
+			`{
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/${dir}"
@@ -72,241 +86,208 @@ const fixes = {
 	"references": [{ "path": "." }, { "path": "../spec" }]
 }
 `
-			);
-		}
-	},
-
-	async dependencies({ projectPath, rootPkg }) {
-		const pkgPath = `${projectPath}/package.json`;
-		const pkg = await readJson(pkgPath);
-		const oldPackage = JSON.stringify(pkg, null, '\t');
-
-		for (const name in pkg.dependencies) {
-			const rootValue =
-				rootPkg.devDependencies?.[name] || rootPkg.dependencies?.[name];
-			if (pkg.dependencies[name] !== rootValue)
-				pkg.dependencies[name] = rootValue;
-		}
-
-		const newPackage = JSON.stringify(pkg, null, '\t');
-
-		if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
-	},
-
-	'tsconfig.references': async ({ projectPath, baseDir }) => {
-		const pkgPath = `${projectPath}/package.json`;
-		const pkg = await readJson(pkgPath);
-		const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
-		const oldPackage = JSON.stringify(pkg, null, '\t');
-
-		for (const ref of tsconfig.references) {
-			const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
-			if (refName) {
-				const refPkg = `@cxl/${refName}`;
-				if (!pkg.dependencies) pkg.dependencies = {};
-
-				if (!pkg.dependencies[refName]) {
-					const pkgVersion = (
-						await readJson(`${baseDir}/${refName}/package.json`)
-					)?.version;
-					if (pkgVersion) pkg.dependencies[refPkg] = `~${pkgVersion}`;
-				}
-			}
-		}
-
-		const newPackage = JSON.stringify(pkg, null, '\t');
-
-		if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
-	},
-};
+		);
+	}
+}
 
 function exists(filepath) {
 	return fs.stat(filepath).catch(() => false);
 }
 
-const rules = [
-	({ pkg }) =>
-		requiredPackageFields.map(field =>
-			Result(
-				'package',
-				field in pkg,
-				`Field "${field}" required in package.json`
-			)
-		),
+function rule(valid, message) {
+	return { valid, message };
+}
 
-	({ pkg }) =>
-		pkg.scripts
-			? requiredPackageScripts.map(field =>
-					Result(
-						'package',
-						field in pkg.scripts,
-						`Script "${field}" required in package.json`
-					)
-			  )
-			: [
-					Result(
-						'package',
-						'scripts' in pkg,
-						`Field "scripts" required in package.json`
-					),
-			  ],
-	({ pkg, dir, rootPkg }) => [
-		Result(
-			'package',
+async function fixPackage({ projectPath, dir, rootPkg }) {
+	let hasChanges = false;
+	const pkgPath = `${projectPath}/package.json`;
+	const pkg = await readJson(pkgPath);
+	const oldPackage = JSON.stringify(pkg, null, '\t');
+	const testScript = `npm run build && cd ../dist/${dir} && node ../tester`;
+
+	if (!pkg.scripts) pkg.scripts = {};
+	if (!pkg.scripts.test) pkg.scripts.test = testScript;
+	if (!pkg.scripts.build) pkg.scripts.build = `node ../dist/build`;
+
+	if (!pkg.license) pkg.license = 'GPL-3.0';
+	if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
+	if (pkg.devDependencies) delete pkg.devDependencies;
+	if (pkg.peerDependencies) delete pkg.peerDependencies;
+	if (pkg.browser) pkg.browser = 'amd/index.min.js';
+
+	if (!pkg.scripts.test.startsWith(testScript)) {
+		const testerArgs =
+			/node \.\.\/tester(\s+.+)/.exec(pkg.scripts.test)?.[1] || '';
+		pkg.scripts.test = `${testScript}${testerArgs}`;
+	}
+
+	const newPackage = JSON.stringify(pkg, null, '\t');
+
+	if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
+}
+
+function lintPackage({ pkg, dir, rootPkg }) {
+	const rules = requiredPackageFields.map(field =>
+		rule(field in pkg, `Field "${field}" required in package.json`)
+	);
+
+	if (pkg.scripts)
+		rules.push(
+			...requiredPackageScripts.map(field =>
+				rule(
+					field in pkg.scripts,
+					`Script "${field}" required in package.json`
+				)
+			)
+		);
+	else
+		rules.push(
+			rule('scripts' in pkg, `Field "scripts" required in package.json`)
+		);
+	rules.push(
+		rule(
 			licenses.includes(pkg.license),
 			`Valid license "${pkg.license}" required.`
 		),
-		Result(
-			'package',
-			!pkg.devDependencies,
-			`Package should not have devDependencies.`
-		),
-		Result(
-			'package',
+		rule(!pkg.devDependencies, `Package should not have devDependencies.`),
+		rule(
 			!pkg.peerDependencies,
 			`Package should not have peerDependencies.`
 		),
-		Result(
-			'package',
+		rule(
 			!pkg.browser || pkg.browser === 'amd/index.min.js',
 			`Package "browser" property should use minified amd version`
 		),
-		Result(
-			'package',
+		rule(
 			pkg.bugs === rootPkg.bugs,
 			`Package "bugs" property must match root package`
 		),
-		Result(
-			'package',
+		rule(
 			pkg?.scripts?.test?.startsWith(
 				`npm run build && cd ../dist/${dir} && node ../tester`
 			),
 			`Valid test script in package.json`
-		),
-	],
+		)
+	);
 
-	async ({ projectPath }) =>
-		Result(
-			'tsconfig.test',
-			await exists(`${projectPath}/tsconfig.test.json`),
-			`Missing "tsconfig.test.json" file.`
-		),
-
-	async ({ projectPath }) =>
-		Result(
-			'test',
-			(await exists(`${projectPath}/test.ts`)) ||
-				(await exists(`${projectPath}/test.tsx`)),
-			`Missing "test.ts" file.`
-		),
-	({ rootPkg, pkg }) => {
-		const result = [];
-
-		for (const name in pkg.dependencies) {
-			const pkgValue = pkg.dependencies[name];
-			const rootValue =
-				rootPkg.devDependencies?.[name] || rootPkg.dependencies?.[name];
-			result.push(
-				Result(
-					'dependencies',
-					name.startsWith(rootPkg.name) || rootValue,
-					`Dependency "${name}" must be included in root package.json`
-				),
-				Result(
-					'dependencies',
-					pkgValue !== '*',
-					`Dependency "${name}" must be a valid version. pkg:${pkgValue}`
-				),
-				Result(
-					'dependencies',
-					name.startsWith(rootPkg.name) || rootValue === pkgValue,
-					`Conflicting versions "${name}". root: ${rootValue}, dep: ${pkgValue}`
-				)
-			);
-		}
-
-		return result;
-	},
-	/*({ pkg, rootPkg }) => {
-		const result = [];
-
-		for (const name in pkg.peerDependencies) {
-			const pkgValue = pkg.peerDependencies[name];
-
-			result.push(
-				Result(
-					'peerDependencies',
-					!name.startsWith(rootPkg.name),
-					`Local package "${name}" should not be a peerDependency.`
-				),
-				Result(
-					'peerDependencies',
-					pkgValue !== '*',
-					`Peer Dependency "${name}" must be a valid version. pkg:${pkgValue}`
-				)
-			);
-		}
-
-		return result;
-	},*/
-	async ({ projectPath, pkg }) => {
-		const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
-		const result = [
-			Result('tsconfig', tsconfig, 'tsconfig.json should be present'),
-		];
-		const references = tsconfig?.references;
-
-		if (references)
-			for (const ref of references) {
-				const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
-
-				if (refName) {
-					const refPkg = `@cxl/${refName}`;
-					result.push(
-						Result(
-							'tsconfig.references',
-							pkg.dependencies?.[refPkg],
-							`reference ${refPkg} should be declared as dependency`
-						)
-					);
-				}
-			}
-
-		return result;
-	},
-];
-
-/*function pushDependencies(deps, results) {
-	for (const name in deps) {
-		if (dependencies[name] && dependencies[name] !== deps[name])
-			results.push(
-				Result(
-					'dependencies',
-					false,
-					`Inconsistent dependency version "${name}"`
-				)
-			);
-		else dependencies[name] = deps[name];
-	}
+	return {
+		id: 'package',
+		fix: fixPackage,
+		rules,
+	};
 }
 
-async function verifyDependencies(results) {
-	for (const name in dependencies) {
+async function lintTest({ projectPath }) {
+	return {
+		id: 'test',
+		fix: fixTest,
+		rules: [
+			rule(
+				await exists(`${projectPath}/tsconfig.test.json`),
+				`Missing "tsconfig.test.json" file.`
+			),
+			rule(
+				(await exists(`${projectPath}/test.ts`)) ||
+					(await exists(`${projectPath}/test.tsx`)),
+				`Missing "test.ts" file.`
+			),
+		],
+	};
+}
 
-		results.push(
-			Result(
-				'dependencies',
-				pkgValue,
+function lintDependencies({ rootPkg, pkg }) {
+	const rules = [];
+
+	for (const name in pkg.dependencies) {
+		const pkgValue = pkg.dependencies[name];
+		const rootValue =
+			rootPkg.devDependencies?.[name] || rootPkg.dependencies?.[name];
+
+		rules.push(
+			rule(
+				name.startsWith(rootPkg.name) || rootValue,
 				`Dependency "${name}" must be included in root package.json`
 			),
-			Result(
-				'dependencies',
-				pkgValue === dependencies[name],
-				`Inconsistent dependency version "${name}". root: ${pkgValue}, dep: ${dependencies[name]}`
+			rule(
+				pkgValue !== '*',
+				`Dependency "${name}" must be a valid version. pkg:${pkgValue}`
+			),
+			rule(
+				name.startsWith(rootPkg.name) || rootValue === pkgValue,
+				`Conflicting versions "${name}". root: ${rootValue}, dep: ${pkgValue}`
 			)
 		);
 	}
-}*/
+
+	return {
+		id: 'dependencies',
+		fix: fixDependencies,
+		rules,
+	};
+}
+
+async function lintTsconfig({ projectPath, pkg }) {
+	const tsconfig = await readJson(`${projectPath}/tsconfig.json`);
+	const rules = [rule(tsconfig, 'tsconfig.json should be present')];
+	const references = tsconfig?.references;
+
+	if (references)
+		for (const ref of references) {
+			const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
+
+			if (refName) {
+				const refPkg = `@cxl/${refName}`;
+				rules.push(
+					rule(
+						pkg.dependencies?.[refPkg],
+						`reference ${refPkg} should be declared as dependency`
+					)
+				);
+			}
+		}
+
+	return {
+		id: 'tsconfig',
+		fix: fixTsconfig,
+		rules,
+	};
+}
+
+const MATCH_REGEX = /(.+):(.+)/g;
+
+function lintImports({ dir }) {
+	const result = cp.spawnSync('git', ['grep', `"from '\\.\\.\\/"`, dir], {
+		shell: true,
+		encoding: 'utf8',
+	});
+	const imports = result.stdout.trim();
+	return {
+		id: 'imports',
+		rules: [rule(imports.length === 0, 'Should not have local imports')],
+		async fix() {
+			let match;
+			while ((match = MATCH_REGEX.exec(imports))) {
+				const [, file, line] = match;
+				const newLine = line.replace(
+					/'\.\.\/([^/]+)\/index\.js/,
+					"'@cxl/$1"
+				);
+				if (newLine !== line) {
+					const contents = await fs.readFile(file, 'utf8');
+					await fs.writeFile(file, contents.replace(line, newLine));
+				}
+			}
+		},
+	};
+}
+
+const linters = [
+	lintPackage,
+	lintTest,
+	lintDependencies,
+	lintTsconfig,
+	lintImports,
+];
 
 async function verifyProject(dir, rootPkg) {
 	const projectPath = `${baseDir}/${dir}`;
@@ -318,10 +299,7 @@ async function verifyProject(dir, rootPkg) {
 	if (!pkg) return [];
 
 	const data = { projectPath, dir, pkg, rootPkg, baseDir };
-	const results = (await Promise.all(rules.map(rule => rule(data)))).flat();
-
-	// Collect dependencies
-	// if (pkg.dependencies) pushDependencies(pkg.dependencies, results);
+	const results = (await Promise.all(linters.map(lint => lint(data)))).flat();
 
 	results.forEach(r => (r.data = data));
 
@@ -342,26 +320,25 @@ program('verify', async ({ log }) => {
 				Promise.all(all.map(dir => verifyProject(dir, rootPkg)))
 			)
 	).flat();
-	// await verifyDependencies(results);
 
 	let hasErrors = false;
-	const fixMap = new Map();
-
+	const fixes = [];
 	for (const result of results) {
-		if (!result.valid) {
-			const id = `${result.data?.dir}:${result.id}`;
-			hasErrors = true;
-			error(result.data?.dir || 'root', result.message);
+		for (const rule of result.rules) {
+			if (!rule.valid) {
+				hasErrors = true;
+				error(result.data?.dir || 'root', rule.message);
 
-			if (fixes[result.id] && !fixMap.has(id))
-				fixMap.set(id, fixes[result.id].bind(null, result.data));
+				if (result.fix)
+					fixes.push(() => {
+						log(`${result.data?.dir}: Attempting fix`);
+						result.fix(result.data);
+					});
+			}
 		}
 	}
 
-	for (const [id, fix] of fixMap) {
-		log(`${id}: Attempting fix`);
-		await fix();
-	}
+	for (const fix of fixes) await fix();
 
 	if (hasErrors) process.exitCode = 1;
 })();

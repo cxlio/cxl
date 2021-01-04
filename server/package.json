@@ -9,10 +9,8 @@
 		"test": "npm run build && cd ../dist/server && node ../tester --node"
 	},
 	"dependencies": {
-		"source-map-support": "0.5.19"
-	},
-	"peerDependencies": {
-		"@cxl/rx": "0.1.0"
+		"source-map-support": "0.5.19",
+		"@cxl/rx": "~0.2.0"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }

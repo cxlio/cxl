@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
-import { dirname, relative } from 'path';
-import { Test } from '../spec/index.js';
-import { SourceMap, getSourceMap, positionToIndex } from '../source/index.js';
+import { relative } from 'path';
+import type { Test } from '@cxl/spec';
+import { SourceMap, getSourceMap, positionToIndex } from '@cxl/source';
 
 export interface TestResult {
 	success: boolean;
@@ -33,7 +33,7 @@ export type Coverage = TestCoverage[];
 export interface Report {
 	success: boolean;
 	testReport: TestReport;
-	coverage: TestCoverageReport[];
+	coverage?: TestCoverageReport[];
 }
 
 export interface TestCoverage {
@@ -93,18 +93,27 @@ function translateRanges(
 			});
 			if (newRange) {
 				const url = newRange.start.source;
-				const s =
-					sourcesMap[url] ||
-					(sourcesMap[url] = {
-						source: readFileSync(url, 'utf8'),
-						ranges: [],
-					});
+				try {
+					const s =
+						sourcesMap[url] ||
+						(sourcesMap[url] = {
+							source: readFileSync(url, 'utf8'),
+							ranges: [],
+						});
 
-				s.ranges.push({
-					startOffset: positionToIndex(s.source, newRange.start),
-					endOffset: positionToIndex(s.source, newRange.end),
-					count: range.count,
-				});
+					if (s.source)
+						s.ranges.push({
+							startOffset: positionToIndex(
+								s.source,
+								newRange.start
+							),
+							endOffset: positionToIndex(s.source, newRange.end),
+							count: range.count,
+						});
+				} catch (e) {
+					console.error(e);
+					sourcesMap[url] = { ranges: [] };
+				}
 			}
 		});
 	});
@@ -129,13 +138,13 @@ function translateRanges(
 async function generateCoverageReport(coverage: Coverage) {
 	const cwd = process.cwd();
 	const filtered: TestCoverage[] = [];
+	const ignoreRegex = /\/node_modules\//;
 
 	for (const script of coverage) {
 		const url = script.url.replace(/^file:\/\//, '');
-		const dir = dirname(url);
 
-		if (dir.startsWith(cwd)) {
-			const sourceMap = await getSourceMap(url);
+		if (url.startsWith(cwd) && !ignoreRegex.test(url)) {
+			const sourceMap = await getSourceMap(url).catch(() => undefined);
 			const relativeUrl = relative(cwd, url);
 
 			filtered.push({
@@ -183,10 +192,10 @@ function renderTestReport(test: Test): TestReport {
 
 export async function generateReport(
 	suite: Test,
-	v8Coverage: Coverage
+	v8Coverage?: Coverage
 ): Promise<Report> {
 	const testReport = renderTestReport(suite);
-	const coverage = await generateCoverageReport(v8Coverage);
+	const coverage = v8Coverage && (await generateCoverageReport(v8Coverage));
 	return {
 		success: testReport.failureCount === 0,
 		testReport,

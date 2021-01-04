@@ -7,7 +7,10 @@
 	"bin": "index.js",
 	"dependencies": {
 		"highlight.js": "^10.1.1",
-		"markdown-it": "^11.0.0"
+		"markdown-it": "^11.0.0",
+		"@cxl/server": "~0.0.2",
+		"@cxl/dts": "~0.0.1",
+		"@cxl/tsx": "~0.0.1"
 	},
 	"scripts": {
 		"build": "node build",

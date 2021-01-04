@@ -1,6 +1,6 @@
+import { dom } from '@cxl/tsx';
+import { suite } from '@cxl/spec';
 import { Router } from './index.js';
-import { dom } from '../tsx/index.js';
-import { suite } from '../spec/index.js';
 
 export default suite('router', test => {
 	test('Router#go - no parameters', a => {

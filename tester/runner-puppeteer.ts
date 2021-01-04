@@ -1,7 +1,7 @@
 import { Browser, CoverageEntry, Page, Request, launch } from 'puppeteer';
 import { readFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
-import { Test } from '../spec/index.js';
+import type { Test } from '@cxl/spec';
 import type { TestRunner } from './index.js';
 
 import { TestCoverage, generateReport } from './report.js';
@@ -53,17 +53,14 @@ async function handleRequest(sources: Output[], req: Request) {
 	if (req.method() !== 'POST') return req.continue();
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
-
-	let url = resolve(base, scriptPath);
-	if (!url.endsWith('.js')) url += '.js';
+	const paths = [resolve(base)];
 
 	try {
+		const url = require.resolve(scriptPath, { paths });
 		await respond(req, sources, url);
 	} catch (e) {
-		if (e.code === 'ENOENT') {
-			url = url.replace(/\.js$/, '/index.js');
-			await respond(req, sources, url);
-		} else req.continue();
+		console.error(base, scriptPath, e);
+		req.continue();
 	}
 }
 
@@ -154,7 +151,7 @@ async function generateCoverage(
 export default async function runPuppeteer(app: TestRunner) {
 	const entryFile = app.entryFile;
 	const browser = await launch({
-		product: app.firefox ? 'firefox' : 'chrome',
+		// product: app.firefox ? 'firefox' : 'chrome',
 		headless: true,
 		args: ['--no-sandbox', '--disable-setuid-sandbox'],
 		timeout: 5000,
@@ -177,7 +174,9 @@ export default async function runPuppeteer(app: TestRunner) {
 		: await cjsRunner(page, sources, app);
 	if (!suite) throw new Error('Invalid suite');
 
-	const coverage = await generateCoverage(page, sources);
+	const coverage = app.ignoreCoverage
+		? undefined
+		: await generateCoverage(page, sources);
 
 	if (!app.firefox) await page.tracing.stop();
 

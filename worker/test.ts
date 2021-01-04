@@ -1,6 +1,6 @@
-import { Subscriber, combineLatest } from '../rx/index.js';
+import { Subscriber, combineLatest } from '@cxl/rx';
 import { compile } from './index.js';
-import { suite } from '../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('worker', test => {
 	test('Multiple Requests', a => {

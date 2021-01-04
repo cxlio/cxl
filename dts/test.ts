@@ -9,7 +9,7 @@ import {
 	ScriptTarget,
 	parse,
 } from './index.js';
-import { TestApi, suite } from '../spec/index.js';
+import { TestApi, suite } from '@cxl/spec';
 
 export default suite('dts', test => {
 	test('single literal const', (a: TestApi) => {

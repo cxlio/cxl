@@ -1,6 +1,6 @@
 import { cold, expectLog } from './util';
 import { distinctUntilChanged } from '../index';
-import { suite } from '../../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('distinctUntilChanged', test => {
 	test('should distinguish between values', a => {

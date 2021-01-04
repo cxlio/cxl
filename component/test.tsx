@@ -8,9 +8,9 @@ import {
 	get,
 	registerComponent,
 } from './index';
-import { dom } from '../tsx';
-import { of, tap } from '../rx';
-import { suite } from '../spec/index.js';
+import { dom } from '@cxl/tsx';
+import { of, tap } from '@cxl/rx';
+import { suite } from '@cxl/spec';
 
 export default suite('component', test => {
 	test('Component - empty', a => {

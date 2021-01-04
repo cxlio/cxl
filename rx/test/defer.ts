@@ -1,6 +1,6 @@
 import { cold, expectLog } from './util';
 import { defer } from '../index';
-import { suite } from '../../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('defer', test => {
 	test('should defer the creation of a simple observable', a => {

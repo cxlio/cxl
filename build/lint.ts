@@ -1,8 +1,8 @@
 import { relative } from 'path';
 import { ESLint } from 'eslint';
 
-import { Observable } from '../rx/index.js';
-import { Output } from '../source/index.js';
+import { Observable } from '@cxl/rx';
+import { Output } from '@cxl/source';
 import { builder } from './builder.js';
 
 function handleEslintResult(results: ESLint.LintResult[]) {

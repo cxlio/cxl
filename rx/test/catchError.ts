@@ -1,6 +1,6 @@
 import { cold, expectLog } from './util';
 import { catchError, of } from '../index';
-import { suite } from '../../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('catchError', test => {
 	test('should catch error and replace with a cold Observable', a => {

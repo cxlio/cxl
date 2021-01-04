@@ -1,4 +1,4 @@
-import { colors } from '../server/colors.js';
+import { colors } from '@cxl/server/colors.js';
 
 import {
 	Report,
@@ -40,6 +40,6 @@ function printCoverage(coverage: TestCoverageReport[]) {
 }
 
 export default function generate(report: Report) {
-	printCoverage(report.coverage);
+	if (report.coverage) printCoverage(report.coverage);
 	printTest(report.testReport);
 }

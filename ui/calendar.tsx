@@ -5,12 +5,12 @@ import {
 	Component,
 	StyleAttribute,
 	get,
-} from '../component/index.js';
-import { css, padding } from '../css/index.js';
-import { dom } from '../tsx/index.js';
-import { be } from '../rx/index.js';
-import { onAction } from '../dom/index.js';
-import { each, onValue, render } from '../template/index.js';
+} from '@cxl/component';
+import { css, padding } from '@cxl/css';
+import { dom } from '@cxl/tsx';
+import { be } from '@cxl/rx';
+import { onAction } from '@cxl/dom';
+import { each, onValue, render } from '@cxl/template';
 
 import {
 	Button,

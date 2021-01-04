@@ -1,4 +1,4 @@
-import { suite } from '../spec/index.js';
+import { suite } from '@cxl/spec';
 import { dragInside } from './index.js';
 
 export default suite('drag', test => {

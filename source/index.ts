@@ -1,5 +1,5 @@
 import { dirname, resolve } from 'path';
-import { readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 import { MappingItem, SourceMapConsumer, RawSourceMap } from 'source-map';
 
 export interface Output {
@@ -90,18 +90,18 @@ export class SourceMap {
 	path: string;
 	dir: string;
 	map?: SourceMapConsumer;
-	raw: RawSourceMap;
+	raw?: RawSourceMap;
 	mappings: MappingItem[];
 
 	constructor(path: string) {
 		this.path = resolve(path);
 		this.dir = dirname(this.path);
-		this.raw = JSON.parse(readFileSync(this.path, 'utf8'));
 		this.mappings = [];
 	}
 
 	async load() {
-		this.map = await new SourceMapConsumer(this.raw);
+		const raw = (this.raw = JSON.parse(await readFile(this.path, 'utf8')));
+		this.map = await new SourceMapConsumer(raw);
 		this.map.eachMapping(m => this.mappings.push(m));
 		return this;
 	}
@@ -134,8 +134,8 @@ export function getSourceMapPath(source: string, cwd: string) {
 	return match ? resolve(cwd, match[1]) : '';
 }
 
-export function getSourceMap(sourcePath: string) {
-	const source = readFileSync(sourcePath, 'utf8');
+export async function getSourceMap(sourcePath: string) {
+	const source = await readFile(sourcePath, 'utf8');
 	const filePath = getSourceMapPath(source, dirname(sourcePath));
 	return filePath ? new SourceMap(filePath).load() : undefined;
 }

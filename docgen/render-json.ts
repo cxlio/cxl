@@ -1,6 +1,6 @@
-import type { DocGen, File } from './index.js';
-import { Kind, Output } from '../dts/index.js';
 import { relative } from 'path';
+import { Kind, Output } from '@cxl/dts';
+import type { DocGen, File } from './index.js';
 
 function serialize(key: string, value: any) {
 	const cwd = process.cwd();

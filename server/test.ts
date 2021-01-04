@@ -1,14 +1,19 @@
 import { Application } from './index.js';
-import { suite } from '../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('server', test => {
 	test('Application', a => {
 		class TestApp extends Application {
 			name = 'test';
 			setup() {
-				this.parameters.register({
-					name: 'node',
-				});
+				this.parameters.register(
+					{
+						name: 'node',
+					},
+					{
+						name: 'ignoreCoverage',
+					}
+				);
 			}
 			run() {
 				a.equal(this.name, 'test');

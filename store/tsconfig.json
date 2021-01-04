@@ -1,9 +1,0 @@
-{
-	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"outDir": "../dist/store",
-		"lib": ["es2015"]
-	},
-	"references": [{ "path": "../rx" }],
-	"files": ["index.ts"]
-}

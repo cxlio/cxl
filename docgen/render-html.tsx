@@ -5,7 +5,7 @@ import {
 	Flags,
 	Source,
 	DocumentationContent,
-} from '../dts';
+} from '@cxl/dts';
 import type { DocGen, File } from './index.js';
 import {
 	kindToString,

@@ -1,4 +1,4 @@
-import { Observable, tap } from '../rx';
+import { Observable, tap } from '@cxl/rx';
 
 export type Elements = {
 	[P in keyof HTMLElementTagNameMap]: Partial<HTMLElementTagNameMap[P]>;

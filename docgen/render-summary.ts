@@ -1,5 +1,5 @@
 import type { DocGen, File } from './index.js';
-import { Node, Kind, Flags, Output } from '../dts/index.js';
+import { Node, Kind, Flags, Output } from '@cxl/dts';
 import { getHref } from './render-html';
 
 function declarationFilter(node: Node) {

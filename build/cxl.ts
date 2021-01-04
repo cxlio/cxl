@@ -2,7 +2,7 @@ import { basename } from 'path';
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 
-import { EMPTY, defer } from '../rx/index.js';
+import { EMPTY, defer } from '@cxl/rx';
 
 import { BuildConfiguration, build } from './builder.js';
 import { docs, pkg, readPackage, readme } from './package.js';

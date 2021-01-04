@@ -8,7 +8,7 @@ import {
 	defer,
 	of,
 	merge,
-} from '../rx/index.js';
+} from '@cxl/rx';
 
 type ElementContent = string | Node;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;

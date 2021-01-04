@@ -1,6 +1,6 @@
 import { posix as fsPath } from 'path';
 import { promises as fs, Stats, watch as fsWatch } from 'fs';
-import { Observable, Subscriber, merge, of } from '../rx/index.js';
+import { Observable, Subscriber, merge, of } from '@cxl/rx';
 
 export enum EventType {
 	Change = 'change',

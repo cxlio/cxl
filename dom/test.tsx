@@ -1,6 +1,6 @@
-import { dom } from '../tsx/index.js';
+import { dom } from '@cxl/tsx';
+import { suite } from '@cxl/spec';
 import { empty, setAttribute, setContent } from './index.js';
-import { suite } from '../spec/index.js';
 
 export default suite('dom', test => {
 	test('empty(Element)', a => {

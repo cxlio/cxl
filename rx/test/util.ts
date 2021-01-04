@@ -1,5 +1,5 @@
 import { Observable, Subject, operator, toPromise } from '../index.js';
-import { TestApi } from '../../spec/index.js';
+import { TestApi } from '@cxl/spec';
 
 interface Log {
 	events: string;

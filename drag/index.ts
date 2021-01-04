@@ -1,5 +1,5 @@
-import { EMPTY, Observable, merge } from '../rx/index.js';
-import { on } from '../dom/index.js';
+import { EMPTY, Observable, merge } from '@cxl/rx';
+import { on } from '@cxl/dom';
 
 export interface DragHandler {
 	onStart(ev: DragEvent): void;

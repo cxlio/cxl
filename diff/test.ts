@@ -1,4 +1,4 @@
-import { spec } from '../spec/index.js';
+import { spec } from '@cxl/spec';
 import { diff, patch } from './index.js';
 
 export default spec('diff', s => {

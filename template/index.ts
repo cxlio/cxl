@@ -3,7 +3,7 @@ import {
 	setContent as domSetContent,
 	on,
 	trigger,
-} from '../dom/index.js';
+} from '@cxl/dom';
 import {
 	ListEvent,
 	Observable,
@@ -15,10 +15,10 @@ import {
 	merge,
 	of,
 	tap,
-} from '../rx/index.js';
-import { Bindable, NativeChildren, dom } from '../tsx/index.js';
-import { Styles, render as renderCSS } from '../css/index.js';
-import { staticTemplate } from '../component/index.js';
+} from '@cxl/rx';
+import { Bindable, NativeChildren, dom } from '@cxl/tsx';
+import { Styles, render as renderCSS } from '@cxl/css';
+import { staticTemplate } from '@cxl/component';
 
 interface ElementWithValue<T> extends HTMLElement {
 	value: T;

@@ -2,9 +2,9 @@ import { dirname, join, resolve } from 'path';
 import { existsSync, mkdirSync, utimesSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 
-import { Application, sh } from '../server/index.js';
-import { Observable } from '../rx/index.js';
-import { Output } from '../source/index.js';
+import { Application, sh } from '@cxl/server';
+import { Observable } from '@cxl/rx';
+import { Output } from '@cxl/source';
 import { tscVersion } from './tsc.js';
 import { BASEDIR, Package, readPackage } from './package.js';
 

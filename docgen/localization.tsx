@@ -1,4 +1,4 @@
-import { Kind } from '../dts/index.js';
+import { Kind } from '@cxl/dts';
 
 const KindMap: Record<Kind, string> = {
 	[Kind.Unknown]: 'Unknown',

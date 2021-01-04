@@ -6,7 +6,7 @@ import {
 	throwError,
 	toPromise,
 } from '../index';
-import { suite } from '../../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('debounceTime', test => {
 	test('should debounce time asynchronously', async a => {

@@ -3,9 +3,13 @@
 	"version": "0.0.1",
 	"description": "Reactive DOM wrapper",
 	"license": "GPL-3.0",
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/dom && node ../tester"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"dependencies": {
+		"@cxl/rx": "~0.2.0"
+	}
 }

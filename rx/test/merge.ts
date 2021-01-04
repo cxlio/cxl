@@ -1,6 +1,6 @@
 import { cold, expectLog } from './util';
 import { merge, of } from '../index';
-import { suite } from '../../spec';
+import { suite } from '@cxl/spec';
 
 export default suite('merge', test => {
 	test('should return itself when try to merge single observable', a => {

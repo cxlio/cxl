@@ -20,7 +20,7 @@ import fromSuite from './test/from.js';
 import mergeSuite from './test/merge.js';
 import switchMapSuite from './test/switchMap.js';
 
-import { suite } from '../spec/index.js';
+import { suite } from '@cxl/spec';
 
 declare function setInterval(fn: () => void, interval?: number): number;
 declare function clearInterval(intervalId: number): void;

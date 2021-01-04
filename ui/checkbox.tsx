@@ -1,4 +1,4 @@
-import { dom } from '../tsx/index.js';
+import { dom } from '@cxl/tsx';
 import {
 	Augment,
 	Attribute,
@@ -7,12 +7,12 @@ import {
 	get,
 	role,
 	staticTemplate,
-} from '../component/index.js';
+} from '@cxl/component';
 import { Focusable, Svg, ariaChecked } from './core.js';
-import { tap, merge } from '../rx/index.js';
+import { tap, merge } from '@cxl/rx';
 import { FocusCircleStyle, InputBase } from './input-base.js';
-import { onAction } from '../dom/index.js';
-import { Style } from '../template/index.js';
+import { onAction } from '@cxl/dom';
+import { Style } from '@cxl/template';
 
 const Undefined = {};
 

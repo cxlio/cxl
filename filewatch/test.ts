@@ -1,4 +1,4 @@
-import { suite } from '../spec/index.js';
+import { suite } from '@cxl/spec';
 import { watch } from './index.js';
 import { writeFileSync, unlinkSync, mkdirSync, rmdirSync } from 'fs';
 import { resolve } from 'path';

@@ -7,12 +7,13 @@
 		"index.js",
 		"index.d.ts"
 	],
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/router && node ../tester"
 	},
-	"peerDependencies": {
-		"@cxl/rx": "*"
-	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"dependencies": {
+		"@cxl/debug": "~0.0.1"
+	}
 }

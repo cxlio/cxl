@@ -3,9 +3,15 @@
 	"version": "0.0.1",
 	"description": "Web Component Framework",
 	"license": "GPL-3.0",
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/component && node ../tester"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"dependencies": {
+		"@cxl/rx": "~0.2.0",
+		"@cxl/dom": "~0.0.1",
+		"@cxl/tsx": "~0.0.1"
+	}
 }

@@ -1,5 +1,5 @@
 import { cold, logEvents } from './util';
-import { suite } from '../../spec';
+import { suite } from '@cxl/spec';
 
 export default suite('switchMap', test => {
 	test('should handle outer throw', a => {

@@ -7,6 +7,9 @@
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/source && node ../tester --node"
 	},
+	"dependencies": {
+		"source-map": "^0.7.3"
+	},
 	"license": "GPL-3.0",
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }

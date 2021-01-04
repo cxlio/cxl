@@ -3,9 +3,17 @@
 	"version": "1.0.0",
 	"description": "Reactive template library",
 	"license": "GPL-3.0",
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/template && node ../tester"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"dependencies": {
+		"@cxl/rx": "~0.2.0",
+		"@cxl/dom": "~0.0.1",
+		"@cxl/tsx": "~0.0.1",
+		"@cxl/css": "~0.0.1",
+		"@cxl/component": "~0.0.1"
+	}
 }

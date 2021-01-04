@@ -1,8 +1,8 @@
-import { be, merge } from '../rx/index.js';
-import { dom } from '../tsx/index.js';
+import { be, merge } from '@cxl/rx';
+import { dom } from '@cxl/tsx';
+import { Span } from '@cxl/component';
+import { suite } from '@cxl/spec';
 import { getAttribute, portal, teleport } from './index.js';
-import { Span } from '../component/index.js';
-import { suite } from '../spec/index.js';
 
 async function connect<T extends Node>(el: any, callback: (el: T) => any) {
 	await callback(el);

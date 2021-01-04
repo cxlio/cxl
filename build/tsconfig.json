@@ -1,8 +1,7 @@
 {
-	"extends": "../tsconfig.node.json",
+	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"outDir": "../dist/build",
-		"baseUrl": "../dist/build"
+		"outDir": "../dist/build"
 	},
 	"references": [
 		{ "path": "../rx" },

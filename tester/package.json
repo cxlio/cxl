@@ -8,14 +8,13 @@
 		"test": "npm run build && cd ../dist/tester && node ../tester --node"
 	},
 	"dependencies": {
-		"puppeteer": "^5.2.0",
+		"puppeteer": "^5.5.0",
 		"source-map-support": "0.5.19",
-		"source-map": "^0.7.3"
-	},
-	"peerDependencies": {
-		"@cxl/server": "*",
-		"@cxl/rx": "*",
-		"@cxl/dom": "*"
+		"source-map": "^0.7.3",
+		"@cxl/rx": "~0.2.0",
+		"@cxl/server": "~0.0.2",
+		"@cxl/spec": "~0.0.2",
+		"@cxl/source": "~0.0.1"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }

@@ -1,5 +1,5 @@
 import { from } from '../index';
-import { suite } from '../../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('from', test => {
 	test('should create an observable from an array', a => {

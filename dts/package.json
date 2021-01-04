@@ -7,5 +7,10 @@
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/dts && node ../tester --node"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"dependencies": {
+		"typescript": "^4.2.0-dev.20210102",
+		"@cxl/rx": "~0.2.0",
+		"@cxl/server": "~0.0.2"
+	}
 }

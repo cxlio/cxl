@@ -1,7 +1,7 @@
-import { collection, db } from './index.js';
-import { suite, TestApi } from '../spec/index.js';
-import { merge } from '../rx/index.js';
 import * as firebase from 'firebase';
+import { suite, TestApi } from '@cxl/spec';
+import { merge } from '@cxl/rx';
+import { collection, db } from './index.js';
 
 interface Schema {
 	test: {

@@ -3,7 +3,7 @@
 	"description": "Lightweight reactiveX implementation",
 	"version": "0.2.0",
 	"license": "Apache-2.0",
-	"browser": "es6/index.min.js",
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"package": "npm run build docs package",

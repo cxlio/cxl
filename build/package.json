@@ -12,8 +12,12 @@
 		"test": "npm run build && cd ../dist/build && node ../tester --node"
 	},
 	"dependencies": {
-		"terser": "^4.6.13",
-		"typescript": "^4.2.0-dev.20201211"
+		"eslint": "^7.14.0",
+		"terser": "^5.5.1",
+		"typescript": "^4.2.0-dev.20210102",
+		"@cxl/rx": "~0.2.0",
+		"@cxl/server": "~0.0.2",
+		"@cxl/source": "~0.0.1"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }

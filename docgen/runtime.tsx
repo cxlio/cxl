@@ -1,14 +1,14 @@
-import { dom } from '../tsx/index.js';
-import { Augment, Attribute, Component, get } from '../component/index.js';
-import { onAction, onChildrenMutation } from '../dom/index.js';
-import { border, css, padding } from '../css/index.js';
-import { be } from '../rx/index.js';
-import '../ui/theme.js';
-import '../ui/router.js';
-import { Span } from '../ui/core.js';
-import { Tabs, Tab } from '../ui/navigation.js';
-import { SelectBox, Option } from '../ui/select.js';
-import { onValue } from '../template/index.js';
+import { dom } from '@cxl/tsx';
+import { Augment, Attribute, Component, get } from '@cxl/component';
+import { onAction, onChildrenMutation } from '@cxl/dom';
+import { border, css, padding } from '@cxl/css';
+import { be } from '@cxl/rx';
+import '@cxl/ui/theme.js';
+import '@cxl/ui/router.js';
+import { Span } from '@cxl/ui/core.js';
+import { Tabs, Tab } from '@cxl/ui/navigation.js';
+import { SelectBox, Option } from '@cxl/ui/select.js';
+import { onValue } from '@cxl/template/index.js';
 
 import type { RuntimeConfig } from './render.js';
 

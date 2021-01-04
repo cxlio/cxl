@@ -5,15 +5,14 @@ import {
 	defer,
 	from,
 	map,
-	operator,
 	pipe,
 	reduce,
 	tap,
-} from '../rx/index.js';
-import { Output } from '../source/index.js';
+} from '@cxl/rx';
+import { Output } from '@cxl/source';
 import { promises as fs, readFileSync } from 'fs';
 import { basename as pathBasename, dirname, resolve } from 'path';
-import { sh } from '../server/index.js';
+import { sh } from '@cxl/server';
 
 interface MinifyConfig {
 	sourceMap?: { content?: string; url: string };
@@ -98,26 +97,33 @@ export function getSourceMap(out: Output): Output | undefined {
 }
 
 export function minify(config: MinifyConfig = {}) {
-	return operator<Output>(subs => (out: Output) => {
-		const destPath = pathBasename(out.path.replace(/\.js$/, '.min.js'));
+	return (source: Observable<Output>) =>
+		new Observable<Output>(subscriber => {
+			const subscription = source.subscribe(async out => {
+				const destPath = pathBasename(
+					out.path.replace(/\.js$/, '.min.js')
+				);
+				if (!config.sourceMap) {
+					const sourceMap = getSourceMap(out);
+					if (sourceMap)
+						config.sourceMap = {
+							content: sourceMap.source,
+							url: destPath + '.map',
+						};
+				}
+				const { code, map } = await Terser.minify(out.source, config);
+				if (!code) throw new Error('No code generated');
 
-		// Detect sourceMap if not present in config
-		if (!config.sourceMap) {
-			const sourceMap = getSourceMap(out);
-			if (sourceMap)
-				config.sourceMap = {
-					content: sourceMap.source,
-					url: destPath + '.map',
-				};
-		}
+				subscriber.next({ path: destPath, source: code });
 
-		const { code, map, error } = Terser.minify(out.source, config);
+				if (map && config.sourceMap)
+					subscriber.next({
+						path: config.sourceMap.url,
+						source: map.toString(),
+					});
+				subscriber.complete();
+			});
 
-		if (error) throw error;
-		if (!code) throw new Error('No code generated');
-
-		subs.next({ path: destPath, source: code });
-		if (map && config.sourceMap)
-			subs.next({ path: config.sourceMap.url, source: map.toString() });
-	});
+			return () => subscription.unsubscribe();
+		});
 }

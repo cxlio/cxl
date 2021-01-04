@@ -1,4 +1,4 @@
-import { observable } from '../rx/index.js';
+import { observable } from '@cxl/rx';
 
 function isJSON(xhr: XMLHttpRequest) {
 	const contentType = xhr.getResponseHeader('Content-Type');

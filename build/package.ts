@@ -1,10 +1,10 @@
-import { Observable, defer, merge, of } from '../rx/index.js';
+import { Observable, defer, merge, of } from '@cxl/rx';
 import { existsSync, readFileSync, promises } from 'fs';
 import { join } from 'path';
 import { file } from './file.js';
 import { execSync } from 'child_process';
-import { Output } from '../source/index.js';
-import { sh } from '../server/index.js';
+import { Output } from '@cxl/source';
+import { sh } from '@cxl/server';
 import * as ts from 'typescript';
 
 type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0';
@@ -122,7 +122,6 @@ function getPublishedVersion(p: Package) {
 	try {
 		return execSync(`npm show ${p.name}@${p.version} version`, {
 			encoding: 'utf8',
-			//stdio: ['ignore', 'inherit', 'ignore'],
 		}).trim();
 	} catch (e) {
 		return;

@@ -1,6 +1,6 @@
-import { TestApi, suite } from '../spec/index.js';
+import { TestApi, suite } from '@cxl/spec';
+import { Observable, be, of, merge } from '@cxl/rx';
 import dom from './index.js';
-import { Observable, be, of, merge } from '../rx/index.js';
 
 class Span extends HTMLElement {
 	jsxAttributes!: {

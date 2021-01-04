@@ -1,6 +1,6 @@
 import { Observable, filter } from '../index';
 import { cold, expectLog } from './util';
-import { suite } from '../../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('filter', test => {
 	test('should filter out event values', a => {

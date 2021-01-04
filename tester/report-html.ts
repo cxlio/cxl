@@ -1,5 +1,5 @@
 import { readFile, writeFile } from 'fs/promises';
-import { escapeHtml } from '../source/index.js';
+import { escapeHtml } from '@cxl/source';
 import { Report, TestCoverageReport } from './report.js';
 
 const STYLES = `<style>
@@ -49,7 +49,9 @@ async function renderSource(test: TestCoverageReport) {
 }
 
 export default async function generate(report: Report) {
-	const pages = await Promise.all(report.coverage.map(renderSource));
-	const result = `${HEADER}${STYLES}${pages.join('')}`;
-	await writeFile('test-report.html', result);
+	if (report.coverage) {
+		const pages = await Promise.all(report.coverage.map(renderSource));
+		const result = `${HEADER}${STYLES}${pages.join('')}`;
+		await writeFile('test-report.html', result);
+	}
 }

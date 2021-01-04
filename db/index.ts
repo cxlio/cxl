@@ -1,4 +1,4 @@
-import { Observable, ListEvent } from '../rx/index.js';
+import { Observable, ListEvent } from '@cxl/rx';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 

@@ -1,6 +1,6 @@
 import { cold, expectLog } from './util';
 import { combineLatest } from '../index';
-import { suite } from '../../spec/index.js';
+import { suite } from '@cxl/spec';
 
 export default suite('combineLatest', test => {
 	test('should combine events from two observables', async a => {

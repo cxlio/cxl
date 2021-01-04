@@ -1,4 +1,4 @@
-import { subject, toPromise } from '../rx/index.js';
+import { subject, toPromise } from '@cxl/rx';
 
 export type Measurements = Record<string, any>;
 
@@ -58,7 +58,7 @@ function inspect(val: any) {
 
 export class TestApi {
 	readonly id = lastTestId++;
-	
+
 	constructor(private $test: Test) {}
 
 	/**
@@ -349,7 +349,10 @@ export function suite(
 	suiteFn: SuiteFn | any[]
 ) {
 	if (Array.isArray(suiteFn)) {
-		const result = new Test(nameOrConfig, () => { /* nop */ });
+		const result = new Test(nameOrConfig, () => {
+			/* nop */
+		});
 		suiteFn.forEach(test => result.addTest(test));
+		return result;
 	} else return new Test(nameOrConfig, ctx => suiteFn(ctx.test.bind(ctx)));
 }

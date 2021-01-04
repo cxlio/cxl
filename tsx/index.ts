@@ -1,4 +1,4 @@
-import { Observable } from '../rx/index.js';
+import { Observable } from '@cxl/rx';
 
 /* eslint @typescript-eslint/no-namespace: 'off' */
 /* eslint @typescript-eslint/ban-types: 'off' */

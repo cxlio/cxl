@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import type { Observable } from '../rx/index.js';
+import type { Observable } from '@cxl/rx';
 import { colors } from './colors.js';
 
 type OperationFunction<T> = (() => Promise<T>) | Promise<T> | Observable<T>;

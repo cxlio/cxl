@@ -1,4 +1,4 @@
-import { spec } from '../spec/index.js';
+import { spec } from '@cxl/spec';
 import { render } from './index.js';
 
 export default spec('css', s => {
