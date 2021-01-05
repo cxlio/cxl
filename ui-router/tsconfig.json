@@ -1,0 +1,16 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-router"
+	},
+	"files": ["index.tsx"],
+	"references": [
+		{ "path": "../tsx" },
+		{ "path": "../dom" },
+		{ "path": "../rx" },
+		{ "path": "../component" },
+		{ "path": "../css" },
+		{ "path": "../ui" },
+		{ "path": "../router" }
+	]
+}

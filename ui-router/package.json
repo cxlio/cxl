@@ -1,0 +1,21 @@
+{
+	"name": "@cxl/ui-router",
+	"version": "0.0.1",
+	"browser": "amd/index.min.js",
+	"description": "UI Router Components",
+	"dependencies": {
+		"@cxl/tsx": "~0.0.1",
+		"@cxl/dom": "~0.0.1",
+		"@cxl/rx": "~0.2.0",
+		"@cxl/component": "~0.0.1",
+		"@cxl/router": "~0.1.0",
+		"@cxl/css": "~0.0.1"
+	},
+	"scripts": {
+		"test": "npm run build && cd ../dist/ui-router && node ../tester",
+		"build": "node ../dist/build"
+	},
+	"homepage": "https://cxlio.github.io/cxl/ui-router",
+	"license": "GPL-3.0",
+	"bugs": "https://github.com/cxlio/cxl/issues"
+}
