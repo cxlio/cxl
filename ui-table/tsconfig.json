@@ -1,0 +1,16 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-table"
+	},
+	"files": ["index.tsx"],
+	"references": [
+		{ "path": "../tsx" },
+		{ "path": "../css" },
+		{ "path": "../template" },
+		{ "path": "../component" },
+		{ "path": "../rx" },
+		{ "path": "../dom" },
+		{ "path": "../ui" }
+	]
+}

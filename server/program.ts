@@ -8,12 +8,10 @@ type LogMessage<T = any> = string | ((p: T) => string) | Error;
 
 interface Parameter {
 	name: string;
-	shortcut?: string;
-	rest?: boolean;
+	short?: string;
 	/// @default 'boolean'
 	type?: 'string' | 'boolean' | 'number';
 	help?: string;
-	handle?(value: string): void;
 }
 
 /*interface OperationResult {
@@ -41,6 +39,155 @@ interface Program {
 	name: string;
 	pkg: Package;
 	log: Logger;
+}
+
+const StringValue = `"(?:[^"\\\\]|\\\\.)*"`;
+const MultipleShort = `-(\\w\\w+)`;
+const ArgValue = `\\s*(?:=\\s*|\\s+)(${StringValue}|[^-][^\\s]*)`;
+const SingleShortValue = `-(\\w)(?:${ArgValue})?`;
+const Long = `--(\\w+)(?:${ArgValue})?`;
+
+const ArgRegex = new RegExp(
+	`\\s*(?:${MultipleShort}|${SingleShortValue}|${Long}|(${StringValue}|[^\\s]+))`,
+	'g'
+);
+
+export const DefaultParameters: Parameter[] = [
+	{
+		name: 'help',
+		short: 'h',
+	},
+	{
+		name: 'config',
+		help: 'Use JSON config file',
+		short: 'c',
+	},
+];
+
+interface Argument {
+	name: string;
+	value?: string;
+}
+
+function unquote(value: string) {
+	return value.startsWith('"') && value.endsWith('"')
+		? value.slice(1, value.length - 1)
+		: value;
+}
+
+function findParam(
+	parameters: Parameter[],
+	shortcut: string,
+	pvalue?: string,
+	prop: 'short' | 'name' = 'short'
+) {
+	const result = parameters.find(p => p[prop] === shortcut);
+	if (!result) throw new Error(`Invalid parameter -${shortcut}`);
+	const value = pvalue && unquote(pvalue);
+
+	return { name: result.name, value };
+}
+
+function findParameter(
+	parameters: Parameter[],
+	shortcut: string,
+	prop: 'short' | 'name' = 'short'
+) {
+	const result = parameters.find(p => p[prop] === shortcut);
+	if (!result) throw new Error(`Invalid parameter -${shortcut}`);
+	return result;
+}
+
+function parseValue(param: Parameter, value: string) {
+	if (param.type === 'number') return parseInt(value);
+	if (param.type === 'string') return unquote(value);
+	if (param.type === 'boolean') return value !== 'false';
+
+	return value === '' || value === 'true' || value === undefined
+		? true
+		: value === 'false'
+		? false
+		: unquote(value);
+}
+
+function setParam(result: any, param: Parameter, value: string) {
+	const key = param.name;
+	const newValue = parseValue(param, value);
+	const lastValue = result[key];
+
+	if (lastValue === undefined) result[key] = newValue;
+	else if (Array.isArray(lastValue)) result[key].push(newValue);
+	else if (
+		(newValue === true || newValue === false) &&
+		(lastValue === true || lastValue === false)
+	)
+		result[key] = newValue;
+	else result[key] = [result[key], newValue];
+}
+
+export function parseParameters(parameters: Parameter[], input: string) {
+	const result: any = {};
+	let m: RegExpExecArray | null;
+
+	while ((m = ArgRegex.exec(input))) {
+		const [
+			,
+			multipleShort,
+			short,
+			shortValue,
+			long,
+			longValue,
+			restValue,
+		] = m;
+		if (multipleShort)
+			multipleShort
+				.split('')
+				.forEach(p =>
+					setParam(result, findParameter(parameters, p), '')
+				);
+		else if (short)
+			setParam(result, findParameter(parameters, short), shortValue);
+		else if (long)
+			setParam(
+				result,
+				findParameter(parameters, long, 'name'),
+				longValue
+			);
+		else if (restValue) setParam(result, { name: '$' }, restValue);
+	}
+	return result;
+}
+
+export function parseParametersArray(parameters: Parameter[], input: string) {
+	const result: Argument[] = [];
+	let m: RegExpExecArray | null;
+
+	while ((m = ArgRegex.exec(input))) {
+		const [
+			,
+			multipleShort,
+			short,
+			shortValue,
+			long,
+			longValue,
+			restValue,
+		] = m;
+		if (multipleShort)
+			result.push(
+				...multipleShort.split('').map(p => findParam(parameters, p))
+			);
+		else if (short) result.push(findParam(parameters, short, shortValue));
+		else if (long)
+			result.push(findParam(parameters, long, longValue, 'name'));
+		else if (restValue)
+			result.push({ name: '*', value: unquote(restValue) });
+	}
+
+	return result;
+}
+
+export function parseArgv(parameters: Parameter[]) {
+	return parseParameters(parameters, process.argv.slice(2).join(' '));
 }
 
 /**

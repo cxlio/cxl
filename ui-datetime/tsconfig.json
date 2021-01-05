@@ -1,0 +1,16 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-datetime"
+	},
+	"files": ["index.tsx"],
+	"references": [
+		{ "path": "../tsx" },
+		{ "path": "../ui" },
+		{ "path": "../component" },
+		{ "path": "../css" },
+		{ "path": "../rx" },
+		{ "path": "../dom" },
+		{ "path": "../template" }
+	]
+}
