@@ -2,7 +2,8 @@ import { be, merge } from '@cxl/rx';
 import { dom } from '@cxl/tsx';
 import { Span } from '@cxl/component';
 import { suite } from '@cxl/spec';
-import { getAttribute, portal, teleport } from './index.js';
+import { animationFrame, trigger } from '@cxl/dom';
+import { getAttribute, portal, teleport, model } from './index.js';
 
 async function connect<T extends Node>(el: any, callback: (el: T) => any) {
 	await callback(el);
@@ -81,5 +82,22 @@ export default suite('template', test => {
 			a.equal(el.childNodes[0]?.textContent, 'Hello');
 			subs.unsubscribe();
 		});
+	});
+
+	test('model', async a => {
+		const el = a.element('input');
+		const sub = be('');
+
+		const subs = model(el, sub).subscribe();
+
+		a.equal(el.value, '');
+		a.equal(el.value, sub.value);
+		el.value = 'test';
+		trigger(el, 'change');
+		await animationFrame.first();
+		a.equal(sub.value, 'test');
+		a.equal(el.value, sub.value);
+
+		subs.unsubscribe();
 	});
 });

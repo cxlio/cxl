@@ -1,7 +1,7 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"bundledPackageName": "@cxl/ui",
+		"bundledPackageName": "@cxl",
 		"outDir": "../dist/ui",
 		"outFile": "../dist/ui/index.bundle.js",
 		"rootDir": "..",

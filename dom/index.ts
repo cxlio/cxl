@@ -52,7 +52,7 @@ export function on(
 	element: EventTarget | Window,
 	event: string,
 	options?: AddEventListenerOptions
-): Observable<Event>;
+): Observable<CustomEvent>;
 export function on(
 	element: EventTarget | Window,
 	event: string,
@@ -444,3 +444,13 @@ export const raf = requestAnimationFrame.bind(window);
 export function onLocation() {
 	return merge(onHashChange(), onHistoryChange()).map(() => window.location);
 }
+
+export const animationFrame = new Observable<number>(subs => {
+	let frame = 0;
+	let rafid = requestAnimationFrame(next);
+	function next() {
+		subs.next(frame++);
+		rafid = requestAnimationFrame(next);
+	}
+	return () => cancelAnimationFrame(rafid);
+});

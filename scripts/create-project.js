@@ -52,6 +52,12 @@ async function projectFiles({ tsx, $ }) {
 					content: `{
 	"name": "${rootPkg.name}${name}",
 	"version": "0.0.1",${tsx ? '\n\t"browser": "amd/index.min.js",' : ''}
+	"bugs": "${rootPkg.bugs}",
+	"homepage": "${rootPkg.homepage}/${name}",
+	"scripts": {
+		"build": "node ../dist/build" 
+		"test": "npm run build && cd ../dist/${name} && node ../tester"
+	},
 	"dependencies": { ${tsx ? `"@cxl/tsx": "${tsxVersion}"` : ''} }
 }`,
 				},

@@ -8,7 +8,7 @@ Router library
 
 -   Branch Version: [0.1.0](https://npmjs.com/package/@cxl/router/v/0.1.0)
 -   License: GPL-3.0
--   Documentation: [Link](undefined)
+-   Documentation: [Link](https://cxlio.github.io/cxl/router)
 
 ## Installation
 

@@ -9,11 +9,11 @@ import {
 	registerComponent,
 } from './index';
 import { dom } from '@cxl/tsx';
-import { of, tap } from '@cxl/rx';
-import { suite } from '@cxl/spec';
+import { be, of, tap } from '@cxl/rx';
+import { spec } from '@cxl/spec';
 
-export default suite('component', test => {
-	test('Component - empty', a => {
+export default spec('component', a => {
+	a.test('Component - empty', a => {
 		class TestComponent extends Component {
 			static tagName = 'div';
 			bind() {
@@ -25,7 +25,7 @@ export default suite('component', test => {
 		a.ok(element instanceof HTMLDivElement);
 	});
 
-	test('Component - register', a => {
+	a.test('Component - register', a => {
 		const id = 'cxl-test' + a.id;
 		@Augment()
 		class Test extends Component {
@@ -37,7 +37,7 @@ export default suite('component', test => {
 		a.ok(el instanceof Test);
 	});
 
-	test('Component - template', a => {
+	a.test('Component - template', a => {
 		const id = 'cxl-test' + a.id;
 		@Augment(id, _ => (
 			<div>
@@ -65,14 +65,14 @@ export default suite('component', test => {
 		a.equal(el2.childNodes.length, 1);
 	});
 
-	test('Slot', a => {
+	a.test('Slot', a => {
 		const el = Slot();
 
 		a.ok(el);
 		a.ok(el instanceof HTMLSlotElement);
 	});
 
-	test('bind()', a => {
+	a.test('bind()', a => {
 		const id = 'cxl-test' + a.id;
 		function bindTest(node: Test) {
 			a.equal(node.tagName, id.toUpperCase());
@@ -90,7 +90,7 @@ export default suite('component', test => {
 		a.ran(2);
 	});
 
-	test('Component - inheritance', a => {
+	a.test('Component - inheritance', a => {
 		const id = 'cxl-test' + a.id;
 
 		class FocusBehavior extends Component {
@@ -139,7 +139,7 @@ export default suite('component', test => {
 		a.equal(instance.name, '');
 	});
 
-	test('Attribute', a => {
+	a.test('Attribute', a => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -163,7 +163,7 @@ export default suite('component', test => {
 		a.equal(el2.test, true);
 	});
 
-	test('Attribute Initialization', a => {
+	a.test('Attribute Initialization', a => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -185,7 +185,7 @@ export default suite('component', test => {
 		a.equal(el2['test-string'], 'hello');
 	});
 
-	test('Attribute - multi word', a => {
+	a.test('Attribute - multi word', a => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -211,7 +211,7 @@ export default suite('component', test => {
 		a.equal(el['test-string'], 'value');
 	});
 
-	test('Component - Attributes', a => {
+	a.test('Component - Attributes', a => {
 		const id = 'cxl-test' + a.id;
 
 		class Test extends Component {
@@ -236,7 +236,7 @@ export default suite('component', test => {
 		a.equal(el3.hello, 'world');
 	});
 
-	test('Component - Attributes', a => {
+	a.test('Component - Attributes', a => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -261,7 +261,7 @@ export default suite('component', test => {
 		a.equal(el3.hello, 'world');
 	});
 
-	test('StyleAttribute - default', a => {
+	a.test('StyleAttribute - default', a => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -278,7 +278,7 @@ export default suite('component', test => {
 		a.ok(el.hasAttribute('persist'));
 	});
 
-	test('get', a => {
+	a.test('get', a => {
 		const id = 'cxl-test' + a.id;
 
 		@Augment()
@@ -318,5 +318,38 @@ export default suite('component', test => {
 		s2.unsubscribe();
 
 		a.ran(6);
+	});
+
+	a.test('Attribute', a => {
+		a.test('should work with getters and setters', a => {
+			const id = 'cxl-test' + a.id;
+			const setter = be(false);
+			const event = be('');
+
+			@Augment<Test>(id, $ => get($, 'attr').tap(val => event.next(val)))
+			class Test extends Component {
+				$attr = 'one';
+
+				@Attribute()
+				get attr() {
+					return this.$attr;
+				}
+
+				set attr(val: string) {
+					this.$attr = val;
+					setter.next(true);
+				}
+			}
+			const el = a.element(id) as Test;
+
+			a.equal(el.attr, 'one');
+			a.equal(el.$attr, 'one');
+			a.equal(event.value, 'one');
+			el.attr = 'two';
+			a.equal(setter.value, true);
+			a.equal(el.attr, 'two');
+			a.equal(el.$attr, 'two');
+			a.equal(event.value, 'two');
+		});
 	});
 });

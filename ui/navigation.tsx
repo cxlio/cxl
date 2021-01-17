@@ -9,11 +9,11 @@ import {
 	role,
 } from '@cxl/component';
 import { on, onAction, onLoad, trigger } from '@cxl/dom';
-import { portal, triggerEvent } from '@cxl/template';
+import { aria, portal, triggerEvent } from '@cxl/template';
 import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
-import { IconButton, Span, Svg, aria, ripple } from './core.js';
+import { IconButton, Span, Svg, ripple } from './core.js';
 import { Drawer } from './dialog.js';
 
 /**

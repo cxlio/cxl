@@ -2,7 +2,9 @@ import { TestApi, spec } from '@cxl/spec';
 import { on } from '@cxl/dom';
 import { dom } from '@cxl/tsx';
 import { getRegisteredComponents, Component } from '@cxl/component';
-import { InputBase, Span } from './index.js';
+import '@cxl/template';
+import { of } from '@cxl/rx';
+import { TextArea, InputBase, Span, SelectBox, Option } from './index.js';
 
 async function connect<T extends Node>(el: T, callback: (el: T) => any) {
 	await callback(el);
@@ -223,6 +225,129 @@ export default spec('ui', a => {
 	for (const tagName of Object.keys(components).sort()) {
 		a.test(tagName, a => testComponent(components[tagName], a));
 	}
+
+	a.test('cxl-textarea', a => {
+		a.test('should support multiple lines', a => {
+			const el = a.element('cxl-textarea') as TextArea;
+			el.value = 'test';
+			a.ok(el.value, 'test');
+		});
+	});
+
+	a.test('cxl-option', a => {
+		a.test('initial value should be empty string', a => {
+			const el = a.element('cxl-option') as Option;
+			a.equal(el.value, '');
+		});
+
+		a.test('initial value should remain as empty string if set', a => {
+			a.dom.innerHTML = `<cxl-option value="">Test</cxl-option>`;
+			const el = a.dom.firstElementChild as Option;
+			a.equal(el.value, '');
+		});
+	});
+
+	a.test('cxl-select', a => {
+		a.test('no value', async (a: TestApi) => {
+			a.dom.innerHTML = `<cxl-select>
+				<cxl-option value="a">A</cxl-option>
+				<cxl-option value="b">B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+			</cxl-select>`;
+			const select = a.dom.firstElementChild as SelectBox;
+			a.equal(select.options?.size, 3, 'Options should be set');
+			a.equal(select.value, 'a');
+			await of(true).raf();
+			a.equal(select.value, 'a');
+			await of(true).raf();
+			a.equal(select.value, 'a');
+		});
+
+		a.test('should prevent leak of options change event', a => {
+			const done = a.async();
+			const el = document.createElement('cxl-select') as SelectBox;
+			let firstEvent = true;
+			el.innerHTML = `
+				<cxl-option value="a">A</cxl-option>
+				<cxl-option value="b">B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+				<cxl-option value="d">D</cxl-option>`;
+			el.addEventListener('change', ev => {
+				a.equal((ev.target as any)?.tagName, 'CXL-SELECT');
+				a.equal((ev.target as any)?.value, firstEvent ? 'a' : 'c');
+				if (firstEvent) firstEvent = false;
+				else done();
+			});
+			a.dom.appendChild(el);
+			el.value = 'c';
+		});
+
+		a.test('should add options synchronously', a => {
+			const el = a.element('cxl-select') as SelectBox;
+			a.equal(el.children.length, 0);
+			a.ok(!el.options);
+			el.appendChild(<Option>A</Option>);
+			a.equal(el.children.length, 1);
+			a.equal(el.options?.size, 1);
+			el.appendChild(<Option>B</Option>);
+			a.equal(el.children.length, 2);
+			a.equal(el.options?.size, 2);
+			el.removeChild(el.firstChild as any);
+			a.equal(el.children.length, 1);
+			a.equal(el.options?.size, 1);
+			el.removeChild(el.firstChild as any);
+			a.equal(el.children.length, 0);
+			a.equal(el.options?.size, 0);
+		});
+
+		a.test('should have undefined as initial value', a => {
+			const el = a.element('cxl-select') as SelectBox;
+			a.equal(el.value, undefined);
+		});
+
+		a.test('attribute value set', async (a: TestApi) => {
+			a.dom.innerHTML = `<cxl-select value="b">
+				<cxl-option value="a">A</cxl-option>
+				<cxl-option value="b">B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+			</cxl-select>`;
+			const select = a.dom.firstElementChild as SelectBox;
+			a.equal(select.options?.size, 3);
+			a.equal(select.selected?.value, 'b');
+			a.equal(select.value, 'b');
+			select.value = 'c';
+			a.equal(select.selected?.value, 'c');
+			a.equal(select.value, 'c');
+			await of(true).raf();
+			a.equal(select.selected?.value, 'c');
+			a.equal(select.value, 'c');
+		});
+
+		a.test(
+			'should set value to empty string if not found in options',
+			async a => {
+				a.dom.innerHTML = `<cxl-select value="b">
+				<cxl-option value="">A</cxl-option>
+				<cxl-option value="b">B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+			</cxl-select>`;
+				const select = a.dom.firstElementChild as SelectBox;
+				a.equal(select.selected?.value, 'b');
+				select.value = 'd';
+				a.equal(select.selected?.value, '');
+				a.equal(select.value, '');
+				select.removeChild(select.firstElementChild as any);
+				a.equal(select.children.length, 2);
+				a.equal(select.options?.size, 2);
+				await of(true).raf();
+				a.ok(!select.selected);
+				a.equal(select.value, '');
+				select.value = 'f';
+				a.ok(!select.selected);
+				a.equal(select.value, '');
+			}
+		);
+	});
 
 	a.test('ripple', a => {
 		let clickHandled = false;

@@ -77,7 +77,7 @@ export class InputBase extends Component {
 	@StyleAttribute()
 	touched = false;
 	@Attribute()
-	name?: string;
+	name = '';
 
 	private internals: any;
 

@@ -33,6 +33,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			tasks: [
 				file('index.html', 'index.html').catchError(() => EMPTY),
 				file('debug.html', 'debug.html').catchError(() => EMPTY),
+				file('test.html', 'test.html').catchError(() => EMPTY),
 				tsconfig('tsconfig.test.json'),
 			],
 		},

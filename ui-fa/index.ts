@@ -1,7 +1,7 @@
 import { Augment, Component, Attribute, role } from '@cxl/component';
 import { css, registerFont } from '@cxl/css';
 import { getShadow } from '@cxl/dom';
-import { defaultTheme } from '@cxl/ui/theme.js';
+import { theme } from '@cxl/ui/theme.js';
 
 const icons = {
 	ad: '\uf641',
@@ -987,7 +987,7 @@ declare module '../css/index.js' {
 	}
 }
 
-defaultTheme.typography['icon'] = {
+theme.typography['icon'] = {
 	fontFamily: 'Font Awesome\\ 5 Free',
 	fontSize: 'inherit',
 };

@@ -3,6 +3,10 @@
 	"compilerOptions": {
 		"outDir": "../dist/docgen"
 	},
-	"references": [{ "path": "../ui" }, { "path": "tsconfig.json" }],
+	"references": [
+		{ "path": "../ui" },
+		{ "path": "../ui-router" },
+		{ "path": "tsconfig.json" }
+	],
 	"files": ["runtime.tsx"]
 }

@@ -1,5 +1,5 @@
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
-	PARAM_REGEX = /:([\w_$]+)/g,
+	PARAM_REGEX = /:([\w_$@]+)/g,
 	optionalParam = /\((.*?)\)/g,
 	namedParam = /(\(\?)?:\w+/g,
 	splatParam = /\*\w+/g,

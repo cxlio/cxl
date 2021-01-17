@@ -84,8 +84,16 @@ import {
 	)
 )
 export class Option extends Component {
+	private $value?: string;
+
 	@Attribute()
-	value: any = null;
+	get value(): string {
+		return this.$value === undefined ? this.textContent || '' : this.$value;
+	}
+
+	set value(val: string) {
+		this.$value = val;
+	}
 
 	@StyleAttribute()
 	selected = false;
@@ -164,7 +172,7 @@ export class SelectMenu extends Component {
 			merge(
 				focusable(el),
 				registableHost<Option>(el, 'selectable').tap(options =>
-					el.setOptions(options)
+					el.setOptions(((el as any).options = options))
 				),
 				on(el, 'blur').tap(() => el.close()),
 				onKeypress(el, 'escape').tap(() => el.close())
@@ -181,13 +189,9 @@ export abstract class SelectBase extends InputBase {
 	@StyleAttribute()
 	opened = false;
 
-	@Attribute()
 	readonly options?: Set<Option>;
 
-	protected setOptions(options: Set<Option>) {
-		(this as any).options = options;
-	}
-
+	protected abstract setOptions(options: Set<Option>): void;
 	protected abstract setSelected(option: Option): void;
 	abstract open(): void;
 	abstract close(): void;
@@ -210,7 +214,7 @@ export abstract class SelectBase extends InputBase {
  */
 @Augment<SelectBox>(
 	'cxl-select',
-	bind(host =>
+	host =>
 		merge(
 			navigationList(
 				host,
@@ -221,14 +225,15 @@ export abstract class SelectBase extends InputBase {
 				host.setSelected(selected as Option)
 			),
 			onAction(host).tap(() => !host.opened && host.open())
-		)
-	),
+		),
 	host => (
 		<SelectMenu
 			$={el =>
-				merge(get(host, 'opened'), get(host, 'selected')).raf(() =>
-					host.positionMenu(el)
-				)
+				merge(
+					on(el, 'change').tap(ev => ev.stopPropagation()),
+					get(host, 'opened'),
+					get(host, 'selected')
+				).raf(() => host.positionMenu(el))
 			}
 			visible={get(host, 'opened')}
 		>
@@ -275,13 +280,37 @@ export class SelectBox extends SelectBase {
 		menu.scrollTop = scrollTop;
 	}
 
-	protected setSelected(option: Option) {
-		if (this.selected)
-			this.selected.selected = this.selected.focused = false;
-		option.selected = option.focused = true;
-		this.selected = option;
-		this.selectedText$.next(option.textContent || '');
-		this.value = option.value;
+	protected setOptions(options: Set<Option>) {
+		const { value, selected } = this;
+
+		if (selected && options.has(selected)) return;
+
+		let first: Option | null = null;
+		for (const o of options) {
+			first = first || o;
+
+			if (value === o.value) return this.setSelected(o);
+		}
+
+		if (value === undefined && !this.selected && first)
+			this.setSelected(first);
+		else if (selected && !selected.parentNode) this.setSelected(undefined);
+	}
+
+	protected setSelected(option?: Option) {
+		if (option !== this.selected) {
+			if (this.selected)
+				this.selected.selected = this.selected.focused = false;
+			this.selected = option;
+		}
+
+		if (option) {
+			option.selected = option.focused = true;
+			this.selectedText$.next(option.textContent || '');
+			this.value = option.value;
+		} else if (option === undefined)
+			this.selectedText$.next((this.value = ''));
+
 		this.close();
 	}
 

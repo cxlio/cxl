@@ -6,7 +6,6 @@
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"package": "npm run build docs package",
 		"test": "npm run build && cd ../dist/rx && node ../tester"
 	},
 	"homepage": "https://cxlio.github.io/cxl/rx",

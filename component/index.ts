@@ -118,9 +118,11 @@ export abstract class Component extends HTMLElement {
 		value: any
 	) {
 		if (oldValue !== value) {
-			const actualValue =
-				value === '' ? true : value === null ? false : value;
-			this[name] = actualValue;
+			if (value === '') {
+				const thisValue: any = this[name];
+				(this as any)[name] =
+					thisValue === false || thisValue === true ? true : '';
+			} else this[name] = value === null ? false : value;
 		}
 	}
 }
@@ -155,7 +157,7 @@ export function augment<T extends Component>(
 }
 
 export function registerComponent(tagName: string, ctor: any) {
-	if (!ctor.tagName) ctor.tagName = tagName;
+	ctor.tagName = tagName;
 	registeredComponents[tagName] = ctor;
 	try {
 		customElements.define(tagName, ctor);
@@ -263,7 +265,7 @@ const attributeOperator = tap<AttributeEvent<any, any>>(
 	}
 );
 
-export function Attribute(options?: Partial<AttributeOptions>) {
+export function Attribute(options?: Partial<AttributeOptions>): any {
 	return (
 		target: any,
 		attribute: string,
@@ -294,11 +296,11 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 				);
 			});
 
-		Object.defineProperty(target, attribute, {
-			get() {
+		return {
+			get(this: any) {
 				return this[prop];
 			},
-			set(value: any) {
+			set(this: any, value: any) {
 				if (this[prop] !== value) {
 					this[prop] = value;
 					this.attributes$.next({
@@ -308,7 +310,7 @@ export function Attribute(options?: Partial<AttributeOptions>) {
 					});
 				}
 			},
-		});
+		};
 	};
 }
 

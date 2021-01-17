@@ -461,7 +461,9 @@ export function setTheme(newTheme: Theme) {
 	result += ':root{';
 
 	for (const i in colors)
-		result += `--cxl-${toSnake(i)}:${(colors as any)[i]};`;
+		result += `--cxl-${toSnake(i)}:${
+			(colors as any)[i]
+		};--cxl-base-${toSnake(i)}:${(colors as any)[i]};`;
 	for (const i in variables)
 		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
 
@@ -601,4 +603,8 @@ export function border(
 
 export function rgba(r: number, g: number, b: number, a?: number) {
 	return new RGBA(r, g, b, a);
+}
+
+export function baseColor(name: keyof Colors) {
+	return `var(--cxl-base-${toSnake(name)})`;
 }

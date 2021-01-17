@@ -294,10 +294,19 @@ export class Page extends Component {}
 			display: 'block',
 			elevation: 1,
 		},
+		elevation2: { elevation: 2 },
+		elevation3: { elevation: 3 },
+		elevation4: { elevation: 4 },
+		elevation5: { elevation: 5 },
 	}),
 	Slot
 )
-export class Card extends Component {}
+export class Card extends C {
+	@Attribute({
+		persistOperator: persistWithParameter('elevation'),
+	})
+	elevation: 1 | 2 | 3 | 4 | 5 = 1;
+}
 
 @Augment<List>(
 	'cxl-list',

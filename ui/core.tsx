@@ -12,9 +12,9 @@ import {
 	role,
 } from '@cxl/component';
 import { Bindable, dom, expression } from '@cxl/tsx';
-import { EMPTY, Observable, defer, merge, tap } from '@cxl/rx';
+import { EMPTY, Observable, merge, tap } from '@cxl/rx';
 import { StyleSheet, border, css, padding, pct } from '@cxl/css';
-import { getAttribute, stopEvent, triggerEvent } from '@cxl/template';
+import { ariaProp, getAttribute, stopEvent, triggerEvent } from '@cxl/template';
 import { on, onAction, remove, trigger } from '@cxl/dom';
 import { InversePrimary, ResetSurface } from './theme.js';
 
@@ -236,8 +236,9 @@ export function Focusable(host: Bindable) {
 
 export function registable<T extends Component>(host: T, id: string) {
 	return new Observable(() => {
-		trigger(host, id + '.register');
-		return () => trigger(host, id + '.unregister');
+		const detail: any = {};
+		trigger(host, id + '.register', detail);
+		return () => detail.unsubscribe?.();
 	});
 }
 
@@ -246,55 +247,28 @@ export function registableHost<TargetT extends EventTarget>(
 	id: string,
 	elements = new Set<TargetT>()
 ) {
-	function register(ev: Event) {
-		if (ev.target) elements.add(ev.target as TargetT);
-	}
+	return new Observable<Set<TargetT>>(subs => {
+		function register(ev: CustomEvent) {
+			if (ev.target) {
+				elements.add(ev.target as TargetT);
+				subs.next(elements);
+				ev.detail.unsubscribe = () => {
+					elements.delete(ev.target as TargetT);
+					subs.next(elements);
+				};
+			}
+		}
 
-	function unregister(ev: Event) {
-		if (ev.target) elements.delete(ev.target as TargetT);
-	}
-
-	return merge(
-		on(host, id + '.register').tap(register),
-		on(host, id + '.unregister').tap(unregister)
-	).map(() => elements);
+		const inner = on(host, id + '.register').subscribe(register);
+		return () => inner.unsubscribe();
+	});
 }
 
 interface SelectableComponent extends Component {
 	selected: boolean;
 }
 
-export function aria<T extends Component>(prop: string, value: string) {
-	return (ctx: T) =>
-		ctx.bind(defer(() => ctx.setAttribute(`aria-${prop}`, value)));
-}
-
-export function ariaValue(host: Element, prop: string) {
-	return tap<string | number>(val =>
-		host.setAttribute('aria-' + prop, val.toString())
-	);
-}
-
-export function ariaProp(host: Element, prop: string) {
-	return tap<boolean>(val =>
-		host.setAttribute('aria-' + prop, val ? 'true' : 'false')
-	);
-}
-
-interface ValueElement extends Element {
-	value: boolean | undefined;
-}
-
-export function ariaChecked(host: ValueElement) {
-	return tap<boolean>(val =>
-		host.setAttribute(
-			'aria-checked',
-			host.value === undefined ? 'mixed' : val ? 'true' : 'false'
-		)
-	);
-}
-
-interface SelectableTarget extends EventTarget {
+interface SelectableTarget extends Node {
 	value: any;
 	selected: boolean;
 }
@@ -302,41 +276,25 @@ interface SelectableTarget extends EventTarget {
 interface SelectableHost<T> extends Element {
 	value: any;
 	options?: Set<T>;
+	selected?: T;
 }
 
-/**
- * Handles element selection events. Emits everytime a new item is selected.
- */
-export function selectableHost<TargetT extends SelectableTarget>(
-	host: SelectableHost<TargetT>,
-	isMultiple = false
+interface SelectableMultiHost<T> extends Element {
+	value: any;
+	options?: Set<T>;
+	selected?: Set<T>;
+}
+
+export function selectableHostMultiple<TargetT extends SelectableTarget>(
+	host: SelectableMultiHost<TargetT>
 ) {
 	return new Observable<TargetT>(subscriber => {
-		let selected: any;
-		let options: Set<TargetT> | undefined;
-
 		function setSelected(option: TargetT) {
-			subscriber.next((selected = option));
+			subscriber.next(option);
 		}
 
-		function onOptionsChange(newOptions: Set<TargetT>) {
-			const value = host.value;
-			let first: TargetT | null = null;
-			options = undefined;
-			for (const o of newOptions) {
-				first = first || o;
-				const isNotFound = value?.indexOf(o.value) === -1;
-				if (o.selected && (value === undefined || isNotFound))
-					setSelected(o);
-			}
-
-			if (!selected && first) setSelected(first);
-
-			options = newOptions;
-		}
-
-		function onChangeMultiple() {
-			const value = host.value;
+		function onChange() {
+			const { value, options } = host;
 
 			if (!options) return;
 
@@ -348,26 +306,48 @@ export function selectableHost<TargetT extends SelectableTarget>(
 			}
 		}
 
-		function onChangeSingle() {
-			const value = host.value;
+		const subscription = merge(
+			getAttribute(host, 'value').tap(onChange),
+			on(host, 'selectable.action').tap(ev => {
+				if (ev.target && host.options?.has(ev.target as TargetT)) {
+					ev.stopImmediatePropagation();
+					ev.stopPropagation();
+					setSelected(ev.target as TargetT);
+				}
+			})
+		).subscribe();
+
+		return () => subscription.unsubscribe();
+	});
+}
+
+/**
+ * Handles element selection events. Emits everytime a new item is selected.
+ */
+export function selectableHost<TargetT extends SelectableTarget>(
+	host: SelectableHost<TargetT>
+) {
+	return new Observable<TargetT | undefined>(subscriber => {
+		function setSelected(option: TargetT | undefined) {
+			subscriber.next(option);
+		}
+
+		function onChange() {
+			const { value, options, selected } = host;
 
 			if (!options || (selected && selected.value === value)) return;
 
 			for (const o of options)
-				if (o.value === value || !selected) setSelected(o);
+				if (o.parentNode && o.value === value) return setSelected(o);
 				else o.selected = false;
+
+			setSelected(undefined);
 		}
 
-		const onChange = isMultiple ? onChangeMultiple : onChangeSingle;
 		const subscription = merge(
-			getAttribute(host, 'options')
-				.raf()
-				.tap(val => {
-					if (val) onOptionsChange(val);
-				}),
 			getAttribute(host, 'value').tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
-				if (ev.target && options?.has(ev.target as TargetT)) {
+				if (ev.target && host.options?.has(ev.target as TargetT)) {
 					ev.stopImmediatePropagation();
 					ev.stopPropagation();
 					setSelected(ev.target as TargetT);

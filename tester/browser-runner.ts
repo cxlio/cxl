@@ -1,4 +1,5 @@
 import { Result, Test } from '@cxl/spec';
+import type { TestResult } from './report';
 
 let output = '';
 
@@ -29,49 +30,60 @@ function failure(): string {
 	return '&times;';
 }
 
-class TestReport {
-	failures: Result[] = [];
-	constructor(public suite: Test) {}
+function printError(fail: Result) {
+	console.error(fail.message);
+	if (fail.stack) console.error(fail.stack);
+	const msg = fail.message;
+	error(msg);
+}
 
-	printTest(test: Test) {
-		let out = '';
+function printResult(result: Result) {
+	output += result.success ? success() : failure(); //success(); //`${result.message} ${result.success ? success() : failure()}`;
+}
 
-		const failures = test.results.filter(result => {
-			out += result.success ? success() : failure();
-			return result.success === false;
-		});
+function renderTestReport(test: Test) {
+	let failureCount = 0;
+	const failures: TestResult[] = [];
 
-		if (test.results.length === 0 && test.tests.length === 0) {
-			out = failure();
-			failures.push({ success: false, message: 'No assertions found' });
+	const results: TestResult[] = test.results.map(r => {
+		if (r.success === false) {
+			failureCount++;
+			failures.push(r);
 		}
 
-		group(`${test.name} ${out}`);
-		failures.forEach(fail => this.printError(fail));
-		test.tests.forEach((test: Test) => this.printTest(test));
-		groupEnd();
+		return {
+			message: r.message,
+			success: r.success,
+			stack: r.stack,
+		};
+	});
 
-		return failures;
+	if (
+		results.length === 0 &&
+		test.tests.length === 0 &&
+		test.only.length === 0
+	) {
+		failureCount++;
+		results.push({ success: false, message: 'No assertions found' });
 	}
 
-	printError(fail: Result) {
-		console.error(fail.message);
-		if (fail.stack) console.error(fail.stack);
-		this.failures.push(fail);
-		const msg = fail.message;
-		error(msg);
-	}
-
-	print() {
-		this.printTest(this.suite);
-		return this.failures;
-	}
+	group(
+		`${test.name}${failureCount > 0 ? ` (${failureCount} failures)` : ''}`
+	);
+	results.forEach(r => {
+		printResult(r);
+		if (!r.success) printError(r);
+	});
+	if (test.only.length)
+		test.only.forEach((test: Test) => renderTestReport(test));
+	else test.tests.forEach((test: Test) => renderTestReport(test));
+	groupEnd();
 }
 
 const browserRunner = {
 	async runSuite(suite: Test) {
 		await suite.run();
-		new TestReport(suite).print();
+		renderTestReport(suite);
 	},
 
 	async run(suites: Test[]) {

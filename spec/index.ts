@@ -107,10 +107,19 @@ export class TestApi {
 
 	async() {
 		let result: () => void;
+		let called = false;
+		if (this.$test.promise)
+			throw new Error('async() called multiple times');
+
 		this.$test.promise = this.$test.doTimeout(
 			new Promise<void>(resolve => (result = resolve))
 		);
-		return () => result();
+		return () => {
+			if (called)
+				this.$test.pushError(new Error('Test was already completed.'));
+			result();
+			called = true;
+		};
 	}
 
 	measure(measurements: Measurements) {
@@ -165,8 +174,12 @@ export class TestApi {
 	}
 
 	/** Returns a connected element */
-	element<T extends HTMLElement>(tagName: string): T {
-		const el = document.createElement(tagName) as T;
+	element<K extends keyof HTMLElementTagNameMap>(
+		tagName: K
+	): HTMLElementTagNameMap[K];
+	element(tagName: string): HTMLElement;
+	element(tagName: string) {
+		const el = document.createElement(tagName);
 		this.dom.appendChild(el);
 		return el;
 	}
@@ -198,7 +211,7 @@ export class Test {
 	timeout = 5 * 1000;
 	domContainer?: Element;
 	events = subject<TestEvent>();
-	private completed = false;
+	completed = false;
 
 	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
 		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
@@ -220,8 +233,6 @@ export class Test {
 			}, time);
 
 			promise.then(() => {
-				if (this.completed)
-					reject(new Error('Test was already completed.'));
 				this.completed = true;
 				clearTimeout(timeoutId);
 				resolve();

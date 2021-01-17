@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const cp = require('child_process');
 
-cp.execSync('npm run build --prefix build');
+cp.execSync('npm run build --prefix build', 'utf8');
 
 const { readJson } = require('../dist/server');
 const { program } = require('../dist/server/program');

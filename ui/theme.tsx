@@ -1,4 +1,4 @@
-import { Colors, Theme, setTheme, rgba } from '@cxl/css';
+import { Colors, Theme as CSSTheme, baseColor, setTheme, rgba } from '@cxl/css';
 
 declare module '../css/index.js' {
 	interface Animation {
@@ -22,7 +22,7 @@ declare module '../css/index.js' {
 	}
 }
 
-export const defaultTheme: Theme = {
+export const theme: CSSTheme = {
 	animation: {
 		spin: {
 			keyframes:
@@ -183,34 +183,25 @@ export const defaultTheme: Theme = {
 	},
 };
 
-const {
-	surface,
-	onSurface,
-	primary,
-	onPrimary,
-	error,
-	onError,
-} = defaultTheme.colors;
-
-export const ResetSurface = {
+export const ResetSurface: any = {
 	variables: {
-		surface: surface,
-		onSurface: onSurface,
-		primary: primary,
-		onPrimary: onPrimary,
-		link: onSurface,
-		error: error,
-		onError: onError,
+		surface: baseColor('surface'),
+		onSurface: baseColor('onSurface'),
+		primary: baseColor('primary'),
+		onPrimary: baseColor('onPrimary'),
+		link: baseColor('onSurface'),
+		error: baseColor('error'),
+		onError: baseColor('onError'),
 	},
 };
 
-export const InversePrimary = {
+export const InversePrimary: any = {
 	variables: {
-		surface: primary,
-		onSurface: onPrimary,
-		primary: surface,
-		onPrimary: onSurface,
-		link: onPrimary,
+		surface: baseColor('primary'),
+		onSurface: baseColor('onPrimary'),
+		primary: baseColor('surface'),
+		onPrimary: baseColor('onSurface'),
+		link: baseColor('onPrimary'),
 		error: rgba(0xff, 0x6e, 0x40),
 		onError: rgba(0, 0, 0),
 		divider: rgba(0xff, 0xff, 0xff, 0.48),
@@ -229,4 +220,4 @@ export const DarkColors: Partial<Colors> = {
 	onSecondary: rgba(0, 0, 0),
 };
 
-setTheme(defaultTheme);
+setTheme(theme);

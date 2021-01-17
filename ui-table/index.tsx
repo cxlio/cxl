@@ -1,5 +1,5 @@
 import { border, css } from '@cxl/css';
-import { triggerEvent } from '@cxl/template';
+import { ariaProp, triggerEvent } from '@cxl/template';
 import {
 	Component,
 	Augment,
@@ -12,7 +12,8 @@ import {
 import { dom } from '@cxl/tsx';
 import { tap } from '@cxl/rx';
 import { on, onAction } from '@cxl/dom';
-import { T, Span, registable, ariaProp } from '@cxl/ui';
+import '@cxl/ui/theme.js';
+import { T, Span, registable } from '@cxl/ui/core.js';
 import { Checkbox } from '@cxl/ui/checkbox.js';
 
 function onHeaderAction(el: Th) {

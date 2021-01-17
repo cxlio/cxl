@@ -64,7 +64,7 @@ export function docs(dirName: string, devMode = false) {
 		sh(
 			`node ${docgen} --clean ${
 				devMode ? '--debug' : ''
-			} -o ../docs/${dirName} ` //--repository "https://github.com/cxlio/cxl/tree/${branch}/${dirName}"`
+			} -o ../docs/${dirName} --summary `
 		).then(
 			out => (console.log(out), subs.complete()),
 			e => subs.error(e)
@@ -88,6 +88,7 @@ function packageJson(p: any) {
 				name: p.name,
 				version: p.version,
 				description: p.description,
+				private: p.private,
 				license: p.license,
 				files: [
 					'*.js',

@@ -19,32 +19,26 @@ import {
 	Focusable,
 	IconButton,
 	Svg,
-	aria,
-	ariaValue,
 	focusDelegate,
 	focusable,
 	navigationList,
 	registableHost,
-	selectableHost,
+	selectableHostMultiple,
 } from './core.js';
 import { dom, expression } from '@cxl/tsx';
 import {
+	aria,
+	ariaValue,
 	onValue,
 	syncAttribute,
 	triggerEvent,
 	teleport,
 } from '@cxl/template';
-import {
-	trigger,
-	onKeypress,
-	on,
-	onAction,
-	setAttribute,
-} from '@cxl/dom';
+import { trigger, onKeypress, on, onAction, setAttribute } from '@cxl/dom';
 import { border, css, boxShadow, padding } from '@cxl/css';
 import { EMPTY, Observable, be, defer, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
-import { FocusCircleStyle, Undefined, InputBase } from './input-base.js';
+import { FocusCircleStyle, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
 import { Appbar, AppbarContextual } from './navigation.js';
 
@@ -625,7 +619,6 @@ export class Form extends Component {
 @Augment<Input>(
 	'cxl-input',
 	role('textbox'),
-	bind(host => onKeypress(host, 'enter').tap(ev => ev.preventDefault())),
 	css({
 		$: {
 			display: 'block',
@@ -646,16 +639,21 @@ export class Input extends InputBase {
 	value = '';
 }
 
-function ContentEditable<T extends InputBase>(host: T) {
-	const el = <div className="input" />;
-	host.bind($contentEditable(el as any, host));
+function ContentEditable<T extends InputBase>(host: T, multi = false) {
+	const el = (<div className="input" />) as HTMLDivElement;
+	host.bind($contentEditable(el, host));
+	host.bind(
+		onKeypress(el, 'enter').tap(ev =>
+			multi ? ev.stopPropagation() : ev.preventDefault()
+		)
+	);
+
 	return el;
 }
 
 @Augment<FieldInput>(
 	'cxl-field-input',
 	role('textbox'),
-	bind(host => onKeypress(host, 'enter').tap(ev => ev.preventDefault())),
 	css({
 		$lastChild: { marginBottom: 0 },
 		$: { display: 'block', marginBottom: 16 },
@@ -700,6 +698,7 @@ export class FieldInput extends InputBase {
 			lineHeight: 20,
 			color: 'onSurface',
 			outline: 'none',
+			whiteSpace: 'pre-wrap',
 			flexGrow: 1,
 		},
 		$disabled: { pointerEvents: 'none' },
@@ -711,7 +710,7 @@ export class FieldInput extends InputBase {
 			outline={get(host, 'outline')}
 		>
 			<Label>{get(host, 'label')}</Label>
-			{ContentEditable(host)}
+			{ContentEditable(host, true)}
 		</Field>
 	)
 )
@@ -907,7 +906,7 @@ export class Radio extends InputBase {
 				if (host.focusedOption) host.setSelected(host.focusedOption);
 				else host.open();
 			}),
-			selectableHost(host, true).tap(selected =>
+			selectableHostMultiple(host).tap(selected =>
 				host.setSelected(selected as Option)
 			),
 			navigationList(
@@ -948,8 +947,16 @@ export class MultiSelect extends SelectBase {
 	}
 
 	protected setOptions(options: Set<Option>) {
-		super.setOptions(options);
 		options.forEach(o => (o.multiple = true));
+
+		const { value } = this;
+
+		if (!options) return;
+
+		for (const o of options) {
+			if (!o.selected && value.indexOf(o.value) !== -1)
+				this.setSelected(o);
+		}
 	}
 
 	protected setSelected(option: Option) {
@@ -1057,8 +1064,8 @@ export class MultiSelect extends SelectBase {
 				host.checked = !host.checked;
 			}),
 			get(host, 'value').tap(val => {
-				if (val !== Undefined)
-					host.checked = val === host['true-value'];
+				//if (val !== Undefined)
+				host.checked = val === host['true-value'];
 			}),
 			get(host, 'checked').tap(val => {
 				host.setAttribute('aria-checked', val ? 'true' : 'false');
@@ -1068,7 +1075,7 @@ export class MultiSelect extends SelectBase {
 	})
 )
 export class Switch extends InputBase {
-	value = Undefined;
+	value = false;
 	@StyleAttribute()
 	checked = false;
 	@Attribute()
@@ -1129,6 +1136,7 @@ function $contentEditable<T extends InputBase>(el: HTMLElement, host: T) {
 		input: {
 			minHeight: 20,
 			lineHeight: 20,
+			whiteSpace: 'pre-wrap',
 			color: 'onSurface',
 			outline: 'none',
 		},
@@ -1235,7 +1243,12 @@ const SearchIcon = staticTemplate(() => (
 			>
 				<Field className="input">
 					<Input
-						$={el => syncAttribute($, (inputEl = el), 'value')}
+						$={el =>
+							merge(
+								get($, 'name').pipe(ariaValue(el, 'label')),
+								syncAttribute($, (inputEl = el), 'value')
+							)
+						}
 					/>
 					<SearchIcon />
 				</Field>
@@ -1263,6 +1276,7 @@ const SearchIcon = staticTemplate(() => (
 					<Input
 						$={el =>
 							merge(
+								get(host, 'name').pipe(ariaValue(el, 'label')),
 								syncAttribute(host, el, 'value'),
 								focusDelegate(host, (host.desktopInput = el))
 							)

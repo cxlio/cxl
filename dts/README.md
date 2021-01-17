@@ -8,7 +8,7 @@ Generate symbol information from typescript source code
 
 -   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/dts/v/0.0.1)
 -   License: GPL-3.0-only
--   Documentation: [Link](undefined)
+-   Documentation: [Link](https://cxlio.github.io/cxl/dts)
 
 ## Installation
 

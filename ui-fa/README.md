@@ -8,7 +8,7 @@ Font Awesome Icons Kit
 
 -   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/ui-fa/v/0.0.1)
 -   License: GPL-3.0
--   Documentation: [Link](undefined)
+-   Documentation: [Link](https://cxlio.github.io/cxl/ui-fa)
 
 ## Installation
 

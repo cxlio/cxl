@@ -2,9 +2,8 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"module": "amd",
-		"outDir": "../dist/rx/amd"
+		"outDir": "../dist/rx/amd",
+		"bundledPackageName": "@cxl/rx"
 	},
-	"files": [
-		"index.ts"
-	]
+	"files": ["index.ts"]
 }

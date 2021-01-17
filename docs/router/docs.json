@@ -36,7 +36,7 @@
           "name": "PARAM_REGEX",
           "flags": 0,
           "id": 2,
-          "value": "/:([\\w_$]+)/g",
+          "value": "/:([\\w_$@]+)/g",
           "type": {
             "name": "RegExp",
             "kind": 6
@@ -46,7 +46,7 @@
           "source": {
             "fileName": "index.ts",
             "line": 1,
-            "ch": 29
+            "ch": 30
           },
           "kind": 31,
           "name": "optionalParam",

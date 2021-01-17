@@ -278,11 +278,6 @@ export class Reference<T> extends Subject<T> {
 		return this.$value as any;
 	}
 
-	constructor(value?: T) {
-		super();
-		if (arguments.length === 1) this.$value = value as T;
-	}
-
 	protected onSubscribe(subscription: Subscriber<T>) {
 		if (this.$value !== Undefined) subscription.next(this.$value as T);
 		return super.onSubscribe(subscription);
@@ -685,6 +680,36 @@ export function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
+export function publishLast<T>(): Operator<T, T> {
+	return (source: Observable<T>) => {
+		const subject = new Subject<T>();
+		let sourceSubscription: Subscription;
+		let lastValue: T;
+		let ready = false;
+
+		return observable<T>(subs => {
+			let subjectSubscription: Subscription;
+			if (ready) {
+				subs.next(lastValue);
+				subs.complete();
+			} else subjectSubscription = subject.subscribe(subs);
+
+			if (!sourceSubscription)
+				sourceSubscription = source.subscribe(
+					val => (lastValue = val),
+					e => subs.error(e),
+					() => {
+						ready = true;
+						subject.next(lastValue);
+						subject.complete();
+					}
+				);
+
+			return () => subjectSubscription?.unsubscribe();
+		});
+	};
+}
+
 /**
  * Creates an output Observable which concurrently emits all values from every given input Observable.
  */
@@ -834,10 +859,8 @@ export function subject<T>() {
 /**
  * Creates a new Reference object. A reference is a Behavior Subject that does not require an initial value.
  */
-export function ref<T>(initial?: T) {
-	return arguments.length === 1
-		? new Reference<T>(initial)
-		: new Reference<T>();
+export function ref<T>() {
+	return new Reference<T>();
 }
 
 const operators: any = {
@@ -850,6 +873,7 @@ const operators: any = {
 	is,
 	map,
 	mergeMap,
+	publishLast,
 	reduce,
 	switchMap,
 	take,
@@ -874,6 +898,7 @@ export interface Observable<T> {
 	is(equalTo: T): Observable<boolean>;
 	map<T2>(mapFn: (val: T) => T2): Observable<T2>;
 	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
+	publishLast(): Observable<T>;
 	reduce<T2>(
 		reduceFn: (acc: T2, val: T, i: number) => T2,
 		seed: T2

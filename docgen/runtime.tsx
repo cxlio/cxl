@@ -4,7 +4,7 @@ import { onAction, onChildrenMutation } from '@cxl/dom';
 import { border, css, padding } from '@cxl/css';
 import { be } from '@cxl/rx';
 import '@cxl/ui/theme.js';
-import '@cxl/ui/router.js';
+import '@cxl/ui-router';
 import { Span } from '@cxl/ui/core.js';
 import { Tabs, Tab } from '@cxl/ui/navigation.js';
 import { SelectBox, Option } from '@cxl/ui/select.js';

@@ -31,7 +31,8 @@ import {
 	onLocation,
 	on,
 } from '@cxl/dom';
-import { AppbarTitle, Item, StateStyles, Tab } from '@cxl/ui';
+import { AppbarTitle, Item, Tab } from '@cxl/ui/navigation.js';
+import { StateStyles } from '@cxl/ui/core.js';
 import { dom } from '@cxl/tsx';
 import { each, triggerEvent } from '@cxl/template';
 import { css } from '@cxl/css';
@@ -77,7 +78,11 @@ export function routerOutlet(host: HTMLElement) {
 	return router$.tap(state => {
 		const { url, root } = state;
 		if (root.parentNode !== host) host.appendChild(root);
-		else if (currentRoute && currentRoute !== root)
+		else if (
+			currentRoute &&
+			currentRoute !== root &&
+			currentRoute.parentNode
+		)
 			host.removeChild(currentRoute);
 
 		currentRoute = root;

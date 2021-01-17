@@ -2,7 +2,7 @@
 	
 [![npm version](https://badge.fury.io/js/%40cxl%2Fui.svg)](https://badge.fury.io/js/%40cxl%2Fui)
 
-High-performance Web Components for rapid application development.
+High-performance Web Components
 
 ## Project Details
 

@@ -143,58 +143,58 @@
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s87">getElementRoute</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s48">parseQueryParameters</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s90">parseUrl</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s45">replaceParameters</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Interfaces
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--RouteDefinition.html">RouteDefinition</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--RouterState.html">RouterState</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Strategy.html">Strategy</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Url.html">Url</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Constants</cxl-t><a name="s94"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>HashStrategy: <cxl-a href="index--Strategy.html">Strategy</cxl-a> = <pre><code class="hljs">{
-	getHref(url: Url | <span class="hljs-built_in">string</span>) {
+	<span class="hljs-function"><span class="hljs-title">getHref</span>(<span class="hljs-params">url: Url | <span class="hljs-built_in">string</span></span>)</span> {
 		url = <span class="hljs-keyword">typeof</span> url === <span class="hljs-string">&#x27;string&#x27;</span> ? parseUrl(url) : url;
 		<span class="hljs-keyword">return</span> <span class="hljs-string">`#<span class="hljs-subst">${url.path}</span><span class="hljs-subst">${url.hash ? <span class="hljs-string">`#<span class="hljs-subst">${url.hash}</span>`</span> : <span class="hljs-string">&#x27;&#x27;</span>}</span>`</span>;
 	},
 
-	serialize(url) {
+	<span class="hljs-function"><span class="hljs-title">serialize</span>(<span class="hljs-params">url</span>)</span> {
 		<span class="hljs-keyword">const</span> href = <span class="hljs-built_in">this</span>.getHref(url);
 		<span class="hljs-keyword">if</span> (location.hash !== href) location.hash = href;
 	},
 
-	deserialize() {
+	<span class="hljs-function"><span class="hljs-title">deserialize</span>(<span class="hljs-params"></span>)</span> {
 		<span class="hljs-keyword">return</span> parseUrl(location.hash.slice(<span class="hljs-number">1</span>));
 	},
 }</code></pre></cxl-t>
 		</cxl-c></cxl-card><a name="s93"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>PathStrategy: <cxl-a href="index--Strategy.html">Strategy</cxl-a> = <pre><code class="hljs">{
-	getHref(url: Url | <span class="hljs-built_in">string</span>) {
+	<span class="hljs-function"><span class="hljs-title">getHref</span>(<span class="hljs-params">url: Url | <span class="hljs-built_in">string</span></span>)</span> {
 		url = <span class="hljs-keyword">typeof</span> url === <span class="hljs-string">&#x27;string&#x27;</span> ? parseUrl(url) : url;
 		<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${url.path}</span><span class="hljs-subst">${url.hash ? <span class="hljs-string">`#<span class="hljs-subst">${url.hash}</span>`</span> : <span class="hljs-string">&#x27;&#x27;</span>}</span>`</span>;
 	},
 
-	serialize(url) {
+	<span class="hljs-function"><span class="hljs-title">serialize</span>(<span class="hljs-params">url</span>)</span> {
 		history.pushState({ url }, <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-built_in">this</span>.getHref(url));
 	},
 
-	deserialize() {
+	<span class="hljs-function"><span class="hljs-title">deserialize</span>(<span class="hljs-params"></span>)</span> {
 		<span class="hljs-keyword">return</span> (
 			history.state?.url || {
-				path: location.pathname,
-				hash: location.hash.slice(<span class="hljs-number">1</span>),
+				<span class="hljs-attr">path</span>: location.pathname,
+				<span class="hljs-attr">hash</span>: location.hash.slice(<span class="hljs-number">1</span>),
 			}
 		);
 	},
 }</code></pre></cxl-t>
 		</cxl-c></cxl-card><a name="s92"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>QueryStrategy: <cxl-a href="index--Strategy.html">Strategy</cxl-a> = <pre><code class="hljs">{
-	getHref(url: Url | <span class="hljs-built_in">string</span>) {
+	<span class="hljs-function"><span class="hljs-title">getHref</span>(<span class="hljs-params">url: Url | <span class="hljs-built_in">string</span></span>)</span> {
 		url = <span class="hljs-keyword">typeof</span> url === <span class="hljs-string">&#x27;string&#x27;</span> ? parseUrl(url) : url;
 		<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${url.path ? <span class="hljs-string">`?<span class="hljs-subst">${url.path}</span>`</span> : <span class="hljs-string">&#x27;&#x27;</span>}</span><span class="hljs-subst">${
 			url.hash ? <span class="hljs-string">`#<span class="hljs-subst">${url.hash}</span>`</span> : <span class="hljs-string">&#x27;&#x27;</span>
 		}</span>`</span>;
 	},
 
-	serialize(url) {
+	<span class="hljs-function"><span class="hljs-title">serialize</span>(<span class="hljs-params">url</span>)</span> {
 		history.pushState({ url }, <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-built_in">this</span>.getHref(url));
 	},
 
-	deserialize() {
+	<span class="hljs-function"><span class="hljs-title">deserialize</span>(<span class="hljs-params"></span>)</span> {
 		<span class="hljs-keyword">return</span> (
 			history.state?.url || {
-				path: location.search.slice(<span class="hljs-number">1</span>),
-				hash: location.hash.slice(<span class="hljs-number">1</span>),
+				<span class="hljs-attr">path</span>: location.search.slice(<span class="hljs-number">1</span>),
+				<span class="hljs-attr">hash</span>: location.hash.slice(<span class="hljs-number">1</span>),
 			}
 		);
 	},
@@ -218,7 +218,7 @@
 <cxl-t h3>Project Details</cxl-t><ul>
 <li>Branch Version: <a href="https://npmjs.com/package/@cxl/router/v/0.1.0">0.1.0</a></li>
 <li>License: GPL-3.0</li>
-<li>Documentation: <a href="undefined">Link</a></li>
+<li>Documentation: <a href="https://cxlio.github.io/cxl/router">Link</a></li>
 </ul>
 <cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/router
 </code></pre></template></cxl-router></cxl-page></cxl-application>

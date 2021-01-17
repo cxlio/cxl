@@ -9,23 +9,37 @@ import {
 	Observable,
 	Operator,
 	concat,
-	debounceTime,
 	defer,
-	map,
 	merge,
 	of,
 	tap,
 } from '@cxl/rx';
 import { Bindable, NativeChildren, dom } from '@cxl/tsx';
 import { Styles, render as renderCSS } from '@cxl/css';
-import { staticTemplate } from '@cxl/component';
+import { Component, staticTemplate } from '@cxl/component';
 
 interface ElementWithValue<T> extends HTMLElement {
 	value: T;
 }
 
+interface ValueElement extends Element {
+	value: boolean | undefined;
+}
+
 function isObservedAttribute(el: any, attr: any) {
 	return (el.constructor as any).observedAttributes?.includes(attr);
+}
+
+export function sortBy<T, K extends keyof T>(key: K) {
+	return (a: T, b: T) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0);
+}
+
+export function getSearchRegex(term: string) {
+	try {
+		return new RegExp(term, 'i');
+	} catch (e) {
+		return new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+	}
 }
 
 export function getAttribute<T extends Node, K extends keyof T>(
@@ -90,14 +104,21 @@ interface NextObservable<T> extends Observable<T> {
 }
 
 export function model<T>(el: ElementWithValue<T>, ref: NextObservable<T>) {
-	return sync(onValue(el), val => (el.value = val), ref, ref.next.bind(ref));
+	return ref.switchMap(initial => {
+		el.value = initial;
+		return sync(
+			onValue(el),
+			val => (el.value = val),
+			ref,
+			ref.next.bind(ref)
+		);
+	});
 }
 
 export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
-	return merge(on(el, 'input'), on(el, 'change')).pipe(
-		map(ev => (ev.target as T).value),
-		debounceTime()
-	);
+	return merge(on(el, 'input'), on(el, 'change'))
+		.map(ev => (ev.target as T).value)
+		.raf();
 }
 
 export function setContent(el: Element) {
@@ -261,4 +282,74 @@ export function Style(p: { children: Styles }) {
 
 export function Static(p: { children: NativeChildren }): any {
 	return staticTemplate(() => dom(dom, undefined, p.children));
+}
+
+type AriaProperties = {
+	atomic: string;
+	autocomplete: string;
+	busy: string;
+	checked: string;
+	controls: string;
+	current: string;
+	describedby: string;
+	details: string;
+	disabled: string;
+	dropeffect: string;
+	errormessage: string;
+	expanded: string;
+	flowto: string;
+	grabbed: string;
+	haspopup: string;
+	hidden: string;
+	invalid: string;
+	keyshortcuts: string;
+	label: string;
+	labelledby: string;
+	level: string;
+	live: string;
+	orientation: string;
+	owns: string;
+	placeholder: string;
+	pressed: string;
+	readonly: string;
+	required: string;
+	selected: string;
+	sort: string;
+	valuemax: string;
+	valuemin: string;
+	valuenow: string;
+	valuetext: string;
+	modal: string;
+	multiline: string;
+	multiselectable: string;
+	relevant: string;
+	roledescription: string;
+};
+
+type AriaProperty = keyof AriaProperties;
+
+export function aria<T extends Component>(prop: AriaProperty, value: string) {
+	return (ctx: T) =>
+		ctx.bind(defer(() => ctx.setAttribute(`aria-${prop}`, value)));
+}
+
+export function ariaValue(host: Element, prop: AriaProperty) {
+	return tap<string | number>(val =>
+		host.setAttribute('aria-' + prop, val.toString())
+	);
+}
+
+export function ariaProp(host: Element, prop: AriaProperty) {
+	return tap<boolean>(val =>
+		host.setAttribute('aria-' + prop, val ? 'true' : 'false')
+	);
+}
+
+export function ariaChecked(host: ValueElement) {
+	return tap<boolean>(val =>
+		host.setAttribute(
+			'aria-checked',
+			host.value === undefined ? 'mixed' : val ? 'true' : 'false'
+		)
+	);
 }

@@ -582,7 +582,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "name": "Event",
+                "name": "CustomEvent",
                 "kind": 6
               }
             ]
@@ -656,7 +656,7 @@
           "source": {
             "fileName": "index.ts",
             "line": 54,
-            "ch": 21
+            "ch": 27
           },
           "kind": 16,
           "name": "on",
@@ -2911,6 +2911,29 @@
               }
             ]
           }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 447,
+            "ch": 12
+          },
+          "kind": 31,
+          "name": "animationFrame",
+          "flags": 1,
+          "id": 152,
+          "value": "new Observable<number>(subs => {\n\tlet frame = 0;\n\tlet rafid = requestAnimationFrame(next);\n\tfunction next() {\n\t\tsubs.next(frame++);\n\t\trafid = requestAnimationFrame(next);\n\t}\n\treturn () => cancelAnimationFrame(rafid);\n})",
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
         }
       ]
     },
@@ -2933,7 +2956,7 @@
           "kind": 8,
           "name": "VirtualNode",
           "flags": 128,
-          "id": 152,
+          "id": 153,
           "children": [
             {
               "source": {
@@ -2944,7 +2967,7 @@
               "kind": 10,
               "name": "ELEMENT_NODE",
               "flags": 100,
-              "id": 153,
+              "id": 154,
               "value": "1",
               "type": {
                 "name": "1",
@@ -2966,7 +2989,7 @@
               "kind": 10,
               "name": "TEXT_NODE",
               "flags": 100,
-              "id": 154,
+              "id": 155,
               "value": "3",
               "type": {
                 "name": "3",
@@ -2988,7 +3011,7 @@
               "kind": 10,
               "name": "COMMENT_NODE",
               "flags": 100,
-              "id": 155,
+              "id": 156,
               "value": "8",
               "type": {
                 "name": "8",
@@ -3010,7 +3033,7 @@
               "kind": 10,
               "name": "DOCUMENT_FRAGMENT_NODE",
               "flags": 100,
-              "id": 156,
+              "id": 157,
               "value": "11",
               "type": {
                 "name": "11",
@@ -3032,7 +3055,7 @@
               "kind": 10,
               "name": "textContent",
               "flags": 132,
-              "id": 157,
+              "id": 158,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3048,7 +3071,7 @@
               "kind": 10,
               "name": "nodeType",
               "flags": 196,
-              "id": 158,
+              "id": 159,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -3064,7 +3087,7 @@
               "kind": 10,
               "name": "parentNode",
               "flags": 4,
-              "id": 159,
+              "id": 160,
               "type": {
                 "source": {
                   "fileName": "virtual.ts",
@@ -3076,7 +3099,7 @@
                 "flags": 0,
                 "children": [
                   {
-                    "id": 160,
+                    "id": 161,
                     "name": "VirtualElement",
                     "kind": 6
                   },
@@ -3103,7 +3126,7 @@
               "kind": 10,
               "name": "isConnected",
               "flags": 4,
-              "id": 161,
+              "id": 162,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3120,7 +3143,7 @@
               "kind": 11,
               "name": "getIndex",
               "flags": 8,
-              "id": 162,
+              "id": 163,
               "parameters": [],
               "type": {
                 "name": "",
@@ -3149,7 +3172,7 @@
               "kind": 12,
               "name": "nextSibling",
               "flags": 4,
-              "id": 163,
+              "id": 164,
               "type": {
                 "source": {
                   "fileName": "virtual.ts",
@@ -3161,7 +3184,7 @@
                 "flags": 0,
                 "children": [
                   {
-                    "id": 152,
+                    "id": 153,
                     "name": "VirtualNode",
                     "kind": 6
                   },
@@ -3188,7 +3211,7 @@
               "kind": 12,
               "name": "previousSibling",
               "flags": 4,
-              "id": 164,
+              "id": 165,
               "parameters": [],
               "type": {
                 "name": "",
@@ -3201,7 +3224,7 @@
                     "flags": 0
                   },
                   {
-                    "id": 152,
+                    "id": 153,
                     "name": "VirtualNode",
                     "kind": 6
                   }
@@ -3217,7 +3240,7 @@
               "kind": 11,
               "name": "cloneNode",
               "flags": 4,
-              "id": 165,
+              "id": 166,
               "parameters": [
                 {
                   "source": {
@@ -3228,7 +3251,7 @@
                   "kind": 9,
                   "name": "_deep",
                   "flags": 0,
-                  "id": 166,
+                  "id": 167,
                   "value": "true",
                   "type": {
                     "name": "boolean",
@@ -3246,12 +3269,12 @@
           ],
           "extendedBy": [
             {
-              "id": 182,
+              "id": 183,
               "name": "VirtualTextNode",
               "kind": 6
             },
             {
-              "id": 160,
+              "id": 161,
               "name": "VirtualElement",
               "kind": 6
             }
@@ -3266,7 +3289,7 @@
           "kind": 16,
           "name": "remove",
           "flags": 0,
-          "id": 167,
+          "id": 168,
           "parameters": [
             {
               "source": {
@@ -3277,9 +3300,9 @@
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 168,
+              "id": 169,
               "type": {
-                "id": 152,
+                "id": 153,
                 "name": "VirtualNode",
                 "kind": 6
               }
@@ -3300,7 +3323,7 @@
           "kind": 16,
           "name": "empty",
           "flags": 0,
-          "id": 169,
+          "id": 170,
           "parameters": [
             {
               "source": {
@@ -3311,9 +3334,9 @@
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 170,
+              "id": 171,
               "type": {
-                "id": 160,
+                "id": 161,
                 "name": "VirtualElement",
                 "kind": 6
               }
@@ -3334,7 +3357,7 @@
           "kind": 16,
           "name": "insert",
           "flags": 0,
-          "id": 171,
+          "id": 172,
           "parameters": [
             {
               "source": {
@@ -3345,9 +3368,9 @@
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 172,
+              "id": 173,
               "type": {
-                "id": 160,
+                "id": 161,
                 "name": "VirtualElement",
                 "kind": 6
               }
@@ -3361,9 +3384,9 @@
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 173,
+              "id": 174,
               "type": {
-                "id": 152,
+                "id": 153,
                 "name": "VirtualNode",
                 "kind": 6
               }
@@ -3384,7 +3407,7 @@
           "kind": 8,
           "name": "VirtualMutationObserver",
           "flags": 0,
-          "id": 174,
+          "id": 175,
           "children": [
             {
               "source": {
@@ -3395,7 +3418,7 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 175,
+              "id": 176,
               "parameters": [
                 {
                   "source": {
@@ -3406,7 +3429,7 @@
                   "kind": 10,
                   "name": "callback",
                   "flags": 8,
-                  "id": 176,
+                  "id": 177,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -3415,7 +3438,7 @@
                 }
               ],
               "type": {
-                "id": 174,
+                "id": 175,
                 "name": "VirtualMutationObserver",
                 "kind": 6
               }
@@ -3429,7 +3452,7 @@
               "kind": 11,
               "name": "$trigger",
               "flags": 4,
-              "id": 177,
+              "id": 178,
               "parameters": [
                 {
                   "source": {
@@ -3440,7 +3463,7 @@
                   "kind": 9,
                   "name": "event",
                   "flags": 0,
-                  "id": 178,
+                  "id": 179,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -3463,7 +3486,7 @@
               "kind": 11,
               "name": "observe",
               "flags": 4,
-              "id": 179,
+              "id": 180,
               "parameters": [
                 {
                   "source": {
@@ -3474,9 +3497,9 @@
                   "kind": 9,
                   "name": "element",
                   "flags": 0,
-                  "id": 180,
+                  "id": 181,
                   "type": {
-                    "id": 160,
+                    "id": 161,
                     "name": "VirtualElement",
                     "kind": 6
                   }
@@ -3490,7 +3513,7 @@
                   "kind": 9,
                   "name": "_options",
                   "flags": 524288,
-                  "id": 181,
+                  "id": 182,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -3513,7 +3536,7 @@
               "kind": 10,
               "name": "callback",
               "flags": 8,
-              "id": 176,
+              "id": 177,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -3531,7 +3554,7 @@
           "kind": 8,
           "name": "VirtualTextNode",
           "flags": 0,
-          "id": 182,
+          "id": 183,
           "children": [
             {
               "source": {
@@ -3542,7 +3565,7 @@
               "kind": 10,
               "name": "textContent",
               "flags": 4,
-              "id": 183,
+              "id": 184,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3558,7 +3581,7 @@
               "kind": 10,
               "name": "nodeType",
               "flags": 4,
-              "id": 184,
+              "id": 185,
               "value": "3",
               "type": {
                 "name": "number",
@@ -3575,7 +3598,7 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 185,
+              "id": 186,
               "parameters": [
                 {
                   "source": {
@@ -3586,7 +3609,7 @@
                   "kind": 9,
                   "name": "content",
                   "flags": 0,
-                  "id": 186,
+                  "id": 187,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -3595,7 +3618,7 @@
                 }
               ],
               "type": {
-                "id": 182,
+                "id": 183,
                 "name": "VirtualTextNode",
                 "kind": 6
               }
@@ -3607,7 +3630,7 @@
             "name": "",
             "children": [
               {
-                "id": 152,
+                "id": 153,
                 "name": "VirtualNode",
                 "kind": 6
               }
@@ -3615,7 +3638,7 @@
           }
         },
         {
-          "id": 160,
+          "id": 161,
           "source": {
             "fileName": "virtual.ts",
             "line": 73,
@@ -3634,7 +3657,7 @@
               "kind": 10,
               "name": "$attributes",
               "flags": 8,
-              "id": 187,
+              "id": 188,
               "type": {
                 "source": {
                   "fileName": "virtual.ts",
@@ -3664,7 +3687,7 @@
                         "kind": 9,
                         "name": "name",
                         "flags": 0,
-                        "id": 188,
+                        "id": 189,
                         "type": {
                           "name": "string",
                           "kind": 32,
@@ -3691,7 +3714,7 @@
               "kind": 10,
               "name": "tagName",
               "flags": 68,
-              "id": 189,
+              "id": 190,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3707,7 +3730,7 @@
               "kind": 10,
               "name": "nodeType",
               "flags": 68,
-              "id": 190,
+              "id": 191,
               "value": "VirtualNode.ELEMENT_NODE",
               "type": {
                 "name": "1",
@@ -3729,7 +3752,7 @@
               "kind": 10,
               "name": "childNodes",
               "flags": 4,
-              "id": 191,
+              "id": 192,
               "type": {
                 "source": {
                   "fileName": "virtual.ts",
@@ -3740,7 +3763,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 152,
+                  "id": 153,
                   "name": "VirtualNode",
                   "kind": 6
                 }
@@ -3756,9 +3779,9 @@
               "kind": 10,
               "name": "$observer",
               "flags": 4,
-              "id": 192,
+              "id": 193,
               "type": {
-                "id": 174,
+                "id": 175,
                 "name": "VirtualMutationObserver",
                 "kind": 6
               }
@@ -3772,9 +3795,9 @@
               "kind": 10,
               "name": "shadowRoot",
               "flags": 4,
-              "id": 193,
+              "id": 194,
               "type": {
-                "id": 194,
+                "id": 195,
                 "name": "VirtualFragment",
                 "kind": 6
               }
@@ -3788,7 +3811,7 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 195,
+              "id": 196,
               "parameters": [
                 {
                   "source": {
@@ -3799,7 +3822,7 @@
                   "kind": 9,
                   "name": "tagName",
                   "flags": 0,
-                  "id": 196,
+                  "id": 197,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -3808,7 +3831,7 @@
                 }
               ],
               "type": {
-                "id": 160,
+                "id": 161,
                 "name": "VirtualElement",
                 "kind": 6
               }
@@ -3822,7 +3845,7 @@
               "kind": 11,
               "name": "appendChild",
               "flags": 4,
-              "id": 197,
+              "id": 198,
               "parameters": [
                 {
                   "source": {
@@ -3833,9 +3856,9 @@
                   "kind": 9,
                   "name": "node",
                   "flags": 0,
-                  "id": 198,
+                  "id": 199,
                   "type": {
-                    "id": 152,
+                    "id": 153,
                     "name": "VirtualNode",
                     "kind": 6
                   }
@@ -3856,7 +3879,7 @@
               "kind": 12,
               "name": "textContent",
               "flags": 4,
-              "id": 199,
+              "id": 200,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3873,7 +3896,7 @@
               "kind": 13,
               "name": "textContent",
               "flags": 4,
-              "id": 200,
+              "id": 201,
               "parameters": [
                 {
                   "source": {
@@ -3884,7 +3907,7 @@
                   "kind": 9,
                   "name": "val",
                   "flags": 0,
-                  "id": 201,
+                  "id": 202,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -3907,10 +3930,10 @@
               "kind": 12,
               "name": "firstChild",
               "flags": 4,
-              "id": 202,
+              "id": 203,
               "parameters": [],
               "type": {
-                "id": 152,
+                "id": 153,
                 "name": "VirtualNode",
                 "kind": 6
               }
@@ -3924,10 +3947,10 @@
               "kind": 12,
               "name": "lastChild",
               "flags": 4,
-              "id": 203,
+              "id": 204,
               "parameters": [],
               "type": {
-                "id": 152,
+                "id": 153,
                 "name": "VirtualNode",
                 "kind": 6
               }
@@ -3941,7 +3964,7 @@
               "kind": 11,
               "name": "attachShadow",
               "flags": 4,
-              "id": 204,
+              "id": 205,
               "parameters": [
                 {
                   "source": {
@@ -3952,7 +3975,7 @@
                   "kind": 9,
                   "name": "_options",
                   "flags": 524288,
-                  "id": 205,
+                  "id": 206,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -3961,7 +3984,7 @@
                 }
               ],
               "type": {
-                "id": 194,
+                "id": 195,
                 "name": "VirtualFragment",
                 "kind": 6
               }
@@ -3975,7 +3998,7 @@
               "kind": 11,
               "name": "addEventListener",
               "flags": 4,
-              "id": 206,
+              "id": 207,
               "parameters": [
                 {
                   "source": {
@@ -3986,7 +4009,7 @@
                   "kind": 9,
                   "name": "_event",
                   "flags": 0,
-                  "id": 207,
+                  "id": 208,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -4002,7 +4025,7 @@
                   "kind": 9,
                   "name": "_handler",
                   "flags": 0,
-                  "id": 208,
+                  "id": 209,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -4018,7 +4041,7 @@
                   "kind": 9,
                   "name": "_options",
                   "flags": 0,
-                  "id": 209,
+                  "id": 210,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -4041,7 +4064,7 @@
               "kind": 11,
               "name": "removeEventListener",
               "flags": 4,
-              "id": 210,
+              "id": 211,
               "parameters": [
                 {
                   "source": {
@@ -4052,7 +4075,7 @@
                   "kind": 9,
                   "name": "_event",
                   "flags": 0,
-                  "id": 211,
+                  "id": 212,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -4068,7 +4091,7 @@
                   "kind": 9,
                   "name": "_handler",
                   "flags": 0,
-                  "id": 212,
+                  "id": 213,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -4084,7 +4107,7 @@
                   "kind": 9,
                   "name": "_options",
                   "flags": 0,
-                  "id": 213,
+                  "id": 214,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -4107,7 +4130,7 @@
               "kind": 11,
               "name": "setAttribute",
               "flags": 4,
-              "id": 214,
+              "id": 215,
               "parameters": [
                 {
                   "source": {
@@ -4118,7 +4141,7 @@
                   "kind": 9,
                   "name": "attr",
                   "flags": 0,
-                  "id": 215,
+                  "id": 216,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -4134,7 +4157,7 @@
                   "kind": 9,
                   "name": "value",
                   "flags": 0,
-                  "id": 216,
+                  "id": 217,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -4157,7 +4180,7 @@
               "kind": 11,
               "name": "getAttribute",
               "flags": 4,
-              "id": 217,
+              "id": 218,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -4173,7 +4196,7 @@
                   "kind": 9,
                   "name": "attr",
                   "flags": 0,
-                  "id": 218,
+                  "id": 219,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -4191,7 +4214,7 @@
               "kind": 11,
               "name": "hasAttribute",
               "flags": 4,
-              "id": 219,
+              "id": 220,
               "type": {
                 "name": "boolean",
                 "kind": 32,
@@ -4207,7 +4230,7 @@
                   "kind": 9,
                   "name": "attr",
                   "flags": 0,
-                  "id": 220,
+                  "id": 221,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -4225,7 +4248,7 @@
               "kind": 11,
               "name": "removeAttribute",
               "flags": 4,
-              "id": 221,
+              "id": 222,
               "parameters": [
                 {
                   "source": {
@@ -4236,7 +4259,7 @@
                   "kind": 9,
                   "name": "attr",
                   "flags": 0,
-                  "id": 222,
+                  "id": 223,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -4259,7 +4282,7 @@
               "kind": 11,
               "name": "insertBefore",
               "flags": 4,
-              "id": 223,
+              "id": 224,
               "parameters": [
                 {
                   "source": {
@@ -4270,9 +4293,9 @@
                   "kind": 9,
                   "name": "node",
                   "flags": 0,
-                  "id": 224,
+                  "id": 225,
                   "type": {
-                    "id": 152,
+                    "id": 153,
                     "name": "VirtualNode",
                     "kind": 6
                   }
@@ -4286,9 +4309,9 @@
                   "kind": 9,
                   "name": "before",
                   "flags": 524288,
-                  "id": 225,
+                  "id": 226,
                   "type": {
-                    "id": 152,
+                    "id": 153,
                     "name": "VirtualNode",
                     "kind": 6
                   }
@@ -4309,7 +4332,7 @@
               "kind": 11,
               "name": "removeChild",
               "flags": 4,
-              "id": 226,
+              "id": 227,
               "parameters": [
                 {
                   "source": {
@@ -4320,9 +4343,9 @@
                   "kind": 9,
                   "name": "child",
                   "flags": 0,
-                  "id": 227,
+                  "id": 228,
                   "type": {
-                    "id": 152,
+                    "id": 153,
                     "name": "VirtualNode",
                     "kind": 6
                   }
@@ -4343,7 +4366,7 @@
               "kind": 11,
               "name": "cloneNode",
               "flags": 4,
-              "id": 228,
+              "id": 229,
               "parameters": [
                 {
                   "source": {
@@ -4354,7 +4377,7 @@
                   "kind": 9,
                   "name": "deep",
                   "flags": 524288,
-                  "id": 229,
+                  "id": 230,
                   "type": {
                     "name": "boolean",
                     "kind": 32,
@@ -4375,7 +4398,7 @@
             "name": "",
             "children": [
               {
-                "id": 152,
+                "id": 153,
                 "name": "VirtualNode",
                 "kind": 6
               }
@@ -4383,24 +4406,24 @@
           },
           "extendedBy": [
             {
-              "id": 194,
+              "id": 195,
               "name": "VirtualFragment",
               "kind": 6
             },
             {
-              "id": 231,
+              "id": 232,
               "name": "VirtualTemplateElement",
               "kind": 6
             },
             {
-              "id": 231,
+              "id": 232,
               "name": "VirtualTemplateElement",
               "kind": 6
             }
           ]
         },
         {
-          "id": 194,
+          "id": 195,
           "source": {
             "fileName": "virtual.ts",
             "line": 173,
@@ -4419,10 +4442,10 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 230,
+              "id": 231,
               "parameters": [],
               "type": {
-                "id": 194,
+                "id": 195,
                 "name": "VirtualFragment",
                 "kind": 6
               }
@@ -4434,7 +4457,7 @@
             "name": "",
             "children": [
               {
-                "id": 160,
+                "id": 161,
                 "name": "VirtualElement",
                 "kind": 6
               }
@@ -4450,7 +4473,7 @@
           "kind": 8,
           "name": "VirtualTemplateElement",
           "flags": 0,
-          "id": 231,
+          "id": 232,
           "children": [
             {
               "source": {
@@ -4461,9 +4484,9 @@
               "kind": 10,
               "name": "content",
               "flags": 4,
-              "id": 232,
+              "id": 233,
               "type": {
-                "id": 194,
+                "id": 195,
                 "name": "VirtualFragment",
                 "kind": 6
               }
@@ -4477,10 +4500,10 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 233,
+              "id": 234,
               "parameters": [],
               "type": {
-                "id": 231,
+                "id": 232,
                 "name": "VirtualTemplateElement",
                 "kind": 6
               }
@@ -4494,9 +4517,9 @@
               "kind": 10,
               "name": "content",
               "flags": 4,
-              "id": 232,
+              "id": 233,
               "type": {
-                "id": 194,
+                "id": 195,
                 "name": "VirtualFragment",
                 "kind": 6
               }
@@ -4510,10 +4533,10 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 233,
+              "id": 234,
               "parameters": [],
               "type": {
-                "id": 231,
+                "id": 232,
                 "name": "VirtualTemplateElement",
                 "kind": 6
               }
@@ -4525,7 +4548,7 @@
             "name": "",
             "children": [
               {
-                "id": 160,
+                "id": 161,
                 "name": "VirtualElement",
                 "kind": 6
               }
@@ -4541,7 +4564,7 @@
           "kind": 31,
           "name": "TAG_MAP",
           "flags": 0,
-          "id": 234,
+          "id": 235,
           "value": "{\n\tTEMPLATE: VirtualTemplateElement\n}",
           "type": {
             "source": {
@@ -4562,7 +4585,7 @@
                 "kind": 0,
                 "name": "TEMPLATE",
                 "flags": 0,
-                "id": 235,
+                "id": 236,
                 "value": "VirtualTemplateElement",
                 "type": {
                   "source": {
@@ -4573,7 +4596,7 @@
                   "kind": 8,
                   "name": "VirtualTemplateElement",
                   "flags": 0,
-                  "id": 231,
+                  "id": 232,
                   "children": [
                     {
                       "source": {
@@ -4584,9 +4607,9 @@
                       "kind": 10,
                       "name": "content",
                       "flags": 4,
-                      "id": 232,
+                      "id": 233,
                       "type": {
-                        "id": 194,
+                        "id": 195,
                         "name": "VirtualFragment",
                         "kind": 6
                       }
@@ -4600,10 +4623,10 @@
                       "kind": 14,
                       "name": "constructor",
                       "flags": 0,
-                      "id": 233,
+                      "id": 234,
                       "parameters": [],
                       "type": {
-                        "id": 231,
+                        "id": 232,
                         "name": "VirtualTemplateElement",
                         "kind": 6
                       }
@@ -4617,9 +4640,9 @@
                       "kind": 10,
                       "name": "content",
                       "flags": 4,
-                      "id": 232,
+                      "id": 233,
                       "type": {
-                        "id": 194,
+                        "id": 195,
                         "name": "VirtualFragment",
                         "kind": 6
                       }
@@ -4633,10 +4656,10 @@
                       "kind": 14,
                       "name": "constructor",
                       "flags": 0,
-                      "id": 233,
+                      "id": 234,
                       "parameters": [],
                       "type": {
-                        "id": 231,
+                        "id": 232,
                         "name": "VirtualTemplateElement",
                         "kind": 6
                       }
@@ -4648,7 +4671,7 @@
                     "name": "",
                     "children": [
                       {
-                        "id": 160,
+                        "id": 161,
                         "name": "VirtualElement",
                         "kind": 6
                       }
@@ -4668,7 +4691,7 @@
           "kind": 31,
           "name": "CUSTOM_ELEMENT_REGISTRY",
           "flags": 0,
-          "id": 236,
+          "id": 237,
           "type": {
             "name": "Record",
             "kind": 6,

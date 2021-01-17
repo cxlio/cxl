@@ -1,14 +1,21 @@
-const { buildCxl, tsconfig, file, minify } = require('../dist/build');
+const {
+	buildCxl,
+	tsconfig,
+	file,
+	minify,
+	files,
+	concatFile,
+} = require('../dist/build');
 
 buildCxl(
 	{
 		outputDir: '../dist/docgen',
 		tasks: [
 			tsconfig('tsconfig.client.json'),
-			file(
+			files([
 				'../node_modules/highlight.js/styles/default.css',
-				'styles.css'
-			),
+				'../node_modules/highlight.js/styles/a11y-light.css',
+			]).pipe(concatFile('styles.css')),
 		],
 	},
 	{

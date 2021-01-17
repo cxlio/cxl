@@ -8,7 +8,7 @@ Input validation library
 
 -   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/validation/v/0.0.1)
 -   License: Apache-2.0
--   Documentation: [Link](undefined)
+-   Documentation: [Link](https://cxlio.github.io/cxl/validation)
 
 ## Installation
 
