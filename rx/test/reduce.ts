@@ -11,7 +11,7 @@ export default spec('reduce', a => {
 			x: 9,
 		};
 		const e1 = cold('--a--b--c--|', values);
-		const e1subs = '^           !';
+		const e1subs = '^          !';
 		const expected = '-----------(9|)';
 
 		const reduceFunction = function (o: number, x: string) {
@@ -24,7 +24,7 @@ export default spec('reduce', a => {
 
 	a.should('reduce with seed', async a => {
 		const e1 = cold('--a--b--|');
-		const e1subs = '^        !';
+		const e1subs = '^       !';
 		const expected = '--------(nab|)';
 
 		const seed = 'n';

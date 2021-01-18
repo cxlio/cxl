@@ -5,11 +5,11 @@ import { suite } from '@cxl/spec';
 export default suite('concat', test => {
 	test('should emit elements from multiple sources', a => {
 		const e1 = cold('-a-b-c-|');
-		const e1subs = '^       !';
+		const e1subs = '^      !';
 		const e2 = cold('-0-1-|');
-		const e2subs = '       ^    !';
+		const e2subs = '      ^    !';
 		const e3 = cold('-w-x-y-z-|');
-		const e3subs = '            ^        !';
+		const e3subs = '           ^        !';
 		const expected = '-a-b-c--0-1--w-x-y-z-|';
 
 		const obs = concat(e1, e2, e3);

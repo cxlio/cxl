@@ -99,6 +99,16 @@ export class TestApi {
 		);
 	}
 
+	throws(fn: () => any) {
+		let success = false;
+		try {
+			fn();
+		} catch (e) {
+			success = true;
+		}
+		return this.ok(success, `Expected function to throw`);
+	}
+
 	ran(n: number) {
 		const results = this.$test.results;
 		return this.ok(
@@ -260,6 +270,7 @@ export class Test {
 
 	async run(): Promise<Result[]> {
 		try {
+			this.promise = undefined;
 			const testApi = new TestApi(this);
 			const result = this.testFn(testApi);
 			const promise = result ? this.doTimeout(result) : this.promise;

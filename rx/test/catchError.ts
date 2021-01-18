@@ -15,7 +15,7 @@ export default suite('catchError', test => {
 
 	test('should catch error and replace it with Observable.of()', a => {
 		const e1 = cold('--a--b--c--------|');
-		const subs = '^        !';
+		const subs = '^       !';
 		const expected = '--a--b--(XYZ|)';
 
 		const result = e1

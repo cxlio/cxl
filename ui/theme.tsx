@@ -88,13 +88,14 @@ export const theme: CSSTheme = {
 		// Animation speed
 		speed: '0.3s',
 		font: 'Roboto, sans-serif',
+		fontSize: '16px',
 		fontMonospace: 'monospace',
 	},
 	typography: {
 		default: {
 			fontWeight: 400,
 			fontFamily: 'var(--cxl-font)',
-			fontSize: '16px',
+			fontSize: 'var(--cxl-font-size)',
 			letterSpacing: 'normal',
 		},
 		caption: { fontSize: '12px', letterSpacing: '0.4px' },
@@ -106,7 +107,6 @@ export const theme: CSSTheme = {
 		h6: { fontSize: '20px', fontWeight: 500, letterSpacing: '0.15px' },
 		body2: { fontSize: '14px', letterSpacing: '0.25px' },
 		subtitle: {
-			fontSize: '16px',
 			letterSpacing: '0.15px',
 		},
 		subtitle2: {

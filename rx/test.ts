@@ -139,6 +139,11 @@ export default suite('rx', [
 				},
 			});
 		});
+
+		test('should be thenable', async a => {
+			const res = await of(10);
+			a.equal(res, 10);
+		});
 	}),
 
 	suite('Observable#subscribe', test => {
@@ -474,6 +479,13 @@ export default suite('rx', [
 				done();
 			});
 			ref.next(true);
+		});
+
+		test('should throw if not initialized', a => {
+			const ref = new Reference<boolean>();
+			a.throws(() => ref.value);
+			ref.next(true);
+			a.equal(ref.value, true);
 		});
 	}),
 

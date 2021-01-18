@@ -1,26 +1,82 @@
 import { cold, expectLog } from './util';
-import { combineLatest } from '../index';
-import { suite } from '@cxl/spec';
+import { combineLatest, from } from '../index';
+import { spec } from '@cxl/spec';
 
-export default suite('combineLatest', test => {
-	test('should combine events from two observables', async a => {
-		const e1 = cold('-a-b-c-|');
-		const e2 = cold('---1-|');
-		const e3 = cold('-x|');
-		const expected = '---b,1,x-c,1,x-|';
+export default spec('combineLatest', it => {
+	it.should('combineLatest the provided observables', a => {
+		const firstSource = cold('----a----b----c----|');
+		const secondSource = cold('--d--e--f--g--|');
+		const expected = '----adae--afbf-bg--cg----|';
 
-		await expectLog(a, combineLatest(e1, e2, e3), expected);
-		a.equal(e1.subscriptions, '^       !');
-		a.equal(e2.subscriptions, '^     !');
-		a.equal(e3.subscriptions, '^  !');
+		const combined = combineLatest(firstSource, secondSource).map(
+			([a, b]) => '' + a + b
+		);
+
+		expectLog(a, combined, expected);
 	});
 
-	test("should work with two EMPTY's", async a => {
+	it.should("work with two EMPTY's", async a => {
 		const e1 = cold('|');
 		const e2 = cold('|');
 
 		await expectLog(a, combineLatest(e1, e2), '|');
-		a.equal(e1.subscriptions, '^!');
-		a.equal(e2.subscriptions, '^!');
+		a.equal(e1.subscriptions, '(^!)');
+		a.equal(e2.subscriptions, '(^!)');
 	});
+
+	it.should(
+		'return EMPTY if passed an empty array as the only argument',
+		a => {
+			const results: string[] = [];
+			combineLatest().subscribe({
+				next: () => {
+					throw new Error('should not emit');
+				},
+				complete: () => {
+					results.push('done');
+				},
+			});
+
+			a.equal(results[0], 'done');
+		}
+	);
+
+	it.should(
+		'combine an immediately-scheduled source with an immediately-scheduled second',
+		a => {
+			const done = a.async();
+			const e1 = from([1, 2, 3, 4]);
+			const e2 = from([4, 5, 6, 7, 8]);
+			const e3 = from([9, 10, 11]);
+			const r = [
+				[1, 4, 9],
+				[2, 4, 9],
+				[2, 5, 9],
+				[2, 5, 10],
+				[3, 5, 10],
+				[3, 6, 10],
+				[3, 6, 11],
+				[4, 6, 11],
+				[4, 7, 11],
+				[4, 8, 11],
+			];
+			let index = 0;
+
+			combineLatest(e1, e2, e3).subscribe(
+				vals => {
+					const row = r[index++];
+					a.equal(vals[0], row[0]);
+					a.equal(vals[1], row[1]);
+					a.equal(vals[2], row[2]);
+				},
+				() => {
+					throw new Error('should not be called');
+				},
+				() => {
+					a.equal(index, r.length);
+					done();
+				}
+			);
+		}
+	);
 });

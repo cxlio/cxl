@@ -10,19 +10,22 @@ const STYLES = `<style>
 
 const HEADER = `<!DOCTYPE html>
 	<head><title>Test Report</title></head>
-<cxl-appbar>
-	<cxl-appbar-title>Test Report</cxl-appbar-title>
-	<cxl-navbar>
-	</cxl-navbar>
-</cxl-appbar><cxl-meta></cxl-meta>`;
+`;
+let INDEX = '';
 
 type Tag = { offset: number; text: string };
 
 async function renderSource(test: TestCoverageReport) {
 	const source = await readFile(test.url, 'utf8');
 	let index = 0;
-	let output = `<h2>${test.url} <small>(${test.blockCovered}/${test.blockTotal})</small></h2><pre>`;
+	let output = `<h2><a name="${test.url}">${test.url}</a></h2><pre>`;
 	const tags: Tag[] = [];
+	const covPct = ((test.blockCovered / test.blockTotal) * 100).toFixed(2);
+
+	INDEX += `<tr>
+		<td><a href="#${test.url}">${test.url}</a></td>
+		<td>${covPct}% (${test.blockCovered}/${test.blockTotal})</td>
+	</tr>`;
 
 	test.functions.forEach(fn => {
 		fn.ranges.forEach(range => {
@@ -51,7 +54,9 @@ async function renderSource(test: TestCoverageReport) {
 export default async function generate(report: Report) {
 	if (report.coverage) {
 		const pages = await Promise.all(report.coverage.map(renderSource));
-		const result = `${HEADER}${STYLES}${pages.join('')}`;
+		const result = `${HEADER}${STYLES}<table>${INDEX}</table>${pages.join(
+			''
+		)}`;
 		await writeFile('test-report.html', result);
 	}
 }

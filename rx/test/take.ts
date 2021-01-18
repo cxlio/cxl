@@ -5,7 +5,7 @@ import { spec } from '@cxl/spec';
 export default spec('take', a => {
 	a.should('take two values of an observable with many values', async a => {
 		const e1 = cold('--a-----b----c---d--|');
-		const e1subs = '^        !';
+		const e1subs = '^       !';
 		const expected = '--a-----(b|)';
 
 		await expectLog(a, e1.pipe(take(2)), expected);
@@ -29,7 +29,7 @@ export default spec('take', a => {
 
 	a.should('be empty on take(0)', a => {
 		const e1 = cold('--b----c---d--|');
-		const e1subs = '^  !'; // Don't subscribe at all
+		const e1subs = '^ !'; // Don't subscribe at all
 		const expected = '--|';
 
 		expectLog(a, e1.take(0), expected);

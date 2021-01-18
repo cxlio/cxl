@@ -3,8 +3,19 @@
 	"compilerOptions": {
 		"outDir": "../dist/ui"
 	},
-	"include": ["*.tsx"],
-	"exclude": ["test.tsx"],
+	"files": [
+		"checkbox.tsx",
+		"core.tsx",
+		"dialog.tsx",
+		"form.tsx",
+		"index.tsx",
+		"input-base.tsx",
+		"layout.tsx",
+		"navigation.tsx",
+		"select.tsx",
+		"theme.tsx",
+		"validation.tsx"
+	],
 	"references": [
 		{ "path": "../rx" },
 		{ "path": "../tsx" },

@@ -5,12 +5,13 @@ interface Log {
 	events: string;
 }
 
-class Scheduler extends Subject<any> {
+class Scheduler extends Subject<number> {
 	time = 0;
 	run() {
 		let maxCycles = 100;
 		while (this.observers.size && maxCycles-- > 0) {
-			this.next(this.time++);
+			this.next(this.time);
+			this.time++;
 		}
 		this.time = 0;
 	}
@@ -34,10 +35,13 @@ function logOperator() {
 	function emit(ev: string) {
 		const diff = scheduler.time - time;
 		if (diff) {
-			flush();
-			log.events += '-'.repeat(diff - 1);
+			if (events.length) {
+				flush();
+				log.events += '-'.repeat(diff - 1);
+			} else log.events += '-'.repeat(diff);
 			time = scheduler.time;
 		}
+
 		events.push(ev);
 	}
 
@@ -79,14 +83,18 @@ class ColdObservable extends Observable<string> {
 
 	log(ev: string) {
 		const diff = scheduler.time - this.time;
-		this.subscriptions += (diff > 1 ? ' '.repeat(diff - 1) : '') + ev;
+		if (diff === 0 && this.subscriptions.length)
+			this.subscriptions = this.subscriptions.replace(
+				/(.)$/,
+				`($1${ev})`
+			);
+		else this.subscriptions += (diff > 1 ? ' '.repeat(diff - 1) : '') + ev;
 		this.time = scheduler.time;
 	}
 
 	constructor(stream: string, values?: any) {
 		super(subs => {
 			this.log('^');
-
 			const iter = stream[Symbol.iterator]();
 			const inner = scheduler.subscribe(() => {
 				const { done, value } = iter.next();

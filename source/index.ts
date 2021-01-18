@@ -86,6 +86,25 @@ function indexToPosOne(source: string, index: number) {
 	return { start, end };
 }*/
 
+export function getMappingsForRange(
+	sourceMap: SourceMapConsumer,
+	start: Position,
+	end: Position
+) {
+	const result: MappingItem[] = [];
+	sourceMap.eachMapping(m => {
+		if (
+			m.generatedLine >= start.line &&
+			m.generatedColumn >= start.column &&
+			m.generatedLine <= end.line &&
+			m.generatedColumn <= end.column
+		)
+			result.push(m);
+	});
+	console.log(result);
+	return result;
+}
+
 export class SourceMap {
 	path: string;
 	dir: string;
@@ -110,13 +129,25 @@ export class SourceMap {
 		const sourceMap = this.map;
 		if (!sourceMap) throw new Error('Sourcemap not initialized');
 
-		const start = sourceMap.originalPositionFor(
-			indexToPosOne(source, range.start)
-		);
-		const end = sourceMap.originalPositionFor(
-			indexToPosOne(source, range.end)
-		);
+		const startPos = indexToPosOne(source, range.start);
+		const start = sourceMap.originalPositionFor(startPos);
+		const endPos = indexToPosOne(source, range.end);
+		let end = sourceMap.originalPositionFor(endPos);
 
+		if (start.source === null && range.start === 0 && end.source) {
+			start.source = end.source;
+			start.line = 1;
+			start.column = 0;
+		}
+		if (
+			end.source === null &&
+			range.end === source.length &&
+			start.source
+		) {
+			//end.source = end.source;
+			endPos.line--;
+			end = sourceMap.originalPositionFor(endPos);
+		}
 		if (start.source === null || end.source === null) return;
 		if (start.line === null || end.line === null) return;
 

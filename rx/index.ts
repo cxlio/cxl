@@ -764,68 +764,125 @@ export function merge<R extends Observable<any>[]>(
 export function zip<T extends any[]>(
 	...observables: T
 ): Observable<PickObservable<T>> {
-	return new Observable<any>(subs => {
-		const latest: any[] = [];
-		let count = 0,
-			opened = observables.length;
+	return observables.length === 0
+		? EMPTY
+		: new Observable<any>(subs => {
+				const buffer: any[][] = new Array(observables.length);
+				const subscriptions: Subscription[] = [];
+				let completed = 0;
 
-		const subscriptions = observables.map((o, i) => {
-			return o.subscribe({
-				next(val: any) {
-					latest[i] = val;
-					if (++count === opened) {
-						subs.next(latest.slice(0));
-						count = 0;
+				function flush() {
+					let hasNext = true;
+					for (const bucket of buffer)
+						if (!bucket || bucket.length === 0) {
+							hasNext = false;
+							break;
+						}
+					if (hasNext) {
+						subs.next(buffer.map(b => b.shift()));
+						flush();
 					}
-				},
-				error(e: any) {
-					subs.error(e);
-				},
-				complete() {
-					if (--opened === 0) subs.complete();
-				},
-			});
-		});
 
-		return () => subscriptions.forEach(s => s.unsubscribe());
-	});
+					if (completed) {
+						for (const bucket of buffer)
+							if (bucket.length !== 0) return;
+						subs.complete();
+						for (const s of subscriptions) s.unsubscribe();
+					}
+				}
+
+				observables.forEach((o, id) => {
+					const bucket: any[] = (buffer[id] = []);
+					subscriptions.push(
+						o.subscribe({
+							next(val: any) {
+								bucket.push(val);
+								flush();
+							},
+							error(e: any) {
+								subs.error(e);
+							},
+							complete() {
+								completed++;
+								flush();
+							},
+						})
+					);
+				});
+
+				return () => subscriptions.forEach(s => s.unsubscribe());
+		  });
 }
 
 /**
  * Combines multiple Observables to create an Observable whose values are calculated from the
  * latest values of each of its input Observables.
  */
-export function combineLatest<T extends any[]>(
+export function combineLatest<T extends Observable<any>[]>(
 	...observables: T
 ): Observable<PickObservable<T>> {
-	return new Observable<any>(subs => {
-		const latest: any[] = [];
-		const len = observables.length;
-		let count = 0,
-			opened = len;
+	return observables.length === 0
+		? EMPTY
+		: new Observable<any>(subs => {
+				const buffer: any[][] = new Array(observables.length);
+				const subscriptions: Subscription[] = [];
+				let completed = 0;
+				let last: any[];
 
-		const subscriptions = observables.map((o, i) => {
-			let fired = false;
-			return o.subscribe({
-				next(val: any) {
-					if (!fired) {
-						count++;
-						fired = true;
-					}
-					latest[i] = val;
-					if (count === len) subs.next(latest.slice(0));
-				},
-				error(e: any) {
-					subs.error(e);
-				},
-				complete() {
-					if (--opened === 0) subs.complete();
-				},
-			});
-		});
+				function flush() {
+					for (const bucket of buffer)
+						if (!bucket || bucket.length === 0) return;
 
-		return () => subscriptions.forEach(s => s.unsubscribe());
-	});
+					last = buffer.map((b, i) =>
+						b.length ? b.shift() : last[i]
+					);
+					subs.next(last);
+				}
+
+				observables.forEach((o, id) => {
+					const bucket: any[] = (buffer[id] = []);
+					subscriptions.push(
+						o.subscribe({
+							next(val: any) {
+								if (last) {
+									bucket.push(val);
+									buffer.forEach((b, i) => {
+										if (b.length) {
+											last[i] = b.shift();
+											subs.next(last.slice(0));
+										}
+									});
+								} else {
+									bucket.push(val);
+									flush();
+								}
+							},
+							error(e: any) {
+								subs.error(e);
+							},
+							complete() {
+								if (++completed === observables.length) {
+									let remaining = 0;
+									do {
+										remaining = 0;
+										buffer.forEach((b, i) => {
+											if (b.length) {
+												remaining += b.length;
+												last[i] = b.shift();
+												subs.next(last.slice(0));
+											}
+										});
+									} while (remaining);
+
+									subs.complete();
+								}
+							},
+						})
+					);
+				});
+
+				return () => subscriptions.forEach(s => s.unsubscribe());
+		  });
 }
 
 /**
