@@ -57,7 +57,9 @@ function inspect(val: any) {
 }
 
 export class TestApi {
-	readonly id = lastTestId++;
+	get id() {
+		return this.$test.id;
+	}
 
 	constructor(private $test: Test) {}
 
@@ -153,6 +155,10 @@ export class TestApi {
 		this.$test.only.push(new Test(name, testFn));
 	}
 
+	should(name: string, testFn: TestFn) {
+		return this.test(`should ${name}`, testFn);
+	}
+
 	test(name: string, testFn: TestFn) {
 		this.$test.tests.push(new Test(name, testFn));
 	}
@@ -212,6 +218,8 @@ export class Test {
 	domContainer?: Element;
 	events = subject<TestEvent>();
 	completed = false;
+
+	readonly id = lastTestId++;
 
 	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
 		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;

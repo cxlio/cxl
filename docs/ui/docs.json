@@ -9749,7 +9749,7 @@
               "flags": 4,
               "id": 400,
               "type": {
-                "name": "string",
+                "name": "any",
                 "kind": 32,
                 "flags": 0
               },
@@ -9777,7 +9777,7 @@
                   "flags": 0,
                   "id": 402,
                   "type": {
-                    "name": "string",
+                    "name": "any",
                     "kind": 32,
                     "flags": 0
                   }

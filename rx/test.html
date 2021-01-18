@@ -1,13 +1,14 @@
-<html>
-	<head>
-		<title>cxl - Test Suite</title>
-	</head>
-	<body>
-		<script src="../tester/require-browser.js"></script>
-		<script type="module">
-			import browserRunner from '../tester/browser-runner.js';
-			let suite = require('./test.js').default;
-			browserRunner.run([suite]);
-		</script>
-	</body>
-</html>
+<script src="../tester/require-browser.js"></script>
+<script type="module">
+	require.replace = function (path, base) {
+		return path.replace(
+			/^@cxl\/(.+)/,
+			(str, p1) =>
+				`/cxl/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`
+		);
+	};
+	const browserRunner = require('../tester/browser-runner.js').default;
+
+	const suite = require('./test.js').default;
+	browserRunner.run([suite]);
+</script>

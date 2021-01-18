@@ -17,7 +17,7 @@
 
 		const mods = require.modules;
 
-		if (require.replace) path = require.replace(path);
+		if (require.replace) path = require.replace(path, require.base);
 		// Handle packages
 		if (path[0] !== '.' && path[0] !== '/') {
 			if (!mods[path]) throw new Error(`Module "${path}" not found.`);

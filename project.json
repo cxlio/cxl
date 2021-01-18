@@ -1,5 +1,5 @@
 {
-	"ignore": ["./docs"],
+	"ignore": ["./docs/"],
 	"typescript.tsconfig_pattern": "tsconfig(?:\\.test)?\\.json$",
 	"watch": {
 		"rules": {

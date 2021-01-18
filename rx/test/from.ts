@@ -19,4 +19,19 @@ export default suite('from', test => {
 			},
 		});
 	});
+	test('should create an observable from a promise', a => {
+		const done = a.async();
+		let count = 0;
+
+		from(new Promise(resolve => resolve(10))).subscribe({
+			next(val) {
+				a.equal(val, 10);
+				count++;
+			},
+			complete() {
+				a.equal(count, 1);
+				done();
+			},
+		});
+	});
 });

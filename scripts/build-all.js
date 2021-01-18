@@ -29,6 +29,7 @@ async function build(dir) {
 	);
 
 	stats.packages.push({
+		dir,
 		name: pkg.name,
 		package: pkg,
 		testReport,
@@ -44,7 +45,7 @@ module.exports = fs.readdir('.').then(async all => {
 
 	for (const dir of all) {
 		try {
-			await build(dir);
+			if (dir !== 'docgen' && dir !== 'tester') await build(dir);
 		} catch (e) {
 			console.error(`Failed to build: ${dir}`);
 			console.error(e);

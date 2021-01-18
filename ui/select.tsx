@@ -87,11 +87,11 @@ export class Option extends Component {
 	private $value?: string;
 
 	@Attribute()
-	get value(): string {
+	get value(): any {
 		return this.$value === undefined ? this.textContent || '' : this.$value;
 	}
 
-	set value(val: string) {
+	set value(val: any) {
 		this.$value = val;
 	}
 

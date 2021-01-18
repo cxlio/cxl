@@ -1,7 +1,7 @@
 import { Observable, from, map } from '@cxl/rx';
 import { basename, dirname, join, resolve } from 'path';
 import { colors } from './colors.js';
-import { exec } from 'child_process';
+import { SpawnOptions, spawn } from 'child_process';
 import { readFileSync, promises as fs } from 'fs';
 
 require('source-map-support').install();
@@ -103,13 +103,14 @@ export function mkdirp(dir: string): Promise<any> {
 		.catch(() => mkdirp(resolve(dir, '..')).then(() => fs.mkdir(dir)));
 }
 
-export function sh(cmd: string, options = {}) {
-	return new Promise((resolve, reject) =>
-		exec(cmd, { encoding: 'utf8', ...options }, (err, out) => {
-			if (err) reject(err.message);
-			else resolve(out.trim());
-		})
-	);
+export function sh(cmd: string, options: SpawnOptions = {}) {
+	return new Promise((resolve, reject) => {
+		const proc = spawn(cmd, [], { shell: true, ...options });
+		let output = '';
+		proc.stdout?.on('data', data => (output += data?.toString() || ''));
+		proc.stderr?.on('data', data => (output += data?.toString() || ''));
+		proc.on('close', code => (code ? reject(output) : resolve(output)));
+	});
 }
 
 interface Parameter {

@@ -1,10 +1,14 @@
 import {
 	Observable,
 	Reference,
+	ReplaySubject,
 	Subject,
 	be,
+	filter,
+	first,
 	map,
 	of,
+	pipe,
 	tap,
 	toPromise,
 } from './index.js';
@@ -19,8 +23,14 @@ import filterSuite from './test/filter.js';
 import fromSuite from './test/from.js';
 import mergeSuite from './test/merge.js';
 import switchMapSuite from './test/switchMap.js';
+import reduceSuite from './test/reduce.js';
+import mergeMapSuite from './test/mergeMap.js';
+import takeSuite from './test/take.js';
+import publishLast from './test/publishLast.js';
+import finalizeSuite from './test/finalize.js';
+import zipSuite from './test/zip.js';
 
-import { suite } from '@cxl/spec';
+import { suite, spec } from '@cxl/spec';
 
 declare function setInterval(fn: () => void, interval?: number): number;
 declare function clearInterval(intervalId: number): void;
@@ -38,13 +48,19 @@ export default suite('rx', [
 	deferSuite,
 	distinctUntilChangedSuite,
 	filterSuite,
+	finalizeSuite,
 	fromSuite,
 	exhaustMapSuite,
 	mergeSuite,
+	mergeMapSuite,
 	concatSuite,
 	combineLatestSuite,
 	debounceTimeSuite,
+	reduceSuite,
 	switchMapSuite,
+	takeSuite,
+	publishLast,
+	zipSuite,
 	suite('Observable', test => {
 		test('constructor', a => {
 			const observable = new Observable(function subscribe(observer) {
@@ -458,6 +474,124 @@ export default suite('rx', [
 				done();
 			});
 			ref.next(true);
+		});
+	}),
+
+	spec('pipe', a => {
+		a.test('support for multiple operators', a => {
+			const v1 = be(1);
+			const p1 = pipe(
+				first(),
+				filter<number>(v => !!v),
+				tap(a => v1.next(a))
+			);
+			of(2).pipe(p1).subscribe();
+			a.equal(v1.value, 2);
+		});
+	}),
+
+	spec('ReplaySubject', a => {
+		a.should('add the observer before running subscription code', a => {
+			const subject = new ReplaySubject<number>();
+			subject.next(1);
+			const results: number[] = [];
+
+			subject.subscribe(value => {
+				results.push(value);
+				if (value < 3) {
+					subject.next(value + 1);
+				}
+			});
+
+			a.equal(results[0], 1);
+			a.equal(results[1], 2);
+			a.equal(results[2], 3);
+		});
+
+		a.should('replay values upon subscription', a => {
+			const done = a.async();
+			const subject = new ReplaySubject<number>();
+			const expects = [1, 2, 3];
+			let i = 0;
+			subject.next(1);
+			subject.next(2);
+			subject.next(3);
+			subject.subscribe(
+				(x: number) => {
+					a.equal(x, expects[i++]);
+					if (i === 3) {
+						subject.complete();
+					}
+				},
+				() => {
+					throw new Error('should not be called');
+				},
+				() => {
+					done();
+				}
+			);
+		});
+
+		a.should('replay values and complete', a => {
+			const done = a.async();
+			const subject = new ReplaySubject<number>();
+			const expects = [1, 2, 3];
+			let i = 0;
+			subject.next(1);
+			subject.next(2);
+			subject.next(3);
+			subject.complete();
+			subject.subscribe(
+				(x: number) => {
+					a.equal(x, expects[i++]);
+				},
+				undefined,
+				done
+			);
+		});
+
+		a.should('replay values and error', a => {
+			const done = a.async();
+			const subject = new ReplaySubject<number>();
+			const expects = [1, 2, 3];
+			let i = 0;
+			subject.next(1);
+			subject.next(2);
+			subject.next(3);
+			subject.error('fooey');
+			subject.subscribe(
+				(x: number) => {
+					a.equal(x, expects[i++]);
+				},
+				(err: any) => {
+					a.equal(err, 'fooey');
+					done();
+				}
+			);
+		});
+
+		a.should('only replay values within its buffer size', a => {
+			const done = a.async();
+			const subject = new ReplaySubject<number>(2);
+			const expects = [2, 3];
+			let i = 0;
+			subject.next(1);
+			subject.next(2);
+			subject.next(3);
+			subject.subscribe(
+				(x: number) => {
+					a.equal(x, expects[i++]);
+					if (i === 2) {
+						subject.complete();
+					}
+				},
+				() => {
+					throw new Error('should not be called');
+				},
+				() => {
+					done();
+				}
+			);
 		});
 	}),
 ]);

@@ -1,10 +1,10 @@
-import { Result, Test } from '@cxl/spec';
+import type { Result, Test } from '@cxl/spec';
 import type { TestResult } from './report';
 
 let output = '';
 
-function group(title: string) {
-	output += `<dl><dt>${title}</dt><dd><ul>`;
+function group(testId: number, title: string) {
+	output += `<dl><dt><a data-test="${testId}" href="#">${title}</a></dt><dd><ul>`;
 }
 
 function groupEnd() {
@@ -15,10 +15,10 @@ function error(msg: string | Error) {
 	output += '<li style="background-color:#ffcdd2">';
 	if (msg instanceof Error) {
 		output += `
-			<cxl-t subtitle>${msg.message}</cxl-t>
+			<p style="white-space:pre">${msg.message}</p>
 			<pre>${msg.stack}</pre>
 		`;
-	} else output += `<cxl-t subtitle>${msg}</cxl-t>`;
+	} else output += `<p style="white-space:pre">${msg}</p>`;
 	output += '</li>';
 }
 
@@ -38,7 +38,7 @@ function printError(fail: Result) {
 }
 
 function printResult(result: Result) {
-	output += result.success ? success() : failure(); //success(); //`${result.message} ${result.success ? success() : failure()}`;
+	output += result.success ? success() : failure();
 }
 
 function renderTestReport(test: Test) {
@@ -68,6 +68,7 @@ function renderTestReport(test: Test) {
 	}
 
 	group(
+		test.id,
 		`${test.name}${failureCount > 0 ? ` (${failureCount} failures)` : ''}`
 	);
 	results.forEach(r => {
@@ -80,6 +81,30 @@ function renderTestReport(test: Test) {
 	groupEnd();
 }
 
+function findTest(tests: Test[], id: number): Test | void {
+	for (const test of tests) {
+		if (test.id === id) return test;
+		const childTest = findTest(test.tests, id);
+		if (childTest) return childTest;
+	}
+}
+
+async function onClick(suite: Test[], ev: Event) {
+	const testId = (ev.target as HTMLElement)?.dataset.test;
+	if (testId) {
+		const test = findTest(suite, +testId);
+
+		if (test) {
+			console.log(`Running test "${test.name}"`);
+			test.results = [];
+			await test.run();
+			console.log(test.results);
+		}
+		ev.stopPropagation();
+		ev.preventDefault();
+	}
+}
+
 const browserRunner = {
 	async runSuite(suite: Test) {
 		await suite.run();
@@ -90,6 +115,7 @@ const browserRunner = {
 		await Promise.all(suites.map(suite => this.runSuite(suite)));
 		const container = document.createElement('cxl-content');
 		container.innerHTML = output;
+		container.addEventListener('click', ev => onClick(suites, ev));
 		document.body.appendChild(container);
 	},
 };

@@ -347,6 +347,23 @@ export default spec('ui', a => {
 				a.equal(select.value, '');
 			}
 		);
+
+		a.test('should support value types other than string', a => {
+			const el = (
+				<SelectBox>
+					<Option value={2}>2</Option>
+					<Option value={1}>1</Option>
+					<Option value={true}>1</Option>
+				</SelectBox>
+			) as SelectBox;
+
+			a.dom.appendChild(el);
+			a.equal(el.value, 2);
+			el.value = 1;
+			a.equal(el.selected?.value, 1);
+			el.value = true;
+			a.equal(el.selected?.value, true);
+		});
 	});
 
 	a.test('ripple', a => {

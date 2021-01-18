@@ -230,8 +230,9 @@ export class BehaviorSubject<T> extends Subject<T> {
 	}
 
 	protected onSubscribe(subscription: Subscriber<T>) {
+		const result = super.onSubscribe(subscription);
 		subscription.next(this.currentValue);
-		return super.onSubscribe(subscription);
+		return result;
 	}
 
 	next(val: T) {
@@ -245,15 +246,33 @@ export class BehaviorSubject<T> extends Subject<T> {
  * It buffers a set number of values and will emit those values immediately to any
  * new subscribers in addition to emitting new values to existing subscribers.
  */
-export class ReplaySubject<T> extends Subject<T> {
+export class ReplaySubject<T, ErrorT = any> extends Subject<T> {
 	private buffer: T[] = [];
-	constructor(public readonly bufferSize: number) {
+	private isComplete = false;
+	private hasError = false;
+	private lastError?: ErrorT;
+
+	constructor(public readonly bufferSize: number = Infinity) {
 		super();
 	}
 
 	protected onSubscribe(subscription: Subscriber<T>) {
+		const result = super.onSubscribe(subscription);
 		this.buffer.forEach(val => subscription.next(val));
-		return super.onSubscribe(subscription);
+		if (this.hasError) subscription.error(this.lastError as ErrorT);
+		else if (this.isComplete) subscription.complete();
+		return result;
+	}
+
+	complete() {
+		this.isComplete = true;
+		super.complete();
+	}
+
+	error(val: ErrorT) {
+		this.hasError = true;
+		this.lastError = val;
+		super.error(val);
 	}
 
 	next(val: T) {
@@ -457,6 +476,7 @@ export function reduce<T, T2>(
 			},
 			complete() {
 				subscriber.next(acc);
+				subscriber.complete();
 			},
 		};
 	});
@@ -815,10 +835,12 @@ export function combineLatest<T extends any[]>(
 export function finalize<T>(fn: () => void): Operator<T, T> {
 	return operator<T, T>((subscriber: Subscriber<T>) => ({
 		next: (val: T) => subscriber.next(val),
-		error: (e: any) => subscriber.error(e),
+		error: (e: any) => {
+			subscriber.error(e), fn();
+		},
 		complete() {
-			fn();
 			subscriber.complete();
+			fn();
 		},
 	}));
 }

@@ -784,18 +784,11 @@
               "name": "options",
               "flags": 0,
               "id": 42,
-              "value": "{}",
               "type": {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 105,
-                  "ch": 41
-                },
-                "kind": 34,
-                "name": "",
-                "flags": 0,
-                "children": []
-              }
+                "name": "SpawnOptions",
+                "kind": 6
+              },
+              "value": "{}"
             }
           ],
           "type": {
@@ -813,7 +806,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 112,
+            "line": 113,
             "ch": 1
           },
           "kind": 4,
@@ -824,7 +817,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 114,
+                "line": 115,
                 "ch": 21
               },
               "kind": 10,
@@ -840,7 +833,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 115,
+                "line": 116,
                 "ch": 14
               },
               "kind": 10,
@@ -856,7 +849,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 116,
+                "line": 117,
                 "ch": 19
               },
               "kind": 10,
@@ -872,7 +865,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 117,
+                "line": 118,
                 "ch": 16
               },
               "kind": 10,
@@ -882,7 +875,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 119,
+                  "line": 120,
                   "ch": 7
                 },
                 "kind": 5,
@@ -892,7 +885,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 119,
+                      "line": 120,
                       "ch": 7
                     },
                     "kind": 23,
@@ -902,7 +895,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 119,
+                      "line": 120,
                       "ch": 18
                     },
                     "kind": 23,
@@ -912,7 +905,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 119,
+                      "line": 120,
                       "ch": 30
                     },
                     "kind": 23,
@@ -925,7 +918,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 119,
+                "line": 120,
                 "ch": 40
               },
               "kind": 10,
@@ -941,7 +934,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 120,
+                "line": 121,
                 "ch": 15
               },
               "kind": 11,
@@ -957,7 +950,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 121,
+                    "line": 122,
                     "ch": 9
                   },
                   "kind": 9,
@@ -973,7 +966,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 121,
+                    "line": 122,
                     "ch": 26
                   },
                   "kind": 9,
@@ -993,7 +986,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 122,
+            "line": 123,
             "ch": 1
           },
           "kind": 8,
@@ -1004,7 +997,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 124,
+                "line": 125,
                 "ch": 29
               },
               "kind": 10,
@@ -1014,7 +1007,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 125,
+                  "line": 126,
                   "ch": 21
                 },
                 "kind": 15,
@@ -1031,7 +1024,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 142,
+                "line": 143,
                 "ch": 3
               },
               "kind": 14,
@@ -1042,7 +1035,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 144,
+                    "line": 145,
                     "ch": 13
                   },
                   "kind": 10,
@@ -1065,7 +1058,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 144,
+                "line": 145,
                 "ch": 41
               },
               "kind": 11,
@@ -1076,7 +1069,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 146,
+                    "line": 147,
                     "ch": 10
                   },
                   "kind": 9,
@@ -1086,7 +1079,7 @@
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 146,
+                      "line": 147,
                       "ch": 15
                     },
                     "kind": 15,
@@ -1109,7 +1102,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 148,
+                "line": 149,
                 "ch": 2
               },
               "kind": 11,
@@ -1120,7 +1113,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 150,
+                    "line": 151,
                     "ch": 15
                   },
                   "kind": 9,
@@ -1143,7 +1136,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 157,
+                "line": 158,
                 "ch": 2
               },
               "kind": 11,
@@ -1154,7 +1147,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 159,
+                    "line": 160,
                     "ch": 11
                   },
                   "kind": 9,
@@ -1177,7 +1170,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 167,
+                "line": 168,
                 "ch": 2
               },
               "kind": 11,
@@ -1188,7 +1181,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 169,
+                    "line": 170,
                     "ch": 7
                   },
                   "kind": 9,
@@ -1198,7 +1191,7 @@
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 169,
+                      "line": 170,
                       "ch": 12
                     },
                     "kind": 15,
@@ -1221,7 +1214,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 144,
+                "line": 145,
                 "ch": 13
               },
               "kind": 10,
@@ -1239,7 +1232,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 192,
+            "line": 193,
             "ch": 1
           },
           "kind": 16,
@@ -1257,7 +1250,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 198,
+                "line": 199,
                 "ch": 31
               },
               "kind": 3,
@@ -1274,7 +1267,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 200,
+                  "line": 201,
                   "ch": 11
                 },
                 "kind": 5,
@@ -1299,7 +1292,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 198,
+                "line": 199,
                 "ch": 40
               },
               "kind": 9,
@@ -1326,7 +1319,7 @@
           "id": 51,
           "source": {
             "fileName": "index.ts",
-            "line": 206,
+            "line": 207,
             "ch": 1
           },
           "kind": 8,
@@ -1336,7 +1329,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 208,
+                "line": 209,
                 "ch": 35
               },
               "kind": 10,
@@ -1352,7 +1345,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 209,
+                "line": 210,
                 "ch": 15
               },
               "kind": 10,
@@ -1362,7 +1355,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 210,
+                  "line": 211,
                   "ch": 7
                 },
                 "kind": 26,
@@ -1371,7 +1364,7 @@
                 "type": {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 210,
+                    "line": 211,
                     "ch": 13
                   },
                   "kind": 27,
@@ -1384,7 +1377,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 210,
+                "line": 211,
                 "ch": 38
               },
               "kind": 10,
@@ -1400,7 +1393,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 211,
+                "line": 212,
                 "ch": 18
               },
               "kind": 10,
@@ -1417,7 +1410,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 212,
+                "line": 213,
                 "ch": 46
               },
               "kind": 10,
@@ -1433,7 +1426,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 213,
+                "line": 214,
                 "ch": 15
               },
               "kind": 10,
@@ -1450,7 +1443,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 214,
+                "line": 215,
                 "ch": 17
               },
               "kind": 10,
@@ -1466,7 +1459,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 216,
+                "line": 217,
                 "ch": 32
               },
               "kind": 11,
@@ -1483,7 +1476,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 220,
+                "line": 221,
                 "ch": 2
               },
               "kind": 11,
@@ -1494,7 +1487,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 222,
+                    "line": 223,
                     "ch": 5
                   },
                   "kind": 9,
@@ -1510,7 +1503,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 222,
+                    "line": 223,
                     "ch": 21
                   },
                   "kind": 9,
@@ -1546,7 +1539,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 230,
+                "line": 231,
                 "ch": 2
               },
               "kind": 11,
@@ -1557,7 +1550,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 232,
+                    "line": 233,
                     "ch": 23
                   },
                   "kind": 9,
@@ -1580,7 +1573,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 235,
+                "line": 236,
                 "ch": 2
               },
               "kind": 11,
@@ -1603,7 +1596,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 266,
+                "line": 267,
                 "ch": 2
               },
               "kind": 11,
@@ -1613,7 +1606,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 268,
+                  "line": 269,
                   "ch": 26
                 },
                 "kind": 5,
