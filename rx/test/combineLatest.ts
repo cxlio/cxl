@@ -79,4 +79,18 @@ export default spec('combineLatest', it => {
 			);
 		}
 	);
+
+	it.should('work with empty and error', a => {
+		const e1 = cold('----------|'); //empty
+		const e1subs = '^     !';
+		const e2 = cold('------#', undefined, 'shazbot!'); //error
+		const e2subs = '^     !';
+		const expected = '------#';
+
+		const result = combineLatest(e1, e2).map(([x, y]) => x + y);
+
+		expectLog(a, result, expected);
+		a.equal(e1.subscriptions, e1subs);
+		a.equal(e2.subscriptions, e2subs);
+	});
 });

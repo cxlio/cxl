@@ -91,4 +91,33 @@ export default spec('zip', it => {
 		a.equal(e1.subscriptions, e1subs);
 		a.equal(e2.subscriptions, e2subs);
 	});
+
+	it.should('work with two sources that eventually raise errors', a => {
+		const e1 = cold('--w-----#----', { w: 1 }, 'err1');
+		const e1subs = '^       !';
+		const e2 = cold('-----z-----#-', { z: 2 }, 'err2');
+		const e2subs = '^       !';
+		const expected = '-----1,2--#';
+
+		expectLog(a, zip(e1, e2), expected);
+		a.equal(e1.subscriptions, e1subs);
+		a.equal(e2.subscriptions, e2subs);
+	});
+
+	it.should(
+		'return EMPTY if passed an empty array as the only argument',
+		a => {
+			const results: string[] = [];
+			zip().subscribe({
+				next: () => {
+					throw new Error('should not emit');
+				},
+				complete: () => {
+					results.push('done');
+				},
+			});
+
+			a.equal(results[0], 'done');
+		}
+	);
 });

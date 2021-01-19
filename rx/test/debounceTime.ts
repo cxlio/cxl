@@ -2,27 +2,48 @@ import {
 	catchError,
 	debounceTime,
 	of,
+	from,
+	merge,
 	tap,
 	throwError,
 	toPromise,
 } from '../index';
-import { suite } from '@cxl/spec';
+import { spec } from '@cxl/spec';
 
-export default suite('debounceTime', test => {
-	test('should debounce time asynchronously', async a => {
-		let fired = false;
+export default spec('debounceTime', it => {
+	it.should('debounce time asynchronously', async a => {
+		let fired = 0;
 		const promise = toPromise(
-			of(true).pipe(
-				debounceTime(100),
-				tap(() => (fired = true))
+			from([1, 2, 3]).pipe(
+				debounceTime(5),
+				tap(() => fired++)
 			)
 		);
-		a.equal(fired, false);
+		a.equal(fired, 0);
 		await promise;
-		a.equal(fired, true);
+		a.equal(fired, 1);
 	});
 
-	test('should propagate errors', a => {
+	it.should('cancel timeout if error', async a => {
+		let fired = 0;
+		const promise = merge(of(1), throwError(0))
+			.debounceTime(5)
+			.tap(() => fired++)
+			.catchError(e => ((fired = e), of(e)));
+		a.equal(fired, 0);
+		await promise;
+		a.equal(fired, 0);
+	});
+
+	it.should('complete if empty', async a => {
+		let fired = 0;
+		await from([])
+			.debounceTime(0)
+			.tap(() => fired++);
+		a.equal(fired, 0);
+	});
+
+	it.should('propagate errors', a => {
 		let fired = false;
 		throwError(true)
 			.pipe(

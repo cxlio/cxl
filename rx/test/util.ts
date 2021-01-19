@@ -88,11 +88,15 @@ class ColdObservable extends Observable<string> {
 				/(.)$/,
 				`($1${ev})`
 			);
-		else this.subscriptions += (diff > 1 ? ' '.repeat(diff - 1) : '') + ev;
+		else
+			this.subscriptions +=
+				(diff > 0
+					? ' '.repeat(diff - (this.subscriptions ? 1 : 0))
+					: '') + ev;
 		this.time = scheduler.time;
 	}
 
-	constructor(stream: string, values?: any) {
+	constructor(stream: string, values?: any, error?: any) {
 		super(subs => {
 			this.log('^');
 			const iter = stream[Symbol.iterator]();
@@ -101,7 +105,7 @@ class ColdObservable extends Observable<string> {
 
 				if (done) inner.unsubscribe();
 				else if (value === '|') subs.complete();
-				else if (value === '#') subs.error(value);
+				else if (value === '#') subs.error(error);
 				else if (value !== '-')
 					subs.next((values && values[value]) || value);
 			});
@@ -113,6 +117,6 @@ class ColdObservable extends Observable<string> {
 	}
 }
 
-export function cold(stream: string, values?: any) {
-	return new ColdObservable(stream, values);
+export function cold(stream: string, values?: any, error?: any) {
+	return new ColdObservable(stream, values, error);
 }

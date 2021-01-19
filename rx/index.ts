@@ -331,9 +331,7 @@ export function concat<R extends Observable<any>[]>(
 
 		onComplete();
 
-		return () => {
-			if (subscription) subscription.unsubscribe();
-		};
+		return () => subscription?.unsubscribe();
 	}) as any;
 }
 
@@ -463,6 +461,9 @@ export function is<T>(equalTo: T) {
 	return operator<T, boolean>(subs => (val: T) => subs.next(val === equalTo));
 }
 
+/**
+ * Applies an accumulator function over the source Observable, and returns the accumulated result when the source completes, given an optional seed value.
+ */
 export function reduce<T, T2>(
 	reduceFn: (acc: T2, val: T, i: number) => T2,
 	seed: T2
@@ -700,6 +701,9 @@ export function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
+/**
+ * Returns an observable that shares a single subscription to the underlying sequence containing only the last notification.
+ */
 export function publishLast<T>(): Operator<T, T> {
 	return (source: Observable<T>) => {
 		const subject = new Subject<T>();
@@ -833,9 +837,7 @@ export function combineLatest<T extends Observable<any>[]>(
 					for (const bucket of buffer)
 						if (!bucket || bucket.length === 0) return;
 
-					last = buffer.map((b, i) =>
-						b.length ? b.shift() : last[i]
-					);
+					last = buffer.map(b => b.shift());
 					subs.next(last);
 				}
 

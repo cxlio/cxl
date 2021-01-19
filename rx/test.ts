@@ -9,6 +9,7 @@ import {
 	map,
 	of,
 	pipe,
+	ref,
 	tap,
 	toPromise,
 } from './index.js';
@@ -474,18 +475,20 @@ export default suite('rx', [
 			const ref = new Reference<boolean>();
 			const done = a.async();
 
-			ref.first().subscribe(val => {
+			ref.subscribe(val => a.equal(val, true));
+			ref.next(true);
+			ref.subscribe(val => {
 				a.ok(val);
 				done();
 			});
-			ref.next(true);
+			ref.complete();
 		});
 
 		test('should throw if not initialized', a => {
-			const ref = new Reference<boolean>();
-			a.throws(() => ref.value);
-			ref.next(true);
-			a.equal(ref.value, true);
+			const r = ref<boolean>();
+			a.throws(() => r.value);
+			r.next(true);
+			a.equal(r.value, true);
 		});
 	}),
 
