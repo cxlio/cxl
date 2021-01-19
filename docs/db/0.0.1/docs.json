@@ -1,0 +1,1203 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 2,
+            "ch": 27
+          },
+          "kind": 2,
+          "name": "UID",
+          "flags": 1,
+          "id": 1,
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 4,
+            "ch": 25
+          },
+          "kind": 8,
+          "name": "Reference",
+          "flags": 1,
+          "id": 2,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 6,
+                "ch": 23
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 3
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 6,
+                "ch": 49
+              },
+              "kind": 10,
+              "name": "path",
+              "flags": 68,
+              "id": 4,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 7,
+                "ch": 23
+              },
+              "kind": 14,
+              "name": "constructor",
+              "flags": 0,
+              "id": 5,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 9,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "dir",
+                  "flags": 0,
+                  "id": 6,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 9,
+                    "ch": 25
+                  },
+                  "kind": 9,
+                  "name": "key",
+                  "flags": 64,
+                  "id": 7,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "id": 2,
+                "name": "Reference",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 3,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 17,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "next",
+              "flags": 4,
+              "id": 8,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 19,
+                    "ch": 6
+                  },
+                  "kind": 9,
+                  "name": "val",
+                  "flags": 0,
+                  "id": 9,
+                  "type": {
+                    "id": 3,
+                    "name": "T",
+                    "kind": 6
+                  }
+                }
+              ],
+              "type": {
+                "name": "Promise",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 22,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "ref",
+              "flags": 4,
+              "id": 10,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 24,
+                    "ch": 5
+                  },
+                  "kind": 3,
+                  "name": "K",
+                  "flags": 0,
+                  "id": 11
+                }
+              ],
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 24,
+                    "ch": 24
+                  },
+                  "kind": 9,
+                  "name": "key",
+                  "flags": 0,
+                  "id": 12,
+                  "type": {
+                    "id": 11,
+                    "name": "K",
+                    "kind": 6
+                  }
+                }
+              ],
+              "type": {
+                "id": 2,
+                "name": "Reference",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "",
+                    "kind": 21,
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 3,
+                        "name": "T",
+                        "kind": 6
+                      },
+                      {
+                        "id": 11,
+                        "name": "K",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 9,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "key",
+              "flags": 64,
+              "id": 7,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Observable",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 3,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 27,
+            "ch": 1
+          },
+          "kind": 2,
+          "name": "Collection",
+          "flags": 0,
+          "id": 13,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 29,
+                "ch": 16
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 14
+            }
+          ],
+          "type": {
+            "id": 13,
+            "name": "Reference",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "Record",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "id": 14,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 29,
+            "ch": 50
+          },
+          "kind": 2,
+          "name": "CollectionEvent",
+          "flags": 0,
+          "id": 15,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 30,
+                "ch": 21
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 16
+            }
+          ],
+          "type": {
+            "name": "ListEvent",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 2,
+                "name": "Reference",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 16,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 30,
+            "ch": 50
+          },
+          "kind": 2,
+          "name": "Snapshot",
+          "flags": 0,
+          "id": 17,
+          "type": {
+            "name": "firebase.database.DataSnapshot",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 31,
+            "ch": 47
+          },
+          "kind": 16,
+          "name": "getRef",
+          "flags": 0,
+          "id": 18,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 33,
+                "ch": 16
+              },
+              "kind": 9,
+              "name": "ref",
+              "flags": 0,
+              "id": 19,
+              "type": {
+                "id": 2,
+                "name": "Reference",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Reference",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 35,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "createCollection",
+          "flags": 0,
+          "id": 20,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 37,
+                "ch": 26
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 21
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 37,
+                "ch": 29
+              },
+              "kind": 9,
+              "name": "path",
+              "flags": 0,
+              "id": 22,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 38,
+                "ch": 14
+              },
+              "kind": 9,
+              "name": "ref$",
+              "flags": 0,
+              "id": 23,
+              "type": {
+                "name": "firebase.database.Query",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 39,
+                "ch": 31
+              },
+              "kind": 9,
+              "name": "getItem",
+              "flags": 0,
+              "id": 24,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 40,
+                  "ch": 9
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 25,
+                "type": {
+                  "id": 2,
+                  "name": "Reference",
+                  "kind": 6,
+                  "typeParameters": [
+                    {
+                      "id": 21,
+                      "name": "T",
+                      "kind": 6
+                    }
+                  ]
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 40,
+                      "ch": 11
+                    },
+                    "kind": 9,
+                    "name": "snap",
+                    "flags": 0,
+                    "id": 26,
+                    "type": {
+                      "name": "Snapshot",
+                      "kind": 6
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 40,
+                      "ch": 26
+                    },
+                    "kind": 9,
+                    "name": "path",
+                    "flags": 0,
+                    "id": 27,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "ListEvent",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 2,
+                    "name": "Reference",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 21,
+                        "name": "T",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 52,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "collection",
+          "flags": 1,
+          "id": 28,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 54,
+                "ch": 27
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 29
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 54,
+                "ch": 30
+              },
+              "kind": 9,
+              "name": "ref",
+              "flags": 0,
+              "id": 30,
+              "type": {
+                "id": 13,
+                "name": "Collection",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 29,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "ListEvent",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 2,
+                    "name": "Reference",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 29,
+                        "name": "T",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 60,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "mapValueCollection",
+          "flags": 1,
+          "id": 31,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 62,
+                "ch": 35
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 32
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 62,
+                "ch": 37
+              },
+              "kind": 3,
+              "name": "T2",
+              "flags": 0,
+              "id": 33
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 62,
+                "ch": 42
+              },
+              "kind": 9,
+              "name": "ref",
+              "flags": 0,
+              "id": 34,
+              "type": {
+                "id": 13,
+                "name": "Collection",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 32,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 63,
+                "ch": 20
+              },
+              "kind": 9,
+              "name": "refTo",
+              "flags": 0,
+              "id": 35,
+              "type": {
+                "id": 13,
+                "name": "Collection",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 33,
+                    "name": "T2",
+                    "kind": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "ListEvent",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 2,
+                    "name": "Reference",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 33,
+                        "name": "T2",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 69,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "mapCollection",
+          "flags": 1,
+          "id": 36,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 71,
+                "ch": 30
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 37
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 71,
+                "ch": 32
+              },
+              "kind": 3,
+              "name": "T2",
+              "flags": 0,
+              "id": 38
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 71,
+                "ch": 37
+              },
+              "kind": 9,
+              "name": "ref",
+              "flags": 0,
+              "id": 39,
+              "type": {
+                "id": 13,
+                "name": "Collection",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 37,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 72,
+                "ch": 20
+              },
+              "kind": 9,
+              "name": "refTo",
+              "flags": 0,
+              "id": 40,
+              "type": {
+                "id": 13,
+                "name": "Collection",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 38,
+                    "name": "T2",
+                    "kind": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "ListEvent",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 2,
+                    "name": "Reference",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 38,
+                        "name": "T2",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 78,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "push",
+          "flags": 1,
+          "id": 41,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 80,
+                "ch": 21
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 42
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 80,
+                "ch": 24
+              },
+              "kind": 9,
+              "name": "ref",
+              "flags": 0,
+              "id": 43,
+              "type": {
+                "id": 13,
+                "name": "Collection",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 42,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 80,
+                "ch": 43
+              },
+              "kind": 9,
+              "name": "initial",
+              "flags": 524288,
+              "id": 44,
+              "type": {
+                "id": 42,
+                "name": "T",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "id": 2,
+            "name": "Reference",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 42,
+                "name": "T",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 85,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "db",
+          "flags": 1,
+          "id": 45,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 87,
+                "ch": 19
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 46
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 87,
+                "ch": 22
+              },
+              "kind": 9,
+              "name": "path",
+              "flags": 0,
+              "id": 47,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "id": 2,
+            "name": "Reference",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 46,
+                "name": "T",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 89,
+            "ch": 1
+          },
+          "kind": 2,
+          "name": "BaseTypes",
+          "flags": 0,
+          "id": 48,
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 97,
+              "ch": 16
+            },
+            "kind": 5,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 97,
+                  "ch": 44
+                },
+                "kind": 23,
+                "name": "null",
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 97,
+            "ch": 50
+          },
+          "kind": 2,
+          "name": "AllowedProperties",
+          "flags": 0,
+          "id": 49,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 98,
+                "ch": 23
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 50
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 98,
+              "ch": 27
+            },
+            "kind": 0,
+            "name": "",
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 100,
+            "ch": 2
+          },
+          "kind": 16,
+          "name": "where",
+          "flags": 1,
+          "id": 51,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 102,
+                "ch": 22
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 52
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 102,
+                "ch": 24
+              },
+              "kind": 3,
+              "name": "K",
+              "flags": 0,
+              "id": 53
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 102,
+                "ch": 63
+              },
+              "kind": 9,
+              "name": "ref",
+              "flags": 0,
+              "id": 54,
+              "type": {
+                "id": 13,
+                "name": "Collection",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 52,
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 103,
+                "ch": 20
+              },
+              "kind": 9,
+              "name": "field",
+              "flags": 0,
+              "id": 55,
+              "type": {
+                "id": 53,
+                "name": "K",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 104,
+                "ch": 10
+              },
+              "kind": 9,
+              "name": "equalTo",
+              "flags": 0,
+              "id": 56,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 105,
+                  "ch": 9
+                },
+                "kind": 21,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 49,
+                    "name": "AllowedProperties",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 52,
+                        "name": "T",
+                        "kind": 6
+                      }
+                    ]
+                  },
+                  {
+                    "id": 53,
+                    "name": "K",
+                    "kind": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "ListEvent",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 2,
+                    "name": "Reference",
+                    "kind": 6,
+                    "typeParameters": [
+                      {
+                        "id": 52,
+                        "name": "T",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

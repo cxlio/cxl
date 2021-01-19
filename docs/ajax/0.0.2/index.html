@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+	<head><meta name="description" content="Documentation for @cxl/ajax" /><script>window.docgen={"activeVersion":"0.0.2","userScripts":[],"versions":["0.0.2"]};</script><script src="runtime.bundle.min.js"></script></head>
+	<link rel="stylesheet" href="styles.css" />
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
+	<cxl-application permanent><title>@cxl/ajax</title><cxl-appbar>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">@cxl/ajax</cxl-t><small>0.0.2</small>
+	</cxl-c>
+		<cxl-hr></cxl-hr>
+		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
+		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index-api.html#s21"><cxl-badge style="margin-right:12px">F</cxl-badge>get</cxl-router-item><cxl-router-item href="index-api.html#s18"><cxl-badge style="margin-right:12px">F</cxl-badge>request</cxl-router-item><cxl-router-item href="index-api.html#s24"><cxl-badge style="margin-right:12px">F</cxl-badge>xhr</cxl-router-item>
+		</cxl-navbar>
+	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">@cxl/ajax</a></cxl-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-path="index--AjaxOptions.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>AjaxOptions</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { AjaxOptions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/ajax&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--AjaxOptions.html#s4">contentType</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--AjaxOptions.html#s5">data</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--AjaxOptions.html#s3">method</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--AjaxOptions.html#s7">progress</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--AjaxOptions.html#s6">responseType</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--AjaxOptions.html#s2">url</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s4"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>contentType: string</cxl-t>
+		</cxl-c></cxl-card><a name="s5"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>data: string | Blob | ArrayBuffer</cxl-t>
+		</cxl-c></cxl-card><a name="s3"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>method: string</cxl-t>
+		</cxl-c></cxl-card><a name="s7"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>progress: (ev: ProgressEvent) => void</cxl-t>
+		</cxl-c></cxl-card><a name="s6"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>responseType: XMLHttpRequestResponseType</cxl-t>
+		</cxl-c></cxl-card><a name="s2"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>url: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s21">get</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s18">request</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s24">xhr</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s21"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>get&lt;T&gt;(url: string | <cxl-a href="index--AjaxOptions.html">AjaxOptions</cxl-a>): Observable&lt;<a href="#s22">T</a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>url: string | <cxl-a href="index--AjaxOptions.html">AjaxOptions</cxl-a></li></ul>
+		</cxl-c></cxl-card><a name="s18"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>request&lt;T&gt;(options: <cxl-a href="index--AjaxOptions.html">AjaxOptions</cxl-a>): Observable&lt;<a href="#s19">T</a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>options: <cxl-a href="index--AjaxOptions.html">AjaxOptions</cxl-a></li></ul>
+		</cxl-c></cxl-card><a name="s24"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>xhr(def: <cxl-a href="index--AjaxOptions.html">AjaxOptions</cxl-a>): Promise&lt;XMLHttpRequest&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>def: <cxl-a href="index--AjaxOptions.html">AjaxOptions</cxl-a></li></ul>
+		</cxl-c></cxl-card></template><template data-default="true" data-path="index.html"><cxl-t h2>@cxl/ajax</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fajax"><img src="https://badge.fury.io/js/%40cxl%2Fajax.svg" alt="npm version"></a></p>
+<p>ajax helper</p>
+<cxl-t h3>Project Details</cxl-t><ul>
+<li>Branch Version: <a href="https://npmjs.com/package/@cxl/ajax/v/0.0.2">0.0.2</a></li>
+<li>License: GPL-3.0</li>
+<li>Documentation: <a href="https://cxlio.github.io/cxl/ajax">Link</a></li>
+</ul>
+<cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/ajax
+</code></pre></template></cxl-router></cxl-page></cxl-application>

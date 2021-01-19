@@ -1,0 +1,3119 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 6,
+            "ch": 42
+          },
+          "kind": 8,
+          "name": "TestRunner",
+          "flags": 1,
+          "id": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 8,
+                "ch": 45
+              },
+              "kind": 10,
+              "name": "version",
+              "flags": 4,
+              "id": 2,
+              "value": "'0.0.1'",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 9,
+                "ch": 19
+              },
+              "kind": 10,
+              "name": "name",
+              "flags": 4,
+              "id": 3,
+              "value": "'@cxl/tester'",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 10,
+                "ch": 22
+              },
+              "kind": 10,
+              "name": "entryFile",
+              "flags": 4,
+              "id": 4,
+              "value": "'./test.js'",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 11,
+                "ch": 25
+              },
+              "kind": 10,
+              "name": "ignoreCoverage",
+              "flags": 4,
+              "id": 5,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 13,
+                "ch": 24
+              },
+              "kind": 10,
+              "name": "amd",
+              "flags": 4,
+              "id": 6,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 14,
+                "ch": 13
+              },
+              "kind": 10,
+              "name": "node",
+              "flags": 4,
+              "id": 7,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 15,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "firefox",
+              "flags": 4,
+              "id": 8,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 16,
+                "ch": 17
+              },
+              "kind": 11,
+              "name": "setup",
+              "flags": 4,
+              "id": 9,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 28,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "run",
+              "flags": 260,
+              "id": 10,
+              "parameters": [],
+              "type": {
+                "name": "Promise",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "void",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Application",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 42,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "app",
+          "flags": 0,
+          "id": 11,
+          "value": "new TestRunner()",
+          "type": {
+            "id": 1,
+            "name": "TestRunner",
+            "kind": 6
+          }
+        }
+      ]
+    },
+    {
+      "source": {
+        "fileName": "report.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "report.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 3,
+            "ch": 71
+          },
+          "kind": 4,
+          "name": "TestResult",
+          "flags": 1,
+          "id": 12,
+          "children": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 5,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "success",
+              "flags": 4,
+              "id": 13,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 6,
+                "ch": 18
+              },
+              "kind": 10,
+              "name": "message",
+              "flags": 4,
+              "id": 14,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 7,
+                "ch": 17
+              },
+              "kind": 10,
+              "name": "stack",
+              "flags": 4,
+              "id": 15,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 9,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "CoverageRange",
+          "flags": 1,
+          "id": 16,
+          "children": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 11,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "startOffset",
+              "flags": 4,
+              "id": 17,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 12,
+                "ch": 21
+              },
+              "kind": 10,
+              "name": "endOffset",
+              "flags": 4,
+              "id": 18,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 13,
+                "ch": 19
+              },
+              "kind": 10,
+              "name": "count",
+              "flags": 4,
+              "id": 19,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 15,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "TestReport",
+          "flags": 1,
+          "id": 20,
+          "children": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 17,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "name",
+              "flags": 4,
+              "id": 21,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 18,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "failureCount",
+              "flags": 4,
+              "id": 22,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 19,
+                "ch": 22
+              },
+              "kind": 10,
+              "name": "results",
+              "flags": 4,
+              "id": 23,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 20,
+                  "ch": 9
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 12,
+                  "name": "TestResult",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 20,
+                "ch": 23
+              },
+              "kind": 10,
+              "name": "tests",
+              "flags": 4,
+              "id": 24,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 21,
+                  "ch": 7
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 20,
+                  "name": "TestReport",
+                  "kind": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 22,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "FunctionCoverage",
+          "flags": 1,
+          "id": 25,
+          "children": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 24,
+                "ch": 35
+              },
+              "kind": 10,
+              "name": "functionName",
+              "flags": 4,
+              "id": 26,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 25,
+                "ch": 22
+              },
+              "kind": 10,
+              "name": "ranges",
+              "flags": 4,
+              "id": 27,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 26,
+                  "ch": 8
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 16,
+                  "name": "CoverageRange",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 26,
+                "ch": 25
+              },
+              "kind": 10,
+              "name": "isBlockCoverage",
+              "flags": 4,
+              "id": 28,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 28,
+            "ch": 1
+          },
+          "kind": 2,
+          "name": "Coverage",
+          "flags": 1,
+          "id": 29,
+          "type": {
+            "source": {
+              "fileName": "report.ts",
+              "line": 30,
+              "ch": 22
+            },
+            "kind": 15,
+            "name": "Array",
+            "flags": 0,
+            "type": {
+              "id": 30,
+              "name": "TestCoverage",
+              "kind": 6
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 30,
+            "ch": 38
+          },
+          "kind": 4,
+          "name": "Report",
+          "flags": 1,
+          "id": 31,
+          "children": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 32,
+                "ch": 25
+              },
+              "kind": 10,
+              "name": "success",
+              "flags": 4,
+              "id": 32,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 33,
+                "ch": 18
+              },
+              "kind": 10,
+              "name": "testReport",
+              "flags": 4,
+              "id": 33,
+              "type": {
+                "id": 20,
+                "name": "TestReport",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 34,
+                "ch": 24
+              },
+              "kind": 10,
+              "name": "coverage",
+              "flags": 4,
+              "id": 34,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 35,
+                  "ch": 11
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 35,
+                  "name": "TestCoverageReport",
+                  "kind": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "source": {
+            "fileName": "report.ts",
+            "line": 36,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "TestCoverage",
+          "flags": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 38,
+                "ch": 31
+              },
+              "kind": 10,
+              "name": "url",
+              "flags": 4,
+              "id": 36,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 39,
+                "ch": 13
+              },
+              "kind": 10,
+              "name": "functions",
+              "flags": 4,
+              "id": 37,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 40,
+                  "ch": 11
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 25,
+                  "name": "FunctionCoverage",
+                  "kind": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "source": {
+            "fileName": "report.ts",
+            "line": 41,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "TestCoverageReport",
+          "flags": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 43,
+                "ch": 37
+              },
+              "kind": 10,
+              "name": "url",
+              "flags": 4,
+              "id": 38,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 44,
+                "ch": 13
+              },
+              "kind": 10,
+              "name": "functions",
+              "flags": 4,
+              "id": 39,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 45,
+                  "ch": 11
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 25,
+                  "name": "FunctionCoverage",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 45,
+                "ch": 31
+              },
+              "kind": 10,
+              "name": "functionTotal",
+              "flags": 4,
+              "id": 40,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 46,
+                "ch": 24
+              },
+              "kind": 10,
+              "name": "functionCovered",
+              "flags": 4,
+              "id": 41,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 47,
+                "ch": 26
+              },
+              "kind": 10,
+              "name": "blockTotal",
+              "flags": 4,
+              "id": 42,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 48,
+                "ch": 20
+              },
+              "kind": 10,
+              "name": "blockCovered",
+              "flags": 4,
+              "id": 43,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 50,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "calculateCoverage",
+          "flags": 0,
+          "id": 44,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 52,
+                "ch": 27
+              },
+              "kind": 9,
+              "name": "coverage",
+              "flags": 0,
+              "id": 45,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 52,
+                  "ch": 36
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 30,
+                  "name": "TestCoverage",
+                  "kind": 6
+                }
+              }
+            }
+          ],
+          "type": {
+            "name": "Array",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 35,
+                "name": "TestCoverageReport",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 77,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "translateRanges",
+          "flags": 0,
+          "id": 46,
+          "type": {
+            "source": {
+              "fileName": "report.ts",
+              "line": 83,
+              "ch": 2
+            },
+            "kind": 15,
+            "name": "Array",
+            "flags": 0,
+            "type": {
+              "id": 30,
+              "name": "TestCoverage",
+              "kind": 6
+            }
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 79,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "sourceMap",
+              "flags": 0,
+              "id": 47,
+              "type": {
+                "name": "SourceMap",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 80,
+                "ch": 22
+              },
+              "kind": 9,
+              "name": "url",
+              "flags": 0,
+              "id": 48,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 81,
+                "ch": 13
+              },
+              "kind": 9,
+              "name": "functions",
+              "flags": 0,
+              "id": 49,
+              "type": {
+                "source": {
+                  "fileName": "report.ts",
+                  "line": 82,
+                  "ch": 11
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 25,
+                  "name": "FunctionCoverage",
+                  "kind": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 135,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "generateCoverageReport",
+          "flags": 256,
+          "id": 50,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 137,
+                "ch": 38
+              },
+              "kind": 9,
+              "name": "coverage",
+              "flags": 0,
+              "id": 51,
+              "type": {
+                "id": 29,
+                "name": "Coverage",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "Array",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 35,
+                    "name": "TestCoverageReport",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 162,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "renderTestReport",
+          "flags": 0,
+          "id": 52,
+          "type": {
+            "id": 20,
+            "name": "TestReport",
+            "kind": 6
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 164,
+                "ch": 26
+              },
+              "kind": 9,
+              "name": "test",
+              "flags": 0,
+              "id": 53,
+              "type": {
+                "name": "Test",
+                "kind": 6
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "report.ts",
+            "line": 194,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "generateReport",
+          "flags": 257,
+          "id": 54,
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 31,
+                "name": "Report",
+                "kind": 6
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 196,
+                "ch": 37
+              },
+              "kind": 9,
+              "name": "suite",
+              "flags": 0,
+              "id": 55,
+              "type": {
+                "name": "Test",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "report.ts",
+                "line": 197,
+                "ch": 13
+              },
+              "kind": 9,
+              "name": "v8Coverage",
+              "flags": 524288,
+              "id": 56,
+              "type": {
+                "id": 29,
+                "name": "Coverage",
+                "kind": 6
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": {
+        "fileName": "runner-node.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "runner-node.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "runner-node.ts",
+            "line": 6,
+            "ch": 55
+          },
+          "kind": 16,
+          "name": "post",
+          "flags": 0,
+          "id": 57,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-node.ts",
+                "line": 8,
+                "ch": 14
+              },
+              "kind": 9,
+              "name": "session",
+              "flags": 0,
+              "id": 58,
+              "type": {
+                "name": "inspector.Session",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-node.ts",
+                "line": 8,
+                "ch": 41
+              },
+              "kind": 9,
+              "name": "msg",
+              "flags": 0,
+              "id": 59,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-node.ts",
+                "line": 8,
+                "ch": 54
+              },
+              "kind": 9,
+              "name": "params",
+              "flags": 0,
+              "id": 60,
+              "value": "{}",
+              "type": {
+                "source": {
+                  "fileName": "runner-node.ts",
+                  "line": 8,
+                  "ch": 63
+                },
+                "kind": 34,
+                "name": "",
+                "flags": 0,
+                "children": []
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "unknown",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-node.ts",
+            "line": 14,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "recordCoverage",
+          "flags": 256,
+          "id": 61,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-node.ts",
+                "line": 16,
+                "ch": 30
+              },
+              "kind": 9,
+              "name": "session",
+              "flags": 0,
+              "id": 62,
+              "type": {
+                "name": "inspector.Session",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-node.ts",
+                "line": 17,
+                "ch": 28
+              },
+              "kind": 9,
+              "name": "cb",
+              "flags": 0,
+              "id": 63,
+              "type": {
+                "source": {
+                  "fileName": "runner-node.ts",
+                  "line": 18,
+                  "ch": 4
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 64,
+                "type": {
+                  "name": "Promise",
+                  "kind": 6,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  ]
+                },
+                "parameters": []
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 29,
+                "name": "Coverage",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-node.ts",
+            "line": 27,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "runSuite",
+          "flags": 0,
+          "id": 65,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-node.ts",
+                "line": 29,
+                "ch": 18
+              },
+              "kind": 9,
+              "name": "suitePath",
+              "flags": 0,
+              "id": 66,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "Test",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-node.ts",
+            "line": 32,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "runNode",
+          "flags": 769,
+          "id": 67,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-node.ts",
+                "line": 34,
+                "ch": 38
+              },
+              "kind": 9,
+              "name": "app",
+              "flags": 0,
+              "id": 68,
+              "type": {
+                "id": 1,
+                "name": "TestRunner",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 31,
+                "name": "Report",
+                "kind": 6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": {
+        "fileName": "runner-puppeteer.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "runner-puppeteer.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 6,
+            "ch": 59
+          },
+          "kind": 4,
+          "name": "Output",
+          "flags": 0,
+          "id": 69,
+          "children": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 8,
+                "ch": 18
+              },
+              "kind": 10,
+              "name": "path",
+              "flags": 4,
+              "id": 70,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 9,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "source",
+              "flags": 4,
+              "id": 71,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 11,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "startTracing",
+          "flags": 256,
+          "id": 72,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 13,
+                "ch": 28
+              },
+              "kind": 9,
+              "name": "page",
+              "flags": 0,
+              "id": 73,
+              "type": {
+                "name": "Page",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 20,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "handleConsole",
+          "flags": 0,
+          "id": 74,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 22,
+                "ch": 23
+              },
+              "kind": 9,
+              "name": "msg",
+              "flags": 0,
+              "id": 75,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 22,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "app",
+              "flags": 0,
+              "id": 76,
+              "type": {
+                "id": 1,
+                "name": "TestRunner",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 27,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "openPage",
+          "flags": 256,
+          "id": 77,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 29,
+                "ch": 24
+              },
+              "kind": 9,
+              "name": "browser",
+              "flags": 0,
+              "id": 78,
+              "type": {
+                "name": "Browser",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "Page",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 32,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "respond",
+          "flags": 256,
+          "id": 79,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 34,
+                "ch": 23
+              },
+              "kind": 9,
+              "name": "req",
+              "flags": 0,
+              "id": 80,
+              "type": {
+                "name": "Request",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 34,
+                "ch": 36
+              },
+              "kind": 9,
+              "name": "sources",
+              "flags": 0,
+              "id": 81,
+              "type": {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 34,
+                  "ch": 45
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 69,
+                  "name": "Output",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 34,
+                "ch": 55
+              },
+              "kind": 9,
+              "name": "url",
+              "flags": 0,
+              "id": 82,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 49,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "handleRequest",
+          "flags": 256,
+          "id": 83,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 51,
+                "ch": 29
+              },
+              "kind": 9,
+              "name": "sources",
+              "flags": 0,
+              "id": 84,
+              "type": {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 51,
+                  "ch": 37
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 69,
+                  "name": "Output",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 51,
+                "ch": 47
+              },
+              "kind": 9,
+              "name": "req",
+              "flags": 0,
+              "id": 85,
+              "type": {
+                "name": "Request",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 64,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "amdRunner",
+          "flags": 256,
+          "id": 86,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 66,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "page",
+              "flags": 0,
+              "id": 87,
+              "type": {
+                "name": "Page",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 66,
+                "ch": 36
+              },
+              "kind": 9,
+              "name": "sources",
+              "flags": 0,
+              "id": 88,
+              "type": {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 66,
+                  "ch": 45
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 69,
+                  "name": "Output",
+                  "kind": 6
+                }
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "Test",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 80,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "cjsRunner",
+          "flags": 256,
+          "id": 89,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 82,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "page",
+              "flags": 0,
+              "id": 90,
+              "type": {
+                "name": "Page",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 82,
+                "ch": 36
+              },
+              "kind": 9,
+              "name": "sources",
+              "flags": 0,
+              "id": 91,
+              "type": {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 82,
+                  "ch": 45
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 69,
+                  "name": "Output",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 82,
+                "ch": 55
+              },
+              "kind": 9,
+              "name": "app",
+              "flags": 0,
+              "id": 92,
+              "type": {
+                "id": 1,
+                "name": "TestRunner",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 104,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "Range",
+          "flags": 0,
+          "id": 93,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 106,
+                "ch": 15
+              },
+              "kind": 9,
+              "name": "startOffset",
+              "flags": 0,
+              "id": 94,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 106,
+                "ch": 35
+              },
+              "kind": 9,
+              "name": "endOffset",
+              "flags": 0,
+              "id": 95,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 106,
+                "ch": 54
+              },
+              "kind": 9,
+              "name": "count",
+              "flags": 0,
+              "id": 96,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "runner-puppeteer.ts",
+              "line": 107,
+              "ch": 7
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 107,
+                  "ch": 9
+                },
+                "kind": 0,
+                "name": "startOffset",
+                "flags": 0,
+                "id": 97,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 108,
+                  "ch": 14
+                },
+                "kind": 0,
+                "name": "endOffset",
+                "flags": 0,
+                "id": 98,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 109,
+                  "ch": 12
+                },
+                "kind": 0,
+                "name": "count",
+                "flags": 0,
+                "id": 99,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 107,
+                  "ch": 9
+                },
+                "kind": 0,
+                "name": "startOffset",
+                "flags": 0,
+                "id": 97,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 108,
+                  "ch": 14
+                },
+                "kind": 0,
+                "name": "endOffset",
+                "flags": 0,
+                "id": 98,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 109,
+                  "ch": 12
+                },
+                "kind": 0,
+                "name": "count",
+                "flags": 0,
+                "id": 99,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 112,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "generateRanges",
+          "flags": 0,
+          "id": 100,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 114,
+                "ch": 24
+              },
+              "kind": 9,
+              "name": "entry",
+              "flags": 0,
+              "id": 101,
+              "type": {
+                "name": "CoverageEntry",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Array",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 107,
+                  "ch": 7
+                },
+                "kind": 34,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 107,
+                      "ch": 9
+                    },
+                    "kind": 0,
+                    "name": "startOffset",
+                    "flags": 0,
+                    "id": 97,
+                    "type": {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 108,
+                      "ch": 14
+                    },
+                    "kind": 0,
+                    "name": "endOffset",
+                    "flags": 0,
+                    "id": 98,
+                    "type": {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 109,
+                      "ch": 12
+                    },
+                    "kind": 0,
+                    "name": "count",
+                    "flags": 0,
+                    "id": 99,
+                    "type": {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 107,
+                      "ch": 9
+                    },
+                    "kind": 0,
+                    "name": "startOffset",
+                    "flags": 0,
+                    "id": 97,
+                    "type": {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 108,
+                      "ch": 14
+                    },
+                    "kind": 0,
+                    "name": "endOffset",
+                    "flags": 0,
+                    "id": 98,
+                    "type": {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 109,
+                      "ch": 12
+                    },
+                    "kind": 0,
+                    "name": "count",
+                    "flags": 0,
+                    "id": 99,
+                    "type": {
+                      "name": "number",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 128,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "generateCoverage",
+          "flags": 256,
+          "id": 102,
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 133,
+                  "ch": 11
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 30,
+                  "name": "TestCoverage",
+                  "kind": 6
+                }
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 130,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "page",
+              "flags": 0,
+              "id": 103,
+              "type": {
+                "name": "Page",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 131,
+                "ch": 12
+              },
+              "kind": 9,
+              "name": "sources",
+              "flags": 0,
+              "id": 104,
+              "type": {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 132,
+                  "ch": 9
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 69,
+                  "name": "Output",
+                  "kind": 6
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 148,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "runPuppeteer",
+          "flags": 769,
+          "id": 105,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "runner-puppeteer.ts",
+                "line": 150,
+                "ch": 43
+              },
+              "kind": 9,
+              "name": "app",
+              "flags": 0,
+              "id": 106,
+              "type": {
+                "id": 1,
+                "name": "TestRunner",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 31,
+                "name": "Report",
+                "kind": 6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": {
+        "fileName": "report-stdout.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "report-stdout.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "report-stdout.ts",
+            "line": 7,
+            "ch": 21
+          },
+          "kind": 16,
+          "name": "printError",
+          "flags": 0,
+          "id": 107,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report-stdout.ts",
+                "line": 9,
+                "ch": 20
+              },
+              "kind": 9,
+              "name": "name",
+              "flags": 0,
+              "id": 108,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "report-stdout.ts",
+                "line": 9,
+                "ch": 33
+              },
+              "kind": 9,
+              "name": "fail",
+              "flags": 0,
+              "id": 109,
+              "type": {
+                "id": 12,
+                "name": "TestResult",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-stdout.ts",
+            "line": 13,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "printTest",
+          "flags": 0,
+          "id": 110,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report-stdout.ts",
+                "line": 15,
+                "ch": 19
+              },
+              "kind": 9,
+              "name": "test",
+              "flags": 0,
+              "id": 111,
+              "type": {
+                "id": 20,
+                "name": "TestReport",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Array",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 12,
+                "name": "TestResult",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-stdout.ts",
+            "line": 29,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "printCoverage",
+          "flags": 0,
+          "id": 112,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report-stdout.ts",
+                "line": 31,
+                "ch": 23
+              },
+              "kind": 9,
+              "name": "coverage",
+              "flags": 0,
+              "id": 113,
+              "type": {
+                "source": {
+                  "fileName": "report-stdout.ts",
+                  "line": 31,
+                  "ch": 32
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 35,
+                  "name": "TestCoverageReport",
+                  "kind": 6
+                }
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-stdout.ts",
+            "line": 39,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "generate",
+          "flags": 513,
+          "id": 114,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report-stdout.ts",
+                "line": 41,
+                "ch": 33
+              },
+              "kind": 9,
+              "name": "report",
+              "flags": 0,
+              "id": 115,
+              "type": {
+                "id": 31,
+                "name": "Report",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        }
+      ]
+    },
+    {
+      "source": {
+        "fileName": "report-html.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "report-html.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "report-html.ts",
+            "line": 4,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "STYLES",
+          "flags": 0,
+          "id": 116,
+          "value": "`<style>\n\tbody { font-size: 16px; }\n\tem.covered { background-color: #a5d6a7 }\n\tem { background-color: #ef9a9a; }\n</style>`",
+          "type": {
+            "name": "\"<style>\\n\\tbody { font-size: 16px; }\\n\\tem.covered { background-color: #a5d6a7 }\\n\\tem { background-color: #ef9a9a; }\\n</style>\"",
+            "kind": 23,
+            "type": {
+              "name": "string",
+              "kind": 32,
+              "flags": 0
+            },
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-html.ts",
+            "line": 10,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "HEADER",
+          "flags": 0,
+          "id": 117,
+          "value": "`<!DOCTYPE html>\n\t<head><title>Test Report</title></head>\n`",
+          "type": {
+            "name": "\"<!DOCTYPE html>\\n\\t<head><title>Test Report</title></head>\\n\"",
+            "kind": 23,
+            "type": {
+              "name": "string",
+              "kind": 32,
+              "flags": 0
+            },
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-html.ts",
+            "line": 13,
+            "ch": 3
+          },
+          "kind": 1,
+          "name": "INDEX",
+          "flags": 0,
+          "id": 118,
+          "value": "''",
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-html.ts",
+            "line": 13,
+            "ch": 15
+          },
+          "kind": 2,
+          "name": "Tag",
+          "flags": 0,
+          "id": 119,
+          "type": {
+            "source": {
+              "fileName": "report-html.ts",
+              "line": 15,
+              "ch": 10
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "report-html.ts",
+                  "line": 15,
+                  "ch": 12
+                },
+                "kind": 10,
+                "name": "offset",
+                "flags": 4,
+                "id": 120,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "report-html.ts",
+                  "line": 15,
+                  "ch": 28
+                },
+                "kind": 10,
+                "name": "text",
+                "flags": 4,
+                "id": 121,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-html.ts",
+            "line": 15,
+            "ch": 44
+          },
+          "kind": 16,
+          "name": "renderSource",
+          "flags": 256,
+          "id": 122,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report-html.ts",
+                "line": 17,
+                "ch": 28
+              },
+              "kind": 9,
+              "name": "test",
+              "flags": 0,
+              "id": 123,
+              "type": {
+                "id": 35,
+                "name": "TestCoverageReport",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "`${string}</pre>`",
+                "kind": 0,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "report-html.ts",
+            "line": 51,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "generate",
+          "flags": 769,
+          "id": 124,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "report-html.ts",
+                "line": 53,
+                "ch": 39
+              },
+              "kind": 9,
+              "name": "report",
+              "flags": 0,
+              "id": 125,
+              "type": {
+                "id": 31,
+                "name": "Report",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": {
+        "fileName": "browser-runner.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "browser-runner.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 3,
+            "ch": 3
+          },
+          "kind": 1,
+          "name": "output",
+          "flags": 0,
+          "id": 126,
+          "value": "''",
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 3,
+            "ch": 16
+          },
+          "kind": 16,
+          "name": "group",
+          "flags": 0,
+          "id": 127,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 5,
+                "ch": 15
+              },
+              "kind": 9,
+              "name": "testId",
+              "flags": 0,
+              "id": 128,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 5,
+                "ch": 30
+              },
+              "kind": 9,
+              "name": "title",
+              "flags": 0,
+              "id": 129,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 7,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "groupEnd",
+          "flags": 0,
+          "id": 130,
+          "parameters": [],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 11,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "error",
+          "flags": 0,
+          "id": 131,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 13,
+                "ch": 15
+              },
+              "kind": 9,
+              "name": "msg",
+              "flags": 0,
+              "id": 132,
+              "type": {
+                "source": {
+                  "fileName": "browser-runner.ts",
+                  "line": 13,
+                  "ch": 19
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "Error",
+                    "kind": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 22,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "success",
+          "flags": 0,
+          "id": 133,
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          },
+          "parameters": []
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 26,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "failure",
+          "flags": 0,
+          "id": 134,
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          },
+          "parameters": []
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 30,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "printError",
+          "flags": 0,
+          "id": 135,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 32,
+                "ch": 20
+              },
+              "kind": 9,
+              "name": "fail",
+              "flags": 0,
+              "id": 136,
+              "type": {
+                "name": "Result",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 37,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "printResult",
+          "flags": 0,
+          "id": 137,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 39,
+                "ch": 21
+              },
+              "kind": 9,
+              "name": "result",
+              "flags": 0,
+              "id": 138,
+              "type": {
+                "name": "Result",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 41,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "renderTestReport",
+          "flags": 0,
+          "id": 139,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 43,
+                "ch": 26
+              },
+              "kind": 9,
+              "name": "test",
+              "flags": 0,
+              "id": 140,
+              "type": {
+                "name": "Test",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 81,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "findTest",
+          "flags": 0,
+          "id": 141,
+          "type": {
+            "source": {
+              "fileName": "browser-runner.ts",
+              "line": 83,
+              "ch": 45
+            },
+            "kind": 5,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "name": "Test",
+                "kind": 6
+              },
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 83,
+                "ch": 18
+              },
+              "kind": 9,
+              "name": "tests",
+              "flags": 0,
+              "id": 142,
+              "type": {
+                "source": {
+                  "fileName": "browser-runner.ts",
+                  "line": 83,
+                  "ch": 24
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "Test",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 83,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "id",
+              "flags": 0,
+              "id": 143,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 89,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "onClick",
+          "flags": 256,
+          "id": 144,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 91,
+                "ch": 23
+              },
+              "kind": 9,
+              "name": "suite",
+              "flags": 0,
+              "id": 145,
+              "type": {
+                "source": {
+                  "fileName": "browser-runner.ts",
+                  "line": 91,
+                  "ch": 29
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "Test",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "browser-runner.ts",
+                "line": 91,
+                "ch": 37
+              },
+              "kind": 9,
+              "name": "ev",
+              "flags": 0,
+              "id": 146,
+              "type": {
+                "name": "Event",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 107,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "browserRunner",
+          "flags": 0,
+          "id": 147,
+          "value": "{\n\tasync runSuite(suite: Test) {\n\t\tawait suite.run();\n\t\trenderTestReport(suite);\n\t},\n\n\tasync run(suites: Test[]) {\n\t\tawait Promise.all(suites.map(suite => this.runSuite(suite)));\n\t\tconst container = document.createElement('cxl-content');\n\t\tcontainer.innerHTML = output;\n\t\tcontainer.addEventListener('click', ev => onClick(suites, ev));\n\t\tdocument.body.appendChild(container);\n\t},\n}",
+          "type": {
+            "source": {
+              "fileName": "browser-runner.ts",
+              "line": 107,
+              "ch": 21
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "browser-runner.ts",
+                  "line": 107,
+                  "ch": 23
+                },
+                "kind": 11,
+                "name": "runSuite",
+                "flags": 260,
+                "id": 148,
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "browser-runner.ts",
+                      "line": 108,
+                      "ch": 16
+                    },
+                    "kind": 9,
+                    "name": "suite",
+                    "flags": 0,
+                    "id": 149,
+                    "type": {
+                      "name": "Test",
+                      "kind": 6
+                    }
+                  }
+                ],
+                "type": {
+                  "name": "Promise",
+                  "kind": 6,
+                  "typeParameters": [
+                    {
+                      "name": "void",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "source": {
+                  "fileName": "browser-runner.ts",
+                  "line": 111,
+                  "ch": 3
+                },
+                "kind": 11,
+                "name": "run",
+                "flags": 260,
+                "id": 150,
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "browser-runner.ts",
+                      "line": 113,
+                      "ch": 11
+                    },
+                    "kind": 9,
+                    "name": "suites",
+                    "flags": 0,
+                    "id": 151,
+                    "type": {
+                      "source": {
+                        "fileName": "browser-runner.ts",
+                        "line": 113,
+                        "ch": 18
+                      },
+                      "kind": 15,
+                      "name": "Array",
+                      "flags": 0,
+                      "type": {
+                        "name": "Test",
+                        "kind": 6
+                      }
+                    }
+                  }
+                ],
+                "type": {
+                  "name": "Promise",
+                  "kind": 6,
+                  "typeParameters": [
+                    {
+                      "name": "void",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

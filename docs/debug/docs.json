@@ -1,0 +1,686 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 0,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "start",
+          "flags": 0,
+          "id": 1,
+          "value": "performance.now()",
+          "type": {
+            "name": "number",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 0,
+            "ch": 32
+          },
+          "kind": 31,
+          "name": "console",
+          "flags": 0,
+          "id": 2,
+          "value": "window.console",
+          "type": {
+            "name": "Console",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 1,
+            "ch": 26
+          },
+          "kind": 16,
+          "name": "notify",
+          "flags": 0,
+          "id": 3,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 3,
+                "ch": 16
+              },
+              "kind": 9,
+              "name": "method",
+              "flags": 0,
+              "id": 4,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 3,
+                  "ch": 23
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 5,
+                "type": {
+                  "name": "void",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 3,
+                      "ch": 25
+                    },
+                    "kind": 9,
+                    "name": "args",
+                    "flags": 262144,
+                    "id": 6,
+                    "type": {
+                      "source": {
+                        "fileName": "index.ts",
+                        "line": 3,
+                        "ch": 33
+                      },
+                      "kind": 15,
+                      "name": "Array",
+                      "flags": 0,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 4,
+              "ch": 7
+            },
+            "kind": 16,
+            "name": "",
+            "flags": 0,
+            "id": 7,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 4,
+                  "ch": 9
+                },
+                "kind": 9,
+                "name": "msg",
+                "flags": 0,
+                "id": 8,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 4,
+                  "ch": 21
+                },
+                "kind": 9,
+                "name": "args",
+                "flags": 262144,
+                "id": 9,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 4,
+                    "ch": 30
+                  },
+                  "kind": 15,
+                  "name": "Array",
+                  "flags": 0,
+                  "type": {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 32,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 13,
+            "ch": 12
+          },
+          "kind": 31,
+          "name": "log",
+          "flags": 1,
+          "id": 10,
+          "value": "notify(console.log.bind(console))",
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 4,
+              "ch": 7
+            },
+            "kind": 16,
+            "name": "",
+            "flags": 0,
+            "id": 7,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 4,
+                  "ch": 9
+                },
+                "kind": 9,
+                "name": "msg",
+                "flags": 0,
+                "id": 8,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 4,
+                  "ch": 21
+                },
+                "kind": 9,
+                "name": "args",
+                "flags": 262144,
+                "id": 9,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 4,
+                    "ch": 30
+                  },
+                  "kind": 15,
+                  "name": "Array",
+                  "flags": 0,
+                  "type": {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 32,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 14,
+            "ch": 12
+          },
+          "kind": 31,
+          "name": "warn",
+          "flags": 1,
+          "id": 11,
+          "value": "notify(console.warn.bind(console))",
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 4,
+              "ch": 7
+            },
+            "kind": 16,
+            "name": "",
+            "flags": 0,
+            "id": 7,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 4,
+                  "ch": 9
+                },
+                "kind": 9,
+                "name": "msg",
+                "flags": 0,
+                "id": 8,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 4,
+                  "ch": 21
+                },
+                "kind": 9,
+                "name": "args",
+                "flags": 262144,
+                "id": 9,
+                "type": {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 4,
+                    "ch": 30
+                  },
+                  "kind": 15,
+                  "name": "Array",
+                  "flags": 0,
+                  "type": {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 32,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 14,
+            "ch": 55
+          },
+          "kind": 2,
+          "name": "Return",
+          "flags": 0,
+          "id": 12,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 16,
+                "ch": 12
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 13
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 16,
+              "ch": 16
+            },
+            "kind": 18,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "id": 13,
+                "name": "T",
+                "kind": 6
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 16,
+                  "ch": 26
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 14,
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 16,
+                      "ch": 28
+                    },
+                    "kind": 9,
+                    "name": "args",
+                    "flags": 262144,
+                    "id": 15,
+                    "type": {
+                      "name": "any",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "ReturnType",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "T",
+                    "kind": 6
+                  }
+                ]
+              },
+              {
+                "name": "never",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 16,
+            "ch": 73
+          },
+          "kind": 16,
+          "name": "override",
+          "flags": 1,
+          "id": 16,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 18,
+                "ch": 25
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 17
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 18,
+                "ch": 27
+              },
+              "kind": 3,
+              "name": "K",
+              "flags": 0,
+              "id": 18
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 18,
+                "ch": 47
+              },
+              "kind": 9,
+              "name": "obj",
+              "flags": 0,
+              "id": 19,
+              "type": {
+                "id": 17,
+                "name": "T",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 19,
+                "ch": 8
+              },
+              "kind": 9,
+              "name": "fn",
+              "flags": 0,
+              "id": 20,
+              "type": {
+                "id": 18,
+                "name": "K",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 20,
+                "ch": 7
+              },
+              "kind": 9,
+              "name": "pre",
+              "flags": 0,
+              "id": 21,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 21,
+                  "ch": 5
+                },
+                "kind": 18,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 21,
+                      "ch": 5
+                    },
+                    "kind": 21,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 17,
+                        "name": "T",
+                        "kind": 6
+                      },
+                      {
+                        "id": 18,
+                        "name": "K",
+                        "kind": 6
+                      }
+                    ]
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 21,
+                      "ch": 18
+                    },
+                    "kind": 17,
+                    "name": "",
+                    "flags": 0,
+                    "id": 22,
+                    "type": {
+                      "name": "any",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "index.ts",
+                          "line": 21,
+                          "ch": 20
+                        },
+                        "kind": 9,
+                        "name": "arg",
+                        "flags": 262144,
+                        "id": 23,
+                        "type": {
+                          "name": "any",
+                          "kind": 32,
+                          "flags": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 21,
+                      "ch": 41
+                    },
+                    "kind": 21,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 17,
+                        "name": "T",
+                        "kind": 6
+                      },
+                      {
+                        "id": 18,
+                        "name": "K",
+                        "kind": 6
+                      }
+                    ]
+                  },
+                  {
+                    "name": "never",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 21,
+                "ch": 55
+              },
+              "kind": 9,
+              "name": "post",
+              "flags": 524288,
+              "id": 24,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 22,
+                  "ch": 7
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 25,
+                "type": {
+                  "name": "void",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 22,
+                      "ch": 17
+                    },
+                    "kind": 9,
+                    "name": "result",
+                    "flags": 0,
+                    "id": 26,
+                    "type": {
+                      "id": 12,
+                      "name": "Return",
+                      "kind": 6,
+                      "typeParameters": [
+                        {
+                          "source": {
+                            "fileName": "index.ts",
+                            "line": 22,
+                            "ch": 33
+                          },
+                          "kind": 21,
+                          "name": "",
+                          "flags": 0,
+                          "children": [
+                            {
+                              "id": 17,
+                              "name": "T",
+                              "kind": 6
+                            },
+                            {
+                              "id": 18,
+                              "name": "K",
+                              "kind": 6
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 22,
+                      "ch": 39
+                    },
+                    "kind": 9,
+                    "name": "args",
+                    "flags": 262144,
+                    "id": 27,
+                    "type": {
+                      "source": {
+                        "fileName": "index.ts",
+                        "line": 22,
+                        "ch": 48
+                      },
+                      "kind": 15,
+                      "name": "Array",
+                      "flags": 0,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,502 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 0,
+            "ch": 37
+          },
+          "kind": 4,
+          "name": "AjaxOptions",
+          "flags": 0,
+          "id": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 2,
+                "ch": 23
+              },
+              "kind": 10,
+              "name": "url",
+              "flags": 4,
+              "id": 2,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 3,
+                "ch": 13
+              },
+              "kind": 10,
+              "name": "method",
+              "flags": 4,
+              "id": 3,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 4,
+                "ch": 17
+              },
+              "kind": 10,
+              "name": "contentType",
+              "flags": 4,
+              "id": 4,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 5,
+                "ch": 22
+              },
+              "kind": 10,
+              "name": "data",
+              "flags": 4,
+              "id": 5,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 6,
+                  "ch": 7
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "Blob",
+                    "kind": 6
+                  },
+                  {
+                    "name": "ArrayBuffer",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 6,
+                "ch": 36
+              },
+              "kind": 10,
+              "name": "responseType",
+              "flags": 4,
+              "id": 6,
+              "type": {
+                "name": "XMLHttpRequestResponseType",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 7,
+                "ch": 43
+              },
+              "kind": 10,
+              "name": "progress",
+              "flags": 4,
+              "id": 7,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 8,
+                  "ch": 11
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 8,
+                "type": {
+                  "name": "void",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 8,
+                      "ch": 13
+                    },
+                    "kind": 9,
+                    "name": "ev",
+                    "flags": 0,
+                    "id": 9,
+                    "type": {
+                      "name": "ProgressEvent",
+                      "kind": 6
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 11,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "AjaxDefaults",
+          "flags": 0,
+          "id": 10,
+          "value": "{\n\tmethod: 'GET',\n\tcontentType: 'application/json',\n\tbaseURL: '',\n}",
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 11,
+              "ch": 20
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 11,
+                  "ch": 22
+                },
+                "kind": 0,
+                "name": "method",
+                "flags": 0,
+                "id": 11,
+                "value": "'GET'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 12,
+                  "ch": 15
+                },
+                "kind": 0,
+                "name": "contentType",
+                "flags": 0,
+                "id": 12,
+                "value": "'application/json'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 13,
+                  "ch": 33
+                },
+                "kind": 0,
+                "name": "baseURL",
+                "flags": 0,
+                "id": 13,
+                "value": "''",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 15,
+            "ch": 2
+          },
+          "kind": 16,
+          "name": "isJSON",
+          "flags": 0,
+          "id": 14,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 17,
+                "ch": 16
+              },
+              "kind": 9,
+              "name": "xhr",
+              "flags": 0,
+              "id": 15,
+              "type": {
+                "name": "XMLHttpRequest",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "",
+            "flags": 0,
+            "kind": 5,
+            "children": [
+              {
+                "name": "null",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "\"\"",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 20,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "parse",
+          "flags": 0,
+          "id": 16,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 22,
+                "ch": 15
+              },
+              "kind": 9,
+              "name": "xhr",
+              "flags": 0,
+              "id": 17,
+              "type": {
+                "name": "XMLHttpRequest",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "any",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 24,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "request",
+          "flags": 1,
+          "id": 18,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 26,
+                "ch": 24
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 19
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 26,
+                "ch": 27
+              },
+              "kind": 9,
+              "name": "options",
+              "flags": 0,
+              "id": 20,
+              "type": {
+                "id": 1,
+                "name": "AjaxOptions",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 19,
+                "name": "T",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 38,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "get",
+          "flags": 1,
+          "id": 21,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 40,
+                "ch": 20
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 22
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 40,
+                "ch": 23
+              },
+              "kind": 9,
+              "name": "url",
+              "flags": 0,
+              "id": 23,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 40,
+                  "ch": 27
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "id": 1,
+                    "name": "AjaxOptions",
+                    "kind": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 22,
+                "name": "T",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 43,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "xhr",
+          "flags": 1,
+          "id": 24,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 45,
+                "ch": 20
+              },
+              "kind": 9,
+              "name": "def",
+              "flags": 0,
+              "id": 25,
+              "type": {
+                "id": 1,
+                "name": "AjaxOptions",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "XMLHttpRequest",
+                "kind": 6
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

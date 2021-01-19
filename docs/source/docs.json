@@ -1,0 +1,967 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 2,
+            "ch": 74
+          },
+          "kind": 4,
+          "name": "Output",
+          "flags": 1,
+          "id": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 4,
+                "ch": 25
+              },
+              "kind": 10,
+              "name": "path",
+              "flags": 4,
+              "id": 2,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 5,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "source",
+              "flags": 4,
+              "id": 3,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 6,
+                "ch": 16
+              },
+              "kind": 10,
+              "name": "mtime",
+              "flags": 4,
+              "id": 4,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 8,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Position",
+          "flags": 1,
+          "id": 5,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 10,
+                "ch": 27
+              },
+              "kind": 10,
+              "name": "line",
+              "flags": 4,
+              "id": 6,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 11,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "column",
+              "flags": 4,
+              "id": 7,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 13,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Range",
+          "flags": 1,
+          "id": 8,
+          "docs": {
+            "content": [
+              {
+                "value": "Source code range, starts at 0."
+              }
+            ]
+          },
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 18,
+                "ch": 24
+              },
+              "kind": 10,
+              "name": "start",
+              "flags": 4,
+              "id": 9,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 19,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "end",
+              "flags": 4,
+              "id": 10,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 21,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "SourcePosition",
+          "flags": 1,
+          "id": 11,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 23,
+                "ch": 33
+              },
+              "kind": 10,
+              "name": "source",
+              "flags": 4,
+              "id": 12,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 24,
+                "ch": 16
+              },
+              "kind": 10,
+              "name": "line",
+              "flags": 4,
+              "id": 13,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 25,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "column",
+              "flags": 4,
+              "id": 14,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 27,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "RangePosition",
+          "flags": 1,
+          "id": 15,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 29,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "start",
+              "flags": 4,
+              "id": 16,
+              "type": {
+                "id": 11,
+                "name": "SourcePosition",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 30,
+                "ch": 23
+              },
+              "kind": 10,
+              "name": "end",
+              "flags": 4,
+              "id": 17,
+              "type": {
+                "id": 11,
+                "name": "SourcePosition",
+                "kind": 6
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 34,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "SOURCEMAP_REGEX",
+          "flags": 0,
+          "id": 18,
+          "value": "/\\/\\/# sourceMappingURL=(.+)/",
+          "type": {
+            "name": "RegExp",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 34,
+            "ch": 54
+          },
+          "kind": 16,
+          "name": "indexToPosition",
+          "flags": 1,
+          "id": 19,
+          "type": {
+            "id": 5,
+            "name": "Position",
+            "kind": 6
+          },
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 36,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "source",
+              "flags": 0,
+              "id": 20,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 36,
+                "ch": 47
+              },
+              "kind": 9,
+              "name": "index",
+              "flags": 0,
+              "id": 21,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 50,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "positionToIndex",
+          "flags": 1,
+          "id": 22,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 52,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "source",
+              "flags": 0,
+              "id": 23,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 52,
+                "ch": 47
+              },
+              "kind": 9,
+              "name": "pos",
+              "flags": 0,
+              "id": 24,
+              "type": {
+                "id": 5,
+                "name": "Position",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "number",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 63,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "indexToPosOne",
+          "flags": 0,
+          "id": 25,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 65,
+                "ch": 23
+              },
+              "kind": 9,
+              "name": "source",
+              "flags": 0,
+              "id": 26,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 65,
+                "ch": 38
+              },
+              "kind": 9,
+              "name": "index",
+              "flags": 0,
+              "id": 27,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "id": 5,
+            "name": "Position",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 69,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "getMappingsForRange",
+          "flags": 1,
+          "id": 28,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 88,
+                "ch": 36
+              },
+              "kind": 9,
+              "name": "sourceMap",
+              "flags": 0,
+              "id": 29,
+              "type": {
+                "name": "SourceMapConsumer",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 89,
+                "ch": 30
+              },
+              "kind": 9,
+              "name": "start",
+              "flags": 0,
+              "id": 30,
+              "type": {
+                "id": 5,
+                "name": "Position",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 90,
+                "ch": 17
+              },
+              "kind": 9,
+              "name": "end",
+              "flags": 0,
+              "id": 31,
+              "type": {
+                "id": 5,
+                "name": "Position",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Array",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "MappingItem",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 105,
+            "ch": 1
+          },
+          "kind": 8,
+          "name": "SourceMap",
+          "flags": 1,
+          "id": 32,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 107,
+                "ch": 24
+              },
+              "kind": 10,
+              "name": "path",
+              "flags": 4,
+              "id": 33,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 108,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "dir",
+              "flags": 4,
+              "id": 34,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 109,
+                "ch": 13
+              },
+              "kind": 10,
+              "name": "map",
+              "flags": 4,
+              "id": 35,
+              "type": {
+                "name": "SourceMapConsumer",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 110,
+                "ch": 25
+              },
+              "kind": 10,
+              "name": "raw",
+              "flags": 4,
+              "id": 36,
+              "type": {
+                "name": "RawSourceMap",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 111,
+                "ch": 20
+              },
+              "kind": 10,
+              "name": "mappings",
+              "flags": 4,
+              "id": 37,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 112,
+                  "ch": 10
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "MappingItem",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 112,
+                "ch": 25
+              },
+              "kind": 14,
+              "name": "constructor",
+              "flags": 0,
+              "id": 38,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 114,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "path",
+                  "flags": 0,
+                  "id": 39,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "id": 32,
+                "name": "SourceMap",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 118,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "load",
+              "flags": 260,
+              "id": 40,
+              "parameters": [],
+              "type": {
+                "name": "Promise",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 32,
+                    "name": "SourceMap",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 125,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "translateRange",
+              "flags": 4,
+              "id": 41,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 127,
+                  "ch": 46
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 15,
+                    "name": "RangePosition",
+                    "kind": 6
+                  },
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 127,
+                    "ch": 16
+                  },
+                  "kind": 9,
+                  "name": "source",
+                  "flags": 0,
+                  "id": 42,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 127,
+                    "ch": 31
+                  },
+                  "kind": 9,
+                  "name": "range",
+                  "flags": 0,
+                  "id": 43,
+                  "type": {
+                    "id": 8,
+                    "name": "Range",
+                    "kind": 6
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 160,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "getSourceMapPath",
+          "flags": 1,
+          "id": 44,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 162,
+                "ch": 33
+              },
+              "kind": 9,
+              "name": "source",
+              "flags": 0,
+              "id": 45,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 162,
+                "ch": 48
+              },
+              "kind": 9,
+              "name": "cwd",
+              "flags": 0,
+              "id": 46,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 165,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "getSourceMap",
+          "flags": 257,
+          "id": 47,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 167,
+                "ch": 35
+              },
+              "kind": 9,
+              "name": "sourcePath",
+              "flags": 0,
+              "id": 48,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "id": 32,
+                    "name": "SourceMap",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 173,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "ENTITIES_REGEX",
+          "flags": 0,
+          "id": 49,
+          "value": "/[&<>]/g",
+          "type": {
+            "name": "RegExp",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 173,
+            "ch": 32
+          },
+          "kind": 31,
+          "name": "ENTITIES_MAP",
+          "flags": 0,
+          "id": 50,
+          "value": "{\n\t\t'&': '&amp;',\n\t\t'<': '&lt;',\n\t\t'>': '&gt;',\n\t}",
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 174,
+              "ch": 15
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 174,
+                  "ch": 17
+                },
+                "kind": 0,
+                "name": "'&'",
+                "flags": 0,
+                "id": 51,
+                "value": "'&amp;'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 175,
+                  "ch": 15
+                },
+                "kind": 0,
+                "name": "'<'",
+                "flags": 0,
+                "id": 52,
+                "value": "'&lt;'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 176,
+                  "ch": 14
+                },
+                "kind": 0,
+                "name": "'>'",
+                "flags": 0,
+                "id": 53,
+                "value": "'&gt;'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 178,
+            "ch": 3
+          },
+          "kind": 16,
+          "name": "escapeHtml",
+          "flags": 1,
+          "id": 54,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 180,
+                "ch": 27
+              },
+              "kind": 9,
+              "name": "str",
+              "flags": 0,
+              "id": 55,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        }
+      ]
+    }
+  ]
+}

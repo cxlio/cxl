@@ -1,0 +1,652 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.tsx",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.tsx",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 16,
+            "ch": 47
+          },
+          "kind": 16,
+          "name": "onHeaderAction",
+          "flags": 0,
+          "id": 1,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 18,
+                "ch": 24
+              },
+              "kind": 9,
+              "name": "el",
+              "flags": 0,
+              "id": 2,
+              "type": {
+                "id": 3,
+                "name": "Th",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "MouseEvent",
+                    "kind": 6
+                  },
+                  {
+                    "name": "KeyboardEvent",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 24,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "onSort",
+          "flags": 0,
+          "id": 4,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 26,
+                "ch": 16
+              },
+              "kind": 9,
+              "name": "el",
+              "flags": 0,
+              "id": 5,
+              "type": {
+                "name": "HTMLElement",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 26,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "host",
+              "flags": 0,
+              "id": 6,
+              "type": {
+                "id": 3,
+                "name": "Th",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "\"asc\"",
+                    "kind": 23,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "flags": 0
+                  },
+                  {
+                    "name": "\"desc\"",
+                    "kind": 23,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "flags": 0
+                  },
+                  {
+                    "name": "\"none\"",
+                    "kind": 23,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "flags": 0
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "source": {
+            "fileName": "index.tsx",
+            "line": 36,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "Th",
+          "flags": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 82,
+                "ch": 35
+              },
+              "kind": 10,
+              "name": "eventType",
+              "flags": 4,
+              "id": 7,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 83,
+                  "ch": 12
+                },
+                "kind": 23,
+                "name": "'datatable.sort'",
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 83,
+                "ch": 30
+              },
+              "kind": 36,
+              "name": "width",
+              "flags": 4,
+              "id": 8,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 86,
+                "ch": 16
+              },
+              "kind": 36,
+              "name": "sortable",
+              "flags": 4,
+              "id": 9,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 89,
+                "ch": 18
+              },
+              "kind": 36,
+              "name": "'sort-order'",
+              "flags": 4,
+              "id": 10,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 92,
+                  "ch": 14
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 92,
+                      "ch": 14
+                    },
+                    "kind": 23,
+                    "name": "'asc'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 92,
+                      "ch": 22
+                    },
+                    "kind": 23,
+                    "name": "'desc'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 92,
+                      "ch": 31
+                    },
+                    "kind": 23,
+                    "name": "'none'",
+                    "flags": 0
+                  }
+                ]
+              },
+              "value": "'none'"
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-th"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 93,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "Table",
+          "flags": 1,
+          "id": 11,
+          "docs": {
+            "content": [
+              {
+                "value": "Data tables display sets of data across rows and columns."
+              },
+              {
+                "tag": "example",
+                "value": "<cxl-table>\n<cxl-tr>\n<cxl-th width=\"100px\">Header 1</cxl-th>\n<cxl-th>Header 2</cxl-th>\n<cxl-th>Header 3</cxl-th>\n<cxl-th>Header 4</cxl-th>\n</cxl-tr>\n<cxl-tr>\n<cxl-td>Cell 1</cxl-td>\n<cxl-td>Cell 2</cxl-td>\n<cxl-td>Cell 3</cxl-td>\n<cxl-td>Cell 4</cxl-td>\n</cxl-tr>\n</cxl-table>"
+              },
+              {
+                "tag": "see",
+                "value": "Td"
+              }
+            ],
+            "tagName": "cxl-table",
+            "role": "table"
+          },
+          "children": [],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 132,
+            "ch": 39
+          },
+          "kind": 35,
+          "name": "Cell",
+          "flags": 0,
+          "id": 12,
+          "children": [],
+          "docs": {
+            "role": "table-cell"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          },
+          "extendedBy": [
+            {
+              "id": 13,
+              "name": "Td",
+              "kind": 6
+            },
+            {
+              "id": 14,
+              "name": "CheckboxCell",
+              "kind": 6
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 152,
+            "ch": 31
+          },
+          "kind": 35,
+          "name": "Td",
+          "flags": 1,
+          "id": 13,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-td"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "id": 12,
+                "name": "Cell",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 155,
+            "ch": 31
+          },
+          "kind": 35,
+          "name": "CheckboxCell",
+          "flags": 1,
+          "id": 14,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 182,
+                "ch": 40
+              },
+              "kind": 10,
+              "name": "selectEvent",
+              "flags": 68,
+              "id": 15,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              },
+              "value": "'datatable.select'"
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 183,
+                "ch": 51
+              },
+              "kind": 36,
+              "name": "checked",
+              "flags": 4,
+              "id": 16,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "id": 12,
+                "name": "Cell",
+                "kind": 6
+              }
+            ]
+          },
+          "extendedBy": [
+            {
+              "id": 17,
+              "name": "CheckboxTd",
+              "kind": 6
+            },
+            {
+              "id": 18,
+              "name": "CheckboxTh",
+              "kind": 6
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 187,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "CheckboxTd",
+          "flags": 1,
+          "id": 17,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-td-checkbox"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "id": 14,
+                "name": "CheckboxCell",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 193,
+            "ch": 47
+          },
+          "kind": 35,
+          "name": "CheckboxTh",
+          "flags": 1,
+          "id": 18,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 199,
+                "ch": 46
+              },
+              "kind": 10,
+              "name": "selectEvent",
+              "flags": 68,
+              "id": 19,
+              "value": "'datatable.selectAll'",
+              "type": {
+                "name": "\"datatable.selectAll\"",
+                "kind": 23,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-th-checkbox"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "id": 14,
+                "name": "CheckboxCell",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 201,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "Tr",
+          "flags": 1,
+          "id": 20,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 217,
+                "ch": 35
+              },
+              "kind": 36,
+              "name": "selected",
+              "flags": 4,
+              "id": 21,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-tr",
+            "role": "row"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 220,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "TableHeader",
+          "flags": 1,
+          "id": 22,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-table-header"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 236,
+            "ch": 45
+          },
+          "kind": 35,
+          "name": "TableSelectedCount",
+          "flags": 1,
+          "id": 23,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 253,
+                "ch": 51
+              },
+              "kind": 36,
+              "name": "selected",
+              "flags": 4,
+              "id": 24,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

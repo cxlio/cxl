@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+	<head><meta name="description" content="Documentation for @cxl/validation" /><script>window.docgen={"activeVersion":"0.0.1","userScripts":[],"versions":["0.0.1"]};</script><script src="runtime.bundle.min.js"></script></head>
+	<link rel="stylesheet" href="styles.css" />
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
+	<cxl-application permanent><title>@cxl/validation</title><cxl-appbar>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">@cxl/validation</cxl-t><small>0.0.1</small>
+	</cxl-c>
+		<cxl-hr></cxl-hr>
+		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
+		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index-api.html#s1"><cxl-badge style="margin-right:12px">T</cxl-badge>ValidateFunction</cxl-router-item><cxl-router-item href="index-api.html#s6"><cxl-badge style="margin-right:12px">K</cxl-badge>ValidationMessage</cxl-router-item><cxl-router-item href="index-api.html#s20"><cxl-badge style="margin-right:12px">F</cxl-badge>email</cxl-router-item><cxl-router-item href="index-api.html#s18"><cxl-badge style="margin-right:12px">F</cxl-badge>required</cxl-router-item><cxl-router-item href="index-api.html#s13"><cxl-badge style="margin-right:12px">F</cxl-badge>validate</cxl-router-item>
+		</cxl-navbar>
+	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">@cxl/validation</a></cxl-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.tsx</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Constants
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s6">ValidationMessage</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s20">email</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s18">required</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s13">validate</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Type Alias
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s1">ValidateFunction</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Constants</cxl-t><a name="s6"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>ValidationMessage: { json: string, zipcode: string, equalTo: string, required: string, notZero: string, email: string } = <pre><code class="hljs">{
+	<span class="hljs-attribute">json</span>: <span class="hljs-string">&#x27;Invalid JSON value&#x27;</span>,
+	zipcode: <span class="hljs-string">&#x27;Please enter a valid zip code&#x27;</span>,
+	equalTo: <span class="hljs-string">&#x27;Values do not match&#x27;</span>,
+	required: <span class="hljs-string">&#x27;This field is required&#x27;</span>,
+	notZero: <span class="hljs-string">&#x27;Value cannot be zero&#x27;</span>,
+	email: <span class="hljs-string">&#x27;Please enter a valid email address&#x27;</span>,
+}</code></pre></cxl-t>
+		</cxl-c></cxl-card><cxl-t h5>Functions</cxl-t><a name="s20"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>email(val: string): string | boolean</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>val: string</li></ul>
+		</cxl-c></cxl-card><a name="s18"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>required(val: any): string | boolean</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>val: any</li></ul>
+		</cxl-c></cxl-card><a name="s13"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>validate(el: HTMLFormElement, ...validators: <cxl-a href="index-api.html#s1">ValidateFunction</cxl-a>&lt;any&gt;[]): (value: any) => void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>el: HTMLFormElement</li><li>...validators: <cxl-a href="index-api.html#s1">ValidateFunction</cxl-a>&lt;any&gt;[]</li></ul>
+		</cxl-c></cxl-card><cxl-t h5>Type Alias</cxl-t><a name="s1"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>ValidateFunction&lt;T&gt; = (val: <a href="#s2">T</a>) => string | true</cxl-t>
+		</cxl-c></cxl-card></template><template data-default="true" data-path="index.html"><cxl-t h2>@cxl/validation</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fvalidation"><img src="https://badge.fury.io/js/%40cxl%2Fvalidation.svg" alt="npm version"></a></p>
+<p>Input validation library</p>
+<cxl-t h3>Project Details</cxl-t><ul>
+<li>Branch Version: <a href="https://npmjs.com/package/@cxl/validation/v/0.0.1">0.0.1</a></li>
+<li>License: Apache-2.0</li>
+<li>Documentation: <a href="https://cxlio.github.io/cxl/validation">Link</a></li>
+</ul>
+<cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/validation
+</code></pre></template></cxl-router></cxl-page></cxl-application>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+	<head><meta name="description" content="Documentation for @cxl/tester" /><script>window.docgen={"activeVersion":"0.0.1","userScripts":[],"versions":["0.0.1"]};</script><script src="runtime.bundle.min.js"></script></head>
+	<link rel="stylesheet" href="styles.css" />
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
+	<cxl-application permanent><title>@cxl/tester</title><cxl-appbar>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">@cxl/tester</cxl-t><small>0.0.1</small>
+	</cxl-c>
+		<cxl-hr></cxl-hr>
+		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
+		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index--TestRunner.html"><cxl-badge style="margin-right:12px">C</cxl-badge>TestRunner</cxl-router-item><cxl-router-item href="browser-runner.html"><i>browser-runner.ts</i></cxl-router-item><cxl-router-item href="report-html.html"><i>report-html.ts</i></cxl-router-item><cxl-router-item href="report-html.html#s124"><cxl-badge style="margin-right:12px">F</cxl-badge>generate</cxl-router-item><cxl-router-item href="report-stdout.html"><i>report-stdout.ts</i></cxl-router-item><cxl-router-item href="report-stdout.html#s114"><cxl-badge style="margin-right:12px">F</cxl-badge>generate</cxl-router-item><cxl-router-item href="report.html"><i>report.ts</i></cxl-router-item><cxl-router-item href="report.html#s29"><cxl-badge style="margin-right:12px">T</cxl-badge>Coverage</cxl-router-item><cxl-router-item href="report--CoverageRange.html"><cxl-badge style="margin-right:12px">I</cxl-badge>CoverageRange</cxl-router-item><cxl-router-item href="report--FunctionCoverage.html"><cxl-badge style="margin-right:12px">I</cxl-badge>FunctionCoverage</cxl-router-item><cxl-router-item href="report--Report.html"><cxl-badge style="margin-right:12px">I</cxl-badge>Report</cxl-router-item><cxl-router-item href="report--TestCoverage.html"><cxl-badge style="margin-right:12px">I</cxl-badge>TestCoverage</cxl-router-item><cxl-router-item href="report--TestCoverageReport.html"><cxl-badge style="margin-right:12px">I</cxl-badge>TestCoverageReport</cxl-router-item><cxl-router-item href="report--TestReport.html"><cxl-badge style="margin-right:12px">I</cxl-badge>TestReport</cxl-router-item><cxl-router-item href="report--TestResult.html"><cxl-badge style="margin-right:12px">I</cxl-badge>TestResult</cxl-router-item><cxl-router-item href="report.html#s54"><cxl-badge style="margin-right:12px">F</cxl-badge>generateReport</cxl-router-item><cxl-router-item href="runner-node.html"><i>runner-node.ts</i></cxl-router-item><cxl-router-item href="runner-node.html#s67"><cxl-badge style="margin-right:12px">F</cxl-badge>runNode</cxl-router-item><cxl-router-item href="runner-puppeteer.html"><i>runner-puppeteer.ts</i></cxl-router-item><cxl-router-item href="runner-puppeteer.html#s105"><cxl-badge style="margin-right:12px">F</cxl-badge>runPuppeteer</cxl-router-item>
+		</cxl-navbar>
+	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">@cxl/tester</a></cxl-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-path="index--TestRunner.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span>TestRunner <cxl-t h6 inline>extends Application</cxl-t></cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { TestRunner } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Methods
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s10">run</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s9">setup</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s6">amd</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s4">entryFile</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s8">firefox</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s5">ignoreCoverage</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s3">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s7">node</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html#s2">version</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Methods</cxl-t><a name="s10"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>run(): Promise&lt;void&gt;</cxl-t>
+		</cxl-c></cxl-card><a name="s9"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>setup(): void</cxl-t>
+		</cxl-c></cxl-card><cxl-t h5>Properties</cxl-t><a name="s6"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>amd: boolean = false</cxl-t>
+		</cxl-c></cxl-card><a name="s4"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>entryFile: string = './test.js'</cxl-t>
+		</cxl-c></cxl-card><a name="s8"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>firefox: boolean = false</cxl-t>
+		</cxl-c></cxl-card><a name="s5"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>ignoreCoverage: boolean = false</cxl-t>
+		</cxl-c></cxl-card><a name="s3"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string = '@cxl/tester'</cxl-t>
+		</cxl-c></cxl-card><a name="s7"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>node: boolean = false</cxl-t>
+		</cxl-c></cxl-card><a name="s2"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>version: string = '0.0.1'</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Classes
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--TestRunner.html">TestRunner</cxl-a></cxl-c></cxl-grid></cxl-c></template><template  data-path="report--TestResult.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>TestResult</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { TestResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/report&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--TestResult.html#s14">message</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestResult.html#s15">stack</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestResult.html#s13">success</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s14"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>message: string</cxl-t>
+		</cxl-c></cxl-card><a name="s15"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>stack: string</cxl-t>
+		</cxl-c></cxl-card><a name="s13"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>success: boolean</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="report--CoverageRange.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>CoverageRange</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { CoverageRange } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/report&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--CoverageRange.html#s19">count</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--CoverageRange.html#s18">endOffset</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--CoverageRange.html#s17">startOffset</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s19"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>count: number</cxl-t>
+		</cxl-c></cxl-card><a name="s18"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>endOffset: number</cxl-t>
+		</cxl-c></cxl-card><a name="s17"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>startOffset: number</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="report--TestReport.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>TestReport</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { TestReport } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/report&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--TestReport.html#s22">failureCount</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestReport.html#s21">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestReport.html#s23">results</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestReport.html#s24">tests</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s22"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>failureCount: number</cxl-t>
+		</cxl-c></cxl-card><a name="s21"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
+		</cxl-c></cxl-card><a name="s23"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>results: <cxl-a href="report--TestResult.html">TestResult</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card><a name="s24"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>tests: <cxl-a href="report--TestReport.html">TestReport</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="report--FunctionCoverage.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>FunctionCoverage</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { FunctionCoverage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/report&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--FunctionCoverage.html#s26">functionName</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--FunctionCoverage.html#s28">isBlockCoverage</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--FunctionCoverage.html#s27">ranges</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s26"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>functionName: string</cxl-t>
+		</cxl-c></cxl-card><a name="s28"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>isBlockCoverage: boolean</cxl-t>
+		</cxl-c></cxl-card><a name="s27"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>ranges: <cxl-a href="report--CoverageRange.html">CoverageRange</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="report--Report.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Report</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Report } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/report&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--Report.html#s34">coverage</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--Report.html#s32">success</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--Report.html#s33">testReport</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s34"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>coverage: <cxl-a href="report--TestCoverageReport.html">TestCoverageReport</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card><a name="s32"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>success: boolean</cxl-t>
+		</cxl-c></cxl-card><a name="s33"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>testReport: <cxl-a href="report--TestReport.html">TestReport</cxl-a></cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="report--TestCoverage.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>TestCoverage</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { TestCoverage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/report&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--TestCoverage.html#s37">functions</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverage.html#s36">url</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s37"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>functions: <cxl-a href="report--FunctionCoverage.html">FunctionCoverage</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card><a name="s36"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>url: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="report--TestCoverageReport.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>TestCoverageReport</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { TestCoverageReport } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/report&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--TestCoverageReport.html#s43">blockCovered</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverageReport.html#s42">blockTotal</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverageReport.html#s41">functionCovered</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverageReport.html#s40">functionTotal</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverageReport.html#s39">functions</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverageReport.html#s38">url</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s43"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>blockCovered: number</cxl-t>
+		</cxl-c></cxl-card><a name="s42"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>blockTotal: number</cxl-t>
+		</cxl-c></cxl-card><a name="s41"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>functionCovered: number</cxl-t>
+		</cxl-c></cxl-card><a name="s40"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>functionTotal: number</cxl-t>
+		</cxl-c></cxl-card><a name="s39"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>functions: <cxl-a href="report--FunctionCoverage.html">FunctionCoverage</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card><a name="s38"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>url: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="report.html"><cxl-t h3><span style="float:right"></span>report.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report.html#s54">generateReport</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Interfaces
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report--CoverageRange.html">CoverageRange</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--FunctionCoverage.html">FunctionCoverage</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--Report.html">Report</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverage.html">TestCoverage</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestCoverageReport.html">TestCoverageReport</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestReport.html">TestReport</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="report--TestResult.html">TestResult</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Type Alias
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report.html#s29">Coverage</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s54"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>generateReport(suite: Test, v8Coverage?: <cxl-a href="report.html#s29">Coverage</cxl-a>): Promise&lt;<cxl-a href="report--Report.html">Report</cxl-a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>suite: Test</li><li>v8Coverage?: <cxl-a href="report.html#s29">Coverage</cxl-a></li></ul>
+		</cxl-c></cxl-card><cxl-t h5>Type Alias</cxl-t><a name="s29"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>Coverage = <cxl-a href="report--TestCoverage.html">TestCoverage</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="runner-node.html"><cxl-t h3><span style="float:right"></span>runner-node.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="runner-node.html#s67">runNode</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s67"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>runNode(app: <cxl-a href="index--TestRunner.html">TestRunner</cxl-a>): Promise&lt;<cxl-a href="report--Report.html">Report</cxl-a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>app: <cxl-a href="index--TestRunner.html">TestRunner</cxl-a></li></ul>
+		</cxl-c></cxl-card></template><template  data-path="runner-puppeteer--Output.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Output</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Output } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/tester/runner-puppeteer&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="runner-puppeteer--Output.html#s70">path</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="runner-puppeteer--Output.html#s71">source</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s70"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>path: string</cxl-t>
+		</cxl-c></cxl-card><a name="s71"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>source: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-path="runner-puppeteer.html"><cxl-t h3><span style="float:right"></span>runner-puppeteer.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="runner-puppeteer.html#s105">runPuppeteer</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s105"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>runPuppeteer(app: <cxl-a href="index--TestRunner.html">TestRunner</cxl-a>): Promise&lt;<cxl-a href="report--Report.html">Report</cxl-a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>app: <cxl-a href="index--TestRunner.html">TestRunner</cxl-a></li></ul>
+		</cxl-c></cxl-card></template><template  data-path="report-stdout.html"><cxl-t h3><span style="float:right"></span>report-stdout.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report-stdout.html#s114">generate</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s114"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>generate(report: <cxl-a href="report--Report.html">Report</cxl-a>): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>report: <cxl-a href="report--Report.html">Report</cxl-a></li></ul>
+		</cxl-c></cxl-card></template><template  data-path="report-html.html"><cxl-t h3><span style="float:right"></span>report-html.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="report-html.html#s124">generate</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s124"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>generate(report: <cxl-a href="report--Report.html">Report</cxl-a>): Promise&lt;void&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>report: <cxl-a href="report--Report.html">Report</cxl-a></li></ul>
+		</cxl-c></cxl-card></template><template  data-path="browser-runner.html"><cxl-t h3><span style="float:right"></span>browser-runner.ts</cxl-t><cxl-t h4>Members</cxl-t></template><template data-default="true" data-path="index.html"><cxl-t h2>@cxl/tester</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Ftester"><img src="https://badge.fury.io/js/%40cxl%2Ftester.svg" alt="npm version"></a></p>
+<p>Test runner tool</p>
+<cxl-t h3>Project Details</cxl-t><ul>
+<li>Branch Version: <a href="https://npmjs.com/package/@cxl/tester/v/0.0.1">0.0.1</a></li>
+<li>License: GPL-3.0</li>
+<li>Documentation: <a href="https://cxlio.github.io/cxl/tester">Link</a></li>
+</ul>
+<cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/tester
+</code></pre></template></cxl-router></cxl-page></cxl-application>

@@ -1,0 +1,425 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.tsx",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.tsx",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 0,
+            "ch": 0
+          },
+          "kind": 2,
+          "name": "ValidateFunction",
+          "flags": 1,
+          "id": 1,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 0,
+                "ch": 29
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 2
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 0,
+              "ch": 33
+            },
+            "kind": 17,
+            "name": "",
+            "flags": 0,
+            "id": 3,
+            "type": {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 0,
+                "ch": 45
+              },
+              "kind": 5,
+              "name": "",
+              "flags": 0,
+              "children": [
+                {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                },
+                {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 0,
+                    "ch": 54
+                  },
+                  "kind": 23,
+                  "name": "true",
+                  "flags": 0
+                }
+              ]
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 0,
+                  "ch": 35
+                },
+                "kind": 9,
+                "name": "val",
+                "flags": 0,
+                "id": 4,
+                "type": {
+                  "id": 2,
+                  "name": "T",
+                  "kind": 6
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 2,
+            "ch": 5
+          },
+          "kind": 31,
+          "name": "EMAIL",
+          "flags": 0,
+          "id": 5,
+          "value": "/^(([^<>()[\\].,;:\\s@\"]+(\\.[^<>()[\\].,;:\\s@\"]+)*)|(\".+\"))@(([^<>()[\\].,;:\\s@\"]+\\.)+[^<>()[\\].,;:\\s@\"]{2,})$/i",
+          "type": {
+            "name": "RegExp",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 4,
+            "ch": 12
+          },
+          "kind": 31,
+          "name": "ValidationMessage",
+          "flags": 1,
+          "id": 6,
+          "value": "{\n\tjson: 'Invalid JSON value',\n\tzipcode: 'Please enter a valid zip code',\n\tequalTo: 'Values do not match',\n\trequired: 'This field is required',\n\tnotZero: 'Value cannot be zero',\n\temail: 'Please enter a valid email address',\n}",
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 4,
+              "ch": 32
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 4,
+                  "ch": 34
+                },
+                "kind": 0,
+                "name": "json",
+                "flags": 0,
+                "id": 7,
+                "value": "'Invalid JSON value'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 5,
+                  "ch": 28
+                },
+                "kind": 0,
+                "name": "zipcode",
+                "flags": 0,
+                "id": 8,
+                "value": "'Please enter a valid zip code'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 6,
+                  "ch": 42
+                },
+                "kind": 0,
+                "name": "equalTo",
+                "flags": 0,
+                "id": 9,
+                "value": "'Values do not match'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 7,
+                  "ch": 32
+                },
+                "kind": 0,
+                "name": "required",
+                "flags": 0,
+                "id": 10,
+                "value": "'This field is required'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 8,
+                  "ch": 36
+                },
+                "kind": 0,
+                "name": "notZero",
+                "flags": 0,
+                "id": 11,
+                "value": "'Value cannot be zero'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 9,
+                  "ch": 33
+                },
+                "kind": 0,
+                "name": "email",
+                "flags": 0,
+                "id": 12,
+                "value": "'Please enter a valid email address'",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 11,
+            "ch": 2
+          },
+          "kind": 16,
+          "name": "validate",
+          "flags": 1,
+          "id": 13,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 13,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "el",
+              "flags": 0,
+              "id": 14,
+              "type": {
+                "name": "HTMLFormElement",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 14,
+                "ch": 21
+              },
+              "kind": 9,
+              "name": "validators",
+              "flags": 262144,
+              "id": 15,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 15,
+                  "ch": 15
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 1,
+                  "name": "ValidateFunction",
+                  "kind": 6,
+                  "typeParameters": [
+                    {
+                      "name": "any",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 17,
+              "ch": 7
+            },
+            "kind": 16,
+            "name": "",
+            "flags": 0,
+            "id": 16,
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 17,
+                  "ch": 9
+                },
+                "kind": 9,
+                "name": "value",
+                "flags": 0,
+                "id": 17,
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ],
+            "type": {
+              "name": "void",
+              "kind": 32,
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 25,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "required",
+          "flags": 1,
+          "id": 18,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 27,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "val",
+              "flags": 0,
+              "id": 19,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "",
+            "flags": 0,
+            "kind": 5,
+            "children": [
+              {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 32,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "email",
+          "flags": 1,
+          "id": 20,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 34,
+                "ch": 22
+              },
+              "kind": 9,
+              "name": "val",
+              "flags": 0,
+              "id": 21,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "",
+            "flags": 0,
+            "kind": 5,
+            "children": [
+              {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
