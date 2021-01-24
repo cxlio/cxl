@@ -129,6 +129,7 @@ export class Option extends Component {
 			pointerEvents: 'auto',
 		},
 	}),
+	$ => on($, 'change').tap(ev => ev.stopPropagation()),
 	Slot
 )
 export class SelectMenu extends Component {
@@ -229,11 +230,9 @@ export abstract class SelectBase extends InputBase {
 	host => (
 		<SelectMenu
 			$={el =>
-				merge(
-					on(el, 'change').tap(ev => ev.stopPropagation()),
-					get(host, 'opened'),
-					get(host, 'selected')
-				).raf(() => host.positionMenu(el))
+				merge(get(host, 'opened'), get(host, 'selected')).raf(() =>
+					host.positionMenu(el)
+				)
 			}
 			visible={get(host, 'opened')}
 		>

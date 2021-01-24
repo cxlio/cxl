@@ -383,9 +383,12 @@ export class Router {
 		const parsed = parseUrl(url);
 		if (!this.state?.url) return false;
 		const current = this.state.url;
-		return (
-			parsed.path === current.path &&
-			(!parsed.hash || parsed.hash === current.hash)
-		);
+		return !!Object.values(this.instances).find(el => {
+			const routeDef: Route<any> = (el as any)[routeSymbol];
+			return (
+				routeDef.path?.test(parsed.path) &&
+				(!parsed.hash || parsed.hash === current.hash)
+			);
+		});
 	}
 }

@@ -8,7 +8,7 @@ export default spec('zip', it => {
 		const asubs = '^';
 		const b1 = cold('--4--5--6--7--8--');
 		const bsubs = '^';
-		const expected = '---14---25---36';
+		const expected = '---1,4---2,5---3,6-----';
 
 		expectLog(a, zip(a1, b1), expected);
 		a.equal(a1.subscriptions, asubs);

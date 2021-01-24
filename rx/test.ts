@@ -3,6 +3,7 @@ import {
 	Reference,
 	ReplaySubject,
 	Subject,
+	Subscriber,
 	be,
 	filter,
 	first,
@@ -189,6 +190,24 @@ export default suite('rx', [
 			});
 
 			source.subscribe();
+		});
+
+		test('should return a Subscription that calls the unsubscribe function returned by the subscriber', a => {
+			let unsubscribeCalled = false;
+
+			const source = new Observable<number>(() => {
+				return () => {
+					unsubscribeCalled = true;
+				};
+			});
+
+			const sub = source.subscribe(() => {
+				//noop
+			});
+			a.equal(unsubscribeCalled, false);
+			a.equal(typeof sub.unsubscribe, 'function');
+			sub.unsubscribe();
+			a.ok(unsubscribeCalled);
 		});
 
 		test('should ignore next messages after unsubscription', a => {
@@ -502,6 +521,129 @@ export default suite('rx', [
 			);
 			of(2).pipe(p1).subscribe();
 			a.equal(v1.value, 2);
+		});
+	}),
+
+	spec('Subscriber', it => {
+		it.should('ignore next messages after unsubscription', a => {
+			let times = 0;
+
+			const sub = new Subscriber({
+				next() {
+					times += 1;
+				},
+			});
+
+			sub.next(0);
+			sub.next(0);
+			sub.unsubscribe();
+			sub.next(0);
+
+			a.equal(times, 2);
+		});
+
+		it.should('ignore error messages after unsubscription', a => {
+			let times = 0;
+			let errorCalled = false;
+
+			const sub = new Subscriber({
+				next() {
+					times += 1;
+				},
+				error() {
+					errorCalled = true;
+				},
+			});
+
+			sub.next(0);
+			sub.next(0);
+			sub.unsubscribe();
+			sub.next(0);
+			sub.error(0);
+
+			a.equal(times, 2);
+			a.ok(!errorCalled);
+		});
+
+		it.should('ignore complete messages after unsubscription', a => {
+			let times = 0;
+			let completeCalled = false;
+
+			const sub = new Subscriber({
+				next() {
+					times += 1;
+				},
+				complete() {
+					completeCalled = true;
+				},
+			});
+
+			sub.next(0);
+			sub.next(0);
+			sub.unsubscribe();
+			sub.next(0);
+			sub.complete();
+
+			a.equal(times, 2);
+			a.ok(!completeCalled);
+		});
+
+		it.should(
+			'not be closed when other subscriber with same observer instance completes',
+			a => {
+				const observer = {
+					next: function () {
+						/*noop*/
+					},
+				};
+
+				const sub1 = new Subscriber(observer);
+				const sub2 = new Subscriber(observer);
+
+				sub2.complete();
+
+				a.ok(!sub1.isUnsubscribed);
+				a.ok(sub2.isUnsubscribed);
+			}
+		);
+
+		it.should('call complete observer without any arguments', a => {
+			let argument: Array<any> | undefined;
+
+			const observer = {
+				complete: (...args: Array<any>) => {
+					argument = args;
+				},
+			};
+
+			const sub1 = new Subscriber(observer);
+			sub1.complete();
+
+			a.equal(argument?.length, 0);
+		});
+
+		it.should('NOT break this context on next methods', a => {
+			// This is a contrived class to illustrate that we can pass another
+			// object that is "observer shaped" and not have it lose its context
+			// as it would have in v5 - v6.
+			class CustomConsumer {
+				valuesProcessed: string[] = [];
+
+				// In here, we access instance state and alter it.
+				next(value: string) {
+					if (value === 'reset') {
+						this.valuesProcessed = [];
+					} else {
+						this.valuesProcessed.push(value);
+					}
+				}
+			}
+
+			const consumer = new CustomConsumer();
+
+			of('old', 'old', 'reset', 'new', 'new').subscribe(consumer);
+
+			a.equalValues(consumer.valuesProcessed, ['new', 'new']);
 		});
 	}),
 

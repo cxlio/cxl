@@ -9,6 +9,7 @@ import {
 	defer,
 	filter,
 	map,
+	observable,
 	of,
 	tap,
 } from '@cxl/rx';
@@ -194,12 +195,7 @@ export function bind<T extends Component>(
 }
 
 export function connect<T extends Component>(bindFn: (node: T) => void) {
-	return (host: T) =>
-		host.bind(
-			defer(() => {
-				bindFn(host);
-			})
-		);
+	return (host: T) => host.bind(observable(() => bindFn(host)));
 }
 
 function attributes$(host: Component): Observable<AttributeEvent<any, any>> {
@@ -303,7 +299,8 @@ export function Attribute(options?: Partial<AttributeOptions>): any {
 			set(this: any, value: any) {
 				if (this[prop] !== value) {
 					this[prop] = value;
-					this.attributes$.next({
+					// Can be undefined if setting prototype value
+					this.attributes$?.next({
 						target: this,
 						attribute,
 						value,
@@ -328,7 +325,7 @@ export function getRegisteredComponents() {
 export function role<T extends Component>(roleName: string) {
 	return (host: T) =>
 		host.bind(
-			defer(() => {
+			observable(() => {
 				const el = host as any;
 				!el.hasAttribute('role') && el.setAttribute('role', roleName);
 			})

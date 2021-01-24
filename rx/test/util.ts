@@ -1,4 +1,4 @@
-import { Observable, Subject, operator, toPromise } from '../index.js';
+import { Observable, Subject, toPromise } from '../index.js';
 import { TestApi } from '@cxl/spec';
 
 interface Log {
@@ -13,55 +13,69 @@ class Scheduler extends Subject<number> {
 			this.next(this.time);
 			this.time++;
 		}
+		eof$.next(this.time - 1);
 		this.time = 0;
 	}
 }
 
 const scheduler = new Scheduler();
+const eof$ = new Subject<number>();
 
 function logOperator() {
 	const log: Log = { events: '' };
 	let events: string[] = [];
 	let time = scheduler.time;
 
-	function flush() {
+	function flush(schedulerTime = scheduler.time) {
+		let diff = schedulerTime - time;
 		if (events.length) {
 			log.events +=
 				events.length > 1 ? `(${events.join('')})` : events[0];
 			events = [];
+			diff--;
 		}
+		if (diff > 0) log.events += '-'.repeat(diff);
 	}
 
 	function emit(ev: string) {
 		const diff = scheduler.time - time;
 		if (diff) {
-			if (events.length) {
-				flush();
-				log.events += '-'.repeat(diff - 1);
-			} else log.events += '-'.repeat(diff);
+			flush();
 			time = scheduler.time;
 		}
 
 		events.push(ev);
 	}
 
-	return operator<string, Log>(subs => ({
-		next(val) {
-			emit(val);
-		},
-		error() {
-			emit('#');
-			flush();
-			subs.next(log);
-			subs.complete();
-		},
-		complete() {
-			emit('|');
-			flush();
-			subs.next(log);
-			subs.complete();
-		},
-	}));
+	return (source: Observable<string>) =>
+		new Observable<Log>(subscriber => {
+			const eofSub = eof$.subscribe(t => {
+				flush(t);
+				subscriber.next(log);
+				subscriber.complete();
+			});
+			const subscription = source.subscribe({
+				next(val) {
+					emit(val);
+				},
+				error() {
+					emit('#');
+					flush();
+					subscriber.next(log);
+					subscriber.complete();
+				},
+				complete() {
+					emit('|');
+					flush();
+					subscriber.next(log);
+					subscriber.complete();
+				},
+			});
+			return () => {
+				eofSub.unsubscribe();
+				subscription.unsubscribe();
+			};
+		});
 }
 
 export function logEvents(observable: Observable<any>) {
@@ -99,18 +113,38 @@ class ColdObservable extends Observable<string> {
 	constructor(stream: string, values?: any, error?: any) {
 		super(subs => {
 			this.log('^');
+			let emitUnsub = true;
 			const iter = stream[Symbol.iterator]();
-			const inner = scheduler.subscribe(() => {
-				const { done, value } = iter.next();
 
-				if (done) inner.unsubscribe();
-				else if (value === '|') subs.complete();
+			function handleEvent(value: string) {
+				if (value === '|') subs.complete();
 				else if (value === '#') subs.error(error);
 				else if (value !== '-')
 					subs.next((values && values[value]) || value);
-			});
+			}
+
+			function handleGroup() {
+				const n = iter.next();
+				if (n.value !== ')') {
+					handleEvent(n.value);
+					handleGroup();
+				}
+			}
+
+			function next() {
+				const { done, value } = iter.next();
+
+				if (done) {
+					emitUnsub = false;
+					inner.unsubscribe();
+				} else if (value === '(') handleGroup();
+				else handleEvent(value);
+			}
+
+			const inner = scheduler.subscribe(next);
+
 			return () => {
-				this.log('!');
+				if (emitUnsub) this.log('!');
 				inner.unsubscribe();
 			};
 		});
@@ -119,4 +153,8 @@ class ColdObservable extends Observable<string> {
 
 export function cold(stream: string, values?: any, error?: any) {
 	return new ColdObservable(stream, values, error);
+}
+
+export function replaceValues(src: string, values: Record<string, any>) {
+	return src.replace(/./g, c => values[c] || c);
 }

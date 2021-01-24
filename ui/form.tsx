@@ -36,7 +36,7 @@ import {
 } from '@cxl/template';
 import { trigger, onKeypress, on, onAction, setAttribute } from '@cxl/dom';
 import { border, css, boxShadow, padding } from '@cxl/css';
-import { EMPTY, Observable, be, defer, merge } from '@cxl/rx';
+import { EMPTY, Observable, observable, be, defer, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
@@ -270,7 +270,7 @@ function fieldInput<T extends Component>(host: T) {
 			? (get(host.parentNode, 'input').filter(
 					inp => !!inp
 			  ) as Observable<InputBase>)
-			: undefined
+			: EMPTY
 	);
 }
 
@@ -370,7 +370,7 @@ export class Label extends Component {}
 				get(host, 'input').switchMap(input =>
 					input
 						? merge(
-								defer(update),
+								observable(() => update()),
 								on(input, 'focusable.change').tap(update),
 								on(input, 'focusable.focus').tap(update),
 								on(input, 'focusable.blur').tap(update),
@@ -847,7 +847,7 @@ const radioElements = new Set<Radio>();
 		}
 
 		return merge(
-			defer(unregister),
+			observable(unregister),
 			onAction(host).tap(() => {
 				if (host.disabled) return;
 				if (!host.checked) host.checked = host.touched = true;

@@ -60,6 +60,7 @@ export class Subscriber<T> {
 		this.subscriber = subscriber;
 		try {
 			if (subscribe) this.onUnsubscribe = subscribe(this);
+			if (this.isUnsubscribed && this.onUnsubscribe) this.onUnsubscribe();
 		} catch (e) {
 			this.error(e);
 		}
@@ -338,27 +339,15 @@ export function concat<R extends Observable<any>[]>(
 /**
  * Creates an Observable that, on subscribe, calls an Observable factory to make an Observable for each new Observer.
  */
-export function defer<T>(fn: () => Observable<T> | void) {
+export function defer<T>(fn: () => Subscribable<T>) {
 	return new Observable<T>(subs => {
-		const newObs = fn();
-		if (newObs) {
-			const innerSubs = newObs.subscribe(subs);
-			return () => innerSubs.unsubscribe();
-		}
-
-		subs.complete();
+		const innerSubs = fn().subscribe(subs);
+		return () => innerSubs.unsubscribe();
 	});
 }
 
 export function isInterop<T>(obs: any): obs is InteropObservable<T> {
 	return !!obs[observableSymbol];
-}
-
-function fromSubscribable<T>(obs: Subscribable<T>) {
-	return new Observable<T>(subs => {
-		const subscription = obs.subscribe(subs);
-		return () => subscription.unsubscribe();
-	});
 }
 
 /**
@@ -368,7 +357,7 @@ export function from<T>(
 	input: Array<T> | Promise<T> | Observable<T> | InteropObservable<T>
 ): Observable<T> {
 	if (input instanceof Observable) return input;
-	if (isInterop(input)) return fromSubscribable(input[observableSymbol]());
+	if (isInterop(input)) return defer(input[observableSymbol]);
 
 	return new Observable<T>(subs => {
 		if (Array.isArray(input)) {
@@ -444,7 +433,7 @@ export function operator<T, T2 = T>(
 				};
 
 			const subscription = source.subscribe(next);
-			return subscription.unsubscribe.bind(subscription);
+			return () => subscription.unsubscribe();
 		});
 }
 
@@ -496,23 +485,6 @@ export function debounce<A extends any[], R>(
 	};
 }
 
-export function collect<T>(source: Observable<T>, gate: Observable<any>) {
-	const collected: T[] = [];
-
-	return new Observable<T>(subs => {
-		const s1 = source.subscribe(val => collected.push(val));
-		const s2 = gate.subscribe(() => {
-			collected.forEach(c => subs.next(c));
-			collected.length = 0;
-		});
-
-		return () => {
-			s1.unsubscribe();
-			s2.unsubscribe();
-		};
-	});
-}
-
 /**
  * Emits a value from the source Observable only after a particular time span has passed without another source emission.
  */
@@ -546,14 +518,29 @@ export function debounceTime<T>(time?: number) {
  */
 export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 	return operator<T, T2>(subscriber => {
-		let lastSubscription: Subscription;
-		return (val: T) => {
-			if (lastSubscription) lastSubscription.unsubscribe();
+		let lastSubscription: Subscription | undefined;
+		let completed = false;
+		const cleanUp = () => {
+			lastSubscription?.unsubscribe();
+			lastSubscription = undefined;
+			if (completed) subscriber.complete();
+		};
 
-			const newObservable = project(val);
-			lastSubscription = newObservable.subscribe(val =>
-				subscriber.next(val)
-			);
+		return {
+			next(val: T) {
+				cleanUp();
+				const newObservable = project(val);
+				lastSubscription = newObservable.subscribe(
+					val => subscriber.next(val),
+					e => subscriber.error(e),
+					() => cleanUp()
+				);
+			},
+			error: e => subscriber.error(e),
+			complete() {
+				completed = true;
+				if (!lastSubscription) subscriber.complete();
+			},
 		};
 	});
 }
@@ -562,52 +549,81 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
  * Projects each source value to an Observable which is merged in the output Observable.
  */
 export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
-	const subscriptions: Subscription[] = [];
+	return (source: Observable<T>) =>
+		observable<T2>(subscriber => {
+			const subscriptions: Subscription[] = [];
+			let count = 0;
+			let completed = 0;
+			let sourceCompleted = false;
 
-	return operator<T, T2>(subscriber =>
-		cleanUpSubscriber(
-			(val: T) => {
-				const newObservable = project(val);
-				subscriptions.push(
-					newObservable.subscribe(val => subscriber.next(val))
-				);
-			},
-			subscriber,
-			() => subscriptions.forEach(s => s.unsubscribe())
-		)
-	);
+			function cleanUp() {
+				subscriptions.forEach(s => s.unsubscribe());
+			}
+
+			subscriptions.push(
+				source.subscribe({
+					next: (val: T) => {
+						count++;
+						subscriptions.push(
+							project(val).subscribe({
+								next: val => subscriber.next(val),
+								error: e => {
+									subscriber.error(e);
+									cleanUp();
+								},
+								complete: () => {
+									completed++;
+									if (
+										sourceCompleted &&
+										completed === count
+									) {
+										subscriber.complete();
+										cleanUp();
+									}
+								},
+							})
+						);
+					},
+					error: e => subscriber.error(e),
+					complete() {
+						sourceCompleted = true;
+						if (completed === count) {
+							subscriber.complete();
+							cleanUp();
+						}
+					},
+				})
+			);
+			return cleanUp;
+		});
 }
 
 /**
  * Projects each source value to an Observable which is merged in the output Observable
  * only if the previous projected Observable has completed.
  */
-export function exhaustMap<T, T2>(project: (value?: T) => Observable<T2>) {
-	let lastSubscription: Subscription | null;
+export function exhaustMap<T, T2>(project: (value: T) => Observable<T2>) {
+	return operator<T, T2>(subscriber => {
+		let lastSubscription: Subscription | undefined;
 
-	function cleanup() {
-		if (lastSubscription) {
-			lastSubscription.unsubscribe();
-			lastSubscription = null;
+		function cleanup() {
+			lastSubscription?.unsubscribe();
+			lastSubscription = undefined;
 		}
-	}
 
-	return operator<T, T2>(subscriber =>
-		cleanUpSubscriber(
+		return cleanUpSubscriber(
 			(val: T) => {
 				if (!lastSubscription)
 					lastSubscription = project(val).subscribe(
-						cleanUpSubscriber(
-							val => subscriber.next(val),
-							subscriber,
-							cleanup
-						)
+						val => subscriber.next(val),
+						e => subscriber.error(e),
+						cleanup
 					);
 			},
 			subscriber,
 			cleanup
-		)
-	);
+		);
+	});
 }
 
 /**
@@ -628,6 +644,16 @@ export function take<T>(howMany: number) {
 	return operator((subs: Subscriber<T>) => (val: T) => {
 		if (howMany-- > 0) subs.next(val);
 		if (howMany <= 0) subs.complete();
+	});
+}
+
+/**
+ * Emits only the first count values emitted by the source Observable.
+ */
+export function takeWhile<T>(fn: (val: T) => boolean) {
+	return operator((subs: Subscriber<T>) => (val: T) => {
+		if (fn(val)) subs.next(val);
+		else subs.complete();
 	});
 }
 
@@ -709,6 +735,7 @@ export function publishLast<T>(): Operator<T, T> {
 		const subject = new Subject<T>();
 		let sourceSubscription: Subscription;
 		let lastValue: T;
+		let hasEmitted = false;
 		let ready = false;
 
 		return observable<T>(subs => {
@@ -720,11 +747,14 @@ export function publishLast<T>(): Operator<T, T> {
 
 			if (!sourceSubscription)
 				sourceSubscription = source.subscribe(
-					val => (lastValue = val),
+					val => {
+						hasEmitted = true;
+						lastValue = val;
+					},
 					e => subs.error(e),
 					() => {
 						ready = true;
-						subject.next(lastValue);
+						if (hasEmitted) subject.next(lastValue);
 						subject.complete();
 					}
 				);
@@ -958,6 +988,7 @@ const operators: any = {
 	reduce,
 	switchMap,
 	take,
+	takeWhile,
 	tap,
 };
 
@@ -986,6 +1017,7 @@ export interface Observable<T> {
 	): Observable<T2>;
 	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	take(howMany: number): Observable<T>;
+	takeWhile(fn: (val: T) => boolean): Observable<T>;
 	tap(tapFn: (val: T) => void): Observable<T>;
 }
 

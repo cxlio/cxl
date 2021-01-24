@@ -2,7 +2,7 @@ import { basename } from 'path';
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 
-import { EMPTY, defer } from '@cxl/rx';
+import { EMPTY, observable } from '@cxl/rx';
 
 import { BuildConfiguration, build } from './builder.js';
 import { docs, pkg, readPackage, readme } from './package.js';
@@ -23,7 +23,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			target: 'clean',
 			outputDir,
 			tasks: [
-				defer(() => {
+				observable(() => {
 					execSync(`rm -rf ${outputDir}`);
 				}),
 			],

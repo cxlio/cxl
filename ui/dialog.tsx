@@ -9,14 +9,7 @@ import {
 } from '@cxl/component';
 import { css, padding, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import {
-	createElement,
-	insert,
-	on,
-	onAction,
-	trigger,
-	remove,
-} from '@cxl/dom';
+import { createElement, insert, on, onAction, trigger, remove } from '@cxl/dom';
 import { merge } from '@cxl/rx';
 import { T, Button, Span } from './core.js';
 
@@ -107,7 +100,7 @@ const DialogStyles = css({
 				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={onAction($).tap(() => $.resolve())}>
+				<Button flat $={el => onAction(el).tap(() => $.resolve())}>
 					{get($, 'action')}
 				</Button>
 			</div>
@@ -148,10 +141,10 @@ export class DialogAlert extends Component {
 				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={onAction($).tap(() => $.reject())}>
+				<Button flat $={el => onAction(el).tap(() => $.reject())}>
 					{get($, 'cancel-text')}
 				</Button>
-				<Button flat $={onAction($).tap(() => $.resolve())}>
+				<Button flat $={el => onAction(el).tap(() => $.resolve())}>
 					{get($, 'action')}
 				</Button>
 			</div>
@@ -336,35 +329,52 @@ export class Snackbar extends Component {
 	})
 )
 export class SnackbarContainer extends Component {
-	queue: Snackbar[] = [];
+	queue: [Snackbar, () => void][] = [];
 
 	private notifyNext() {
-		const next = this.queue[0];
+		const [next, resolve] = this.queue[0];
 
 		this.appendChild(next);
 
 		setTimeout(() => {
 			remove(next);
-
 			this.queue.shift();
+			resolve();
 
 			if (this.queue.length) this.notifyNext();
 		}, next.delay);
 	}
 
 	notify(snackbar: Snackbar) {
-		this.queue.push(snackbar);
-
-		if (this.queue.length === 1) this.notifyNext();
+		return new Promise<void>(resolve => {
+			this.queue.push([snackbar, resolve]);
+			if (this.queue.length === 1) this.notifyNext();
+		});
 	}
 }
 
-export function alert(options: string | Partial<DialogAlert>) {
-	if (typeof options === 'string') options = { message: options };
+interface AlertOptions {
+	titleText?: string;
+	message: string;
+	actionText?: string;
+}
 
-	const modal = createElement(DialogAlert, options);
+export function alert(
+	optionsOrMessage: string | AlertOptions,
+	container: Element = document.body
+) {
+	const options: AlertOptions =
+		typeof optionsOrMessage === 'string'
+			? { message: optionsOrMessage }
+			: optionsOrMessage;
 
-	document.body.appendChild(modal);
+	const modal = createElement(DialogAlert, {
+		'title-text': options.titleText || '',
+		message: options.message,
+		action: options.actionText || DialogAlert.prototype.action,
+	});
+
+	container.appendChild(modal);
 
 	return modal.promise.then(() => remove(modal));
 }
@@ -372,12 +382,15 @@ export function alert(options: string | Partial<DialogAlert>) {
 /**
  * Confirmation dialog
  */
-export function confirm(options: string | Partial<DialogConfirm>) {
+export function confirm(
+	options: string | Partial<DialogConfirm>,
+	container: Element = document.body
+) {
 	if (typeof options === 'string') options = { message: options };
 
 	const modal = createElement(DialogConfirm, options);
 
-	document.body.appendChild(modal);
+	container.appendChild(modal);
 
 	return modal.promise;
 }
@@ -385,10 +398,9 @@ export function confirm(options: string | Partial<DialogConfirm>) {
 let snackbarContainer: SnackbarContainer;
 
 export function notify(
-	options: string | (Partial<Snackbar> & { content: string })
+	options: string | (Partial<Snackbar> & { content: string }),
+	bar = snackbarContainer
 ) {
-	let bar = snackbarContainer;
-
 	if (!bar) {
 		bar = snackbarContainer = createElement(SnackbarContainer);
 		document.body.appendChild(bar);
@@ -400,5 +412,9 @@ export function notify(
 
 	if (options.content) insert(snackbar, options.content);
 
-	bar.notify(snackbar);
+	return bar.notify(snackbar);
+}
+
+export function setSnackbarContainer(bar: SnackbarContainer) {
+	snackbarContainer = bar;
 }

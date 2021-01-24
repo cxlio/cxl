@@ -84,11 +84,8 @@ async function cjsRunner(page: Page, sources: Output[], app: TestRunner) {
 	const entry = sources[0].path;
 	app.log(`Running in commonjs mode`);
 	await page.addScriptTag({ path: __dirname + '/require.js' });
+	await page.setRequestInterception(true);
 
-	await app.log(
-		'Setting up request interceptor',
-		page.setRequestInterception(true)
-	);
 	page.on('request', (req: Request) => {
 		try {
 			handleRequest(sources, req);

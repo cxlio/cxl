@@ -84,12 +84,12 @@ export class TestApi {
 	}
 
 	ok(condition: any, message = 'Assertion failed') {
-		this.$test.results.push({ success: !!condition, message });
+		this.$test.push({ success: !!condition, message });
 	}
 
 	assert(condition: any, message = 'Assertion Failed'): asserts condition {
 		if (!condition) throw new Error(message);
-		this.$test.results.push({ success: !!condition, message });
+		this.$test.push({ success: !!condition, message });
 	}
 
 	equal<T>(a: T, b: T, desc?: string) {
@@ -97,6 +97,12 @@ export class TestApi {
 			a === b,
 			`${desc ? desc + ': ' : ''}${inspect(a)} should equal ${inspect(b)}`
 		);
+	}
+
+	equalValues<T>(a: T, b: T, desc?: string) {
+		for (const i in b) {
+			this.equal(a[i], b[i], desc);
+		}
 	}
 
 	throws(fn: () => any) {
@@ -236,6 +242,11 @@ export class Test {
 		else this.name = nameOrConfig.name;
 	}
 
+	push(result: Result) {
+		if (this.completed) throw new Error('Test already completed');
+		this.results.push(result);
+	}
+
 	pushError(e: Error | string) {
 		this.results.push(
 			e instanceof Error
@@ -281,11 +292,12 @@ export class Test {
 				await Promise.all(this.only.map(test => test.run()));
 			else if (this.tests.length)
 				await Promise.all(this.tests.map(test => test.run()));
-			if (this.domContainer && this.domContainer.parentNode)
-				this.domContainer.parentNode.removeChild(this.domContainer);
 		} catch (e) {
 			this.pushError(e);
 		} finally {
+			if (this.domContainer && this.domContainer.parentNode)
+				this.domContainer.parentNode.removeChild(this.domContainer);
+
 			this.domContainer = undefined;
 			await this.emit('afterAll');
 		}
@@ -365,6 +377,16 @@ function spyProp<T, K extends keyof T>(object: T, prop: K) {
 	});
 
 	return result;
+}
+
+/**
+ * Emulates a keydown event
+ */
+export function triggerKeydown(el: Element, key: string) {
+	const ev = new CustomEvent('keydown', { bubbles: true });
+	(ev as any).key = key;
+	el.dispatchEvent(ev);
+	return ev;
 }
 
 export function spec(name: string | TestConfig, fn: TestFn) {

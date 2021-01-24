@@ -102,8 +102,11 @@ export function navigationList(
 			let el = host.querySelector(startSelector);
 			const key = ev.key;
 
-			function findByFirstChar(item: Node) {
-				return item.textContent?.[0].toLowerCase() === key;
+			function findByFirstChar(item: Element) {
+				return (
+					item.matches(selector) &&
+					item.textContent?.[0].toLowerCase() === key
+				);
 			}
 
 			switch (key) {

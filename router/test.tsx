@@ -57,4 +57,22 @@ export default suite('router', test => {
 		router.go('/park/');
 		a.equal(router.state?.route.id, '/park');
 	});
+
+	test('isActiveUrl()', a => {
+		const router = new Router();
+		router.route({
+			id: 'home',
+			path: '/',
+			render: () => <a />,
+		});
+		router.route({
+			parent: 'home',
+			path: '/park',
+			render: () => <b />,
+		});
+
+		router.go('/park');
+		a.ok(router.isActiveUrl('/'));
+		a.ok(router.isActiveUrl('/park'));
+	});
 });

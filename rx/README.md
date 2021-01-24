@@ -6,7 +6,7 @@ Lightweight reactiveX implementation
 
 ## Project Details
 
--   Branch Version: [0.2.0](https://npmjs.com/package/@cxl/rx/v/0.2.0)
+-   Branch Version: [0.3.0](https://npmjs.com/package/@cxl/rx/v/0.3.0)
 -   License: Apache-2.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/rx)
 
@@ -27,3 +27,7 @@ const ref = be('');
 ref.filter(val => !!val).tap(val => console.log(val)).subscribe();
 ref.next('Hello World');
 ```
+
+## Features
+
+-   Lightweight

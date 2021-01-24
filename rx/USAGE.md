@@ -11,3 +11,7 @@ const ref = be('');
 ref.filter(val => !!val).tap(val => console.log(val)).subscribe();
 ref.next('Hello World');
 ```
+
+## Features
+
+-   Lightweight

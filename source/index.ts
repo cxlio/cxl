@@ -59,8 +59,7 @@ export function positionToIndex(source: string, pos: Position) {
 	for (let i = 0; i < len; i++) {
 		if (source[i] === '\n' && --line === 0) return i + pos.column + 1;
 	}
-	console.log(pos);
-	throw new Error('Invalid Position');
+	throw new Error(`Invalid Position: ${pos.line},${pos.column}`);
 }
 
 function indexToPosOne(source: string, index: number) {
@@ -86,23 +85,20 @@ function indexToPosOne(source: string, index: number) {
 	return { start, end };
 }*/
 
-export function getMappingsForRange(
-	sourceMap: SourceMapConsumer,
+function getMappingsForRange(
+	sourceMap: SourceMap,
 	start: Position,
 	end: Position
 ) {
-	const result: MappingItem[] = [];
-	sourceMap.eachMapping(m => {
-		if (
-			m.generatedLine >= start.line &&
-			m.generatedColumn >= start.column &&
-			m.generatedLine <= end.line &&
-			m.generatedColumn <= end.column
-		)
-			result.push(m);
-	});
-	console.log(result);
-	return result;
+	return sourceMap.mappings.filter(
+		m =>
+			(m.generatedLine > start.line ||
+				(m.generatedLine === start.line &&
+					m.generatedColumn >= start.column)) &&
+			(m.generatedLine < end.line ||
+				(m.generatedLine === end.line &&
+					m.generatedColumn <= end.column))
+	);
 }
 
 export class SourceMap {
@@ -125,28 +121,44 @@ export class SourceMap {
 		return this;
 	}
 
+	originalPosition(source: string, offset: number) {
+		const pos = indexToPosOne(source, offset);
+		const result = this.map?.originalPositionFor(pos);
+		return result?.source ? result : undefined;
+	}
+
 	translateRange(source: string, range: Range): RangePosition | undefined {
 		const sourceMap = this.map;
 		if (!sourceMap) throw new Error('Sourcemap not initialized');
 
 		const startPos = indexToPosOne(source, range.start);
-		const start = sourceMap.originalPositionFor(startPos);
+		let start = sourceMap.originalPositionFor(startPos);
 		const endPos = indexToPosOne(source, range.end);
 		let end = sourceMap.originalPositionFor(endPos);
 
-		if (start.source === null && range.start === 0 && end.source) {
-			start.source = end.source;
-			start.line = 1;
-			start.column = 0;
-		}
-		if (
-			end.source === null &&
-			range.end === source.length &&
-			start.source
-		) {
-			//end.source = end.source;
-			endPos.line--;
-			end = sourceMap.originalPositionFor(endPos);
+		if (start.source === null || end.source === null) {
+			const mappings = getMappingsForRange(this, startPos, endPos);
+			if (!mappings || mappings.length < 2) return;
+
+			const startMap = mappings[0];
+			const endMap = mappings[mappings.length - 1];
+
+			start = start.source
+				? start
+				: {
+						source: startMap.source,
+						column: startMap.originalColumn,
+						line: startMap.originalLine,
+						name: null,
+				  };
+			end = end.source
+				? end
+				: {
+						source: endMap.source,
+						column: endMap.originalColumn,
+						line: endMap.originalLine,
+						name: null,
+				  };
 		}
 		if (start.source === null || end.source === null) return;
 		if (start.line === null || end.line === null) return;

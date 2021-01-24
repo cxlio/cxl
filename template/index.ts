@@ -11,6 +11,7 @@ import {
 	concat,
 	defer,
 	merge,
+	observable,
 	of,
 	tap,
 } from '@cxl/rx';
@@ -330,7 +331,7 @@ type AriaProperty = keyof AriaProperties;
 
 export function aria<T extends Component>(prop: AriaProperty, value: string) {
 	return (ctx: T) =>
-		ctx.bind(defer(() => ctx.setAttribute(`aria-${prop}`, value)));
+		ctx.bind(observable(() => ctx.setAttribute(`aria-${prop}`, value)));
 }
 
 export function ariaValue(host: Element, prop: AriaProperty) {

@@ -34,7 +34,7 @@ export default spec('concat', it => {
 		a.equal(inner.subscriptions, innersubs);
 	});
 
-	it.should('not complete if first source does not completes', a => {
+	it.should('not complete if first source does not complete', a => {
 		const e1 = cold('-');
 		const e1subs = '^';
 		const e2 = cold('--|');

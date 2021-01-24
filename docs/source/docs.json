@@ -393,7 +393,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 63,
+            "line": 62,
             "ch": 1
           },
           "kind": 16,
@@ -404,7 +404,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 65,
+                "line": 64,
                 "ch": 23
               },
               "kind": 9,
@@ -420,7 +420,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 65,
+                "line": 64,
                 "ch": 38
               },
               "kind": 9,
@@ -443,39 +443,40 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 69,
+            "line": 68,
             "ch": 1
           },
           "kind": 16,
           "name": "getMappingsForRange",
-          "flags": 1,
+          "flags": 0,
           "id": 28,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 88,
-                "ch": 36
+                "line": 87,
+                "ch": 29
               },
               "kind": 9,
               "name": "sourceMap",
               "flags": 0,
               "id": 29,
               "type": {
-                "name": "SourceMapConsumer",
+                "id": 30,
+                "name": "SourceMap",
                 "kind": 6
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 89,
-                "ch": 30
+                "line": 88,
+                "ch": 22
               },
               "kind": 9,
               "name": "start",
               "flags": 0,
-              "id": 30,
+              "id": 31,
               "type": {
                 "id": 5,
                 "name": "Position",
@@ -485,13 +486,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 90,
+                "line": 89,
                 "ch": 17
               },
               "kind": 9,
               "name": "end",
               "flags": 0,
-              "id": 31,
+              "id": 32,
               "type": {
                 "id": 5,
                 "name": "Position",
@@ -511,20 +512,20 @@
           }
         },
         {
+          "id": 30,
           "source": {
             "fileName": "index.ts",
-            "line": 105,
+            "line": 101,
             "ch": 1
           },
           "kind": 8,
           "name": "SourceMap",
           "flags": 1,
-          "id": 32,
           "children": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 107,
+                "line": 103,
                 "ch": 24
               },
               "kind": 10,
@@ -540,7 +541,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 108,
+                "line": 104,
                 "ch": 14
               },
               "kind": 10,
@@ -556,7 +557,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 109,
+                "line": 105,
                 "ch": 13
               },
               "kind": 10,
@@ -571,7 +572,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 110,
+                "line": 106,
                 "ch": 25
               },
               "kind": 10,
@@ -586,7 +587,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 111,
+                "line": 107,
                 "ch": 20
               },
               "kind": 10,
@@ -596,7 +597,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 112,
+                  "line": 108,
                   "ch": 10
                 },
                 "kind": 15,
@@ -611,7 +612,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 112,
+                "line": 108,
                 "ch": 25
               },
               "kind": 14,
@@ -622,7 +623,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 114,
+                    "line": 110,
                     "ch": 13
                   },
                   "kind": 9,
@@ -637,7 +638,7 @@
                 }
               ],
               "type": {
-                "id": 32,
+                "id": 30,
                 "name": "SourceMap",
                 "kind": 6
               }
@@ -645,7 +646,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 118,
+                "line": 114,
                 "ch": 2
               },
               "kind": 11,
@@ -658,7 +659,7 @@
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 32,
+                    "id": 30,
                     "name": "SourceMap",
                     "kind": 6
                   }
@@ -668,17 +669,78 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 125,
+                "line": 121,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "originalPosition",
+              "flags": 4,
+              "id": 41,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 123,
+                    "ch": 18
+                  },
+                  "kind": 9,
+                  "name": "source",
+                  "flags": 0,
+                  "id": 42,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 123,
+                    "ch": 33
+                  },
+                  "kind": 9,
+                  "name": "offset",
+                  "flags": 0,
+                  "id": 43,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "NullableMappedPosition",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 127,
                 "ch": 2
               },
               "kind": 11,
               "name": "translateRange",
               "flags": 4,
-              "id": 41,
+              "id": 44,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 127,
+                  "line": 129,
                   "ch": 46
                 },
                 "kind": 5,
@@ -701,13 +763,13 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 127,
+                    "line": 129,
                     "ch": 16
                   },
                   "kind": 9,
                   "name": "source",
                   "flags": 0,
-                  "id": 42,
+                  "id": 45,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -717,13 +779,13 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 127,
+                    "line": 129,
                     "ch": 31
                   },
                   "kind": 9,
                   "name": "range",
                   "flags": 0,
-                  "id": 43,
+                  "id": 46,
                   "type": {
                     "id": 8,
                     "name": "Range",
@@ -737,24 +799,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 160,
+            "line": 172,
             "ch": 1
           },
           "kind": 16,
           "name": "getSourceMapPath",
           "flags": 1,
-          "id": 44,
+          "id": 47,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 162,
+                "line": 174,
                 "ch": 33
               },
               "kind": 9,
               "name": "source",
               "flags": 0,
-              "id": 45,
+              "id": 48,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -764,13 +826,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 162,
+                "line": 174,
                 "ch": 48
               },
               "kind": 9,
               "name": "cwd",
               "flags": 0,
-              "id": 46,
+              "id": 49,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -787,24 +849,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 165,
+            "line": 177,
             "ch": 1
           },
           "kind": 16,
           "name": "getSourceMap",
           "flags": 257,
-          "id": 47,
+          "id": 50,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 167,
+                "line": 179,
                 "ch": 35
               },
               "kind": 9,
               "name": "sourcePath",
               "flags": 0,
-              "id": 48,
+              "id": 51,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -827,7 +889,7 @@
                     "flags": 0
                   },
                   {
-                    "id": 32,
+                    "id": 30,
                     "name": "SourceMap",
                     "kind": 6
                   }
@@ -839,13 +901,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 173,
+            "line": 185,
             "ch": 5
           },
           "kind": 31,
           "name": "ENTITIES_REGEX",
           "flags": 0,
-          "id": 49,
+          "id": 52,
           "value": "/[&<>]/g",
           "type": {
             "name": "RegExp",
@@ -855,18 +917,18 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 173,
+            "line": 185,
             "ch": 32
           },
           "kind": 31,
           "name": "ENTITIES_MAP",
           "flags": 0,
-          "id": 50,
+          "id": 53,
           "value": "{\n\t\t'&': '&amp;',\n\t\t'<': '&lt;',\n\t\t'>': '&gt;',\n\t}",
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 174,
+              "line": 186,
               "ch": 15
             },
             "kind": 34,
@@ -876,13 +938,13 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 174,
+                  "line": 186,
                   "ch": 17
                 },
                 "kind": 0,
                 "name": "'&'",
                 "flags": 0,
-                "id": 51,
+                "id": 54,
                 "value": "'&amp;'",
                 "type": {
                   "name": "string",
@@ -893,13 +955,13 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 175,
+                  "line": 187,
                   "ch": 15
                 },
                 "kind": 0,
                 "name": "'<'",
                 "flags": 0,
-                "id": 52,
+                "id": 55,
                 "value": "'&lt;'",
                 "type": {
                   "name": "string",
@@ -910,13 +972,13 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 176,
+                  "line": 188,
                   "ch": 14
                 },
                 "kind": 0,
                 "name": "'>'",
                 "flags": 0,
-                "id": 53,
+                "id": 56,
                 "value": "'&gt;'",
                 "type": {
                   "name": "string",
@@ -930,24 +992,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 178,
+            "line": 190,
             "ch": 3
           },
           "kind": 16,
           "name": "escapeHtml",
           "flags": 1,
-          "id": 54,
+          "id": 57,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 180,
+                "line": 192,
                 "ch": 27
               },
               "kind": 9,
               "name": "str",
               "flags": 0,
-              "id": 55,
+              "id": 58,
               "type": {
                 "name": "string",
                 "kind": 32,

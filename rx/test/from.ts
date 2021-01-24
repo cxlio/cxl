@@ -67,15 +67,17 @@ export default suite('from', test => {
 		};
 		let count = 0;
 
-		from(source).subscribe({
-			next(val) {
-				a.equal(val, 10);
-				count++;
-			},
-			complete() {
-				a.equal(count, 1);
-				done();
-			},
-		});
+		from(source)
+			.subscribe({
+				next(val) {
+					a.equal(val, 10);
+					count++;
+				},
+				complete() {
+					a.equal(count, 1);
+					done();
+				},
+			})
+			.unsubscribe();
 	});
 });

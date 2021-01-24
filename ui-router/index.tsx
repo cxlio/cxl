@@ -10,7 +10,7 @@ import {
 	Observable,
 	Reference,
 	combineLatest,
-	defer,
+	observable,
 	of,
 	merge,
 } from '@cxl/rx';
@@ -70,7 +70,7 @@ export function DefaultRoute(path: string | RouteOptions = '') {
 }
 
 export function routeIsActive(path: string) {
-	return router$.map(state => state.url.path === path);
+	return router$.map(() => router.isActiveUrl(path));
 }
 
 export function routerOutlet(host: HTMLElement) {
@@ -99,7 +99,7 @@ export function routerStrategy(
 	strategy: Strategy = Strategies.query
 ) {
 	return merge(
-		defer(() => strategy$.next(strategy)),
+		observable(() => strategy$.next(strategy)),
 		getUrl.tap(() => router.go(strategy.deserialize())),
 		router$.tap(state => strategy.serialize(state.url))
 	);

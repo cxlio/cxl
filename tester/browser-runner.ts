@@ -18,7 +18,7 @@ function error(msg: string | Error) {
 			<p style="white-space:pre">${msg.message}</p>
 			<pre>${msg.stack}</pre>
 		`;
-	} else output += `<p style="white-space:pre">${msg}</p>`;
+	} else output += `<p style="white-space:pre-wrap">${msg}</p>`;
 	output += '</li>';
 }
 

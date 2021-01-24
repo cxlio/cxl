@@ -62,7 +62,7 @@ function calculateCoverage(coverage: TestCoverage[]) {
 				const len = range.endOffset - range.startOffset;
 				blockTotal += len;
 				if (range.count) blockCovered += len;
-				else blockCovered -= len;
+				// else blockCovered -= len;
 			}
 		}
 
