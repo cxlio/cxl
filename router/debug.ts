@@ -5,10 +5,10 @@ override(
 	RouteManager.prototype,
 	'register',
 	function (this: RouteManager, route) {
-		const path = route.path?.toString();
+		const path = route.id;
 		const routes: Route<any>[] = (this as any).routes;
-		if (path && routes.find(r => r.path?.path === path))
-			throw new Error(`Path "${path}" already registered`);
+		if (path && routes.find(r => r.id === path))
+			throw new Error(`Route with id "${path}" already registered`);
 	}
 );
 

@@ -1,6 +1,6 @@
 import { dom } from '@cxl/tsx';
 import { suite } from '@cxl/spec';
-import { Router } from './index.js';
+import { Router, normalize } from './index.js';
 
 export default suite('router', test => {
 	test('Router#go - no parameters', a => {
@@ -31,6 +31,13 @@ export default suite('router', test => {
 		router.go('test/@title');
 		a.equal(router.state?.route, router.routes.get('test'));
 		a.equal((router.state?.root as any).title, '@title');
+	});
+
+	test('normalize', a => {
+		a.equal(normalize('/'), '');
+		a.equal(normalize('//'), '');
+		a.equal(normalize('/path'), 'path');
+		a.equal(normalize('/path/'), 'path');
 	});
 
 	test('Empty route', a => {
@@ -66,13 +73,26 @@ export default suite('router', test => {
 			render: () => <a />,
 		});
 		router.route({
+			id: 'park',
 			parent: 'home',
 			path: '/park',
+			render: () => <b />,
+		});
+
+		router.route({
+			parent: 'park',
+			path: '/park/:item/details',
 			render: () => <b />,
 		});
 
 		router.go('/park');
 		a.ok(router.isActiveUrl('/'));
 		a.ok(router.isActiveUrl('/park'));
+		a.ok(router.isActiveUrl('/park/'));
+		router.go('/park/item/details');
+		a.ok(router.isActiveUrl('/'));
+		a.ok(router.isActiveUrl('/park'));
+		a.ok(router.isActiveUrl('/park/item/details'));
+		a.ok(!router.isActiveUrl('/park/item2/details'));
 	});
 });

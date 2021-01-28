@@ -9,12 +9,17 @@ import {
 	bind,
 	get,
 	onUpdate,
-	role,
 } from '@cxl/component';
 import { Bindable, dom, expression } from '@cxl/tsx';
 import { EMPTY, Observable, merge, tap } from '@cxl/rx';
 import { StyleSheet, border, css, padding, pct } from '@cxl/css';
-import { ariaProp, getAttribute, stopEvent, triggerEvent } from '@cxl/template';
+import {
+	ariaProp,
+	getAttribute,
+	stopEvent,
+	role,
+	triggerEvent,
+} from '@cxl/template';
 import { on, onAction, remove, trigger } from '@cxl/dom';
 import { InversePrimary, ResetSurface } from './theme.js';
 
@@ -839,6 +844,7 @@ export class T extends Component {
 			animation: 'fadeOut',
 			transformOrigin: 'top',
 			top: 0,
+			zIndex: 1,
 		},
 		popup$right: { right: 0 },
 		popup$opened: { scaleY: 1, animation: 'fadeIn' },

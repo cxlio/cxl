@@ -2,7 +2,7 @@ import { basename } from 'path';
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 
-import { EMPTY, observable } from '@cxl/rx';
+import { EMPTY, concat, observable } from '@cxl/rx';
 
 import { BuildConfiguration, build } from './builder.js';
 import { docs, pkg, readPackage, readme } from './package.js';
@@ -96,6 +96,22 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 										minify()
 								  )
 								: EMPTY,
+						],
+					},
+			  ]
+			: []),
+		...(existsSync('tsconfig.bundle.json')
+			? [
+					{
+						target: 'package',
+						outputDir: outputDir,
+						tasks: [
+							concat(
+								tsconfig('tsconfig.bundle.json'),
+								file(`${outputDir}/index.bundle.js`).pipe(
+									minify()
+								)
+							),
 						],
 					},
 			  ]

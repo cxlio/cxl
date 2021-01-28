@@ -8,7 +8,9 @@ import {
 	filter,
 	first,
 	map,
+	observable,
 	of,
+	operators,
 	pipe,
 	ref,
 	tap,
@@ -749,6 +751,24 @@ export default suite('rx', [
 					done();
 				}
 			);
+		});
+	}),
+
+	spec('operators', they => {
+		they.should('be defined in the prototype of Observable', a => {
+			for (const op in operators) a.ok((Observable.prototype as any)[op]);
+		});
+
+		they.should('unsubscribe from source on complete', a => {
+			let wasCalled = 0;
+
+			const source = observable(subs => {
+				subs.complete();
+				return () => wasCalled++;
+			});
+			const obs = source.switchMap(s => of(s));
+			obs.subscribe();
+			a.equal(wasCalled, 1);
 		});
 	}),
 ]);

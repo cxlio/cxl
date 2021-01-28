@@ -267,48 +267,6 @@ export class AttributeObserver extends Subject<MutationEvent> {
 	}
 }
 
-export class Marker {
-	node: Comment;
-	children: NodeSnapshot[] = [];
-
-	constructor(public element: Element, text: string) {
-		const parent = element.parentNode;
-		const node = (this.node = document.createComment(text || ''));
-
-		if (parent) {
-			parent.insertBefore(node, element);
-		} else throw new Error('Invalid Parent Node');
-
-		remove(element);
-		// TODO. Used by marker.empty directive
-		(element as any).$marker = this;
-	}
-
-	toggle(val: boolean, removeTo: Element) {
-		const el = this.element,
-			parent = this.node.parentNode;
-
-		if (val && parent) parent.insertBefore(el, this.node);
-		else {
-			if (removeTo) removeTo.appendChild(el);
-			else remove(el);
-		}
-	}
-
-	insert(content: Element, nextNode: Node) {
-		// TODO performance.
-		this.children.push(new NodeSnapshot(content.childNodes));
-
-		if (this.node.parentNode)
-			this.node.parentNode.insertBefore(content, nextNode || this.node);
-	}
-
-	empty() {
-		this.children.forEach(snap => snap.remove());
-		this.children = [];
-	}
-}
-
 export function onChildrenMutation(el: Element) {
 	return new ChildrenObserver(el);
 }

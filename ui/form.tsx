@@ -6,7 +6,6 @@ import {
 	Slot,
 	bind,
 	get,
-	role,
 	staticTemplate,
 } from '@cxl/component';
 import {
@@ -41,6 +40,7 @@ import { dragInside } from '@cxl/drag';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
 import { Appbar, AppbarContextual } from './navigation.js';
+import { role } from '@cxl/template';
 
 export { SelectBox, Option } from './select.js';
 
@@ -1171,12 +1171,14 @@ export class TextArea extends InputBase {
 			lineHeight: 16,
 			width: 56,
 		},
-		'@small': { $fixed: { bottom: 'auto', top: 32 } },
 		$fixed: {
 			position: 'fixed',
 			height: 56,
 			bottom: 16,
 			right: 24,
+		},
+		'@small': {
+			$fixed: { position: 'absolute', bottom: 'auto', marginTop: -28 },
 		},
 		$focus: { elevation: 4 },
 	}),

@@ -210,26 +210,47 @@ class Marker {
 		this.node.parentNode?.insertBefore(content, nextNode);
 	}
 
+	remove(node: Node) {
+		const index = this.children.indexOf(node);
+		if (index === -1) throw new Error('node not found');
+		this.children.splice(index, 1);
+		const parent = this.node.parentNode;
+		if (!parent) return;
+		parent.removeChild(node);
+	}
+
 	empty() {
 		const parent = this.node.parentNode;
-
 		if (!parent) return;
-
 		this.children.forEach(snap => parent.removeChild(snap));
-		this.children = [];
+		this.children.length = 0;
 	}
 }
 
-export function list<T>(
-	source: Observable<ListEvent<T>>,
+export function list<T, K>(
+	source: Observable<ListEvent<T, K>>,
 	renderFn: (item: T) => Node
 ) {
-	const marker = new Marker();
 	return (host: Bindable) => {
+		const marker = new Marker();
+		const map = new Map<K, Node | Node[]>();
 		host.bind(
 			source.tap(ev => {
-				if (ev.type === 'insert') marker.insert(renderFn(ev.item));
-				else if (ev.type === 'empty') marker.empty();
+				if (ev.type === 'insert') {
+					const node = renderFn(ev.item);
+					map.set(
+						ev.key,
+						node instanceof DocumentFragment
+							? Array.from(node.childNodes)
+							: node
+					);
+					marker.insert(node);
+				} else if (ev.type === 'remove') {
+					const node = map.get(ev.key);
+					if (Array.isArray(node))
+						node.forEach(n => marker.remove(n));
+					else if (node) marker.remove(node);
+				} else if (ev.type === 'empty') marker.empty();
 			})
 		);
 		return marker.node;
@@ -353,4 +374,14 @@ export function ariaChecked(host: ValueElement) {
 			host.value === undefined ? 'mixed' : val ? 'true' : 'false'
 		)
 	);
+}
+
+export function role<T extends Component>(roleName: string) {
+	return (host: T) =>
+		host.bind(
+			observable(() => {
+				const el = host as any;
+				!el.hasAttribute('role') && el.setAttribute('role', roleName);
+			})
+		);
 }

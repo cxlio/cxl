@@ -6,12 +6,12 @@ import {
 	Slot,
 	StyleAttribute,
 	update,
-	role,
 } from '@cxl/component';
 import { css, margin, padding, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { operator } from '@cxl/rx';
 import { InversePrimary } from './theme.js';
+import { role } from '@cxl/template';
 
 const colStyles = ((r: any) => {
 	for (let i = 12; i > 0; i--)

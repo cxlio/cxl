@@ -1,5 +1,5 @@
 import { border, css } from '@cxl/css';
-import { ariaProp, triggerEvent } from '@cxl/template';
+import { ariaProp, triggerEvent, role } from '@cxl/template';
 import {
 	Component,
 	Augment,
@@ -7,7 +7,6 @@ import {
 	StyleAttribute,
 	bind,
 	get,
-	role,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
 import { tap } from '@cxl/rx';

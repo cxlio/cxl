@@ -1,4 +1,5 @@
-import { Augment, Component, Attribute, role } from '@cxl/component';
+import { Augment, Component, Attribute } from '@cxl/component';
+import { role } from '@cxl/template';
 import { css, registerFont } from '@cxl/css';
 import { getShadow } from '@cxl/dom';
 import { theme } from '@cxl/ui/theme.js';

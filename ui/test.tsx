@@ -613,7 +613,10 @@ export default spec('ui', a => {
 			) as Button;
 			button.click();
 			a.ok(el);
-			el.promise.then(done);
+			el.promise.then(val => {
+				a.equal(val, true);
+				done();
+			});
 		});
 		a.should('reject promise on cancel', a => {
 			const done = a.async();
@@ -623,7 +626,10 @@ export default spec('ui', a => {
 			) as Button;
 			button?.click();
 			a.ok(el);
-			el.promise.catch(done);
+			el.promise.then(val => {
+				a.equal(val, false);
+				done();
+			});
 		});
 		a.should('show dialog with the confirm function', async a => {
 			const promise = confirm(

@@ -62,6 +62,12 @@ function routeToRegExp(route: string): [RegExp, string[]] {
 	return [result, names];
 }
 
+export function normalize(path: string) {
+	if (path[0] === '/') path = path.slice(1);
+	if (path.endsWith('/')) path = path.slice(0, -1);
+	return path;
+}
+
 export function replaceParameters(
 	path: string,
 	params?: Record<string, string>
@@ -79,12 +85,12 @@ export function parseQueryParameters(query: string) {
 }
 
 class Fragment {
+	path: string;
 	regex: RegExp;
 	parameters: string[];
 
-	constructor(public path: string) {
-		if (path[0] === '/') path = path.slice(1);
-
+	constructor(path: string) {
+		this.path = path = normalize(path);
 		[this.regex, this.parameters] = routeToRegExp(path);
 	}
 
@@ -197,7 +203,7 @@ export function getElementRoute<T extends RouteElement>(
 
 export function parseUrl(url: string): Url {
 	const match = URL_REGEX.exec(url);
-	return { path: match?.[1] || '', hash: match?.[2] || '' };
+	return { path: normalize(match?.[1] || ''), hash: match?.[2] || '' };
 }
 
 export const QueryStrategy: Strategy = {
@@ -387,6 +393,7 @@ export class Router {
 			const routeDef: Route<any> = (el as any)[routeSymbol];
 			return (
 				routeDef.path?.test(parsed.path) &&
+				current.path.startsWith(parsed.path) &&
 				(!parsed.hash || parsed.hash === current.hash)
 			);
 		});

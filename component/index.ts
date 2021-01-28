@@ -203,7 +203,7 @@ function attributes$(host: Component): Observable<AttributeEvent<any, any>> {
 }
 
 export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
-	return concat(of(host), attributes$(host)).pipe(tap(() => fn(host)));
+	return concat(of(host), attributes$(host)).tap(() => fn(host));
 }
 
 /**
@@ -320,16 +320,6 @@ export function StyleAttribute() {
 
 export function getRegisteredComponents() {
 	return { ...registeredComponents };
-}
-
-export function role<T extends Component>(roleName: string) {
-	return (host: T) =>
-		host.bind(
-			observable(() => {
-				const el = host as any;
-				!el.hasAttribute('role') && el.setAttribute('role', roleName);
-			})
-		);
 }
 
 @Augment('cxl-span')

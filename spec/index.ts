@@ -75,12 +75,7 @@ export class TestApi {
 	}
 
 	afterAll(fn: () => Promise<any> | void) {
-		this.$test.events.subscribe(ev => {
-			if (ev.type === 'afterAll') {
-				const result = fn();
-				if (result) ev.promises.push(result);
-			}
-		});
+		this.$test.onEvent('afterAll', fn);
 	}
 
 	ok(condition: any, message = 'Assertion failed') {
@@ -240,6 +235,15 @@ export class Test {
 	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
 		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
 		else this.name = nameOrConfig.name;
+	}
+
+	onEvent(id: EventType, fn: () => Promise<any> | void) {
+		this.events.subscribe(ev => {
+			if (ev.type === id) {
+				const result = fn();
+				if (result) ev.promises.push(result);
+			}
+		});
 	}
 
 	push(result: Result) {

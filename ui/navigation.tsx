@@ -6,10 +6,9 @@ import {
 	StyleAttribute,
 	bind,
 	get,
-	role,
 } from '@cxl/component';
 import { on, onAction, onLoad, trigger } from '@cxl/dom';
-import { aria, portal, triggerEvent } from '@cxl/template';
+import { aria, portal, role, triggerEvent } from '@cxl/template';
 import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
@@ -134,6 +133,9 @@ import { Drawer } from './dialog.js';
 			<div className="tabs">
 				<host.Slot selector="cxl-tabs" />
 			</div>
+			<div className="fab">
+				<host.Slot selector="cxl-fab" />
+			</div>
 		</>
 	)
 )
@@ -215,6 +217,7 @@ export class AppbarTitle extends Component {
 			textAlign: 'center',
 			display: 'block',
 			outline: 0,
+			minWidth: 90,
 		},
 		'@small': {
 			$: { display: 'inline-block' },

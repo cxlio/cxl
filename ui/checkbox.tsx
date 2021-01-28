@@ -5,14 +5,13 @@ import {
 	StyleAttribute,
 	bind,
 	get,
-	role,
 	staticTemplate,
 } from '@cxl/component';
 import { Focusable, Svg } from './core.js';
 import { tap, merge } from '@cxl/rx';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
-import { Style, ariaChecked } from '@cxl/template';
+import { Style, ariaChecked, role } from '@cxl/template';
 
 const Undefined = {};
 

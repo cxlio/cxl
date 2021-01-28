@@ -1,4 +1,4 @@
-import { Observable, ListEvent } from '@cxl/rx';
+import { Observable, ListEvent, observable, merge } from '@cxl/rx';
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
@@ -10,7 +10,8 @@ export class Reference<T> extends Observable<T> {
 	constructor(dir: string, readonly key: string) {
 		super(subs => {
 			const ref$ = firebase.database().ref(this.path);
-			const onValue = (snap: any) => subs.next(snap.val());
+			const onValue = (snap: firebase.database.DataSnapshot) =>
+				subs.next(snap.val());
 			ref$.on('value', onValue);
 			return () => ref$.off('value', onValue);
 		});
@@ -28,11 +29,21 @@ export class Reference<T> extends Observable<T> {
 }
 
 type Collection<T> = Reference<Record<string, T>>;
-type CollectionEvent<T> = ListEvent<Reference<T>>;
+type CollectionEvent<T> = ListEvent<Reference<T>, string>;
 type Snapshot = firebase.database.DataSnapshot;
 
 function getRef(ref: Reference<any>) {
 	return firebase.database().ref(ref.path);
+}
+
+function on(ref$: firebase.database.Query, ev: firebase.database.EventType) {
+	return observable<any>(subs => {
+		function handler(snap: firebase.database.DataSnapshot) {
+			subs.next(snap);
+		}
+		ref$.on(ev, handler);
+		return () => ref$.off(ev, handler);
+	});
 }
 
 function createCollection<T>(
@@ -42,13 +53,18 @@ function createCollection<T>(
 ) {
 	return new Observable<CollectionEvent<T>>(subs => {
 		subs.next({ type: 'empty' });
-		ref$.on('child_added', snap =>
-			subs.next({
-				type: 'insert',
-				item: getItem(snap, path),
-			})
-		);
-		return () => ref$.off();
+		function next(
+			type: 'insert' | 'remove',
+			snap: firebase.database.DataSnapshot
+		) {
+			subs.next({ type, key: snap.key || '', item: getItem(snap, path) });
+		}
+		const inner = merge(
+			on(ref$, 'child_added').tap(next.bind(null, 'insert')),
+			on(ref$, 'child_removed').tap(next.bind(null, 'remove'))
+		).subscribe();
+
+		return () => inner.unsubscribe();
 	});
 }
 
@@ -87,6 +103,10 @@ export function push<T>(ref: Collection<T>, initial?: T) {
 
 export function db<T>(path: string) {
 	return new Reference<T>(path, '');
+}
+
+export function remove(ref: Reference<any>) {
+	return getRef(ref).remove();
 }
 
 /*function observe<T>(ref$: firebase.database.Query) {

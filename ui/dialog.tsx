@@ -4,7 +4,6 @@ import {
 	Augment,
 	Component,
 	connect,
-	role,
 	get,
 } from '@cxl/component';
 import { css, padding, pct } from '@cxl/css';
@@ -12,6 +11,7 @@ import { dom } from '@cxl/tsx';
 import { createElement, insert, on, onAction, trigger, remove } from '@cxl/dom';
 import { merge } from '@cxl/rx';
 import { T, Button, Span } from './core.js';
+import { role } from '@cxl/template';
 
 /**
  * A backdrop appears behind all other surfaces in an app, displaying contextual and actionable content.
@@ -141,10 +141,10 @@ export class DialogAlert extends Component {
 				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={el => onAction(el).tap(() => $.reject())}>
+				<Button flat $={el => onAction(el).tap(() => $.resolve(false))}>
 					{get($, 'cancel-text')}
 				</Button>
-				<Button flat $={el => onAction(el).tap(() => $.resolve())}>
+				<Button flat $={el => onAction(el).tap(() => $.resolve(true))}>
 					{get($, 'action')}
 				</Button>
 			</div>
@@ -152,8 +152,7 @@ export class DialogAlert extends Component {
 	)
 )
 export class DialogConfirm extends Component {
-	resolve!: () => void;
-	reject!: () => void;
+	resolve!: (val: boolean) => void;
 
 	@Attribute()
 	'cancel-text' = 'Cancel';
@@ -167,9 +166,8 @@ export class DialogConfirm extends Component {
 	@Attribute()
 	action = 'Ok';
 
-	readonly promise = new Promise<void>((resolve, reject) => {
+	readonly promise = new Promise<boolean>(resolve => {
 		this.resolve = resolve;
-		this.reject = reject;
 	});
 }
 
@@ -392,7 +390,7 @@ export function confirm(
 
 	container.appendChild(modal);
 
-	return modal.promise;
+	return modal.promise.then(val => (remove(modal), val));
 }
 
 let snackbarContainer: SnackbarContainer;

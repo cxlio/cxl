@@ -1,6 +1,9 @@
 {
 	"summary": true,
-	"scripts": ["../dist/ui/index.bundle.min.js"],
+	"scripts": [
+		"../dist/ui/index.bundle.min.js",
+		"../dist/ui-fa/amd/index.min.js"
+	],
 	"extra": [
 		{
 			"items": [

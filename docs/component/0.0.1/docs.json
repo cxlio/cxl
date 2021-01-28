@@ -988,7 +988,7 @@
           },
           "extendedBy": [
             {
-              "id": 136,
+              "id": 131,
               "name": "Span",
               "kind": 6
             }
@@ -2519,86 +2519,10 @@
             "line": 322,
             "ch": 1
           },
-          "kind": 16,
-          "name": "role",
-          "flags": 1,
-          "id": 131,
-          "typeParameters": [
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 324,
-                "ch": 21
-              },
-              "kind": 3,
-              "name": "T",
-              "flags": 0,
-              "id": 132
-            }
-          ],
-          "parameters": [
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 324,
-                "ch": 42
-              },
-              "kind": 9,
-              "name": "roleName",
-              "flags": 0,
-              "id": 133,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ],
-          "type": {
-            "source": {
-              "fileName": "index.ts",
-              "line": 325,
-              "ch": 7
-            },
-            "kind": 16,
-            "name": "",
-            "flags": 0,
-            "id": 134,
-            "parameters": [
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 325,
-                  "ch": 9
-                },
-                "kind": 9,
-                "name": "host",
-                "flags": 0,
-                "id": 135,
-                "type": {
-                  "id": 132,
-                  "name": "T",
-                  "kind": 6
-                }
-              }
-            ],
-            "type": {
-              "name": "void",
-              "kind": 32,
-              "flags": 0
-            }
-          }
-        },
-        {
-          "source": {
-            "fileName": "index.ts",
-            "line": 332,
-            "ch": 1
-          },
           "kind": 35,
           "name": "Span",
           "flags": 1,
-          "id": 136,
+          "id": 131,
           "children": [],
           "docs": {
             "tagName": "cxl-span"
@@ -2619,13 +2543,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 335,
+            "line": 325,
             "ch": 38
           },
           "kind": 16,
           "name": "Slot",
           "flags": 1,
-          "id": 137,
+          "id": 132,
           "parameters": [],
           "type": {
             "name": "HTMLSlotElement",
@@ -2635,34 +2559,34 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 339,
+            "line": 329,
             "ch": 1
           },
           "kind": 16,
           "name": "staticTemplate",
           "flags": 1,
-          "id": 138,
+          "id": 133,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 341,
+                "line": 331,
                 "ch": 31
               },
               "kind": 9,
               "name": "template",
               "flags": 0,
-              "id": 139,
+              "id": 134,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 341,
+                  "line": 331,
                   "ch": 40
                 },
                 "kind": 17,
                 "name": "",
                 "flags": 0,
-                "id": 140,
+                "id": 135,
                 "type": {
                   "name": "Node",
                   "kind": 6
@@ -2674,13 +2598,13 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 343,
+              "line": 333,
               "ch": 7
             },
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 141,
+            "id": 136,
             "parameters": [],
             "type": {
               "name": "Node",

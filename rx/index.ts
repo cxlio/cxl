@@ -489,27 +489,28 @@ export function debounce<A extends any[], R>(
  * Emits a value from the source Observable only after a particular time span has passed without another source emission.
  */
 export function debounceTime<T>(time?: number) {
-	let to: number,
-		completed = false;
-
-	return operator<T>(subscriber => ({
-		next(val: T) {
-			if (to) clearTimeout(to);
-			to = setTimeout(() => {
-				subscriber.next(val);
-				to = 0;
-				if (completed) subscriber.complete();
-			}, time);
-		},
-		error(e) {
-			if (to) clearTimeout(to);
-			subscriber.error(e);
-		},
-		complete() {
-			if (to) completed = true;
-			else subscriber.complete();
-		},
-	}));
+	return operator<T>(subscriber => {
+		let to: number,
+			completed = false;
+		return {
+			next(val: T) {
+				if (to) clearTimeout(to);
+				to = setTimeout(() => {
+					subscriber.next(val);
+					to = 0;
+					if (completed) subscriber.complete();
+				}, time);
+			},
+			error(e) {
+				if (to) clearTimeout(to);
+				subscriber.error(e);
+			},
+			complete() {
+				if (to) completed = true;
+				else subscriber.complete();
+			},
+		};
+	});
 }
 
 /**
@@ -517,32 +518,38 @@ export function debounceTime<T>(time?: number) {
  * emitting values only from the most recently projected Observable.
  */
 export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
-	return operator<T, T2>(subscriber => {
-		let lastSubscription: Subscription | undefined;
-		let completed = false;
-		const cleanUp = () => {
-			lastSubscription?.unsubscribe();
-			lastSubscription = undefined;
-			if (completed) subscriber.complete();
-		};
+	return (source: Observable<T>) =>
+		observable<T2>(subscriber => {
+			let lastSubscription: Subscription | undefined;
+			let completed = false;
+			const cleanUp = () => {
+				lastSubscription?.unsubscribe();
+				lastSubscription = undefined;
+				if (completed) subscriber.complete();
+			};
 
-		return {
-			next(val: T) {
+			const sourceSubs = source.subscribe({
+				next(val: T) {
+					cleanUp();
+					const newObservable = project(val);
+					lastSubscription = newObservable.subscribe(
+						val => subscriber.next(val),
+						e => subscriber.error(e),
+						() => cleanUp()
+					);
+				},
+				error: e => subscriber.error(e),
+				complete() {
+					completed = true;
+					if (!lastSubscription) subscriber.complete();
+				},
+			});
+
+			return () => {
 				cleanUp();
-				const newObservable = project(val);
-				lastSubscription = newObservable.subscribe(
-					val => subscriber.next(val),
-					e => subscriber.error(e),
-					() => cleanUp()
-				);
-			},
-			error: e => subscriber.error(e),
-			complete() {
-				completed = true;
-				if (!lastSubscription) subscriber.complete();
-			},
-		};
-	});
+				sourceSubs.unsubscribe();
+			};
+		});
 }
 
 /**
@@ -974,7 +981,7 @@ export function ref<T>() {
 	return new Reference<T>();
 }
 
-const operators: any = {
+export const operators: any = {
 	catchError,
 	debounceTime,
 	distinctUntilChanged,
@@ -1021,13 +1028,19 @@ export interface Observable<T> {
 	tap(tapFn: (val: T) => void): Observable<T>;
 }
 
-interface InsertEvent<T> {
+interface InsertEvent<T, K> {
 	type: 'insert';
 	item: T;
+	key: K;
+}
+
+interface RemoveEvent<K> {
+	type: 'remove';
+	key: K;
 }
 
 interface EmptyEvent {
 	type: 'empty';
 }
 
-export type ListEvent<T> = InsertEvent<T> | EmptyEvent;
+export type ListEvent<T, K> = InsertEvent<T, K> | RemoveEvent<K> | EmptyEvent;

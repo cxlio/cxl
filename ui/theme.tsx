@@ -192,6 +192,7 @@ export const ResetSurface: any = {
 		link: baseColor('onSurface'),
 		error: baseColor('error'),
 		onError: baseColor('onError'),
+		divider: baseColor('divider'),
 	},
 };
 

@@ -1,7 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path').posix;
 const { readJson, sh } = require('../dist/server');
-//const { sh } = require('../dist/build');
 
 function writeIndex(content) {
 	const INDEX = `
@@ -18,7 +17,7 @@ function writeIndex(content) {
 <body>
 	<cxl-application>
 	<cxl-appbar><cxl-appbar-title>Build Report</cxl-appbar-title></cxl-appbar>
-	<cxl-content>${content}</cxl-content>
+	<cxl-content center>${content}</cxl-content>
 	</cxl-application>
 </body>
 </html>

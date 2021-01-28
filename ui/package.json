@@ -6,7 +6,7 @@
 	"homepage": "https://cxlio.github.io/cxl/ui",
 	"browser": "amd/index.min.js",
 	"scripts": {
-		"build": "node build",
+		"build": "node ../dist/build",
 		"build-icons": "node build-icons",
 		"test": "npm run build && cd ../dist/ui && node ../tester"
 	},
