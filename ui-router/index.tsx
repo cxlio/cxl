@@ -184,10 +184,10 @@ export function RouterTitle() {
 		return route.first ? (
 			<Span>{route.title}</Span>
 		) : (
-			<>
+			<Span slot="parent">
 				<RouterLink href={route.path}>{route.title}</RouterLink>
 				&nbsp;/&nbsp;
-			</>
+			</Span>
 		);
 	}
 
@@ -314,6 +314,10 @@ export class RouterItem extends Component {
 
 	@Attribute()
 	disabled = false;
+
+	focus() {
+		(this.shadowRoot?.querySelector('cxl-item') as Item)?.focus();
+	}
 }
 
 @Augment<RouterOutlet>('cxl-router-outlet', bind(routerOutlet))

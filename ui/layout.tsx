@@ -11,7 +11,6 @@ import { css, margin, padding, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { operator } from '@cxl/rx';
 import { InversePrimary } from './theme.js';
-import { role } from '@cxl/template';
 
 const colStyles = ((r: any) => {
 	for (let i = 12; i > 0; i--)
@@ -307,22 +306,6 @@ export class Card extends C {
 	})
 	elevation: 1 | 2 | 3 | 4 | 5 = 1;
 }
-
-@Augment<List>(
-	'cxl-list',
-	role('list'),
-	css({
-		$: {
-			display: 'block',
-			paddingTop: 8,
-			paddingBottom: 8,
-			marginLeft: -16,
-			marginRight: -16,
-		},
-	}),
-	Slot
-)
-export class List extends Component {}
 
 /**
  * @example

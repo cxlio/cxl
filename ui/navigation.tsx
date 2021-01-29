@@ -12,7 +12,15 @@ import { aria, portal, role, triggerEvent } from '@cxl/template';
 import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
-import { IconButton, Span, Svg, ripple } from './core.js';
+import {
+	IconButton,
+	Span,
+	StateStyles,
+	Svg,
+	focusable,
+	navigationList,
+	ripple,
+} from './core.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -184,8 +192,17 @@ export class AppbarContextual extends Component {
 			textDecoration: 'none',
 			alignSelf: 'flex-end',
 		},
+		parentslot: { display: 'none' },
+		'@small': {
+			parentslot: { display: 'contents' },
+		},
 	}),
-	() => <slot />
+	() => (
+		<>
+			<slot className="parentslot" name="parent"></slot>
+			<slot />
+		</>
+	)
 )
 export class AppbarTitle extends Component {
 	@StyleAttribute()
@@ -411,6 +428,7 @@ export class Menu extends Component {
 @Augment<Item>(
 	'cxl-item',
 	bind(ripple),
+	focusable,
 	css({
 		$: {
 			display: 'block',
@@ -429,11 +447,39 @@ export class Menu extends Component {
 			backgroundColor: 'primaryLight',
 			color: 'onPrimaryLight',
 		},
+		...StateStyles,
 	}),
 	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
-	() => <slot />
+	_ => <slot />
 )
 export class Item extends Component {
 	@StyleAttribute()
+	disabled = false;
+
+	touched = false;
+
+	@StyleAttribute()
 	selected = false;
 }
+
+@Augment<List>(
+	'cxl-list',
+	role('list'),
+	$ =>
+		navigationList(
+			$,
+			':not([disabled])',
+			':focus, :focus-within'
+		).tap((el: any) => el?.focus?.()),
+	css({
+		$: {
+			display: 'block',
+			paddingTop: 8,
+			paddingBottom: 8,
+			marginLeft: -16,
+			marginRight: -16,
+		},
+	}),
+	_ => <slot />
+)
+export class List extends Component {}

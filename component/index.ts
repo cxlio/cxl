@@ -73,9 +73,10 @@ export abstract class Component extends HTMLElement {
 		return this;
 	};
 
-	Slot = (p: { selector: string }) => {
+	Slot = (p: { selector: string; name?: string }) => {
 		const el = document.createElement('slot');
-		const selector = (el.name = p.selector);
+		const name = (el.name = p.name || p.selector);
+		const selector = p.selector;
 		this.bind(
 			defer(() => {
 				for (const node of this.children)
@@ -87,7 +88,7 @@ export abstract class Component extends HTMLElement {
 						node instanceof HTMLElement &&
 						node.matches(selector)
 					)
-						node.slot = selector;
+						node.slot = name;
 				});
 			})
 		);

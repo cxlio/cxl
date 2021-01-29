@@ -994,6 +994,7 @@ theme.typography['icon'] = {
 };
 
 @Augment(
+	'cxl-icon',
 	role('img'),
 	css({
 		$: {
@@ -1001,15 +1002,13 @@ theme.typography['icon'] = {
 			font: 'icon',
 		},
 		$round: {
-			borderRadius: 1,
+			borderRadius: '50%',
 			textAlign: 'center',
 		},
 		$outline: { borderWidth: 1 },
 	})
 )
 export class Icon extends Component {
-	static tagName = 'cxl-icon';
-
 	protected $icon: IconKey = '';
 	protected iconNode?: Text;
 
@@ -1035,6 +1034,14 @@ export class Icon extends Component {
 		}
 	}
 }
+
+@Augment(
+	'cxl-item-icon',
+	css({
+		$: { marginRight: 16 },
+	})
+)
+export class ItemIcon extends Icon {}
 
 @Augment(
 	css({

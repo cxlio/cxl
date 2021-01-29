@@ -68,6 +68,16 @@ function createCollection<T>(
 	});
 }
 
+export function observe<T>(ref: Reference<T>) {
+	return new Observable<T>(subs => {
+		const ref$ = getRef(ref);
+		const onValue = (snap: firebase.database.DataSnapshot) =>
+			subs.next(snap.val());
+		ref$.on('value', onValue);
+		return () => ref$.off('value', onValue);
+	});
+}
+
 export function collection<T>(ref: Collection<T>) {
 	return createCollection(
 		ref.path,
@@ -94,11 +104,11 @@ export function mapCollection<T, T2>(
 	);
 }
 
-export function push<T>(ref: Collection<T>, initial?: T) {
+export async function push<T>(ref: Collection<T>, initial?: T) {
 	const ref$ = firebase.database().ref(ref.path);
-	const child = ref$.push(initial);
+	const child = await ref$.push(initial);
 	if (child.key === null) throw new Error('Invalid key');
-	return new Reference<T>(ref.path, child.key);
+	return child.key;
 }
 
 export function db<T>(path: string) {
@@ -109,12 +119,6 @@ export function remove(ref: Reference<any>) {
 	return getRef(ref).remove();
 }
 
-/*function observe<T>(ref$: firebase.database.Query) {
-	return new Observable<T>(subs => {
-		ref$.on('value', snap => subs.next(snap.val()));
-		return () => ref$.off('value');
-	});
-}*/
 type BaseTypes = string | number | boolean | null;
 type AllowedProperties<T> = {
 	[K in keyof T]: T[K] extends BaseTypes ? T[K] : never;

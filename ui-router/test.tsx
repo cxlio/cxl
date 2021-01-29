@@ -6,8 +6,11 @@ export default spec('ui-router', s => {
 		a.ok(router);
 	});
 
-	s.test('RouterItem', a => {
-		const el = a.element('cxl-router-item') as RouterItem;
-		a.ok(el);
+	s.test('RouterItem', it => {
+		it.should('implement a focus method', a => {
+			const el = a.element('cxl-router-item') as RouterItem;
+			el.focus();
+			a.ok(el.matches(':focus-within'));
+		});
 	});
 });
