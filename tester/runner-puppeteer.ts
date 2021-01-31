@@ -1,8 +1,9 @@
 import { Browser, CoverageEntry, Page, Request, launch } from 'puppeteer';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile, mkdir } from 'fs/promises';
 import { dirname, resolve } from 'path';
 import type { Test } from '@cxl/spec';
 import type { TestRunner } from './index.js';
+import { PNG } from 'pngjs';
 
 import { TestCoverage, generateReport } from './report.js';
 
@@ -51,6 +52,9 @@ async function respond(req: Request, sources: Output[], url: string) {
 
 async function handleRequest(sources: Output[], req: Request) {
 	if (req.method() !== 'POST') return req.continue();
+
+	const url = new URL(req.url());
+	if (url.hostname !== 'localhost') return req.continue();
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
 	const paths = [resolve(base)];
@@ -145,6 +149,93 @@ async function generateCoverage(
 	});
 }
 
+let figureReady = false;
+
+function parsePNG(buffer: Buffer) {
+	return new Promise<Buffer>((resolve, reject) => {
+		const png = new PNG();
+		png.parse(buffer, (e, self) => {
+			if (e) reject(e);
+			else resolve(self.data);
+		});
+	});
+}
+
+let screenshotQueue = Promise.resolve();
+
+function screenshot(page: Page, domId: string) {
+	return new Promise<Buffer>((resolve, reject) => {
+		const id = `#${domId}`;
+		screenshotQueue = screenshotQueue.then(() => {
+			return page
+				.$eval(id, el => ((el as any).style.zIndex = 10))
+				.then(() => page.$(`#${domId}`))
+				.then(el =>
+					el?.screenshot({
+						type: 'png',
+						encoding: 'binary',
+					})
+				)
+				.then(buffer => {
+					buffer ? resolve(buffer) : reject();
+				});
+			/*.then(() =>
+					page.$eval(id, el => {
+						(el as any).style.zIndex = 0;
+					})
+				);*/
+		});
+	});
+}
+
+async function handleFigureRequest(
+	page: Page,
+	data: { name: string; domId: string; baseline?: string },
+	app: TestRunner
+) {
+	const { name, domId } = data;
+	const baseline = (data.baseline = `${
+		app.baselinePath || 'spec'
+	}/${name}.png`);
+	const filename = `spec/${name}.png`;
+
+	if (!figureReady) {
+		await page
+			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 500 })
+			.catch(() => 1);
+		figureReady = true;
+	}
+
+	const [original, buffer] = await Promise.all([
+		readFile(baseline).catch(() => undefined),
+		screenshot(page, domId),
+	]);
+
+	if ((!original || app.updateBaselines) && buffer && app.baselinePath) {
+		mkdir(app.baselinePath)
+			.catch(() => false)
+			.then(() => writeFile(baseline, buffer));
+	} else if (original && buffer && app.baselinePath) {
+		const [originalData, newData] = await Promise.all([
+			parsePNG(original),
+			parsePNG(buffer),
+		]);
+		const len = originalData.length;
+
+		if (len !== newData.length) return 0;
+		for (let i = 0; i < len; i++) {
+			if (originalData.readUInt8(i) !== newData.readUInt8(i)) return 0;
+		}
+	}
+
+	if (buffer)
+		mkdir('spec')
+			.catch(() => false)
+			.then(() => writeFile(filename, buffer));
+
+	return 1;
+}
+
 export default async function runPuppeteer(app: TestRunner) {
 	const entryFile = app.entryFile;
 	const browser = await launch({
@@ -157,8 +248,14 @@ export default async function runPuppeteer(app: TestRunner) {
 	app.log(`Puppeteer ${await browser.version()}`);
 
 	const page = await openPage(browser);
+
+	function cxlRunner(cmd: any) {
+		if (cmd.type === 'figure') return handleFigureRequest(page, cmd, app);
+	}
+
 	page.on('console', msg => handleConsole(msg, app));
 	page.on('pageerror', msg => app.log(msg));
+	page.exposeFunction('__cxlRunner', cxlRunner);
 
 	if (!app.firefox) await startTracing(page);
 

@@ -1,5 +1,7 @@
 import { subject, toPromise } from '@cxl/rx';
 
+declare function __cxlRunner(msg: any): any;
+
 export type Measurements = Record<string, any>;
 
 type EventType = 'afterAll' | 'afterEach' | 'beforeAll' | 'beforeEach';
@@ -38,9 +40,18 @@ interface SpyProp<T> {
 	value: T;
 }
 
+export interface FigureData {
+	type: 'figure';
+	name: string;
+	html: string;
+	baseline?: string;
+	match: number;
+}
+
 export interface Result {
 	success: boolean;
 	message: string;
+	data?: FigureData;
 	stack?: any;
 }
 
@@ -71,7 +82,7 @@ export class TestApi {
 		if (!this.$test.domContainer)
 			document.body.appendChild((this.$test.domContainer = el));
 
-		return el;
+		return el as HTMLElement;
 	}
 
 	afterAll(fn: () => Promise<any> | void) {
@@ -162,8 +173,9 @@ export class TestApi {
 	 * you want to run in that test file.
 	 */
 	testOnly(name: string, testFn: TestFn) {
-		this.$test.tests.push(new Test(name, testFn));
-		this.$test.only.push(new Test(name, testFn));
+		const test = new Test(name, testFn);
+		this.$test.tests.push(test);
+		this.$test.only.push(test);
 	}
 
 	should(name: string, testFn: TestFn) {
@@ -216,6 +228,43 @@ export class TestApi {
 			el.addEventListener('change', handler);
 			trigger(el);
 		});
+	}
+
+	figure(name: string, html: Node | string) {
+		if (typeof __cxlRunner !== 'undefined')
+			this.test(name, async a => {
+				const domId = (a.dom.id = `dom${a.id}`);
+
+				if (typeof html === 'string') a.dom.innerHTML = html;
+				else {
+					a.dom.appendChild(html);
+					html = a.dom.innerHTML;
+				}
+
+				const style = a.dom.style;
+				style.position = 'absolute';
+				style.overflowX = 'hidden';
+				style.top = style.left = '0';
+				style.width = '320px';
+
+				const data: any = {
+					type: 'figure',
+					name,
+					domId,
+					html,
+				};
+				const match = (data.match = await __cxlRunner(data));
+
+				a.$test.push({
+					success: match === 1,
+					message: 'Screenshot should match baseline',
+					data,
+				});
+			});
+		else {
+			console.warn('figure method not supported');
+			this.ok(true, 'figure method not supported');
+		}
 	}
 }
 
@@ -285,6 +334,7 @@ export class Test {
 
 	async run(): Promise<Result[]> {
 		try {
+			this.completed = false;
 			this.promise = undefined;
 			const testApi = new TestApi(this);
 			const result = this.testFn(testApi);

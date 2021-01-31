@@ -32,9 +32,8 @@ import {
 	on,
 } from '@cxl/dom';
 import { AppbarTitle, Item, Tab } from '@cxl/ui/navigation.js';
-import { StateStyles } from '@cxl/ui/core.js';
 import { dom } from '@cxl/tsx';
-import { each, triggerEvent } from '@cxl/template';
+import { StateStyles, each, triggerEvent } from '@cxl/template';
 import { css } from '@cxl/css';
 
 const router$ = new Reference<RouterState>();

@@ -1,5 +1,4 @@
 import { TestApi, spec, triggerKeydown } from '@cxl/spec';
-import { on } from '@cxl/dom';
 import { dom } from '@cxl/tsx';
 import { getRegisteredComponents, Component } from '@cxl/component';
 import '@cxl/template';
@@ -16,9 +15,11 @@ import {
 	InputBase,
 	MultiSelect,
 	Radio,
-	Span,
 	SelectBox,
 	SubmitButton,
+	List,
+	Item,
+	Avatar,
 	Tabs,
 	Tab,
 	TextArea,
@@ -27,14 +28,9 @@ import {
 	Slider,
 	alert,
 	confirm,
-	navigationList,
 	notify,
 	setSnackbarContainer,
 } from './index.js';
-
-async function connect<T extends Node>(el: T, callback: (el: T) => any) {
-	await callback(el);
-}
 
 const Measure: Record<string, any> = {
 	'CXL-APPBAR'(test: TestApi) {
@@ -682,124 +678,6 @@ export default spec('ui', a => {
 		a.ok(notify({ content: 'message', delay: 0 }).then(done));
 	});
 
-	a.test('navigationList', it => {
-		it.should('navigate by keyup and keydown', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			let eventIndex = 0;
-			let lastEl: Element;
-			const subs = navigationList(ul, 'li', 'li.selected').subscribe(
-				el => {
-					if (eventIndex === 0) a.equal(el, ul.firstElementChild);
-					else if (eventIndex === 1) a.equal(el, ul.children[1]);
-					else if (eventIndex === 2) a.equal(el, ul.children[2]);
-					else if (eventIndex === 3) a.equal(el, ul.children[2]);
-					else if (eventIndex === 4) a.equal(el, ul.children[1]);
-					else if (eventIndex === 5) a.equal(el, ul.children[0]);
-					else if (eventIndex === 6) a.equal(el, ul.children[0]);
-					else {
-						subs.unsubscribe();
-						done();
-					}
-					if (lastEl) lastEl.className = '';
-					if (el) {
-						el.className = 'selected';
-						lastEl = el;
-					}
-					eventIndex++;
-				}
-			);
-
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowUp');
-			triggerKeydown(ul, 'ArrowUp');
-			triggerKeydown(ul, 'ArrowUp');
-			triggerKeydown(ul, 'ArrowUp');
-		});
-
-		it.should('select first element on keydown', a => {
-			a.dom.innerHTML = `<ul><li disabled>One</li><li>Two</li><li>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			const subs = navigationList(
-				ul,
-				'li:not([disabled])',
-				'li.selected'
-			).subscribe(el => {
-				a.equal(el, ul.children[1]);
-				subs.unsubscribe();
-				done();
-			});
-			triggerKeydown(ul, 'ArrowDown');
-		});
-
-		it.should('select last element on keyup that matches selector', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li disabled>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			const subs = navigationList(
-				ul,
-				'li:not([disabled])',
-				'li.selected'
-			).subscribe(el => {
-				a.equal(el, ul.children[1]);
-				subs.unsubscribe();
-				done();
-			});
-			triggerKeydown(ul, 'ArrowUp');
-		});
-
-		it.should('select last element on keyup', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			const subs = navigationList(ul, 'li', 'li.selected').subscribe(
-				el => {
-					a.equal(el, ul.children[2]);
-					subs.unsubscribe();
-					done();
-				}
-			);
-			triggerKeydown(ul, 'ArrowUp');
-		});
-
-		it.should('select by character key', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li disabled>Three</li><li>tour</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			let eventIndex = 0;
-			let lastEl: Element;
-			const subs = navigationList(
-				ul,
-				'li:not([disabled])',
-				'li.selected'
-			).subscribe(el => {
-				if (eventIndex === 0) a.equal(el, ul.children[1]);
-				else if (eventIndex === 1) a.equal(el, ul.children[3]);
-				else if (eventIndex === 2) a.equal(el, ul.children[1]);
-				else {
-					a.equal(el, ul.children[3]);
-					subs.unsubscribe();
-					done();
-				}
-				if (lastEl) lastEl.className = '';
-				if (el) {
-					el.className = 'selected';
-					lastEl = el;
-				}
-				eventIndex++;
-			});
-			triggerKeydown(ul, 't');
-			triggerKeydown(ul, 't');
-			triggerKeydown(ul, 't');
-			triggerKeydown(ul, 't');
-		});
-	});
-
 	a.test('cxl-slider', it => {
 		it.should('change value on keypress', a => {
 			const slider = (<Slider />) as Slider;
@@ -915,7 +793,7 @@ export default spec('ui', a => {
 	});
 
 	a.test('cxl-radio', it => {
-		it.should('', a => {
+		it.should('group radio buttons that share the same name', a => {
 			a.dom.innerHTML = `
 				<cxl-radio name="rad" value="1"></cxl-radio>
 				<cxl-radio checked name="rad" value="2"></cxl-radio>
@@ -949,6 +827,37 @@ export default spec('ui', a => {
 		});
 	});
 
+	a.test('cxl-appbar', it => {
+		it.figure(
+			'Appbar With Title',
+			`<cxl-appbar>
+				<cxl-navbar></cxl-navbar>
+				<cxl-appbar-title>Appbar Title</cxl-appbar-title>
+			 </cxl-appbar>`
+		);
+
+		it.figure(
+			'Appbar With Tabs',
+			`<cxl-appbar>
+				<cxl-navbar></cxl-navbar>
+				<cxl-appbar-title>Appbar with Tabs</cxl-appbar-title>
+				<cxl-tabs>
+					<cxl-tab selected>Tab 1</cxl-tab>
+					<cxl-tab>Tab 2</cxl-tab>
+					<cxl-tab>Tab 3</cxl-tab>
+				</cxl-tabs>
+			</cxl-appbar>`
+		);
+
+		it.figure(
+			'Extended Appbar',
+			`<cxl-appbar extended>
+  <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+  <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
+</cxl-appbar>`
+		);
+	});
+
 	a.test('cxl-tabs', it => {
 		it.should('switch tabs when a child tab is selected', a => {
 			a.dom.innerHTML = `<cxl-tabs><cxl-tab>Tab1</cxl-tab><cxl-tab selected>Tab2</cxl-tab></cxl-tabs>`;
@@ -961,20 +870,20 @@ export default spec('ui', a => {
 		});
 	});
 
-	a.test('ripple', a => {
-		let clickHandled = false;
-
-		function ripple(el: HTMLElement) {
-			el.title = 'hello';
-			return on(el, 'click').tap(() => (clickHandled = true));
-		}
-
-		connect(<Span $={ripple}>Container</Span>, (el: any) => {
-			a.dom.appendChild(el);
-			a.ok(el);
-			el.click();
-			a.equal(el.title, 'hello');
-			a.ok(clickHandled);
-		});
+	a.test('cxl-list', a => {
+		a.figure(
+			'Single Line List',
+			<List>
+				<Item>
+					<Avatar /> One Line Item
+				</Item>
+				<Item>
+					<Avatar /> One Line Item
+				</Item>
+				<Item>
+					<Avatar /> One Line Item
+				</Item>
+			</List>
+		);
 	});
 });

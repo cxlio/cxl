@@ -11,16 +11,17 @@ import {
 import { css } from '@cxl/css';
 import { be, merge } from '@cxl/rx';
 import { on, onAction, onKeypress } from '@cxl/dom';
-import { role, triggerEvent } from '@cxl/template';
-import { InputBase } from './input-base.js';
 import {
-	Svg,
+	role,
+	triggerEvent,
 	focusable,
 	registableHost,
 	navigationList,
 	selectable,
 	selectableHost,
-} from './core.js';
+} from '@cxl/template';
+import { InputBase } from './input-base.js';
+import { Svg } from './core.js';
 
 @Augment<Option>(
 	'cxl-option',

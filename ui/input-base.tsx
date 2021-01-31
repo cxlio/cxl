@@ -9,8 +9,7 @@ import {
 } from '@cxl/component';
 import { merge } from '@cxl/rx';
 import { css } from '@cxl/css';
-import { triggerEvent } from '@cxl/template';
-import { registable } from './core.js';
+import { triggerEvent, registable } from '@cxl/template';
 
 export const FocusCircleStyle = css({
 	focusCircle: {
@@ -44,8 +43,6 @@ export const FocusCircleStyle = css({
 	},
 	focusCircle$disabled: { scaleX: 0, scaleY: 0 },
 });
-
-export const Undefined = {};
 
 @Augment<InputBase>(
 	bind(host =>

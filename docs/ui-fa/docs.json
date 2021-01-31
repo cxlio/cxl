@@ -16501,30 +16501,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 1009,
-                "ch": 37
-              },
-              "kind": 10,
-              "name": "tagName",
-              "flags": 36,
-              "id": 970,
-              "value": "'cxl-icon'",
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
                 "line": 1010,
-                "ch": 29
+                "ch": 37
               },
               "kind": 10,
               "name": "$icon",
               "flags": 16,
-              "id": 971,
+              "id": 970,
               "type": {
                 "name": "IconKey",
                 "kind": 6
@@ -16534,13 +16517,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 1012,
+                "line": 1011,
                 "ch": 31
               },
               "kind": 10,
               "name": "iconNode",
               "flags": 16,
-              "id": 972,
+              "id": 971,
               "type": {
                 "name": "Text",
                 "kind": 6
@@ -16549,13 +16532,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 1013,
+                "line": 1012,
                 "ch": 27
               },
               "kind": 12,
               "name": "icon",
               "flags": 4,
-              "id": 973,
+              "id": 972,
               "parameters": [],
               "type": {
                 "name": "",
@@ -26228,24 +26211,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 1018,
+                "line": 1017,
                 "ch": 2
               },
               "kind": 13,
               "name": "icon",
               "flags": 4,
-              "id": 974,
+              "id": 973,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 1020,
+                    "line": 1019,
                     "ch": 10
                   },
                   "kind": 9,
                   "name": "iconName",
                   "flags": 0,
-                  "id": 975,
+                  "id": 974,
                   "type": {
                     "name": "IconKey",
                     "kind": 6
@@ -26276,6 +26259,11 @@
           },
           "extendedBy": [
             {
+              "id": 975,
+              "name": "ItemIcon",
+              "kind": 6
+            },
+            {
               "id": 976,
               "name": "FieldIcon",
               "kind": 6
@@ -26285,8 +26273,35 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 1036,
+            "line": 1035,
             "ch": 1
+          },
+          "kind": 35,
+          "name": "ItemIcon",
+          "flags": 1,
+          "id": 975,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-item-icon"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "id": 969,
+                "name": "Icon",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 1043,
+            "ch": 37
           },
           "kind": 35,
           "name": "FieldIcon",
@@ -26296,7 +26311,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 1049,
+                "line": 1056,
                 "ch": 37
               },
               "kind": 10,

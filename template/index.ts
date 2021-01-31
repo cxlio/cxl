@@ -1,7 +1,10 @@
 import {
 	AttributeObserver,
+	findNextNode,
+	findNextNodeBySelector,
 	setContent as domSetContent,
 	on,
+	onAction,
 	trigger,
 } from '@cxl/dom';
 import {
@@ -16,8 +19,13 @@ import {
 	tap,
 } from '@cxl/rx';
 import { Bindable, NativeChildren, dom } from '@cxl/tsx';
-import { Styles, render as renderCSS } from '@cxl/css';
-import { Component, staticTemplate } from '@cxl/component';
+import { Styles, StyleSheet, render as renderCSS, css } from '@cxl/css';
+import {
+	Component,
+	attributeChanged,
+	get,
+	staticTemplate,
+} from '@cxl/component';
 
 interface ElementWithValue<T> extends HTMLElement {
 	value: T;
@@ -384,4 +392,311 @@ export function role<T extends Component>(roleName: string) {
 				!el.hasAttribute('role') && el.setAttribute('role', roleName);
 			})
 		);
+}
+interface SelectableNode extends ParentNode, EventTarget {}
+
+/**
+ * Handles keyboard navigation, emits the next selected item.
+ */
+export function navigationList(
+	host: SelectableNode,
+	selector: string,
+	startSelector: string
+) {
+	return on(host, 'keydown')
+		.map(ev => {
+			let el = host.querySelector(startSelector);
+			const key = ev.key;
+
+			function findByFirstChar(item: Element) {
+				return (
+					item.matches(selector) &&
+					item.textContent?.[0].toLowerCase() === key
+				);
+			}
+
+			switch (key) {
+				case 'ArrowDown':
+					if (el) el = findNextNodeBySelector(el, selector) || el;
+					else {
+						const first = host.firstElementChild;
+
+						if (first)
+							el = first.matches(selector)
+								? first
+								: findNextNodeBySelector(first, selector);
+					}
+					if (el) ev.preventDefault();
+
+					break;
+				case 'ArrowUp':
+					if (el)
+						el =
+							findNextNodeBySelector(
+								el,
+								selector,
+								'previousElementSibling'
+							) || el;
+					else {
+						const first = host.lastElementChild;
+
+						if (first)
+							el = first.matches(selector)
+								? first
+								: findNextNodeBySelector(
+										first,
+										selector,
+										'previousElementSibling'
+								  );
+					}
+					if (el) ev.preventDefault();
+					break;
+				default:
+					if (/^\w$/.test(key)) {
+						const first = host.firstElementChild;
+						el =
+							(el && findNextNode(el, findByFirstChar)) ||
+							(first && findNextNode(first, findByFirstChar)) ||
+							null;
+						ev.preventDefault();
+					}
+			}
+			return el;
+		})
+		.filter(el => !!el);
+}
+
+interface FocusableComponent extends Component {
+	disabled: boolean;
+	touched: boolean;
+}
+
+export function focusableEvents<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return merge(
+		on(element, 'focus').pipe(triggerEvent(host, 'focusable.focus')),
+		on(element, 'blur').tap(() => {
+			host.touched = true;
+			trigger(host, 'focusable.blur');
+		}),
+		attributeChanged(host, 'disabled').pipe(
+			triggerEvent(host, 'focusable.change')
+		),
+		attributeChanged(host, 'touched').pipe(
+			triggerEvent(host, 'focusable.change')
+		)
+	);
+}
+
+export function disabledAttribute<T extends FocusableComponent>(host: T) {
+	return get(host, 'disabled').tap(value =>
+		host.setAttribute('aria-disabled', value ? 'true' : 'false')
+	);
+}
+
+export function focusableDisabled<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return disabledAttribute(host).tap(value => {
+		if (value) element.removeAttribute('tabindex');
+		else element.tabIndex = 0;
+	});
+}
+
+export function focusable<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return merge(
+		focusableDisabled(host, element),
+		focusableEvents(host, element)
+	);
+}
+
+export const DisabledStyles = {
+	cursor: 'default',
+	filter: 'saturate(0)',
+	opacity: 0.38,
+	pointerEvents: 'none',
+};
+
+export const StateStyles = {
+	$focus: { outline: 0 },
+	$disabled: DisabledStyles,
+};
+
+const stateStyles = new StyleSheet({ styles: StateStyles });
+
+const disabledCss = css({ $disabled: DisabledStyles });
+
+interface DisableElement extends HTMLElement {
+	disabled: boolean;
+}
+
+export function focusDelegate<T extends FocusableComponent>(
+	host: T,
+	delegate: DisableElement
+) {
+	host.Shadow({ children: disabledCss });
+	return merge(
+		disabledAttribute(host).tap(val => (delegate.disabled = val)),
+		focusableEvents(host, delegate)
+	);
+}
+
+/**
+ * Adds focusable functionality to input components.
+ */
+export function Focusable(host: Bindable) {
+	host.bind(focusable(host as FocusableComponent));
+	return stateStyles.clone();
+}
+
+export function registable<T extends Component>(host: T, id: string) {
+	return new Observable(() => {
+		const detail: any = {};
+		trigger(host, id + '.register', detail);
+		return () => detail.unsubscribe?.();
+	});
+}
+
+export function registableHost<TargetT extends EventTarget>(
+	host: EventTarget,
+	id: string,
+	elements = new Set<TargetT>()
+) {
+	return new Observable<Set<TargetT>>(subs => {
+		function register(ev: CustomEvent) {
+			if (ev.target) {
+				elements.add(ev.target as TargetT);
+				subs.next(elements);
+				ev.detail.unsubscribe = () => {
+					elements.delete(ev.target as TargetT);
+					subs.next(elements);
+				};
+			}
+		}
+
+		const inner = on(host, id + '.register').subscribe(register);
+		return () => inner.unsubscribe();
+	});
+}
+
+interface SelectableComponent extends Component {
+	selected: boolean;
+}
+
+interface SelectableTarget extends Node {
+	value: any;
+	selected: boolean;
+}
+
+interface SelectableHost<T> extends Element {
+	value: any;
+	options?: Set<T>;
+	selected?: T;
+}
+
+interface SelectableMultiHost<T> extends Element {
+	value: any;
+	options?: Set<T>;
+	selected?: Set<T>;
+}
+
+export function selectableHostMultiple<TargetT extends SelectableTarget>(
+	host: SelectableMultiHost<TargetT>
+) {
+	return new Observable<TargetT>(subscriber => {
+		function setSelected(option: TargetT) {
+			subscriber.next(option);
+		}
+
+		function onChange() {
+			const { value, options } = host;
+
+			if (!options) return;
+
+			for (const o of options) {
+				const isFound = value.indexOf(o.value) !== -1;
+				if (isFound) {
+					if (!o.selected) setSelected(o);
+				} else o.selected = false;
+			}
+		}
+
+		const subscription = merge(
+			getAttribute(host, 'value').tap(onChange),
+			on(host, 'selectable.action').tap(ev => {
+				if (ev.target && host.options?.has(ev.target as TargetT)) {
+					ev.stopImmediatePropagation();
+					ev.stopPropagation();
+					setSelected(ev.target as TargetT);
+				}
+			})
+		).subscribe();
+
+		return () => subscription.unsubscribe();
+	});
+}
+
+/**
+ * Handles element selection events. Emits everytime a new item is selected.
+ */
+export function selectableHost<TargetT extends SelectableTarget>(
+	host: SelectableHost<TargetT>
+) {
+	return new Observable<TargetT | undefined>(subscriber => {
+		function setSelected(option: TargetT | undefined) {
+			subscriber.next(option);
+		}
+
+		function onChange() {
+			const { value, options, selected } = host;
+
+			if (!options || (selected && selected.value === value)) return;
+
+			for (const o of options)
+				if (o.parentNode && o.value === value) return setSelected(o);
+				else o.selected = false;
+
+			setSelected(undefined);
+		}
+
+		const subscription = merge(
+			getAttribute(host, 'value').tap(onChange),
+			on(host, 'selectable.action').tap(ev => {
+				if (ev.target && host.options?.has(ev.target as TargetT)) {
+					ev.stopImmediatePropagation();
+					ev.stopPropagation();
+					setSelected(ev.target as TargetT);
+				}
+			})
+		).subscribe();
+
+		return () => subscription.unsubscribe();
+	});
+}
+
+export function selectable<T extends SelectableComponent>(host: T) {
+	return merge(
+		registable(host, 'selectable'),
+		onAction(host).pipe(
+			triggerEvent(host, 'selectable.action'),
+			stopEvent()
+		),
+		get(host, 'selected').pipe(ariaProp(host, 'selected'))
+	);
+}
+
+/**
+ * Adds nodes to head on component rendering
+ */
+export function head(...nodes: Node[]) {
+	return (host: Node) => {
+		const head = host.ownerDocument?.head || document.head;
+		nodes.forEach(child => head.appendChild(child));
+	};
 }

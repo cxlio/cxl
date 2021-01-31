@@ -10,19 +10,12 @@ import {
 } from '@cxl/component';
 import {
 	ButtonBase,
-	DisabledStyles,
 	Spinner,
 	Span,
 	Toggle,
 	FocusHighlight,
-	Focusable,
 	IconButton,
 	Svg,
-	focusDelegate,
-	focusable,
-	navigationList,
-	registableHost,
-	selectableHostMultiple,
 } from './core.js';
 import { dom, expression } from '@cxl/tsx';
 import {
@@ -40,7 +33,16 @@ import { dragInside } from '@cxl/drag';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
 import { Appbar, AppbarContextual } from './navigation.js';
-import { role } from '@cxl/template';
+import {
+	DisabledStyles,
+	Focusable,
+	focusDelegate,
+	focusable,
+	navigationList,
+	registableHost,
+	selectableHostMultiple,
+	role,
+} from '@cxl/template';
 
 export { SelectBox, Option } from './select.js';
 
@@ -726,6 +728,7 @@ export class FieldTextArea extends InputBase {
 }
 
 /**
+ * Input field with password masking.
  * @example
  * <cxl-field floating>
  *   <cxl-label>Email Address</cxl-label>
@@ -1064,7 +1067,6 @@ export class MultiSelect extends SelectBase {
 				host.checked = !host.checked;
 			}),
 			get(host, 'value').tap(val => {
-				//if (val !== Undefined)
 				host.checked = val === host['true-value'];
 			}),
 			get(host, 'checked').tap(val => {
@@ -1202,6 +1204,7 @@ const SearchIcon = staticTemplate(() => (
 ));
 
 /**
+ * Search Input for Appbar
  * @demo
  * <cxl-appbar>
  *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>

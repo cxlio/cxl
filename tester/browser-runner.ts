@@ -4,11 +4,11 @@ import type { TestResult } from './report';
 let output = '';
 
 function group(testId: number, title: string) {
-	output += `<dl><dt><a data-test="${testId}" href="#">${title}</a></dt><dd><ul>`;
+	output += `<dl><dt><a data-test="${testId}" href="#">${title}</a></dt><dd>`;
 }
 
 function groupEnd() {
-	output += '</ul></dd></dl>';
+	output += '</dd></dl>';
 }
 
 function error(msg: string | Error) {
@@ -39,23 +39,22 @@ function printError(fail: Result) {
 
 function printResult(result: Result) {
 	output += result.success ? success() : failure();
+	const data = result.data;
+	if (data?.type === 'figure') {
+		output += `<div style="display:inline-block; width:320px;position:relative;">${data.html}</div><img src="spec/${data.name}.png" /><img src="../../ui/spec/${data.name}.png" />`;
+	}
 }
 
 function renderTestReport(test: Test) {
 	let failureCount = 0;
 	const failures: TestResult[] = [];
+	const results = test.results;
 
-	const results: TestResult[] = test.results.map(r => {
+	results.forEach(r => {
 		if (r.success === false) {
 			failureCount++;
 			failures.push(r);
 		}
-
-		return {
-			message: r.message,
-			success: r.success,
-			stack: r.stack,
-		};
 	});
 
 	if (
@@ -71,6 +70,7 @@ function renderTestReport(test: Test) {
 		test.id,
 		`${test.name}${failureCount > 0 ? ` (${failureCount} failures)` : ''}`
 	);
+
 	results.forEach(r => {
 		printResult(r);
 		if (!r.success) printError(r);
@@ -104,6 +104,10 @@ async function onClick(suite: Test[], ev: Event) {
 		ev.preventDefault();
 	}
 }
+
+(window as any).__cxlRunner = () => {
+	return 1;
+};
 
 const browserRunner = {
 	async runSuite(suite: Test) {

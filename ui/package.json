@@ -7,8 +7,7 @@
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"build-icons": "node build-icons",
-		"test": "npm run build && cd ../dist/ui && node ../tester"
+		"test": "npm run build && cd ../dist/ui && node ../tester --baselinePath ../../ui/spec"
 	},
 	"dependencies": {
 		"@cxl/tsx": "~0.0.1",

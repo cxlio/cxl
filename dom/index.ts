@@ -412,3 +412,32 @@ export const animationFrame = new Observable<number>(subs => {
 	}
 	return () => cancelAnimationFrame(rafid);
 });
+
+export function findNextNode<T extends ChildNode>(
+	el: T,
+	fn: (el: T) => boolean,
+	direction: 'nextSibling' | 'previousSibling' = 'nextSibling'
+) {
+	let node = el[direction] as T;
+
+	while (node) {
+		if (fn(node)) return node;
+		node = node[direction] as T;
+	}
+}
+
+export function findNextNodeBySelector(
+	el: Element,
+	selector: string,
+	direction:
+		| 'nextElementSibling'
+		| 'previousElementSibling' = 'nextElementSibling'
+) {
+	let node = el[direction];
+
+	while (node) {
+		if (node.matches(selector)) return node;
+		node = node[direction];
+	}
+	return null;
+}

@@ -10,6 +10,8 @@ export class TestRunner extends Application {
 	version = '0.0.1';
 	name = '@cxl/tester';
 	entryFile = './test.js';
+	baselinePath?: string;
+	updateBaselines = false;
 
 	ignoreCoverage = false;
 	amd = false;
@@ -24,6 +26,8 @@ export class TestRunner extends Application {
 				help: 'Run tests in firefox through puppeteer.',
 			},
 			{ name: 'entryFile', rest: true },
+			{ name: 'baselinePath', type: 'string', help: 'Baseline Path' },
+			{ name: 'updateBaselines' },
 			{ name: 'ignoreCoverage', help: 'Disable coverage report.' }
 		);
 	}

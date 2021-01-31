@@ -35,3 +35,27 @@ export function required(val: any) {
 export function email(val: string) {
 	return val === '' || EMAIL.test(val) || ValidationMessage.email;
 }
+
+/*import { get } from '@cxl/component';
+import type { InputBase } from './input-base.js';
+
+export function validate<T extends InputBase>(
+	el: T,
+	...validators: ValidateFunction<T['value']>[]
+) {
+	return get(el, 'value').tap(value => {
+		let message: string | boolean = true;
+		validators.find(validateFn => {
+			message = validateFn(value);
+			return message !== true;
+		});
+		el.setCustomValidity(message === true ? '' : (message as any));
+	});
+}
+
+export function $validate<T extends InputBase>(
+	...validators: ValidateFunction<T['value']>[]
+) {
+	return (el: T) => validate(el, ...validators);
+}
+*/

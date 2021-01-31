@@ -7,11 +7,11 @@ import {
 	get,
 	staticTemplate,
 } from '@cxl/component';
-import { Focusable, Svg } from './core.js';
+import { Svg } from './core.js';
 import { tap, merge } from '@cxl/rx';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
-import { Style, ariaChecked, role } from '@cxl/template';
+import { Focusable, Style, ariaChecked, role } from '@cxl/template';
 
 const Undefined = {};
 

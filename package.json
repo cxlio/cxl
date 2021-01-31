@@ -8,13 +8,16 @@
 		"@types/eslint": "^7.2.0",
 		"@types/markdown-it": "^10.0.1",
 		"@types/node": "^14.10.2",
-		"@types/puppeteer": "^3.0.1",
+		"@types/pngjs": "^3.4.2",
+		"@types/puppeteer": "^5.4.2",
 		"@typescript-eslint/eslint-plugin": "^4.1.1",
 		"@typescript-eslint/parser": "^4.1.1",
 		"eslint": "^7.14.0",
 		"firebase": "^7.24.0",
 		"highlight.js": "^10.1.1",
 		"markdown-it": "^11.0.0",
+		"pngjs": "^6.0.0",
+		"puppeteer": "^5.5.0",
 		"source-map": "^0.7.3",
 		"source-map-support": "0.5.19",
 		"terser": "^5.5.1",
@@ -25,8 +28,5 @@
 		"prepublishOnly": "node scripts/build-all.js && node scripts/build-readme",
 		"postinstall": "scripts/install.sh"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues",
-	"dependencies": {
-		"puppeteer": "^5.5.0"
-	}
+	"bugs": "https://github.com/cxlio/cxl/issues"
 }

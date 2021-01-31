@@ -8,19 +8,19 @@ import {
 	get,
 } from '@cxl/component';
 import { on, onAction, onLoad, trigger } from '@cxl/dom';
-import { aria, portal, role, triggerEvent } from '@cxl/template';
+import {
+	StateStyles,
+	focusable,
+	navigationList,
+	aria,
+	portal,
+	role,
+	triggerEvent,
+} from '@cxl/template';
 import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
-import {
-	IconButton,
-	Span,
-	StateStyles,
-	Svg,
-	focusable,
-	navigationList,
-	ripple,
-} from './core.js';
+import { IconButton, Span, Svg, ripple } from './core.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -330,12 +330,14 @@ export class Tabs extends Component {
 	selected?: Tab;
 }
 
-const MenuIcon = (
-	<Svg
-		viewBox="0 0 24 24"
-		width={24}
-	>{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
-);
+function MenuIcon() {
+	return (
+		<Svg
+			viewBox="0 0 24 24"
+			width={24}
+		>{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
+	);
+}
 
 /**
  * Navigation drawers provide access to destinations in your app.
@@ -371,7 +373,7 @@ const MenuIcon = (
 				}
 				className="toggler"
 			>
-				{MenuIcon}
+				<MenuIcon />
 			</IconButton>
 			<Drawer
 				className="drawer"
@@ -431,7 +433,7 @@ export class Menu extends Component {
 	focusable,
 	css({
 		$: {
-			display: 'block',
+			display: 'flex',
 			position: 'relative',
 			color: 'onSurface',
 			font: 'default',
@@ -462,6 +464,9 @@ export class Item extends Component {
 	selected = false;
 }
 
+/**
+ * Lists are continuous, vertical indexes of text or images.
+ */
 @Augment<List>(
 	'cxl-list',
 	role('list'),
@@ -476,8 +481,6 @@ export class Item extends Component {
 			display: 'block',
 			paddingTop: 8,
 			paddingBottom: 8,
-			marginLeft: -16,
-			marginRight: -16,
 		},
 	}),
 	_ => <slot />
