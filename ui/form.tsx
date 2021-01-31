@@ -43,6 +43,7 @@ import {
 	selectableHostMultiple,
 	role,
 } from '@cxl/template';
+import { checkedBehavior } from './checkbox.js';
 
 export { SelectBox, Option } from './select.js';
 
@@ -1066,13 +1067,14 @@ export class MultiSelect extends SelectBase {
 				if (host.disabled) return;
 				host.checked = !host.checked;
 			}),
-			get(host, 'value').tap(val => {
+			checkedBehavior(host, () => (host.value = host.checked))
+			/*get(host, 'value').tap(val => {
 				host.checked = val === host['true-value'];
 			}),
 			get(host, 'checked').tap(val => {
 				host.setAttribute('aria-checked', val ? 'true' : 'false');
 				host.value = val ? host['true-value'] : host['false-value'];
-			})
+			})*/
 		);
 	})
 )
@@ -1080,10 +1082,6 @@ export class Switch extends InputBase {
 	value = false;
 	@StyleAttribute()
 	checked = false;
-	@Attribute()
-	'true-value': any = true;
-	@Attribute()
-	'false-value': any = false;
 }
 
 function $focusProxy(el: HTMLElement, host: InputBase) {

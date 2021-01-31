@@ -1,3 +1,4 @@
+export * from './checkbox.js';
 export * from './core.js';
 export * from './theme.js';
 export * from './dialog.js';

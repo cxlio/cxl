@@ -1,19 +1,38 @@
 import { dom } from '@cxl/tsx';
 import {
 	Augment,
-	Attribute,
+	Component,
 	StyleAttribute,
 	bind,
 	get,
 	staticTemplate,
 } from '@cxl/component';
 import { Svg } from './core.js';
-import { tap, merge } from '@cxl/rx';
+import { merge } from '@cxl/rx';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
 import { Focusable, Style, ariaChecked, role } from '@cxl/template';
 
-const Undefined = {};
+interface CheckedComponent extends Component {
+	value: any;
+	checked: boolean;
+}
+
+export function checkedBehavior<T extends CheckedComponent>(
+	host: T,
+	update: () => void
+) {
+	let first = true;
+	return merge(
+		get(host, 'value').tap(val => {
+			if (first) {
+				if (val === true) host.checked = true;
+				first = false;
+			} else host.checked = val === true;
+		}),
+		get(host, 'checked').pipe(ariaChecked(host)).tap(update)
+	);
+}
 
 /**
  * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.
@@ -27,14 +46,9 @@ const Undefined = {};
 	'cxl-checkbox',
 	role('checkbox'),
 	bind(host => {
-		const update = tap<any>(
-			() =>
-				(host.value = host.indeterminate
-					? undefined
-					: host.checked
-					? host['true-value']
-					: host['false-value'])
-		);
+		const update = () =>
+			(host.value = host.indeterminate ? undefined : host.checked);
+
 		return merge(
 			onAction(host).tap(ev => {
 				if (host.disabled) return;
@@ -45,14 +59,8 @@ const Undefined = {};
 
 				ev.preventDefault();
 			}),
-			get(host, 'value').tap(val => {
-				if (val !== Undefined)
-					host.checked = val === host['true-value'];
-			}),
-			get(host, 'checked').pipe(ariaChecked(host), update),
-			get(host, 'indeterminate').pipe(update),
-			get(host, 'true-value').pipe(update),
-			get(host, 'false-value').pipe(update)
+			checkedBehavior(host, update),
+			get(host, 'indeterminate').tap(update)
 		);
 	}),
 	FocusCircleStyle,
@@ -120,7 +128,7 @@ const Undefined = {};
 	))
 )
 export class Checkbox extends InputBase {
-	value: any = Undefined;
+	value: boolean | undefined = false;
 
 	@StyleAttribute()
 	checked = false;
@@ -128,9 +136,4 @@ export class Checkbox extends InputBase {
 	indeterminate = false;
 	@StyleAttribute()
 	inline = false;
-
-	@Attribute()
-	'true-value': any = true;
-	@Attribute()
-	'false-value': any = false;
 }

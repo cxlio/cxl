@@ -13,36 +13,184 @@
         {
           "source": {
             "fileName": "checkbox.tsx",
-            "line": 15,
-            "ch": 5
+            "line": 13,
+            "ch": 68
           },
-          "kind": 31,
-          "name": "Undefined",
+          "kind": 4,
+          "name": "CheckedComponent",
           "flags": 0,
           "id": 1,
-          "value": "{}",
-          "type": {
-            "source": {
-              "fileName": "checkbox.tsx",
-              "line": 15,
-              "ch": 17
+          "children": [
+            {
+              "source": {
+                "fileName": "checkbox.tsx",
+                "line": 15,
+                "ch": 46
+              },
+              "kind": 10,
+              "name": "value",
+              "flags": 4,
+              "id": 2,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
             },
-            "kind": 34,
-            "name": "",
+            {
+              "source": {
+                "fileName": "checkbox.tsx",
+                "line": 16,
+                "ch": 12
+              },
+              "kind": 10,
+              "name": "checked",
+              "flags": 4,
+              "id": 3,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
             "flags": 0,
-            "children": []
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
           }
         },
         {
           "source": {
             "fileName": "checkbox.tsx",
-            "line": 15,
-            "ch": 21
+            "line": 18,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "checkedBehavior",
+          "flags": 1,
+          "id": 4,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "checkbox.tsx",
+                "line": 20,
+                "ch": 32
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 5
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "checkbox.tsx",
+                "line": 20,
+                "ch": 60
+              },
+              "kind": 9,
+              "name": "host",
+              "flags": 0,
+              "id": 6,
+              "type": {
+                "id": 5,
+                "name": "T",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "checkbox.tsx",
+                "line": 21,
+                "ch": 9
+              },
+              "kind": 9,
+              "name": "update",
+              "flags": 0,
+              "id": 7,
+              "type": {
+                "source": {
+                  "fileName": "checkbox.tsx",
+                  "line": 22,
+                  "ch": 8
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 8,
+                "type": {
+                  "name": "void",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "parameters": []
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "",
+                "flags": 0,
+                "kind": 5,
+                "children": [
+                  {
+                    "name": "boolean",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "boolean",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "",
+                    "kind": 21,
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 5,
+                        "name": "T",
+                        "kind": 6
+                      },
+                      {
+                        "name": "\"value\"",
+                        "kind": 23,
+                        "type": {
+                          "name": "string",
+                          "kind": 32,
+                          "flags": 0
+                        },
+                        "flags": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "checkbox.tsx",
+            "line": 34,
+            "ch": 1
           },
           "kind": 35,
           "name": "Checkbox",
           "flags": 1,
-          "id": 2,
+          "id": 9,
           "docs": {
             "content": [
               {
@@ -60,30 +208,47 @@
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 121,
+                "line": 129,
                 "ch": 41
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 3,
+              "id": 10,
               "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
+                "source": {
+                  "fileName": "checkbox.tsx",
+                  "line": 130,
+                  "ch": 7
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "boolean",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
               },
-              "value": "Undefined"
+              "value": "false"
             },
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 122,
-                "ch": 24
+                "line": 130,
+                "ch": 36
               },
               "kind": 36,
               "name": "checked",
               "flags": 4,
-              "id": 4,
+              "id": 11,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -94,13 +259,13 @@
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 125,
+                "line": 133,
                 "ch": 17
               },
               "kind": 36,
               "name": "indeterminate",
               "flags": 4,
-              "id": 5,
+              "id": 12,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -111,53 +276,19 @@
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 127,
+                "line": 135,
                 "ch": 23
               },
               "kind": 36,
               "name": "inline",
               "flags": 4,
-              "id": 6,
+              "id": 13,
               "value": "false",
               "type": {
                 "name": "boolean",
                 "kind": 32,
                 "flags": 0
               }
-            },
-            {
-              "source": {
-                "fileName": "checkbox.tsx",
-                "line": 129,
-                "ch": 16
-              },
-              "kind": 36,
-              "name": "'true-value'",
-              "flags": 4,
-              "id": 7,
-              "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
-              },
-              "value": "true"
-            },
-            {
-              "source": {
-                "fileName": "checkbox.tsx",
-                "line": 132,
-                "ch": 26
-              },
-              "kind": 36,
-              "name": "'false-value'",
-              "flags": 4,
-              "id": 8,
-              "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
-              },
-              "value": "false"
             }
           ],
           "type": {
@@ -166,7 +297,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -208,7 +339,7 @@
           "kind": 31,
           "name": "FocusHighlight",
           "flags": 1,
-          "id": 10,
+          "id": 15,
           "value": "{\n\t$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },\n\t$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },\n}",
           "type": {
             "source": {
@@ -229,7 +360,7 @@
                 "kind": 0,
                 "name": "$focus",
                 "flags": 0,
-                "id": 11,
+                "id": 16,
                 "value": "{ filter: 'invert(0.2) saturate(2) brightness(1.1)' }",
                 "type": {
                   "source": {
@@ -250,7 +381,7 @@
                       "kind": 0,
                       "name": "filter",
                       "flags": 0,
-                      "id": 12,
+                      "id": 17,
                       "value": "'invert(0.2) saturate(2) brightness(1.1)'",
                       "type": {
                         "name": "string",
@@ -270,7 +401,7 @@
                 "kind": 0,
                 "name": "$hover",
                 "flags": 0,
-                "id": 13,
+                "id": 18,
                 "value": "{ filter: 'invert(0.15) saturate(1.5) brightness(1.1)' }",
                 "type": {
                   "source": {
@@ -291,7 +422,7 @@
                       "kind": 0,
                       "name": "filter",
                       "flags": 0,
-                      "id": 14,
+                      "id": 19,
                       "value": "'invert(0.15) saturate(1.5) brightness(1.1)'",
                       "type": {
                         "name": "string",
@@ -314,7 +445,7 @@
           "kind": 16,
           "name": "attachRipple",
           "flags": 0,
-          "id": 15,
+          "id": 20,
           "typeParameters": [
             {
               "source": {
@@ -325,7 +456,7 @@
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 16
+              "id": 21
             }
           ],
           "parameters": [
@@ -338,9 +469,9 @@
               "kind": 9,
               "name": "hostEl",
               "flags": 0,
-              "id": 17,
+              "id": 22,
               "type": {
-                "id": 16,
+                "id": 21,
                 "name": "T",
                 "kind": 6
               }
@@ -354,7 +485,7 @@
               "kind": 9,
               "name": "ev",
               "flags": 0,
-              "id": 18,
+              "id": 23,
               "type": {
                 "name": "MouseEvent",
                 "kind": 6
@@ -376,7 +507,7 @@
           "kind": 16,
           "name": "ripple",
           "flags": 1,
-          "id": 19,
+          "id": 24,
           "parameters": [
             {
               "source": {
@@ -387,7 +518,7 @@
               "kind": 9,
               "name": "element",
               "flags": 0,
-              "id": 20,
+              "id": 25,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -426,7 +557,7 @@
           "kind": 35,
           "name": "Ripple",
           "flags": 1,
-          "id": 21,
+          "id": 26,
           "children": [
             {
               "source": {
@@ -437,7 +568,7 @@
               "kind": 36,
               "name": "x",
               "flags": 4,
-              "id": 22,
+              "id": 27,
               "value": "0",
               "type": {
                 "name": "number",
@@ -454,7 +585,7 @@
               "kind": 36,
               "name": "y",
               "flags": 4,
-              "id": 23,
+              "id": 28,
               "value": "0",
               "type": {
                 "name": "number",
@@ -471,7 +602,7 @@
               "kind": 36,
               "name": "radius",
               "flags": 4,
-              "id": 24,
+              "id": 29,
               "value": "0",
               "type": {
                 "name": "number",
@@ -504,7 +635,7 @@
           "kind": 35,
           "name": "RippleContainer",
           "flags": 1,
-          "id": 25,
+          "id": 30,
           "docs": {
             "content": [
               {
@@ -536,7 +667,7 @@
           "kind": 31,
           "name": "AVATAR_DEFAULT",
           "flags": 0,
-          "id": 26,
+          "id": 31,
           "value": "\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 0 26 26' %3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E\"",
           "type": {
             "name": "\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 0 26 26' %3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E\"",
@@ -558,7 +689,7 @@
           "kind": 35,
           "name": "Avatar",
           "flags": 1,
-          "id": 27,
+          "id": 32,
           "docs": {
             "content": [
               {
@@ -582,7 +713,7 @@
               "kind": 36,
               "name": "big",
               "flags": 4,
-              "id": 28,
+              "id": 33,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -599,7 +730,7 @@
               "kind": 36,
               "name": "little",
               "flags": 4,
-              "id": 29,
+              "id": 34,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -616,7 +747,7 @@
               "kind": 36,
               "name": "src",
               "flags": 4,
-              "id": 30,
+              "id": 35,
               "value": "''",
               "type": {
                 "name": "string",
@@ -633,7 +764,7 @@
               "kind": 36,
               "name": "text",
               "flags": 4,
-              "id": 31,
+              "id": 36,
               "value": "''",
               "type": {
                 "name": "string",
@@ -663,7 +794,7 @@
           "kind": 35,
           "name": "Chip",
           "flags": 1,
-          "id": 32,
+          "id": 37,
           "docs": {
             "content": [
               {
@@ -686,7 +817,7 @@
               "kind": 36,
               "name": "removable",
               "flags": 4,
-              "id": 33,
+              "id": 38,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -703,7 +834,7 @@
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 34,
+              "id": 39,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -720,7 +851,7 @@
               "kind": 36,
               "name": "touched",
               "flags": 4,
-              "id": 35,
+              "id": 40,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -737,7 +868,7 @@
               "kind": 36,
               "name": "primary",
               "flags": 4,
-              "id": 36,
+              "id": 41,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -754,7 +885,7 @@
               "kind": 36,
               "name": "secondary",
               "flags": 4,
-              "id": 37,
+              "id": 42,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -771,7 +902,7 @@
               "kind": 36,
               "name": "small",
               "flags": 4,
-              "id": 38,
+              "id": 43,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -788,7 +919,7 @@
               "kind": 11,
               "name": "remove",
               "flags": 4,
-              "id": 39,
+              "id": 44,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -818,7 +949,7 @@
           "kind": 35,
           "name": "Badge",
           "flags": 1,
-          "id": 40,
+          "id": 45,
           "docs": {
             "content": [
               {
@@ -841,7 +972,7 @@
               "kind": 36,
               "name": "secondary",
               "flags": 4,
-              "id": 41,
+              "id": 46,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -858,7 +989,7 @@
               "kind": 36,
               "name": "error",
               "flags": 4,
-              "id": 42,
+              "id": 47,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -875,7 +1006,7 @@
               "kind": 36,
               "name": "over",
               "flags": 4,
-              "id": 43,
+              "id": 48,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -892,7 +1023,7 @@
               "kind": 36,
               "name": "top",
               "flags": 4,
-              "id": 44,
+              "id": 49,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -922,7 +1053,7 @@
           "kind": 35,
           "name": "Hr",
           "flags": 1,
-          "id": 45,
+          "id": 50,
           "children": [],
           "docs": {
             "tagName": "cxl-hr",
@@ -949,7 +1080,7 @@
           "kind": 35,
           "name": "Progress",
           "flags": 1,
-          "id": 46,
+          "id": 51,
           "docs": {
             "content": [
               {
@@ -973,7 +1104,7 @@
               "kind": 36,
               "name": "value",
               "flags": 4,
-              "id": 47,
+              "id": 52,
               "value": "Infinity",
               "type": {
                 "name": "number",
@@ -1003,7 +1134,7 @@
           "kind": 16,
           "name": "Svg",
           "flags": 1,
-          "id": 48,
+          "id": 53,
           "parameters": [
             {
               "source": {
@@ -1014,7 +1145,7 @@
               "kind": 9,
               "name": "p",
               "flags": 0,
-              "id": 49,
+              "id": 54,
               "type": {
                 "source": {
                   "fileName": "core.tsx",
@@ -1034,7 +1165,7 @@
                     "kind": 10,
                     "name": "viewBox",
                     "flags": 4,
-                    "id": 50,
+                    "id": 55,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -1050,7 +1181,7 @@
                     "kind": 10,
                     "name": "className",
                     "flags": 4,
-                    "id": 51,
+                    "id": 56,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -1066,7 +1197,7 @@
                     "kind": 10,
                     "name": "width",
                     "flags": 4,
-                    "id": 52,
+                    "id": 57,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -1082,7 +1213,7 @@
                     "kind": 10,
                     "name": "height",
                     "flags": 4,
-                    "id": 53,
+                    "id": 58,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -1098,7 +1229,7 @@
                     "kind": 10,
                     "name": "children",
                     "flags": 4,
-                    "id": 54,
+                    "id": 59,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -1123,7 +1254,7 @@
           "kind": 35,
           "name": "Spinner",
           "flags": 1,
-          "id": 55,
+          "id": 60,
           "docs": {
             "content": [
               {
@@ -1158,7 +1289,7 @@
           "kind": 35,
           "name": "T",
           "flags": 1,
-          "id": 56,
+          "id": 61,
           "children": [
             {
               "source": {
@@ -1169,7 +1300,7 @@
               "kind": 36,
               "name": "h1",
               "flags": 4,
-              "id": 57,
+              "id": 62,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1186,7 +1317,7 @@
               "kind": 36,
               "name": "h2",
               "flags": 4,
-              "id": 58,
+              "id": 63,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1203,7 +1334,7 @@
               "kind": 36,
               "name": "h3",
               "flags": 4,
-              "id": 59,
+              "id": 64,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1220,7 +1351,7 @@
               "kind": 36,
               "name": "h4",
               "flags": 4,
-              "id": 60,
+              "id": 65,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1237,7 +1368,7 @@
               "kind": 36,
               "name": "h5",
               "flags": 4,
-              "id": 61,
+              "id": 66,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1254,7 +1385,7 @@
               "kind": 36,
               "name": "h6",
               "flags": 4,
-              "id": 62,
+              "id": 67,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1271,7 +1402,7 @@
               "kind": 36,
               "name": "caption",
               "flags": 4,
-              "id": 63,
+              "id": 68,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1288,7 +1419,7 @@
               "kind": 36,
               "name": "center",
               "flags": 4,
-              "id": 64,
+              "id": 69,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1305,7 +1436,7 @@
               "kind": 36,
               "name": "subtitle",
               "flags": 4,
-              "id": 65,
+              "id": 70,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1322,7 +1453,7 @@
               "kind": 36,
               "name": "subtitle2",
               "flags": 4,
-              "id": 66,
+              "id": 71,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1339,7 +1470,7 @@
               "kind": 36,
               "name": "body2",
               "flags": 4,
-              "id": 67,
+              "id": 72,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1356,7 +1487,7 @@
               "kind": 36,
               "name": "code",
               "flags": 4,
-              "id": 68,
+              "id": 73,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1373,7 +1504,7 @@
               "kind": 36,
               "name": "inline",
               "flags": 4,
-              "id": 69,
+              "id": 74,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1406,7 +1537,7 @@
           "kind": 35,
           "name": "Toggle",
           "flags": 1,
-          "id": 70,
+          "id": 75,
           "docs": {
             "content": [
               {
@@ -1426,7 +1557,7 @@
               "kind": 36,
               "name": "opened",
               "flags": 4,
-              "id": 71,
+              "id": 76,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1443,7 +1574,7 @@
               "kind": 36,
               "name": "right",
               "flags": 4,
-              "id": 72,
+              "id": 77,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1473,7 +1604,7 @@
           "kind": 35,
           "name": "ButtonBase",
           "flags": 1,
-          "id": 73,
+          "id": 78,
           "children": [
             {
               "source": {
@@ -1484,7 +1615,7 @@
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 74,
+              "id": 79,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1501,7 +1632,7 @@
               "kind": 36,
               "name": "primary",
               "flags": 4,
-              "id": 75,
+              "id": 80,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1518,7 +1649,7 @@
               "kind": 36,
               "name": "flat",
               "flags": 4,
-              "id": 76,
+              "id": 81,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1535,7 +1666,7 @@
               "kind": 36,
               "name": "secondary",
               "flags": 4,
-              "id": 77,
+              "id": 82,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1552,7 +1683,7 @@
               "kind": 36,
               "name": "touched",
               "flags": 4,
-              "id": 78,
+              "id": 83,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1569,7 +1700,7 @@
               "kind": 36,
               "name": "big",
               "flags": 4,
-              "id": 79,
+              "id": 84,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1586,7 +1717,7 @@
               "kind": 36,
               "name": "outline",
               "flags": 4,
-              "id": 80,
+              "id": 85,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1611,17 +1742,17 @@
           },
           "extendedBy": [
             {
-              "id": 81,
+              "id": 86,
               "name": "Button",
               "kind": 6
             },
             {
-              "id": 82,
+              "id": 87,
               "name": "IconButton",
               "kind": 6
             },
             {
-              "id": 144,
+              "id": 149,
               "name": "SubmitButton",
               "kind": 6
             }
@@ -1636,7 +1767,7 @@
           "kind": 35,
           "name": "Button",
           "flags": 1,
-          "id": 81,
+          "id": 86,
           "docs": {
             "content": [
               {
@@ -1656,7 +1787,7 @@
             "name": "",
             "children": [
               {
-                "id": 73,
+                "id": 78,
                 "name": "ButtonBase",
                 "kind": 6
               }
@@ -1672,7 +1803,7 @@
           "kind": 35,
           "name": "IconButton",
           "flags": 1,
-          "id": 82,
+          "id": 87,
           "children": [],
           "docs": {
             "tagName": "cxl-icon-button"
@@ -1683,7 +1814,7 @@
             "name": "",
             "children": [
               {
-                "id": 73,
+                "id": 78,
                 "name": "ButtonBase",
                 "kind": 6
               }
@@ -1699,7 +1830,7 @@
           "kind": 35,
           "name": "Meta",
           "flags": 1,
-          "id": 83,
+          "id": 88,
           "children": [
             {
               "source": {
@@ -1710,7 +1841,7 @@
               "kind": 11,
               "name": "connectedCallback",
               "flags": 4,
-              "id": 84,
+              "id": 89,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -1743,7 +1874,7 @@
           "kind": 35,
           "name": "Application",
           "flags": 1,
-          "id": 85,
+          "id": 90,
           "children": [
             {
               "source": {
@@ -1754,7 +1885,7 @@
               "kind": 36,
               "name": "permanent",
               "flags": 4,
-              "id": 86,
+              "id": 91,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1787,7 +1918,7 @@
           "kind": 35,
           "name": "Surface",
           "flags": 1,
-          "id": 87,
+          "id": 92,
           "children": [
             {
               "source": {
@@ -1798,7 +1929,7 @@
               "kind": 36,
               "name": "primary",
               "flags": 4,
-              "id": 88,
+              "id": 93,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1831,7 +1962,7 @@
           "kind": 35,
           "name": "Toolbar",
           "flags": 1,
-          "id": 89,
+          "id": 94,
           "children": [],
           "docs": {
             "tagName": "cxl-toolbar"
@@ -1869,7 +2000,7 @@
           "kind": 35,
           "name": "Backdrop",
           "flags": 1,
-          "id": 90,
+          "id": 95,
           "docs": {
             "content": [
               {
@@ -1900,7 +2031,7 @@
           "kind": 35,
           "name": "Dialog",
           "flags": 1,
-          "id": 91,
+          "id": 96,
           "docs": {
             "content": [
               {
@@ -1936,7 +2067,7 @@
           "kind": 31,
           "name": "DialogStyles",
           "flags": 0,
-          "id": 92,
+          "id": 97,
           "value": "css({\n\tcontent: padding(16),\n\tfooter: padding(8),\n})",
           "type": {
             "source": {
@@ -1947,7 +2078,7 @@
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 93,
+            "id": 98,
             "parameters": [],
             "type": {
               "name": "Node",
@@ -1964,7 +2095,7 @@
           "kind": 35,
           "name": "DialogAlert",
           "flags": 1,
-          "id": 94,
+          "id": 99,
           "docs": {
             "content": [
               {
@@ -1985,7 +2116,7 @@
               "kind": 10,
               "name": "resolve",
               "flags": 4,
-              "id": 95,
+              "id": 100,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -1995,7 +2126,7 @@
                 "kind": 17,
                 "name": "",
                 "flags": 0,
-                "id": 96,
+                "id": 101,
                 "type": {
                   "name": "void",
                   "kind": 32,
@@ -2013,7 +2144,7 @@
               "kind": 36,
               "name": "'title-text'",
               "flags": 4,
-              "id": 97,
+              "id": 102,
               "value": "''",
               "type": {
                 "name": "string",
@@ -2030,7 +2161,7 @@
               "kind": 36,
               "name": "message",
               "flags": 4,
-              "id": 98,
+              "id": 103,
               "value": "''",
               "type": {
                 "name": "string",
@@ -2047,7 +2178,7 @@
               "kind": 36,
               "name": "action",
               "flags": 4,
-              "id": 99,
+              "id": 104,
               "value": "'Ok'",
               "type": {
                 "name": "string",
@@ -2064,7 +2195,7 @@
               "kind": 10,
               "name": "promise",
               "flags": 68,
-              "id": 100,
+              "id": 105,
               "value": "new Promise<void>(resolve => {\n\t\tthis.resolve = resolve;\n\t})",
               "type": {
                 "name": "Promise",
@@ -2100,7 +2231,7 @@
           "kind": 35,
           "name": "DialogConfirm",
           "flags": 1,
-          "id": 101,
+          "id": 106,
           "docs": {
             "content": [
               {
@@ -2121,7 +2252,7 @@
               "kind": 10,
               "name": "resolve",
               "flags": 4,
-              "id": 102,
+              "id": 107,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -2131,7 +2262,7 @@
                 "kind": 17,
                 "name": "",
                 "flags": 0,
-                "id": 103,
+                "id": 108,
                 "type": {
                   "name": "void",
                   "kind": 32,
@@ -2147,7 +2278,7 @@
                     "kind": 9,
                     "name": "val",
                     "flags": 0,
-                    "id": 104,
+                    "id": 109,
                     "type": {
                       "name": "boolean",
                       "kind": 32,
@@ -2166,7 +2297,7 @@
               "kind": 36,
               "name": "'cancel-text'",
               "flags": 4,
-              "id": 105,
+              "id": 110,
               "value": "'Cancel'",
               "type": {
                 "name": "string",
@@ -2183,7 +2314,7 @@
               "kind": 36,
               "name": "'title-text'",
               "flags": 4,
-              "id": 106,
+              "id": 111,
               "value": "''",
               "type": {
                 "name": "string",
@@ -2200,7 +2331,7 @@
               "kind": 36,
               "name": "message",
               "flags": 4,
-              "id": 107,
+              "id": 112,
               "value": "''",
               "type": {
                 "name": "string",
@@ -2217,7 +2348,7 @@
               "kind": 36,
               "name": "action",
               "flags": 4,
-              "id": 108,
+              "id": 113,
               "value": "'Ok'",
               "type": {
                 "name": "string",
@@ -2234,7 +2365,7 @@
               "kind": 10,
               "name": "promise",
               "flags": 68,
-              "id": 109,
+              "id": 114,
               "value": "new Promise<boolean>(resolve => {\n\t\tthis.resolve = resolve;\n\t})",
               "type": {
                 "name": "Promise",
@@ -2270,7 +2401,7 @@
           "kind": 35,
           "name": "Drawer",
           "flags": 1,
-          "id": 110,
+          "id": 115,
           "docs": {
             "content": [
               {
@@ -2293,7 +2424,7 @@
               "kind": 36,
               "name": "visible",
               "flags": 4,
-              "id": 111,
+              "id": 116,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -2310,7 +2441,7 @@
               "kind": 36,
               "name": "right",
               "flags": 4,
-              "id": 112,
+              "id": 117,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -2327,7 +2458,7 @@
               "kind": 36,
               "name": "permanent",
               "flags": 4,
-              "id": 113,
+              "id": 118,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -2357,7 +2488,7 @@
           "kind": 35,
           "name": "Snackbar",
           "flags": 1,
-          "id": 114,
+          "id": 119,
           "docs": {
             "content": [
               {
@@ -2380,7 +2511,7 @@
               "kind": 36,
               "name": "delay",
               "flags": 4,
-              "id": 115,
+              "id": 120,
               "value": "4000",
               "type": {
                 "name": "number",
@@ -2410,7 +2541,7 @@
           "kind": 35,
           "name": "SnackbarContainer",
           "flags": 1,
-          "id": 116,
+          "id": 121,
           "children": [
             {
               "source": {
@@ -2421,7 +2552,7 @@
               "kind": 10,
               "name": "queue",
               "flags": 4,
-              "id": 117,
+              "id": 122,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -2442,7 +2573,7 @@
                   "flags": 0,
                   "children": [
                     {
-                      "id": 114,
+                      "id": 119,
                       "name": "Snackbar",
                       "kind": 6
                     },
@@ -2455,7 +2586,7 @@
                       "kind": 17,
                       "name": "",
                       "flags": 0,
-                      "id": 118,
+                      "id": 123,
                       "type": {
                         "name": "void",
                         "kind": 32,
@@ -2477,7 +2608,7 @@
               "kind": 11,
               "name": "notifyNext",
               "flags": 8,
-              "id": 119,
+              "id": 124,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -2494,7 +2625,7 @@
               "kind": 11,
               "name": "notify",
               "flags": 4,
-              "id": 120,
+              "id": 125,
               "parameters": [
                 {
                   "source": {
@@ -2505,9 +2636,9 @@
                   "kind": 9,
                   "name": "snackbar",
                   "flags": 0,
-                  "id": 121,
+                  "id": 126,
                   "type": {
-                    "id": 114,
+                    "id": 119,
                     "name": "Snackbar",
                     "kind": 6
                   }
@@ -2550,7 +2681,7 @@
           "kind": 4,
           "name": "AlertOptions",
           "flags": 0,
-          "id": 122,
+          "id": 127,
           "children": [
             {
               "source": {
@@ -2561,7 +2692,7 @@
               "kind": 10,
               "name": "titleText",
               "flags": 4,
-              "id": 123,
+              "id": 128,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2577,7 +2708,7 @@
               "kind": 10,
               "name": "message",
               "flags": 4,
-              "id": 124,
+              "id": 129,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2593,7 +2724,7 @@
               "kind": 10,
               "name": "actionText",
               "flags": 4,
-              "id": 125,
+              "id": 130,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2611,7 +2742,7 @@
           "kind": 16,
           "name": "alert",
           "flags": 1,
-          "id": 126,
+          "id": 131,
           "parameters": [
             {
               "source": {
@@ -2622,7 +2753,7 @@
               "kind": 9,
               "name": "optionsOrMessage",
               "flags": 0,
-              "id": 127,
+              "id": 132,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -2639,7 +2770,7 @@
                     "flags": 0
                   },
                   {
-                    "id": 122,
+                    "id": 127,
                     "name": "AlertOptions",
                     "kind": 6
                   }
@@ -2655,7 +2786,7 @@
               "kind": 9,
               "name": "container",
               "flags": 0,
-              "id": 128,
+              "id": 133,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -2684,7 +2815,7 @@
           "kind": 16,
           "name": "confirm",
           "flags": 1,
-          "id": 129,
+          "id": 134,
           "docs": {
             "content": [
               {
@@ -2702,7 +2833,7 @@
               "kind": 9,
               "name": "options",
               "flags": 0,
-              "id": 130,
+              "id": 135,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -2723,7 +2854,7 @@
                     "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 101,
+                        "id": 106,
                         "name": "DialogConfirm",
                         "kind": 6
                       }
@@ -2741,7 +2872,7 @@
               "kind": 9,
               "name": "container",
               "flags": 0,
-              "id": 131,
+              "id": 136,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -2770,9 +2901,9 @@
           "kind": 1,
           "name": "snackbarContainer",
           "flags": 0,
-          "id": 132,
+          "id": 137,
           "type": {
-            "id": 116,
+            "id": 121,
             "name": "SnackbarContainer",
             "kind": 6
           }
@@ -2786,7 +2917,7 @@
           "kind": 16,
           "name": "notify",
           "flags": 1,
-          "id": 133,
+          "id": 138,
           "parameters": [
             {
               "source": {
@@ -2797,7 +2928,7 @@
               "kind": 9,
               "name": "options",
               "flags": 0,
-              "id": 134,
+              "id": 139,
               "type": {
                 "source": {
                   "fileName": "dialog.tsx",
@@ -2822,7 +2953,7 @@
                     "kind": 19,
                     "name": "",
                     "flags": 0,
-                    "id": 135,
+                    "id": 140,
                     "type": {
                       "source": {
                         "fileName": "dialog.tsx",
@@ -2846,10 +2977,10 @@
               "kind": 9,
               "name": "bar",
               "flags": 0,
-              "id": 136,
+              "id": 141,
               "value": "snackbarContainer",
               "type": {
-                "id": 116,
+                "id": 121,
                 "name": "SnackbarContainer",
                 "kind": 6
               }
@@ -2876,7 +3007,7 @@
           "kind": 16,
           "name": "setSnackbarContainer",
           "flags": 1,
-          "id": 137,
+          "id": 142,
           "parameters": [
             {
               "source": {
@@ -2887,9 +3018,9 @@
               "kind": 9,
               "name": "bar",
               "flags": 0,
-              "id": 138,
+              "id": 143,
               "type": {
-                "id": 116,
+                "id": 121,
                 "name": "SnackbarContainer",
                 "kind": 6
               }
@@ -2916,14 +3047,14 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 46,
+            "line": 47,
             "ch": 8
           },
           "kind": 25,
           "name": "SelectBox",
           "flags": 1,
           "type": {
-            "id": 139,
+            "id": 144,
             "name": "SelectBox",
             "kind": 6
           }
@@ -2931,14 +3062,14 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 46,
+            "line": 47,
             "ch": 19
           },
           "kind": 25,
           "name": "Option",
           "flags": 1,
           "type": {
-            "id": 140,
+            "id": 145,
             "name": "Option",
             "kind": 6
           }
@@ -2946,13 +3077,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 46,
+            "line": 47,
             "ch": 48
           },
           "kind": 35,
           "name": "Slider",
           "flags": 1,
-          "id": 141,
+          "id": 146,
           "docs": {
             "content": [
               {
@@ -2970,13 +3101,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 136,
+                "line": 137,
                 "ch": 39
               },
               "kind": 36,
               "name": "step",
               "flags": 4,
-              "id": 142,
+              "id": 147,
               "value": "0.05",
               "type": {
                 "name": "number",
@@ -2987,13 +3118,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 138,
+                "line": 139,
                 "ch": 13
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 143,
+              "id": 148,
               "value": "0",
               "type": {
                 "name": "number",
@@ -3008,7 +3139,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -3018,24 +3149,24 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 141,
+            "line": 142,
             "ch": 1
           },
           "kind": 35,
           "name": "SubmitButton",
           "flags": 1,
-          "id": 144,
+          "id": 149,
           "children": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 163,
+                "line": 164,
                 "ch": 46
               },
               "kind": 10,
               "name": "primary",
               "flags": 4,
-              "id": 145,
+              "id": 150,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -3053,7 +3184,7 @@
             "name": "",
             "children": [
               {
-                "id": 73,
+                "id": 78,
                 "name": "ButtonBase",
                 "kind": 6
               }
@@ -3063,13 +3194,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 167,
+            "line": 168,
             "ch": 5
           },
           "kind": 31,
           "name": "FieldBase",
           "flags": 0,
-          "id": 146,
+          "id": 151,
           "value": "[\n\tcss({\n\t\t$: {\n\t\t\tcolor: 'onSurface',\n\t\t\tposition: 'relative',\n\t\t\tdisplay: 'block',\n\t\t},\n\t\tcontainer: {\n\t\t\tposition: 'relative',\n\t\t\t...padding(0, 12, 4, 12),\n\t\t},\n\t\t$invalid: { color: 'error' },\n\t\t$outline: { marginTop: -2 },\n\t\tcontainer$outline: {\n\t\t\tborderColor: 'onSurface',\n\t\t\tborderWidth: 1,\n\t\t\tborderStyle: 'solid',\n\t\t\tborderRadius: 4,\n\t\t\tmarginTop: 2,\n\t\t\tpaddingTop: 12,\n\t\t\tpaddingBottom: 12,\n\t\t},\n\t\tcontainer$outline$focusWithin: {\n\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'primary'),\n\t\t},\n\t\tcontainer$focusWithin$outline: {\n\t\t\tborderColor: 'primary',\n\t\t},\n\t\tcontainer$invalid$outline: { borderColor: 'error' },\n\t\tcontainer$invalid$outline$focusWithin: {\n\t\t\tboxShadow: boxShadow(0, 0, 0, 1, 'error'),\n\t\t},\n\t\tcontent: {\n\t\t\tdisplay: 'flex',\n\t\t\tposition: 'relative',\n\t\t\tfont: 'default',\n\t\t\t// marginBottom: 2,\n\t\t\tmarginTop: 4,\n\t\t\tlineHeight: 20,\n\t\t},\n\t\tcontent$focusWithin: {\n\t\t\tcolor: 'primary',\n\t\t},\n\t\tmask: {\n\t\t\tposition: 'absolute',\n\t\t\ttop: 0,\n\t\t\tright: 0,\n\t\t\tleft: 0,\n\t\t\tbottom: 0,\n\t\t\tbackgroundColor: 'onSurface8',\n\t\t},\n\t\tmask$outline: {\n\t\t\tborderRadius: 4,\n\t\t\tbackgroundColor: 'surface',\n\t\t},\n\t\tmask$hover: {\n\t\t\tfilter: 'invert(0.15) saturate(1.5) brightness(1.1)',\n\t\t},\n\t\tmask$hover$disabled: { filter: 'none' },\n\t\tlabel: {\n\t\t\tposition: 'relative',\n\t\t\tfont: 'caption',\n\t\t\tmarginLeft: -4,\n\t\t\tpaddingTop: 8,\n\t\t\tpaddingBottom: 2,\n\t\t\tlineHeight: 10,\n\t\t\tverticalAlign: 'bottom',\n\t\t},\n\t\tlabel$focusWithin: { color: 'primary' },\n\t\tlabel$invalid: { color: 'error' },\n\t\tlabel$outline: {\n\t\t\tposition: 'absolute',\n\t\t\ttranslateY: -17,\n\t\t\tpaddingTop: 0,\n\t\t\theight: 5,\n\t\t\tbackgroundColor: 'surface',\n\t\t\tdisplay: 'inline-block',\n\t\t},\n\t\tlabel$floating$novalue: {\n\t\t\tfont: 'default',\n\t\t\ttranslateY: 21,\n\t\t\topacity: 0.75,\n\t\t},\n\t\tlabel$leading: { paddingLeft: 24 },\n\t\tlabel$floating$novalue$outline: {\n\t\t\ttranslateY: 9,\n\t\t},\n\t}),\n\t($: any) => (\n\t\t<div className=\"container\">\n\t\t\t<div className=\"mask\"></div>\n\t\t\t<div className=\"label\">\n\t\t\t\t<$.Slot selector=\"cxl-label\" />\n\t\t\t</div>\n\t\t\t<div className=\"content\">\n\t\t\t\t<slot />\n\t\t\t</div>\n\t\t</div>\n\t),\n]",
           "type": {
             "name": "Array",
@@ -3078,24 +3209,24 @@
               {
                 "source": {
                   "fileName": "form.tsx",
-                  "line": 254,
+                  "line": 255,
                   "ch": 4
                 },
                 "kind": 16,
                 "name": "",
                 "flags": 0,
-                "id": 147,
+                "id": 152,
                 "parameters": [
                   {
                     "source": {
                       "fileName": "form.tsx",
-                      "line": 255,
+                      "line": 256,
                       "ch": 2
                     },
                     "kind": 9,
                     "name": "$",
                     "flags": 0,
-                    "id": 148,
+                    "id": 153,
                     "type": {
                       "name": "any",
                       "kind": 32,
@@ -3114,39 +3245,39 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 266,
+            "line": 267,
             "ch": 2
           },
           "kind": 16,
           "name": "fieldInput",
           "flags": 0,
-          "id": 149,
+          "id": 154,
           "typeParameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 268,
+                "line": 269,
                 "ch": 20
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 150
+              "id": 155
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 268,
+                "line": 269,
                 "ch": 41
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 151,
+              "id": 156,
               "type": {
-                "id": 150,
+                "id": 155,
                 "name": "T",
                 "kind": 6
               }
@@ -3157,7 +3288,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -3167,13 +3298,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 276,
+            "line": 277,
             "ch": 1
           },
           "kind": 35,
           "name": "Label",
           "flags": 1,
-          "id": 152,
+          "id": 157,
           "children": [],
           "docs": {
             "tagName": "cxl-label"
@@ -3193,13 +3324,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 294,
+            "line": 295,
             "ch": 39
           },
           "kind": 35,
           "name": "Field",
           "flags": 1,
-          "id": 153,
+          "id": 158,
           "docs": {
             "content": [
               {
@@ -3213,13 +3344,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 411,
+                "line": 412,
                 "ch": 38
               },
               "kind": 36,
               "name": "outline",
               "flags": 4,
-              "id": 154,
+              "id": 159,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3230,13 +3361,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 413,
+                "line": 414,
                 "ch": 17
               },
               "kind": 36,
               "name": "inputdisabled",
               "flags": 16,
-              "id": 155,
+              "id": 160,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3247,13 +3378,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 415,
+                "line": 416,
                 "ch": 33
               },
               "kind": 36,
               "name": "invalid",
               "flags": 4,
-              "id": 156,
+              "id": 161,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3264,13 +3395,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 417,
+                "line": 418,
                 "ch": 17
               },
               "kind": 36,
               "name": "floating",
               "flags": 4,
-              "id": 157,
+              "id": 162,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3281,13 +3412,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 419,
+                "line": 420,
                 "ch": 18
               },
               "kind": 36,
               "name": "leading",
               "flags": 4,
-              "id": 158,
+              "id": 163,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3298,13 +3429,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 421,
+                "line": 422,
                 "ch": 17
               },
               "kind": 36,
               "name": "novalue",
               "flags": 4,
-              "id": 159,
+              "id": 164,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -3315,15 +3446,15 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 423,
+                "line": 424,
                 "ch": 16
               },
               "kind": 36,
               "name": "input",
               "flags": 4,
-              "id": 160,
+              "id": 165,
               "type": {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -3344,13 +3475,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 426,
+            "line": 427,
             "ch": 1
           },
           "kind": 35,
           "name": "FieldHelp",
           "flags": 1,
-          "id": 161,
+          "id": 166,
           "docs": {
             "content": [
               {
@@ -3364,13 +3495,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 456,
+                "line": 457,
                 "ch": 42
               },
               "kind": 36,
               "name": "invalid",
               "flags": 4,
-              "id": 162,
+              "id": 167,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3394,24 +3525,24 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 459,
+            "line": 460,
             "ch": 1
           },
           "kind": 35,
           "name": "Fieldset",
           "flags": 1,
-          "id": 163,
+          "id": 168,
           "children": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 478,
+                "line": 479,
                 "ch": 41
               },
               "kind": 36,
               "name": "outline",
               "flags": 4,
-              "id": 164,
+              "id": 169,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -3438,13 +3569,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 481,
+            "line": 482,
             "ch": 1
           },
           "kind": 35,
           "name": "FieldToggle",
           "flags": 1,
-          "id": 165,
+          "id": 170,
           "children": [],
           "docs": {
             "tagName": "cxl-field-toggle"
@@ -3464,24 +3595,24 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 506,
+            "line": 507,
             "ch": 45
           },
           "kind": 35,
           "name": "FieldCounter",
           "flags": 1,
-          "id": 166,
+          "id": 171,
           "children": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 516,
+                "line": 517,
                 "ch": 45
               },
               "kind": 36,
               "name": "max",
               "flags": 4,
-              "id": 167,
+              "id": 172,
               "value": "100",
               "type": {
                 "name": "number",
@@ -3508,24 +3639,24 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 519,
+            "line": 520,
             "ch": 1
           },
           "kind": 35,
           "name": "FocusLine",
           "flags": 1,
-          "id": 168,
+          "id": 173,
           "children": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 544,
+                "line": 545,
                 "ch": 42
               },
               "kind": 36,
               "name": "focused",
               "flags": 4,
-              "id": 169,
+              "id": 174,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3536,13 +3667,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 546,
+                "line": 547,
                 "ch": 17
               },
               "kind": 36,
               "name": "invalid",
               "flags": 4,
-              "id": 170,
+              "id": 175,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3569,13 +3700,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 550,
+            "line": 551,
             "ch": 1
           },
           "kind": 35,
           "name": "Form",
           "flags": 1,
-          "id": 171,
+          "id": 176,
           "docs": {
             "content": [
               {
@@ -3590,13 +3721,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 584,
+                "line": 585,
                 "ch": 37
               },
               "kind": 36,
               "name": "autocomplete",
               "flags": 4,
-              "id": 172,
+              "id": 177,
               "value": "'off'",
               "type": {
                 "name": "string",
@@ -3607,20 +3738,20 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 586,
+                "line": 587,
                 "ch": 22
               },
               "kind": 10,
               "name": "elements",
               "flags": 4,
-              "id": 173,
+              "id": 178,
               "value": "new Set<InputBase>()",
               "type": {
                 "name": "Set",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 9,
+                    "id": 14,
                     "name": "InputBase",
                     "kind": 6
                   }
@@ -3630,13 +3761,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 588,
+                "line": 589,
                 "ch": 33
               },
               "kind": 11,
               "name": "submit",
               "flags": 4,
-              "id": 174,
+              "id": 179,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -3647,13 +3778,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 600,
+                "line": 601,
                 "ch": 2
               },
               "kind": 11,
               "name": "getFormData",
               "flags": 4,
-              "id": 175,
+              "id": 180,
               "parameters": [],
               "type": {
                 "name": "Record",
@@ -3688,13 +3819,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 609,
+            "line": 610,
             "ch": 1
           },
           "kind": 35,
           "name": "Input",
           "flags": 1,
-          "id": 176,
+          "id": 181,
           "docs": {
             "content": [
               {
@@ -3716,13 +3847,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 639,
+                "line": 640,
                 "ch": 38
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 177,
+              "id": 182,
               "value": "''",
               "type": {
                 "name": "string",
@@ -3737,7 +3868,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -3747,39 +3878,39 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 641,
+            "line": 642,
             "ch": 1
           },
           "kind": 16,
           "name": "ContentEditable",
           "flags": 0,
-          "id": 178,
+          "id": 183,
           "typeParameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 643,
+                "line": 644,
                 "ch": 25
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 179
+              "id": 184
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 643,
+                "line": 644,
                 "ch": 46
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 180,
+              "id": 185,
               "type": {
-                "id": 179,
+                "id": 184,
                 "name": "T",
                 "kind": 6
               }
@@ -3787,13 +3918,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 643,
+                "line": 644,
                 "ch": 54
               },
               "kind": 9,
               "name": "multi",
               "flags": 0,
-              "id": 181,
+              "id": 186,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3810,24 +3941,24 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 653,
+            "line": 654,
             "ch": 1
           },
           "kind": 35,
           "name": "FieldInput",
           "flags": 1,
-          "id": 182,
+          "id": 187,
           "children": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 681,
+                "line": 682,
                 "ch": 43
               },
               "kind": 36,
               "name": "outline",
               "flags": 4,
-              "id": 183,
+              "id": 188,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3838,13 +3969,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 683,
+                "line": 684,
                 "ch": 17
               },
               "kind": 36,
               "name": "floating",
               "flags": 4,
-              "id": 184,
+              "id": 189,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3855,13 +3986,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 686,
+                "line": 687,
                 "ch": 18
               },
               "kind": 36,
               "name": "label",
               "flags": 4,
-              "id": 185,
+              "id": 190,
               "value": "''",
               "type": {
                 "name": "string",
@@ -3880,7 +4011,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -3890,24 +4021,24 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 690,
+            "line": 691,
             "ch": 1
           },
           "kind": 35,
           "name": "FieldTextArea",
           "flags": 1,
-          "id": 186,
+          "id": 191,
           "children": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 718,
+                "line": 719,
                 "ch": 46
               },
               "kind": 36,
               "name": "outline",
               "flags": 4,
-              "id": 187,
+              "id": 192,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3918,13 +4049,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 720,
+                "line": 721,
                 "ch": 17
               },
               "kind": 36,
               "name": "floating",
               "flags": 4,
-              "id": 188,
+              "id": 193,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -3935,13 +4066,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 723,
+                "line": 724,
                 "ch": 18
               },
               "kind": 36,
               "name": "label",
               "flags": 4,
-              "id": 189,
+              "id": 194,
               "value": "''",
               "type": {
                 "name": "string",
@@ -3959,7 +4090,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -3969,13 +4100,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 727,
+            "line": 728,
             "ch": 1
           },
           "kind": 35,
           "name": "PasswordInput",
           "flags": 1,
-          "id": 190,
+          "id": 195,
           "docs": {
             "content": [
               {
@@ -3993,13 +4124,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 761,
+                "line": 762,
                 "ch": 46
               },
               "kind": 36,
               "name": "maxlength",
               "flags": 4,
-              "id": 191,
+              "id": 196,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -4009,13 +4140,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 763,
+                "line": 764,
                 "ch": 20
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 192,
+              "id": 197,
               "value": "''",
               "type": {
                 "name": "string",
@@ -4030,7 +4161,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -4040,20 +4171,20 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 768,
+            "line": 769,
             "ch": 5
           },
           "kind": 31,
           "name": "radioElements",
           "flags": 0,
-          "id": 193,
+          "id": 198,
           "value": "new Set<Radio>()",
           "type": {
             "name": "Set",
             "kind": 6,
             "typeParameters": [
               {
-                "id": 194,
+                "id": 199,
                 "name": "Radio",
                 "kind": 6
               }
@@ -4061,10 +4192,10 @@
           }
         },
         {
-          "id": 194,
+          "id": 199,
           "source": {
             "fileName": "form.tsx",
-            "line": 768,
+            "line": 769,
             "ch": 39
           },
           "kind": 35,
@@ -4087,13 +4218,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 873,
+                "line": 874,
                 "ch": 38
               },
               "kind": 36,
               "name": "checked",
               "flags": 4,
-              "id": 195,
+              "id": 200,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -4108,7 +4239,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -4118,13 +4249,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 876,
+            "line": 877,
             "ch": 1
           },
           "kind": 35,
           "name": "MultiSelect",
           "flags": 1,
-          "id": 196,
+          "id": 201,
           "docs": {
             "content": [
               {
@@ -4141,13 +4272,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 927,
+                "line": 928,
                 "ch": 45
               },
               "kind": 36,
               "name": "placeholder",
               "flags": 4,
-              "id": 197,
+              "id": 202,
               "docs": {
                 "content": [
                   {
@@ -4165,13 +4296,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 932,
+                "line": 933,
                 "ch": 18
               },
               "kind": 10,
               "name": "selectedText$",
               "flags": 4,
-              "id": 198,
+              "id": 203,
               "value": "be('')",
               "type": {
                 "name": "BehaviorSubject",
@@ -4188,19 +4319,19 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 934,
+                "line": 935,
                 "ch": 24
               },
               "kind": 10,
               "name": "selected",
               "flags": 68,
-              "id": 199,
+              "id": 204,
               "type": {
                 "name": "Set",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 140,
+                    "id": 145,
                     "name": "Option",
                     "kind": 6
                   }
@@ -4211,17 +4342,17 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 935,
+                "line": 936,
                 "ch": 52
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 200,
+              "id": 205,
               "type": {
                 "source": {
                   "fileName": "form.tsx",
-                  "line": 936,
+                  "line": 937,
                   "ch": 7
                 },
                 "kind": 15,
@@ -4238,15 +4369,15 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 936,
+                "line": 937,
                 "ch": 19
               },
               "kind": 10,
               "name": "focusedOption",
               "flags": 16,
-              "id": 201,
+              "id": 206,
               "type": {
-                "id": 140,
+                "id": 145,
                 "name": "Option",
                 "kind": 6
               }
@@ -4254,26 +4385,26 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 938,
+                "line": 939,
                 "ch": 34
               },
               "kind": 11,
               "name": "positionMenu",
               "flags": 16,
-              "id": 202,
+              "id": 207,
               "parameters": [
                 {
                   "source": {
                     "fileName": "form.tsx",
-                    "line": 940,
+                    "line": 941,
                     "ch": 24
                   },
                   "kind": 9,
                   "name": "menu",
                   "flags": 0,
-                  "id": 203,
+                  "id": 208,
                   "type": {
-                    "id": 204,
+                    "id": 209,
                     "name": "SelectMenu",
                     "kind": 6
                   }
@@ -4288,30 +4419,30 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 949,
+                "line": 950,
                 "ch": 2
               },
               "kind": 11,
               "name": "setOptions",
               "flags": 16,
-              "id": 205,
+              "id": 210,
               "parameters": [
                 {
                   "source": {
                     "fileName": "form.tsx",
-                    "line": 951,
+                    "line": 952,
                     "ch": 22
                   },
                   "kind": 9,
                   "name": "options",
                   "flags": 0,
-                  "id": 206,
+                  "id": 211,
                   "type": {
                     "name": "Set",
                     "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 140,
+                        "id": 145,
                         "name": "Option",
                         "kind": 6
                       }
@@ -4328,26 +4459,26 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 962,
+                "line": 963,
                 "ch": 2
               },
               "kind": 11,
               "name": "setSelected",
               "flags": 16,
-              "id": 207,
+              "id": 212,
               "parameters": [
                 {
                   "source": {
                     "fileName": "form.tsx",
-                    "line": 964,
+                    "line": 965,
                     "ch": 23
                   },
                   "kind": 9,
                   "name": "option",
                   "flags": 0,
-                  "id": 208,
+                  "id": 213,
                   "type": {
-                    "id": 140,
+                    "id": 145,
                     "name": "Option",
                     "kind": 6
                   }
@@ -4362,26 +4493,26 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 974,
+                "line": 975,
                 "ch": 2
               },
               "kind": 11,
               "name": "setFocusedOption",
               "flags": 16,
-              "id": 209,
+              "id": 214,
               "parameters": [
                 {
                   "source": {
                     "fileName": "form.tsx",
-                    "line": 976,
+                    "line": 977,
                     "ch": 28
                   },
                   "kind": 9,
                   "name": "option",
                   "flags": 0,
-                  "id": 210,
+                  "id": 215,
                   "type": {
-                    "id": 140,
+                    "id": 145,
                     "name": "Option",
                     "kind": 6
                   }
@@ -4396,13 +4527,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 980,
+                "line": 981,
                 "ch": 2
               },
               "kind": 11,
               "name": "clearFocusedOption",
               "flags": 16,
-              "id": 211,
+              "id": 216,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -4413,13 +4544,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 985,
+                "line": 986,
                 "ch": 2
               },
               "kind": 11,
               "name": "open",
               "flags": 4,
-              "id": 212,
+              "id": 217,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -4430,13 +4561,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 990,
+                "line": 991,
                 "ch": 2
               },
               "kind": 11,
               "name": "close",
               "flags": 4,
-              "id": 213,
+              "id": 218,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -4451,7 +4582,7 @@
             "name": "",
             "children": [
               {
-                "id": 214,
+                "id": 219,
                 "name": "SelectBase",
                 "kind": 6
               }
@@ -4461,13 +4592,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 998,
+            "line": 999,
             "ch": 1
           },
           "kind": 35,
           "name": "Switch",
           "flags": 1,
-          "id": 215,
+          "id": 220,
           "docs": {
             "content": [
               {
@@ -4485,30 +4616,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1078,
+                "line": 1080,
                 "ch": 39
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 216,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "form.tsx",
-                "line": 1079,
-                "ch": 15
-              },
-              "kind": 36,
-              "name": "checked",
-              "flags": 4,
-              "id": 217,
+              "id": 221,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -4520,35 +4634,18 @@
               "source": {
                 "fileName": "form.tsx",
                 "line": 1081,
-                "ch": 17
+                "ch": 15
               },
               "kind": 36,
-              "name": "'true-value'",
+              "name": "checked",
               "flags": 4,
-              "id": 218,
+              "id": 222,
+              "value": "false",
               "type": {
-                "name": "any",
+                "name": "boolean",
                 "kind": 32,
                 "flags": 0
-              },
-              "value": "true"
-            },
-            {
-              "source": {
-                "fileName": "form.tsx",
-                "line": 1083,
-                "ch": 26
-              },
-              "kind": 36,
-              "name": "'false-value'",
-              "flags": 4,
-              "id": 219,
-              "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
-              },
-              "value": "false"
+              }
             }
           ],
           "type": {
@@ -4557,7 +4654,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -4567,24 +4664,24 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1086,
+            "line": 1084,
             "ch": 1
           },
           "kind": 16,
           "name": "$focusProxy",
           "flags": 0,
-          "id": 220,
+          "id": 223,
           "parameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1088,
+                "line": 1086,
                 "ch": 21
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 221,
+              "id": 224,
               "type": {
                 "name": "HTMLElement",
                 "kind": 6
@@ -4593,15 +4690,15 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1088,
+                "line": 1086,
                 "ch": 37
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 222,
+              "id": 225,
               "type": {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -4638,39 +4735,39 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1091,
+            "line": 1089,
             "ch": 1
           },
           "kind": 16,
           "name": "$valueProxy",
           "flags": 0,
-          "id": 223,
+          "id": 226,
           "typeParameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1093,
+                "line": 1091,
                 "ch": 21
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 224
+              "id": 227
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1093,
+                "line": 1091,
                 "ch": 42
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 225,
+              "id": 228,
               "type": {
-                "id": 224,
+                "id": 227,
                 "name": "T",
                 "kind": 6
               }
@@ -4678,13 +4775,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1093,
+                "line": 1091,
                 "ch": 50
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 226,
+              "id": 229,
               "type": {
                 "name": "HTMLInputElement",
                 "kind": 6
@@ -4699,37 +4796,37 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1105,
+            "line": 1103,
             "ch": 1
           },
           "kind": 16,
           "name": "$contentEditable",
           "flags": 0,
-          "id": 227,
+          "id": 230,
           "typeParameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1107,
+                "line": 1105,
                 "ch": 26
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 228
+              "id": 231
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1107,
+                "line": 1105,
                 "ch": 47
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 229,
+              "id": 232,
               "type": {
                 "name": "HTMLElement",
                 "kind": 6
@@ -4738,15 +4835,15 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1107,
+                "line": 1105,
                 "ch": 63
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 230,
+              "id": 233,
               "type": {
-                "id": 228,
+                "id": 231,
                 "name": "T",
                 "kind": 6
               }
@@ -4785,7 +4882,7 @@
                     "flags": 0,
                     "children": [
                       {
-                        "id": 228,
+                        "id": 231,
                         "name": "T",
                         "kind": 6
                       },
@@ -4807,7 +4904,7 @@
                     "flags": 0,
                     "children": [
                       {
-                        "id": 228,
+                        "id": 231,
                         "name": "T",
                         "kind": 6
                       },
@@ -4831,13 +4928,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1118,
+            "line": 1116,
             "ch": 1
           },
           "kind": 35,
           "name": "TextArea",
           "flags": 1,
-          "id": 231,
+          "id": 234,
           "docs": {
             "content": [
               {
@@ -4855,13 +4952,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1148,
+                "line": 1146,
                 "ch": 41
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 232,
+              "id": 235,
               "value": "''",
               "type": {
                 "name": "string",
@@ -4876,7 +4973,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -4886,13 +4983,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1150,
+            "line": 1148,
             "ch": 1
           },
           "kind": 35,
           "name": "Fab",
           "flags": 1,
-          "id": 233,
+          "id": 236,
           "docs": {
             "content": [
               {
@@ -4909,13 +5006,30 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1189,
+                "line": 1187,
                 "ch": 36
               },
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 234,
+              "id": 237,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "form.tsx",
+                "line": 1189,
+                "ch": 18
+              },
+              "kind": 36,
+              "name": "fixed",
+              "flags": 4,
+              "id": 238,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -4927,29 +5041,12 @@
               "source": {
                 "fileName": "form.tsx",
                 "line": 1191,
-                "ch": 18
-              },
-              "kind": 36,
-              "name": "fixed",
-              "flags": 4,
-              "id": 235,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "form.tsx",
-                "line": 1193,
                 "ch": 15
               },
               "kind": 10,
               "name": "touched",
               "flags": 4,
-              "id": 236,
+              "id": 239,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -4973,13 +5070,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1198,
+            "line": 1196,
             "ch": 5
           },
           "kind": 31,
           "name": "SearchIcon",
           "flags": 0,
-          "id": 237,
+          "id": 240,
           "value": "staticTemplate(() => (\n\t<Svg\n\t\twidth={24}\n\t\tviewBox=\"0 0 48 48\"\n\t>{`<path d=\"M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z\"/>`}</Svg>\n))",
           "type": {
             "source": {
@@ -4990,7 +5087,7 @@
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 238,
+            "id": 241,
             "parameters": [],
             "type": {
               "name": "Node",
@@ -5001,13 +5098,13 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 1203,
+            "line": 1201,
             "ch": 3
           },
           "kind": 35,
           "name": "AppbarSearch",
           "flags": 1,
-          "id": 239,
+          "id": 242,
           "docs": {
             "content": [
               {
@@ -5028,13 +5125,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1295,
+                "line": 1293,
                 "ch": 45
               },
               "kind": 36,
               "name": "opened",
               "flags": 4,
-              "id": 240,
+              "id": 243,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -5045,15 +5142,15 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1297,
+                "line": 1295,
                 "ch": 16
               },
               "kind": 10,
               "name": "desktopInput",
               "flags": 16,
-              "id": 241,
+              "id": 244,
               "type": {
-                "id": 176,
+                "id": 181,
                 "name": "Input",
                 "kind": 6
               }
@@ -5061,15 +5158,15 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1299,
+                "line": 1297,
                 "ch": 32
               },
               "kind": 10,
               "name": "mobileIcon",
               "flags": 16,
-              "id": 242,
+              "id": 245,
               "type": {
-                "id": 82,
+                "id": 87,
                 "name": "IconButton",
                 "kind": 6
               }
@@ -5077,13 +5174,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1300,
+                "line": 1298,
                 "ch": 35
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 243,
+              "id": 246,
               "value": "''",
               "type": {
                 "name": "string",
@@ -5094,13 +5191,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1302,
+                "line": 1300,
                 "ch": 12
               },
               "kind": 11,
               "name": "open",
               "flags": 4,
-              "id": 244,
+              "id": 247,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -5111,13 +5208,13 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 1307,
+                "line": 1305,
                 "ch": 2
               },
               "kind": 11,
               "name": "focus",
               "flags": 4,
-              "id": 245,
+              "id": 248,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -5132,7 +5229,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -5152,11 +5249,31 @@
       "flags": 0,
       "children": [
         {
+          "name": "checkedBehavior",
+          "kind": 25,
+          "flags": 1,
+          "type": {
+            "id": 4,
+            "name": "checkedBehavior",
+            "kind": 6
+          }
+        },
+        {
+          "name": "Checkbox",
+          "kind": 25,
+          "flags": 1,
+          "type": {
+            "id": 9,
+            "name": "Checkbox",
+            "kind": 6
+          }
+        },
+        {
           "name": "ripple",
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 19,
+            "id": 24,
             "name": "ripple",
             "kind": 6
           }
@@ -5166,7 +5283,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 48,
+            "id": 53,
             "name": "Svg",
             "kind": 6
           }
@@ -5185,7 +5302,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 10,
+            "id": 15,
             "name": "FocusHighlight",
             "kind": 6
           }
@@ -5195,7 +5312,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 21,
+            "id": 26,
             "name": "Ripple",
             "kind": 6
           }
@@ -5205,7 +5322,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 25,
+            "id": 30,
             "name": "RippleContainer",
             "kind": 6
           }
@@ -5215,7 +5332,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 27,
+            "id": 32,
             "name": "Avatar",
             "kind": 6
           }
@@ -5225,7 +5342,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 32,
+            "id": 37,
             "name": "Chip",
             "kind": 6
           }
@@ -5235,7 +5352,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 40,
+            "id": 45,
             "name": "Badge",
             "kind": 6
           }
@@ -5245,7 +5362,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 45,
+            "id": 50,
             "name": "Hr",
             "kind": 6
           }
@@ -5255,7 +5372,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 46,
+            "id": 51,
             "name": "Progress",
             "kind": 6
           }
@@ -5265,7 +5382,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 55,
+            "id": 60,
             "name": "Spinner",
             "kind": 6
           }
@@ -5275,7 +5392,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 56,
+            "id": 61,
             "name": "T",
             "kind": 6
           }
@@ -5285,7 +5402,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 70,
+            "id": 75,
             "name": "Toggle",
             "kind": 6
           }
@@ -5295,7 +5412,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 73,
+            "id": 78,
             "name": "ButtonBase",
             "kind": 6
           }
@@ -5305,7 +5422,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 81,
+            "id": 86,
             "name": "Button",
             "kind": 6
           }
@@ -5315,7 +5432,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 82,
+            "id": 87,
             "name": "IconButton",
             "kind": 6
           }
@@ -5325,7 +5442,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 83,
+            "id": 88,
             "name": "Meta",
             "kind": 6
           }
@@ -5335,7 +5452,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 85,
+            "id": 90,
             "name": "Application",
             "kind": 6
           }
@@ -5345,7 +5462,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 87,
+            "id": 92,
             "name": "Surface",
             "kind": 6
           }
@@ -5355,7 +5472,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 89,
+            "id": 94,
             "name": "Toolbar",
             "kind": 6
           }
@@ -5365,7 +5482,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 246,
+            "id": 249,
             "name": "theme",
             "kind": 6
           }
@@ -5375,7 +5492,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 247,
+            "id": 250,
             "name": "ResetSurface",
             "kind": 6
           }
@@ -5385,7 +5502,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 248,
+            "id": 251,
             "name": "InversePrimary",
             "kind": 6
           }
@@ -5395,7 +5512,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 249,
+            "id": 252,
             "name": "DarkColors",
             "kind": 6
           }
@@ -5405,7 +5522,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 126,
+            "id": 131,
             "name": "alert",
             "kind": 6
           }
@@ -5415,7 +5532,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 129,
+            "id": 134,
             "name": "confirm",
             "kind": 6
           }
@@ -5425,7 +5542,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 133,
+            "id": 138,
             "name": "notify",
             "kind": 6
           }
@@ -5435,7 +5552,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 137,
+            "id": 142,
             "name": "setSnackbarContainer",
             "kind": 6
           }
@@ -5445,7 +5562,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 90,
+            "id": 95,
             "name": "Backdrop",
             "kind": 6
           }
@@ -5455,7 +5572,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 91,
+            "id": 96,
             "name": "Dialog",
             "kind": 6
           }
@@ -5465,7 +5582,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 94,
+            "id": 99,
             "name": "DialogAlert",
             "kind": 6
           }
@@ -5475,7 +5592,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 101,
+            "id": 106,
             "name": "DialogConfirm",
             "kind": 6
           }
@@ -5485,7 +5602,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 110,
+            "id": 115,
             "name": "Drawer",
             "kind": 6
           }
@@ -5495,7 +5612,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 114,
+            "id": 119,
             "name": "Snackbar",
             "kind": 6
           }
@@ -5505,7 +5622,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 116,
+            "id": 121,
             "name": "SnackbarContainer",
             "kind": 6
           }
@@ -5515,7 +5632,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 139,
+            "id": 144,
             "name": "SelectBox",
             "kind": 6
           }
@@ -5525,7 +5642,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 140,
+            "id": 145,
             "name": "Option",
             "kind": 6
           }
@@ -5535,7 +5652,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 141,
+            "id": 146,
             "name": "Slider",
             "kind": 6
           }
@@ -5545,7 +5662,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 144,
+            "id": 149,
             "name": "SubmitButton",
             "kind": 6
           }
@@ -5555,7 +5672,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 152,
+            "id": 157,
             "name": "Label",
             "kind": 6
           }
@@ -5565,7 +5682,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 153,
+            "id": 158,
             "name": "Field",
             "kind": 6
           }
@@ -5575,7 +5692,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 161,
+            "id": 166,
             "name": "FieldHelp",
             "kind": 6
           }
@@ -5585,7 +5702,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 163,
+            "id": 168,
             "name": "Fieldset",
             "kind": 6
           }
@@ -5595,7 +5712,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 165,
+            "id": 170,
             "name": "FieldToggle",
             "kind": 6
           }
@@ -5605,7 +5722,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 166,
+            "id": 171,
             "name": "FieldCounter",
             "kind": 6
           }
@@ -5615,7 +5732,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 168,
+            "id": 173,
             "name": "FocusLine",
             "kind": 6
           }
@@ -5625,7 +5742,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 171,
+            "id": 176,
             "name": "Form",
             "kind": 6
           }
@@ -5635,7 +5752,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 176,
+            "id": 181,
             "name": "Input",
             "kind": 6
           }
@@ -5645,7 +5762,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 182,
+            "id": 187,
             "name": "FieldInput",
             "kind": 6
           }
@@ -5655,7 +5772,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 186,
+            "id": 191,
             "name": "FieldTextArea",
             "kind": 6
           }
@@ -5665,7 +5782,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 190,
+            "id": 195,
             "name": "PasswordInput",
             "kind": 6
           }
@@ -5675,7 +5792,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 194,
+            "id": 199,
             "name": "Radio",
             "kind": 6
           }
@@ -5685,7 +5802,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 196,
+            "id": 201,
             "name": "MultiSelect",
             "kind": 6
           }
@@ -5695,7 +5812,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 215,
+            "id": 220,
             "name": "Switch",
             "kind": 6
           }
@@ -5705,7 +5822,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 231,
+            "id": 234,
             "name": "TextArea",
             "kind": 6
           }
@@ -5715,7 +5832,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 233,
+            "id": 236,
             "name": "Fab",
             "kind": 6
           }
@@ -5725,7 +5842,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 239,
+            "id": 242,
             "name": "AppbarSearch",
             "kind": 6
           }
@@ -5735,7 +5852,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 250,
+            "id": 253,
             "name": "C",
             "kind": 6
           }
@@ -5745,7 +5862,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 251,
+            "id": 254,
             "name": "Layout",
             "kind": 6
           }
@@ -5755,7 +5872,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 252,
+            "id": 255,
             "name": "Content",
             "kind": 6
           }
@@ -5765,7 +5882,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 253,
+            "id": 256,
             "name": "Page",
             "kind": 6
           }
@@ -5775,7 +5892,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 254,
+            "id": 257,
             "name": "Card",
             "kind": 6
           }
@@ -5785,7 +5902,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 255,
+            "id": 258,
             "name": "Grid",
             "kind": 6
           }
@@ -5795,7 +5912,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 256,
+            "id": 259,
             "name": "Appbar",
             "kind": 6
           }
@@ -5805,7 +5922,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 257,
+            "id": 260,
             "name": "AppbarContextual",
             "kind": 6
           }
@@ -5815,7 +5932,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 258,
+            "id": 261,
             "name": "AppbarTitle",
             "kind": 6
           }
@@ -5825,7 +5942,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 259,
+            "id": 262,
             "name": "Tab",
             "kind": 6
           }
@@ -5835,7 +5952,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 260,
+            "id": 263,
             "name": "Tabs",
             "kind": 6
           }
@@ -5845,7 +5962,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 261,
+            "id": 264,
             "name": "Navbar",
             "kind": 6
           }
@@ -5855,7 +5972,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 262,
+            "id": 265,
             "name": "Menu",
             "kind": 6
           }
@@ -5865,7 +5982,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 263,
+            "id": 266,
             "name": "Item",
             "kind": 6
           }
@@ -5875,7 +5992,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 264,
+            "id": 267,
             "name": "List",
             "kind": 6
           }
@@ -5885,7 +6002,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 265,
+            "id": 268,
             "name": "FocusCircleStyle",
             "kind": 6
           }
@@ -5895,7 +6012,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 9,
+            "id": 14,
             "name": "InputBase",
             "kind": 6
           }
@@ -5913,7 +6030,7 @@
       "flags": 0,
       "children": [
         {
-          "id": 265,
+          "id": 268,
           "source": {
             "fileName": "input-base.tsx",
             "line": 13,
@@ -5932,7 +6049,7 @@
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 93,
+            "id": 98,
             "parameters": [],
             "type": {
               "name": "Node",
@@ -5941,60 +6058,60 @@
           }
         },
         {
-          "id": 9,
+          "id": 14,
           "extendedBy": [
             {
-              "id": 2,
+              "id": 9,
               "name": "Checkbox",
               "kind": 6
             },
             {
-              "id": 141,
+              "id": 146,
               "name": "Slider",
               "kind": 6
             },
             {
-              "id": 176,
+              "id": 181,
               "name": "Input",
               "kind": 6
             },
             {
-              "id": 182,
+              "id": 187,
               "name": "FieldInput",
               "kind": 6
             },
             {
-              "id": 186,
+              "id": 191,
               "name": "FieldTextArea",
               "kind": 6
             },
             {
-              "id": 190,
+              "id": 195,
               "name": "PasswordInput",
               "kind": 6
             },
             {
-              "id": 194,
+              "id": 199,
               "name": "Radio",
               "kind": 6
             },
             {
-              "id": 215,
+              "id": 220,
               "name": "Switch",
               "kind": 6
             },
             {
-              "id": 231,
+              "id": 234,
               "name": "TextArea",
               "kind": 6
             },
             {
-              "id": 239,
+              "id": 242,
               "name": "AppbarSearch",
               "kind": 6
             },
             {
-              "id": 214,
+              "id": 219,
               "name": "SelectBase",
               "kind": 6
             }
@@ -6017,7 +6134,7 @@
               "kind": 10,
               "name": "formAssociated",
               "flags": 36,
-              "id": 266,
+              "id": 269,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -6034,7 +6151,7 @@
               "kind": 36,
               "name": "value",
               "flags": 4,
-              "id": 267,
+              "id": 270,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -6050,7 +6167,7 @@
               "kind": 36,
               "name": "invalid",
               "flags": 4,
-              "id": 268,
+              "id": 271,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6067,7 +6184,7 @@
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 269,
+              "id": 272,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6084,7 +6201,7 @@
               "kind": 36,
               "name": "touched",
               "flags": 4,
-              "id": 270,
+              "id": 273,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6101,7 +6218,7 @@
               "kind": 36,
               "name": "name",
               "flags": 4,
-              "id": 271,
+              "id": 274,
               "value": "''",
               "type": {
                 "name": "string",
@@ -6118,7 +6235,7 @@
               "kind": 10,
               "name": "internals",
               "flags": 8,
-              "id": 272,
+              "id": 275,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -6134,10 +6251,10 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 273,
+              "id": 276,
               "parameters": [],
               "type": {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -6151,7 +6268,7 @@
               "kind": 11,
               "name": "formDisabledCallback",
               "flags": 16,
-              "id": 274,
+              "id": 277,
               "parameters": [
                 {
                   "source": {
@@ -6162,7 +6279,7 @@
                   "kind": 9,
                   "name": "disabled",
                   "flags": 0,
-                  "id": 275,
+                  "id": 278,
                   "type": {
                     "name": "boolean",
                     "kind": 32,
@@ -6185,7 +6302,7 @@
               "kind": 12,
               "name": "validationMessage",
               "flags": 4,
-              "id": 276,
+              "id": 279,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -6202,7 +6319,7 @@
               "kind": 12,
               "name": "validity",
               "flags": 4,
-              "id": 277,
+              "id": 280,
               "type": {
                 "name": "ValidityState",
                 "kind": 6
@@ -6218,7 +6335,7 @@
               "kind": 11,
               "name": "setCustomValidity",
               "flags": 4,
-              "id": 278,
+              "id": 281,
               "parameters": [
                 {
                   "source": {
@@ -6229,7 +6346,7 @@
                   "kind": 9,
                   "name": "msg",
                   "flags": 0,
-                  "id": 279,
+                  "id": 282,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -6252,7 +6369,7 @@
               "kind": 10,
               "name": "focusElement",
               "flags": 4,
-              "id": 280,
+              "id": 283,
               "docs": {
                 "content": [
                   {
@@ -6274,7 +6391,7 @@
               "kind": 11,
               "name": "focus",
               "flags": 4,
-              "id": 281,
+              "id": 284,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -6316,7 +6433,7 @@
           "kind": 31,
           "name": "colStyles",
           "flags": 0,
-          "id": 282,
+          "id": 285,
           "value": "((r: any) => {\n\tfor (let i = 12; i > 0; i--)\n\t\tr.xl['$xl' + i] = r.lg['$lg' + i] = r.md['$md' + i] = r.sm[\n\t\t\t'$sm' + i\n\t\t] = r.xs['$xs' + i] = {\n\t\t\tdisplay: 'block',\n\t\t\tgridColumnEnd: 'span ' + i,\n\t\t\tflexBasis: pct((100 / 12) * i),\n\t\t};\n\treturn r;\n})({\n\txl: {},\n\tlg: {},\n\tmd: {},\n\tsm: {},\n\txs: {},\n})",
           "type": {
             "name": "any",
@@ -6333,7 +6450,7 @@
           "kind": 16,
           "name": "persistWithParameter",
           "flags": 0,
-          "id": 283,
+          "id": 286,
           "parameters": [
             {
               "source": {
@@ -6344,7 +6461,7 @@
               "kind": 9,
               "name": "prefix",
               "flags": 0,
-              "id": 284,
+              "id": 287,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -6426,7 +6543,7 @@
           }
         },
         {
-          "id": 250,
+          "id": 253,
           "source": {
             "fileName": "layout.tsx",
             "line": 50,
@@ -6445,7 +6562,7 @@
               "kind": 36,
               "name": "flex",
               "flags": 4,
-              "id": 285,
+              "id": 288,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6462,7 +6579,7 @@
               "kind": 36,
               "name": "vflex",
               "flags": 4,
-              "id": 286,
+              "id": 289,
               "docs": {
                 "content": [
                   {
@@ -6486,7 +6603,7 @@
               "kind": 36,
               "name": "grow",
               "flags": 4,
-              "id": 287,
+              "id": 290,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6503,7 +6620,7 @@
               "kind": 36,
               "name": "pad16",
               "flags": 4,
-              "id": 288,
+              "id": 291,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6520,7 +6637,7 @@
               "kind": 36,
               "name": "xs",
               "flags": 4,
-              "id": 289,
+              "id": 292,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -6536,7 +6653,7 @@
               "kind": 36,
               "name": "sm",
               "flags": 4,
-              "id": 290,
+              "id": 293,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -6552,7 +6669,7 @@
               "kind": 36,
               "name": "md",
               "flags": 4,
-              "id": 291,
+              "id": 294,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -6568,7 +6685,7 @@
               "kind": 36,
               "name": "lg",
               "flags": 4,
-              "id": 292,
+              "id": 295,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -6584,7 +6701,7 @@
               "kind": 36,
               "name": "xl",
               "flags": 4,
-              "id": 293,
+              "id": 296,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -6600,7 +6717,7 @@
               "kind": 36,
               "name": "primary",
               "flags": 4,
-              "id": 294,
+              "id": 297,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6617,7 +6734,7 @@
               "kind": 36,
               "name": "secondary",
               "flags": 4,
-              "id": 295,
+              "id": 298,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6642,14 +6759,14 @@
           },
           "extendedBy": [
             {
-              "id": 254,
+              "id": 257,
               "name": "Card",
               "kind": 6
             }
           ]
         },
         {
-          "id": 251,
+          "id": 254,
           "source": {
             "fileName": "layout.tsx",
             "line": 159,
@@ -6668,7 +6785,7 @@
               "kind": 36,
               "name": "center",
               "flags": 4,
-              "id": 296,
+              "id": 299,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6685,7 +6802,7 @@
               "kind": 36,
               "name": "full",
               "flags": 4,
-              "id": 297,
+              "id": 300,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6710,7 +6827,7 @@
           }
         },
         {
-          "id": 252,
+          "id": 255,
           "source": {
             "fileName": "layout.tsx",
             "line": 191,
@@ -6729,7 +6846,7 @@
               "kind": 36,
               "name": "center",
               "flags": 4,
-              "id": 298,
+              "id": 301,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6746,7 +6863,7 @@
               "kind": 36,
               "name": "full",
               "flags": 4,
-              "id": 299,
+              "id": 302,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6771,7 +6888,7 @@
           }
         },
         {
-          "id": 253,
+          "id": 256,
           "source": {
             "fileName": "layout.tsx",
             "line": 236,
@@ -6797,7 +6914,7 @@
           }
         },
         {
-          "id": 254,
+          "id": 257,
           "source": {
             "fileName": "layout.tsx",
             "line": 267,
@@ -6828,7 +6945,7 @@
               "kind": 36,
               "name": "elevation",
               "flags": 4,
-              "id": 300,
+              "id": 303,
               "type": {
                 "source": {
                   "fileName": "layout.tsx",
@@ -6900,7 +7017,7 @@
             "name": "",
             "children": [
               {
-                "id": 250,
+                "id": 253,
                 "name": "C",
                 "kind": 6
               }
@@ -6908,7 +7025,7 @@
           }
         },
         {
-          "id": 255,
+          "id": 258,
           "source": {
             "fileName": "layout.tsx",
             "line": 307,
@@ -6936,7 +7053,7 @@
               "kind": 36,
               "name": "rows",
               "flags": 4,
-              "id": 301,
+              "id": 304,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -6952,7 +7069,7 @@
               "kind": 36,
               "name": "columns",
               "flags": 4,
-              "id": 302,
+              "id": 305,
               "value": "'repeat(12, minmax(0,1fr))'",
               "type": {
                 "name": "string",
@@ -6969,7 +7086,7 @@
               "kind": 36,
               "name": "gap",
               "flags": 4,
-              "id": 303,
+              "id": 306,
               "value": "16",
               "type": {
                 "name": "number",
@@ -7003,7 +7120,7 @@
       "flags": 0,
       "children": [
         {
-          "id": 256,
+          "id": 259,
           "source": {
             "fileName": "navigation.tsx",
             "line": 23,
@@ -7043,7 +7160,7 @@
               "kind": 36,
               "name": "extended",
               "flags": 4,
-              "id": 304,
+              "id": 307,
               "docs": {
                 "content": [
                   {
@@ -7068,7 +7185,7 @@
               "kind": 36,
               "name": "center",
               "flags": 4,
-              "id": 305,
+              "id": 308,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7085,7 +7202,7 @@
               "kind": 36,
               "name": "contextual",
               "flags": 4,
-              "id": 306,
+              "id": 309,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -7106,7 +7223,7 @@
           }
         },
         {
-          "id": 257,
+          "id": 260,
           "source": {
             "fileName": "navigation.tsx",
             "line": 165,
@@ -7125,7 +7242,7 @@
               "kind": 36,
               "name": "name",
               "flags": 4,
-              "id": 307,
+              "id": 310,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -7141,7 +7258,7 @@
               "kind": 36,
               "name": "visible",
               "flags": 4,
-              "id": 308,
+              "id": 311,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7166,7 +7283,7 @@
           }
         },
         {
-          "id": 258,
+          "id": 261,
           "source": {
             "fileName": "navigation.tsx",
             "line": 178,
@@ -7194,7 +7311,7 @@
               "kind": 36,
               "name": "extended",
               "flags": 4,
-              "id": 309,
+              "id": 312,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7216,7 +7333,7 @@
           }
         },
         {
-          "id": 259,
+          "id": 262,
           "source": {
             "fileName": "navigation.tsx",
             "line": 209,
@@ -7249,7 +7366,7 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 310,
+              "id": 313,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7271,7 +7388,7 @@
           }
         },
         {
-          "id": 260,
+          "id": 263,
           "source": {
             "fileName": "navigation.tsx",
             "line": 254,
@@ -7307,9 +7424,9 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 311,
+              "id": 314,
               "type": {
-                "id": 259,
+                "id": 262,
                 "name": "Tab",
                 "kind": 6
               }
@@ -7336,7 +7453,7 @@
           "kind": 16,
           "name": "MenuIcon",
           "flags": 0,
-          "id": 312,
+          "id": 315,
           "parameters": [],
           "type": {
             "name": "Node",
@@ -7344,7 +7461,7 @@
           }
         },
         {
-          "id": 261,
+          "id": 264,
           "source": {
             "fileName": "navigation.tsx",
             "line": 339,
@@ -7372,7 +7489,7 @@
               "kind": 36,
               "name": "permanent",
               "flags": 4,
-              "id": 313,
+              "id": 316,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7389,9 +7506,9 @@
               "kind": 36,
               "name": "drawer",
               "flags": 4,
-              "id": 314,
+              "id": 317,
               "type": {
-                "id": 110,
+                "id": 115,
                 "name": "Drawer",
                 "kind": 6
               }
@@ -7410,7 +7527,7 @@
           }
         },
         {
-          "id": 262,
+          "id": 265,
           "source": {
             "fileName": "navigation.tsx",
             "line": 393,
@@ -7441,7 +7558,7 @@
               "kind": 36,
               "name": "dense",
               "flags": 4,
-              "id": 315,
+              "id": 318,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7463,7 +7580,7 @@
           }
         },
         {
-          "id": 263,
+          "id": 266,
           "source": {
             "fileName": "navigation.tsx",
             "line": 427,
@@ -7482,7 +7599,7 @@
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 316,
+              "id": 319,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7499,7 +7616,7 @@
               "kind": 10,
               "name": "touched",
               "flags": 4,
-              "id": 317,
+              "id": 320,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7516,7 +7633,7 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 318,
+              "id": 321,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7541,7 +7658,7 @@
           }
         },
         {
-          "id": 264,
+          "id": 267,
           "source": {
             "fileName": "navigation.tsx",
             "line": 464,
@@ -7585,7 +7702,7 @@
       "flags": 0,
       "children": [
         {
-          "id": 140,
+          "id": 145,
           "source": {
             "fileName": "select.tsx",
             "line": 23,
@@ -7604,7 +7721,7 @@
               "kind": 10,
               "name": "$value",
               "flags": 8,
-              "id": 319,
+              "id": 322,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -7620,7 +7737,7 @@
               "kind": 12,
               "name": "value",
               "flags": 4,
-              "id": 320,
+              "id": 323,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -7637,7 +7754,7 @@
               "kind": 13,
               "name": "value",
               "flags": 4,
-              "id": 321,
+              "id": 324,
               "parameters": [
                 {
                   "source": {
@@ -7648,7 +7765,7 @@
                   "kind": 9,
                   "name": "val",
                   "flags": 0,
-                  "id": 322,
+                  "id": 325,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -7671,7 +7788,7 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 323,
+              "id": 326,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7688,7 +7805,7 @@
               "kind": 36,
               "name": "focused",
               "flags": 4,
-              "id": 324,
+              "id": 327,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7705,7 +7822,7 @@
               "kind": 36,
               "name": "inactive",
               "flags": 4,
-              "id": 325,
+              "id": 328,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7722,7 +7839,7 @@
               "kind": 36,
               "name": "multiple",
               "flags": 4,
-              "id": 326,
+              "id": 329,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7748,7 +7865,7 @@
           }
         },
         {
-          "id": 204,
+          "id": 209,
           "source": {
             "fileName": "select.tsx",
             "line": 108,
@@ -7767,7 +7884,7 @@
               "kind": 36,
               "name": "visible",
               "flags": 4,
-              "id": 327,
+              "id": 330,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7792,15 +7909,15 @@
           }
         },
         {
-          "id": 214,
+          "id": 219,
           "extendedBy": [
             {
-              "id": 196,
+              "id": 201,
               "name": "MultiSelect",
               "kind": 6
             },
             {
-              "id": 139,
+              "id": 144,
               "name": "SelectBox",
               "kind": 6
             }
@@ -7823,7 +7940,7 @@
               "kind": 36,
               "name": "opened",
               "flags": 4,
-              "id": 328,
+              "id": 331,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7840,13 +7957,13 @@
               "kind": 10,
               "name": "options",
               "flags": 68,
-              "id": 329,
+              "id": 332,
               "type": {
                 "name": "Set",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 140,
+                    "id": 145,
                     "name": "Option",
                     "kind": 6
                   }
@@ -7862,7 +7979,7 @@
               "kind": 11,
               "name": "setOptions",
               "flags": 144,
-              "id": 330,
+              "id": 333,
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -7878,13 +7995,13 @@
                   "kind": 9,
                   "name": "options",
                   "flags": 0,
-                  "id": 331,
+                  "id": 334,
                   "type": {
                     "name": "Set",
                     "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 140,
+                        "id": 145,
                         "name": "Option",
                         "kind": 6
                       }
@@ -7902,7 +8019,7 @@
               "kind": 11,
               "name": "setSelected",
               "flags": 144,
-              "id": 332,
+              "id": 335,
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -7918,9 +8035,9 @@
                   "kind": 9,
                   "name": "option",
                   "flags": 0,
-                  "id": 333,
+                  "id": 336,
                   "type": {
-                    "id": 140,
+                    "id": 145,
                     "name": "Option",
                     "kind": 6
                   }
@@ -7936,7 +8053,7 @@
               "kind": 11,
               "name": "open",
               "flags": 132,
-              "id": 334,
+              "id": 337,
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -7953,7 +8070,7 @@
               "kind": 11,
               "name": "close",
               "flags": 132,
-              "id": 335,
+              "id": 338,
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -7971,7 +8088,7 @@
             "name": "",
             "children": [
               {
-                "id": 9,
+                "id": 14,
                 "name": "InputBase",
                 "kind": 6
               }
@@ -7979,7 +8096,7 @@
           }
         },
         {
-          "id": 139,
+          "id": 144,
           "source": {
             "fileName": "select.tsx",
             "line": 198,
@@ -8014,9 +8131,9 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 336,
+              "id": 339,
               "type": {
-                "id": 140,
+                "id": 145,
                 "name": "Option",
                 "kind": 6
               }
@@ -8030,7 +8147,7 @@
               "kind": 10,
               "name": "selectedText$",
               "flags": 16,
-              "id": 337,
+              "id": 340,
               "value": "be('')",
               "type": {
                 "name": "BehaviorSubject",
@@ -8053,7 +8170,7 @@
               "kind": 11,
               "name": "positionMenu",
               "flags": 16,
-              "id": 338,
+              "id": 341,
               "parameters": [
                 {
                   "source": {
@@ -8064,9 +8181,9 @@
                   "kind": 9,
                   "name": "menu",
                   "flags": 0,
-                  "id": 339,
+                  "id": 342,
                   "type": {
-                    "id": 204,
+                    "id": 209,
                     "name": "SelectMenu",
                     "kind": 6
                   }
@@ -8087,7 +8204,7 @@
               "kind": 11,
               "name": "setOptions",
               "flags": 16,
-              "id": 340,
+              "id": 343,
               "parameters": [
                 {
                   "source": {
@@ -8098,13 +8215,13 @@
                   "kind": 9,
                   "name": "options",
                   "flags": 0,
-                  "id": 341,
+                  "id": 344,
                   "type": {
                     "name": "Set",
                     "kind": 6,
                     "typeParameters": [
                       {
-                        "id": 140,
+                        "id": 145,
                         "name": "Option",
                         "kind": 6
                       }
@@ -8127,7 +8244,7 @@
               "kind": 11,
               "name": "setSelected",
               "flags": 16,
-              "id": 342,
+              "id": 345,
               "parameters": [
                 {
                   "source": {
@@ -8138,9 +8255,9 @@
                   "kind": 9,
                   "name": "option",
                   "flags": 524288,
-                  "id": 343,
+                  "id": 346,
                   "type": {
-                    "id": 140,
+                    "id": 145,
                     "name": "Option",
                     "kind": 6
                   }
@@ -8161,7 +8278,7 @@
               "kind": 11,
               "name": "open",
               "flags": 4,
-              "id": 344,
+              "id": 347,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -8178,7 +8295,7 @@
               "kind": 11,
               "name": "close",
               "flags": 4,
-              "id": 345,
+              "id": 348,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -8193,7 +8310,7 @@
             "name": "",
             "children": [
               {
-                "id": 214,
+                "id": 219,
                 "name": "SelectBase",
                 "kind": 6
               }
@@ -8213,7 +8330,7 @@
       "flags": 0,
       "children": [
         {
-          "id": 246,
+          "id": 249,
           "source": {
             "fileName": "theme.tsx",
             "line": 24,
@@ -8229,7 +8346,7 @@
           "value": "{\n\tanimation: {\n\t\tspin: {\n\t\t\tkeyframes:\n\t\t\t\t'0% { transform: rotate(0); } to { transform: rotate(360deg); }',\n\t\t\tvalue: 'cxl-spin 2s infinite linear',\n\t\t},\n\t\tpulse: {\n\t\t\tkeyframes:\n\t\t\t\t'0% { transform: rotate(0); } to { transform: rotate(360deg); }',\n\t\t\tvalue: 'cxl-pulse 1s infinite steps(8)',\n\t\t},\n\t\texpand: {\n\t\t\tkeyframes:\n\t\t\t\t'0% { transform: scale(0,0); } 100% { transform: scale(1,1); }',\n\t\t\tvalue: 'cxl-expand var(--cxl-speed) 1 ease-in',\n\t\t},\n\t\tfadeIn: {\n\t\t\tkeyframes:\n\t\t\t\t'0% { display: block; opacity: 0; } 100% { opacity: 1; }',\n\t\t\tvalue: 'cxl-fadeIn var(--cxl-speed) linear forwards',\n\t\t},\n\t\tfadeOut: {\n\t\t\tkeyframes:\n\t\t\t\t'0% { opacity: 1 } 100% { visibility:hidden; opacity: 0; }',\n\t\t\tvalue: 'cxl-fadeOut var(--cxl-speed) linear both',\n\t\t},\n\t\twait: {\n\t\t\tkeyframes: `\n0% { transform: translateX(0) scaleX(0) }\n33% { transform: translateX(0) scaleX(0.75)}\n66% { transform: translateX(75%) scaleX(0.25)}\n100%{ transform:translateX(100%) scaleX(0) }\n\t\t\t`,\n\t\t\tvalue: 'cxl-wait 1s infinite linear',\n\t\t},\n\n\t\tspinnerstroke: {\n\t\t\tkeyframes: `\n\t0%      { stroke-dashoffset: $start;  transform: rotate(0); }\n\t12.5%   { stroke-dashoffset: $end;    transform: rotate(0); }\n\t12.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(72.5deg); }\n\t25%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(72.5deg); }\n\t25.0001%   { stroke-dashoffset: $start;  transform: rotate(270deg); }\n\t37.5%   { stroke-dashoffset: $end;    transform: rotate(270deg); }\n\t37.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(161.5deg); }\n\t50%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(161.5deg); }\n\t50.0001%  { stroke-dashoffset: $start;  transform: rotate(180deg); }\n\t62.5%   { stroke-dashoffset: $end;    transform: rotate(180deg); }\n\t62.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(251.5deg); }\n\t75%     { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(251.5deg); }\n\t75.0001%  { stroke-dashoffset: $start;  transform: rotate(90deg); }\n\t87.5%   { stroke-dashoffset: $end;    transform: rotate(90deg); }\n\t87.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(341.5deg); }\n\t100%    { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(341.5deg); }\n\t\t\t`\n\t\t\t\t.replace(/\\$start/g, (282.743 * (1 - 0.05)).toString())\n\t\t\t\t.replace(/\\$end/g, (282.743 * (1 - 0.8)).toString()),\n\t\t\tvalue: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)',\n\t\t},\n\t},\n\tbreakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },\n\tvariables: {\n\t\t// Animation speed\n\t\tspeed: '0.3s',\n\t\tfont: 'Roboto, sans-serif',\n\t\tfontSize: '16px',\n\t\tfontMonospace: 'monospace',\n\t},\n\ttypography: {\n\t\tdefault: {\n\t\t\tfontWeight: 400,\n\t\t\tfontFamily: 'var(--cxl-font)',\n\t\t\tfontSize: 'var(--cxl-font-size)',\n\t\t\tletterSpacing: 'normal',\n\t\t},\n\t\tcaption: { fontSize: '12px', letterSpacing: '0.4px' },\n\t\th1: { fontWeight: 300, fontSize: '96px', letterSpacing: '-1.5px' },\n\t\th2: { fontWeight: 300, fontSize: '60px', letterSpacing: '-0.5px' },\n\t\th3: { fontSize: '48px' },\n\t\th4: { fontSize: '34px', letterSpacing: '0.25px' },\n\t\th5: { fontSize: '24px' },\n\t\th6: { fontSize: '20px', fontWeight: 500, letterSpacing: '0.15px' },\n\t\tbody2: { fontSize: '14px', letterSpacing: '0.25px' },\n\t\tsubtitle: {\n\t\t\tletterSpacing: '0.15px',\n\t\t},\n\t\tsubtitle2: {\n\t\t\tfontSize: '14px',\n\t\t\tfontWeight: 500,\n\t\t\tletterSpacing: '0.1px',\n\t\t},\n\t\tbutton: {\n\t\t\tfontSize: '14px',\n\t\t\tfontWeight: 500,\n\t\t\tlineHeight: '20px',\n\t\t\tletterSpacing: '1.25px',\n\t\t\ttextTransform: 'uppercase',\n\t\t},\n\t\tcode: { fontFamily: 'var(--cxl-font-monospace)' },\n\t\tmonospace: { fontFamily: 'var(--cxl-font-monospace)' },\n\t},\n\tcolors: {\n\t\televation: rgba(0, 0, 0, 0.26),\n\t\tprimary: rgba(0x15, 0x65, 0xc0),\n\t\t// 0.14 opacity will pass accessibility contrast requirements\n\t\tget primaryLight() {\n\t\t\treturn this.primary.alpha(0.14);\n\t\t},\n\n\t\tsecondary: rgba(0xf9, 0xaa, 0x33),\n\t\tsurface: rgba(0xff, 0xff, 0xff),\n\t\terror: rgba(0xb0, 0x00, 0x20),\n\t\tget errorLight() {\n\t\t\treturn this.error.alpha(0.14);\n\t\t},\n\n\t\tonPrimary: rgba(0xff, 0xff, 0xff),\n\t\tget onPrimaryLight() {\n\t\t\treturn this.primary;\n\t\t},\n\t\tonSecondary: rgba(0, 0, 0),\n\t\tonSurface: rgba(0, 0, 0),\n\n\t\tget onSurface8() {\n\t\t\treturn this.onSurface.alpha(0.08);\n\t\t},\n\t\tget onSurface12() {\n\t\t\treturn this.onSurface.alpha(0.12);\n\t\t},\n\t\tget onSurface87() {\n\t\t\treturn this.onSurface.alpha(0.87);\n\t\t},\n\t\tonError: rgba(0xff, 0xff, 0xff),\n\n\t\tget background() {\n\t\t\treturn this.surface;\n\t\t},\n\t\tget link() {\n\t\t\treturn this.primary;\n\t\t},\n\t\tget headerText() {\n\t\t\treturn this.onSurface.alpha(0.6);\n\t\t},\n\t\tget divider() {\n\t\t\treturn this.onSurface.alpha(0.16);\n\t\t},\n\t},\n\timports: [\n\t\t'https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap',\n\t],\n\tglobalStyles: {\n\t\t'@a': { color: 'link' },\n\t\t'*': {\n\t\t\tboxSizing: 'border-box',\n\t\t\ttransition:\n\t\t\t\t'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)',\n\t\t} as any,\n\t},\n}"
         },
         {
-          "id": 247,
+          "id": 250,
           "source": {
             "fileName": "theme.tsx",
             "line": 185,
@@ -8246,7 +8363,7 @@
           "value": "{\n\tvariables: {\n\t\tsurface: baseColor('surface'),\n\t\tonSurface: baseColor('onSurface'),\n\t\tprimary: baseColor('primary'),\n\t\tonPrimary: baseColor('onPrimary'),\n\t\tlink: baseColor('onSurface'),\n\t\terror: baseColor('error'),\n\t\tonError: baseColor('onError'),\n\t\tdivider: baseColor('divider'),\n\t},\n}"
         },
         {
-          "id": 248,
+          "id": 251,
           "source": {
             "fileName": "theme.tsx",
             "line": 198,
@@ -8263,7 +8380,7 @@
           "value": "{\n\tvariables: {\n\t\tsurface: baseColor('primary'),\n\t\tonSurface: baseColor('onPrimary'),\n\t\tprimary: baseColor('surface'),\n\t\tonPrimary: baseColor('onSurface'),\n\t\tlink: baseColor('onPrimary'),\n\t\terror: rgba(0xff, 0x6e, 0x40),\n\t\tonError: rgba(0, 0, 0),\n\t\tdivider: rgba(0xff, 0xff, 0xff, 0.48),\n\t},\n}"
         },
         {
-          "id": 249,
+          "id": 252,
           "source": {
             "fileName": "theme.tsx",
             "line": 211,

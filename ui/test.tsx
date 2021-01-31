@@ -6,6 +6,7 @@ import { of } from '@cxl/rx';
 import {
 	Drawer,
 	Button,
+	Checkbox,
 	DialogAlert,
 	DialogConfirm,
 	Field,
@@ -108,6 +109,8 @@ function testBooleanValue(ctor: typeof Component, test: TestApi) {
 		a.equal(el.value, true);
 		el.value = false;
 		a.equal(el.value, false, 'value should be set immediately');
+		el.value = true;
+		a.equal(el.value, true, 'value should be set immediately');
 	});
 }
 
@@ -142,6 +145,22 @@ function testChecked(ctor: typeof Component, test: TestApi) {
 		}
 		c.addEventListener('change', handler);
 		c.checked = true;
+
+		if (c.value !== undefined) {
+			a.test('checked attribute set', a => {
+				a.dom.innerHTML = `<${ctor.tagName} checked>`;
+				const c = a.dom.children[0] as any;
+				a.equal(c.checked, true);
+				a.equal(c.value, true);
+			});
+
+			a.test('value attribute set', a => {
+				a.dom.innerHTML = `<${ctor.tagName} value>`;
+				const c = a.dom.children[0] as any;
+				a.equal(c.checked, true);
+				a.equal(c.value, true);
+			});
+		}
 	});
 }
 
@@ -856,6 +875,15 @@ export default spec('ui', a => {
   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
 </cxl-appbar>`
 		);
+	});
+
+	a.test('cxl-checkbox', it => {
+		it.test('[indeterminate] attribute set', a => {
+			a.dom.innerHTML = `<cxl-checkbox indeterminate></cxl-checkbox>`;
+			const c = a.dom.children[0] as Checkbox;
+			a.equal(c.value, undefined);
+			a.equal(c.indeterminate, true);
+		});
 	});
 
 	a.test('cxl-tabs', it => {
