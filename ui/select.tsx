@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/select.js"/>
 import { dom, expression } from '@cxl/tsx';
 import {
 	Augment,

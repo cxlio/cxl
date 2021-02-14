@@ -13,26 +13,713 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 16,
-            "ch": 46
+            "line": 27,
+            "ch": 41
           },
-          "kind": 16,
-          "name": "onHeaderAction",
+          "kind": 2,
+          "name": "DatasetController",
           "flags": 0,
           "id": 1,
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 29,
+              "ch": 24
+            },
+            "kind": 17,
+            "name": "",
+            "flags": 0,
+            "id": 2,
+            "type": {
+              "name": "void",
+              "kind": 32,
+              "flags": 0
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 29,
+                  "ch": 26
+                },
+                "kind": 9,
+                "name": "action",
+                "flags": 0,
+                "id": 3,
+                "type": {
+                  "id": 4,
+                  "name": "DataAction",
+                  "kind": 6
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 29,
+            "ch": 54
+          },
+          "kind": 2,
+          "name": "DataEvent",
+          "flags": 0,
+          "id": 5,
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 30,
+              "ch": 16
+            },
+            "kind": 5,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 30,
+                  "ch": 16
+                },
+                "kind": 23,
+                "name": "'filter'",
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 30,
+                  "ch": 27
+                },
+                "kind": 23,
+                "name": "'sort'",
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 30,
+                  "ch": 36
+                },
+                "kind": 23,
+                "name": "'slice'",
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 30,
+                  "ch": 46
+                },
+                "kind": 23,
+                "name": "'update'",
+                "flags": 0
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 30,
+                  "ch": 57
+                },
+                "kind": 23,
+                "name": "'select'",
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 30,
+            "ch": 67
+          },
+          "kind": 4,
+          "name": "SortableElement",
+          "flags": 0,
+          "id": 6,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 32,
+                "ch": 45
+              },
+              "kind": 10,
+              "name": "sortable",
+              "flags": 4,
+              "id": 7,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 33,
+                  "ch": 10
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "boolean",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 33,
+                      "ch": 20
+                    },
+                    "kind": 23,
+                    "name": "'numeric'",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 33,
+                "ch": 31
+              },
+              "kind": 10,
+              "name": "sort",
+              "flags": 4,
+              "id": 8,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 34,
+                  "ch": 6
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 34,
+                      "ch": 6
+                    },
+                    "kind": 23,
+                    "name": "'asc'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 34,
+                      "ch": 14
+                    },
+                    "kind": 23,
+                    "name": "'desc'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 34,
+                      "ch": 23
+                    },
+                    "kind": 23,
+                    "name": "'none'",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 34,
+                "ch": 31
+              },
+              "kind": 10,
+              "name": "field",
+              "flags": 4,
+              "id": 9,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "source": {
+            "fileName": "index.tsx",
+            "line": 36,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "DataAction",
+          "flags": 0,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 38,
+                "ch": 21
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 10,
+              "value": "Component"
+            }
+          ],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 38,
+                "ch": 55
+              },
+              "kind": 10,
+              "name": "type",
+              "flags": 4,
+              "id": 11,
+              "type": {
+                "id": 5,
+                "name": "DataEvent",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 39,
+                "ch": 17
+              },
+              "kind": 10,
+              "name": "target",
+              "flags": 4,
+              "id": 12,
+              "type": {
+                "id": 10,
+                "name": "T",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 40,
+                "ch": 11
+              },
+              "kind": 10,
+              "name": "value",
+              "flags": 4,
+              "id": 13,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 41,
+                "ch": 12
+              },
+              "kind": 10,
+              "name": "state",
+              "flags": 4,
+              "id": 14,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 43,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "datasetRegistable",
+          "flags": 1,
+          "id": 15,
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 45,
+                "ch": 34
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 16
+            }
+          ],
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 18,
+                "line": 45,
+                "ch": 55
+              },
+              "kind": 9,
+              "name": "host",
+              "flags": 0,
+              "id": 17,
+              "type": {
+                "id": 16,
+                "name": "T",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 46,
+                "ch": 9
+              },
+              "kind": 9,
+              "name": "controller",
+              "flags": 0,
+              "id": 18,
+              "type": {
+                "id": 1,
+                "name": "DatasetController",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "never",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 50,
+            "ch": 1
+          },
+          "kind": 2,
+          "name": "SortFunction",
+          "flags": 0,
+          "id": 19,
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 52,
+              "ch": 19
+            },
+            "kind": 17,
+            "name": "",
+            "flags": 0,
+            "id": 20,
+            "type": {
+              "name": "number",
+              "kind": 32,
+              "flags": 0
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 52,
+                  "ch": 21
+                },
+                "kind": 9,
+                "name": "a",
+                "flags": 0,
+                "id": 21,
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 52,
+                  "ch": 28
+                },
+                "kind": 9,
+                "name": "b",
+                "flags": 0,
+                "id": 22,
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 52,
+                  "ch": 36
+                },
+                "kind": 9,
+                "name": "dir",
+                "flags": 0,
+                "id": 23,
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 52,
+                    "ch": 41
+                  },
+                  "kind": 5,
+                  "name": "",
+                  "flags": 0,
+                  "children": [
+                    {
+                      "source": {
+                        "fileName": "index.tsx",
+                        "line": 52,
+                        "ch": 41
+                      },
+                      "kind": 23,
+                      "name": "1",
+                      "flags": 0
+                    },
+                    {
+                      "source": {
+                        "fileName": "index.tsx",
+                        "line": 52,
+                        "ch": 45
+                      },
+                      "kind": 23,
+                      "name": "-1",
+                      "flags": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 52,
+            "ch": 60
+          },
+          "kind": 16,
+          "name": "textSort",
+          "flags": 0,
+          "id": 24,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 54,
+                "ch": 18
+              },
+              "kind": 9,
+              "name": "a",
+              "flags": 0,
+              "id": 25,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 54,
+                "ch": 28
+              },
+              "kind": 9,
+              "name": "b",
+              "flags": 0,
+              "id": 26,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 54,
+                "ch": 39
+              },
+              "kind": 9,
+              "name": "dir",
+              "flags": 0,
+              "id": 27,
+              "value": "1",
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "number",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 56,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "numericSort",
+          "flags": 0,
+          "id": 28,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 58,
+                "ch": 21
+              },
+              "kind": 9,
+              "name": "a",
+              "flags": 0,
+              "id": 29,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 58,
+                "ch": 31
+              },
+              "kind": 9,
+              "name": "b",
+              "flags": 0,
+              "id": 30,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 58,
+                "ch": 42
+              },
+              "kind": 9,
+              "name": "dir",
+              "flags": 0,
+              "id": 31,
+              "value": "1",
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "number",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 60,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "datasetSortable",
+          "flags": 0,
+          "id": 32,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 62,
+                "ch": 25
+              },
+              "kind": 9,
+              "name": "$",
+              "flags": 0,
+              "id": 33,
+              "type": {
+                "id": 6,
+                "name": "SortableElement",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "never",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 87,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "onHeaderAction",
+          "flags": 0,
+          "id": 34,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 89,
                 "ch": 24
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 2,
+              "id": 35,
               "type": {
-                "id": 3,
+                "id": 36,
                 "name": "Th",
                 "kind": 6
               }
@@ -63,24 +750,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 24,
+            "line": 106,
             "ch": 1
           },
           "kind": 16,
           "name": "onSort",
           "flags": 0,
-          "id": 4,
+          "id": 37,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 26,
+                "line": 108,
                 "ch": 16
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 5,
+              "id": 38,
               "type": {
                 "name": "HTMLElement",
                 "kind": 6
@@ -89,15 +776,15 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 26,
+                "line": 108,
                 "ch": 32
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 6,
+              "id": 39,
               "type": {
-                "id": 3,
+                "id": 36,
                 "name": "Th",
                 "kind": 6
               }
@@ -148,11 +835,34 @@
           }
         },
         {
-          "id": 3,
           "source": {
             "fileName": "index.tsx",
-            "line": 36,
+            "line": 123,
             "ch": 1
+          },
+          "kind": 35,
+          "name": "SortIcon",
+          "flags": 1,
+          "id": 40,
+          "children": [],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "id": 36,
+          "source": {
+            "fileName": "index.tsx",
+            "line": 126,
+            "ch": 42
           },
           "kind": 35,
           "name": "Th",
@@ -161,34 +871,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 78,
+                "line": 175,
                 "ch": 35
-              },
-              "kind": 10,
-              "name": "eventType",
-              "flags": 4,
-              "id": 7,
-              "type": {
-                "source": {
-                  "fileName": "index.tsx",
-                  "line": 79,
-                  "ch": 12
-                },
-                "kind": 23,
-                "name": "'datatable.sort'",
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 79,
-                "ch": 30
               },
               "kind": 36,
               "name": "width",
               "flags": 4,
-              "id": 8,
+              "id": 41,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -198,35 +887,57 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 82,
+                "line": 177,
                 "ch": 16
               },
               "kind": 36,
               "name": "sortable",
               "flags": 4,
-              "id": 9,
-              "value": "false",
+              "id": 42,
               "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 180,
+                  "ch": 10
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "boolean",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 180,
+                      "ch": 20
+                    },
+                    "kind": 23,
+                    "name": "'numeric'",
+                    "flags": 0
+                  }
+                ]
+              },
+              "value": "false"
             },
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 85,
-                "ch": 18
+                "line": 180,
+                "ch": 39
               },
               "kind": 36,
-              "name": "'sort-order'",
+              "name": "sort",
               "flags": 4,
-              "id": 10,
+              "id": 43,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 88,
-                  "ch": 14
+                  "line": 183,
+                  "ch": 6
                 },
                 "kind": 5,
                 "name": "",
@@ -235,8 +946,8 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 88,
-                      "ch": 14
+                      "line": 183,
+                      "ch": 6
                     },
                     "kind": 23,
                     "name": "'asc'",
@@ -245,8 +956,8 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 88,
-                      "ch": 22
+                      "line": 183,
+                      "ch": 14
                     },
                     "kind": 23,
                     "name": "'desc'",
@@ -255,8 +966,8 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 88,
-                      "ch": 31
+                      "line": 183,
+                      "ch": 23
                     },
                     "kind": 23,
                     "name": "'none'",
@@ -265,6 +976,22 @@
                 ]
               },
               "value": "'none'"
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 183,
+                "ch": 40
+              },
+              "kind": 36,
+              "name": "field",
+              "flags": 4,
+              "id": 44,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
             }
           ],
           "docs": {
@@ -285,17 +1012,17 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 89,
+            "line": 187,
             "ch": 1
           },
           "kind": 35,
           "name": "Table",
           "flags": 1,
-          "id": 11,
+          "id": 45,
           "docs": {
             "content": [
               {
-                "value": "Data tables display sets of data across rows and columns."
+                "value": "Tables display sets of data across rows and columns."
               },
               {
                 "tag": "example",
@@ -325,24 +1052,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 128,
+            "line": 226,
             "ch": 39
           },
           "kind": 35,
           "name": "Cell",
           "flags": 0,
-          "id": 12,
+          "id": 46,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 147,
+                "line": 245,
                 "ch": 30
               },
               "kind": 36,
               "name": "right",
               "flags": 4,
-              "id": 13,
+              "id": 47,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -367,13 +1094,8 @@
           },
           "extendedBy": [
             {
-              "id": 14,
+              "id": 48,
               "name": "Td",
-              "kind": 6
-            },
-            {
-              "id": 15,
-              "name": "CheckboxCell",
               "kind": 6
             }
           ]
@@ -381,13 +1103,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 150,
+            "line": 248,
             "ch": 1
           },
           "kind": 35,
           "name": "Td",
           "flags": 1,
-          "id": 14,
+          "id": 48,
           "children": [],
           "docs": {
             "tagName": "cxl-td"
@@ -398,7 +1120,7 @@
             "name": "",
             "children": [
               {
-                "id": 12,
+                "id": 46,
                 "name": "Cell",
                 "kind": 6
               }
@@ -408,87 +1130,16 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 153,
+            "line": 251,
             "ch": 31
           },
           "kind": 35,
-          "name": "CheckboxCell",
+          "name": "TableSelectAll",
           "flags": 1,
-          "id": 15,
-          "children": [
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 180,
-                "ch": 40
-              },
-              "kind": 10,
-              "name": "selectEvent",
-              "flags": 68,
-              "id": 16,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              },
-              "value": "'datatable.select'"
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 181,
-                "ch": 51
-              },
-              "kind": 36,
-              "name": "checked",
-              "flags": 4,
-              "id": 17,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ],
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "id": 12,
-                "name": "Cell",
-                "kind": 6
-              }
-            ]
-          },
-          "extendedBy": [
-            {
-              "id": 18,
-              "name": "TdCheckbox",
-              "kind": 6
-            },
-            {
-              "id": 19,
-              "name": "ThCheckbox",
-              "kind": 6
-            }
-          ]
-        },
-        {
-          "source": {
-            "fileName": "index.tsx",
-            "line": 185,
-            "ch": 1
-          },
-          "kind": 35,
-          "name": "TdCheckbox",
-          "flags": 1,
-          "id": 18,
+          "id": 49,
           "children": [],
           "docs": {
-            "tagName": "cxl-td-checkbox"
+            "tagName": "cxl-table-select-all"
           },
           "type": {
             "flags": 0,
@@ -496,8 +1147,7 @@
             "name": "",
             "children": [
               {
-                "id": 15,
-                "name": "CheckboxCell",
+                "name": "Checkbox",
                 "kind": 6
               }
             ]
@@ -506,63 +1156,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 191,
+            "line": 276,
             "ch": 47
-          },
-          "kind": 35,
-          "name": "ThCheckbox",
-          "flags": 1,
-          "id": 19,
-          "children": [
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 197,
-                "ch": 46
-              },
-              "kind": 10,
-              "name": "selectEvent",
-              "flags": 68,
-              "id": 20,
-              "value": "'datatable.selectAll'",
-              "type": {
-                "name": "\"datatable.selectAll\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            }
-          ],
-          "docs": {
-            "tagName": "cxl-th-checkbox"
-          },
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "id": 15,
-                "name": "CheckboxCell",
-                "kind": 6
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "index.tsx",
-            "line": 199,
-            "ch": 1
           },
           "kind": 35,
           "name": "Tr",
           "flags": 1,
-          "id": 21,
+          "id": 50,
           "children": [],
           "docs": {
             "tagName": "cxl-tr",
@@ -583,27 +1183,43 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 202,
+            "line": 287,
             "ch": 36
           },
           "kind": 35,
           "name": "TrSelectable",
           "flags": 1,
-          "id": 22,
+          "id": 51,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 223,
+                "line": 338,
                 "ch": 45
               },
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 23,
+              "id": 52,
               "value": "false",
               "type": {
                 "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 340,
+                "ch": 18
+              },
+              "kind": 36,
+              "name": "value",
+              "flags": 4,
+              "id": 53,
+              "type": {
+                "name": "any",
                 "kind": 32,
                 "flags": 0
               }
@@ -628,16 +1244,16 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 226,
+            "line": 344,
             "ch": 1
           },
           "kind": 35,
-          "name": "TableToolbar",
+          "name": "TableBody",
           "flags": 1,
-          "id": 24,
+          "id": 54,
           "children": [],
           "docs": {
-            "tagName": "cxl-table-toolbar"
+            "tagName": "cxl-tbody"
           },
           "type": {
             "flags": 0,
@@ -654,24 +1270,50 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 242,
-            "ch": 46
+            "line": 353,
+            "ch": 43
+          },
+          "kind": 35,
+          "name": "TableToolbar",
+          "flags": 1,
+          "id": 55,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-table-toolbar"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Toolbar",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 368,
+            "ch": 44
           },
           "kind": 35,
           "name": "TableSelectedCount",
           "flags": 1,
-          "id": 25,
+          "id": 56,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 259,
+                "line": 385,
                 "ch": 51
               },
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 26,
+              "id": 57,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -694,25 +1336,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 262,
+            "line": 388,
             "ch": 1
           },
-          "kind": 35,
-          "name": "TablePagination",
+          "kind": 16,
+          "name": "getPageCount",
           "flags": 1,
-          "id": 27,
-          "children": [
+          "id": 58,
+          "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 274,
-                "ch": 48
+                "line": 390,
+                "ch": 29
               },
-              "kind": 36,
-              "name": "rows",
-              "flags": 4,
-              "id": 28,
-              "value": "6",
+              "kind": 9,
+              "name": "total",
+              "flags": 0,
+              "id": 59,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -722,14 +1363,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 276,
-                "ch": 10
+                "line": 390,
+                "ch": 43
               },
-              "kind": 36,
-              "name": "page",
-              "flags": 4,
-              "id": 29,
-              "value": "0",
+              "kind": 9,
+              "name": "rows",
+              "flags": 0,
+              "id": 60,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -738,12 +1378,396 @@
             }
           ],
           "type": {
+            "name": "number",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 393,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "TablePagination",
+          "flags": 1,
+          "id": 61,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 478,
+                "ch": 48
+              },
+              "kind": 36,
+              "name": "rows",
+              "flags": 4,
+              "id": 62,
+              "value": "5",
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 480,
+                "ch": 10
+              },
+              "kind": 36,
+              "name": "options",
+              "flags": 4,
+              "id": 63,
+              "value": "[5, 10, 25, 50]",
+              "type": {
+                "name": "Array",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 483,
+                "ch": 27
+              },
+              "kind": 36,
+              "name": "page",
+              "flags": 4,
+              "id": 64,
+              "value": "0",
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 486,
+                "ch": 10
+              },
+              "kind": 36,
+              "name": "total",
+              "flags": 68,
+              "id": 65,
+              "value": "0",
+              "type": {
+                "name": "0",
+                "kind": 23,
+                "type": {
+                  "name": "number",
+                  "kind": 32,
+                  "flags": 0
+                },
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 489,
+                "ch": 20
+              },
+              "kind": 11,
+              "name": "goFirst",
+              "flags": 4,
+              "id": 66,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 493,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "goNext",
+              "flags": 4,
+              "id": 67,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 496,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "goPrevious",
+              "flags": 4,
+              "id": 68,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 499,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "goLast",
+              "flags": 4,
+              "id": 69,
+              "parameters": [],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-table-pagination"
+          },
+          "type": {
             "flags": 0,
             "kind": 33,
             "name": "",
             "children": [
               {
                 "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 503,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "Dataset",
+          "flags": 1,
+          "id": 70,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 561,
+                "ch": 40
+              },
+              "kind": 36,
+              "name": "source",
+              "flags": 4,
+              "id": 71,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 563,
+                  "ch": 8
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              "value": "[]"
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 563,
+                "ch": 20
+              },
+              "kind": 36,
+              "name": "value",
+              "flags": 4,
+              "id": 72,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 566,
+                  "ch": 7
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              "value": "[]"
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 566,
+                "ch": 19
+              },
+              "kind": 10,
+              "name": "selectable",
+              "flags": 68,
+              "id": 73,
+              "value": "new Set<any>()",
+              "type": {
+                "name": "Set",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 568,
+                "ch": 38
+              },
+              "kind": 10,
+              "name": "selected",
+              "flags": 68,
+              "id": 74,
+              "value": "new Set<any>()",
+              "type": {
+                "name": "Set",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 570,
+                "ch": 36
+              },
+              "kind": 10,
+              "name": "update",
+              "flags": 4,
+              "id": 75,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 572,
+                  "ch": 9
+                },
+                "kind": 17,
+                "name": "",
+                "flags": 0,
+                "id": 76,
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 572,
+                    "ch": 25
+                  },
+                  "kind": 15,
+                  "name": "Array",
+                  "flags": 0,
+                  "type": {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                "parameters": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 572,
+                      "ch": 11
+                    },
+                    "kind": 9,
+                    "name": "state",
+                    "flags": 0,
+                    "id": 77,
+                    "type": {
+                      "name": "any",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-dataset"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          },
+          "extendedBy": [
+            {
+              "id": 78,
+              "name": "DataTable",
+              "kind": 6
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 573,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "DataTable",
+          "flags": 1,
+          "id": 78,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-datatable"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "id": 70,
+                "name": "Dataset",
                 "kind": 6
               }
             ]

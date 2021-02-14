@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/form.js"/>
 import {
 	StyleAttribute,
 	Augment,

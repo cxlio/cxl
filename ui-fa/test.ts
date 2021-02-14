@@ -1,8 +1,11 @@
 import { spec } from '@cxl/spec';
-import { Icon } from './index.js';
+import { Icon } from '@cxl/ui';
+import './index.js';
 
 export default spec('ui-fa', s => {
 	s.test('should load', a => {
-		a.ok(Icon);
+		const el = document.createElement(Icon.tagName) as Icon;
+		el.icon = 'wind';
+		a.ok(el);
 	});
 });

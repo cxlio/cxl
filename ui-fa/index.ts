@@ -2,16 +2,10 @@
 import { registerFont } from '@cxl/css';
 import { registerIconSet } from '@cxl/ui';
 
-declare module '../css' {
-	interface Typography {
-		fa?: CSSStyle;
-	}
-}
+type FaIconSet = typeof icons;
 
 declare module '../ui' {
-	interface Icons {
-		fa: typeof icons;
-	}
+	interface IconSet extends FaIconSet {}
 }
 
 const icons = {
@@ -50,9 +44,13 @@ const icons = {
 	'arrow-circle-right': '\uf0a9',
 	'arrow-circle-up': '\uf0aa',
 	'arrow-down': '\uf063',
+	arrow_downward: '\uf063',
 	'arrow-left': '\uf060',
+	arrow_back: '\uf060',
 	'arrow-right': '\uf061',
+	arrow_forward: '\uf061',
 	'arrow-up': '\uf062',
+	arrow_upward: '\uf062',
 	'arrows-alt': '\uf0b2',
 	'arrows-alt-h': '\uf337',
 	'arrows-alt-v': '\uf338',
@@ -76,6 +74,7 @@ const icons = {
 	'band-aid': '\uf462',
 	barcode: '\uf02a',
 	bars: '\uf0c9',
+	menu: '\uf0c9',
 	'baseball-ball': '\uf433',
 	'basketball-ball': '\uf434',
 	bath: '\uf2cd',
@@ -195,7 +194,9 @@ const icons = {
 	'chevron-circle-up': '\uf139',
 	'chevron-down': '\uf078',
 	'chevron-left': '\uf053',
+	chevron_left: '\uf053',
 	'chevron-right': '\uf054',
+	chevron_right: '\uf054',
 	'chevron-up': '\uf077',
 	child: '\uf1ae',
 	church: '\uf51d',
@@ -357,6 +358,7 @@ const icons = {
 	'fill-drip': '\uf576',
 	film: '\uf008',
 	filter: '\uf0b0',
+	filter_list: '\uf0b0',
 	fingerprint: '\uf577',
 	fire: '\uf06d',
 	'fire-alt': '\uf7e4',
@@ -807,7 +809,9 @@ const icons = {
 	'star-of-david': '\uf69a',
 	'star-of-life': '\uf621',
 	'step-backward': '\uf048',
+	first_page: '\uf048',
 	'step-forward': '\uf051',
+	last_page: '\uf051',
 	stethoscope: '\uf0f1',
 	'sticky-note': '\uf249',
 	stop: '\uf04d',
@@ -990,7 +994,7 @@ registerFont({
 	weight: '900',
 });
 
-registerIconSet('fa', icons, {
+registerIconSet(icons, {
 	fontFamily: 'Font Awesome\\ 5 Free',
 	fontSize: 'inherit',
 });

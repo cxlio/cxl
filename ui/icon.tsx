@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/icon.js"/>
 import { Attribute, Augment, Component, get } from '@cxl/component';
 import { role } from '@cxl/template';
 import { CSSStyle, css } from '@cxl/css';
@@ -7,17 +8,13 @@ import { dom } from '@cxl/tsx';
 import { ButtonBase } from './core.js';
 
 type IconKey = keyof IconSet;
-type DefaultIconSet = typeof defaultIconSet;
+type DefaultIconSet = typeof defaultIcons;
 
 export interface IconSet extends DefaultIconSet {
 	'': string;
 }
 
-export interface Icons {
-	icon: IconSet;
-}
-
-const defaultIconSet = {
+const defaultIcons = {
 	arrow_back: 'arrow_back',
 	arrow_forward: 'arrow_forward',
 	arrow_upward: 'arrow_upward',
@@ -32,18 +29,14 @@ const defaultIconSet = {
 	'': '',
 };
 
-const icons: Icons = {
-	icon: defaultIconSet,
-};
+const icons = { ...defaultIcons };
 
-export function registerIconSet<K extends keyof Icons>(
-	name: K,
-	set: Icons[K],
+export function registerIconSet<T extends IconSet>(
+	set: T,
 	typography?: CSSStyle
 ) {
-	icons[name] = set;
-
-	if (typography) theme.typography[name] = typography;
+	Object.assign(icons, set);
+	if (typography) theme.typography.icon = typography;
 }
 
 @Augment(
@@ -65,23 +58,19 @@ export class Icon extends Component {
 	protected iconNode?: Text;
 
 	@Attribute()
-	iconset: keyof Icons = 'icon';
-
-	@Attribute()
 	get icon(): IconKey {
 		return this.$icon;
 	}
 
 	set icon(iconName: IconKey) {
 		this.$icon = iconName;
-		const iconset = this.iconset;
-		const icon = iconName && icons[iconset][iconName];
+		const icon = iconName && icons[iconName];
 
 		if (icon) {
 			if (this.iconNode) {
 				this.iconNode.data = icon;
 			} else {
-				const typo = theme.typography[iconset];
+				const typo = theme.typography.icon;
 				Object.assign(this.style, typo);
 				this.iconNode = document.createTextNode(icon);
 				getShadow(this).appendChild(this.iconNode);

@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/dialog.js"/>
 import {
 	Attribute,
 	StyleAttribute,

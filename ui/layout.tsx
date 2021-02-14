@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/layout.js"/>
 import {
 	Attribute,
 	AttributeEvent,

@@ -657,7 +657,6 @@ export class Button extends ButtonBase {}
 export class Meta extends Component {
 	connectedCallback() {
 		document.documentElement.lang = 'en';
-		setTheme(theme);
 		super.connectedCallback();
 	}
 }

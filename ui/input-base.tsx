@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/input-base.js"/>
 import {
 	Augment,
 	Attribute,

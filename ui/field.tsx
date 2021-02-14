@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/field.js"/>
 import {
 	StyleAttribute,
 	Augment,

@@ -7,7 +7,7 @@
 		"rootDir": "..",
 		"module": "amd"
 	},
-	"include": [
+	"files": [
 		"../rx/index.ts",
 		"../css/index.ts",
 		"../tsx/index.ts",
@@ -17,7 +17,6 @@
 		"../router/index.ts",
 		"../ui/core.tsx",
 		"../ui/theme.tsx",
-		"../ui-fa/index.tsx",
 		"../ui/layout.tsx",
 		"../ui/dialog.tsx",
 		"../ui/navigation.tsx",

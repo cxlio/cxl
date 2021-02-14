@@ -257,5 +257,3 @@ export const DarkColors: Partial<Colors> = {
 	onPrimary: rgba(0, 0, 0),
 	onSecondary: rgba(0, 0, 0),
 };
-
-// setTheme(theme);

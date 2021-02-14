@@ -18,7 +18,7 @@ import {
 	get,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
-import { EMPTY, Observable, merge } from '@cxl/rx';
+import { EMPTY, merge } from '@cxl/rx';
 import { on, onAction, trigger } from '@cxl/dom';
 import type {} from '@cxl/ui/theme.js';
 import { Icon, IconButton } from '@cxl/ui/icon.js';
@@ -27,7 +27,7 @@ import { Checkbox } from '@cxl/ui/checkbox.js';
 import { Option, SelectBox } from '@cxl/ui/select.js';
 import { Field } from '@cxl/ui/field.js';
 
-type DatasetController = (action: DataAction) => any[];
+type DatasetController = (action: DataAction) => void;
 type DataEvent = 'filter' | 'sort' | 'slice' | 'update' | 'select';
 
 interface SortableElement extends Component {
@@ -43,12 +43,11 @@ interface DataAction<T extends Component = Component> {
 	state: any;
 }
 
-declare module '@cxl/template' {
-	function registable<T extends Component>(
-		host: T,
-		id: 'dataset',
-		controller: DatasetController
-	): Observable<any>;
+export function datasetRegistable<T extends Component>(
+	host: T,
+	controller: DatasetController
+) {
+	return registable(host, 'dataset', controller);
 }
 
 type SortFunction = (a: any, b: any, dir: 1 | -1) => number;
@@ -62,7 +61,7 @@ function numericSort(a: number, b: number, dir = 1) {
 }
 
 function datasetSortable($: SortableElement) {
-	return registable($, 'dataset', (ev: DataAction) => {
+	return datasetRegistable($, (ev: DataAction) => {
 		if (ev.type === 'update') {
 			if (
 				ev.value &&
@@ -255,7 +254,7 @@ export class Td extends Cell {}
 @Augment<TableSelectAll>(
 	'cxl-table-select-all',
 	$ =>
-		registable($, 'dataset', ev => {
+		datasetRegistable($, ev => {
 			if (ev.type === 'select' && ev.value === 'select') {
 				const dataset = ev.target as Dataset;
 				let count = 0;
@@ -300,7 +299,7 @@ export class Tr extends Component {}
 	}),
 	$ => selectable($),
 	$ =>
-		registable($, 'dataset', ev => {
+		datasetRegistable($, ev => {
 			if (ev.type === 'update')
 				$.selected = (ev.target as Dataset).selected.has($.value);
 			else if (ev.type === 'select') {
@@ -419,7 +418,7 @@ export function getPageCount(total: number, rows: number) {
 		},
 	}),
 	$ =>
-		registable($, 'dataset', action => {
+		datasetRegistable($, action => {
 			if (action.type === 'update') {
 				action.state.slice = { page: $.page, rows: $.rows };
 			} else if (action.type === 'slice') {

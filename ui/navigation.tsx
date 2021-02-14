@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/navigation.js"/>
 import { dom } from '@cxl/tsx';
 import {
 	Augment,
