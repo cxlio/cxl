@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/core.js"/>
 import {
 	Attribute,
 	Augment,
@@ -11,10 +12,10 @@ import {
 } from '@cxl/component';
 import { dom, expression } from '@cxl/tsx';
 import { EMPTY, merge, tap } from '@cxl/rx';
-import { border, css, padding, pct } from '@cxl/css';
+import { border, css, padding, pct, setTheme } from '@cxl/css';
 import { Focusable, head, role } from '@cxl/template';
 import { on, onAction, remove, trigger } from '@cxl/dom';
-import { InversePrimary, ResetSurface } from './theme.js';
+import { InversePrimary, ResetSurface, theme } from './theme.js';
 
 export { Span } from '@cxl/component';
 
@@ -134,15 +135,16 @@ const AVATAR_DEFAULT =
 	css({
 		$: {
 			borderRadius: 32,
-			backgroundColor: 'surface',
+			backgroundColor: 'onSurface8',
 			width: 40,
+			...padding(2),
 			height: 40,
 			display: 'inline-block',
 			lineHeight: 38,
 			textAlign: 'center',
 			overflowY: 'hidden',
 		},
-		$little: {
+		$small: {
 			width: 32,
 			height: 32,
 			font: 'default',
@@ -150,8 +152,8 @@ const AVATAR_DEFAULT =
 		},
 		$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
 		image: {
-			width: pct(100),
-			height: pct(100),
+			width: '100%',
+			height: '100%',
 			borderRadius: 32,
 		},
 	}),
@@ -178,9 +180,15 @@ export class Avatar extends Component {
 	@StyleAttribute()
 	big = false;
 	@StyleAttribute()
-	little = false;
+	small = false;
 	@Attribute()
 	src = '';
+	/**
+	 * @example
+	 * <cxl-avatar text="GB"></cxl-avatar>
+	 * <cxl-avatar text="GB" small primary></cxl-avatar>
+	 * <cxl-avatar text="GB" big secondary></cxl-avatar>
+	 */
 	@Attribute()
 	text = '';
 }
@@ -189,10 +197,8 @@ export class Avatar extends Component {
  * Chips are compact elements that represent an input, attribute, or action.
  * @example
  * <cxl-chip>Single Chip</cxl-chip>
- * <cxl-chip removable>Removable Chip</cxl-chip>
- * <cxl-chip><cxl-icon icon="home"></cxl-icon> Chip with Icon</cxl-chip>
+ * <cxl-chip secondary removable>Removable Chip</cxl-chip>
  * <cxl-chip><cxl-avatar little></cxl-avatar> Chip with Avatar</cxl-chip>
- * <cxl-chip little removable>Removable Chip</cxl-chip>
  */
 @Augment<Chip>(
 	'cxl-chip',
@@ -288,9 +294,8 @@ export class Chip extends Component {
  * different elements such as avatars, text, and icons.
  *
  * @example
- * <cxl-icon icon="envelope"></cxl-icon><cxl-badge top over>5</cxl-badge>
- * <cxl-icon icon="shopping-cart"></cxl-icon><cxl-badge secondary top over>5</cxl-badge>
- * <cxl-icon icon="exclamation-triangle"></cxl-icon><cxl-badge error top over>5</cxl-badge>
+ * <cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge><br/>
+ * <cxl-button primary>Badge<cxl-badge secondary small></cxl-badge></cxl-button>
  */
 @Augment(
 	'cxl-badge',
@@ -298,9 +303,10 @@ export class Chip extends Component {
 		$: {
 			display: 'inline-block',
 			position: 'relative',
-			width: 22,
-			height: 22,
-			lineHeight: 22,
+			width: 20,
+			height: 20,
+			marginRight: -10,
+			lineHeight: 20,
 			font: 'caption',
 			borderRadius: 11,
 			color: 'onPrimary',
@@ -312,24 +318,28 @@ export class Chip extends Component {
 			color: 'onSecondary',
 			backgroundColor: 'secondary',
 		},
+		$small: {
+			width: 8,
+			height: 8,
+			marginRight: -4,
+		},
 		$error: { color: 'onError', backgroundColor: 'error' },
-		$top: { translateY: -11 },
 		$over: { marginLeft: -8 },
 	}),
 	() => <slot />
 )
 export class Badge extends Component {
-	@Attribute()
+	@StyleAttribute()
+	small = false;
+
+	@StyleAttribute()
 	secondary = false;
 
-	@Attribute()
+	@StyleAttribute()
 	error = false;
 
-	@Attribute()
+	@StyleAttribute()
 	over = false;
-
-	@Attribute()
-	top = false;
 }
 
 @Augment(
@@ -486,10 +496,11 @@ export class T extends Component {
 }
 
 /**
+ * Show or hide an element when clicked.
  * @example
  * <cxl-toggle>
  *   <cxl-icon-button slot="trigger">
- *     <cxl-icon icon="ellipsis-v"></cxl-icon>
+ *     &vellip;
  *   </cxl-icon-button>
  *   <cxl-menu>
  *     <cxl-item>Features</cxl-item>
@@ -635,20 +646,6 @@ export class ButtonBase extends Component {
 export class Button extends ButtonBase {}
 
 @Augment(
-	'cxl-icon-button',
-	css({
-		$: {
-			fontSize: 'inherit',
-			elevation: 0,
-			paddingLeft: 8,
-			paddingRight: 8,
-		},
-	}),
-	Slot
-)
-export class IconButton extends ButtonBase {}
-
-@Augment(
 	'cxl-meta',
 	head(
 		<meta name="viewport" content="width=device-width, initial-scale=1" />,
@@ -660,6 +657,7 @@ export class IconButton extends ButtonBase {}
 export class Meta extends Component {
 	connectedCallback() {
 		document.documentElement.lang = 'en';
+		setTheme(theme);
 		super.connectedCallback();
 	}
 }
@@ -707,7 +705,10 @@ export class Surface extends Component {
 	'cxl-toolbar',
 	css({
 		$: {
-			display: 'flex',
+			display: 'grid',
+			gridAutoFlow: 'column',
+			gridTemplateColumns: 'min-content',
+			gap: 16,
 			alignItems: 'center',
 			height: 56,
 			...padding(4, 16, 4, 16),

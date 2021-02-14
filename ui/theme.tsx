@@ -1,8 +1,32 @@
-import { Colors, Theme as CSSTheme, baseColor, setTheme, rgba } from '@cxl/css';
+///<amd-module name="@cxl/ui/theme.js"/>
+import { Colors, baseColor, rgba, theme } from '@cxl/css';
+export { theme } from '@cxl/css';
 
 declare module '../css/index.js' {
 	interface Animation {
 		spinnerstroke: AnimationDefinition;
+	}
+
+	interface Colors {
+		elevation: BaseColor;
+		primary: BaseColor;
+		primaryLight: BaseColor;
+		secondary: BaseColor;
+		surface: BaseColor;
+		error: BaseColor;
+		errorLight: BaseColor;
+		onPrimary: BaseColor;
+		onPrimaryLight: BaseColor;
+		onSecondary: BaseColor;
+		onSurface: BaseColor;
+		onSurface8: BaseColor;
+		onSurface12: BaseColor;
+		onSurface87: BaseColor;
+		onError: BaseColor;
+		background: BaseColor;
+		link: BaseColor;
+		headerText: BaseColor;
+		divider: BaseColor;
 	}
 
 	interface Typography {
@@ -19,10 +43,12 @@ declare module '../css/index.js' {
 		button: CSSStyle;
 		code: CSSStyle;
 		monospace: CSSStyle;
+		icon: CSSStyle;
+		icon_button: CSSStyle;
 	}
 }
 
-export const theme: CSSTheme = {
+Object.assign(theme.animation, {
 	animation: {
 		spin: {
 			keyframes:
@@ -83,96 +109,107 @@ export const theme: CSSTheme = {
 			value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)',
 		},
 	},
-	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
-	variables: {
-		// Animation speed
-		speed: '0.3s',
-		font: 'Roboto, sans-serif',
-		fontSize: '16px',
-		fontMonospace: 'monospace',
+});
+
+Object.assign(theme.variables, {
+	// Animation speed
+	speed: '0.3s',
+	font: 'Roboto, sans-serif',
+	fontSize: '16px',
+	fontMonospace: 'monospace',
+});
+
+Object.assign(theme.typography, {
+	default: {
+		fontWeight: 400,
+		fontFamily: 'var(--cxl-font)',
+		fontSize: 'var(--cxl-font-size)',
+		letterSpacing: 'normal',
 	},
-	typography: {
-		default: {
-			fontWeight: 400,
-			fontFamily: 'var(--cxl-font)',
-			fontSize: 'var(--cxl-font-size)',
-			letterSpacing: 'normal',
-		},
-		caption: { fontSize: '12px', letterSpacing: '0.4px' },
-		h1: { fontWeight: 300, fontSize: '96px', letterSpacing: '-1.5px' },
-		h2: { fontWeight: 300, fontSize: '60px', letterSpacing: '-0.5px' },
-		h3: { fontSize: '48px' },
-		h4: { fontSize: '34px', letterSpacing: '0.25px' },
-		h5: { fontSize: '24px' },
-		h6: { fontSize: '20px', fontWeight: 500, letterSpacing: '0.15px' },
-		body2: { fontSize: '14px', letterSpacing: '0.25px' },
-		subtitle: {
-			letterSpacing: '0.15px',
-		},
-		subtitle2: {
-			fontSize: '14px',
-			fontWeight: 500,
-			letterSpacing: '0.1px',
-		},
-		button: {
-			fontSize: '14px',
-			fontWeight: 500,
-			lineHeight: '20px',
-			letterSpacing: '1.25px',
-			textTransform: 'uppercase',
-		},
-		code: { fontFamily: 'var(--cxl-font-monospace)' },
-		monospace: { fontFamily: 'var(--cxl-font-monospace)' },
+	caption: { fontSize: '12px', letterSpacing: '0.4px' },
+	h1: { fontWeight: 300, fontSize: '96px', letterSpacing: '-1.5px' },
+	h2: { fontWeight: 300, fontSize: '60px', letterSpacing: '-0.5px' },
+	h3: { fontSize: '48px' },
+	h4: { fontSize: '34px', letterSpacing: '0.25px' },
+	h5: { fontSize: '24px' },
+	h6: { fontSize: '20px', fontWeight: 500, letterSpacing: '0.15px' },
+	body2: { fontSize: '14px', letterSpacing: '0.25px' },
+	subtitle: {
+		letterSpacing: '0.15px',
 	},
-	colors: {
-		elevation: rgba(0, 0, 0, 0.26),
-		primary: rgba(0x15, 0x65, 0xc0),
-		// 0.14 opacity will pass accessibility contrast requirements
-		get primaryLight() {
-			return this.primary.alpha(0.14);
-		},
-
-		secondary: rgba(0xf9, 0xaa, 0x33),
-		surface: rgba(0xff, 0xff, 0xff),
-		error: rgba(0xb0, 0x00, 0x20),
-		get errorLight() {
-			return this.error.alpha(0.14);
-		},
-
-		onPrimary: rgba(0xff, 0xff, 0xff),
-		get onPrimaryLight() {
-			return this.primary;
-		},
-		onSecondary: rgba(0, 0, 0),
-		onSurface: rgba(0, 0, 0),
-
-		get onSurface8() {
-			return this.onSurface.alpha(0.08);
-		},
-		get onSurface12() {
-			return this.onSurface.alpha(0.12);
-		},
-		get onSurface87() {
-			return this.onSurface.alpha(0.87);
-		},
-		onError: rgba(0xff, 0xff, 0xff),
-
-		get background() {
-			return this.surface;
-		},
-		get link() {
-			return this.primary;
-		},
-		get headerText() {
-			return this.onSurface.alpha(0.6);
-		},
-		get divider() {
-			return this.onSurface.alpha(0.16);
-		},
+	subtitle2: {
+		fontSize: '14px',
+		fontWeight: 500,
+		letterSpacing: '0.1px',
 	},
+	button: {
+		fontSize: '14px',
+		fontWeight: 500,
+		lineHeight: '20px',
+		letterSpacing: '1.25px',
+		textTransform: 'uppercase',
+	},
+	code: { fontFamily: 'var(--cxl-font-monospace)' },
+	monospace: { fontFamily: 'var(--cxl-font-monospace)' },
+	icon: { fontFamily: "'Material Icons'", textTransform: 'none' },
+	icon_button: {
+		fontFamily: "'Material Icons'",
+		textTransform: 'none',
+		fontSize: '20px',
+	},
+});
+Object.assign(theme.colors, {
+	elevation: rgba(0, 0, 0, 0.26),
+	primary: rgba(0x15, 0x65, 0xc0),
+	// 0.14 opacity will pass accessibility contrast requirements
+	get primaryLight() {
+		return this.primary.alpha(0.14);
+	},
+
+	secondary: rgba(0xf9, 0xaa, 0x33),
+	surface: rgba(0xff, 0xff, 0xff),
+	error: rgba(0xb0, 0x00, 0x20),
+	get errorLight() {
+		return this.error.alpha(0.14);
+	},
+
+	onPrimary: rgba(0xff, 0xff, 0xff),
+	get onPrimaryLight() {
+		return this.primary;
+	},
+	onSecondary: rgba(0, 0, 0),
+	onSurface: rgba(0, 0, 0),
+
+	get onSurface8() {
+		return this.onSurface.alpha(0.08);
+	},
+	get onSurface12() {
+		return this.onSurface.alpha(0.12);
+	},
+	get onSurface87() {
+		return this.onSurface.alpha(0.87);
+	},
+	onError: rgba(0xff, 0xff, 0xff),
+
+	get background() {
+		return this.surface;
+	},
+	get link() {
+		return this.primary;
+	},
+	get headerText() {
+		return this.onSurface.alpha(0.6);
+	},
+	get divider() {
+		return this.onSurface.alpha(0.16);
+	},
+});
+
+Object.assign(theme, {
 	imports: [
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap',
 	],
+
 	globalStyles: {
 		'@a': { color: 'link' },
 		'*': {
@@ -181,7 +218,7 @@ export const theme: CSSTheme = {
 				'opacity var(--cxl-speed), transform var(--cxl-speed), box-shadow var(--cxl-speed), filter var(--cxl-speed)',
 		} as any,
 	},
-};
+});
 
 export const ResetSurface: any = {
 	variables: {
@@ -221,4 +258,4 @@ export const DarkColors: Partial<Colors> = {
 	onSecondary: rgba(0, 0, 0),
 };
 
-setTheme(theme);
+// setTheme(theme);

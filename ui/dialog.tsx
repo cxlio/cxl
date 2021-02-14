@@ -15,6 +15,8 @@ import { role } from '@cxl/template';
 
 /**
  * A backdrop appears behind all other surfaces in an app, displaying contextual and actionable content.
+ * @demo
+ * <cxl-backdrop></cxl-backdrop>
  */
 @Augment(
 	'cxl-backdrop',
@@ -286,6 +288,7 @@ export class Drawer extends Component {
 	css({
 		$: {
 			display: 'block',
+			textAlign: 'center',
 			opacity: 0,
 			scaleX: 0.5,
 			scaleY: 0.5,

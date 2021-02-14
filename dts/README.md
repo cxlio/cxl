@@ -6,7 +6,7 @@ Generate symbol information from typescript source code
 
 ## Project Details
 
--   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/dts/v/0.0.1)
+-   Branch Version: [0.1.0](https://npmjs.com/package/@cxl/dts/v/0.1.0)
 -   License: GPL-3.0-only
 -   Documentation: [Link](https://cxlio.github.io/cxl/dts)
 

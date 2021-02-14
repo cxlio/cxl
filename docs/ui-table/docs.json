@@ -13,8 +13,8 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 15,
-            "ch": 47
+            "line": 16,
+            "ch": 46
           },
           "kind": 16,
           "name": "onHeaderAction",
@@ -24,7 +24,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 17,
+                "line": 18,
                 "ch": 24
               },
               "kind": 9,
@@ -63,7 +63,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 23,
+            "line": 24,
             "ch": 1
           },
           "kind": 16,
@@ -74,7 +74,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 25,
+                "line": 26,
                 "ch": 16
               },
               "kind": 9,
@@ -89,7 +89,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 25,
+                "line": 26,
                 "ch": 32
               },
               "kind": 9,
@@ -151,7 +151,7 @@
           "id": 3,
           "source": {
             "fileName": "index.tsx",
-            "line": 35,
+            "line": 36,
             "ch": 1
           },
           "kind": 35,
@@ -161,7 +161,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 81,
+                "line": 78,
                 "ch": 35
               },
               "kind": 10,
@@ -171,7 +171,7 @@
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 82,
+                  "line": 79,
                   "ch": 12
                 },
                 "kind": 23,
@@ -182,7 +182,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 82,
+                "line": 79,
                 "ch": 30
               },
               "kind": 36,
@@ -198,7 +198,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 85,
+                "line": 82,
                 "ch": 16
               },
               "kind": 36,
@@ -215,7 +215,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 88,
+                "line": 85,
                 "ch": 18
               },
               "kind": 36,
@@ -225,7 +225,7 @@
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 91,
+                  "line": 88,
                   "ch": 14
                 },
                 "kind": 5,
@@ -235,7 +235,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 91,
+                      "line": 88,
                       "ch": 14
                     },
                     "kind": 23,
@@ -245,7 +245,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 91,
+                      "line": 88,
                       "ch": 22
                     },
                     "kind": 23,
@@ -255,7 +255,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 91,
+                      "line": 88,
                       "ch": 31
                     },
                     "kind": 23,
@@ -285,7 +285,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 92,
+            "line": 89,
             "ch": 1
           },
           "kind": 35,
@@ -325,14 +325,32 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 131,
+            "line": 128,
             "ch": 39
           },
           "kind": 35,
           "name": "Cell",
           "flags": 0,
           "id": 12,
-          "children": [],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 147,
+                "ch": 30
+              },
+              "kind": 36,
+              "name": "right",
+              "flags": 4,
+              "id": 13,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
           "docs": {
             "role": "table-cell"
           },
@@ -349,12 +367,12 @@
           },
           "extendedBy": [
             {
-              "id": 13,
+              "id": 14,
               "name": "Td",
               "kind": 6
             },
             {
-              "id": 14,
+              "id": 15,
               "name": "CheckboxCell",
               "kind": 6
             }
@@ -363,13 +381,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 151,
-            "ch": 31
+            "line": 150,
+            "ch": 1
           },
           "kind": 35,
           "name": "Td",
           "flags": 1,
-          "id": 13,
+          "id": 14,
           "children": [],
           "docs": {
             "tagName": "cxl-td"
@@ -390,24 +408,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 154,
+            "line": 153,
             "ch": 31
           },
           "kind": 35,
           "name": "CheckboxCell",
           "flags": 1,
-          "id": 14,
+          "id": 15,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 181,
+                "line": 180,
                 "ch": 40
               },
               "kind": 10,
               "name": "selectEvent",
               "flags": 68,
-              "id": 15,
+              "id": 16,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -418,13 +436,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 182,
+                "line": 181,
                 "ch": 51
               },
               "kind": 36,
               "name": "checked",
               "flags": 4,
-              "id": 16,
+              "id": 17,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -447,13 +465,13 @@
           },
           "extendedBy": [
             {
-              "id": 17,
-              "name": "CheckboxTd",
+              "id": 18,
+              "name": "TdCheckbox",
               "kind": 6
             },
             {
-              "id": 18,
-              "name": "CheckboxTh",
+              "id": 19,
+              "name": "ThCheckbox",
               "kind": 6
             }
           ]
@@ -461,13 +479,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 186,
+            "line": 185,
             "ch": 1
           },
           "kind": 35,
-          "name": "CheckboxTd",
+          "name": "TdCheckbox",
           "flags": 1,
-          "id": 17,
+          "id": 18,
           "children": [],
           "docs": {
             "tagName": "cxl-td-checkbox"
@@ -478,7 +496,7 @@
             "name": "",
             "children": [
               {
-                "id": 14,
+                "id": 15,
                 "name": "CheckboxCell",
                 "kind": 6
               }
@@ -488,24 +506,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 192,
+            "line": 191,
             "ch": 47
           },
           "kind": 35,
-          "name": "CheckboxTh",
+          "name": "ThCheckbox",
           "flags": 1,
-          "id": 18,
+          "id": 19,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 198,
+                "line": 197,
                 "ch": 46
               },
               "kind": 10,
               "name": "selectEvent",
               "flags": 68,
-              "id": 19,
+              "id": 20,
               "value": "'datatable.selectAll'",
               "type": {
                 "name": "\"datatable.selectAll\"",
@@ -528,7 +546,7 @@
             "name": "",
             "children": [
               {
-                "id": 14,
+                "id": 15,
                 "name": "CheckboxCell",
                 "kind": 6
               }
@@ -538,32 +556,14 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 200,
+            "line": 199,
             "ch": 1
           },
           "kind": 35,
           "name": "Tr",
           "flags": 1,
-          "id": 20,
-          "children": [
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 216,
-                "ch": 35
-              },
-              "kind": 36,
-              "name": "selected",
-              "flags": 4,
-              "id": 21,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ],
+          "id": 21,
+          "children": [],
           "docs": {
             "tagName": "cxl-tr",
             "role": "row"
@@ -583,16 +583,35 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 219,
-            "ch": 1
+            "line": 202,
+            "ch": 36
           },
           "kind": 35,
-          "name": "TableHeader",
+          "name": "TrSelectable",
           "flags": 1,
           "id": 22,
-          "children": [],
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 223,
+                "ch": 45
+              },
+              "kind": 36,
+              "name": "selected",
+              "flags": 4,
+              "id": 23,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
           "docs": {
-            "tagName": "cxl-table-header"
+            "tagName": "cxl-tr-selectable",
+            "role": "row"
           },
           "type": {
             "flags": 0,
@@ -609,26 +628,110 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 235,
-            "ch": 45
+            "line": 226,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "TableToolbar",
+          "flags": 1,
+          "id": 24,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-table-toolbar"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 242,
+            "ch": 46
           },
           "kind": 35,
           "name": "TableSelectedCount",
           "flags": 1,
-          "id": 23,
+          "id": 25,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 252,
+                "line": 259,
                 "ch": 51
               },
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 24,
+              "id": 26,
               "type": {
                 "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 262,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "TablePagination",
+          "flags": 1,
+          "id": 27,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 274,
+                "ch": 48
+              },
+              "kind": 36,
+              "name": "rows",
+              "flags": 4,
+              "id": 28,
+              "value": "6",
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 276,
+                "ch": 10
+              },
+              "kind": 36,
+              "name": "page",
+              "flags": 4,
+              "id": 29,
+              "value": "0",
+              "type": {
+                "name": "number",
                 "kind": 32,
                 "flags": 0
               }

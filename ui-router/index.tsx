@@ -32,6 +32,7 @@ import {
 	on,
 } from '@cxl/dom';
 import { AppbarTitle, Item, Tab } from '@cxl/ui/navigation.js';
+import type {} from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
 import { StateStyles, each, triggerEvent } from '@cxl/template';
 import { css } from '@cxl/css';

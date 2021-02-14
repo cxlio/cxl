@@ -4,7 +4,7 @@
 	"description": "High-performance Web Components",
 	"license": "GPL-3.0",
 	"homepage": "https://cxlio.github.io/cxl/ui",
-	"browser": "amd/index.min.js",
+	"browser": "index.bundle.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/ui && node ../tester --baselinePath ../../ui/spec"

@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/component"/>
 import { AttributeType, Children, renderChildren } from '@cxl/tsx';
 import { getShadow, onChildrenMutation } from '@cxl/dom';
 import {
@@ -34,7 +35,7 @@ const subscriber = {
 
 export class Bindings {
 	private subscriptions?: Subscription[];
-	private bindings?: Observable<any>[];
+	bindings?: Observable<any>[];
 
 	bind(binding: Observable<any>) {
 		if (this.subscriptions)
@@ -45,8 +46,8 @@ export class Bindings {
 
 	connect() {
 		if (!this.subscriptions && this.bindings)
-			this.subscriptions = this.bindings.map(b =>
-				b.subscribe(subscriber)
+			this.subscriptions = this.bindings.map(s =>
+				s.subscribe(subscriber)
 			);
 	}
 	disconnect() {
@@ -64,6 +65,7 @@ export abstract class Component extends HTMLElement {
 	}
 
 	private $$bindings?: Bindings;
+	private $$prebind?: Observable<any>[];
 	private render?: (node: any) => void;
 	protected jsxAttributes!: AttributeType<this>;
 	protected attributes$ = new Subject<AttributeEvent<any, any>>();
@@ -97,16 +99,24 @@ export abstract class Component extends HTMLElement {
 	};
 
 	bind(obs: Observable<any>) {
-		if (!this.$$bindings) this.$$bindings = new Bindings();
-		this.$$bindings.bind(obs);
+		const render = this.render as any;
+		if (render) {
+			const bindings = this.$$prebind || (this.$$prebind = []);
+			bindings.push(obs);
+		} else {
+			if (!this.$$bindings) this.$$bindings = new Bindings();
+			this.$$bindings.bind(obs);
+		}
 	}
 
 	protected connectedCallback() {
-		if (this.render) {
-			this.render(this);
+		const render = this.render as any;
+		if (render) {
 			this.render = undefined;
+			render(this);
+			if (this.$$prebind)
+				this.$$prebind.forEach((b: Observable<any>) => this.bind(b));
 		}
-
 		if (this.$$bindings) this.$$bindings.connect();
 	}
 
@@ -141,9 +151,10 @@ export function appendShadow<T extends Component>(
 	host: T,
 	child: Node | Observable<any>
 ) {
-	const shadow = getShadow(host);
-	if (child instanceof Node) shadow.appendChild(child);
-	else host.bind(child);
+	if (child instanceof Node) {
+		const shadow = getShadow(host);
+		shadow.appendChild(child);
+	} else host.bind(child);
 }
 
 export function augment<T extends Component>(

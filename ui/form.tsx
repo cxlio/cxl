@@ -14,9 +14,9 @@ import {
 	Span,
 	Toggle,
 	FocusHighlight,
-	IconButton,
 	Svg,
 } from './core.js';
+import { IconButton } from './icon.js';
 import { dom, expression } from '@cxl/tsx';
 import {
 	aria,
@@ -26,9 +26,9 @@ import {
 	triggerEvent,
 	teleport,
 } from '@cxl/template';
-import { trigger, onKeypress, on, onAction, setAttribute } from '@cxl/dom';
-import { border, css, boxShadow, padding } from '@cxl/css';
-import { EMPTY, Observable, observable, be, defer, merge } from '@cxl/rx';
+import { trigger, onKeypress, on, onAction } from '@cxl/dom';
+import { border, css, padding } from '@cxl/css';
+import { EMPTY, Observable, observable, defer, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
@@ -36,6 +36,7 @@ import { Appbar, AppbarContextual } from './navigation.js';
 import {
 	DisabledStyles,
 	Focusable,
+	checkedBehavior,
 	focusDelegate,
 	focusable,
 	navigationList,
@@ -43,7 +44,7 @@ import {
 	selectableHostMultiple,
 	role,
 } from '@cxl/template';
-import { checkedBehavior } from './checkbox.js';
+import { Field } from './field.js';
 
 export { SelectBox, Option } from './select.js';
 
@@ -166,107 +167,6 @@ export class SubmitButton extends ButtonBase {
 	primary = true;
 }
 
-const FieldBase = [
-	css({
-		$: {
-			color: 'onSurface',
-			position: 'relative',
-			display: 'block',
-		},
-		container: {
-			position: 'relative',
-			...padding(0, 12, 4, 12),
-		},
-		$invalid: { color: 'error' },
-		$outline: { marginTop: -2 },
-		container$outline: {
-			borderColor: 'onSurface',
-			borderWidth: 1,
-			borderStyle: 'solid',
-			borderRadius: 4,
-			marginTop: 2,
-			paddingTop: 12,
-			paddingBottom: 12,
-		},
-		container$outline$focusWithin: {
-			boxShadow: boxShadow(0, 0, 0, 1, 'primary'),
-		},
-		container$focusWithin$outline: {
-			borderColor: 'primary',
-		},
-		container$invalid$outline: { borderColor: 'error' },
-		container$invalid$outline$focusWithin: {
-			boxShadow: boxShadow(0, 0, 0, 1, 'error'),
-		},
-		content: {
-			display: 'flex',
-			position: 'relative',
-			font: 'default',
-			// marginBottom: 2,
-			marginTop: 4,
-			lineHeight: 20,
-		},
-		content$focusWithin: {
-			color: 'primary',
-		},
-		mask: {
-			position: 'absolute',
-			top: 0,
-			right: 0,
-			left: 0,
-			bottom: 0,
-			backgroundColor: 'onSurface8',
-		},
-		mask$outline: {
-			borderRadius: 4,
-			backgroundColor: 'surface',
-		},
-		mask$hover: {
-			filter: 'invert(0.15) saturate(1.5) brightness(1.1)',
-		},
-		mask$hover$disabled: { filter: 'none' },
-		label: {
-			position: 'relative',
-			font: 'caption',
-			marginLeft: -4,
-			paddingTop: 8,
-			paddingBottom: 2,
-			lineHeight: 10,
-			verticalAlign: 'bottom',
-		},
-		label$focusWithin: { color: 'primary' },
-		label$invalid: { color: 'error' },
-		label$outline: {
-			position: 'absolute',
-			translateY: -17,
-			paddingTop: 0,
-			height: 5,
-			backgroundColor: 'surface',
-			display: 'inline-block',
-		},
-		label$floating$novalue: {
-			font: 'default',
-			translateY: 21,
-			opacity: 0.75,
-		},
-		label$leading: { paddingLeft: 24 },
-		label$floating$novalue$outline: {
-			translateY: 9,
-		},
-	}),
-	($: any) => (
-		<div className="container">
-			<div className="mask"></div>
-			<div className="label">
-				<$.Slot selector="cxl-label" />
-			</div>
-			<div className="content">
-				<slot />
-			</div>
-		</div>
-	),
-];
-
 function fieldInput<T extends Component>(host: T) {
 	return defer(() =>
 		host.parentNode instanceof Field
@@ -298,138 +198,6 @@ export class Label extends Component {}
 /**
  * @example
  * <cxl-field>
- *   <cxl-label>Input Label</cxl-label>
- *   <cxl-input required></cxl-input>
- * </cxl-field>
- * <cxl-field floating>
- *   <cxl-label>Floating Label</cxl-label>
- *   <cxl-input></cxl-input>
- * </cxl-field>
- * <cxl-field outline>
- *   <cxl-label>Outlined Form Group</cxl-label>
- *   <cxl-input></cxl-input>
- *   <cxl-field-help>Field Help Text</cxl-field-help>
- * </cxl-field>
- */
-@Augment<Field>(
-	'cxl-field',
-	css({
-		$: { marginBottom: 16 },
-		$lastChild: { marginBottom: 0 },
-		line: { position: 'absolute', left: 0, right: 0 },
-		line$outline: { display: 'none' },
-		help: {
-			font: 'caption',
-			position: 'relative',
-			display: 'flex',
-			paddingTop: 4,
-			flexGrow: 1,
-			paddingLeft: 12,
-			paddingRight: 12,
-		},
-		counter: { textAlign: 'right' },
-		help$leading: { paddingLeft: 38 },
-		invalidMessage: { display: 'none', paddingTop: 4 },
-		invalidMessage$invalid: { display: 'block' },
-		$inputdisabled: {
-			filter: 'saturate(0)',
-			opacity: 0.6,
-			pointerEvents: 'none',
-		},
-	}),
-	...FieldBase,
-	host => {
-		const invalid = be(false);
-		const focused = be(false);
-		const invalidMessage = be('');
-
-		function onRegister(ev: Event) {
-			if (ev.target) {
-				host.input = ev.target as InputBase;
-				onChange();
-			}
-		}
-
-		function update(ev?: any) {
-			const input = host.input;
-			if (input) {
-				invalid.next(input.touched && input.invalid);
-				host.inputdisabled = input.disabled;
-				host.invalid = invalid.value;
-				if (host.invalid) invalidMessage.next(input.validationMessage);
-				if (!ev) return;
-				if (ev.type === 'focusable.focus') focused.next(true);
-				else if (ev.type === 'focusable.blur') focused.next(false);
-			}
-		}
-
-		function onChange() {
-			const value = host.input?.value;
-			host.novalue = !value || value.length === 0;
-		}
-
-		host.bind(
-			merge(
-				get(host, 'input').switchMap(input =>
-					input
-						? merge(
-								observable(() => update()),
-								on(input, 'focusable.change').tap(update),
-								on(input, 'focusable.focus').tap(update),
-								on(input, 'focusable.blur').tap(update),
-								on(input, 'invalid').tap(update),
-								on(input, 'input').tap(onChange),
-								on(input, 'change').tap(onChange),
-								on(host, 'click').tap(
-									() =>
-										document.activeElement !== input &&
-										!focused.value &&
-										input?.focus()
-								)
-						  )
-						: EMPTY
-				),
-				on(host, 'form.register').tap(onRegister)
-			)
-		);
-
-		return (
-			<host.Shadow>
-				<FocusLine
-					className="line"
-					focused={focused}
-					invalid={invalid}
-				/>
-				<div className="help">
-					<host.Slot selector="cxl-field-help" />
-					<div className="invalidMessage">
-						{expression(host, invalidMessage)}
-					</div>
-				</div>
-			</host.Shadow>
-		);
-	}
-)
-export class Field extends Component {
-	@StyleAttribute()
-	outline = false;
-	@StyleAttribute()
-	protected inputdisabled = false;
-	@StyleAttribute()
-	invalid = false;
-	@StyleAttribute()
-	floating = false;
-	@StyleAttribute()
-	leading = false;
-	@StyleAttribute()
-	novalue = true;
-	@Attribute()
-	input?: InputBase;
-}
-
-/**
- * @example
- * <cxl-field>
  *   <cxl-label>Field Label</cxl-label>
  *   <cxl-input value="Input Value"></cxl-input>
  *   <cxl-field-help>Helper Text</cxl-field-help>
@@ -447,7 +215,7 @@ export class Field extends Component {
 		$: {
 			display: 'block',
 			lineHeight: 12,
-			paddingTop: 4,
+			paddingTop: 8,
 			font: 'caption',
 			verticalAlign: 'bottom',
 		},
@@ -458,28 +226,6 @@ export class Field extends Component {
 export class FieldHelp extends Component {
 	@StyleAttribute()
 	invalid = false;
-}
-
-@Augment<Fieldset>(
-	'cxl-fieldset',
-	...FieldBase,
-	bind(host =>
-		merge(on(host, 'invalid'), on(host, 'form.register')).tap(ev => {
-			const target = ev.target as InputBase;
-			if (target)
-				setAttribute(host, 'invalid', target.touched && target.invalid);
-		})
-	),
-	css({
-		$: { marginBottom: 16 },
-		mask: { display: 'none' },
-		content: { display: 'block', marginTop: 16 },
-		content$outline: { marginTop: 0, marginBottom: 0 },
-	})
-)
-export class Fieldset extends Component {
-	@StyleAttribute()
-	outline = true;
 }
 
 @Augment(
@@ -507,6 +253,15 @@ export class Fieldset extends Component {
 )
 export class FieldToggle extends Component {}
 
+/**
+ * Display the ratio of characters used and the total character limit.
+ * @example
+ * <cxl-field>
+ *   <cxl-label>Input Label</cxl-label>
+ *   <cxl-input></cxl-input>
+ *   <cxl-field-counter max="100"></cxl-field-counter>
+ * </cxl-field>
+ */
 @Augment<FieldCounter>('cxl-field-counter', host => (
 	<Span>
 		{fieldInput(host).switchMap(input =>
@@ -518,37 +273,6 @@ export class FieldToggle extends Component {}
 export class FieldCounter extends Component {
 	@Attribute()
 	max = 100;
-}
-
-@Augment(
-	'cxl-focus-line',
-	css({
-		$: {
-			display: 'block',
-			height: 2,
-			borderWidth: 0,
-			borderTop: 1,
-			borderStyle: 'solid',
-			borderColor: 'onSurface',
-		},
-		$invalid: { borderColor: 'error' },
-		line: {
-			backgroundColor: 'primary',
-			marginTop: -1,
-			scaleX: 0,
-			height: 2,
-		},
-		line$focused: { scaleX: 1 },
-		line$invalid: { backgroundColor: 'error' },
-	}),
-	_ => <div className="line" />
-)
-export class FocusLine extends Component {
-	@StyleAttribute()
-	focused = false;
-
-	@StyleAttribute()
-	invalid = false;
 }
 
 /**
@@ -703,6 +427,7 @@ export class FieldInput extends InputBase {
 			outline: 'none',
 			whiteSpace: 'pre-wrap',
 			flexGrow: 1,
+			textAlign: 'left',
 		},
 		$disabled: { pointerEvents: 'none' },
 	}),
@@ -732,7 +457,7 @@ export class FieldTextArea extends InputBase {
  * Input field with password masking.
  * @example
  * <cxl-field floating>
- *   <cxl-label>Email Address</cxl-label>
+ *   <cxl-label>Password</cxl-label>
  *   <cxl-password value="password"></cxl-password>
  * </cxl-field>
  */
@@ -792,6 +517,7 @@ const radioElements = new Set<Radio>();
 			paddingBottom: 12,
 			display: 'block',
 			font: 'default',
+			textAlign: 'left',
 		},
 		$inline: { display: 'inline-block' },
 		$invalid$touched: { color: 'error' },
@@ -922,7 +648,17 @@ export class Radio extends InputBase {
 	),
 	host => (
 		<div className="placeholder">
-			{expression(host, host.selectedText$)}
+			{expression(
+				host,
+				get(host, 'value')
+					.raf()
+					.map(
+						() =>
+							[...host.selected]
+								.map(s => s.textContent)
+								.join(', ') || host.placeholder
+					)
+			)}
 		</div>
 	)
 )
@@ -933,7 +669,6 @@ export class MultiSelect extends SelectBase {
 	@Attribute()
 	placeholder = '';
 
-	selectedText$ = be('');
 	readonly selected: Set<Option> = new Set<Option>();
 	value: any[] = [];
 
@@ -958,7 +693,10 @@ export class MultiSelect extends SelectBase {
 		if (!options) return;
 
 		for (const o of options) {
-			if (!o.selected && value.indexOf(o.value) !== -1)
+			if (
+				(o.selected && !this.selected.has(o)) ||
+				(!o.selected && value.indexOf(o.value) !== -1)
+			)
 				this.setSelected(o);
 		}
 	}
@@ -969,9 +707,6 @@ export class MultiSelect extends SelectBase {
 		this.selected[method](option);
 		const selected = [...this.selected];
 		this.value = selected.map(o => o.value);
-		this.selectedText$.next(
-			selected.map(s => s.textContent).join(', ') || this.placeholder
-		);
 		if (this.opened) this.setFocusedOption(option);
 	}
 
@@ -1010,13 +745,11 @@ export class MultiSelect extends SelectBase {
 	FocusCircleStyle,
 	css({
 		$: {
-			display: 'flex',
+			display: 'inline-block',
 			cursor: 'pointer',
 			paddingTop: 12,
 			paddingBottom: 12,
 		},
-		$inline: { display: 'inline-flex' },
-		content: { flexGrow: 1 },
 		switch: {
 			position: 'relative',
 			width: 46,
@@ -1068,13 +801,6 @@ export class MultiSelect extends SelectBase {
 				host.checked = !host.checked;
 			}),
 			checkedBehavior(host, () => (host.value = host.checked))
-			/*get(host, 'value').tap(val => {
-				host.checked = val === host['true-value'];
-			}),
-			get(host, 'checked').tap(val => {
-				host.setAttribute('aria-checked', val ? 'true' : 'false');
-				host.value = val ? host['true-value'] : host['false-value'];
-			})*/
 		);
 	})
 )
@@ -1121,7 +847,7 @@ function $contentEditable<T extends InputBase>(el: HTMLElement, host: T) {
  * @example
  * <cxl-field>
  *   <cxl-label>Prefilled Text Area</cxl-label>
- *   <cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></cxl-textarea>
+ *   <cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut"></cxl-textarea>
  * </cxl-field>
  */
 @Augment<TextArea>(
@@ -1139,6 +865,7 @@ function $contentEditable<T extends InputBase>(el: HTMLElement, host: T) {
 			whiteSpace: 'pre-wrap',
 			color: 'onSurface',
 			outline: 'none',
+			textAlign: 'left',
 		},
 		$disabled: { pointerEvents: 'none' },
 	}),
@@ -1151,7 +878,7 @@ export class TextArea extends InputBase {
 /**
  * A floating action button (FAB) represents the primary action of a screen.
  * @demo
- * <cxl-fab title="Floating Action Button"><cxl-icon icon="plus"></cxl-icon></cxl-fab>
+ * <cxl-fab title="Floating Action Button">&plus;</cxl-fab>
  */
 @Augment(
 	'cxl-fab',
@@ -1272,9 +999,8 @@ const SearchIcon = staticTemplate(() => (
 						)
 					}
 					className="button"
-				>
-					<SearchIcon />
-				</IconButton>
+					icon="search"
+				/>
 				<Field className="input">
 					<Input
 						$={el =>

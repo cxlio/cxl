@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/tsx"/>
 import { Observable } from '@cxl/rx';
 
 /* eslint @typescript-eslint/no-namespace: 'off' */

@@ -423,13 +423,19 @@ export default suite('rx', [
 	suite('toPromise', test => {
 		test('rx#toPromise', a => {
 			const done = a.async(),
-				A = new Observable(s => s.next('hello')),
+				A = new Observable(s => {
+					s.next('hello');
+					s.complete();
+				}),
 				B = new Observable(s => s.error(true)),
 				promise = toPromise(A);
-			a.ok(promise);
+
 			promise.then(val => a.equal(val, 'hello'));
 
-			toPromise(B).catch(done);
+			toPromise(B).catch(e => {
+				a.equal(e, true);
+				done();
+			});
 		});
 	}),
 

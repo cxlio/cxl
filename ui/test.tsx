@@ -1,8 +1,8 @@
 import { TestApi, spec, triggerKeydown } from '@cxl/spec';
 import { dom } from '@cxl/tsx';
 import { getRegisteredComponents, Component } from '@cxl/component';
-import '@cxl/template';
-import { of } from '@cxl/rx';
+import { each } from '@cxl/template';
+import { be, of } from '@cxl/rx';
 import {
 	Drawer,
 	Button,
@@ -447,6 +447,21 @@ export default spec('ui', a => {
 			select.click();
 			a.equal(select.opened, true);
 		});
+
+		a.should('handle dynamic options', a => {
+			const rows = be(5);
+			const options = be([5, 10, 25, 50]);
+			const el = (
+				<SelectBox className="rows" value={rows}>
+					{each(options, op => (
+						<Option value={op}>{op.toString()}</Option>
+					))}
+				</SelectBox>
+			) as SelectBox;
+			a.dom.appendChild(el);
+			a.equal(el.value, 5);
+			a.ok(el.selected);
+		});
 	});
 
 	a.test('cxl-multiselect', a => {
@@ -501,24 +516,6 @@ export default spec('ui', a => {
 			const el = a.element('cxl-multiselect') as MultiSelect;
 			a.equal(el.value.length, 0);
 		});
-
-		/*a.test('attribute value set', async (a: TestApi) => {
-			a.dom.innerHTML = `<cxl-multiselect value="b">
-				<cxl-option value="a">A</cxl-option>
-				<cxl-option value="b">B</cxl-option>
-				<cxl-option value="c">C</cxl-option>
-			</cxl-multiselect>`;
-			const select = a.dom.firstElementChild as MultiSelect;
-			a.equal(select.options?.size, 3);
-			a.equal(select.selected.has, 'b');
-			a.equal(select.value, 'b');
-			select.value = 'c';
-			a.equal(select.selected?.value, 'c');
-			a.equal(select.value, 'c');
-			await of(true).raf();
-			a.equal(select.selected?.value, 'c');
-			a.equal(select.value, 'c');
-		});*/
 
 		a.test(
 			'should set value to empty array if not found in options',
@@ -576,6 +573,35 @@ export default spec('ui', a => {
 			a.ok(select.selected.has(option1));
 			option1.click();
 			a.ok(!select.selected.has(option1));
+		});
+
+		a.should('display placeholder if no options are selected', async a => {
+			a.dom.innerHTML = `<cxl-multiselect placeholder="(Select)">
+				<cxl-option value="a">A</cxl-option>
+				<cxl-option value="b">B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+			</cxl-multiselect>`;
+			const select = a.dom.firstElementChild as MultiSelect;
+			await of(1).raf();
+			const placeholderEl = select.shadowRoot?.querySelector(
+				'.placeholder'
+			) as HTMLElement;
+			a.ok(placeholderEl?.innerText.includes('(Select)'));
+		});
+
+		a.should('handle preselected options', async a => {
+			a.dom.innerHTML = `<cxl-multiselect>
+				<cxl-option value="a" selected>A</cxl-option>
+				<cxl-option value="b" selected>B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+			</cxl-multiselect>`;
+			const select = a.dom.firstElementChild as MultiSelect;
+			a.equalValues(select.value, ['a', 'b']);
+			await of(1).raf();
+			const placeholderEl = select.shadowRoot?.querySelector(
+				'.placeholder'
+			) as HTMLElement;
+			a.ok(placeholderEl?.innerText.includes('A, B'));
 		});
 	});
 
@@ -884,6 +910,29 @@ export default spec('ui', a => {
 			a.equal(c.value, undefined);
 			a.equal(c.indeterminate, true);
 		});
+
+		it.test('[indeterminate] action handling', a => {
+			a.dom.innerHTML = `<cxl-checkbox indeterminate></cxl-checkbox>`;
+			const c = a.dom.children[0] as Checkbox;
+			c.click();
+			a.equal(c.value, false);
+			a.equal(c.checked, false);
+			a.equal(c.indeterminate, false);
+			c.click();
+			a.equal(c.value, true);
+			a.equal(c.checked, true);
+			a.equal(c.indeterminate, false);
+		});
+	});
+
+	a.test('cxl-badge', a => {
+		a.figure(
+			'Badge Positioning',
+			`
+		<cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge>
+		<cxl-button primary>Badge<cxl-badge secondary small></cxl-badge></cxl-button>
+		`
+		);
 	});
 
 	a.test('cxl-tabs', it => {

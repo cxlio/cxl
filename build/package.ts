@@ -17,6 +17,7 @@ export interface Package {
 	files: string[];
 	main: string;
 	bin?: string;
+	keywords?: string[];
 	browser?: string;
 	homepage: string;
 	private: boolean;

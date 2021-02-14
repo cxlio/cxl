@@ -61,12 +61,25 @@ async function getPackageFiles(dir) {
 	return files.map(f => path.resolve(dir, f));
 }
 
+async function getNPMVersion(name) {
+	try {
+		return (
+			await sh(`npm show ${name} version`, {
+				encoding: 'utf8',
+			})
+		).trim();
+	} catch (e) {
+		return;
+	}
+}
+
 async function build() {
 	const stats = await readJson('dist/stats.json');
 	let output = '';
 
 	for (const pkg of stats.packages) {
 		const dir = /\/(.+)/.exec(pkg.name)[1];
+		const npmVersion = await getNPMVersion(pkg.name);
 		const coverage = await getTotalCoverage(dir, pkg.testReport.coverage);
 		const success = coverage > 90;
 		const usedBy = stats.packages.filter(
@@ -76,7 +89,7 @@ async function build() {
 		// parseNpmPack(pkgFiles);
 		output += `<cxl-tr class="${success ? 'success' : 'failure'}">
 				<cxl-td><a href="../docs/${dir}">${pkg.name}</a></cxl-td>
-				<cxl-td>${pkg.package.version}</cxl-td>
+				<cxl-td>${pkg.package.version} (NPM ${npmVersion})</cxl-td>
 				<cxl-td>${usedBy.map(p => p.name).join('<br>')}</cxl-td>
 				<cxl-td>${pkg.buildTime}</cxl-td>
 				<cxl-td><a href="${dir}/test-report.html">${coverage} %</a></cxl-td>

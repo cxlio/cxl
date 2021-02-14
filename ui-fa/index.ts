@@ -1,8 +1,18 @@
-import { Augment, Component, Attribute } from '@cxl/component';
-import { role } from '@cxl/template';
-import { css, registerFont } from '@cxl/css';
-import { getShadow } from '@cxl/dom';
-import { theme } from '@cxl/ui/theme.js';
+///<amd-module name="@cxl/ui-fa"/>
+import { registerFont } from '@cxl/css';
+import { registerIconSet } from '@cxl/ui';
+
+declare module '../css' {
+	interface Typography {
+		fa?: CSSStyle;
+	}
+}
+
+declare module '../ui' {
+	interface Icons {
+		fa: typeof icons;
+	}
+}
 
 const icons = {
 	ad: '\uf641',
@@ -973,8 +983,6 @@ const icons = {
 	'': '',
 };
 
-type IconKey = keyof typeof icons;
-
 registerFont({
 	family: 'Font Awesome\\ 5 Free',
 	url:
@@ -982,78 +990,7 @@ registerFont({
 	weight: '900',
 });
 
-declare module '../css/index.js' {
-	interface Typography {
-		icon?: CSSStyle;
-	}
-}
-
-theme.typography['icon'] = {
+registerIconSet('fa', icons, {
 	fontFamily: 'Font Awesome\\ 5 Free',
 	fontSize: 'inherit',
-};
-
-@Augment(
-	'cxl-icon',
-	role('img'),
-	css({
-		$: {
-			display: 'inline-block',
-			font: 'icon',
-		},
-		$round: {
-			borderRadius: '50%',
-			textAlign: 'center',
-		},
-		$outline: { borderWidth: 1 },
-	})
-)
-export class Icon extends Component {
-	protected $icon: IconKey = '';
-	protected iconNode?: Text;
-
-	@Attribute()
-	get icon() {
-		return this.$icon;
-	}
-
-	set icon(iconName: IconKey) {
-		this.$icon = iconName;
-		const icon = iconName && icons[iconName];
-
-		if (icon) {
-			if (this.iconNode) {
-				this.iconNode.data = icon;
-			} else {
-				this.iconNode = document.createTextNode(icon);
-				getShadow(this).appendChild(this.iconNode);
-			}
-
-			if (!this.hasAttribute('aria-label'))
-				this.setAttribute('aria-label', this.icon);
-		}
-	}
-}
-
-@Augment(
-	'cxl-item-icon',
-	css({
-		$: { marginRight: 16 },
-	})
-)
-export class ItemIcon extends Icon {}
-
-@Augment(
-	css({
-		$: {
-			paddingRight: 8,
-			lineHeight: 20,
-			width: 24,
-			textAlign: 'center',
-		},
-		$trailing: { paddingRight: 0, paddingLeft: 8 },
-	})
-)
-export class FieldIcon extends Icon {
-	static tagName = 'cxl-field-icon';
-}
+});

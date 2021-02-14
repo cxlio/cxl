@@ -425,7 +425,7 @@
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "name": "unknown",
+                    "name": "string",
                     "kind": 32,
                     "flags": 0
                   }
@@ -1124,26 +1124,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`${string} extends ${string} ? ${string} : ${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
@@ -1174,8 +1157,8 @@
             }
           ],
           "type": {
-            "name": "`<cxl-t h6 inline>${string}</cxl-t>`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1207,21 +1190,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`${string}${string} => ${string}`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`${string}${string}(${string}) => ${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
@@ -1252,8 +1223,8 @@
             }
           ],
           "type": {
-            "name": "`${string}: ${string}`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1285,8 +1256,8 @@
             }
           ],
           "type": {
-            "name": "`{ ${string} }`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1385,26 +1356,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "` = ${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
@@ -1435,8 +1389,8 @@
             }
           ],
           "type": {
-            "name": "`${string}: ${string}`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1478,26 +1432,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`(${string})`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
@@ -1529,8 +1466,8 @@
             }
           ],
           "type": {
-            "name": "`<cxl-chip small primary>${string}</cxl-chip> `",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1595,41 +1532,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "` = ${string}`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "` ${string}`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`: ${string}`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "` => ${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
@@ -1693,8 +1598,8 @@
             }
           ],
           "type": {
-            "name": "`[${string}]: ${string}`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1767,8 +1672,8 @@
             }
           ],
           "type": {
-            "name": "`<a name=\"s${number}\"></a>`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
@@ -1800,26 +1705,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`${string}/${string}#L${number}`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "\"#\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
@@ -1850,26 +1738,9 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`<a title=\"See Source\" style=\"float:right;color:var(--cxl-onSurface87)\" href=\"${string}/${string}#L${number}\"><cxl-icon icon=\"code\"></cxl-icon></a>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "\"<a title=\\\"See Source\\\" style=\\\"float:right;color:var(--cxl-onSurface87)\\\" href=\\\"#\\\"><cxl-icon icon=\\\"code\\\"></cxl-icon></a>\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
@@ -1958,7 +1829,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 257,
+            "line": 259,
             "ch": 1
           },
           "kind": 16,
@@ -1974,7 +1845,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 259,
+                "line": 261,
                 "ch": 14
               },
               "kind": 9,
@@ -1991,7 +1862,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 265,
+            "line": 267,
             "ch": 1
           },
           "kind": 16,
@@ -2002,7 +1873,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 267,
+                "line": 269,
                 "ch": 17
               },
               "kind": 9,
@@ -2024,7 +1895,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 269,
+            "line": 271,
             "ch": 1
           },
           "kind": 16,
@@ -2035,7 +1906,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 271,
+                "line": 273,
                 "ch": 16
               },
               "kind": 9,
@@ -2057,7 +1928,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 283,
+            "line": 285,
             "ch": 1
           },
           "kind": 16,
@@ -2068,7 +1939,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 285,
+                "line": 287,
                 "ch": 23
               },
               "kind": 9,
@@ -2091,7 +1962,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 287,
+            "line": 289,
             "ch": 1
           },
           "kind": 16,
@@ -2102,7 +1973,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 289,
+                "line": 291,
                 "ch": 23
               },
               "kind": 9,
@@ -2124,7 +1995,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 310,
+            "line": 312,
             "ch": 1
           },
           "kind": 16,
@@ -2135,7 +2006,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 312,
+                "line": 314,
                 "ch": 29
               },
               "kind": 9,
@@ -2157,7 +2028,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 314,
+            "line": 316,
             "ch": 1
           },
           "kind": 16,
@@ -2168,7 +2039,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 316,
+                "line": 318,
                 "ch": 32
               },
               "kind": 9,
@@ -2190,7 +2061,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 318,
+            "line": 320,
             "ch": 1
           },
           "kind": 16,
@@ -2201,7 +2072,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 320,
+                "line": 322,
                 "ch": 23
               },
               "kind": 9,
@@ -2215,32 +2086,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`<p><cxl-t subtitle2>${string}: ${string}</cxl-t></p>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 326,
+            "line": 328,
             "ch": 1
           },
           "kind": 16,
@@ -2251,7 +2105,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 328,
+                "line": 330,
                 "ch": 20
               },
               "kind": 9,
@@ -2273,7 +2127,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 346,
+            "line": 348,
             "ch": 1
           },
           "kind": 16,
@@ -2284,7 +2138,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 348,
+                "line": 350,
                 "ch": 20
               },
               "kind": 9,
@@ -2298,27 +2152,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`<cxl-card style=\"margin-bottom: 16px\"><cxl-c pad16>\n\t\t${string}${string}\n\t\t</cxl-c></cxl-card>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<a name=\"s${number}\"></a><cxl-card style=\"margin-bottom: 16px\"><cxl-c pad16>\n\t\t${string}${string}\n\t\t</cxl-c></cxl-card>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 354,
+            "line": 356,
             "ch": 1
           },
           "kind": 16,
@@ -2329,7 +2171,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 356,
+                "line": 358,
                 "ch": 20
               },
               "kind": 9,
@@ -2339,7 +2181,7 @@
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 356,
+                  "line": 358,
                   "ch": 32
                 },
                 "kind": 15,
@@ -2353,32 +2195,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-t subtitle2>Extended By</cxl-t><ul>${string}</ul>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 362,
+            "line": 364,
             "ch": 1
           },
           "kind": 16,
@@ -2394,7 +2219,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 364,
+                "line": 366,
                 "ch": 14
               },
               "kind": 9,
@@ -2409,7 +2234,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 364,
+                "line": 366,
                 "ch": 25
               },
               "kind": 9,
@@ -2427,7 +2252,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 379,
+            "line": 381,
             "ch": 1
           },
           "kind": 16,
@@ -2438,7 +2263,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 381,
+                "line": 383,
                 "ch": 21
               },
               "kind": 9,
@@ -2460,7 +2285,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 390,
+            "line": 392,
             "ch": 1
           },
           "kind": 16,
@@ -2471,7 +2296,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 392,
+                "line": 394,
                 "ch": 18
               },
               "kind": 9,
@@ -2486,7 +2311,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 392,
+                "line": 394,
                 "ch": 26
               },
               "kind": 9,
@@ -2508,7 +2333,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 395,
+            "line": 397,
             "ch": 1
           },
           "kind": 16,
@@ -2519,7 +2344,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 397,
+                "line": 399,
                 "ch": 21
               },
               "kind": 9,
@@ -2533,15 +2358,15 @@
             }
           ],
           "type": {
-            "name": "`<cxl-t h3>${string}${string}</cxl-t>`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 410,
+            "line": 412,
             "ch": 1
           },
           "kind": 16,
@@ -2552,7 +2377,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 412,
+                "line": 414,
                 "ch": 22
               },
               "kind": 9,
@@ -2566,27 +2391,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`${any}`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`${any}/${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 417,
+            "line": 419,
             "ch": 1
           },
           "kind": 16,
@@ -2597,7 +2410,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 419,
+                "line": 421,
                 "ch": 25
               },
               "kind": 9,
@@ -2611,32 +2424,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-t h5>Import</cxl-t>${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 428,
+            "line": 430,
             "ch": 1
           },
           "kind": 16,
@@ -2647,7 +2443,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 430,
+                "line": 432,
                 "ch": 25
               },
               "kind": 9,
@@ -2661,27 +2457,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`<cxl-c sm4 xl3> ${string}</cxl-c>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-c sm4 xl3><cxl-chip small primary>${string}</cxl-chip>  ${string}</cxl-c>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 434,
+            "line": 436,
             "ch": 1
           },
           "kind": 16,
@@ -2692,7 +2476,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 436,
+                "line": 438,
                 "ch": 26
               },
               "kind": 9,
@@ -2707,15 +2491,15 @@
             }
           ],
           "type": {
-            "name": "`<cxl-t h6>${string}\n\t\t</cxl-t><cxl-c pad16><cxl-grid>${string}</cxl-grid></cxl-c>`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 439,
+            "line": 441,
             "ch": 1
           },
           "kind": 16,
@@ -2726,7 +2510,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 441,
+                "line": 443,
                 "ch": 25
               },
               "kind": 9,
@@ -2741,33 +2525,16 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-t h5>${string}</cxl-t>${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "id": 141,
           "source": {
             "fileName": "render-html.tsx",
-            "line": 445,
+            "line": 447,
             "ch": 1
           },
           "kind": 4,
@@ -2777,7 +2544,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 447,
+                "line": 449,
                 "ch": 17
               },
               "kind": 10,
@@ -2792,7 +2559,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 448,
+                "line": 450,
                 "ch": 12
               },
               "kind": 10,
@@ -2802,7 +2569,7 @@
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 449,
+                  "line": 451,
                   "ch": 7
                 },
                 "kind": 15,
@@ -2818,7 +2585,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 449,
+                "line": 451,
                 "ch": 17
               },
               "kind": 10,
@@ -2828,7 +2595,7 @@
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 450,
+                  "line": 452,
                   "ch": 6
                 },
                 "kind": 15,
@@ -2846,7 +2613,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 451,
+            "line": 453,
             "ch": 1
           },
           "kind": 16,
@@ -2857,7 +2624,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 453,
+                "line": 455,
                 "ch": 25
               },
               "kind": 9,
@@ -2872,7 +2639,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 453,
+                "line": 455,
                 "ch": 36
               },
               "kind": 9,
@@ -2889,7 +2656,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 453,
+                "line": 455,
                 "ch": 55
               },
               "kind": 9,
@@ -2919,7 +2686,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 489,
+            "line": 491,
             "ch": 1
           },
           "kind": 16,
@@ -2935,7 +2702,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 491,
+                "line": 493,
                 "ch": 25
               },
               "kind": 9,
@@ -2952,7 +2719,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 514,
+            "line": 516,
             "ch": 1
           },
           "kind": 16,
@@ -2963,7 +2730,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 516,
+                "line": 518,
                 "ch": 17
               },
               "kind": 9,
@@ -2977,32 +2744,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-t h5>HTML</cxl-t>${string}`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 520,
+            "line": 522,
             "ch": 1
           },
           "kind": 16,
@@ -3013,7 +2763,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 522,
+                "line": 524,
                 "ch": 17
               },
               "kind": 9,
@@ -3035,7 +2785,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 540,
+            "line": 542,
             "ch": 1
           },
           "kind": 16,
@@ -3046,7 +2796,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 542,
+                "line": 544,
                 "ch": 20
               },
               "kind": 9,
@@ -3068,7 +2818,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 549,
+            "line": 551,
             "ch": 1
           },
           "kind": 16,
@@ -3084,7 +2834,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 551,
+                "line": 553,
                 "ch": 24
               },
               "kind": 9,
@@ -3101,7 +2851,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 563,
+            "line": 565,
             "ch": 1
           },
           "kind": 16,
@@ -3112,7 +2862,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 565,
+                "line": 567,
                 "ch": 27
               },
               "kind": 9,
@@ -3156,7 +2906,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 572,
+            "line": 574,
             "ch": 5
           },
           "kind": 31,
@@ -3184,7 +2934,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 580,
+            "line": 582,
             "ch": 2
           },
           "kind": 16,
@@ -3195,7 +2945,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 582,
+                "line": 584,
                 "ch": 18
               },
               "kind": 9,
@@ -3209,15 +2959,15 @@
             }
           ],
           "type": {
-            "name": "`<cxl-badge style=\"margin-right:12px\">${string}</cxl-badge>`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 588,
+            "line": 590,
             "ch": 1
           },
           "kind": 16,
@@ -3228,7 +2978,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 590,
+                "line": 592,
                 "ch": 22
               },
               "kind": 9,
@@ -3250,7 +3000,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 605,
+            "line": 607,
             "ch": 1
           },
           "kind": 16,
@@ -3261,7 +3011,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 607,
+                "line": 609,
                 "ch": 14
               },
               "kind": 9,
@@ -3277,7 +3027,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 607,
+                "line": 609,
                 "ch": 28
               },
               "kind": 9,
@@ -3293,7 +3043,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 607,
+                "line": 609,
                 "ch": 42
               },
               "kind": 9,
@@ -3308,27 +3058,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`<cxl-router-item href=\"${string}\">${string}</cxl-router-item>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-router-item href=\"${string}\"><cxl-icon style=\"margin-right: 12px\" icon=\"${string}\"></cxl-icon>${string}</cxl-router-item>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 617,
+            "line": 619,
             "ch": 1
           },
           "kind": 16,
@@ -3339,7 +3077,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 619,
+                "line": 621,
                 "ch": 15
               },
               "kind": 9,
@@ -3349,7 +3087,7 @@
               "type": {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 619,
+                  "line": 621,
                   "ch": 20
                 },
                 "kind": 15,
@@ -3372,7 +3110,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 631,
+            "line": 633,
             "ch": 1
           },
           "kind": 16,
@@ -3381,15 +3119,15 @@
           "id": 174,
           "parameters": [],
           "type": {
-            "name": "`${string}<cxl-hr></cxl-hr>`",
-            "kind": 0,
+            "name": "string",
+            "kind": 32,
             "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 635,
+            "line": 637,
             "ch": 1
           },
           "kind": 16,
@@ -3400,7 +3138,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 637,
+                "line": 639,
                 "ch": 27
               },
               "kind": 9,
@@ -3416,7 +3154,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 637,
+                "line": 639,
                 "ch": 42
               },
               "kind": 9,
@@ -3445,7 +3183,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 646,
+            "line": 648,
             "ch": 1
           },
           "kind": 16,
@@ -3454,32 +3192,15 @@
           "id": 178,
           "parameters": [],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"<doc-version-select></doc-version-select>\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "`<small>${string}</small>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 653,
+            "line": 655,
             "ch": 1
           },
           "kind": 16,
@@ -3490,7 +3211,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 655,
+                "line": 657,
                 "ch": 16
               },
               "kind": 9,
@@ -3506,7 +3227,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 655,
+                "line": 657,
                 "ch": 25
               },
               "kind": 9,
@@ -3520,37 +3241,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style=\"margin-right:12px\">${any}</cxl-t><doc-version-select></doc-version-select>\n\t</cxl-c>\n\t\t<cxl-hr></cxl-hr>\n\t\t\t\n\t\t${string}\n\t\t</cxl-navbar>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style=\"margin-right:12px\">${any}</cxl-t><doc-version-select></doc-version-select>\n\t</cxl-c>\n\t\t<cxl-hr></cxl-hr>\n\t\t${string}<cxl-hr></cxl-hr>\t\n\t\t${string}\n\t\t</cxl-navbar>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style=\"margin-right:12px\">${any}</cxl-t><small>${string}</small>\n\t</cxl-c>\n\t\t<cxl-hr></cxl-hr>\n\t\t\t\n\t\t${string}\n\t\t</cxl-navbar>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style=\"margin-right:12px\">${any}</cxl-t><small>${string}</small>\n\t</cxl-c>\n\t\t<cxl-hr></cxl-hr>\n\t\t${string}<cxl-hr></cxl-hr>\t\n\t\t${string}\n\t\t</cxl-navbar>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 664,
+            "line": 666,
             "ch": 1
           },
           "kind": 16,
@@ -3561,7 +3260,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 666,
+                "line": 668,
                 "ch": 22
               },
               "kind": 9,
@@ -3583,7 +3282,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 668,
+            "line": 670,
             "ch": 1
           },
           "kind": 16,
@@ -3594,7 +3293,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 670,
+                "line": 672,
                 "ch": 22
               },
               "kind": 9,
@@ -3616,7 +3315,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 672,
+            "line": 674,
             "ch": 1
           },
           "kind": 16,
@@ -3633,7 +3332,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 682,
+            "line": 684,
             "ch": 1
           },
           "kind": 16,
@@ -3648,7 +3347,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 687,
+                  "line": 689,
                   "ch": 36
                 },
                 "kind": 34,
@@ -3658,7 +3357,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 687,
+                      "line": 689,
                       "ch": 37
                     },
                     "kind": 0,
@@ -3675,7 +3374,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 688,
+                      "line": 690,
                       "ch": 24
                     },
                     "kind": 0,
@@ -3692,7 +3391,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 687,
+                      "line": 689,
                       "ch": 37
                     },
                     "kind": 0,
@@ -3709,7 +3408,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 688,
+                      "line": 690,
                       "ch": 24
                     },
                     "kind": 0,
@@ -3731,7 +3430,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 692,
+            "line": 694,
             "ch": 1
           },
           "kind": 16,
@@ -3742,7 +3441,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 694,
+                "line": 696,
                 "ch": 16
               },
               "kind": 9,
@@ -3756,37 +3455,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`<!DOCTYPE html>\n\t<head><meta name=\"description\" content=\"Documentation for ${any}\" />${string}</head>\n\t<link rel=\"stylesheet\" href=\"styles.css\" />\n\t<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left:...",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<!DOCTYPE html>\n\t<head><meta name=\"description\" content=\"Documentation for ${any}\" />${string}</head>\n\t<link rel=\"stylesheet\" href=\"styles.css\" />\n\t<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left:...",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<!DOCTYPE html>\n\t<head><meta name=\"description\" content=\"Documentation for ${any}\" />${string}</head>\n\t<link rel=\"stylesheet\" href=\"styles.css\" />\n\t<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left:...",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<!DOCTYPE html>\n\t<head><meta name=\"description\" content=\"Documentation for ${any}\" />${string}</head>\n\t<link rel=\"stylesheet\" href=\"styles.css\" />\n\t<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left:...",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 709,
+            "line": 711,
             "ch": 1
           },
           "kind": 16,
@@ -3797,7 +3474,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 711,
+                "line": 713,
                 "ch": 24
               },
               "kind": 9,
@@ -3813,7 +3490,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 711,
+                "line": 713,
                 "ch": 37
               },
               "kind": 9,
@@ -3837,7 +3514,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 713,
+            "line": 715,
             "ch": 1
           },
           "kind": 16,
@@ -3848,7 +3525,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 715,
+                "line": 717,
                 "ch": 21
               },
               "kind": 9,
@@ -3870,7 +3547,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 733,
+            "line": 735,
             "ch": 1
           },
           "kind": 16,
@@ -3881,7 +3558,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 735,
+                "line": 737,
                 "ch": 14
               },
               "kind": 9,
@@ -3897,7 +3574,7 @@
           "type": {
             "source": {
               "fileName": "render-html.tsx",
-              "line": 736,
+              "line": 738,
               "ch": 7
             },
             "kind": 34,
@@ -3907,7 +3584,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 736,
+                  "line": 738,
                   "ch": 9
                 },
                 "kind": 0,
@@ -3924,7 +3601,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 737,
+                  "line": 739,
                   "ch": 23
                 },
                 "kind": 0,
@@ -3940,7 +3617,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 738,
+                  "line": 740,
                   "ch": 10
                 },
                 "kind": 0,
@@ -3957,7 +3634,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 736,
+                  "line": 738,
                   "ch": 9
                 },
                 "kind": 0,
@@ -3974,7 +3651,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 737,
+                  "line": 739,
                   "ch": 23
                 },
                 "kind": 0,
@@ -3990,7 +3667,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 738,
+                  "line": 740,
                   "ch": 10
                 },
                 "kind": 0,
@@ -4010,7 +3687,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 741,
+            "line": 743,
             "ch": 1
           },
           "kind": 16,
@@ -4021,7 +3698,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 743,
+                "line": 745,
                 "ch": 20
               },
               "kind": 9,
@@ -4043,7 +3720,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 753,
+            "line": 755,
             "ch": 1
           },
           "kind": 16,
@@ -4054,7 +3731,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 755,
+                "line": 757,
                 "ch": 16
               },
               "kind": 9,
@@ -4074,7 +3751,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 736,
+                  "line": 738,
                   "ch": 7
                 },
                 "kind": 34,
@@ -4084,7 +3761,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 736,
+                      "line": 738,
                       "ch": 9
                     },
                     "kind": 0,
@@ -4101,7 +3778,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 737,
+                      "line": 739,
                       "ch": 23
                     },
                     "kind": 0,
@@ -4117,7 +3794,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 738,
+                      "line": 740,
                       "ch": 10
                     },
                     "kind": 0,
@@ -4134,7 +3811,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 736,
+                      "line": 738,
                       "ch": 9
                     },
                     "kind": 0,
@@ -4151,7 +3828,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 737,
+                      "line": 739,
                       "ch": 23
                     },
                     "kind": 0,
@@ -4167,7 +3844,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 738,
+                      "line": 740,
                       "ch": 10
                     },
                     "kind": 0,
@@ -4189,7 +3866,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 758,
+            "line": 760,
             "ch": 1
           },
           "kind": 16,
@@ -4200,7 +3877,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 760,
+                "line": 762,
                 "ch": 18
               },
               "kind": 9,
@@ -4223,7 +3900,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 778,
+            "line": 780,
             "ch": 1
           },
           "kind": 16,
@@ -4234,7 +3911,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 780,
+                "line": 782,
                 "ch": 15
               },
               "kind": 9,
@@ -4249,27 +3926,15 @@
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "`<template  data-path=\"${string}\">${string}</template>`",
-                "kind": 0,
-                "flags": 0
-              },
-              {
-                "name": "`<template data-default=\"true\" data-path=\"${string}\">${string}</template>`",
-                "kind": 0,
-                "flags": 0
-              }
-            ]
+            "name": "string",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 784,
+            "line": 786,
             "ch": 1
           },
           "kind": 16,
@@ -4280,7 +3945,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 786,
+                "line": 788,
                 "ch": 25
               },
               "kind": 9,
@@ -4296,7 +3961,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 786,
+                "line": 788,
                 "ch": 38
               },
               "kind": 9,
@@ -4314,7 +3979,7 @@
           "type": {
             "source": {
               "fileName": "render-html.tsx",
-              "line": 788,
+              "line": 790,
               "ch": 7
             },
             "kind": 34,
@@ -4324,7 +3989,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 788,
+                  "line": 790,
                   "ch": 9
                 },
                 "kind": 0,
@@ -4341,7 +4006,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 789,
+                  "line": 791,
                   "ch": 36
                 },
                 "kind": 0,
@@ -4361,7 +4026,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 792,
+            "line": 794,
             "ch": 1
           },
           "kind": 16,
@@ -4372,7 +4037,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 794,
+                "line": 796,
                 "ch": 27
               },
               "kind": 9,
@@ -4393,7 +4058,7 @@
               {
                 "source": {
                   "fileName": "render-html.tsx",
-                  "line": 687,
+                  "line": 689,
                   "ch": 36
                 },
                 "kind": 34,
@@ -4403,7 +4068,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 687,
+                      "line": 689,
                       "ch": 37
                     },
                     "kind": 0,
@@ -4420,7 +4085,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 688,
+                      "line": 690,
                       "ch": 24
                     },
                     "kind": 0,
@@ -4437,7 +4102,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 687,
+                      "line": 689,
                       "ch": 37
                     },
                     "kind": 0,
@@ -4454,7 +4119,7 @@
                   {
                     "source": {
                       "fileName": "render-html.tsx",
-                      "line": 688,
+                      "line": 690,
                       "ch": 24
                     },
                     "kind": 0,
@@ -4476,7 +4141,7 @@
         {
           "source": {
             "fileName": "render-html.tsx",
-            "line": 810,
+            "line": 812,
             "ch": 1
           },
           "kind": 16,
@@ -4486,7 +4151,7 @@
           "type": {
             "source": {
               "fileName": "render-html.tsx",
-              "line": 812,
+              "line": 814,
               "ch": 52
             },
             "kind": 15,
@@ -4502,7 +4167,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 812,
+                "line": 814,
                 "ch": 23
               },
               "kind": 9,
@@ -4518,7 +4183,7 @@
             {
               "source": {
                 "fileName": "render-html.tsx",
-                "line": 812,
+                "line": 814,
                 "ch": 35
               },
               "kind": 9,

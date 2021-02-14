@@ -104,7 +104,7 @@ export function mkdirp(dir: string): Promise<any> {
 }
 
 export function sh(cmd: string, options: SpawnOptions = {}) {
-	return new Promise((resolve, reject) => {
+	return new Promise<string>((resolve, reject) => {
 		const proc = spawn(cmd, [], { shell: true, ...options });
 		let output = '';
 		proc.stdout?.on('data', data => (output += data?.toString() || ''));

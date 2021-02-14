@@ -33,19 +33,21 @@ const colStyles = ((r: any) => {
 function persistWithParameter(prefix: string) {
 	return operator<AttributeEvent<any>>(() => {
 		let lastAttr: string;
-		return ({ value, target }) => {
-			if (value === undefined) {
-				if (target.hasAttribute(lastAttr))
-					target.removeAttribute(lastAttr);
-			} else {
-				const attr = `${prefix}${value}`;
+		return {
+			next({ value, target }) {
+				if (value === undefined) {
+					if (target.hasAttribute(lastAttr))
+						target.removeAttribute(lastAttr);
+				} else {
+					const attr = `${prefix}${value}`;
 
-				if (lastAttr !== attr) {
-					target.removeAttribute(lastAttr);
-					target.setAttribute(attr, '');
-					lastAttr = attr;
+					if (lastAttr !== attr) {
+						target.removeAttribute(lastAttr);
+						target.setAttribute(attr, '');
+						lastAttr = attr;
+					}
 				}
-			}
+			},
 		};
 	});
 }
@@ -247,6 +249,7 @@ export class Content extends Component {
 			overflowScrolling: 'touch',
 			backgroundColor: 'surface',
 			color: 'onSurface',
+			height: '100%',
 		},
 		container: { ...margin(16) },
 		'@medium': { container: margin(32) },
@@ -308,6 +311,8 @@ export class Card extends C {
 }
 
 /**
+ * The Material Design responsive layout grid is an overarching guide to the placement of components and elements.
+ * The responsive layout grid adapts to screen sizes and orientation, ensuring consistency across layouts.
  * @example
  * <cxl-grid columns="auto auto auto" style="color:#fff">
  *   <cxl-c style="background:#a00; padding: 24px">1</cxl-c>

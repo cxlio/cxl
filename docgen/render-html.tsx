@@ -242,6 +242,8 @@ function SourceLink({ source }: Node) {
 }
 
 function Code(source: string, language?: string) {
+	if (language === 'demo') return Demo({ value: source });
+
 	return (
 		'<pre><code class="hljs">' +
 		(language

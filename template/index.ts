@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/template"/>
 import {
 	AttributeObserver,
 	findNextNode,
@@ -19,7 +20,7 @@ import {
 	tap,
 } from '@cxl/rx';
 import { Bindable, NativeChildren, dom } from '@cxl/tsx';
-import { Styles, StyleSheet, render as renderCSS, css } from '@cxl/css';
+import { Styles, render as renderCSS, css } from '@cxl/css';
 import {
 	Component,
 	attributeChanged,
@@ -67,7 +68,7 @@ export function getAttribute<T extends Node, K extends keyof T>(
 }
 
 export function triggerEvent<R>(element: EventTarget, event: string) {
-	return tap<R>((val: R) => trigger(element, event, val));
+	return tap<R>(trigger.bind(null, element, event));
 }
 
 export function setAttribute(el: Element, attribute: string) {
@@ -528,7 +529,7 @@ export const StateStyles = {
 	$disabled: DisabledStyles,
 };
 
-const stateStyles = new StyleSheet({ styles: StateStyles });
+const stateStyles = css(StateStyles);
 
 const disabledCss = css({ $disabled: DisabledStyles });
 
@@ -552,29 +553,35 @@ export function focusDelegate<T extends FocusableComponent>(
  */
 export function Focusable(host: Bindable) {
 	host.bind(focusable(host as FocusableComponent));
-	return stateStyles.clone();
+	return stateStyles();
 }
 
-export function registable<T extends Component>(host: T, id: string) {
-	return new Observable(() => {
-		const detail: any = {};
+export function registable<T extends Component, ControllerT>(
+	host: T,
+	id: string,
+	controller?: ControllerT
+) {
+	return new Observable<never>(() => {
+		const detail: any = { controller };
 		trigger(host, id + '.register', detail);
 		return () => detail.unsubscribe?.();
 	});
 }
 
-export function registableHost<TargetT extends EventTarget>(
+export function registableHost<ControllerT>(
 	host: EventTarget,
 	id: string,
-	elements = new Set<TargetT>()
+	elements = new Set<ControllerT>()
 ) {
-	return new Observable<Set<TargetT>>(subs => {
+	return new Observable<Set<ControllerT>>(subs => {
 		function register(ev: CustomEvent) {
 			if (ev.target) {
-				elements.add(ev.target as TargetT);
+				const detail = ev.detail;
+				const target = (detail.controller || ev.target) as ControllerT;
+				elements.add(target);
 				subs.next(elements);
 				ev.detail.unsubscribe = () => {
-					elements.delete(ev.target as TargetT);
+					elements.delete(target);
 					subs.next(elements);
 				};
 			}
@@ -603,7 +610,6 @@ interface SelectableHost<T> extends Element {
 interface SelectableMultiHost<T> extends Element {
 	value: any;
 	options?: Set<T>;
-	selected?: Set<T>;
 }
 
 export function selectableHostMultiple<TargetT extends SelectableTarget>(
@@ -699,4 +705,34 @@ export function head(...nodes: Node[]) {
 		const head = host.ownerDocument?.head || document.head;
 		nodes.forEach(child => head.appendChild(child));
 	};
+}
+
+interface CheckedComponent extends Component {
+	value: any;
+	checked: boolean;
+}
+
+export function checkedBehavior<T extends CheckedComponent>(
+	host: T,
+	update: () => void
+) {
+	let first = true;
+	return merge(
+		get(host, 'value').tap(val => {
+			if (first) {
+				if (val === true) host.checked = true;
+				first = false;
+			} else host.checked = val === true;
+		}),
+		get(host, 'checked').pipe(ariaChecked(host)).tap(update)
+	);
+}
+
+export function stopChildEvents(target: EventTarget, event: string) {
+	return on(target, event).tap(ev => {
+		if (ev.target !== target) {
+			ev.stopPropagation();
+			ev.stopImmediatePropagation();
+		}
+	});
 }

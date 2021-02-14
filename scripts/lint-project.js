@@ -137,6 +137,11 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	const oldPackage = JSON.stringify(pkg, null, '\t');
 	const testScript = `npm run build && cd ../dist/${dir} && node ../tester`;
 
+	const tsconfigBundle = await readJson(
+		`${projectPath}/tsconfig.bundle.json`
+	);
+	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.min.js';
+
 	if (!pkg.name === `${rootPkg.name}${dir}`)
 		pkg.name = `${rootPkg.name}${dir}`;
 	if (!pkg.scripts) pkg.scripts = {};
@@ -148,7 +153,7 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
 	if (pkg.devDependencies) delete pkg.devDependencies;
 	if (pkg.peerDependencies) delete pkg.peerDependencies;
-	if (pkg.browser) pkg.browser = 'amd/index.min.js';
+	if (pkg.browser) pkg.browser = browser;
 
 	if (!pkg.scripts.test.startsWith(testScript)) {
 		const testerArgs =
@@ -161,10 +166,35 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
 }
 
-function lintPackage({ pkg, dir, rootPkg }) {
+async function lintTsconfigBundle({ projectPath, pkg }) {
+	const tsconfig = await readJson(`${projectPath}/tsconfig.bundle.json`);
+
+	if (!tsconfig)
+		return {
+			id: 'tsconfig.bundle',
+			rules: [],
+		};
+
+	return {
+		id: 'tsconfig.bundle',
+		rules: [
+			rule(
+				!pkg.browser || pkg.browser === 'index.bundle.min.js',
+				`Package "browser" property should use minified bundle version`
+			),
+		],
+	};
+}
+
+async function lintPackage({ projectPath, pkg, dir, rootPkg }) {
 	const rules = requiredPackageFields.map(field =>
 		rule(field in pkg, `Field "${field}" required in package.json`)
 	);
+
+	const tsconfigBundle = await readJson(
+		`${projectPath}/tsconfig.bundle.json`
+	);
+	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.min.js';
 
 	if (pkg.scripts)
 		rules.push(
@@ -195,7 +225,7 @@ function lintPackage({ pkg, dir, rootPkg }) {
 			`Package should not have peerDependencies.`
 		),
 		rule(
-			!pkg.browser || pkg.browser === 'amd/index.min.js',
+			!pkg.browser || pkg.browser === browser,
 			`Package "browser" property should use minified amd version`
 		),
 		rule(
@@ -316,7 +346,7 @@ async function fixTsconfigAmd({ projectPath, baseDir, dir, pkg }) {
 		tsconfig.compilerOptions.module = 'amd';
 	if (tsconfig.compilerOptions.outDir !== outDir)
 		tsconfig.compilerOptions.outDir = outDir;
-	if (!tsconfig.files) tsconfig.files = baseTsconfig.files;
+	tsconfig.files = baseTsconfig.files;
 
 	tsconfig.references = baseTsconfig.references?.map(ref => {
 		const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
@@ -421,6 +451,7 @@ const linters = [
 	lintTsconfig,
 	lintImports,
 	lintTsconfigAmd,
+	lintTsconfigBundle,
 ];
 
 async function verifyProject(dir, rootPkg) {

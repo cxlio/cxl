@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/dom"/>
 import {
 	BehaviorSubject,
 	Observable,

@@ -55,6 +55,7 @@
           "flags": 1,
           "id": 3,
           "type": {
+            "id": 3,
             "name": "Record",
             "kind": 6,
             "typeParameters": [
@@ -476,6 +477,7 @@
             }
           ],
           "type": {
+            "id": 22,
             "name": "Parameters",
             "kind": 6,
             "typeParameters": [
@@ -1648,6 +1650,7 @@
                   "flags": 0,
                   "id": 96,
                   "type": {
+                    "id": 3,
                     "name": "Measurements",
                     "kind": 6
                   }

@@ -83,6 +83,10 @@
 				"files": ["ui/*.tsx", "ui/build.js", "ui/*.html"],
 				"tasks": "cd ui && npm run build"
 			},
+			"ui-table": {
+				"files": ["ui-table/*.tsx", "ui-table/*.html"],
+				"tasks": "npm run build --prefix ui-table"
+			},
 			"server": {
 				"files": ["server/*.ts", "server/build.js"],
 				"tasks": "npm run build --prefix server"

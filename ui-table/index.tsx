@@ -1,39 +1,131 @@
-import { border, css } from '@cxl/css';
-import { ariaProp, triggerEvent, registable, role } from '@cxl/template';
+import { border, css, padding, margin } from '@cxl/css';
+import {
+	each,
+	triggerEvent,
+	registable,
+	registableHost,
+	role,
+	selectable,
+	stopChildEvents,
+} from '@cxl/template';
 import {
 	Component,
 	Augment,
 	Attribute,
 	StyleAttribute,
+	attributeChanged,
 	bind,
 	get,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
-import { tap } from '@cxl/rx';
-import { on, onAction } from '@cxl/dom';
-import '@cxl/ui/theme.js';
-import { T, Span } from '@cxl/ui/core.js';
+import { EMPTY, Observable, merge } from '@cxl/rx';
+import { on, onAction, trigger } from '@cxl/dom';
+import type {} from '@cxl/ui/theme.js';
+import { Icon, IconButton } from '@cxl/ui/icon.js';
+import { T, Toolbar } from '@cxl/ui/core.js';
 import { Checkbox } from '@cxl/ui/checkbox.js';
+import { Option, SelectBox } from '@cxl/ui/select.js';
+import { Field } from '@cxl/ui/field.js';
+
+type DatasetController = (action: DataAction) => any[];
+type DataEvent = 'filter' | 'sort' | 'slice' | 'update' | 'select';
+
+interface SortableElement extends Component {
+	sortable: boolean | 'numeric';
+	sort: 'asc' | 'desc' | 'none';
+	field?: string;
+}
+
+interface DataAction<T extends Component = Component> {
+	type: DataEvent;
+	target: T;
+	value: any;
+	state: any;
+}
+
+declare module '@cxl/template' {
+	function registable<T extends Component>(
+		host: T,
+		id: 'dataset',
+		controller: DatasetController
+	): Observable<any>;
+}
+
+type SortFunction = (a: any, b: any, dir: 1 | -1) => number;
+
+function textSort(a: string, b: string, dir = 1) {
+	return String(a).localeCompare(b) * dir;
+}
+
+function numericSort(a: number, b: number, dir = 1) {
+	return a === b ? 0 : a > b ? dir : -dir;
+}
+
+function datasetSortable($: SortableElement) {
+	return registable($, 'dataset', (ev: DataAction) => {
+		if (ev.type === 'update') {
+			if (
+				ev.value &&
+				ev.value.detail === 'sortable' &&
+				ev.value.target !== $ &&
+				$.sort !== 'none'
+			)
+				$.sort = 'none';
+			else if ($.sort !== 'none')
+				ev.state.sort = { field: $.field, sort: $.sort };
+		} else if (ev.type === 'sort' && $.sort !== 'none') {
+			const field = $.field;
+			const dir = $.sort === 'asc' ? 1 : -1;
+			const algo = ($.sortable === 'numeric'
+				? numericSort
+				: textSort) as SortFunction;
+			ev.value = (ev.value as any[]).sort(
+				field
+					? (a, b) => algo(a[field], b[field], dir)
+					: (a, b) => algo(a, b, dir)
+			);
+		}
+	});
+}
 
 function onHeaderAction(el: Th) {
-	return onAction(el).tap(() => {
-		const sort = el['sort-order'];
-		el['sort-order'] =
-			sort === 'asc' ? 'desc' : sort === 'desc' ? 'none' : 'asc';
-	});
+	return get(el, 'sortable').switchMap(isSortable =>
+		isSortable
+			? merge(
+					datasetSortable(el),
+					onAction(el).tap(() => {
+						const sort = el.sort;
+						el.sort =
+							sort === 'asc'
+								? 'desc'
+								: sort === 'desc'
+								? 'none'
+								: 'asc';
+					})
+			  )
+			: EMPTY
+	);
 }
 
 function onSort(el: HTMLElement, host: Th) {
 	let lastClass: string;
-	return get(host, 'sort-order').pipe(
-		tap(sortOrder => {
-			if (lastClass) el.classList.remove(lastClass);
-			lastClass = sortOrder;
-			el.classList.add(sortOrder);
-		}),
-		triggerEvent(el, 'datatable.sort')
-	);
+	return get(host, 'sort').tap(sortOrder => {
+		if (lastClass) el.classList.remove(lastClass);
+		lastClass = sortOrder;
+		el.classList.add(sortOrder);
+
+		if (!host.field) return;
+
+		trigger(
+			host,
+			'dataset.update',
+			host.sort === 'none' ? 'sortable.reset' : 'sortable'
+		);
+	});
 }
+
+@Augment<SortIcon>()
+export class SortIcon extends Component {}
 
 @Augment<Th>(
 	'cxl-th',
@@ -41,28 +133,29 @@ function onSort(el: HTMLElement, host: Th) {
 	css({
 		$: {
 			display: 'table-cell',
-			flexGrow: 1,
+			font: 'subtitle2',
 			color: 'headerText',
-			paddingTop: 12,
-			paddingBottom: 12,
-			paddingLeft: 16,
-			paddingRight: 16,
+			...padding(6, 16, 6, 16),
 			...border(0, 0, 1, 0),
+			lineHeight: 44,
 			borderStyle: 'solid',
 			borderColor: 'divider',
-			lineHeight: 24,
 			whiteSpace: 'nowrap',
 		},
 		sortIcon: {
 			display: 'none',
-			marginLeft: -18,
-			marginRight: 8,
+			font: 'h6',
+			lineHeight: 20,
+			marginLeft: 8,
 			scaleY: 0,
 			scaleX: 0,
+			transformOrigin: 'center',
+			verticalAlign: 'middle',
 		},
 		$sortable: { cursor: 'pointer' },
 		$sortable$hover: { color: 'onSurface' },
 		sortIcon$sortable: { display: 'inline-block' },
+		none$sortable$hover: { scaleX: 1, scaleY: 1, opacity: 0.3 },
 		asc: { rotate: 0, scaleX: 1, scaleY: 1 },
 		desc: {
 			rotate: 180,
@@ -73,27 +166,30 @@ function onSort(el: HTMLElement, host: Th) {
 	$ => (
 		<>
 			<slot />
-			<Span $={el => onSort(el, $)} className="sortIcon">
-				{'\u25BC'}
-			</Span>
+			<Icon
+				icon="arrow_upward"
+				$={el => onSort(el, $)}
+				className="sortIcon"
+			/>
 		</>
 	)
 )
 export class Th extends Component {
-	eventType?: 'datatable.sort';
-
 	@Attribute()
 	width?: number;
 
 	@StyleAttribute()
-	sortable = false;
+	sortable: boolean | 'numeric' = false;
 
 	@Attribute()
-	'sort-order': 'asc' | 'desc' | 'none' = 'none';
+	sort: 'asc' | 'desc' | 'none' = 'none';
+
+	@Attribute()
+	field?: string;
 }
 
 /**
- * Data tables display sets of data across rows and columns.
+ * Tables display sets of data across rows and columns.
  * @example
 <cxl-table>
 	<cxl-tr>
@@ -118,7 +214,7 @@ export class Th extends Component {
 		$: {
 			display: 'block',
 			width: '100%',
-			font: 'default',
+			font: 'body2',
 			overflowX: 'auto',
 			...border(1, 1, 0, 1),
 			borderStyle: 'solid',
@@ -136,104 +232,142 @@ export class Table extends Component {}
 	css({
 		$: {
 			display: 'table-cell',
-			paddingTop: 12,
-			paddingBottom: 12,
-			paddingLeft: 16,
-			paddingRight: 16,
+			...padding(6, 16, 6, 16),
+			lineHeight: 40,
 			flexGrow: 1,
 			...border(0, 0, 1, 0),
 			borderStyle: 'solid',
 			borderColor: 'divider',
 		},
+		$right: { textAlign: 'right' },
 		$primary: { backgroundColor: 'primary', color: 'onPrimary' },
 		$secondary: { backgroundColor: 'secondary', color: 'onSecondary' },
 	})
 )
-class Cell extends Component {}
+class Cell extends Component {
+	@StyleAttribute()
+	right = false;
+}
 
 @Augment('cxl-td', () => <slot />)
 export class Td extends Cell {}
 
-@Augment<CheckboxCell>(
-	css({
-		$: { width: 48 },
-		checkbox: { paddingTop: 0, paddingBottom: 0 },
-	}),
-	bind(host =>
-		get(host, 'checked').pipe(
-			ariaProp(host, 'checked'),
-			triggerEvent(host, 'change'),
-			triggerEvent(host, host.selectEvent)
-		)
-	),
-	host => (
-		<>
-			<Checkbox
-				$={el =>
-					on(el, 'change').tap(() => (host.checked = el.checked))
-				}
-				checked={get(host, 'checked')}
-				className="checkbox"
-			/>
-			<slot />
-		</>
-	)
+@Augment<TableSelectAll>(
+	'cxl-table-select-all',
+	$ =>
+		registable($, 'dataset', ev => {
+			if (ev.type === 'select' && ev.value === 'select') {
+				const dataset = ev.target as Dataset;
+				let count = 0;
+				dataset.selectable.forEach((r: any) => r.selected && count++);
+				$.indeterminate =
+					count > 0 && count !== dataset.selectable.size;
+				if (!$.indeterminate) $.checked = count > 0;
+			}
+		}),
+	$ =>
+		on($, 'change').tap(() => {
+			if ($.value !== undefined)
+				trigger(
+					$,
+					'dataset.select',
+					$.checked ? 'select.all' : 'select.none'
+				);
+		})
 )
-export class CheckboxCell extends Cell {
-	readonly selectEvent: string = 'datatable.select';
-
-	@Attribute()
-	checked = false;
-}
-
-@Augment<CheckboxTd>(
-	'cxl-td-checkbox',
-	bind(host => registable(host, 'datatable.checkbox'))
-)
-export class CheckboxTd extends CheckboxCell {}
-
-@Augment<CheckboxTh>(
-	'cxl-th-checkbox',
-	bind(host => registable(host, 'datatable.checkboxAll'))
-)
-export class CheckboxTh extends CheckboxCell {
-	readonly selectEvent = 'datatable.selectAll';
-}
+export class TableSelectAll extends Checkbox {}
 
 @Augment<Tr>(
 	'cxl-tr',
 	role('row'),
-	bind(host =>
-		on(host, 'datatable.select').tap(
-			ev => (host.selected = (ev.target as CheckboxCell)?.checked)
-		)
-	),
+	css({
+		$: { display: 'table-row' },
+	}),
+
+	_ => <slot />
+)
+export class Tr extends Component {}
+
+@Augment<TrSelectable>(
+	'cxl-tr-selectable',
+	role('row'),
 	css({
 		$: { display: 'table-row' },
 		$selected: { backgroundColor: 'primaryLight' },
+		$hover: { backgroundColor: 'onSurface8' },
+		$selected$hover: { backgroundColor: 'primaryLight' },
+		cell: { width: 48 },
 	}),
-	_ => <slot />
+	$ => selectable($),
+	$ =>
+		registable($, 'dataset', ev => {
+			if (ev.type === 'update')
+				$.selected = (ev.target as Dataset).selected.has($.value);
+			else if (ev.type === 'select') {
+				if (ev.value === 'select.all') $.selected = true;
+				else if (ev.value === 'select.none') $.selected = false;
+			}
+		}),
+	$ => {
+		if ($.selected) trigger($, 'dataset.select', 'select');
+		return attributeChanged($, 'selected').tap(() =>
+			trigger($, 'dataset.select', 'select')
+		);
+	},
+	//$ => attributeChanged($, 'value').pipe(triggerEvent($, 'change')),
+	$ => (
+		<>
+			<Td
+				$={el => on(el, 'click').tap(() => ($.selected = !$.selected))}
+				className="cell"
+			>
+				<Checkbox
+					$={el =>
+						merge(
+							on(el, 'change').tap(
+								() => ($.selected = el.checked)
+							),
+							on(el, 'click').tap(ev => ev.stopPropagation())
+						)
+					}
+					checked={get($, 'selected')}
+				/>
+			</Td>
+			<slot />
+		</>
+	)
 )
-export class Tr extends Component {
+export class TrSelectable extends Component {
 	@StyleAttribute()
 	selected = false;
+
+	@Attribute()
+	value: any;
 }
 
 @Augment(
-	'cxl-table-header',
+	'cxl-tbody',
+	css({
+		$: { display: 'table-row-group' },
+	}),
+	() => <slot />
+)
+export class TableBody extends Component {}
+
+@Augment(
+	'cxl-table-toolbar',
 	css({
 		$: {
-			font: 'h6',
-			lineHeight: 36,
-			paddingTop: 16,
-			paddingBottom: 16,
-			paddingLeft: 16,
-			paddingRight: 16,
+			...border(1, 1, 0, 1),
+			...padding(6, 16, 6, 16),
+			lineHeight: 44,
+			borderStyle: 'solid',
+			borderColor: 'divider',
 		},
 	}),
 	_ => <slot />
 )
-export class TableHeader extends Component {}
+export class TableToolbar extends Toolbar {}
 
 @Augment<TableSelectedCount>(
 	css({
@@ -254,3 +388,195 @@ export class TableSelectedCount extends Component {
 	@Attribute()
 	selected: any;
 }
+
+export function getPageCount(total: number, rows: number) {
+	if (total === 0 || rows === 0) return 0;
+	return Math.floor(total / rows) + (total % rows === 0 ? -1 : 0);
+}
+
+@Augment<TablePagination>(
+	'cxl-table-pagination',
+	css({
+		$: {
+			display: 'block',
+			font: 'body2',
+			textAlign: 'right',
+			...border(0, 1, 1, 1),
+			...padding(6, 16, 6, 16),
+			lineHeight: 44,
+			borderStyle: 'solid',
+			borderColor: 'divider',
+		},
+		rows: {
+			display: 'inline-block',
+			...margin(0, 24, 0, 16),
+			width: 64,
+			verticalAlign: 'middle',
+		},
+		nav: {
+			display: 'inline-block',
+			marginLeft: 32,
+		},
+	}),
+	$ =>
+		registable($, 'dataset', action => {
+			if (action.type === 'update') {
+				action.state.slice = { page: $.page, rows: $.rows };
+			} else if (action.type === 'slice') {
+				const data = action.value;
+				const start = $.page * $.rows;
+				($ as any).total = data.length;
+				action.value = data.slice(start, start + $.rows);
+			}
+		}),
+	$ =>
+		get($, 'page').tap(val => {
+			const max = getPageCount($.total, $.rows);
+			if (val < 0) $.page = 0;
+			else if (val > max) $.page = max;
+		}),
+	$ =>
+		merge(get($, 'page'), get($, 'rows')).tap(() =>
+			trigger($, 'dataset.update')
+		),
+	$ => (
+		<$.Shadow>
+			Rows per page:
+			<Field className="rows" outline dense>
+				<SelectBox value={get($, 'rows')}>
+					{each(get($, 'options'), op => (
+						<Option value={op}>{op.toString()}</Option>
+					))}
+				</SelectBox>
+			</Field>
+			{merge(get($, 'page'), get($, 'rows'), get($, 'total')).map(() => {
+				const start = $.page * $.rows;
+				const end = start + $.rows;
+				return `${start + 1}-${end > $.total ? $.total : end} of ${
+					$.total
+				}`;
+			})}
+			<nav className="nav">
+				<IconButton
+					icon="first_page"
+					$={el => onAction(el).tap(() => $.goFirst())}
+				/>
+				<IconButton
+					icon="chevron_left"
+					$={el => onAction(el).tap(() => $.goPrevious())}
+				/>
+				<IconButton
+					icon="chevron_right"
+					$={el => onAction(el).tap(() => $.goNext())}
+				/>
+				<IconButton
+					icon="last_page"
+					$={el => onAction(el).tap(() => $.goLast())}
+				/>
+			</nav>
+		</$.Shadow>
+	)
+)
+export class TablePagination extends Component {
+	@Attribute()
+	rows = 5;
+
+	@Attribute()
+	options = [5, 10, 25, 50];
+
+	@Attribute()
+	page = 0;
+
+	@Attribute()
+	readonly total = 0;
+
+	goFirst() {
+		this.page = 0;
+	}
+	goNext() {
+		this.page += 1;
+	}
+	goPrevious() {
+		this.page -= 1;
+	}
+	goLast() {
+		this.page = getPageCount(this.total, this.rows);
+	}
+}
+
+@Augment<Dataset>('cxl-dataset', $ => {
+	const elements = new Set<DatasetController>();
+	let state: any = {};
+
+	function dispatch(action: DataAction<any>) {
+		elements.forEach(e => e(action));
+		return action.value;
+	}
+
+	function onAction(ev?: CustomEvent) {
+		const value = ev;
+		const newState = {};
+		dispatch({ type: 'update', value, target: $, state: newState });
+		state = newState;
+	}
+
+	function update() {
+		if ($.update) return $.update(state);
+
+		const value: any[] = $.source.slice(0);
+		const action: DataAction<any> = {
+			type: 'filter',
+			target: $,
+			value,
+			state,
+		};
+
+		elements.forEach(e => e(action));
+		action.type = 'sort';
+		elements.forEach(e => e(action));
+		action.type = 'slice';
+		elements.forEach(e => e(action));
+
+		$.value = action.value;
+	}
+
+	return merge(
+		stopChildEvents($, 'change'),
+		merge(get($, 'source'), on($, 'dataset.update').tap(onAction)).raf(
+			update
+		),
+		registableHost<any>($, 'selectable', $.selectable),
+		registableHost<DatasetController>($, 'dataset', elements).raf(() =>
+			onAction()
+		),
+		on($, 'dataset.select')
+			.tap(ev => {
+				const el = ev.target as any;
+				$.selected[el.selected ? 'add' : 'delete'](el.value);
+			})
+			.raf(ev =>
+				dispatch({ type: 'select', value: ev.detail, target: $, state })
+			),
+		attributeChanged($, 'value').pipe(triggerEvent($, 'change'))
+	);
+})
+export class Dataset extends Component {
+	@Attribute()
+	source: any[] = [];
+
+	@Attribute()
+	value: any[] = [];
+
+	readonly selectable = new Set<any>();
+
+	readonly selected = new Set<any>();
+
+	update?: (state: any) => any[];
+}
+
+@Augment<DataTable>('cxl-datatable', _ => (
+	<Table>
+		<slot />
+	</Table>
+))
+export class DataTable extends Dataset {}

@@ -9,10 +9,41 @@ import {
 	registerComponent,
 } from './index';
 import { dom } from '@cxl/tsx';
-import { be, of, tap } from '@cxl/rx';
+import { be, observable, of, tap } from '@cxl/rx';
 import { spec } from '@cxl/spec';
 
 export default spec('component', a => {
+	a.test('Component', a => {
+		a.should('prioritize internal bindings', a => {
+			let order = 0;
+			const id = 'cxl-test' + a.id;
+			@Augment(
+				id,
+				() => observable(() => a.equal(order++, 0)),
+				() => observable(() => a.equal(order++, 1))
+			)
+			class Test extends Component {}
+
+			const el = (
+				<Test $={observable(() => a.equal(order++, 2))} />
+			) as Test;
+			el.bind(observable(() => a.equal(order++, 3)));
+			a.dom.appendChild(el);
+			a.equal((el as any).$$bindings.bindings.length, 4);
+			a.equal((el as any).$$bindings.subscriptions.length, 4);
+
+			order = 0;
+
+			const el2 = (
+				<Test $={observable(() => a.equal(order++, 2))} />
+			) as Test;
+			el2.bind(observable(() => a.equal(order++, 3)));
+			a.dom.appendChild(el2);
+			a.equal((el2 as any).$$bindings.bindings.length, 4);
+			a.equal((el2 as any).$$bindings.subscriptions.length, 4);
+		});
+	});
+
 	a.test('Component - empty', a => {
 		class TestComponent extends Component {
 			static tagName = 'div';

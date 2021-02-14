@@ -2,7 +2,6 @@
 	"extends": "../tsconfig.json",
 	"ignore": true,
 	"compilerOptions": {
-		"bundledPackageName": "@cxl/docgen-runtime",
 		"outDir": "../dist/docgen",
 		"outFile": "../dist/docgen/runtime.bundle.js",
 		"rootDir": "..",
@@ -20,7 +19,6 @@
 		"../ui/theme.tsx",
 		"../ui-fa/index.tsx",
 		"../ui/layout.tsx",
-		"../ui-fa/index.ts",
 		"../ui/dialog.tsx",
 		"../ui/navigation.tsx",
 		"../ui-table/index.tsx",
@@ -28,6 +26,8 @@
 		"../ui/checkbox.tsx",
 		"../ui-router/index.tsx",
 		"../ui/select.tsx",
+		"../ui/icon.tsx",
+		"../ui/field.tsx",
 		"runtime.tsx"
 	],
 	"references": [

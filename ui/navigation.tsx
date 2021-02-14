@@ -20,7 +20,8 @@ import {
 import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
-import { IconButton, Span, Svg, ripple } from './core.js';
+import { Span, ripple } from './core.js';
+import { IconButton } from './icon.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -58,6 +59,7 @@ import { Drawer } from './dialog.js';
 			...InversePrimary,
 			backgroundColor: 'surface',
 			flexShrink: 0,
+			textAlign: 'left',
 			color: 'onSurface',
 			elevation: 2,
 		},
@@ -124,16 +126,12 @@ import { Drawer } from './dialog.js';
 			</div>
 			<div className="flex contextual">
 				<IconButton
+					icon="arrow_back"
 					className="back"
 					$={el =>
 						onAction(el).tap(() => (host.contextual = undefined))
 					}
-				>
-					<Svg
-						viewBox="0 0 24 24"
-						height={24}
-					>{`<path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>`}</Svg>
-				</IconButton>
+				/>
 				<div className="grow">
 					<host.Slot selector="cxl-appbar-contextual" />
 				</div>
@@ -330,17 +328,13 @@ export class Tabs extends Component {
 	selected?: Tab;
 }
 
-function MenuIcon() {
-	return (
-		<Svg
-			viewBox="0 0 24 24"
-			width={24}
-		>{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
-	);
-}
-
 /**
  * Navigation drawers provide access to destinations in your app.
+ * @demo
+ * <cxl-appbar>
+ *   <cxl-navbar></cxl-navbar>
+ *   <cxl-appbar-title>Appbar with Title</cxl-appbar-title>
+ * </cxl-appbar>
  */
 @Augment<Navbar>(
 	'cxl-navbar',
@@ -365,6 +359,7 @@ function MenuIcon() {
 	host => (
 		<>
 			<IconButton
+				icon="menu"
 				$={el =>
 					onAction(el).tap(() => {
 						if (host.drawer)
@@ -372,9 +367,7 @@ function MenuIcon() {
 					})
 				}
 				className="toggler"
-			>
-				<MenuIcon />
-			</IconButton>
+			/>
 			<Drawer
 				className="drawer"
 				$={el => ((host.drawer = el), EMPTY)}
@@ -466,6 +459,12 @@ export class Item extends Component {
 
 /**
  * Lists are continuous, vertical indexes of text or images.
+ * @demo
+ * <cxl-list>
+ *   <cxl-item><cxl-avatar></cxl-avatar> One Line Item</cxl-item>
+ *   <cxl-item><cxl-avatar></cxl-avatar> One Line Item</cxl-item>
+ *   <cxl-item><cxl-avatar></cxl-avatar> One Line Item</cxl-item>
+ * </cxl-list>
  */
 @Augment<List>(
 	'cxl-list',

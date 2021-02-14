@@ -1,5 +1,6 @@
+///<amd-module name="@cxl/css"/>
 type StyleDefinition = Partial<StrictStyleDefinition>;
-type BaseColor = RGBA;
+export type BaseColor = RGBA;
 
 export type CSSStyle = {
 	[P in keyof CSSStyleDeclaration]?: string | number;
@@ -15,25 +16,7 @@ export interface Typography {
 export type Variables = Record<string, string | { toString(): string }>;
 
 export interface Colors {
-	elevation: BaseColor;
-	primary: BaseColor;
-	primaryLight: BaseColor;
-	secondary: BaseColor;
 	surface: BaseColor;
-	error: BaseColor;
-	errorLight: BaseColor;
-	onPrimary: BaseColor;
-	onPrimaryLight: BaseColor;
-	onSecondary: BaseColor;
-	onSurface: BaseColor;
-	onSurface8: BaseColor;
-	onSurface12: BaseColor;
-	onSurface87: BaseColor;
-	onError: BaseColor;
-	background: BaseColor;
-	link: BaseColor;
-	headerText: BaseColor;
-	divider: BaseColor;
 }
 
 export type VariableList = Colors & Variables;
@@ -60,6 +43,8 @@ interface StrictStyleDefinition {
 	translateZ: Length;
 	gap: Length;
 	gridColumnEnd: string;
+	gridAutoFlow: 'column';
+	gridTemplateColumns: string;
 	prepend: string;
 	rotate: number;
 	scaleX: number;
@@ -103,6 +88,8 @@ interface StrictStyleDefinition {
 		| 'flex'
 		| 'grid'
 		| 'table-row'
+		| 'table-caption'
+		| 'table-row-group'
 		| 'table-cell'
 		| 'contents'
 		| 'none'
@@ -117,6 +104,8 @@ interface StrictStyleDefinition {
 	height: Length;
 	minHeight: Length;
 	minWidth: Length;
+	maxHeight: Length;
+	maxWidth: Length;
 	variables: Partial<VariableList>;
 	verticalAlign:
 		| 'top'
@@ -151,12 +140,6 @@ export type Styles =
 			'@xlarge'?: Styles;
 	  };
 
-export interface StyleSheetConfiguration {
-	tagName?: string;
-	global?: boolean;
-	styles: Styles;
-}
-
 export interface Breakpoints {
 	small: number;
 	large: number;
@@ -179,7 +162,7 @@ export interface Theme {
 	typography: Typography;
 	variables: Variables;
 	breakpoints: Breakpoints;
-	globalStyles: Styles;
+	globalStyles?: Styles;
 	imports?: string[];
 }
 
@@ -279,7 +262,20 @@ const SNAKE_CSS: Record<string, string> = {
 	},
 	SNAKE_REGEX = /[A-Z]/g;
 
-let theme: Theme;
+export const theme: any = {
+	animation: {},
+	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
+	variables: {},
+	typography: {
+		default: {
+			fontWeight: 400,
+			fontFamily: 'var(--cxl-font)',
+			fontSize: 'var(--cxl-font-size)',
+			letterSpacing: 'normal',
+		},
+	},
+	colors: { surface: rgba(0, 0, 0) },
+};
 
 type StyleMap = {
 	[key: string]: (
@@ -469,7 +465,6 @@ export function setTheme(newTheme: Theme) {
 
 	rootStyles.innerHTML = result + '}';
 	document.head.appendChild(rootStyles);
-	theme = newTheme;
 }
 
 function renderStyles(styles: Styles, selector = 'body') {
@@ -511,39 +506,13 @@ function renderRule(
 	)}}`;
 }
 
-export class StyleSheet {
-	selector: string;
-	styles: Styles;
-	global: boolean;
-
-	private native?: Element;
-
-	constructor(config: StyleSheetConfiguration) {
-		this.styles = config.styles;
-		this.global = config.global || false;
-		this.selector = config.tagName || (config.global ? 'body' : ':host');
-	}
-
-	clone() {
-		const native = this.native || this.render();
-		return native.cloneNode(true);
-	}
-
-	cloneTo(parent: DocumentFragment | Element) {
-		parent.appendChild(this.clone());
-	}
-
-	private render() {
-		return (this.native = render(this.styles, this.selector, this.global));
-	}
-}
-
 export function render(styles: Styles, selector = ':host', global = false) {
 	const result = document.createElement('style');
 
 	result.textContent =
-		(global ? '' : renderStyles(theme.globalStyles, selector)) +
-		renderStyles(styles, selector);
+		(!global && theme.globalStyles
+			? renderStyles(theme.globalStyles, selector)
+			: '') + renderStyles(styles, selector);
 
 	return result;
 }

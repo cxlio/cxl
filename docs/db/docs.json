@@ -336,6 +336,7 @@
             }
           ],
           "type": {
+            "id": 15,
             "name": "ListEvent",
             "kind": 6,
             "typeParameters": [
@@ -596,25 +597,14 @@
             "kind": 6,
             "typeParameters": [
               {
-                "name": "ListEvent",
+                "id": 15,
+                "name": "CollectionEvent",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 2,
-                    "name": "Reference",
-                    "kind": 6,
-                    "typeParameters": [
-                      {
-                        "id": 24,
-                        "name": "T",
-                        "kind": 6
-                      }
-                    ]
-                  },
-                  {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
+                    "id": 24,
+                    "name": "T",
+                    "kind": 6
                   }
                 ]
               }
@@ -734,25 +724,14 @@
             "kind": 6,
             "typeParameters": [
               {
-                "name": "ListEvent",
+                "id": 15,
+                "name": "CollectionEvent",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 2,
-                    "name": "Reference",
-                    "kind": 6,
-                    "typeParameters": [
-                      {
-                        "id": 35,
-                        "name": "T",
-                        "kind": 6
-                      }
-                    ]
-                  },
-                  {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
+                    "id": 35,
+                    "name": "T",
+                    "kind": 6
                   }
                 ]
               }
@@ -846,25 +825,14 @@
             "kind": 6,
             "typeParameters": [
               {
-                "name": "ListEvent",
+                "id": 15,
+                "name": "CollectionEvent",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 2,
-                    "name": "Reference",
-                    "kind": 6,
-                    "typeParameters": [
-                      {
-                        "id": 39,
-                        "name": "T2",
-                        "kind": 6
-                      }
-                    ]
-                  },
-                  {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
+                    "id": 39,
+                    "name": "T2",
+                    "kind": 6
                   }
                 ]
               }
@@ -958,25 +926,14 @@
             "kind": 6,
             "typeParameters": [
               {
-                "name": "ListEvent",
+                "id": 15,
+                "name": "CollectionEvent",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 2,
-                    "name": "Reference",
-                    "kind": 6,
-                    "typeParameters": [
-                      {
-                        "id": 44,
-                        "name": "T2",
-                        "kind": 6
-                      }
-                    ]
-                  },
-                  {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
+                    "id": 44,
+                    "name": "T2",
+                    "kind": 6
                   }
                 ]
               }
@@ -1362,25 +1319,14 @@
             "kind": 6,
             "typeParameters": [
               {
-                "name": "ListEvent",
+                "id": 15,
+                "name": "CollectionEvent",
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 2,
-                    "name": "Reference",
-                    "kind": 6,
-                    "typeParameters": [
-                      {
-                        "id": 60,
-                        "name": "T",
-                        "kind": 6
-                      }
-                    ]
-                  },
-                  {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
+                    "id": 60,
+                    "name": "T",
+                    "kind": 6
                   }
                 ]
               }

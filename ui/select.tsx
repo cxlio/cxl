@@ -26,7 +26,6 @@ import { Svg } from './core.js';
 @Augment<Option>(
 	'cxl-option',
 	role('option'),
-	bind(selectable),
 	bind(host => get(host, 'value').pipe(triggerEvent(host, 'change'))),
 	css({
 		$: {
@@ -81,7 +80,8 @@ import { Svg } from './core.js';
 				<slot />
 			</div>
 		</>
-	)
+	),
+	bind(selectable)
 )
 export class Option extends Component {
 	private $value?: string;

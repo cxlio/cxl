@@ -139,6 +139,7 @@
           "flags": 0,
           "id": 8,
           "type": {
+            "id": 8,
             "name": "Record",
             "kind": 6,
             "typeParameters": [
@@ -1070,26 +1071,16 @@
                   "flags": 0,
                   "id": 60,
                   "type": {
+                    "id": 8,
                     "name": "Dictionary",
                     "kind": 6
                   }
                 }
               ],
               "type": {
-                "name": "Record",
-                "kind": 6,
-                "typeParameters": [
-                  {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  },
-                  {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                ]
+                "id": 8,
+                "name": "Dictionary",
+                "kind": 6
               }
             },
             {
@@ -1131,20 +1122,9 @@
                     "flags": 0
                   },
                   {
-                    "name": "Record",
-                    "kind": 6,
-                    "typeParameters": [
-                      {
-                        "name": "string",
-                        "kind": 32,
-                        "flags": 0
-                      },
-                      {
-                        "name": "string",
-                        "kind": 32,
-                        "flags": 0
-                      }
-                    ]
+                    "id": 8,
+                    "name": "Dictionary",
+                    "kind": 6
                   }
                 ]
               }

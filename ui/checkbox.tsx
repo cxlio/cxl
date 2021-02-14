@@ -1,7 +1,7 @@
+///<amd-module name="@cxl/ui/checkbox.js"/>
 import { dom } from '@cxl/tsx';
 import {
 	Augment,
-	Component,
 	StyleAttribute,
 	bind,
 	get,
@@ -11,28 +11,7 @@ import { Svg } from './core.js';
 import { merge } from '@cxl/rx';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
-import { Focusable, Style, ariaChecked, role } from '@cxl/template';
-
-interface CheckedComponent extends Component {
-	value: any;
-	checked: boolean;
-}
-
-export function checkedBehavior<T extends CheckedComponent>(
-	host: T,
-	update: () => void
-) {
-	let first = true;
-	return merge(
-		get(host, 'value').tap(val => {
-			if (first) {
-				if (val === true) host.checked = true;
-				first = false;
-			} else host.checked = val === true;
-		}),
-		get(host, 'checked').pipe(ariaChecked(host)).tap(update)
-	);
-}
+import { Focusable, Style, checkedBehavior, role } from '@cxl/template';
 
 /**
  * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.
@@ -40,7 +19,6 @@ export function checkedBehavior<T extends CheckedComponent>(
  * <cxl-checkbox>Checkbox Label</cxl-checkbox>
  * <cxl-checkbox checked>Checkbox Label</cxl-checkbox>
  * <cxl-checkbox indeterminate>Checkbox Indeterminate</cxl-checkbox>
- * <cxl-checkbox indeterminate checked>Checkbox Checked Indeterminate</cxl-checkbox>
  */
 @Augment<Checkbox>(
 	'cxl-checkbox',
@@ -78,6 +56,7 @@ export function checkedBehavior<T extends CheckedComponent>(
 						display: 'block',
 						paddingLeft: 36,
 						lineHeight: 20,
+						textAlign: 'left',
 					},
 					$inline: { display: 'inline-block' },
 					$invalid$touched: { color: 'error' },
