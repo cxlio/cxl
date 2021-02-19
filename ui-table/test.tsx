@@ -2,14 +2,16 @@ import { spec } from '@cxl/spec';
 import {
 	Dataset,
 	DataTable,
-	Th,
 	TablePagination,
+	Th,
+	Tr,
 	getPageCount,
 	TrSelectable,
 	TableSelectAll,
+	TableSource,
+	datasetRegistable,
 } from './index.js';
 import { dom } from '@cxl/tsx';
-import { registable } from '@cxl/template';
 import { get } from '@cxl/component';
 import { animationFrame } from '@cxl/dom';
 
@@ -33,7 +35,7 @@ export default spec('ui-table', s => {
 			const dataset = (<Dataset source={source} />) as Dataset;
 			a.dom.appendChild(dataset);
 
-			registable(dataset, 'dataset', action => {
+			datasetRegistable(dataset, action => {
 				if (action.type !== 'update')
 					a.equalValues(action.value, source);
 				if (action.type === 'slice') done();
@@ -183,6 +185,46 @@ export default spec('ui-table', s => {
 			a.equal(pagination.page, 0);
 			a.equal(dataset.value.length, 10);
 		});
+
+		it.should('update rows displayed if value changed', async a => {
+			const source = Array(100).map((_, i) => i);
+			const dataset = (
+				<Dataset source={source}>
+					<TablePagination />
+				</Dataset>
+			) as Dataset;
+			const pagination = dataset.children[0] as TablePagination;
+			a.dom.appendChild(dataset);
+			await animationFrame.first();
+			a.equal(pagination.rows, 5);
+			pagination.rows = 25;
+			await animationFrame.first();
+			a.equal(pagination.rows, 25);
+			a.equal(dataset.value.length, 25);
+		});
+
+		it.should(
+			'update rows displayed if value is changed from select box',
+			async a => {
+				const source = Array(100).map((_, i) => i);
+				const dataset = (
+					<Dataset source={source}>
+						<TablePagination />
+					</Dataset>
+				) as Dataset;
+				const pagination = dataset.children[0] as TablePagination;
+				a.dom.appendChild(dataset);
+				const select = pagination.shadowRoot?.querySelector(
+					'cxl-select'
+				) as any;
+				await animationFrame.first();
+				a.equal(pagination.rows, 5);
+				select.value = 25;
+				await animationFrame.first();
+				a.equal(pagination.rows, 25);
+				a.equal(dataset.value.length, 25);
+			}
+		);
 	});
 
 	s.test('TrSelectable', it => {
@@ -229,7 +271,6 @@ export default spec('ui-table', s => {
 					<TrSelectable value={source[1]} />
 				</DataTable>
 			) as DataTable;
-			// const selectAll = table.children[0] as TrSelectableAll;
 			const tr = table.children[0] as TrSelectable;
 			a.dom.appendChild(table);
 			a.equal(table.selected.size, 0);
@@ -248,6 +289,19 @@ export default spec('ui-table', s => {
 	});
 
 	s.test('Th', it => {
+		it.should('toggle between sortable states', a => {
+			const el = (<Th sortable />) as Th;
+			a.dom.appendChild(el);
+
+			a.equal(el.sort, 'none');
+			el.click();
+			a.equal(el.sort, 'asc');
+			el.click();
+			a.equal(el.sort, 'desc');
+			el.click();
+			a.equal(el.sort, 'none');
+		});
+
 		it.should('sync up with other Th', a => {
 			const done = a.async();
 			let event = 0;
@@ -313,6 +367,27 @@ export default spec('ui-table', s => {
 			const th1 = dataset.children[1] as Th;
 
 			a.dom.appendChild(dataset);
+		});
+	});
+
+	s.test('TableSource', it => {
+		const source = [
+			{ name: 'one', order: 1 },
+			{ name: 'two', order: 2 },
+			{ name: 'three', order: 3 },
+		];
+		it.should('set the dataset source based on its children', a => {
+			const dataset = (
+				<Dataset>
+					<TableSource>
+						<Tr value={source[0]}></Tr>
+						<Tr value={source[1]}></Tr>
+						<Tr value={source[2]}></Tr>
+					</TableSource>
+				</Dataset>
+			) as Dataset;
+			a.dom.appendChild(dataset);
+			a.equalValues(dataset.source, source);
 		});
 	});
 });

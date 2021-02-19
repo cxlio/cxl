@@ -28,6 +28,12 @@ import {
 	staticTemplate,
 } from '@cxl/component';
 
+declare global {
+	interface HTMLElement {
+		ariaLabel: string | null;
+	}
+}
+
 interface ElementWithValue<T> extends HTMLElement {
 	value: T;
 }

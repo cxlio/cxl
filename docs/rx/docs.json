@@ -5833,14 +5833,14 @@
           },
           "kind": 16,
           "name": "operatorNext",
-          "flags": 0,
+          "flags": 1,
           "id": 290,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 399,
-                "ch": 22
+                "ch": 29
               },
               "kind": 3,
               "name": "T",
@@ -5851,7 +5851,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 399,
-                "ch": 24
+                "ch": 31
               },
               "kind": 3,
               "name": "T2",
@@ -5865,7 +5865,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 399,
-                "ch": 33
+                "ch": 40
               },
               "kind": 9,
               "name": "fn",
@@ -9710,14 +9710,14 @@
           },
           "kind": 4,
           "name": "InsertEvent",
-          "flags": 0,
+          "flags": 1,
           "id": 424,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 1046,
-                "ch": 22
+                "ch": 29
               },
               "kind": 3,
               "name": "T",
@@ -9728,7 +9728,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 1046,
-                "ch": 24
+                "ch": 31
               },
               "kind": 3,
               "name": "K",
@@ -9741,7 +9741,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 1046,
-                "ch": 29
+                "ch": 36
               },
               "kind": 10,
               "name": "type",
@@ -9800,14 +9800,14 @@
           },
           "kind": 4,
           "name": "RemoveEvent",
-          "flags": 0,
+          "flags": 1,
           "id": 430,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 1052,
-                "ch": 22
+                "ch": 29
               },
               "kind": 3,
               "name": "K",
@@ -9820,7 +9820,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 1052,
-                "ch": 26
+                "ch": 33
               },
               "kind": 10,
               "name": "type",
@@ -9863,14 +9863,14 @@
           },
           "kind": 4,
           "name": "EmptyEvent",
-          "flags": 0,
+          "flags": 1,
           "id": 434,
           "children": [
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 1057,
-                "ch": 22
+                "ch": 29
               },
               "kind": 10,
               "name": "type",

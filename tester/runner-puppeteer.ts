@@ -179,11 +179,6 @@ function screenshot(page: Page, domId: string) {
 				.then(buffer => {
 					buffer ? resolve(buffer) : reject();
 				});
-			/*.then(() =>
-					page.$eval(id, el => {
-						(el as any).style.zIndex = 0;
-					})
-				);*/
 		});
 	});
 }
@@ -201,7 +196,7 @@ async function handleFigureRequest(
 
 	if (!figureReady) {
 		await page
-			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 500 })
+			.waitForNavigation({ waitUntil: 'load', timeout: 500 })
 			.catch(() => 1);
 		figureReady = true;
 	}
@@ -210,6 +205,11 @@ async function handleFigureRequest(
 		readFile(baseline).catch(() => undefined),
 		screenshot(page, domId),
 	]);
+
+	if (buffer)
+		mkdir('spec')
+			.catch(() => false)
+			.then(() => writeFile(filename, buffer));
 
 	if ((!original || app.updateBaselines) && buffer && app.baselinePath) {
 		mkdir(app.baselinePath)
@@ -227,11 +227,6 @@ async function handleFigureRequest(
 			if (originalData.readUInt8(i) !== newData.readUInt8(i)) return 0;
 		}
 	}
-
-	if (buffer)
-		mkdir('spec')
-			.catch(() => false)
-			.then(() => writeFile(filename, buffer));
 
 	return 1;
 }

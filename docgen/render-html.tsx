@@ -598,11 +598,12 @@ function ModuleNavbar(node: Node) {
 		`${Item(`<i>${moduleName}</i>`, href)}` +
 		(node.children
 			?.sort(sortNode)
-			.map(c =>
-				declarationFilter(c) && !(c.flags & Flags.Overload)
-					? Item(`${NodeIcon(c)}${c.name}`, getHref(c))
-					: ''
-			)
+			.map(c => {
+				if (declarationFilter(c) && !(c.flags & Flags.Overload)) {
+					const href = getHref(c);
+					return href ? Item(`${NodeIcon(c)}${c.name}`, href) : '';
+				} else return '';
+			})
 			.join('') || '')
 	);
 }

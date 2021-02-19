@@ -122,10 +122,3 @@ export class IconButton extends ButtonBase {
 	@Attribute()
 	icon: IconKey = '';
 }
-
-theme.imports?.push(`https://fonts.googleapis.com/icon?family=Material+Icons`);
-/*theme.imports?.push(
-	`https://fonts.googleapis.com/icon?family=Material+Icons&text=${Object.values(
-		defaultIconSet
-	).join('')}`
-);*/

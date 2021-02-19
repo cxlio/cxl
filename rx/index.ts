@@ -397,7 +397,7 @@ export function toPromise<T>(observable: Observable<T>) {
 	});
 }
 
-function operatorNext<T, T2 = T>(
+export function operatorNext<T, T2 = T>(
 	fn: (subs: Subscriber<T2>) => NextFunction<T>,
 	destroy?: () => void
 ) {
@@ -1044,18 +1044,18 @@ export interface Observable<T> {
 	tap(tapFn: (val: T) => void): Observable<T>;
 }
 
-interface InsertEvent<T, K> {
+export interface InsertEvent<T, K> {
 	type: 'insert';
 	item: T;
 	key: K;
 }
 
-interface RemoveEvent<K> {
+export interface RemoveEvent<K> {
 	type: 'remove';
 	key: K;
 }
 
-interface EmptyEvent {
+export interface EmptyEvent {
 	type: 'empty';
 }
 

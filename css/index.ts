@@ -448,25 +448,6 @@ function parseRuleName(selector: string, name: string) {
 
 const rootStyles = document.createElement('STYLE');
 
-export function setTheme(newTheme: Theme) {
-	const { variables, colors, imports } = newTheme;
-
-	let result = '';
-	if (imports) imports.forEach(imp => (result += `@import url("${imp}");`));
-
-	result += ':root{';
-
-	for (const i in colors)
-		result += `--cxl-${toSnake(i)}:${
-			(colors as any)[i]
-		};--cxl-base-${toSnake(i)}:${(colors as any)[i]};`;
-	for (const i in variables)
-		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
-
-	rootStyles.innerHTML = result + '}';
-	document.head.appendChild(rootStyles);
-}
-
 function renderStyles(styles: Styles, selector = 'body') {
 	let css = '';
 
@@ -576,4 +557,23 @@ export function rgba(r: number, g: number, b: number, a?: number) {
 
 export function baseColor(name: keyof Colors) {
 	return `var(--cxl-base-${toSnake(name)})`;
+}
+
+export function applyTheme() {
+	const { variables, colors, imports } = theme as Theme;
+
+	let result = '';
+	if (imports) imports.forEach(imp => (result += `@import url("${imp}");`));
+
+	result += ':root{';
+
+	for (const i in colors)
+		result += `--cxl-${toSnake(i)}:${
+			(colors as any)[i]
+		};--cxl-base-${toSnake(i)}:${(colors as any)[i]};`;
+	for (const i in variables)
+		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
+
+	rootStyles.innerHTML = result + '}';
+	document.head.appendChild(rootStyles);
 }

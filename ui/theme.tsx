@@ -1,5 +1,6 @@
 ///<amd-module name="@cxl/ui/theme.js"/>
-import { Colors, baseColor, rgba, theme } from '@cxl/css';
+import { Colors, applyTheme, baseColor, rgba, theme } from '@cxl/css';
+
 export { theme } from '@cxl/css';
 
 declare module '../css/index.js' {
@@ -133,7 +134,7 @@ Object.assign(theme.typography, {
 	h4: { fontSize: '34px', letterSpacing: '0.25px' },
 	h5: { fontSize: '24px' },
 	h6: { fontSize: '20px', fontWeight: 500, letterSpacing: '0.15px' },
-	body2: { fontSize: '14px', letterSpacing: '0.25px' },
+	body2: { fontSize: '14px', letterSpacing: '0.25px', lineHeight: '20px' },
 	subtitle: {
 		letterSpacing: '0.15px',
 	},
@@ -208,6 +209,7 @@ Object.assign(theme.colors, {
 Object.assign(theme, {
 	imports: [
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap',
+		'https://fonts.googleapis.com/icon?family=Material+Icons',
 	],
 
 	globalStyles: {
@@ -257,3 +259,5 @@ export const DarkColors: Partial<Colors> = {
 	onPrimary: rgba(0, 0, 0),
 	onSecondary: rgba(0, 0, 0),
 };
+
+applyTheme();

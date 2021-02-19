@@ -46,7 +46,6 @@ export type NativeChildren = NativeChild | NativeChild[];
 export type NativeType<T> = {
 	[K in keyof Omit<T, 'children'>]?: T[K];
 } & {
-	//	$?: (el: T) => void;
 	children?: NativeChildren;
 };
 

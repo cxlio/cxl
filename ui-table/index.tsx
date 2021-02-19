@@ -1,5 +1,6 @@
 import { border, css, padding, margin } from '@cxl/css';
 import {
+	aria,
 	each,
 	triggerEvent,
 	registable,
@@ -19,7 +20,7 @@ import {
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
 import { EMPTY, merge } from '@cxl/rx';
-import { on, onAction, trigger } from '@cxl/dom';
+import { on, onAction, onChildrenMutation, trigger } from '@cxl/dom';
 import type {} from '@cxl/ui/theme.js';
 import { Icon, IconButton } from '@cxl/ui/icon.js';
 import { T, Toolbar } from '@cxl/ui/core.js';
@@ -28,7 +29,7 @@ import { Option, SelectBox } from '@cxl/ui/select.js';
 import { Field } from '@cxl/ui/field.js';
 
 type DatasetController = (action: DataAction) => void;
-type DataEvent = 'filter' | 'sort' | 'slice' | 'update' | 'select';
+type DataEvent = 'filter' | 'sort' | 'slice' | 'update' | 'select' | 'render';
 
 interface SortableElement extends Component {
 	sortable: boolean | 'numeric';
@@ -128,15 +129,16 @@ export class SortIcon extends Component {}
 
 @Augment<Th>(
 	'cxl-th',
+	role('columnheader'),
 	bind(onHeaderAction),
 	css({
 		$: {
 			display: 'table-cell',
 			font: 'subtitle2',
 			color: 'headerText',
-			...padding(6, 16, 6, 16),
+			...padding(16),
 			...border(0, 0, 1, 0),
-			lineHeight: 44,
+			lineHeight: 24,
 			borderStyle: 'solid',
 			borderColor: 'divider',
 			whiteSpace: 'nowrap',
@@ -227,12 +229,12 @@ export class Th extends Component {
 export class Table extends Component {}
 
 @Augment(
-	role('table-cell'),
+	role('cell'),
 	css({
 		$: {
 			display: 'table-cell',
-			...padding(6, 16, 6, 16),
-			lineHeight: 40,
+			...padding(16),
+			lineHeight: 20,
 			flexGrow: 1,
 			...border(0, 0, 1, 0),
 			borderStyle: 'solid',
@@ -253,6 +255,7 @@ export class Td extends Cell {}
 
 @Augment<TableSelectAll>(
 	'cxl-table-select-all',
+	aria('label', 'Select All'),
 	$ =>
 		datasetRegistable($, ev => {
 			if (ev.type === 'select' && ev.value === 'select') {
@@ -282,10 +285,12 @@ export class TableSelectAll extends Checkbox {}
 	css({
 		$: { display: 'table-row' },
 	}),
-
 	_ => <slot />
 )
-export class Tr extends Component {}
+export class Tr extends Component {
+	@Attribute()
+	value?: any;
+}
 
 @Augment<TrSelectable>(
 	'cxl-tr-selectable',
@@ -295,7 +300,7 @@ export class Tr extends Component {}
 		$selected: { backgroundColor: 'primaryLight' },
 		$hover: { backgroundColor: 'onSurface8' },
 		$selected$hover: { backgroundColor: 'primaryLight' },
-		cell: { width: 48 },
+		cell: { width: 48, lineHeight: 0, verticalAlign: 'bottom' },
 	}),
 	$ => selectable($),
 	$ =>
@@ -313,7 +318,6 @@ export class Tr extends Component {}
 			trigger($, 'dataset.select', 'select')
 		);
 	},
-	//$ => attributeChanged($, 'value').pipe(triggerEvent($, 'change')),
 	$ => (
 		<>
 			<Td
@@ -329,6 +333,7 @@ export class Tr extends Component {}
 							on(el, 'click').tap(ev => ev.stopPropagation())
 						)
 					}
+					ariaLabel="Select Row"
 					checked={get($, 'selected')}
 				/>
 			</Td>
@@ -346,6 +351,7 @@ export class TrSelectable extends Component {
 
 @Augment(
 	'cxl-tbody',
+	role('rowgroup'),
 	css({
 		$: { display: 'table-row-group' },
 	}),
@@ -399,7 +405,7 @@ export function getPageCount(total: number, rows: number) {
 		$: {
 			display: 'block',
 			font: 'body2',
-			textAlign: 'right',
+			textAlign: 'center',
 			...border(0, 1, 1, 1),
 			...padding(6, 16, 6, 16),
 			lineHeight: 44,
@@ -412,9 +418,14 @@ export function getPageCount(total: number, rows: number) {
 			width: 64,
 			verticalAlign: 'middle',
 		},
-		nav: {
-			display: 'inline-block',
-			marginLeft: 32,
+		'@small': {
+			$: {
+				textAlign: 'right',
+			},
+			nav: {
+				display: 'inline-block',
+				marginLeft: 32,
+			},
 		},
 	}),
 	$ =>
@@ -442,7 +453,11 @@ export function getPageCount(total: number, rows: number) {
 		<$.Shadow>
 			Rows per page:
 			<Field className="rows" outline dense>
-				<SelectBox value={get($, 'rows')}>
+				<SelectBox
+					$={el => on(el, 'change').tap(() => ($.rows = el.value))}
+					ariaLabel="Rows per Page"
+					value={get($, 'rows')}
+				>
 					{each(get($, 'options'), op => (
 						<Option value={op}>{op.toString()}</Option>
 					))}
@@ -535,6 +550,8 @@ export class TablePagination extends Component {
 		elements.forEach(e => e(action));
 		action.type = 'slice';
 		elements.forEach(e => e(action));
+		action.type = 'render';
+		elements.forEach(e => e(action));
 
 		$.value = action.value;
 	}
@@ -574,8 +591,61 @@ export class Dataset extends Component {
 }
 
 @Augment<DataTable>('cxl-datatable', _ => (
-	<Table>
-		<slot />
-	</Table>
+	<>
+		<slot name="header" />
+		<Table>
+			<slot />
+		</Table>
+		<slot name="footer" />
+	</>
 ))
 export class DataTable extends Dataset {}
+
+@Augment<TableSource>(
+	'cxl-table-source',
+	role('rowgroup'),
+	css({
+		$: { display: 'table-row-group' },
+	}),
+	$ => {
+		function createSlots(len: number) {
+			const slots = $.shadowRoot!.querySelectorAll('slot');
+			let slotCount = slots.length;
+			if (slotCount > len)
+				while (slotCount-- > len) slots[slotCount].remove();
+			else if (slotCount < len)
+				while (slotCount < len) {
+					const el = <slot name={`row${slotCount++}`} />;
+					$.shadowRoot?.appendChild(el);
+				}
+		}
+
+		return merge(
+			datasetRegistable($, action => {
+				if (
+					action.type === 'update' &&
+					action.value?.detail === 'table-source.update'
+				) {
+					const source: any[] = [];
+					for (const child of $.children as any)
+						if (child.value !== undefined) source.push(child.value);
+
+					(action.target as Dataset).source = source;
+				} else if (action.type === 'render') {
+					createSlots(action.value.length);
+
+					for (const child of $.children) {
+						const index = action.value.indexOf(
+							(child as any).value
+						);
+						child.slot = index === -1 ? '' : `row${index}`;
+					}
+				}
+			}),
+			onChildrenMutation($).tap(() => {
+				trigger($, 'dataset.update', 'table-source.update');
+			})
+		);
+	}
+)
+export class TableSource extends Component {}

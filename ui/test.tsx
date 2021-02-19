@@ -930,6 +930,7 @@ export default spec('ui', a => {
 			'Badge Positioning',
 			`
 		<cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge>
+		<br/>
 		<cxl-button primary>Badge<cxl-badge secondary small></cxl-badge></cxl-button>
 		`
 		);

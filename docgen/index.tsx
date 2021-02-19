@@ -107,15 +107,22 @@ export class DocGen extends Application {
 			summary.render(this, json).map(f => this.writeFile(f));
 		}
 
-		await Promise.all(theme.render(this, json).map(f => this.writeFile(f)));
-		await this.writeFile({
-			name: 'styles.css',
-			content: await fs.readFile(STYLES_CSS, 'utf8'),
-		});
-		await this.writeFile({
-			name: 'runtime.bundle.min.js',
-			content: await fs.readFile(RUNTIME_JS, 'utf8'),
-		});
+		try {
+			await Promise.all(
+				theme.render(this, json).map(f => this.writeFile(f))
+			);
+			await this.writeFile({
+				name: 'styles.css',
+				content: await fs.readFile(STYLES_CSS, 'utf8'),
+			});
+			await this.writeFile({
+				name: 'runtime.bundle.min.js',
+				content: await fs.readFile(RUNTIME_JS, 'utf8'),
+			});
+		} catch (e) {
+			console.error(e);
+			process.exitCode = 1;
+		}
 	}
 }
 

@@ -12,10 +12,10 @@ import {
 } from '@cxl/component';
 import { dom, expression } from '@cxl/tsx';
 import { EMPTY, merge, tap } from '@cxl/rx';
-import { border, css, padding, pct, setTheme } from '@cxl/css';
+import { border, css, padding, pct } from '@cxl/css';
 import { Focusable, head, role } from '@cxl/template';
 import { on, onAction, remove, trigger } from '@cxl/dom';
-import { InversePrimary, ResetSurface, theme } from './theme.js';
+import { InversePrimary, ResetSurface } from './theme.js';
 
 export { Span } from '@cxl/component';
 

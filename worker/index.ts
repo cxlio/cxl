@@ -1,4 +1,4 @@
-import { Observable, Subject, Subscriber, operator } from '@cxl/rx';
+import { Observable, Subject, Subscriber, operatorNext } from '@cxl/rx';
 
 declare const process: any;
 
@@ -57,7 +57,7 @@ export class WorkerManager {
 
 	request<ResponseT, MessageT>(payload: MessageT): Observable<ResponseT> {
 		return this.subject.pipe(
-			operator(subs => {
+			operatorNext(subs => {
 				if (this.refCount++ === 0) this.connect();
 				const id = this.id++;
 

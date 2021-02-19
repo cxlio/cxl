@@ -246,6 +246,7 @@ export class TestApi {
 				style.overflowX = 'hidden';
 				style.top = style.left = '0';
 				style.width = '320px';
+				style.backgroundColor = 'white';
 
 				const data: any = {
 					type: 'figure',
