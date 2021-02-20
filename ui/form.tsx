@@ -216,7 +216,8 @@ export class Label extends Component {}
 		$: {
 			display: 'block',
 			lineHeight: 12,
-			paddingTop: 8,
+			marginTop: 8,
+			marginBottom: 8,
 			font: 'caption',
 			verticalAlign: 'bottom',
 		},
@@ -305,8 +306,7 @@ export class FieldCounter extends Component {
 				ev.preventDefault();
 			})
 		)
-	),
-	Slot
+	)
 )
 export class Form extends Component {
 	@Attribute()
@@ -383,8 +383,7 @@ function ContentEditable<T extends InputBase>(host: T, multi = false) {
 	'cxl-field-input',
 	role('textbox'),
 	css({
-		$lastChild: { marginBottom: 0 },
-		$: { display: 'block', marginBottom: 16 },
+		$: { display: 'block', gridColumnEnd: 'span 12' },
 		input: {
 			color: 'onSurface',
 			font: 'default',
@@ -419,8 +418,7 @@ export class FieldInput extends InputBase {
 @Augment<FieldTextArea>(
 	'cxl-field-textarea',
 	css({
-		$: { display: 'block', marginBottom: 16 },
-		$lastChild: { marginBottom: 0 },
+		$: { display: 'block', gridColumnEnd: 'span 12' },
 		input: {
 			minHeight: 20,
 			lineHeight: 20,

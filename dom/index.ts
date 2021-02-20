@@ -442,3 +442,11 @@ export function findNextNodeBySelector(
 	}
 	return null;
 }
+
+export function onResize(el: Element) {
+	return new Observable(subs => {
+		const observer = new ResizeObserver(ev => subs.next(ev));
+		observer.observe(el);
+		return () => observer.unobserve(el);
+	});
+}

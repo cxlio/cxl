@@ -95,6 +95,7 @@ export class ItemIcon extends Icon {}
 		$: {
 			paddingRight: 8,
 			lineHeight: 20,
+			font: 'icon_button',
 			width: 24,
 			textAlign: 'center',
 		},

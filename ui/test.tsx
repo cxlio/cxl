@@ -936,6 +936,70 @@ export default spec('ui', a => {
 		);
 	});
 
+	a.test('cxl-checkbox', a => {
+		a.figure('Empty Checkbox', `<cxl-checkbox></cxl-checkbox>`);
+		a.figure(
+			'Checkbox with Content',
+			`<cxl-checkbox>Checkbox With Content</cxl-checkbox>`
+		);
+	});
+
+	a.test('cxl-field', a => {
+		a.figure(
+			'Filled and Outlined Fields',
+			`
+		<cxl-field>
+			<cxl-label>Field Label</cxl-label>
+			<cxl-field-icon icon="search" title="Leading Icon"></cxl-field-icon>
+			<cxl-input value="Input Value"></cxl-input>
+			<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
+			<cxl-field-help>Helper Text</cxl-field-help>
+		</cxl-field>
+		<cxl-field outline>
+			<cxl-label>Field Label</cxl-label>
+			<cxl-field-icon icon="filter_list" title="Leading Icon"></cxl-field-icon>
+			<cxl-input value="Input Value"></cxl-input>
+			<cxl-field-icon trailing icon="menu" title="Trailing Icon"></cxl-field-icon>
+			<cxl-field-help>Helper Text</cxl-field-help>
+		</cxl-field>
+		`
+		);
+
+		a.figure(
+			'Field States',
+			`
+		<cxl-field-input label="Enabled"></cxl-field-input>
+		<cxl-field-input disabled label="Disabled"></cxl-field-input>
+		<cxl-field-input invalid touched label="Invalid"></cxl-field-input>
+		<cxl-field-input outline label="Enabled"></cxl-field-input>
+		<cxl-field-input outline disabled label="Disabled"></cxl-field-input>
+		<cxl-field-input outline invalid touched label="Invalid"></cxl-field-input>
+		`
+		);
+
+		a.figure(
+			'Dense Fields',
+			`
+		<cxl-field dense>
+			<cxl-label>Filled Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field><br/>
+		<cxl-field outline dense>
+			<cxl-label>Outlined Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field><br/>
+		<cxl-field dense floating>
+			<cxl-label>Filled Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field><br/>
+		<cxl-field outline dense floating>
+			<cxl-label>Outlined Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field>
+		`
+		);
+	});
+
 	a.test('cxl-tabs', it => {
 		it.should('switch tabs when a child tab is selected', a => {
 			a.dom.innerHTML = `<cxl-tabs><cxl-tab>Tab1</cxl-tab><cxl-tab selected>Tab2</cxl-tab></cxl-tabs>`;

@@ -18,6 +18,7 @@ const FieldBase = [
 			color: 'onSurface',
 			position: 'relative',
 			display: 'block',
+			gridColumnEnd: 'span 12',
 		},
 		container: {
 			position: 'relative',
@@ -184,7 +185,6 @@ export class Fieldset extends Component {
 	'cxl-field',
 	css({
 		$: { textAlign: 'left' },
-		$lastChild: { marginBottom: 0 },
 		line: { position: 'absolute', left: 0, right: 0 },
 		line$outline: { display: 'none' },
 		help: {
@@ -204,9 +204,9 @@ export class Fieldset extends Component {
 			pointerEvents: 'none',
 		},
 		label$dense: { paddingTop: 5 },
-		content$dense: { marginTop: 1 },
-		container$dense: { paddingBottom: 1 },
-		label$floating$novalue$dense: { translateY: 18 },
+		content$dense: { marginTop: 0 },
+		container$dense: { paddingBottom: 3 },
+		label$floating$novalue$dense: { translateY: 17 },
 		label$dense$outline: { translateY: -13 },
 		label$floating$novalue$outline$dense: { translateY: 7 },
 		content$dense$outline: { marginTop: 2 },

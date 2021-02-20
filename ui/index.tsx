@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui"/>
 export * from './checkbox.js';
 export * from './core.js';
 export * from './field.js';

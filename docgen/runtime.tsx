@@ -107,9 +107,14 @@ export class DocVersionSelect extends Component {
 				const content = host.childNodes[0]?.textContent?.trim() || '';
 				parent.srcdoc = `<style>body{padding:16px;margin:0;}</style>${UserScripts}${content}`;
 				parent.onload = () => {
-					const height = parent.contentDocument?.body.scrollHeight;
-					if (height && height > 160)
-						parent.style.height = height + 'px';
+					const observer = new ResizeObserver(() => {
+						const height =
+							parent.contentDocument?.body.scrollHeight;
+						if (height && height > 160)
+							parent.style.height = height + 'px';
+					});
+					if (parent.contentDocument?.body)
+						observer.observe(parent.contentDocument.body);
 				};
 				content$.next(content);
 			});

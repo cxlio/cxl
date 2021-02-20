@@ -254,13 +254,8 @@ export class TestApi {
 					domId,
 					html,
 				};
-				const match = (data.match = await __cxlRunner(data));
-
-				a.$test.push({
-					success: match === 1,
-					message: 'Screenshot should match baseline',
-					data,
-				});
+				const match = await __cxlRunner(data);
+				a.$test.push(match);
 			});
 		else {
 			console.warn('figure method not supported');

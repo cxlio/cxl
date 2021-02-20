@@ -41,7 +41,10 @@ function printResult(result: Result) {
 	output += result.success ? success() : failure();
 	const data = result.data;
 	if (data?.type === 'figure') {
-		output += `<div style="display:inline-block; width:320px;position:relative;">${data.html}</div><img src="spec/${data.name}.png" /><img src="../../ui/spec/${data.name}.png" />`;
+		output += `
+		<div style="vertical-align:middle;display:inline-block; width:320px;position:relative;">${data.html}</div>
+		<img style="vertical-align:middle" src="spec/${data.name}.png" />
+		<img style="vertical-align:middle" src="../../ui/spec/${data.name}.png" />`;
 	}
 }
 
@@ -105,8 +108,12 @@ async function onClick(suite: Test[], ev: Event) {
 	}
 }
 
-(window as any).__cxlRunner = () => {
-	return 1;
+(window as any).__cxlRunner = (data: any) => {
+	return {
+		success: true,
+		message: 'Screenshot should match baseline',
+		data,
+	};
 };
 
 const browserRunner = {

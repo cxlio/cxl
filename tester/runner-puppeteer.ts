@@ -149,7 +149,8 @@ async function generateCoverage(
 	});
 }
 
-let figureReady = false;
+let figureReady: Promise<any>;
+let screenshotQueue = Promise.resolve();
 
 function parsePNG(buffer: Buffer) {
 	return new Promise<Buffer>((resolve, reject) => {
@@ -160,8 +161,6 @@ function parsePNG(buffer: Buffer) {
 		});
 	});
 }
-
-let screenshotQueue = Promise.resolve();
 
 function screenshot(page: Page, domId: string) {
 	return new Promise<Buffer>((resolve, reject) => {
@@ -194,13 +193,12 @@ async function handleFigureRequest(
 	}/${name}.png`);
 	const filename = `spec/${name}.png`;
 
-	if (!figureReady) {
-		await page
-			.waitForNavigation({ waitUntil: 'load', timeout: 500 })
-			.catch(() => 1);
-		figureReady = true;
-	}
+	await (figureReady ||
+		(figureReady = page
+			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 500 })
+			.catch(() => 1)));
 
+	page.mouse.move(321, 0);
 	const [original, buffer] = await Promise.all([
 		readFile(baseline).catch(() => undefined),
 		screenshot(page, domId),
@@ -221,14 +219,34 @@ async function handleFigureRequest(
 			parsePNG(buffer),
 		]);
 		const len = originalData.length;
+		let diff = 0;
 
-		if (len !== newData.length) return 0;
-		for (let i = 0; i < len; i++) {
-			if (originalData.readUInt8(i) !== newData.readUInt8(i)) return 0;
+		if (len !== newData.length) {
+			return {
+				success: false,
+				message: 'Screenshot should match baseline: Different Size',
+				data,
+			};
 		}
+		for (let i = 0; i < len; i++) {
+			if (originalData.readUInt8(i) !== newData.readUInt8(i)) diff++;
+		}
+		if (diff > 0)
+			return {
+				success: false,
+				message: `Screenshot should match baseline: Different by ${(
+					(diff / len) *
+					100
+				).toFixed(2)}%`,
+				data,
+			};
 	}
 
-	return 1;
+	return {
+		success: true,
+		message: 'Screenshot should match baseline',
+		data,
+	};
 }
 
 export default async function runPuppeteer(app: TestRunner) {
@@ -236,7 +254,13 @@ export default async function runPuppeteer(app: TestRunner) {
 	const browser = await launch({
 		// product: app.firefox ? 'firefox' : 'chrome',
 		headless: true,
-		args: ['--no-sandbox', '--disable-setuid-sandbox'],
+		args: [
+			'--no-sandbox',
+			'--disable-setuid-sandbox',
+			'--disable-gpu',
+			'--font-render-hinting=none',
+			'--disable-font-subpixel-positioning',
+		],
 		timeout: 5000,
 		dumpio: true,
 	});

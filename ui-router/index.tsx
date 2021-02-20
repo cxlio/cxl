@@ -228,6 +228,7 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 			outline: 0,
 			textDecoration: 'none',
 			color: 'link',
+			cursor: 'pointer',
 		},
 	})
 )

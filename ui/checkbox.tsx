@@ -12,6 +12,7 @@ import { merge } from '@cxl/rx';
 import { FocusCircleStyle, InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
 import { Focusable, Style, checkedBehavior, role } from '@cxl/template';
+import { padding } from '@cxl/css';
 
 /**
  * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.
@@ -50,13 +51,26 @@ import { Focusable, Style, checkedBehavior, role } from '@cxl/template';
 					$: {
 						position: 'relative',
 						cursor: 'pointer',
+						...padding(10, 0, 10, 46),
+						lineHeight: 20,
+						marginLeft: -10,
+						display: 'block',
+						verticalAlign: 'middle',
+						font: 'default',
+					},
+					$empty: {
+						display: 'inline-block',
+						...padding(0),
+						marginLeft: 0,
 						width: 20,
 						height: 20,
-						display: 'inline-block',
-						verticalAlign: 'middle',
 					},
 					$invalid$touched: { color: 'error' },
+					box$empty: {
+						left: 0,
+					},
 					box: {
+						left: 10,
 						width: 20,
 						height: 20,
 						borderWidth: 2,

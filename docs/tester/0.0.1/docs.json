@@ -2213,34 +2213,62 @@
           "name": "figureReady",
           "flags": 0,
           "id": 108,
-          "value": "false",
           "type": {
-            "name": "boolean",
-            "kind": 32,
-            "flags": 0
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
           }
         },
         {
           "source": {
             "fileName": "runner-puppeteer.ts",
-            "line": 151,
-            "ch": 24
+            "line": 152,
+            "ch": 3
+          },
+          "kind": 1,
+          "name": "screenshotQueue",
+          "flags": 0,
+          "id": 109,
+          "value": "Promise.resolve()",
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "runner-puppeteer.ts",
+            "line": 152,
+            "ch": 40
           },
           "kind": 16,
           "name": "parsePNG",
           "flags": 0,
-          "id": 109,
+          "id": 110,
           "parameters": [
             {
               "source": {
                 "fileName": "runner-puppeteer.ts",
-                "line": 153,
+                "line": 154,
                 "ch": 18
               },
               "kind": 9,
               "name": "buffer",
               "flags": 0,
-              "id": 110,
+              "id": 111,
               "type": {
                 "name": "Buffer",
                 "kind": 6
@@ -2261,31 +2289,8 @@
         {
           "source": {
             "fileName": "runner-puppeteer.ts",
-            "line": 163,
-            "ch": 3
-          },
-          "kind": 1,
-          "name": "screenshotQueue",
-          "flags": 0,
-          "id": 111,
-          "value": "Promise.resolve()",
-          "type": {
-            "name": "Promise",
-            "kind": 6,
-            "typeParameters": [
-              {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "runner-puppeteer.ts",
-            "line": 163,
-            "ch": 40
+            "line": 162,
+            "ch": 1
           },
           "kind": 16,
           "name": "screenshot",
@@ -2295,7 +2300,7 @@
             {
               "source": {
                 "fileName": "runner-puppeteer.ts",
-                "line": 165,
+                "line": 164,
                 "ch": 20
               },
               "kind": 9,
@@ -2310,7 +2315,7 @@
             {
               "source": {
                 "fileName": "runner-puppeteer.ts",
-                "line": 165,
+                "line": 164,
                 "ch": 31
               },
               "kind": 9,
@@ -2338,7 +2343,7 @@
         {
           "source": {
             "fileName": "runner-puppeteer.ts",
-            "line": 183,
+            "line": 182,
             "ch": 1
           },
           "kind": 16,
@@ -2349,7 +2354,7 @@
             {
               "source": {
                 "fileName": "runner-puppeteer.ts",
-                "line": 185,
+                "line": 184,
                 "ch": 35
               },
               "kind": 9,
@@ -2364,7 +2369,7 @@
             {
               "source": {
                 "fileName": "runner-puppeteer.ts",
-                "line": 186,
+                "line": 185,
                 "ch": 12
               },
               "kind": 9,
@@ -2374,7 +2379,7 @@
               "type": {
                 "source": {
                   "fileName": "runner-puppeteer.ts",
-                  "line": 187,
+                  "line": 186,
                   "ch": 6
                 },
                 "kind": 34,
@@ -2384,7 +2389,7 @@
                   {
                     "source": {
                       "fileName": "runner-puppeteer.ts",
-                      "line": 187,
+                      "line": 186,
                       "ch": 8
                     },
                     "kind": 10,
@@ -2400,7 +2405,7 @@
                   {
                     "source": {
                       "fileName": "runner-puppeteer.ts",
-                      "line": 187,
+                      "line": 186,
                       "ch": 22
                     },
                     "kind": 10,
@@ -2416,7 +2421,55 @@
                   {
                     "source": {
                       "fileName": "runner-puppeteer.ts",
-                      "line": 187,
+                      "line": 186,
+                      "ch": 37
+                    },
+                    "kind": 10,
+                    "name": "baseline",
+                    "flags": 4,
+                    "id": 120,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 186,
+                      "ch": 8
+                    },
+                    "kind": 10,
+                    "name": "name",
+                    "flags": 4,
+                    "id": 118,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 186,
+                      "ch": 22
+                    },
+                    "kind": 10,
+                    "name": "domId",
+                    "flags": 4,
+                    "id": 119,
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 186,
                       "ch": 37
                     },
                     "kind": 10,
@@ -2435,7 +2488,7 @@
             {
               "source": {
                 "fileName": "runner-puppeteer.ts",
-                "line": 187,
+                "line": 186,
                 "ch": 58
               },
               "kind": 9,
@@ -2454,29 +2507,167 @@
             "kind": 6,
             "typeParameters": [
               {
+                "source": {
+                  "fileName": "runner-puppeteer.ts",
+                  "line": 224,
+                  "ch": 9
+                },
+                "kind": 34,
                 "name": "",
                 "flags": 0,
-                "kind": 5,
                 "children": [
                   {
-                    "name": "0",
-                    "kind": 23,
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 224,
+                      "ch": 11
+                    },
+                    "kind": 0,
+                    "name": "success",
+                    "flags": 0,
+                    "id": 122,
+                    "value": "false",
                     "type": {
-                      "name": "number",
+                      "name": "boolean",
                       "kind": 32,
                       "flags": 0
-                    },
-                    "flags": 0
+                    }
                   },
                   {
-                    "name": "1",
-                    "kind": 23,
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 225,
+                      "ch": 19
+                    },
+                    "kind": 0,
+                    "name": "message",
+                    "flags": 0,
+                    "id": 123,
+                    "value": "'Screenshot should match baseline: Different Size'",
                     "type": {
-                      "name": "number",
+                      "name": "string",
                       "kind": 32,
                       "flags": 0
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "runner-puppeteer.ts",
+                      "line": 226,
+                      "ch": 64
                     },
-                    "flags": 0
+                    "kind": 0,
+                    "name": "data",
+                    "flags": 0,
+                    "id": 124,
+                    "type": {
+                      "source": {
+                        "fileName": "runner-puppeteer.ts",
+                        "line": 186,
+                        "ch": 6
+                      },
+                      "kind": 34,
+                      "name": "",
+                      "flags": 0,
+                      "children": [
+                        {
+                          "source": {
+                            "fileName": "runner-puppeteer.ts",
+                            "line": 186,
+                            "ch": 8
+                          },
+                          "kind": 10,
+                          "name": "name",
+                          "flags": 4,
+                          "id": 118,
+                          "type": {
+                            "name": "string",
+                            "kind": 32,
+                            "flags": 0
+                          }
+                        },
+                        {
+                          "source": {
+                            "fileName": "runner-puppeteer.ts",
+                            "line": 186,
+                            "ch": 22
+                          },
+                          "kind": 10,
+                          "name": "domId",
+                          "flags": 4,
+                          "id": 119,
+                          "type": {
+                            "name": "string",
+                            "kind": 32,
+                            "flags": 0
+                          }
+                        },
+                        {
+                          "source": {
+                            "fileName": "runner-puppeteer.ts",
+                            "line": 186,
+                            "ch": 37
+                          },
+                          "kind": 10,
+                          "name": "baseline",
+                          "flags": 4,
+                          "id": 120,
+                          "type": {
+                            "name": "string",
+                            "kind": 32,
+                            "flags": 0
+                          }
+                        },
+                        {
+                          "source": {
+                            "fileName": "runner-puppeteer.ts",
+                            "line": 186,
+                            "ch": 8
+                          },
+                          "kind": 10,
+                          "name": "name",
+                          "flags": 4,
+                          "id": 118,
+                          "type": {
+                            "name": "string",
+                            "kind": 32,
+                            "flags": 0
+                          }
+                        },
+                        {
+                          "source": {
+                            "fileName": "runner-puppeteer.ts",
+                            "line": 186,
+                            "ch": 22
+                          },
+                          "kind": 10,
+                          "name": "domId",
+                          "flags": 4,
+                          "id": 119,
+                          "type": {
+                            "name": "string",
+                            "kind": 32,
+                            "flags": 0
+                          }
+                        },
+                        {
+                          "source": {
+                            "fileName": "runner-puppeteer.ts",
+                            "line": 186,
+                            "ch": 37
+                          },
+                          "kind": 10,
+                          "name": "baseline",
+                          "flags": 4,
+                          "id": 120,
+                          "type": {
+                            "name": "string",
+                            "kind": 32,
+                            "flags": 0
+                          }
+                        }
+                      ]
+                    }
                   }
                 ]
               }
@@ -2486,24 +2677,24 @@
         {
           "source": {
             "fileName": "runner-puppeteer.ts",
-            "line": 231,
+            "line": 249,
             "ch": 1
           },
           "kind": 16,
           "name": "runPuppeteer",
           "flags": 769,
-          "id": 122,
+          "id": 125,
           "parameters": [
             {
               "source": {
                 "fileName": "runner-puppeteer.ts",
-                "line": 233,
+                "line": 251,
                 "ch": 43
               },
               "kind": 9,
               "name": "app",
               "flags": 0,
-              "id": 123,
+              "id": 126,
               "type": {
                 "id": 1,
                 "name": "TestRunner",
@@ -2544,7 +2735,7 @@
           "kind": 16,
           "name": "printError",
           "flags": 0,
-          "id": 124,
+          "id": 127,
           "parameters": [
             {
               "source": {
@@ -2555,7 +2746,7 @@
               "kind": 9,
               "name": "name",
               "flags": 0,
-              "id": 125,
+              "id": 128,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2571,7 +2762,7 @@
               "kind": 9,
               "name": "fail",
               "flags": 0,
-              "id": 126,
+              "id": 129,
               "type": {
                 "id": 14,
                 "name": "TestResult",
@@ -2594,7 +2785,7 @@
           "kind": 16,
           "name": "printTest",
           "flags": 0,
-          "id": 127,
+          "id": 130,
           "parameters": [
             {
               "source": {
@@ -2605,7 +2796,7 @@
               "kind": 9,
               "name": "test",
               "flags": 0,
-              "id": 128,
+              "id": 131,
               "type": {
                 "id": 23,
                 "name": "TestReport",
@@ -2634,7 +2825,7 @@
           "kind": 16,
           "name": "printCoverage",
           "flags": 0,
-          "id": 129,
+          "id": 132,
           "parameters": [
             {
               "source": {
@@ -2645,7 +2836,7 @@
               "kind": 9,
               "name": "coverage",
               "flags": 0,
-              "id": 130,
+              "id": 133,
               "type": {
                 "source": {
                   "fileName": "report-stdout.ts",
@@ -2678,7 +2869,7 @@
           "kind": 16,
           "name": "generate",
           "flags": 513,
-          "id": 131,
+          "id": 134,
           "parameters": [
             {
               "source": {
@@ -2689,7 +2880,7 @@
               "kind": 9,
               "name": "report",
               "flags": 0,
-              "id": 132,
+              "id": 135,
               "type": {
                 "id": 34,
                 "name": "Report",
@@ -2724,7 +2915,7 @@
           "kind": 31,
           "name": "STYLES",
           "flags": 0,
-          "id": 133,
+          "id": 136,
           "value": "`<style>\n\tbody { font-size: 16px; }\n\tem.covered { background-color: #a5d6a7 }\n\tem { background-color: #ef9a9a; }\n</style>`",
           "type": {
             "name": "\"<style>\\n\\tbody { font-size: 16px; }\\n\\tem.covered { background-color: #a5d6a7 }\\n\\tem { background-color: #ef9a9a; }\\n</style>\"",
@@ -2746,7 +2937,7 @@
           "kind": 31,
           "name": "HEADER",
           "flags": 0,
-          "id": 134,
+          "id": 137,
           "value": "`<!DOCTYPE html>\n\t<head><title>Test Report</title></head>\n`",
           "type": {
             "name": "\"<!DOCTYPE html>\\n\\t<head><title>Test Report</title></head>\\n\"",
@@ -2768,7 +2959,7 @@
           "kind": 1,
           "name": "INDEX",
           "flags": 0,
-          "id": 135,
+          "id": 138,
           "value": "''",
           "type": {
             "name": "string",
@@ -2785,7 +2976,7 @@
           "kind": 2,
           "name": "Tag",
           "flags": 0,
-          "id": 136,
+          "id": 139,
           "type": {
             "source": {
               "fileName": "report-html.ts",
@@ -2805,7 +2996,7 @@
                 "kind": 10,
                 "name": "offset",
                 "flags": 4,
-                "id": 137,
+                "id": 140,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -2821,7 +3012,7 @@
                 "kind": 10,
                 "name": "text",
                 "flags": 4,
-                "id": 138,
+                "id": 141,
                 "type": {
                   "name": "string",
                   "kind": 32,
@@ -2840,7 +3031,7 @@
           "kind": 16,
           "name": "renderSource",
           "flags": 256,
-          "id": 139,
+          "id": 142,
           "parameters": [
             {
               "source": {
@@ -2851,7 +3042,7 @@
               "kind": 9,
               "name": "test",
               "flags": 0,
-              "id": 140,
+              "id": 143,
               "type": {
                 "id": 38,
                 "name": "TestCoverageReport",
@@ -2880,7 +3071,7 @@
           "kind": 16,
           "name": "generate",
           "flags": 769,
-          "id": 141,
+          "id": 144,
           "parameters": [
             {
               "source": {
@@ -2891,7 +3082,7 @@
               "kind": 9,
               "name": "report",
               "flags": 0,
-              "id": 142,
+              "id": 145,
               "type": {
                 "id": 34,
                 "name": "Report",
@@ -2932,7 +3123,7 @@
           "kind": 1,
           "name": "output",
           "flags": 0,
-          "id": 143,
+          "id": 146,
           "value": "''",
           "type": {
             "name": "string",
@@ -2949,7 +3140,7 @@
           "kind": 16,
           "name": "group",
           "flags": 0,
-          "id": 144,
+          "id": 147,
           "parameters": [
             {
               "source": {
@@ -2960,7 +3151,7 @@
               "kind": 9,
               "name": "testId",
               "flags": 0,
-              "id": 145,
+              "id": 148,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -2976,7 +3167,7 @@
               "kind": 9,
               "name": "title",
               "flags": 0,
-              "id": 146,
+              "id": 149,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2999,7 +3190,7 @@
           "kind": 16,
           "name": "groupEnd",
           "flags": 0,
-          "id": 147,
+          "id": 150,
           "parameters": [],
           "type": {
             "name": "void",
@@ -3016,7 +3207,7 @@
           "kind": 16,
           "name": "error",
           "flags": 0,
-          "id": 148,
+          "id": 151,
           "parameters": [
             {
               "source": {
@@ -3027,7 +3218,7 @@
               "kind": 9,
               "name": "msg",
               "flags": 0,
-              "id": 149,
+              "id": 152,
               "type": {
                 "source": {
                   "fileName": "browser-runner.ts",
@@ -3066,7 +3257,7 @@
           "kind": 16,
           "name": "success",
           "flags": 0,
-          "id": 150,
+          "id": 153,
           "type": {
             "name": "string",
             "kind": 32,
@@ -3083,7 +3274,7 @@
           "kind": 16,
           "name": "failure",
           "flags": 0,
-          "id": 151,
+          "id": 154,
           "type": {
             "name": "string",
             "kind": 32,
@@ -3100,7 +3291,7 @@
           "kind": 16,
           "name": "printError",
           "flags": 0,
-          "id": 152,
+          "id": 155,
           "parameters": [
             {
               "source": {
@@ -3111,7 +3302,7 @@
               "kind": 9,
               "name": "fail",
               "flags": 0,
-              "id": 153,
+              "id": 156,
               "type": {
                 "name": "Result",
                 "kind": 6
@@ -3133,7 +3324,7 @@
           "kind": 16,
           "name": "printResult",
           "flags": 0,
-          "id": 154,
+          "id": 157,
           "parameters": [
             {
               "source": {
@@ -3144,7 +3335,7 @@
               "kind": 9,
               "name": "result",
               "flags": 0,
-              "id": 155,
+              "id": 158,
               "type": {
                 "name": "Result",
                 "kind": 6
@@ -3160,24 +3351,24 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 45,
+            "line": 48,
             "ch": 1
           },
           "kind": 16,
           "name": "renderTestReport",
           "flags": 0,
-          "id": 156,
+          "id": 159,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 47,
+                "line": 50,
                 "ch": 26
               },
               "kind": 9,
               "name": "test",
               "flags": 0,
-              "id": 157,
+              "id": 160,
               "type": {
                 "name": "Test",
                 "kind": 6
@@ -3193,17 +3384,17 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 81,
+            "line": 84,
             "ch": 1
           },
           "kind": 16,
           "name": "findTest",
           "flags": 0,
-          "id": 158,
+          "id": 161,
           "type": {
             "source": {
               "fileName": "browser-runner.ts",
-              "line": 83,
+              "line": 86,
               "ch": 45
             },
             "kind": 5,
@@ -3225,17 +3416,17 @@
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 83,
+                "line": 86,
                 "ch": 18
               },
               "kind": 9,
               "name": "tests",
               "flags": 0,
-              "id": 159,
+              "id": 162,
               "type": {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 83,
+                  "line": 86,
                   "ch": 24
                 },
                 "kind": 15,
@@ -3250,13 +3441,13 @@
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 83,
+                "line": 86,
                 "ch": 32
               },
               "kind": 9,
               "name": "id",
               "flags": 0,
-              "id": 160,
+              "id": 163,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -3268,28 +3459,28 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 89,
+            "line": 92,
             "ch": 1
           },
           "kind": 16,
           "name": "onClick",
           "flags": 256,
-          "id": 161,
+          "id": 164,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 91,
+                "line": 94,
                 "ch": 23
               },
               "kind": 9,
               "name": "suite",
               "flags": 0,
-              "id": 162,
+              "id": 165,
               "type": {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 91,
+                  "line": 94,
                   "ch": 29
                 },
                 "kind": 15,
@@ -3304,13 +3495,13 @@
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 91,
+                "line": 94,
                 "ch": 37
               },
               "kind": 9,
               "name": "ev",
               "flags": 0,
-              "id": 163,
+              "id": 166,
               "type": {
                 "name": "Event",
                 "kind": 6
@@ -3332,18 +3523,18 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 111,
+            "line": 118,
             "ch": 5
           },
           "kind": 31,
           "name": "browserRunner",
           "flags": 0,
-          "id": 164,
+          "id": 167,
           "value": "{\n\tasync runSuite(suite: Test) {\n\t\tawait suite.run();\n\t\trenderTestReport(suite);\n\t},\n\n\tasync run(suites: Test[]) {\n\t\tawait Promise.all(suites.map(suite => this.runSuite(suite)));\n\t\tconst container = document.createElement('cxl-content');\n\t\tcontainer.innerHTML = output;\n\t\tcontainer.addEventListener('click', ev => onClick(suites, ev));\n\t\tdocument.body.appendChild(container);\n\t},\n}",
           "type": {
             "source": {
               "fileName": "browser-runner.ts",
-              "line": 111,
+              "line": 118,
               "ch": 21
             },
             "kind": 34,
@@ -3353,24 +3544,24 @@
               {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 111,
+                  "line": 118,
                   "ch": 23
                 },
                 "kind": 11,
                 "name": "runSuite",
                 "flags": 260,
-                "id": 165,
+                "id": 168,
                 "parameters": [
                   {
                     "source": {
                       "fileName": "browser-runner.ts",
-                      "line": 112,
+                      "line": 119,
                       "ch": 16
                     },
                     "kind": 9,
                     "name": "suite",
                     "flags": 0,
-                    "id": 166,
+                    "id": 169,
                     "type": {
                       "name": "Test",
                       "kind": 6
@@ -3392,28 +3583,28 @@
               {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 115,
+                  "line": 122,
                   "ch": 3
                 },
                 "kind": 11,
                 "name": "run",
                 "flags": 260,
-                "id": 167,
+                "id": 170,
                 "parameters": [
                   {
                     "source": {
                       "fileName": "browser-runner.ts",
-                      "line": 117,
+                      "line": 124,
                       "ch": 11
                     },
                     "kind": 9,
                     "name": "suites",
                     "flags": 0,
-                    "id": 168,
+                    "id": 171,
                     "type": {
                       "source": {
                         "fileName": "browser-runner.ts",
-                        "line": 117,
+                        "line": 124,
                         "ch": 18
                       },
                       "kind": 15,
