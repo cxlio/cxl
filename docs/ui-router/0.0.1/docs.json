@@ -889,24 +889,66 @@
             "line": 194,
             "ch": 1
           },
+          "kind": 35,
+          "name": "RouterAppbarTitle",
+          "flags": 1,
+          "id": 41,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-router-appbar-title"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 197,
+            "ch": 51
+          },
           "kind": 16,
           "name": "renderTemplate",
           "flags": 0,
-          "id": 41,
+          "id": 42,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 196,
+                "line": 199,
                 "ch": 24
               },
               "kind": 9,
               "name": "tpl",
               "flags": 0,
-              "id": 42,
+              "id": 43,
               "type": {
                 "name": "HTMLTemplateElement",
                 "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 199,
+                "ch": 49
+              },
+              "kind": 9,
+              "name": "title",
+              "flags": 524288,
+              "id": 44,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
               }
             }
           ],
@@ -918,24 +960,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 200,
+            "line": 204,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterLink",
           "flags": 1,
-          "id": 43,
+          "id": 45,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 234,
+                "line": 238,
                 "ch": 43
               },
               "kind": 36,
               "name": "href",
               "flags": 4,
-              "id": 44,
+              "id": 46,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -945,13 +987,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 236,
+                "line": 240,
                 "ch": 15
               },
               "kind": 36,
               "name": "focusable",
               "flags": 4,
-              "id": 45,
+              "id": 47,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -976,7 +1018,7 @@
           },
           "extendedBy": [
             {
-              "id": 48,
+              "id": 50,
               "name": "A",
               "kind": 6
             }
@@ -985,24 +1027,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 239,
+            "line": 243,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterTab",
           "flags": 1,
-          "id": 46,
+          "id": 48,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 261,
+                "line": 265,
                 "ch": 42
               },
               "kind": 36,
               "name": "href",
               "flags": 4,
-              "id": 47,
+              "id": 49,
               "value": "''",
               "type": {
                 "name": "string",
@@ -1029,24 +1071,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 264,
+            "line": 268,
             "ch": 1
           },
           "kind": 35,
           "name": "A",
           "flags": 1,
-          "id": 48,
+          "id": 50,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 273,
+                "line": 277,
                 "ch": 35
               },
               "kind": 10,
               "name": "focusable",
               "flags": 4,
-              "id": 49,
+              "id": 51,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -1064,7 +1106,7 @@
             "name": "",
             "children": [
               {
-                "id": 43,
+                "id": 45,
                 "name": "RouterLink",
                 "kind": 6
               }
@@ -1074,24 +1116,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 275,
+            "line": 279,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterItem",
           "flags": 1,
-          "id": 50,
+          "id": 52,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 311,
+                "line": 315,
                 "ch": 43
               },
               "kind": 36,
               "name": "href",
               "flags": 4,
-              "id": 51,
+              "id": 53,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1101,13 +1143,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 313,
+                "line": 317,
                 "ch": 15
               },
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 52,
+              "id": 54,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1118,13 +1160,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 316,
+                "line": 320,
                 "ch": 18
               },
               "kind": 11,
               "name": "focus",
               "flags": 4,
-              "id": 53,
+              "id": 55,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -1151,13 +1193,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 321,
+            "line": 325,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterOutlet",
           "flags": 1,
-          "id": 54,
+          "id": 56,
           "children": [],
           "docs": {
             "tagName": "cxl-router-outlet"
@@ -1177,28 +1219,28 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 324,
+            "line": 328,
             "ch": 46
           },
           "kind": 35,
           "name": "RouterComponent",
           "flags": 1,
-          "id": 55,
+          "id": 57,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 358,
+                "line": 361,
                 "ch": 48
               },
               "kind": 36,
               "name": "strategy",
               "flags": 4,
-              "id": 56,
+              "id": 58,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 360,
+                  "line": 363,
                   "ch": 10
                 },
                 "kind": 5,
@@ -1208,7 +1250,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 360,
+                      "line": 363,
                       "ch": 10
                     },
                     "kind": 23,
@@ -1218,7 +1260,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 360,
+                      "line": 363,
                       "ch": 19
                     },
                     "kind": 23,
@@ -1228,7 +1270,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 360,
+                      "line": 363,
                       "ch": 28
                     },
                     "kind": 23,
