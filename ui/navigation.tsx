@@ -5,7 +5,6 @@ import {
 	Attribute,
 	Component,
 	StyleAttribute,
-	bind,
 	get,
 } from '@cxl/component';
 import { on, onAction, onLoad, trigger } from '@cxl/dom';
@@ -22,7 +21,7 @@ import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
 import { Span, ripple } from './core.js';
-import { IconButton } from './icon.js';
+import { ArrowBackIcon, MenuIcon, IconButton } from './icon.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -33,8 +32,6 @@ import { Drawer } from './dialog.js';
  * <cxl-appbar>
  *   <cxl-navbar></cxl-navbar>
  *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
- *   <cxl-icon-button><cxl-icon icon="search"></cxl-icon></cxl-icon-button>
- *   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
  * </cxl-appbar>
  *
  * @demo <caption>Appbar with Tabs</caption>
@@ -127,12 +124,13 @@ import { Drawer } from './dialog.js';
 			</div>
 			<div className="flex contextual">
 				<IconButton
-					icon="arrow_back"
 					className="back"
 					$={el =>
 						onAction(el).tap(() => (host.contextual = undefined))
 					}
-				/>
+				>
+					<ArrowBackIcon />
+				</IconButton>
 				<div className="grow">
 					<host.Slot selector="cxl-appbar-contextual" />
 				</div>
@@ -151,7 +149,6 @@ export class Appbar extends Component {
 	 * @demo
 	 * <cxl-appbar extended>
 	 *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
-	 *   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
 	 * </cxl-appbar>
 	 */
 	@StyleAttribute()
@@ -294,14 +291,13 @@ export class Tab extends Component {
 			<slot />
 		</div>
 	),
-	bind(el =>
+	el =>
 		on(el, 'cxl-tab.selected').tap(ev => {
 			if (el.selected) el.selected.selected = false;
 			if (ev.target instanceof Tab) el.selected = ev.target;
 			else if ((ev as any).detail instanceof Tab)
 				el.selected = (ev as any).detail;
-		})
-	),
+		}),
 	host => (
 		<Span
 			className="selected"
@@ -360,7 +356,6 @@ export class Tabs extends Component {
 	host => (
 		<>
 			<IconButton
-				icon="menu"
 				$={el =>
 					onAction(el).tap(() => {
 						if (host.drawer)
@@ -368,7 +363,9 @@ export class Tabs extends Component {
 					})
 				}
 				className="toggler"
-			/>
+			>
+				<MenuIcon />
+			</IconButton>
 			<Drawer
 				className="drawer"
 				$={el => ((host.drawer = el), EMPTY)}
@@ -423,7 +420,7 @@ export class Menu extends Component {
 
 @Augment<Item>(
 	'cxl-item',
-	bind(ripple),
+	ripple,
 	focusable,
 	css({
 		$: {
@@ -434,10 +431,12 @@ export class Menu extends Component {
 			lineHeight: 24,
 			paddingRight: 16,
 			paddingLeft: 16,
-			paddingTop: 12,
-			paddingBottom: 12,
+			paddingTop: 8,
+			paddingBottom: 8,
+			minHeight: 48,
 			alignItems: 'center',
 			backgroundColor: 'surface',
+			gap: 16,
 		},
 		$selected: {
 			backgroundColor: 'primaryLight',
@@ -445,7 +444,7 @@ export class Menu extends Component {
 		},
 		...StateStyles,
 	}),
-	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
+	host => onAction(host).pipe(triggerEvent(host, 'drawer.close')),
 	_ => <slot />
 )
 export class Item extends Component {

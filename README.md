@@ -14,6 +14,7 @@ Collection of Libraries and Tools
 | @cxl/drag        | [0.1.0](https://npmjs.com/package/@cxl/drag/v/0.1.0) | Apache-2.0 | Drag and Drop library       | [Docs](https://cxlio.github.io/cxl/drag/0.1.0) |
 | @cxl/dts        | [0.1.0](https://npmjs.com/package/@cxl/dts/v/0.1.0) ([latest:0.0.1](https://npmjs.com/package/@cxl/dts/v/0.0.1)) | GPL-3.0-only | Generate symbol information from typescript source code       | [Docs](https://cxlio.github.io/cxl/dts/0.1.0) |
 | @cxl/filewatch        | [0.1.0](https://npmjs.com/package/@cxl/filewatch/v/0.1.0) ([latest:0.0.3](https://npmjs.com/package/@cxl/filewatch/v/0.0.3)) | Apache-2.0 | File watcher library       | [Docs](https://cxlio.github.io/cxl/filewatch/0.1.0) |
+| @cxl/i18n        | [0.0.1](https://npmjs.com/package/@cxl/i18n/v/0.0.1) | GPL-3.0 | Internationalization tools       | [Docs](https://cxlio.github.io/cxl/i18n/0.0.1) |
 | @cxl/lint        | [0.0.1](https://npmjs.com/package/@cxl/lint/v/0.0.1) | GPL-3.0 | linter       | [Docs](https://cxlio.github.io/cxl/lint/0.0.1) |
 | @cxl/router        | [0.1.0](https://npmjs.com/package/@cxl/router/v/0.1.0) | GPL-3.0 | Router library       | [Docs](https://cxlio.github.io/cxl/router/0.1.0) |
 | @cxl/rx        | [0.4.0](https://npmjs.com/package/@cxl/rx/v/0.4.0) ([latest:0.3.0](https://npmjs.com/package/@cxl/rx/v/0.3.0)) | Apache-2.0 | Lightweight reactiveX implementation       | [Docs](https://cxlio.github.io/cxl/rx/0.4.0) |

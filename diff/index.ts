@@ -1,4 +1,4 @@
-type Diff = any[];
+export type Diff = any[];
 
 const DIFF_DELETE = -1,
 	DIFF_INSERT = 1,
@@ -343,7 +343,7 @@ function diff_halfMatch_(text1: string, text2: string) {
 	 * @param  longtext Longer string.
 	 * @param  shorttext Shorter string.
 	 * @param  i Start index of quarter length substring within longtext.
-	 * @return {Array.<string>} Five element Array, containing the prefix of
+	 * @return Five element Array, containing the prefix of
 	 *     longtext, the suffix of longtext, the prefix of shorttext, the suffix
 	 *     of shorttext and the common middle.  Or null if there was no match.
 	 * @private

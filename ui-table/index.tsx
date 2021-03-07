@@ -13,17 +13,17 @@ import {
 	Component,
 	Augment,
 	Attribute,
+	Span,
 	StyleAttribute,
 	attributeChanged,
-	bind,
 	get,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
 import { EMPTY, merge } from '@cxl/rx';
 import { on, onAction, onChildrenMutation, trigger } from '@cxl/dom';
 import type {} from '@cxl/ui/theme.js';
-import { Icon, IconButton } from '@cxl/ui/icon.js';
-import { T, Toolbar } from '@cxl/ui/core.js';
+import { IconButton } from '@cxl/ui/icon.js';
+import { Svg, T, Toolbar } from '@cxl/ui/core.js';
 import { Checkbox } from '@cxl/ui/checkbox.js';
 import { Option, SelectBox } from '@cxl/ui/select.js';
 import { Field } from '@cxl/ui/field.js';
@@ -130,7 +130,7 @@ export class SortIcon extends Component {}
 @Augment<Th>(
 	'cxl-th',
 	role('columnheader'),
-	bind(onHeaderAction),
+	onHeaderAction,
 	css({
 		$: {
 			display: 'table-cell',
@@ -145,8 +145,6 @@ export class SortIcon extends Component {}
 		},
 		sortIcon: {
 			display: 'none',
-			font: 'h6',
-			lineHeight: 20,
 			marginLeft: 8,
 			scaleY: 0,
 			scaleX: 0,
@@ -167,11 +165,11 @@ export class SortIcon extends Component {}
 	$ => (
 		<>
 			<slot />
-			<Icon
-				icon="arrow_upward"
-				$={el => onSort(el, $)}
-				className="sortIcon"
-			/>
+			<Span className="sortIcon" $={el => onSort(el, $)}>
+				<Svg viewBox="0 0 24 24" width={24}>
+					{`<path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/>`}
+				</Svg>
+			</Span>
 		</>
 	)
 )
@@ -471,22 +469,30 @@ export function getPageCount(total: number, rows: number) {
 				}`;
 			})}
 			<nav className="nav">
-				<IconButton
-					icon="first_page"
-					$={el => onAction(el).tap(() => $.goFirst())}
-				/>
-				<IconButton
-					icon="chevron_left"
-					$={el => onAction(el).tap(() => $.goPrevious())}
-				/>
-				<IconButton
-					icon="chevron_right"
-					$={el => onAction(el).tap(() => $.goNext())}
-				/>
-				<IconButton
-					icon="last_page"
-					$={el => onAction(el).tap(() => $.goLast())}
-				/>
+				<IconButton $={el => onAction(el).tap(() => $.goFirst())}>
+					<Svg
+						viewBox="0 0 24 24"
+						width={20}
+					>{`<path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/><path d="M24 24H0V0h24v24z" fill="none"/>`}</Svg>
+				</IconButton>
+				<IconButton $={el => onAction(el).tap(() => $.goPrevious())}>
+					<Svg
+						viewBox="0 0 24 24"
+						width={20}
+					>{`<path d="M0 0h24v24H0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>`}</Svg>
+				</IconButton>
+				<IconButton $={el => onAction(el).tap(() => $.goNext())}>
+					<Svg
+						viewBox="0 0 24 24"
+						width={20}
+					>{`<path d="M0 0h24v24H0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>`}</Svg>
+				</IconButton>
+				<IconButton $={el => onAction(el).tap(() => $.goLast())}>
+					<Svg
+						viewBox="0 0 24 24"
+						width={20}
+					>{`<path d="M0 0h24v24H0V0z" fill="none"/><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"/>`}</Svg>
+				</IconButton>
 			</nav>
 		</$.Shadow>
 	)

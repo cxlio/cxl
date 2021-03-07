@@ -9,6 +9,7 @@ String diff tool
 -   Branch Version: [0.0.2](https://npmjs.com/package/@cxl/diff/v/0.0.2)
 -   License: Apache-2.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/diff)
+-   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
 
 ## Installation
 

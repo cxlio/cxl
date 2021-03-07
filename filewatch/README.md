@@ -9,6 +9,7 @@ File watcher library
 -   Branch Version: [0.1.0](https://npmjs.com/package/@cxl/filewatch/v/0.1.0)
 -   License: Apache-2.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/filewatch)
+-   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
 
 ## Installation
 

@@ -33,6 +33,23 @@ export default suite('router', test => {
 		a.equal((router.state?.root as any).title, '@title');
 	});
 
+	test('Router#go - empty path', a => {
+		const router = new Router();
+		router.route({
+			path: 'test',
+			render: () => <div>Hello World</div>,
+		});
+		router.route({
+			path: '',
+			render: () => <div>Hello World</div>,
+		});
+
+		router.go('test');
+		a.equal(router.state?.route, router.routes.get('test'));
+		router.go('');
+		a.equal(router.state?.route, router.routes.get(''));
+	});
+
 	test('normalize', a => {
 		a.equal(normalize('/'), '');
 		a.equal(normalize('//'), '');

@@ -4,7 +4,6 @@ import {
 	Component,
 	Slot,
 	StyleAttribute,
-	bind,
 	get,
 	registerComponent,
 } from './index';
@@ -103,14 +102,14 @@ export default spec('component', a => {
 		a.ok(el instanceof HTMLSlotElement);
 	});
 
-	a.test('bind()', a => {
+	a.test('Augment - bind', a => {
 		const id = 'cxl-test' + a.id;
 		function bindTest(node: Test) {
 			a.equal(node.tagName, id.toUpperCase());
 			return of('hello').pipe(tap(val => (node.title = val)));
 		}
 
-		@Augment(bind(bindTest))
+		@Augment(bindTest)
 		class Test extends Component {
 			static tagName = id;
 		}

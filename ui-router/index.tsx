@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui-router"/>
 import {
 	Router as MainRouter,
 	Strategies,
@@ -20,7 +21,6 @@ import {
 	Component,
 	Span,
 	augment,
-	bind,
 	get,
 } from '@cxl/component';
 import {
@@ -89,8 +89,8 @@ export function routerOutlet(host: HTMLElement) {
 
 		if (url.hash)
 			host.querySelector(`a[name="${url.hash}"]`)?.scrollIntoView();
-		else if (host.parentElement?.scrollTop)
-			host.parentElement.scrollTo(0, 0);
+		else if (host.parentElement)
+			requestAnimationFrame(() => host.parentElement?.scrollTo(0, 0));
 	});
 }
 
@@ -148,7 +148,7 @@ export function Router(
 ) {
 	return (ctor: any) => {
 		augment(ctor, [
-			bind((host: Component) => initializeRouter(host, strategy, getUrl)),
+			(host: Component) => initializeRouter(host, strategy, getUrl),
 		]);
 	};
 }
@@ -194,8 +194,12 @@ export function RouterTitle() {
 	return <AppbarTitle>{each(routeTitles, renderLink)}</AppbarTitle>;
 }
 
-function renderTemplate(tpl: HTMLTemplateElement) {
+@Augment('cxl-router-appbar-title', RouterTitle)
+export class RouterAppbarTitle extends Component {}
+
+function renderTemplate(tpl: HTMLTemplateElement, title?: string) {
 	const result = document.createElement('div');
+	(result as any).routeTitle = title;
 	result.appendChild(tpl.content.cloneNode(true));
 	return result;
 }
@@ -217,7 +221,7 @@ function renderTemplate(tpl: HTMLTemplateElement) {
 				),
 				onAction(el).tap(ev => {
 					ev.preventDefault();
-					if (host.href) router.go(host.href);
+					if (host.href !== undefined) router.go(host.href);
 				})
 			)
 		);
@@ -321,41 +325,40 @@ export class RouterItem extends Component {
 	}
 }
 
-@Augment<RouterOutlet>('cxl-router-outlet', bind(routerOutlet))
+@Augment<RouterOutlet>('cxl-router-outlet', routerOutlet)
 export class RouterOutlet extends Component {}
 
-@Augment<RouterComponent>(
-	'cxl-router',
-	bind(host => {
-		function register(el: HTMLTemplateElement) {
-			if (el.dataset.registered) return;
-			el.dataset.registered = 'true';
-			const path = el.getAttribute('data-path') || '';
+@Augment<RouterComponent>('cxl-router', host => {
+	function register(el: HTMLTemplateElement) {
+		const dataset = el.dataset;
+		if (dataset.registered) return;
+		dataset.registered = 'true';
+		const path = dataset.path || '';
+		const title = dataset.title || undefined;
 
-			router.route({
-				path,
-				isDefault: el.hasAttribute('data-default'),
-				render: renderTemplate.bind(null, el),
-			});
-		}
-
-		return onReady().switchMap(() => {
-			for (const child of host.children)
-				if (child.tagName === 'TEMPLATE') register(child as any);
-
-			return merge(
-				onChildrenMutation(host).tap(ev => {
-					if (ev.type === 'added' && ev.value.tagName === 'TEMPLATE')
-						register(ev.value);
-				}),
-				get(host, 'strategy').switchMap(strategyName => {
-					const strategy = Strategies[strategyName];
-					return routerStrategy(onLocation(), strategy);
-				})
-			);
+		router.route({
+			path,
+			isDefault: el.hasAttribute('data-default'),
+			render: renderTemplate.bind(null, el, title),
 		});
-	})
-)
+	}
+
+	return onReady().switchMap(() => {
+		for (const child of host.children)
+			if (child.tagName === 'TEMPLATE') register(child as any);
+
+		return merge(
+			onChildrenMutation(host).tap(ev => {
+				if (ev.type === 'added' && ev.value.tagName === 'TEMPLATE')
+					register(ev.value);
+			}),
+			get(host, 'strategy').switchMap(strategyName => {
+				const strategy = Strategies[strategyName];
+				return routerStrategy(onLocation(), strategy);
+			})
+		);
+	});
+})
 export class RouterComponent extends Component {
 	@Attribute()
 	strategy: 'hash' | 'path' | 'query' = 'query';

@@ -547,7 +547,7 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 						() => cleanUp()
 					);
 				},
-				error: e => subscriber.error(e),
+				error: subscriber.error.bind(subscriber),
 				complete() {
 					completed = true;
 					if (!lastSubscription) subscriber.complete();
@@ -600,7 +600,7 @@ export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
 							})
 						);
 					},
-					error: e => subscriber.error(e),
+					error: subscriber.error.bind(subscriber),
 					complete() {
 						sourceCompleted = true;
 						if (completed === count) {
@@ -795,12 +795,8 @@ export function merge<R extends Observable<any>[]>(
 		let refCount = observables.length;
 		const subscriptions = observables.map(o =>
 			o.subscribe({
-				next(val) {
-					subs.next(val);
-				},
-				error(e) {
-					subs.error(e);
-				},
+				next: subs.next.bind(subs),
+				error: subs.error.bind(subs),
 				complete() {
 					if (refCount-- === 1) subs.complete();
 				},
@@ -852,9 +848,7 @@ export function zip<T extends any[]>(
 								bucket.push(val);
 								flush();
 							},
-							error(e: any) {
-								subs.error(e);
-							},
+							error: subs.error.bind(subs),
 							complete() {
 								completed++;
 								flush();
@@ -908,9 +902,7 @@ export function combineLatest<T extends Observable<any>[]>(
 									flush();
 								}
 							},
-							error(e: any) {
-								subs.error(e);
-							},
+							error: subs.error.bind(subs),
 							complete() {
 								if (++completed === observables.length) {
 									let remaining = 0;

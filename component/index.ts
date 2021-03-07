@@ -200,12 +200,6 @@ export function Augment(...augs: any[]) {
 	};
 }
 
-export function bind<T extends Component>(
-	bindFn: (node: T) => Observable<any>
-) {
-	return (host: T) => host.bind(bindFn(host));
-}
-
 export function connect<T extends Component>(bindFn: (node: T) => void) {
 	return (host: T) => host.bind(observable(() => bindFn(host)));
 }
@@ -339,11 +333,4 @@ export class Span extends Component {}
 
 export function Slot() {
 	return document.createElement('slot');
-}
-
-export function staticTemplate(template: () => Node) {
-	let rendered: Node;
-	return () => {
-		return (rendered || (rendered = template())).cloneNode(true);
-	};
 }

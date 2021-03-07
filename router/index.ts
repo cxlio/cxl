@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/router"/>
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	PARAM_REGEX = /:([\w_$@]+)/g,
 	optionalParam = /\((.*?)\)/g,
@@ -209,7 +210,7 @@ export function parseUrl(url: string): Url {
 export const QueryStrategy: Strategy = {
 	getHref(url: Url | string) {
 		url = typeof url === 'string' ? parseUrl(url) : url;
-		return `${url.path ? `?${url.path}` : ''}${
+		return `${url.path ? `?${url.path}` : '?'}${
 			url.hash ? `#${url.hash}` : ''
 		}`;
 	},

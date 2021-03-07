@@ -168,15 +168,7 @@ export class Fieldset extends Component {
 /**
  * @example
  * <cxl-field>
- *   <cxl-label>Input Label</cxl-label>
- *   <cxl-input required></cxl-input>
- * </cxl-field>
- * <cxl-field floating>
- *   <cxl-label>Floating Label</cxl-label>
- *   <cxl-input></cxl-input>
- * </cxl-field>
- * <cxl-field outline>
- *   <cxl-label>Outlined Form Group</cxl-label>
+ *   <cxl-label>Form Field</cxl-label>
  *   <cxl-input></cxl-input>
  *   <cxl-field-help>Field Help Text</cxl-field-help>
  * </cxl-field>
@@ -185,7 +177,7 @@ export class Fieldset extends Component {
 	'cxl-field',
 	css({
 		$: { textAlign: 'left' },
-		line: { position: 'absolute', left: 0, right: 0 },
+		// line: { position: 'relative', left: -12, right: -12 },
 		line$outline: { display: 'none' },
 		help: {
 			font: 'caption',
@@ -286,6 +278,14 @@ export class Fieldset extends Component {
 	}
 )
 export class Field extends Component {
+	/**
+	 * @example
+	 * <cxl-field outline>
+	 *   <cxl-label>Form Field</cxl-label>
+	 *   <cxl-input></cxl-input>
+	 *   <cxl-field-help>Field Help Text</cxl-field-help>
+	 * </cxl-field>
+	 */
 	@StyleAttribute()
 	outline = false;
 	@StyleAttribute()
@@ -298,6 +298,14 @@ export class Field extends Component {
 	leading = false;
 	@StyleAttribute()
 	novalue = true;
+	/**
+	 * @example
+	 * <cxl-field dense>
+	 *   <cxl-label>Form Field</cxl-label>
+	 *   <cxl-input></cxl-input>
+	 *   <cxl-field-help>Field Help Text</cxl-field-help>
+	 * </cxl-field>
+	 */
 	@StyleAttribute()
 	dense = false;
 	@Attribute()

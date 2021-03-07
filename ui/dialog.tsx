@@ -4,6 +4,7 @@ import {
 	StyleAttribute,
 	Augment,
 	Component,
+	attributeChanged,
 	connect,
 	get,
 } from '@cxl/component';
@@ -11,7 +12,8 @@ import { css, padding, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { createElement, insert, on, onAction, trigger, remove } from '@cxl/dom';
 import { merge } from '@cxl/rx';
-import { T, Button, Span } from './core.js';
+import { T, Span } from './core.js';
+import { Button } from './button.js';
 import { role } from '@cxl/template';
 
 /**
@@ -30,6 +32,7 @@ import { role } from '@cxl/template';
 			right: 0,
 			backgroundColor: 'elevation',
 			elevation: 5,
+			overflowY: 'auto',
 		},
 	}),
 	() => <slot></slot>
@@ -254,7 +257,7 @@ export class DialogConfirm extends Component {
 							() => (host.visible = false)
 						),
 						on(el, 'click').tap(ev => ev.stopPropagation()),
-						get(host, 'visible')
+						attributeChanged(host, 'visible')
 							.raf()
 							.tap(visible => {
 								if (!visible) el.scrollTo(0, 0);

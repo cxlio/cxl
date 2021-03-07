@@ -5,20 +5,16 @@
 	><!--
 <cxl-grid>
 	<cxl-c sm6>
-		<cxl-field leading>
+		<cxl-field>
 			<cxl-label>Field Label</cxl-label>
-			<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
 			<cxl-input value="Input Value"></cxl-input>
-			<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
 			<cxl-field-help>Helper Text</cxl-field-help>
 		</cxl-field>
 	</cxl-c>
 	<cxl-c sm6>
 		<cxl-field outline>
 			<cxl-label>Field Label</cxl-label>
-			<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
 			<cxl-input value="Input Value"></cxl-input>
-			<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
 			<cxl-field-help>Helper Text</cxl-field-help>
 		</cxl-field>
 	</cxl-c>
@@ -101,7 +97,7 @@
 <cxl-field>
 	<cxl-label>Input with Help Text</cxl-label>
 	<cxl-input></cxl-input>
-	<cxl-field-help><cxl-icon icon="info" round outline></cxl-icon> Help Text with Icon</cxl-field-help>
+	<cxl-field-help>Field Help Text</cxl-field-help>
 </cxl-field>
 --></doc-demo>
 <cxl-t h5>Character Counter</cxl-t>
@@ -118,18 +114,16 @@
 	><!--
 <cxl-grid>
 <cxl-field>
-	<cxl-label>Leading Icon</cxl-label>
-	<cxl-field-icon icon="dollar-sign"></cxl-field-icon>
-	<cxl-input></cxl-input>
+	<cxl-label>Leading Text</cxl-label>
+	$&nbsp;<cxl-input></cxl-input>
 </cxl-field>
 <cxl-field>
-	<cxl-label>Trailing Icon</cxl-label>
-	<cxl-input></cxl-input>
-	<cxl-field-icon trailing icon="percent"></cxl-field-icon>
+	<cxl-label>Trailing Text</cxl-label>
+	<cxl-input></cxl-input>%
 </cxl-field>
 <cxl-field>
 	<cxl-label>Field Label with Suffix Text</cxl-label>
-	<cxl-input style="text-align: right" value="form.input.value"></cxl-input>
+	<cxl-input style="text-align: right"></cxl-input>
 	<div>@gmail.com</div>
 	<cxl-field-help>Helper Text</cxl-field-help>
 </cxl-field>

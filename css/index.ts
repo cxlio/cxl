@@ -354,7 +354,7 @@ const renderMap: StyleMap = {
 			def.prepend =
 				(def.prepend || '') +
 				`@keyframes cxl-${value}{${animation.keyframes}}`;
-		}
+		} else throw new Error('Animation not defined');
 	},
 	backgroundColor: renderColor,
 	borderColor: renderColor,

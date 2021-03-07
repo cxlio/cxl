@@ -171,6 +171,7 @@ ${pkg.description}
 -   Branch Version: [${pkg.version}](${npmLink(pkg.name, pkg.version)})
 -   License: ${pkg.license}
 -   Documentation: [Link](${pkg.homepage})
+-   Report Issues: [Github](${pkg.bugs})
 
 ## Installation
 

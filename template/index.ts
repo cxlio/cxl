@@ -21,12 +21,7 @@ import {
 } from '@cxl/rx';
 import { Bindable, NativeChildren, dom } from '@cxl/tsx';
 import { Styles, render as renderCSS, css } from '@cxl/css';
-import {
-	Component,
-	attributeChanged,
-	get,
-	staticTemplate,
-} from '@cxl/component';
+import { Component, attributeChanged, get } from '@cxl/component';
 
 declare global {
 	interface HTMLElement {
@@ -708,8 +703,10 @@ export function selectable<T extends SelectableComponent>(host: T) {
  */
 export function head(...nodes: Node[]) {
 	return (host: Node) => {
-		const head = host.ownerDocument?.head || document.head;
-		nodes.forEach(child => head.appendChild(child));
+		requestAnimationFrame(() => {
+			const head = host.ownerDocument?.head || document.head;
+			nodes.forEach(child => head.appendChild(child));
+		});
 	};
 }
 
@@ -741,4 +738,17 @@ export function stopChildEvents(target: EventTarget, event: string) {
 			ev.stopImmediatePropagation();
 		}
 	});
+}
+
+export function $onAction<T extends Element>(
+	cb: (ev: KeyboardEvent | MouseEvent) => void
+) {
+	return (el: T) => onAction(el).tap(cb);
+}
+
+export function staticTemplate(template: () => Node) {
+	let rendered: Node;
+	return () => {
+		return (rendered || (rendered = template())).cloneNode(true);
+	};
 }

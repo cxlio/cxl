@@ -55,7 +55,7 @@ async function projectFiles({ tsx, $ }) {
 	"bugs": "${rootPkg.bugs}",
 	"homepage": "${rootPkg.homepage}/${name}",
 	"scripts": {
-		"build": "node ../dist/build" 
+		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/${name} && node ../tester"
 	},
 	"dependencies": { ${tsx ? `"@cxl/tsx": "${tsxVersion}"` : ''} }

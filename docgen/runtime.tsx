@@ -105,7 +105,7 @@ export class DocVersionSelect extends Component {
 		function init(parent: HTMLIFrameElement) {
 			return onChildrenMutation(host).tap(() => {
 				const content = host.childNodes[0]?.textContent?.trim() || '';
-				parent.srcdoc = `<style>body{padding:16px;margin:0;}</style>${UserScripts}${content}`;
+				parent.srcdoc = `<!DOCTYPE html><style>body{padding:12px;margin:0;}</style>${UserScripts}${content}`;
 				parent.onload = () => {
 					const observer = new ResizeObserver(() => {
 						const height =

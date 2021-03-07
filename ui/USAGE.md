@@ -33,7 +33,3 @@ This is all you need to get started.
 	</cxl-content>
 </cxl-application>
 ```
-
-### Support
-
--   Report any bugs or issues in our [Github Issues](https://github.com/cxlio/cxl/issues) page.

@@ -9,6 +9,7 @@ High-performance Web Components
 -   Branch Version: [3.0.0](https://npmjs.com/package/@cxl/ui/v/3.0.0)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/ui)
+-   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
 
 ## Installation
 
@@ -49,7 +50,3 @@ This is all you need to get started.
 	</cxl-content>
 </cxl-application>
 ```
-
-### Support
-
--   Report any bugs or issues in our [Github Issues](https://github.com/cxlio/cxl/issues) page.

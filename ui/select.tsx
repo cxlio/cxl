@@ -6,7 +6,6 @@ import {
 	Component,
 	Slot,
 	StyleAttribute,
-	bind,
 	get,
 } from '@cxl/component';
 import { css } from '@cxl/css';
@@ -27,7 +26,7 @@ import { Svg } from './core.js';
 @Augment<Option>(
 	'cxl-option',
 	role('option'),
-	bind(host => get(host, 'value').pipe(triggerEvent(host, 'change'))),
+	host => get(host, 'value').pipe(triggerEvent(host, 'change')),
 	css({
 		$: {
 			cursor: 'pointer',
@@ -82,7 +81,7 @@ import { Svg } from './core.js';
 			</div>
 		</>
 	),
-	bind(selectable)
+	selectable
 )
 export class Option extends Component {
 	private $value?: string;

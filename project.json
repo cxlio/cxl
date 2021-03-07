@@ -64,19 +64,9 @@
 				"tasks": "cd ui && node build-icons"
 			},
 
-			"ui-legacy": {
-				"files": [
-					"template/src/*",
-					"ui-legacy/src/*",
-					"template/build.js",
-					"ui-legacy/build.js"
-				],
-				"tasks": "npm run build --prefix ui-legacy"
-			},
-
-			"fb": {
-				"files": ["fb/src/*", "fb/build.js"],
-				"tasks": "npm run build --prefix fb"
+			"ui-router": {
+				"files": ["ui-router/*.tsx"],
+				"tasks": "npm run build --prefix ui-router"
 			},
 
 			"ui": {
@@ -86,6 +76,10 @@
 			"ui-table": {
 				"files": ["ui-table/*.tsx", "ui-table/*.html"],
 				"tasks": "npm run build --prefix ui-table"
+			},
+			"ui-datetime": {
+				"files": ["ui-datetime/*.tsx", "ui-datetime/*.html"],
+				"tasks": "npm run build --prefix ui-datetime"
 			},
 			"server": {
 				"files": ["server/*.ts", "server/build.js"],

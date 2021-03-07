@@ -5,19 +5,10 @@ import {
 	Attribute,
 	Component,
 	Slot,
-	bind,
 	get,
-	staticTemplate,
 } from '@cxl/component';
-import {
-	ButtonBase,
-	Spinner,
-	Span,
-	Toggle,
-	FocusHighlight,
-	Svg,
-} from './core.js';
-import { IconButton } from './icon.js';
+import { ButtonBase, Spinner, Span, FocusHighlight } from './core.js';
+import { IconButton, SearchIcon } from './icon.js';
 import { dom, expression } from '@cxl/tsx';
 import {
 	aria,
@@ -31,7 +22,7 @@ import { trigger, onKeypress, on, onAction } from '@cxl/dom';
 import { border, css, padding } from '@cxl/css';
 import { EMPTY, Observable, observable, defer, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
-import { FocusCircleStyle, InputBase } from './input-base.js';
+import { InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
 import { Appbar, AppbarContextual } from './navigation.js';
 import {
@@ -46,6 +37,7 @@ import {
 	role,
 } from '@cxl/template';
 import { Field } from './field.js';
+import { FocusCircleStyle } from './core.js';
 
 export { SelectBox, Option } from './select.js';
 
@@ -80,7 +72,7 @@ export { SelectBox, Option } from './select.js';
 			position: 'absolute',
 			top: 19,
 		},
-		focusCircle: { marginLeft: -4, marginTop: -8 },
+		focusCircle: { marginLeft: -4, marginTop: -8, left: 'auto' },
 		background: {
 			backgroundColor: 'primaryLight',
 			height: 2,
@@ -162,7 +154,7 @@ export class Slider extends InputBase {
 			<slot />
 		</>
 	),
-	bind(el => onAction(el).pipe(triggerEvent(el, 'form.submit')))
+	el => onAction(el).pipe(triggerEvent(el, 'form.submit'))
 )
 export class SubmitButton extends ButtonBase {
 	primary = true;
@@ -188,11 +180,10 @@ function fieldInput<T extends Component>(host: T) {
 		},
 	}),
 	Slot,
-	bind(host =>
+	host =>
 		fieldInput(host).raf(input =>
 			input.setAttribute('aria-label', host.textContent || '')
 		)
-	)
 )
 export class Label extends Component {}
 
@@ -230,7 +221,7 @@ export class FieldHelp extends Component {
 	invalid = false;
 }
 
-@Augment(
+/*@Augment(
 	'cxl-field-toggle',
 	FocusCircleStyle,
 	css({
@@ -253,7 +244,7 @@ export class FieldHelp extends Component {
 		</>
 	)
 )
-export class FieldToggle extends Component {}
+export class FieldToggle extends Component {}*/
 
 /**
  * Display the ratio of characters used and the total character limit.
@@ -280,32 +271,30 @@ export class FieldCounter extends Component {
 /**
  * @example
  * <cxl-form>
+ *   <cxl-grid>
  *   <cxl-field>
  *     <cxl-label>E-mail Address</cxl-label>
- *     <cxl-input &="valid(email)"></cxl-input>
+ *     <cxl-input></cxl-input>
  *   </cxl-field>
  *   <cxl-field>
  *     <cxl-label>Password</cxl-label>
- *     <cxl-password &="valid(required)"></cxl-password>
+ *     <cxl-password></cxl-password>
  *   </cxl-field>
+ *   </cxl-grid><br/>
  *   <cxl-submit>Submit</cxl-submit>
  * </cxl-form>
  */
-@Augment<Form>(
-	'cxl-form',
-	role('form'),
-	bind(host =>
-		merge(
-			on(host, 'form.submit').tap(ev => {
-				host.submit();
-				ev.stopPropagation();
-			}),
-			registableHost<InputBase>(host, 'form', host.elements),
-			onKeypress(host, 'enter').tap(ev => {
-				host.submit();
-				ev.preventDefault();
-			})
-		)
+@Augment<Form>('cxl-form', role('form'), host =>
+	merge(
+		on(host, 'form.submit').tap(ev => {
+			host.submit();
+			ev.stopPropagation();
+		}),
+		registableHost<InputBase>(host, 'form', host.elements),
+		onKeypress(host, 'enter').tap(ev => {
+			host.submit();
+			ev.preventDefault();
+		})
 	)
 )
 export class Form extends Component {
@@ -361,22 +350,10 @@ export class Form extends Component {
 		},
 		$disabled: { pointerEvents: 'none' },
 	}),
-	$ => ContentEditable($)
+	ContentEditable
 )
 export class Input extends InputBase {
 	value = '';
-}
-
-function ContentEditable<T extends InputBase>(host: T, multi = false) {
-	const el = (<div className="input" />) as HTMLDivElement;
-	host.bind($contentEditable(el, host));
-	host.bind(
-		onKeypress(el, 'enter').tap(ev =>
-			multi ? ev.stopPropagation() : ev.preventDefault()
-		)
-	);
-
-	return el;
 }
 
 @Augment<FieldInput>(
@@ -559,7 +536,7 @@ const radioElements = new Set<Radio>();
 			<slot />
 		</>
 	),
-	bind(host => {
+	host => {
 		let registered = false;
 
 		function unregister() {
@@ -595,7 +572,7 @@ const radioElements = new Set<Radio>();
 				}
 			})
 		);
-	})
+	}
 )
 export class Radio extends InputBase {
 	@StyleAttribute()
@@ -629,7 +606,7 @@ export class Radio extends InputBase {
 			<slot />
 		</SelectMenu>
 	),
-	bind(host =>
+	host =>
 		merge(
 			onAction(host).tap(() => {
 				if (host.focusedOption) host.setSelected(host.focusedOption);
@@ -643,8 +620,7 @@ export class Radio extends InputBase {
 				'cxl-option:not([disabled])',
 				'cxl-option[focused]'
 			).tap(selected => host.setFocusedOption(selected as Option))
-		)
-	),
+		),
 	host => (
 		<div className="placeholder">
 			{expression(
@@ -793,15 +769,14 @@ export class MultiSelect extends SelectBase {
 			</div>
 		</div>
 	),
-	bind(host => {
-		return merge(
+	host =>
+		merge(
 			onAction(host).tap(() => {
 				if (host.disabled) return;
 				host.checked = !host.checked;
 			}),
 			checkedBehavior(host, () => (host.value = host.checked))
-		);
-	})
+		)
 )
 export class Switch extends InputBase {
 	value = false;
@@ -828,7 +803,11 @@ function $valueProxy<T extends InputBase>(host: T, el: HTMLInputElement) {
 	return el;
 }
 
-function $contentEditable<T extends InputBase>(el: HTMLElement, host: T) {
+function contentEditable<T extends InputBase>(
+	el: HTMLElement,
+	host: T,
+	multiLine = false
+) {
 	return merge(
 		$focusProxy(el, host),
 		get(host, 'value').tap(val => {
@@ -837,8 +816,17 @@ function $contentEditable<T extends InputBase>(el: HTMLElement, host: T) {
 		get(host, 'disabled').raf(
 			val => (el.contentEditable = val ? 'false' : 'true')
 		),
-		on(el, 'input').tap(() => (host.value = el.textContent))
+		on(el, 'input').tap(() => (host.value = el.textContent)),
+		onKeypress(el, 'enter').tap(ev =>
+			multiLine ? ev.stopPropagation() : ev.preventDefault()
+		)
 	);
+}
+
+export function ContentEditable<T extends InputBase>(host: T, multi = false) {
+	const el = (<div className="input" />) as HTMLDivElement;
+	host.bind(contentEditable(el, host, multi));
+	return el;
 }
 
 /**
@@ -920,13 +908,6 @@ export class Fab extends Component {
 	touched = false;
 }
 
-const SearchIcon = staticTemplate(() => (
-	<Svg
-		width={24}
-		viewBox="0 0 48 48"
-	>{`<path d="M31 28h-2v-1c2-2 3-5 3-8a13 13 0 10-5 10h1v2l10 10 3-3-10-10zm-12 0a9 9 0 110-18 9 9 0 010 18z"/>`}</Svg>
-));
-
 /**
  * Search Input for Appbar
  * @demo
@@ -998,8 +979,9 @@ const SearchIcon = staticTemplate(() => (
 						)
 					}
 					className="button"
-					icon="search"
-				/>
+				>
+					<SearchIcon />
+				</IconButton>
 				<Field className="input">
 					<Input
 						$={el =>

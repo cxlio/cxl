@@ -1,6 +1,5 @@
 import { spec } from '@cxl/spec';
-import { Icon } from '@cxl/ui';
-import './index.js';
+import { Icon } from './index.js';
 
 export default spec('ui-fa', s => {
 	s.test('should load', a => {

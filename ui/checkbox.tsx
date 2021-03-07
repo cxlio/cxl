@@ -1,17 +1,18 @@
 ///<amd-module name="@cxl/ui/checkbox.js"/>
 import { dom } from '@cxl/tsx';
-import {
-	Augment,
-	StyleAttribute,
-	bind,
-	get,
-	staticTemplate,
-} from '@cxl/component';
+import { Augment, StyleAttribute, get } from '@cxl/component';
 import { Svg } from './core.js';
 import { merge } from '@cxl/rx';
-import { FocusCircleStyle, InputBase } from './input-base.js';
+import { FocusCircleStyle } from './core.js';
+import { InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
-import { Focusable, Style, checkedBehavior, role } from '@cxl/template';
+import {
+	Focusable,
+	Style,
+	checkedBehavior,
+	role,
+	staticTemplate,
+} from '@cxl/template';
 import { padding } from '@cxl/css';
 
 /**
@@ -24,7 +25,7 @@ import { padding } from '@cxl/css';
 @Augment<Checkbox>(
 	'cxl-checkbox',
 	role('checkbox'),
-	bind(host => {
+	host => {
 		const update = () =>
 			(host.value = host.indeterminate ? undefined : host.checked);
 
@@ -41,7 +42,7 @@ import { padding } from '@cxl/css';
 			checkedBehavior(host, update),
 			get(host, 'indeterminate').tap(update)
 		);
-	}),
+	},
 	FocusCircleStyle,
 	Focusable,
 	staticTemplate(() => (
@@ -57,6 +58,7 @@ import { padding } from '@cxl/css';
 						display: 'block',
 						verticalAlign: 'middle',
 						font: 'default',
+						textAlign: 'left',
 					},
 					$empty: {
 						display: 'inline-block',
@@ -74,6 +76,7 @@ import { padding } from '@cxl/css';
 						width: 20,
 						height: 20,
 						borderWidth: 2,
+						lineHeight: 16,
 						borderColor: 'onSurface',
 						borderStyle: 'solid',
 						position: 'absolute',

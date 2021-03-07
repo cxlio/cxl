@@ -73,24 +73,33 @@ async function getNPMVersion(name) {
 	}
 }
 
+async function getScriptSize(dir, pkg) {
+	const main = pkg.browser || pkg.main || 'index.js';
+	const scriptPath = `dist/${dir}/${main}`;
+	const stat = await fs.stat(scriptPath);
+	return `${main}: ${stat.size}`;
+}
+
 async function build() {
 	const stats = await readJson('dist/stats.json');
 	let output = '';
 
 	for (const pkg of stats.packages) {
 		const dir = /\/(.+)/.exec(pkg.name)[1];
-		const npmVersion = await getNPMVersion(pkg.name);
-		const coverage = await getTotalCoverage(dir, pkg.testReport.coverage);
+		const [npmVersion, coverage, size] = await Promise.all([
+			getNPMVersion(pkg.name),
+			getTotalCoverage(dir, pkg.testReport.coverage),
+			getScriptSize(dir, pkg.package),
+		]);
 		const success = coverage > 90;
 		const usedBy = stats.packages.filter(
 			p => p.package.dependencies?.[pkg.name]
 		);
-		// const pkgFiles = await sh(`npm pack ./dist/${dir} --dry-run`);
-		// parseNpmPack(pkgFiles);
 		output += `<cxl-tr class="${success ? 'success' : 'failure'}">
 				<cxl-td><a href="../docs/${dir}">${pkg.name}</a></cxl-td>
 				<cxl-td>${pkg.package.version} (NPM ${npmVersion})</cxl-td>
 				<cxl-td>${usedBy.map(p => p.name).join('<br>')}</cxl-td>
+				<cxl-td>${size}</cxl-td>
 				<cxl-td>${pkg.buildTime}</cxl-td>
 				<cxl-td><a href="${dir}/test-report.html">${coverage} %</a></cxl-td>
 			</cxl-tr>`;
@@ -101,6 +110,7 @@ async function build() {
 	<cxl-th>Package</cxl-th>
 	<cxl-th>Version</cxl-th>
 	<cxl-th>Used By</cxl-th>
+	<cxl-th>Script Size</cxl-th>
 	<cxl-th>Build Time</cxl-th>
 	<cxl-th>Coverage</cxl-th>
 	</cxl-tr>

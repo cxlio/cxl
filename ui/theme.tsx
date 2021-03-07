@@ -44,50 +44,45 @@ declare module '../css/index.js' {
 		button: CSSStyle;
 		code: CSSStyle;
 		monospace: CSSStyle;
-		icon: CSSStyle;
-		icon_button: CSSStyle;
 	}
 }
 
 Object.assign(theme.animation, {
-	animation: {
-		spin: {
-			keyframes:
-				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-spin 2s infinite linear',
-		},
-		pulse: {
-			keyframes:
-				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
-			value: 'cxl-pulse 1s infinite steps(8)',
-		},
-		expand: {
-			keyframes:
-				'0% { transform: scale(0,0); } 100% { transform: scale(1,1); }',
-			value: 'cxl-expand var(--cxl-speed) 1 ease-in',
-		},
-		fadeIn: {
-			keyframes:
-				'0% { display: block; opacity: 0; } 100% { opacity: 1; }',
-			value: 'cxl-fadeIn var(--cxl-speed) linear forwards',
-		},
-		fadeOut: {
-			keyframes:
-				'0% { opacity: 1 } 100% { visibility:hidden; opacity: 0; }',
-			value: 'cxl-fadeOut var(--cxl-speed) linear both',
-		},
-		wait: {
-			keyframes: `
+	spin: {
+		keyframes:
+			'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
+		value: 'cxl-spin 2s infinite linear',
+	},
+	pulse: {
+		keyframes:
+			'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
+		value: 'cxl-pulse 1s infinite steps(8)',
+	},
+	expand: {
+		keyframes:
+			'0% { transform: scale(0,0); } 100% { transform: scale(1,1); }',
+		value: 'cxl-expand var(--cxl-speed) 1 ease-in',
+	},
+	fadeIn: {
+		keyframes: '0% { display: block; opacity: 0; } 100% { opacity: 1; }',
+		value: 'cxl-fadeIn var(--cxl-speed) linear forwards',
+	},
+	fadeOut: {
+		keyframes: '0% { opacity: 1 } 100% { visibility:hidden; opacity: 0; }',
+		value: 'cxl-fadeOut var(--cxl-speed) linear both',
+	},
+	wait: {
+		keyframes: `
 0% { transform: translateX(0) scaleX(0) }
 33% { transform: translateX(0) scaleX(0.75)}
 66% { transform: translateX(75%) scaleX(0.25)}
 100%{ transform:translateX(100%) scaleX(0) }
 			`,
-			value: 'cxl-wait 1s infinite linear',
-		},
+		value: 'cxl-wait 1s infinite linear',
+	},
 
-		spinnerstroke: {
-			keyframes: `
+	spinnerstroke: {
+		keyframes: `
 	0%      { stroke-dashoffset: $start;  transform: rotate(0); }
 	12.5%   { stroke-dashoffset: $end;    transform: rotate(0); }
 	12.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(72.5deg); }
@@ -105,10 +100,9 @@ Object.assign(theme.animation, {
 	87.5001%  { stroke-dashoffset: $end;    transform: rotateX(180deg) rotate(341.5deg); }
 	100%    { stroke-dashoffset: $start;  transform: rotateX(180deg) rotate(341.5deg); }
 			`
-				.replace(/\$start/g, (282.743 * (1 - 0.05)).toString())
-				.replace(/\$end/g, (282.743 * (1 - 0.8)).toString()),
-			value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)',
-		},
+			.replace(/\$start/g, (282.743 * (1 - 0.05)).toString())
+			.replace(/\$end/g, (282.743 * (1 - 0.8)).toString()),
+		value: 'cxl-spinnerstroke 4s infinite cubic-bezier(.35,0,.25,1)',
 	},
 });
 
@@ -152,12 +146,6 @@ Object.assign(theme.typography, {
 	},
 	code: { fontFamily: 'var(--cxl-font-monospace)' },
 	monospace: { fontFamily: 'var(--cxl-font-monospace)' },
-	icon: { fontFamily: "'Material Icons'", textTransform: 'none' },
-	icon_button: {
-		fontFamily: "'Material Icons'",
-		textTransform: 'none',
-		fontSize: '20px',
-	},
 });
 Object.assign(theme.colors, {
 	elevation: rgba(0, 0, 0, 0.26),
@@ -209,7 +197,7 @@ Object.assign(theme.colors, {
 Object.assign(theme, {
 	imports: [
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap',
-		'https://fonts.googleapis.com/icon?family=Material+Icons',
+		// 'https://fonts.googleapis.com/icon?family=Material+Icons',
 	],
 
 	globalStyles: {
@@ -260,4 +248,4 @@ export const DarkColors: Partial<Colors> = {
 	onSecondary: rgba(0, 0, 0),
 };
 
-applyTheme();
+requestAnimationFrame(applyTheme);

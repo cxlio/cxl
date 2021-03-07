@@ -136,7 +136,7 @@ function Type(type?: Node): string {
 }
 
 function SignatureValue(val?: string) {
-	if (val && val.length > 50) return ` = ${Code(val)}`;
+	if (val && val.length > 50) return ''; //` = ${Code(val, 'typescript')}`;
 	return val ? ` = ${escape(val)}` : '';
 }
 
@@ -228,9 +228,9 @@ function getSourceLink(src: Source) {
 }
 
 function getSource(source: Source) {
-	return `<a title="See Source" style="float:right;color:var(--cxl-onSurface87)" href="${getSourceLink(
+	return `<a class="see-source" title="See Source" href="${getSourceLink(
 		source
-	)}"><cxl-icon icon="code"></cxl-icon></a>`;
+	)}">&lt;/&gt;</a>`;
 }
 
 function SourceLink({ source }: Node) {
@@ -329,7 +329,7 @@ function InheritedFrom(symbol?: Node) {
 }
 
 function MemberBody(c: Node) {
-	let result = `<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>${Signature(
+	let result = `<cxl-t code subtitle>${Signature(
 		c
 	)}</cxl-t>${InheritedFrom()}`;
 
@@ -340,7 +340,10 @@ function MemberBody(c: Node) {
 			`<cxl-t subtitle2>${translate('Parameters')}</cxl-t><ul>` +
 			c.parameters
 				.map(
-					p => `<li>${Parameter(p)}${ParameterDocumentation(p)}</li>`
+					p =>
+						`<li><cxl-t code inline>${Parameter(
+							p
+						)}</cxl-t>${ParameterDocumentation(p)}</li>`
 				)
 				.join('') +
 			'</ul>';
@@ -587,7 +590,7 @@ function NodeIcon(node: Node) {
 	const kind =
 		node.kind === Kind.Reference && node.type ? node.type.kind : node.kind;
 	const icon = IconMap[kind] || '?';
-	return `<cxl-badge style="margin-right:12px">${icon}</cxl-badge>`;
+	return `<cxl-badge>${icon}</cxl-badge>`;
 }
 
 function ModuleNavbar(node: Node) {
@@ -612,9 +615,7 @@ function Item(title: string, href: string, icon?: string) {
 	if (!href) throw new Error(`No href for "${title}"`);
 
 	const result = `<cxl-router-item href="${href}">${
-		icon
-			? `<cxl-icon style="margin-right: 12px" icon="${icon}"></cxl-icon>`
-			: ''
+		icon ? `<cxl-icon icon="${icon}"></cxl-icon>` : ''
 	}${title}</cxl-router-item>`;
 
 	return result;
@@ -657,9 +658,9 @@ function Versions() {
 }
 
 function Navbar(pkg: any, out: Output) {
-	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">${
+	return `<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline>${
 		pkg.name
-	}</cxl-t>${Versions()}
+	}</cxl-t>&nbsp;&nbsp;${Versions()}
 	</cxl-c>
 		<cxl-hr></cxl-hr>
 		${extraDocs.length ? NavbarExtra() : ''}	
@@ -680,7 +681,17 @@ function getRuntimeScripts() {
 		`<script>window.docgen=${JSON.stringify(docgenConfig)};</script>` +
 		(application.debug
 			? `<script src="../../dist/tester/require-browser.js"></script>
-	<script>require('../../dist/ui/index.js');require('../../dist/ui/icons.js');require('../../dist/docgen/runtime.js')</script>`
+	<script>
+	require.replace = function (path) {
+		return path.replace(
+			/^@cxl\\/(.+)/,
+			(str, p1) =>
+				\`../../../cxl/dist/\${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
+		);
+	};
+	require('../../dist/ui/index.js');require('../../dist/docgen/runtime.js')</script>`
 			: `<script src="runtime.bundle.min.js"></script>`)
 	);
 }
@@ -704,12 +715,10 @@ function Header(module: Output) {
 		pkg.name
 	}" />${SCRIPTS}</head>
 	<link rel="stylesheet" href="styles.css" />
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}cxl-router-item>cxl-badge{margin-right:0} cxl-grid>cxl-c{overflow-wrap:break-word}.see-source{text-decoration:none;float:right;color:var(--cxl-onSurface87)}cxl-t[code][subtitle]{font-weight:700;margin-bottom:16px}</style>
 	<cxl-application permanent><title>${pkg.name}</title><cxl-appbar>
 	${Navbar(pkg, module)}
-	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">${
-		pkg.name
-	}</a></cxl-appbar-title></cxl-appbar><cxl-page>`;
+	<cxl-router-appbar-title></cxl-router-appbar-title></cxl-appbar><cxl-page>`;
 }
 
 function escapeFileName(name: string, replaceExt = '.html') {
@@ -784,7 +793,9 @@ function Markdown(content: string) {
 function Route(file: File) {
 	return `<template ${
 		file.name === 'index.html' ? 'data-default="true"' : ''
-	} data-path="${file.name}">${file.content}</template>`;
+	} data-title="${file.node?.name || file.name}" data-path="${file.name}">${
+		file.content
+	}</template>`;
 }
 
 function renderExtraFile(file: string, index = false) {

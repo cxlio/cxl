@@ -9,6 +9,7 @@ Lightweight reactiveX implementation
 -   Branch Version: [0.4.0](https://npmjs.com/package/@cxl/rx/v/0.4.0)
 -   License: Apache-2.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/rx)
+-   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
 
 ## Installation
 

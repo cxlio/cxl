@@ -1,12 +1,5 @@
 ///<amd-module name="@cxl/ui-fa"/>
-import { registerFont } from '@cxl/css';
-import { registerIconSet } from '@cxl/ui';
-
-type FaIconSet = typeof icons;
-
-declare module '../ui' {
-	interface IconSet extends FaIconSet {}
-}
+type IconKey = keyof typeof icons;
 
 const icons = {
 	ad: '\uf641',
@@ -134,6 +127,7 @@ const icons = {
 	'business-time': '\uf64a',
 	calculator: '\uf1ec',
 	calendar: '\uf133',
+	calendar_today: '\uf133',
 	'calendar-alt': '\uf073',
 	'calendar-check': '\uf274',
 	'calendar-day': '\uf783',
@@ -154,6 +148,7 @@ const icons = {
 	'car-side': '\uf5e4',
 	caravan: '\uf8ff',
 	'caret-down': '\uf0d7',
+	arrow_drop_down: '\uf0d7',
 	'caret-left': '\uf0d9',
 	'caret-right': '\uf0da',
 	'caret-square-down': '\uf150',
@@ -303,6 +298,7 @@ const icons = {
 	eject: '\uf052',
 	'ellipsis-h': '\uf141',
 	'ellipsis-v': '\uf142',
+	more_vert: '\uf142',
 	envelope: '\uf0e0',
 	'envelope-open': '\uf2b6',
 	'envelope-open-text': '\uf658',
@@ -987,7 +983,46 @@ const icons = {
 	'': '',
 };
 
-registerFont({
+const style = document.createElement('style');
+style.innerHTML = `:host { display: inline-block; }`;
+
+export class Icon extends HTMLElement {
+	static tagName = 'cxl-fa';
+
+	private iconNode?: Text;
+	private $icon: IconKey = '';
+
+	constructor() {
+		super();
+		const shadow = this.shadowRoot || this.attachShadow({ mode: 'open' });
+		shadow.appendChild(style.cloneNode(true));
+	}
+
+	get icon() {
+		return this.$icon;
+	}
+
+	set icon(iconName: IconKey) {
+		this.$icon = iconName;
+		const icon = iconName ? icons[iconName] : undefined;
+
+		if (icon) {
+			if (this.iconNode) {
+				this.iconNode.data = icon;
+			} else {
+				this.iconNode = document.createTextNode(icon);
+				this.shadowRoot?.appendChild(this.iconNode);
+			}
+
+			if (!this.hasAttribute('aria-label'))
+				this.setAttribute('aria-label', String(iconName));
+		}
+	}
+}
+
+customElements.define('cxl-fa', Icon);
+
+/*registerFont({
 	family: 'Font Awesome\\ 5 Free',
 	url:
 		'https://use.fontawesome.com/releases/v5.1.0/webfonts/fa-solid-900.woff2',
@@ -997,4 +1032,4 @@ registerFont({
 registerIconSet(icons, {
 	fontFamily: 'Font Awesome\\ 5 Free',
 	fontSize: 'inherit',
-});
+});*/

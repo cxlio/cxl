@@ -3,10 +3,9 @@ import {
 	Attribute,
 	Augment,
 	Component,
-	Slot,
 	Span,
+	Slot,
 	StyleAttribute,
-	bind,
 	get,
 	onUpdate,
 } from '@cxl/component';
@@ -23,6 +22,40 @@ export const FocusHighlight = {
 	$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
 	$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 };
+
+export const FocusCircleStyle = css({
+	focusCircle: {
+		position: 'absolute',
+		width: 48,
+		height: 48,
+		backgroundColor: 'elevation',
+		borderRadius: 24,
+		opacity: 0,
+		scaleX: 0,
+		scaleY: 0,
+		left: 0,
+		display: 'inline-block',
+		translateX: -14,
+		translateY: -14,
+	},
+	focusCirclePrimary: { backgroundColor: 'primary' },
+	focusCircle$invalid$touched: { backgroundColor: 'error' },
+	focusCircle$hover: {
+		scaleX: 1,
+		scaleY: 1,
+		translateX: -14,
+		translateY: -14,
+		opacity: 0.14,
+	},
+	focusCircle$focus: {
+		scaleX: 1,
+		scaleY: 1,
+		translateX: -14,
+		translateY: -14,
+		opacity: 0.25,
+	},
+	focusCircle$disabled: { scaleX: 0, scaleY: 0 },
+});
 
 function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
 	const x = ev.x,
@@ -105,7 +138,7 @@ export class Ripple extends Component {
  */
 @Augment(
 	'cxl-ripple-container',
-	bind(ripple),
+	ripple,
 	css({
 		$: {
 			display: 'block',
@@ -127,7 +160,7 @@ const AVATAR_DEFAULT =
  * @example
  * <cxl-avatar></cxl-avatar>
  * <cxl-avatar big></cxl-avatar>
- * <cxl-avatar little></cxl-avatar>
+ * <cxl-avatar small></cxl-avatar>
  */
 @Augment<Avatar>(
 	'cxl-avatar',
@@ -194,102 +227,6 @@ export class Avatar extends Component {
 }
 
 /**
- * Chips are compact elements that represent an input, attribute, or action.
- * @example
- * <cxl-chip>Single Chip</cxl-chip>
- * <cxl-chip secondary removable>Removable Chip</cxl-chip>
- * <cxl-chip><cxl-avatar little></cxl-avatar> Chip with Avatar</cxl-chip>
- */
-@Augment<Chip>(
-	'cxl-chip',
-	Focusable,
-	css({
-		$: {
-			borderRadius: 16,
-			font: 'subtitle2',
-			backgroundColor: 'onSurface12',
-			display: 'inline-flex',
-			color: 'onSurface',
-			lineHeight: 32,
-			height: 32,
-			verticalAlign: 'top',
-		},
-		$primary: {
-			color: 'onPrimary',
-			backgroundColor: 'primary',
-		},
-		$secondary: {
-			color: 'onSecondary',
-			backgroundColor: 'secondary',
-		},
-		$small: { font: 'caption', lineHeight: 20, height: 20 },
-		content: {
-			display: 'inline-block',
-			marginLeft: 12,
-			paddingRight: 12,
-		},
-		avatar: { display: 'inline-block' },
-		remove: {
-			display: 'none',
-			marginRight: 12,
-			cursor: 'pointer',
-		},
-		remove$removable: {
-			display: 'inline-block',
-		},
-		...FocusHighlight,
-	}),
-	$ => (
-		<>
-			<span className="avatar">
-				<$.Slot selector="cxl-avatar" />
-			</span>
-			<span className="content">
-				<slot />
-			</span>
-		</>
-	),
-	host => (
-		<Span
-			$={el => on(el, 'click').tap(() => host.remove())}
-			className="remove"
-		>
-			x
-		</Span>
-	),
-	bind(host =>
-		on(host, 'keydown').pipe(
-			tap(ev => {
-				if (
-					host.removable &&
-					(ev.key === 'Delete' || ev.key === 'Backspace')
-				)
-					host.remove();
-			})
-		)
-	)
-)
-export class Chip extends Component {
-	@StyleAttribute()
-	removable = false;
-	@StyleAttribute()
-	disabled = false;
-	@Attribute()
-	touched = false;
-	@StyleAttribute()
-	primary = false;
-	@StyleAttribute()
-	secondary = false;
-	@StyleAttribute()
-	small = false;
-
-	remove() {
-		remove(this);
-		trigger(this, 'cxl-chip.remove');
-	}
-}
-
-/**
  * Chips represent complex entities in small blocks. A chip can contain several
  * different elements such as avatars, text, and icons.
  *
@@ -313,6 +250,7 @@ export class Chip extends Component {
 			backgroundColor: 'primary',
 			textAlign: 'center',
 			verticalAlign: 'top',
+			flexShrink: 0,
 		},
 		$secondary: {
 			color: 'onSecondary',
@@ -403,7 +341,8 @@ export function Svg(p: {
 	children: string;
 }) {
 	const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	el.style.fill = 'var(--cxl-on-surface)';
+	el.style.fill = 'currentColor';
+	el.style.verticalAlign = 'middle';
 	el.innerHTML = p.children;
 	el.setAttribute('viewBox', p.viewBox);
 	if (p.width !== undefined) el.setAttribute('width', p.width.toString());
@@ -499,9 +438,7 @@ export class T extends Component {
  * Show or hide an element when clicked.
  * @example
  * <cxl-toggle>
- *   <cxl-icon-button slot="trigger">
- *     &vellip;
- *   </cxl-icon-button>
+ *   <cxl-button slot="trigger">Open</cxl-button>
  *   <cxl-menu>
  *     <cxl-item>Features</cxl-item>
  *     <cxl-item>Pricing</cxl-item>
@@ -534,7 +471,7 @@ export class T extends Component {
 			</div>
 		</>
 	),
-	bind(el =>
+	el =>
 		merge(
 			get(el, 'opened')
 				.debounceTime()
@@ -547,7 +484,6 @@ export class T extends Component {
 				),
 			onAction(el).tap(() => (el.opened = !el.opened))
 		)
-	)
 )
 export class Toggle extends Component {
 	@StyleAttribute()
@@ -555,95 +491,6 @@ export class Toggle extends Component {
 	@StyleAttribute()
 	right = false;
 }
-
-@Augment(
-	role('button'),
-	Focusable,
-	css({
-		$: {
-			elevation: 1,
-			paddingTop: 8,
-			paddingBottom: 8,
-			paddingRight: 16,
-			paddingLeft: 16,
-			cursor: 'pointer',
-			display: 'inline-block',
-			font: 'button',
-			borderRadius: 2,
-			userSelect: 'none',
-			backgroundColor: 'surface',
-			color: 'onSurface',
-			textAlign: 'center',
-		},
-
-		$big: { ...padding(16), font: 'h5' },
-		$flat: {
-			elevation: 0,
-			paddingRight: 8,
-			paddingLeft: 8,
-		},
-		$outline: {
-			backgroundColor: 'surface',
-			elevation: 0,
-			...border(1),
-			borderStyle: 'solid',
-			borderColor: 'onSurface',
-		},
-		$outline$primary: {
-			color: 'primary',
-			borderColor: 'primary',
-		},
-		$outline$secondary: {
-			color: 'secondary',
-			borderColor: 'secondary',
-		},
-		$primary: {
-			backgroundColor: 'primary',
-			color: 'onPrimary',
-		},
-		$secondary: {
-			backgroundColor: 'secondary',
-			color: 'onSecondary',
-		},
-
-		$active: { elevation: 3 },
-		$active$disabled: { elevation: 1 },
-		$active$flat: { elevation: 0 },
-		'@large': {
-			$flat: { paddingLeft: 12, paddingRight: 12 },
-		},
-	}),
-	css(FocusHighlight),
-	bind(ripple)
-)
-export class ButtonBase extends Component {
-	@StyleAttribute()
-	disabled = false;
-	@StyleAttribute()
-	primary = false;
-	@StyleAttribute()
-	flat = false;
-	@StyleAttribute()
-	secondary = false;
-	@Attribute()
-	touched = false;
-	@StyleAttribute()
-	big = false;
-	@StyleAttribute()
-	outline = false;
-}
-
-/**
- * Buttons allow users to take actions, and make choices, with a single tap.
- * @example
- * <cxl-button primary><cxl-icon icon="upload"></cxl-icon> Upload</cxl-button>
- * <cxl-button secondary>Secondary</cxl-button>
- * <cxl-button disabled>Disabled</cxl-button>
- * <cxl-button flat>Flat Button</cxl-button>
- * <cxl-button outline>With Outline</cxl-button>
- */
-@Augment('cxl-button', Slot)
-export class Button extends ButtonBase {}
 
 @Augment(
 	'cxl-meta',
@@ -716,3 +563,88 @@ export class Surface extends Component {
 	Slot
 )
 export class Toolbar extends Component {}
+
+@Augment(
+	role('button'),
+	Focusable,
+	css({
+		$: {
+			elevation: 1,
+			paddingTop: 8,
+			paddingBottom: 8,
+			paddingRight: 16,
+			paddingLeft: 16,
+			cursor: 'pointer',
+			display: 'inline-block',
+			font: 'button',
+			borderRadius: 2,
+			userSelect: 'none',
+			backgroundColor: 'surface',
+			color: 'onSurface',
+			textAlign: 'center',
+		},
+
+		$big: { ...padding(16), font: 'h5' },
+		$flat: {
+			elevation: 0,
+			paddingRight: 8,
+			paddingLeft: 8,
+		},
+		$flat$primary: {
+			backgroundColor: 'surface',
+			color: 'primary',
+		},
+		$flat$secondary: {
+			backgroundColor: 'surface',
+			color: 'secondary',
+		},
+		$primary: {
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		$secondary: {
+			backgroundColor: 'secondary',
+			color: 'onSecondary',
+		},
+		$outline: {
+			backgroundColor: 'surface',
+			elevation: 0,
+			...border(1),
+			borderStyle: 'solid',
+			borderColor: 'onSurface',
+		},
+		$outline$primary: {
+			color: 'primary',
+			borderColor: 'primary',
+		},
+		$outline$secondary: {
+			color: 'secondary',
+			borderColor: 'secondary',
+		},
+
+		$active: { elevation: 3 },
+		$active$disabled: { elevation: 1 },
+		$active$flat: { elevation: 0 },
+		'@large': {
+			$flat: { paddingLeft: 12, paddingRight: 12 },
+		},
+	}),
+	css(FocusHighlight),
+	ripple
+)
+export class ButtonBase extends Component {
+	@StyleAttribute()
+	disabled = false;
+	@StyleAttribute()
+	primary = false;
+	@StyleAttribute()
+	flat = false;
+	@StyleAttribute()
+	secondary = false;
+	@Attribute()
+	touched = false;
+	@StyleAttribute()
+	big = false;
+	@StyleAttribute()
+	outline = false;
+}
