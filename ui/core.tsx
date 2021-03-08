@@ -13,7 +13,7 @@ import { dom, expression } from '@cxl/tsx';
 import { EMPTY, merge, tap } from '@cxl/rx';
 import { border, css, padding, pct } from '@cxl/css';
 import { Focusable, head, role } from '@cxl/template';
-import { on, onAction, remove, trigger } from '@cxl/dom';
+import { on, onAction, trigger } from '@cxl/dom';
 import { InversePrimary, ResetSurface } from './theme.js';
 
 export { Span } from '@cxl/component';
@@ -116,7 +116,7 @@ export function ripple(element: any) {
 						style.top = host.y - host.radius + 'px';
 						style.width = style.height = host.radius * 2 + 'px';
 					}),
-					on(el, 'animationend').tap(() => remove(ctx))
+					on(el, 'animationend').tap(() => ctx.remove())
 				)
 			}
 			className="ripple"

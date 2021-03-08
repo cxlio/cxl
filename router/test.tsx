@@ -1,6 +1,17 @@
 import { dom } from '@cxl/tsx';
 import { suite } from '@cxl/spec';
-import { Router, normalize } from './index.js';
+import {
+	Router,
+	getElementRoute,
+	normalize,
+	parseQueryParameters,
+	parseUrl,
+	replaceParameters,
+	QueryStrategy,
+	PathStrategy,
+	HashStrategy,
+	sys,
+} from './index.js';
 
 export default suite('router', test => {
 	test('Router#go - no parameters', a => {
@@ -50,6 +61,19 @@ export default suite('router', test => {
 		a.equal(router.state?.route, router.routes.get(''));
 	});
 
+	test('getElementRoute', a => {
+		const router = new Router();
+		const el = <div>Hello World</div>;
+		router.route({
+			path: 'test',
+			render: () => el,
+		});
+		router.go('test');
+
+		const route = getElementRoute(el);
+		a.equal(route?.path?.toString(), 'test');
+	});
+
 	test('normalize', a => {
 		a.equal(normalize('/'), '');
 		a.equal(normalize('//'), '');
@@ -82,6 +106,20 @@ export default suite('router', test => {
 		a.equal(router.state?.route.id, '/park');
 	});
 
+	test('Router#getPath', it => {
+		it.should('replace parameters if present', a => {
+			const router = new Router();
+			router.route({
+				id: 'test',
+				path: '/park/:item/details',
+				render: () => <b />,
+			});
+
+			const path = router.getPath('test', { item: a.id.toString() });
+			a.equal(path, `park/${a.id}/details`);
+		});
+	});
+
 	test('isActiveUrl()', a => {
 		const router = new Router();
 		router.route({
@@ -111,5 +149,125 @@ export default suite('router', test => {
 		a.ok(router.isActiveUrl('/park'));
 		a.ok(router.isActiveUrl('/park/item/details'));
 		a.ok(!router.isActiveUrl('/park/item2/details'));
+	});
+
+	test('replaceParameters', it => {
+		it.should('work with empty path', a => {
+			const url = replaceParameters('', {
+				world: a.id.toString(),
+			});
+			a.equal(url, '');
+		});
+
+		it.should('work with no parameters', a => {
+			const url = replaceParameters('');
+			a.equal(url, '');
+		});
+
+		it.should('replace parameters in a url', a => {
+			const url = replaceParameters('/hello/:world', {
+				world: a.id.toString(),
+			});
+			a.equal(url, `/hello/${a.id}`);
+		});
+	});
+
+	test('parseQueryParameters', it => {
+		it.should('parse query parameters in url', a => {
+			const params = parseQueryParameters('test=hello&hello=world');
+			a.equal(params.test, 'hello');
+			a.equal(params.hello, 'world');
+		});
+	});
+
+	test('QueryStrategy', it => {
+		it.should('get href from url', a => {
+			const url = { path: 'path', hash: 'hash' };
+			const href = QueryStrategy.getHref(url);
+			a.equal(href, '?path#hash');
+		});
+		it.should('update history state', a => {
+			const url = { path: 'path', hash: 'hash' };
+			a.mock(history, 'pushState', (_state, _title, url) => {
+				a.equal(url, '?path#hash');
+			});
+			QueryStrategy.serialize(url);
+		});
+		it.should('get state from history state if present', a => {
+			const url = { path: 'path', hash: 'hash' };
+			const oldHistory = sys.history;
+			sys.history = { state: { url } } as any;
+			const state = QueryStrategy.deserialize();
+			a.equalValues(state, url);
+			sys.history = oldHistory;
+		});
+		it.should('get state from location', a => {
+			const url = { path: 'path', hash: 'hash' };
+			const oldLocation = sys.location;
+			sys.location = { search: '?path', hash: '#hash' } as any;
+			const state = QueryStrategy.deserialize();
+			a.equalValues(state, url);
+			sys.location = oldLocation;
+		});
+	});
+	test('PathStrategy', it => {
+		it.should('get href from url', a => {
+			const url = { path: 'path', hash: 'hash' };
+			const href = PathStrategy.getHref(url);
+			a.equal(href, 'path#hash');
+		});
+		it.should('update history state', a => {
+			const url = { path: 'path', hash: 'hash' };
+			a.mock(history, 'pushState', (_state, _title, url) => {
+				a.equal(url, 'path#hash');
+			});
+			PathStrategy.serialize(url);
+		});
+		it.should('get state from history state if present', a => {
+			const url = { path: 'path', hash: 'hash' };
+			const oldHistory = sys.history;
+			sys.history = { state: { url } } as any;
+			const state = PathStrategy.deserialize();
+			a.equalValues(state, url);
+			sys.history = oldHistory;
+		});
+		it.should('get state from location', a => {
+			const url = { path: 'path', hash: 'hash' };
+			const oldLocation = sys.location;
+			sys.location = { pathname: 'path', hash: '#hash' } as any;
+			const state = PathStrategy.deserialize();
+			a.equalValues(state, url);
+			sys.location = oldLocation;
+		});
+	});
+	test('HashStrategy', it => {
+		it.should('get href from url', a => {
+			const url = { path: 'path', hash: 'hash' };
+			const href = HashStrategy.getHref(url);
+			a.equal(href, '#path#hash');
+		});
+		it.should('update history state', a => {
+			const url = { path: 'path', hash: 'hash' };
+			HashStrategy.serialize(url);
+			a.equal(location.hash, '#path#hash');
+		});
+		it.should('get state from hash', a => {
+			const url = { path: 'path', hash: 'hash' };
+			HashStrategy.serialize(url);
+			const state = HashStrategy.deserialize();
+			a.equalValues(state, url);
+		});
+	});
+
+	test('parseUrl', it => {
+		it.should('handle hash only urls', a => {
+			const url = parseUrl('#hash');
+			a.equal(url.hash, 'hash');
+		});
+		it.should('handle path and hash', a => {
+			const url = parseUrl('path#hash');
+			a.equal(url.hash, 'hash');
+			a.equal(url.path, 'path');
+		});
 	});
 });

@@ -51,6 +51,8 @@ async function fixTsconfig({ projectPath, baseDir, dir }) {
 	const pkg = await readJson(pkgPath);
 	let tsconfig = await readJson(`${projectPath}/tsconfig.json`);
 	const oldPackage = JSON.stringify(pkg, null, '\t');
+	const depProp = pkg.browser ? 'devDependencies' : 'dependencies';
+	const notDepProp = pkg.browser ? 'dependencies' : 'devDependencies';
 
 	if (!tsconfig) {
 		tsconfig = {
@@ -71,14 +73,16 @@ async function fixTsconfig({ projectPath, baseDir, dir }) {
 		const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
 		if (refName) {
 			const refPkg = `@cxl/${refName}`;
-			if (!pkg.dependencies) pkg.dependencies = {};
+			if (!pkg[depProp]) pkg[depProp] = {};
 
-			if (!pkg.dependencies[refName]) {
+			if (!pkg[depProp][refName]) {
 				const pkgVersion = (
 					await readJson(`${baseDir}/${refName}/package.json`)
 				)?.version;
-				if (pkgVersion) pkg.dependencies[refPkg] = `~${pkgVersion}`;
+				if (pkgVersion) pkg[depProp][refPkg] = `~${pkgVersion}`;
 			}
+
+			if (pkg[notDepProp][refName]) delete pkg[notDepProp][refName];
 		}
 	}
 
@@ -310,6 +314,7 @@ async function lintTsconfig({ projectPath, pkg, dir }) {
 		),
 	];
 	const references = tsconfig?.references;
+	const depProp = pkg.browser ? 'devDependencies' : 'dependencies';
 
 	if (references)
 		for (const ref of references) {
@@ -319,8 +324,8 @@ async function lintTsconfig({ projectPath, pkg, dir }) {
 				const refPkg = `@cxl/${refName}`;
 				rules.push(
 					rule(
-						pkg.dependencies?.[refPkg],
-						`reference ${refPkg} should be declared as dependency`
+						pkg[depProp]?.[refPkg],
+						`reference ${refPkg} should be declared as ${depProp}`
 					)
 				);
 			}

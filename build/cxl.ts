@@ -38,12 +38,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			],
 		},
 		{
-			target: 'docs',
-			outputDir: '.',
-			tasks: [readme()],
-		},
-		{
-			target: 'docs-dev',
+			target: 'package',
 			outputDir: '.',
 			tasks: [readme()],
 		},

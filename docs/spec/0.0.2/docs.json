@@ -1826,7 +1826,7 @@
                 "ch": 2
               },
               "kind": 11,
-              "name": "spyFn",
+              "name": "mock",
               "flags": 4,
               "id": 106,
               "typeParameters": [
@@ -1834,7 +1834,7 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 188,
-                    "ch": 7
+                    "ch": 6
                   },
                   "kind": 3,
                   "name": "T",
@@ -1845,7 +1845,7 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 188,
-                    "ch": 9
+                    "ch": 8
                   },
                   "kind": 3,
                   "name": "K",
@@ -1858,7 +1858,7 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 188,
-                    "ch": 42
+                    "ch": 41
                   },
                   "kind": 9,
                   "name": "object",
@@ -1874,7 +1874,7 @@
                   "source": {
                     "fileName": "index.ts",
                     "line": 188,
-                    "ch": 52
+                    "ch": 51
                   },
                   "kind": 9,
                   "name": "method",
@@ -1882,6 +1882,125 @@
                   "id": 110,
                   "type": {
                     "id": 108,
+                    "name": "K",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 188,
+                    "ch": 62
+                  },
+                  "kind": 9,
+                  "name": "fn",
+                  "flags": 0,
+                  "id": 111,
+                  "type": {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 188,
+                      "ch": 66
+                    },
+                    "kind": 21,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "id": 107,
+                        "name": "T",
+                        "kind": 6
+                      },
+                      {
+                        "id": 108,
+                        "name": "K",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "name": "",
+                "kind": 21,
+                "flags": 0,
+                "children": [
+                  {
+                    "id": 107,
+                    "name": "T",
+                    "kind": 6
+                  },
+                  {
+                    "id": 108,
+                    "name": "K",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 197,
+                "ch": 2
+              },
+              "kind": 11,
+              "name": "spyFn",
+              "flags": 4,
+              "id": 112,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 199,
+                    "ch": 7
+                  },
+                  "kind": 3,
+                  "name": "T",
+                  "flags": 0,
+                  "id": 113
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 199,
+                    "ch": 9
+                  },
+                  "kind": 3,
+                  "name": "K",
+                  "flags": 0,
+                  "id": 114
+                }
+              ],
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 199,
+                    "ch": 42
+                  },
+                  "kind": 9,
+                  "name": "object",
+                  "flags": 0,
+                  "id": 115,
+                  "type": {
+                    "id": 113,
+                    "name": "T",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "index.ts",
+                    "line": 199,
+                    "ch": 52
+                  },
+                  "kind": 9,
+                  "name": "method",
+                  "flags": 0,
+                  "id": 116,
+                  "type": {
+                    "id": 114,
                     "name": "K",
                     "kind": 6
                   }
@@ -1912,14 +2031,14 @@
                                 "kind": 6,
                                 "typeParameters": [
                                   {
-                                    "id": 107,
+                                    "id": 113,
                                     "name": "T",
                                     "kind": 6
                                   }
                                 ]
                               },
                               {
-                                "id": 108,
+                                "id": 114,
                                 "name": "K",
                                 "kind": 6
                               }
@@ -1933,12 +2052,12 @@
                         "flags": 0,
                         "children": [
                           {
-                            "id": 107,
+                            "id": 113,
                             "name": "T",
                             "kind": 6
                           },
                           {
-                            "id": 108,
+                            "id": 114,
                             "name": "K",
                             "kind": 6
                           }
@@ -1952,50 +2071,50 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 194,
+                "line": 205,
                 "ch": 2
               },
               "kind": 11,
               "name": "spyProp",
               "flags": 4,
-              "id": 111,
+              "id": 117,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 196,
+                    "line": 207,
                     "ch": 9
                   },
                   "kind": 3,
                   "name": "T",
                   "flags": 0,
-                  "id": 112
+                  "id": 118
                 },
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 196,
+                    "line": 207,
                     "ch": 11
                   },
                   "kind": 3,
                   "name": "K",
                   "flags": 0,
-                  "id": 113
+                  "id": 119
                 }
               ],
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 196,
+                    "line": 207,
                     "ch": 31
                   },
                   "kind": 9,
                   "name": "object",
                   "flags": 0,
-                  "id": 114,
+                  "id": 120,
                   "type": {
-                    "id": 112,
+                    "id": 118,
                     "name": "T",
                     "kind": 6
                   }
@@ -2003,15 +2122,15 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 196,
+                    "line": 207,
                     "ch": 41
                   },
                   "kind": 9,
                   "name": "prop",
                   "flags": 0,
-                  "id": 115,
+                  "id": 121,
                   "type": {
-                    "id": 113,
+                    "id": 119,
                     "name": "K",
                     "kind": 6
                   }
@@ -2033,12 +2152,12 @@
                         "flags": 0,
                         "children": [
                           {
-                            "id": 112,
+                            "id": 118,
                             "name": "T",
                             "kind": 6
                           },
                           {
-                            "id": 113,
+                            "id": 119,
                             "name": "K",
                             "kind": 6
                           }
@@ -2052,13 +2171,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 202,
+                "line": 213,
                 "ch": 2
               },
               "kind": 11,
               "name": "element",
               "flags": 16388,
-              "id": 116,
+              "id": 122,
               "docs": {
                 "content": [
                   {
@@ -2070,19 +2189,19 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 205,
+                    "line": 216,
                     "ch": 9
                   },
                   "kind": 3,
                   "name": "K",
                   "flags": 0,
-                  "id": 117
+                  "id": 123
                 }
               ],
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 207,
+                  "line": 218,
                   "ch": 3
                 },
                 "kind": 21,
@@ -2094,7 +2213,7 @@
                     "kind": 6
                   },
                   {
-                    "id": 117,
+                    "id": 123,
                     "name": "K",
                     "kind": 6
                   }
@@ -2104,15 +2223,15 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 205,
+                    "line": 216,
                     "ch": 48
                   },
                   "kind": 9,
                   "name": "tagName",
                   "flags": 0,
-                  "id": 118,
+                  "id": 124,
                   "type": {
-                    "id": 117,
+                    "id": 123,
                     "name": "K",
                     "kind": 6
                   }
@@ -2122,13 +2241,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 207,
+                "line": 218,
                 "ch": 29
               },
               "kind": 11,
               "name": "element",
               "flags": 16388,
-              "id": 119,
+              "id": 125,
               "type": {
                 "name": "HTMLElement",
                 "kind": 6
@@ -2137,13 +2256,13 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 208,
+                    "line": 219,
                     "ch": 9
                   },
                   "kind": 9,
                   "name": "tagName",
                   "flags": 0,
-                  "id": 120,
+                  "id": 126,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -2155,24 +2274,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 208,
+                "line": 219,
                 "ch": 39
               },
               "kind": 11,
               "name": "element",
               "flags": 4,
-              "id": 121,
+              "id": 127,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 209,
+                    "line": 220,
                     "ch": 9
                   },
                   "kind": 9,
                   "name": "tagName",
                   "flags": 0,
-                  "id": 122,
+                  "id": 128,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -2188,39 +2307,39 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 213,
+                "line": 224,
                 "ch": 2
               },
               "kind": 11,
               "name": "testEvent",
               "flags": 4,
-              "id": 123,
+              "id": 129,
               "typeParameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 215,
+                    "line": 226,
                     "ch": 11
                   },
                   "kind": 3,
                   "name": "T",
                   "flags": 0,
-                  "id": 124
+                  "id": 130
                 }
               ],
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 215,
+                    "line": 226,
                     "ch": 34
                   },
                   "kind": 9,
                   "name": "el",
                   "flags": 0,
-                  "id": 125,
+                  "id": 131,
                   "type": {
-                    "id": 124,
+                    "id": 130,
                     "name": "T",
                     "kind": 6
                   }
@@ -2228,13 +2347,13 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 216,
+                    "line": 227,
                     "ch": 8
                   },
                   "kind": 9,
                   "name": "name",
                   "flags": 0,
-                  "id": 126,
+                  "id": 132,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -2244,23 +2363,23 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 217,
+                    "line": 228,
                     "ch": 15
                   },
                   "kind": 9,
                   "name": "trigger",
                   "flags": 0,
-                  "id": 127,
+                  "id": 133,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 218,
+                      "line": 229,
                       "ch": 10
                     },
                     "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 128,
+                    "id": 134,
                     "type": {
                       "name": "void",
                       "kind": 32,
@@ -2270,15 +2389,15 @@
                       {
                         "source": {
                           "fileName": "index.ts",
-                          "line": 218,
+                          "line": 229,
                           "ch": 12
                         },
                         "kind": 9,
                         "name": "el",
                         "flags": 0,
-                        "id": 129,
+                        "id": 135,
                         "type": {
-                          "id": 124,
+                          "id": 130,
                           "name": "T",
                           "kind": 6
                         }
@@ -2296,24 +2415,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 230,
+                "line": 241,
                 "ch": 2
               },
               "kind": 11,
               "name": "figure",
               "flags": 4,
-              "id": 130,
+              "id": 136,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 232,
+                    "line": 243,
                     "ch": 8
                   },
                   "kind": 9,
                   "name": "name",
                   "flags": 0,
-                  "id": 131,
+                  "id": 137,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -2323,17 +2442,17 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 232,
+                    "line": 243,
                     "ch": 21
                   },
                   "kind": 9,
                   "name": "html",
                   "flags": 0,
-                  "id": 132,
+                  "id": 138,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 232,
+                      "line": 243,
                       "ch": 27
                     },
                     "kind": 5,
@@ -2381,7 +2500,7 @@
           "id": 67,
           "source": {
             "fileName": "index.ts",
-            "line": 264,
+            "line": 275,
             "ch": 1
           },
           "kind": 8,
@@ -2391,13 +2510,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 266,
+                "line": 277,
                 "ch": 19
               },
               "kind": 10,
               "name": "name",
               "flags": 4,
-              "id": 133,
+              "id": 139,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2407,13 +2526,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 267,
+                "line": 278,
                 "ch": 14
               },
               "kind": 10,
               "name": "promise",
               "flags": 4,
-              "id": 134,
+              "id": 140,
               "type": {
                 "name": "Promise",
                 "kind": 6,
@@ -2429,17 +2548,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 268,
+                "line": 279,
                 "ch": 24
               },
               "kind": 10,
               "name": "results",
               "flags": 4,
-              "id": 135,
+              "id": 141,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 269,
+                  "line": 280,
                   "ch": 9
                 },
                 "kind": 15,
@@ -2456,17 +2575,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 269,
+                "line": 280,
                 "ch": 24
               },
               "kind": 10,
               "name": "tests",
               "flags": 4,
-              "id": 136,
+              "id": 142,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 270,
+                  "line": 281,
                   "ch": 7
                 },
                 "kind": 15,
@@ -2483,17 +2602,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 270,
+                "line": 281,
                 "ch": 20
               },
               "kind": 10,
               "name": "only",
               "flags": 4,
-              "id": 137,
+              "id": 143,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 271,
+                  "line": 282,
                   "ch": 6
                 },
                 "kind": 15,
@@ -2510,13 +2629,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 271,
+                "line": 282,
                 "ch": 19
               },
               "kind": 10,
               "name": "timeout",
               "flags": 4,
-              "id": 138,
+              "id": 144,
               "value": "5 * 1000",
               "type": {
                 "name": "number",
@@ -2527,13 +2646,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 272,
+                "line": 283,
                 "ch": 20
               },
               "kind": 10,
               "name": "domContainer",
               "flags": 4,
-              "id": 139,
+              "id": 145,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -2542,13 +2661,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 273,
+                "line": 284,
                 "ch": 24
               },
               "kind": 10,
               "name": "events",
               "flags": 4,
-              "id": 140,
+              "id": 146,
               "value": "subject<TestEvent>()",
               "type": {
                 "name": "Subject",
@@ -2565,13 +2684,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 274,
+                "line": 285,
                 "ch": 31
               },
               "kind": 10,
               "name": "completed",
               "flags": 4,
-              "id": 141,
+              "id": 147,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -2582,13 +2701,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 275,
+                "line": 286,
                 "ch": 19
               },
               "kind": 10,
               "name": "id",
               "flags": 68,
-              "id": 142,
+              "id": 148,
               "value": "lastTestId++",
               "type": {
                 "name": "number",
@@ -2599,28 +2718,28 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 277,
+                "line": 288,
                 "ch": 28
               },
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 143,
+              "id": 149,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 279,
+                    "line": 290,
                     "ch": 13
                   },
                   "kind": 9,
                   "name": "nameOrConfig",
                   "flags": 0,
-                  "id": 144,
+                  "id": 150,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 279,
+                      "line": 290,
                       "ch": 26
                     },
                     "kind": 5,
@@ -2643,13 +2762,13 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 279,
+                    "line": 290,
                     "ch": 47
                   },
                   "kind": 10,
                   "name": "testFn",
                   "flags": 4,
-                  "id": 145,
+                  "id": 151,
                   "type": {
                     "id": 8,
                     "name": "TestFn",
@@ -2666,24 +2785,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 282,
+                "line": 293,
                 "ch": 2
               },
               "kind": 11,
               "name": "onEvent",
               "flags": 4,
-              "id": 146,
+              "id": 152,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 284,
+                    "line": 295,
                     "ch": 9
                   },
                   "kind": 9,
                   "name": "id",
                   "flags": 0,
-                  "id": 147,
+                  "id": 153,
                   "type": {
                     "id": 4,
                     "name": "EventType",
@@ -2693,27 +2812,27 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 284,
+                    "line": 295,
                     "ch": 23
                   },
                   "kind": 9,
                   "name": "fn",
                   "flags": 0,
-                  "id": 148,
+                  "id": 154,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 284,
+                      "line": 295,
                       "ch": 27
                     },
                     "kind": 17,
                     "name": "",
                     "flags": 0,
-                    "id": 149,
+                    "id": 155,
                     "type": {
                       "source": {
                         "fileName": "index.ts",
-                        "line": 284,
+                        "line": 295,
                         "ch": 33
                       },
                       "kind": 5,
@@ -2751,24 +2870,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 291,
+                "line": 302,
                 "ch": 2
               },
               "kind": 11,
               "name": "push",
               "flags": 4,
-              "id": 150,
+              "id": 156,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 293,
+                    "line": 304,
                     "ch": 6
                   },
                   "kind": 9,
                   "name": "result",
                   "flags": 0,
-                  "id": 151,
+                  "id": 157,
                   "type": {
                     "id": 53,
                     "name": "Result",
@@ -2785,28 +2904,28 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 296,
+                "line": 307,
                 "ch": 2
               },
               "kind": 11,
               "name": "pushError",
               "flags": 4,
-              "id": 152,
+              "id": 158,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 298,
+                    "line": 309,
                     "ch": 11
                   },
                   "kind": 9,
                   "name": "e",
                   "flags": 0,
-                  "id": 153,
+                  "id": 159,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 298,
+                      "line": 309,
                       "ch": 13
                     },
                     "kind": 5,
@@ -2835,24 +2954,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 304,
+                "line": 315,
                 "ch": 2
               },
               "kind": 11,
               "name": "doTimeout",
               "flags": 4,
-              "id": 154,
+              "id": 160,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 306,
+                    "line": 317,
                     "ch": 11
                   },
                   "kind": 9,
                   "name": "promise",
                   "flags": 0,
-                  "id": 155,
+                  "id": 161,
                   "type": {
                     "name": "Promise",
                     "kind": 6,
@@ -2868,13 +2987,13 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 306,
+                    "line": 317,
                     "ch": 33
                   },
                   "kind": 9,
                   "name": "time",
                   "flags": 0,
-                  "id": 156,
+                  "id": 162,
                   "value": "this.timeout",
                   "type": {
                     "name": "number",
@@ -2898,24 +3017,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 318,
+                "line": 329,
                 "ch": 2
               },
               "kind": 11,
               "name": "addTest",
               "flags": 4,
-              "id": 157,
+              "id": 163,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 320,
+                    "line": 331,
                     "ch": 9
                   },
                   "kind": 9,
                   "name": "test",
                   "flags": 0,
-                  "id": 158,
+                  "id": 164,
                   "type": {
                     "id": 67,
                     "name": "Test",
@@ -2932,24 +3051,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 322,
+                "line": 333,
                 "ch": 2
               },
               "kind": 11,
               "name": "emit",
               "flags": 260,
-              "id": 159,
+              "id": 165,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 324,
+                    "line": 335,
                     "ch": 12
                   },
                   "kind": 9,
                   "name": "type",
                   "flags": 0,
-                  "id": 160,
+                  "id": 166,
                   "type": {
                     "id": 4,
                     "name": "EventType",
@@ -2972,13 +3091,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 328,
+                "line": 339,
                 "ch": 2
               },
               "kind": 11,
               "name": "run",
               "flags": 260,
-              "id": 161,
+              "id": 167,
               "type": {
                 "name": "Promise",
                 "kind": 6,
@@ -2986,7 +3105,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 330,
+                      "line": 341,
                       "ch": 22
                     },
                     "kind": 15,
@@ -3005,13 +3124,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 356,
+                "line": 367,
                 "ch": 2
               },
               "kind": 11,
               "name": "toJSON",
               "flags": 4,
-              "id": 162,
+              "id": 168,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -3022,13 +3141,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 279,
+                "line": 290,
                 "ch": 47
               },
               "kind": 10,
               "name": "testFn",
               "flags": 4,
-              "id": 145,
+              "id": 151,
               "type": {
                 "id": 8,
                 "name": "TestFn",
@@ -3040,50 +3159,50 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 366,
+            "line": 377,
             "ch": 1
           },
           "kind": 16,
           "name": "spyFn",
           "flags": 0,
-          "id": 163,
+          "id": 169,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 368,
+                "line": 379,
                 "ch": 15
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 164
+              "id": 170
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 368,
+                "line": 379,
                 "ch": 17
               },
               "kind": 3,
               "name": "K",
               "flags": 0,
-              "id": 165
+              "id": 171
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 368,
+                "line": 379,
                 "ch": 50
               },
               "kind": 9,
               "name": "object",
               "flags": 0,
-              "id": 166,
+              "id": 172,
               "type": {
-                "id": 164,
+                "id": 170,
                 "name": "T",
                 "kind": 6
               }
@@ -3091,15 +3210,15 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 368,
+                "line": 379,
                 "ch": 60
               },
               "kind": 9,
               "name": "method",
               "flags": 0,
-              "id": 167,
+              "id": 173,
               "type": {
-                "id": 165,
+                "id": 171,
                 "name": "K",
                 "kind": 6
               }
@@ -3130,14 +3249,14 @@
                             "kind": 6,
                             "typeParameters": [
                               {
-                                "id": 164,
+                                "id": 170,
                                 "name": "T",
                                 "kind": 6
                               }
                             ]
                           },
                           {
-                            "id": 165,
+                            "id": 171,
                             "name": "K",
                             "kind": 6
                           }
@@ -3151,12 +3270,12 @@
                     "flags": 0,
                     "children": [
                       {
-                        "id": 164,
+                        "id": 170,
                         "name": "T",
                         "kind": 6
                       },
                       {
-                        "id": 165,
+                        "id": 171,
                         "name": "K",
                         "kind": 6
                       }
@@ -3170,50 +3289,50 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 394,
+            "line": 405,
             "ch": 1
           },
           "kind": 16,
           "name": "spyProp",
           "flags": 0,
-          "id": 168,
+          "id": 174,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 396,
+                "line": 407,
                 "ch": 17
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 169
+              "id": 175
             },
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 396,
+                "line": 407,
                 "ch": 19
               },
               "kind": 3,
               "name": "K",
               "flags": 0,
-              "id": 170
+              "id": 176
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 396,
+                "line": 407,
                 "ch": 39
               },
               "kind": 9,
               "name": "object",
               "flags": 0,
-              "id": 171,
+              "id": 177,
               "type": {
-                "id": 169,
+                "id": 175,
                 "name": "T",
                 "kind": 6
               }
@@ -3221,15 +3340,15 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 396,
+                "line": 407,
                 "ch": 49
               },
               "kind": 9,
               "name": "prop",
               "flags": 0,
-              "id": 172,
+              "id": 178,
               "type": {
-                "id": 170,
+                "id": 176,
                 "name": "K",
                 "kind": 6
               }
@@ -3251,12 +3370,12 @@
                     "flags": 0,
                     "children": [
                       {
-                        "id": 169,
+                        "id": 175,
                         "name": "T",
                         "kind": 6
                       },
                       {
-                        "id": 170,
+                        "id": 176,
                         "name": "K",
                         "kind": 6
                       }
@@ -3270,13 +3389,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 429,
+            "line": 440,
             "ch": 1
           },
           "kind": 16,
           "name": "triggerKeydown",
           "flags": 1,
-          "id": 173,
+          "id": 179,
           "docs": {
             "content": [
               {
@@ -3288,13 +3407,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 434,
+                "line": 445,
                 "ch": 31
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 174,
+              "id": 180,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -3303,13 +3422,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 434,
+                "line": 445,
                 "ch": 43
               },
               "kind": 9,
               "name": "key",
               "flags": 0,
-              "id": 175,
+              "id": 181,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3332,28 +3451,28 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 439,
+            "line": 450,
             "ch": 1
           },
           "kind": 16,
           "name": "spec",
           "flags": 1,
-          "id": 176,
+          "id": 182,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 441,
+                "line": 452,
                 "ch": 21
               },
               "kind": 9,
               "name": "name",
               "flags": 0,
-              "id": 177,
+              "id": 183,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 441,
+                  "line": 452,
                   "ch": 26
                 },
                 "kind": 5,
@@ -3376,13 +3495,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 441,
+                "line": 452,
                 "ch": 47
               },
               "kind": 9,
               "name": "fn",
               "flags": 0,
-              "id": 178,
+              "id": 184,
               "type": {
                 "id": 8,
                 "name": "TestFn",
@@ -3399,13 +3518,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 443,
+            "line": 454,
             "ch": 1
           },
           "kind": 16,
           "name": "suite",
           "flags": 8193,
-          "id": 179,
+          "id": 185,
           "docs": {
             "content": [
               {
@@ -3418,17 +3537,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 448,
+                "line": 459,
                 "ch": 22
               },
               "kind": 9,
               "name": "nameOrConfig",
               "flags": 0,
-              "id": 180,
+              "id": 186,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 449,
+                  "line": 460,
                   "ch": 14
                 },
                 "kind": 5,
@@ -3451,17 +3570,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 449,
+                "line": 460,
                 "ch": 35
               },
               "kind": 9,
               "name": "suiteFn",
               "flags": 0,
-              "id": 181,
+              "id": 187,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 450,
+                  "line": 461,
                   "ch": 9
                 },
                 "kind": 5,
@@ -3476,7 +3595,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 450,
+                      "line": 461,
                       "ch": 19
                     },
                     "kind": 15,

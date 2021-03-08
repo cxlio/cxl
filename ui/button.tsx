@@ -10,7 +10,7 @@ import {
 import { dom } from '@cxl/tsx';
 import { css } from '@cxl/css';
 import { Focusable } from '@cxl/template';
-import { on, remove, trigger } from '@cxl/dom';
+import { on, trigger } from '@cxl/dom';
 import { ButtonBase, FocusHighlight } from './core.js';
 import { CloseIcon } from './icon.js';
 
@@ -114,7 +114,7 @@ export class Chip extends Component {
 	small = false;
 
 	remove() {
-		remove(this);
+		super.remove();
 		trigger(this, 'cxl-chip.remove');
 	}
 }

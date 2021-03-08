@@ -3,7 +3,6 @@ import {
 	AttributeObserver,
 	findNextNode,
 	findNextNodeBySelector,
-	setContent as domSetContent,
 	on,
 	onAction,
 	trigger,
@@ -72,32 +71,32 @@ export function triggerEvent<R>(element: EventTarget, event: string) {
 	return tap<R>(trigger.bind(null, element, event));
 }
 
-export function setAttribute(el: Element, attribute: string) {
+/*export function setAttribute(el: Element, attribute: string) {
 	return tap(val => ((el as any)[attribute] = val));
-}
+}*/
 
 export function stopEvent<T extends Event>() {
 	return tap<T>((ev: T) => ev.stopPropagation());
 }
 
-export function show(el: HTMLElement) {
+/*export function show(el: HTMLElement) {
 	return tap<boolean>(val => (el.style.display = val ? '' : 'none'));
 }
 
 export function hide(el: HTMLElement) {
 	return tap<boolean>(val => (el.style.display = val ? 'none' : ''));
-}
+}*/
 
 export function sync<T>(
 	getA: Observable<T>,
 	setA: (val: T) => void,
 	getB: Observable<T>,
-	setB: (val: T) => void
+	setB: (val: T) => void,
+	value?: T
 ) {
-	let value: T;
 	return merge(
-		getA.tap(val => val !== value && setB((value = val))),
-		getB.tap(val => val !== value && setA((value = val)))
+		getA.filter(val => val !== value).tap(val => setB((value = val))),
+		getB.filter(val => val !== value).tap(val => setA((value = val)))
 	);
 }
 
@@ -106,7 +105,8 @@ export function syncAttribute(A: Node, B: Node, attr: string) {
 		getAttribute(A, attr as any),
 		val => ((A as any)[attr] = val),
 		getAttribute(B, attr as any),
-		val => ((B as any)[attr] = val)
+		val => ((B as any)[attr] = val),
+		(B as any)[attr]
 	);
 }
 
@@ -130,10 +130,6 @@ export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
 	return merge(on(el, 'input'), on(el, 'change'))
 		.map(ev => (ev.target as T).value)
 		.raf();
-}
-
-export function setContent(el: Element) {
-	return tap((val: any) => domSetContent(el, val));
 }
 
 const LOG = tap(val => console.log(val));
@@ -272,10 +268,15 @@ export function render<T>(
 	renderFn: (item: T) => Node,
 	loading?: () => Node
 ) {
-	const marker = new Marker();
-	if (loading) marker.insert(loading());
-
 	return (host: Bindable) => {
+		const marker = new Marker();
+		if (loading)
+			host.bind(
+				observable(() => {
+					marker.insert(loading());
+				})
+			);
+
 		host.bind(
 			source.tap(item => {
 				marker.empty();
@@ -381,7 +382,7 @@ export function ariaChecked(host: ValueElement) {
 	return tap<boolean>(val =>
 		host.setAttribute(
 			'aria-checked',
-			host.value === undefined ? 'mixed' : val ? 'true' : 'false'
+			val === undefined ? 'mixed' : val ? 'true' : 'false'
 		)
 	);
 }

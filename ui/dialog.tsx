@@ -10,7 +10,7 @@ import {
 } from '@cxl/component';
 import { css, padding, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import { createElement, insert, on, onAction, trigger, remove } from '@cxl/dom';
+import { insert, on, onAction, trigger } from '@cxl/dom';
 import { merge } from '@cxl/rx';
 import { T, Span } from './core.js';
 import { Button } from './button.js';
@@ -342,7 +342,7 @@ export class SnackbarContainer extends Component {
 		this.appendChild(next);
 
 		setTimeout(() => {
-			remove(next);
+			next.remove();
 			this.queue.shift();
 			resolve();
 
@@ -373,15 +373,17 @@ export function alert(
 			? { message: optionsOrMessage }
 			: optionsOrMessage;
 
-	const modal = createElement(DialogAlert, {
-		'title-text': options.titleText || '',
-		message: options.message,
-		action: options.actionText || DialogAlert.prototype.action,
-	});
+	const modal = (
+		<DialogAlert
+			title-text={options.titleText || ''}
+			message={options.message}
+			action={options.actionText || DialogAlert.prototype.action}
+		/>
+	) as DialogAlert;
 
 	container.appendChild(modal);
 
-	return modal.promise.then(() => remove(modal));
+	return modal.promise.then(() => modal.remove());
 }
 
 /**
@@ -393,28 +395,28 @@ export function confirm(
 ) {
 	if (typeof options === 'string') options = { message: options };
 
-	const modal = createElement(DialogConfirm, options);
-
+	const modal = (<DialogConfirm />) as DialogConfirm;
+	Object.assign(modal, options);
 	container.appendChild(modal);
 
-	return modal.promise.then(val => (remove(modal), val));
+	return modal.promise.then(val => (modal.remove(), val));
 }
 
 let snackbarContainer: SnackbarContainer;
 
 export function notify(
-	options: string | (Partial<Snackbar> & { content: string }),
+	options: string | { delay?: number; content: string | Node },
 	bar = snackbarContainer
 ) {
 	if (!bar) {
-		bar = snackbarContainer = createElement(SnackbarContainer);
+		bar = snackbarContainer = (<SnackbarContainer />) as SnackbarContainer;
 		document.body.appendChild(bar);
 	}
 
 	if (typeof options === 'string') options = { content: options };
 
-	const snackbar = createElement(Snackbar, options);
-
+	const snackbar = (<Snackbar />) as Snackbar;
+	if (options.delay) snackbar.delay = options.delay;
 	if (options.content) insert(snackbar, options.content);
 
 	return bar.notify(snackbar);

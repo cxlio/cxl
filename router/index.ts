@@ -8,7 +8,6 @@ const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 
 const routeSymbol = '@@cxlRoute';
 
-type Dictionary = Record<string, string>;
 type RouteArguments = { [key: string]: any };
 type RouteElement = Node;
 
@@ -44,6 +43,11 @@ export interface Strategy {
 	serialize(url: Url): void;
 	deserialize(): Url;
 }
+
+export const sys = {
+	location: window.location,
+	history: window.history,
+};
 
 function routeToRegExp(route: string): [RegExp, string[]] {
 	const names: string[] = [],
@@ -95,23 +99,18 @@ class Fragment {
 		[this.regex, this.parameters] = routeToRegExp(path);
 	}
 
-	_extractQuery(frag: string, result: Dictionary) {
-		const pos = frag.indexOf('?'),
-			query = pos !== -1 ? frag.slice(pos + 1) : null;
-		let m;
-
-		while (query && (m = PARAM_QUERY_REGEX.exec(query)))
-			result[m[1]] = decodeURIComponent(m[2]);
-
-		return result;
+	_extractQuery(frag: string) {
+		const pos = frag.indexOf('?');
+		return pos === -1 ? {} : parseQueryParameters(frag.slice(pos + 1));
 	}
 
 	getArguments(fragment: string) {
-		const match = this.regex.exec(fragment),
-			params = match && match.slice(1),
-			result: Dictionary = {};
+		const match = this.regex.exec(fragment);
+		const params = match && match.slice(1);
 
 		if (!params) return;
+
+		const result = this._extractQuery(fragment);
 
 		params.forEach((param, i) => {
 			// Don't decode the search params.
@@ -125,7 +124,7 @@ class Fragment {
 			result[this.parameters[i]] = p;
 		});
 
-		return this._extractQuery(fragment, result);
+		return result;
 	}
 
 	test(url: string) {
@@ -188,13 +187,9 @@ export class RouteManager {
 		if (route.isDefault) this.defaultRoute = route;
 		this.routes.unshift(route);
 	}
-
-	reset() {
-		this.routes = [];
-	}
 }
 
-const URL_REGEX = /([^#]+)(?:#(.+))?/;
+const URL_REGEX = /([^#]*)(?:#(.+))?/;
 
 export function getElementRoute<T extends RouteElement>(
 	el: T
@@ -216,14 +211,14 @@ export const QueryStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		history.pushState({ url }, '', this.getHref(url));
+		sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
 	deserialize() {
 		return (
-			history.state?.url || {
-				path: location.search.slice(1),
-				hash: location.hash.slice(1),
+			sys.history.state?.url || {
+				path: sys.location.search.slice(1),
+				hash: sys.location.hash.slice(1),
 			}
 		);
 	},
@@ -236,14 +231,14 @@ export const PathStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		history.pushState({ url }, '', this.getHref(url));
+		sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
 	deserialize() {
 		return (
-			history.state?.url || {
-				path: location.pathname,
-				hash: location.hash.slice(1),
+			sys.history.state?.url || {
+				path: sys.location.pathname,
+				hash: sys.location.hash.slice(1),
 			}
 		);
 	},
@@ -256,12 +251,12 @@ export const HashStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		const href = this.getHref(url);
-		if (location.hash !== href) location.hash = href;
+		const href = HashStrategy.getHref(url);
+		if (sys.location.hash !== href) sys.location.hash = href;
 	},
 
 	deserialize() {
-		return parseUrl(location.hash.slice(1));
+		return parseUrl(sys.location.hash.slice(1));
 	},
 };
 
@@ -329,10 +324,6 @@ export class Router {
 		this.discardOldRoutes(instances);
 		this.instances = instances;
 		return result;
-	}
-
-	reset() {
-		this.routes.reset();
 	}
 
 	/**

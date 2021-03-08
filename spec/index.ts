@@ -186,6 +186,17 @@ export class TestApi {
 		this.$test.tests.push(new Test(name, testFn));
 	}
 
+	mock<T, K extends keyof FunctionsOf<T>>(object: T, method: K, fn: T[K]) {
+		const old = object[method];
+		object[method] = fn;
+		this.$test.events.subscribe({
+			complete() {
+				object[method] = old;
+			},
+		});
+		return fn;
+	}
+
 	spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
 		const spy = spyFn(object, method);
 		this.$test.events.subscribe({
