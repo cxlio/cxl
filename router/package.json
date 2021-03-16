@@ -13,8 +13,8 @@
 		"test": "npm run build && cd ../dist/router && node ../tester"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"dependencies": {
+	"homepage": "https://cxlio.github.io/cxl/router",
+	"devDependencies": {
 		"@cxl/debug": "~0.0.1"
-	},
-	"homepage": "https://cxlio.github.io/cxl/router"
+	}
 }

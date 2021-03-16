@@ -5,6 +5,7 @@ import {
 	findNextNodeBySelector,
 	on,
 	onAction,
+	onResize,
 	trigger,
 } from '@cxl/dom';
 import {
@@ -18,8 +19,8 @@ import {
 	of,
 	tap,
 } from '@cxl/rx';
-import { Bindable, NativeChildren, dom } from '@cxl/tsx';
-import { Styles, render as renderCSS, css } from '@cxl/css';
+import type { Bindable } from '@cxl/tsx';
+import { Breakpoint, css, theme } from '@cxl/css';
 import { Component, attributeChanged, get } from '@cxl/component';
 
 declare global {
@@ -30,10 +31,6 @@ declare global {
 
 interface ElementWithValue<T> extends HTMLElement {
 	value: T;
-}
-
-interface ValueElement extends Element {
-	value: boolean | undefined;
 }
 
 function isObservedAttribute(el: any, attr: any) {
@@ -71,21 +68,9 @@ export function triggerEvent<R>(element: EventTarget, event: string) {
 	return tap<R>(trigger.bind(null, element, event));
 }
 
-/*export function setAttribute(el: Element, attribute: string) {
-	return tap(val => ((el as any)[attribute] = val));
-}*/
-
 export function stopEvent<T extends Event>() {
 	return tap<T>((ev: T) => ev.stopPropagation());
 }
-
-/*export function show(el: HTMLElement) {
-	return tap<boolean>(val => (el.style.display = val ? '' : 'none'));
-}
-
-export function hide(el: HTMLElement) {
-	return tap<boolean>(val => (el.style.display = val ? 'none' : ''));
-}*/
 
 export function sync<T>(
 	getA: Observable<T>,
@@ -309,13 +294,13 @@ export function each<T>(
 	};
 }
 
-export function Style(p: { children: Styles }) {
+/*export function Style(p: { children: Styles }) {
 	return renderCSS(p.children);
 }
 
 export function Static(p: { children: NativeChildren }): any {
 	return staticTemplate(() => dom(dom, undefined, p.children));
-}
+}*/
 
 type AriaProperties = {
 	atomic: string;
@@ -361,25 +346,28 @@ type AriaProperties = {
 
 type AriaProperty = keyof AriaProperties;
 
-export function aria<T extends Component>(prop: AriaProperty, value: string) {
+function attrInitial<T extends Component>(name: string, value: string) {
 	return (ctx: T) =>
-		ctx.bind(observable(() => ctx.setAttribute(`aria-${prop}`, value)));
+		observable(() => {
+			if (!ctx.hasAttribute(name)) ctx.setAttribute(name, value);
+		});
+}
+
+export function aria<T extends Component>(prop: AriaProperty, value: string) {
+	return attrInitial<T>(`aria-${prop}`, value);
 }
 
 export function ariaValue(host: Element, prop: AriaProperty) {
-	return tap<string | number>(val =>
-		host.setAttribute('aria-' + prop, val.toString())
+	return tap<string | number | boolean>(val =>
+		host.setAttribute(
+			'aria-' + prop,
+			val === true ? 'true' : val === false ? 'false' : val.toString()
+		)
 	);
 }
 
-export function ariaProp(host: Element, prop: AriaProperty) {
-	return tap<boolean>(val =>
-		host.setAttribute('aria-' + prop, val ? 'true' : 'false')
-	);
-}
-
-export function ariaChecked(host: ValueElement) {
-	return tap<boolean>(val =>
+export function ariaChecked(host: Element) {
+	return tap<boolean | undefined>(val =>
 		host.setAttribute(
 			'aria-checked',
 			val === undefined ? 'mixed' : val ? 'true' : 'false'
@@ -388,14 +376,9 @@ export function ariaChecked(host: ValueElement) {
 }
 
 export function role<T extends Component>(roleName: string) {
-	return (host: T) =>
-		host.bind(
-			observable(() => {
-				const el = host as any;
-				!el.hasAttribute('role') && el.setAttribute('role', roleName);
-			})
-		);
+	return attrInitial<T>('role', roleName);
 }
+
 interface SelectableNode extends ParentNode, EventTarget {}
 
 /**
@@ -563,7 +546,7 @@ export function registable<T extends Component, ControllerT>(
 	id: string,
 	controller?: ControllerT
 ) {
-	return new Observable<never>(() => {
+	return observable<never>(() => {
 		const detail: any = { controller };
 		trigger(host, id + '.register', detail);
 		return () => detail.unsubscribe?.();
@@ -575,7 +558,7 @@ export function registableHost<ControllerT>(
 	id: string,
 	elements = new Set<ControllerT>()
 ) {
-	return new Observable<Set<ControllerT>>(subs => {
+	return observable<Set<ControllerT>>(subs => {
 		function register(ev: CustomEvent) {
 			if (ev.target) {
 				const detail = ev.detail;
@@ -601,17 +584,19 @@ interface SelectableComponent extends Component {
 interface SelectableTarget extends Node {
 	value: any;
 	selected: boolean;
+	multiple?: boolean;
 }
 
 interface SelectableHost<T> extends Element {
-	value: any;
-	options?: Set<T>;
+	value?: any;
+	options: Set<T>;
 	selected?: T;
 }
 
 interface SelectableMultiHost<T> extends Element {
-	value: any;
-	options?: Set<T>;
+	value: any[];
+	options: Set<T>;
+	selected: Set<T>;
 }
 
 export function selectableHostMultiple<TargetT extends SelectableTarget>(
@@ -625,17 +610,31 @@ export function selectableHostMultiple<TargetT extends SelectableTarget>(
 		function onChange() {
 			const { value, options } = host;
 
-			if (!options) return;
-
 			for (const o of options) {
-				const isFound = value.indexOf(o.value) !== -1;
-				if (isFound) {
+				if (value.indexOf(o.value) !== -1) {
 					if (!o.selected) setSelected(o);
 				} else o.selected = false;
 			}
 		}
 
+		function setOptions() {
+			const { value, options, selected } = host;
+
+			options.forEach(o => (o.multiple = true));
+
+			for (const o of options) {
+				if (
+					(o.selected && !selected.has(o)) ||
+					(!o.selected && value.indexOf(o.value) !== -1)
+				)
+					setSelected(o);
+			}
+		}
+
 		const subscription = merge(
+			registableHost<TargetT>(host, 'selectable', host.options).tap(
+				setOptions
+			),
 			getAttribute(host, 'value').tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
 				if (ev.target && host.options?.has(ev.target as TargetT)) {
@@ -664,7 +663,7 @@ export function selectableHost<TargetT extends SelectableTarget>(
 		function onChange() {
 			const { value, options, selected } = host;
 
-			if (!options || (selected && selected.value === value)) return;
+			if (selected && selected.value === value) return;
 
 			for (const o of options)
 				if (o.parentNode && o.value === value) return setSelected(o);
@@ -673,7 +672,26 @@ export function selectableHost<TargetT extends SelectableTarget>(
 			setSelected(undefined);
 		}
 
+		function setOptions() {
+			const { value, options, selected } = host;
+
+			if (selected && options.has(selected)) return;
+
+			let first: TargetT | null = null;
+			for (const o of options) {
+				first = first || o;
+
+				if (value === o.value) return setSelected(o);
+			}
+
+			if (value === undefined && !selected && first) setSelected(first);
+			else if (selected && !selected.parentNode) setSelected(undefined);
+		}
+
 		const subscription = merge(
+			registableHost<TargetT>(host, 'selectable', host.options).tap(
+				setOptions
+			),
 			getAttribute(host, 'value').tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
 				if (ev.target && host.options?.has(ev.target as TargetT)) {
@@ -695,20 +713,8 @@ export function selectable<T extends SelectableComponent>(host: T) {
 			triggerEvent(host, 'selectable.action'),
 			stopEvent()
 		),
-		get(host, 'selected').pipe(ariaProp(host, 'selected'))
+		get(host, 'selected').pipe(ariaValue(host, 'selected'))
 	);
-}
-
-/**
- * Adds nodes to head on component rendering
- */
-export function head(...nodes: Node[]) {
-	return (host: Node) => {
-		requestAnimationFrame(() => {
-			const head = host.ownerDocument?.head || document.head;
-			nodes.forEach(child => head.appendChild(child));
-		});
-	};
 }
 
 interface CheckedComponent extends Component {
@@ -716,23 +722,22 @@ interface CheckedComponent extends Component {
 	checked: boolean;
 }
 
-export function checkedBehavior<T extends CheckedComponent>(
-	host: T,
-	update: () => void
-) {
+export function checkedBehavior<T extends CheckedComponent>(host: T) {
 	let first = true;
 	return merge(
-		get(host, 'value').tap(val => {
-			if (first) {
-				if (val === true) host.checked = true;
-				first = false;
-			} else host.checked = val === true;
-		}),
-		get(host, 'checked').pipe(ariaChecked(host)).tap(update)
+		get(host, 'value')
+			.tap(val => {
+				if (first) {
+					if (val === true) host.checked = true;
+					first = false;
+				} else host.checked = val === true;
+			})
+			.filter(() => false),
+		get(host, 'checked').pipe(ariaChecked(host))
 	);
 }
 
-export function stopChildEvents(target: EventTarget, event: string) {
+export function stopChildrenEvents(target: EventTarget, event: string) {
 	return on(target, event).tap(ev => {
 		if (ev.target !== target) {
 			ev.stopPropagation();
@@ -752,4 +757,34 @@ export function staticTemplate(template: () => Node) {
 	return () => {
 		return (rendered || (rendered = template())).cloneNode(true);
 	};
+}
+
+export function setClassName(el: HTMLElement) {
+	let className: string;
+	return tap<string>(newClass => {
+		if (className !== newClass) {
+			el.classList.remove(className);
+			className = newClass;
+			if (className) el.classList.add(className);
+		}
+	});
+}
+
+export function breakpoint(el: HTMLElement): Observable<Breakpoint> {
+	return onResize(el)
+		.raf()
+		.map(() => {
+			const breakpoints = theme.breakpoints;
+			const width = el.clientWidth;
+			let newClass: Breakpoint = 'xsmall';
+			for (const bp in breakpoints) {
+				if ((breakpoints as any)[bp] > width) return newClass;
+				newClass = bp as Breakpoint;
+			}
+			return newClass;
+		});
+}
+
+export function breakpointClass(el: HTMLElement) {
+	return breakpoint(el).pipe(setClassName(el));
 }

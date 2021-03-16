@@ -505,15 +505,31 @@
               "flags": 0,
               "id": 24,
               "type": {
-                "name": "Element",
-                "kind": 6
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 53,
+                  "ch": 30
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Element",
+                    "kind": 6
+                  },
+                  {
+                    "name": "Window",
+                    "kind": 6
+                  }
+                ]
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 53,
-                "ch": 39
+                "ch": 48
               },
               "kind": 9,
               "name": "key",

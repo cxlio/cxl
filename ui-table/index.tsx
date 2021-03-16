@@ -7,7 +7,7 @@ import {
 	registableHost,
 	role,
 	selectable,
-	stopChildEvents,
+	stopChildrenEvents,
 } from '@cxl/template';
 import {
 	Component,
@@ -563,7 +563,7 @@ export class TablePagination extends Component {
 	}
 
 	return merge(
-		stopChildEvents($, 'change'),
+		stopChildrenEvents($, 'change'),
 		merge(get($, 'source'), on($, 'dataset.update').tap(onAction)).raf(
 			update
 		),

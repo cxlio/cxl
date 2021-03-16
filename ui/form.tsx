@@ -660,22 +660,6 @@ export class MultiSelect extends SelectBase {
 		style.height = height + 'px';
 	}
 
-	protected setOptions(options: Set<Option>) {
-		options.forEach(o => (o.multiple = true));
-
-		const { value } = this;
-
-		if (!options) return;
-
-		for (const o of options) {
-			if (
-				(o.selected && !this.selected.has(o)) ||
-				(!o.selected && value.indexOf(o.value) !== -1)
-			)
-				this.setSelected(o);
-		}
-	}
-
 	protected setSelected(option: Option) {
 		option.selected = !this.selected.has(option);
 		const method = option.selected ? 'add' : 'delete';
@@ -775,7 +759,7 @@ export class MultiSelect extends SelectBase {
 				if (host.disabled) return;
 				host.checked = !host.checked;
 			}),
-			checkedBehavior(host, () => (host.value = host.checked))
+			checkedBehavior(host).tap(() => (host.value = host.checked))
 		)
 )
 export class Switch extends InputBase {
@@ -784,7 +768,7 @@ export class Switch extends InputBase {
 	checked = false;
 }
 
-function $focusProxy(el: HTMLElement, host: InputBase) {
+export function focusProxy(el: HTMLElement, host: InputBase) {
 	host.focusElement = el;
 	return focusable(host, el);
 }
@@ -792,7 +776,7 @@ function $focusProxy(el: HTMLElement, host: InputBase) {
 function $valueProxy<T extends InputBase>(host: T, el: HTMLInputElement) {
 	host.bind(
 		merge(
-			$focusProxy(el, host),
+			focusProxy(el, host),
 			get(host, 'value').tap(val => {
 				if (el.value !== val) el.value = val;
 			}),
@@ -809,7 +793,7 @@ function contentEditable<T extends InputBase>(
 	multiLine = false
 ) {
 	return merge(
-		$focusProxy(el, host),
+		focusProxy(el, host),
 		get(host, 'value').tap(val => {
 			if (el.textContent !== val) el.textContent = val;
 		}),

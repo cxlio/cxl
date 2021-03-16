@@ -336,7 +336,7 @@ export default spec('ui', a => {
 		a.test('should add options synchronously', a => {
 			const el = a.element('cxl-select') as SelectBox;
 			a.equal(el.children.length, 0);
-			a.ok(!el.options);
+			a.equal(el.options.size, 0);
 			el.appendChild(<Option>A</Option>);
 			a.equal(el.children.length, 1);
 			a.equal(el.options?.size, 1);
@@ -375,7 +375,7 @@ export default spec('ui', a => {
 		});
 
 		a.test(
-			'should set value to empty string if not found in options',
+			'should set selected to undefined if not found in options',
 			async a => {
 				a.dom.innerHTML = `<cxl-select value="b">
 				<cxl-option value="">A</cxl-option>
@@ -385,17 +385,11 @@ export default spec('ui', a => {
 				const select = a.dom.firstElementChild as SelectBox;
 				a.equal(select.selected?.value, 'b');
 				select.value = 'd';
-				a.equal(select.selected?.value, '');
-				a.equal(select.value, '');
+				a.equal(select.selected, undefined);
+				a.equal(select.value, 'd');
 				select.removeChild(select.firstElementChild as any);
 				a.equal(select.children.length, 2);
 				a.equal(select.options?.size, 2);
-				await of(true).raf();
-				a.ok(!select.selected);
-				a.equal(select.value, '');
-				select.value = 'f';
-				a.ok(!select.selected);
-				a.equal(select.value, '');
 			}
 		);
 
@@ -507,7 +501,7 @@ export default spec('ui', a => {
 		a.test('should add options synchronously', a => {
 			const el = a.element('cxl-multiselect') as MultiSelect;
 			a.equal(el.children.length, 0);
-			a.ok(!el.options);
+			a.equal(el.options.size, 0);
 			el.appendChild(<Option>A</Option>);
 			a.equal(el.children.length, 1);
 			a.equal(el.options?.size, 1);

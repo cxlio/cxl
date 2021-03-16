@@ -109,7 +109,7 @@ Object.assign(theme.animation, {
 Object.assign(theme.variables, {
 	// Animation speed
 	speed: '0.3s',
-	font: 'Roboto, sans-serif',
+	font: 'Roboto, Helvetica, sans-serif',
 	fontSize: '16px',
 	fontMonospace: 'monospace',
 });
@@ -197,7 +197,6 @@ Object.assign(theme.colors, {
 Object.assign(theme, {
 	imports: [
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap',
-		// 'https://fonts.googleapis.com/icon?family=Material+Icons',
 	],
 
 	globalStyles: {

@@ -1,10 +1,10 @@
 ///<amd-module name="@cxl/docgen/runtime"/>
 import { dom } from '@cxl/tsx';
+import '@cxl/ui/theme.js';
 import { Augment, Attribute, Component, get } from '@cxl/component';
 import { onAction, onChildrenMutation } from '@cxl/dom';
 import { border, css, padding } from '@cxl/css';
 import { be } from '@cxl/rx';
-import '@cxl/ui/theme.js';
 import '@cxl/ui-router';
 import { Span } from '@cxl/ui/core.js';
 import { Tabs, Tab } from '@cxl/ui/navigation.js';

@@ -15,7 +15,6 @@ import {
 	role,
 	triggerEvent,
 	focusable,
-	registableHost,
 	navigationList,
 	selectable,
 	selectableHost,
@@ -172,9 +171,6 @@ export class SelectMenu extends Component {
 		el.bind(
 			merge(
 				focusable(el),
-				registableHost<Option>(el, 'selectable').tap(options =>
-					el.setOptions(((el as any).options = options))
-				),
 				on(el, 'blur').tap(() => el.close()),
 				onKeypress(el, 'escape').tap(() => el.close())
 			)
@@ -190,9 +186,8 @@ export abstract class SelectBase extends InputBase {
 	@StyleAttribute()
 	opened = false;
 
-	readonly options?: Set<Option>;
+	readonly options = new Set<Option>();
 
-	protected abstract setOptions(options: Set<Option>): void;
 	protected abstract setSelected(option: Option): void;
 	abstract open(): void;
 	abstract close(): void;
@@ -222,8 +217,8 @@ export abstract class SelectBase extends InputBase {
 				'cxl-option:not([disabled])',
 				'cxl-option:not([disabled])[selected]'
 			).tap(selected => host.setSelected(selected as Option)),
-			selectableHost(host).tap(selected =>
-				host.setSelected(selected as Option)
+			selectableHost<Option>(host).tap(selected =>
+				host.setSelected(selected)
 			),
 			onAction(host).tap(() => !host.opened && host.open())
 		),
@@ -279,23 +274,6 @@ export class SelectBox extends SelectBase {
 		menu.scrollTop = scrollTop;
 	}
 
-	protected setOptions(options: Set<Option>) {
-		const { value, selected } = this;
-
-		if (selected && options.has(selected)) return;
-
-		let first: Option | null = null;
-		for (const o of options) {
-			first = first || o;
-
-			if (value === o.value) return this.setSelected(o);
-		}
-
-		if (value === undefined && !this.selected && first)
-			this.setSelected(first);
-		else if (selected && !selected.parentNode) this.setSelected(undefined);
-	}
-
 	protected setSelected(option?: Option) {
 		if (option !== this.selected) {
 			if (this.selected)
@@ -307,8 +285,7 @@ export class SelectBox extends SelectBase {
 			option.selected = option.focused = true;
 			this.selectedText$.next(option.textContent || '');
 			this.value = option.value;
-		} else if (option === undefined)
-			this.selectedText$.next((this.value = ''));
+		} else if (option === undefined) this.selectedText$.next('');
 
 		this.close();
 	}

@@ -140,6 +140,8 @@ export type Styles =
 			'@xlarge'?: Styles;
 	  };
 
+export type Breakpoint = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+
 export interface Breakpoints {
 	small: number;
 	large: number;

@@ -8,12 +8,11 @@ import { InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
 import {
 	Focusable,
-	Style,
 	checkedBehavior,
 	role,
 	staticTemplate,
 } from '@cxl/template';
-import { padding } from '@cxl/css';
+import { css, padding } from '@cxl/css';
 
 /**
  * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.
@@ -39,68 +38,66 @@ import { padding } from '@cxl/css';
 
 				ev.preventDefault();
 			}),
-			checkedBehavior(host, update),
+			checkedBehavior(host).tap(update),
 			get(host, 'indeterminate').tap(update)
 		);
 	},
 	FocusCircleStyle,
 	Focusable,
+	css({
+		$: {
+			position: 'relative',
+			cursor: 'pointer',
+			...padding(10, 0, 10, 46),
+			lineHeight: 20,
+			marginLeft: -10,
+			display: 'block',
+			verticalAlign: 'middle',
+			font: 'default',
+			textAlign: 'left',
+		},
+		$empty: {
+			display: 'inline-block',
+			...padding(0),
+			marginLeft: 0,
+			width: 20,
+			height: 20,
+		},
+		$invalid$touched: { color: 'error' },
+		box$empty: {
+			left: 0,
+		},
+		box: {
+			left: 10,
+			width: 20,
+			height: 20,
+			borderWidth: 2,
+			lineHeight: 16,
+			borderColor: 'onSurface',
+			borderStyle: 'solid',
+			position: 'absolute',
+			color: 'transparent',
+		},
+		check: { display: 'none' },
+		minus: { display: 'none' },
+		check$checked: { display: 'initial' },
+		check$indeterminate: { display: 'none' },
+		minus$indeterminate: { display: 'initial' },
+		box$checked: {
+			borderColor: 'primary',
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		box$indeterminate: {
+			borderColor: 'primary',
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		box$invalid$touched: { borderColor: 'error' },
+		focusCircle: { top: -2, left: -2 },
+	}),
 	staticTemplate(() => (
 		<>
-			<Style>
-				{{
-					$: {
-						position: 'relative',
-						cursor: 'pointer',
-						...padding(10, 0, 10, 46),
-						lineHeight: 20,
-						marginLeft: -10,
-						display: 'block',
-						verticalAlign: 'middle',
-						font: 'default',
-						textAlign: 'left',
-					},
-					$empty: {
-						display: 'inline-block',
-						...padding(0),
-						marginLeft: 0,
-						width: 20,
-						height: 20,
-					},
-					$invalid$touched: { color: 'error' },
-					box$empty: {
-						left: 0,
-					},
-					box: {
-						left: 10,
-						width: 20,
-						height: 20,
-						borderWidth: 2,
-						lineHeight: 16,
-						borderColor: 'onSurface',
-						borderStyle: 'solid',
-						position: 'absolute',
-						color: 'transparent',
-					},
-					check: { display: 'none' },
-					minus: { display: 'none' },
-					check$checked: { display: 'initial' },
-					check$indeterminate: { display: 'none' },
-					minus$indeterminate: { display: 'initial' },
-					box$checked: {
-						borderColor: 'primary',
-						backgroundColor: 'primary',
-						color: 'onPrimary',
-					},
-					box$indeterminate: {
-						borderColor: 'primary',
-						backgroundColor: 'primary',
-						color: 'onPrimary',
-					},
-					box$invalid$touched: { borderColor: 'error' },
-					focusCircle: { top: -2, left: -2 },
-				}}
-			</Style>
 			<div className="box">
 				<span className="focusCircle focusCirclePrimary" />
 				<Svg

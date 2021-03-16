@@ -12,7 +12,7 @@ import {
 import { dom, expression } from '@cxl/tsx';
 import { EMPTY, merge, tap } from '@cxl/rx';
 import { border, css, padding, pct } from '@cxl/css';
-import { Focusable, head, role } from '@cxl/template';
+import { Focusable, role } from '@cxl/template';
 import { on, onAction, trigger } from '@cxl/dom';
 import { InversePrimary, ResetSurface } from './theme.js';
 
@@ -492,18 +492,21 @@ export class Toggle extends Component {
 	right = false;
 }
 
-@Augment(
-	'cxl-meta',
-	head(
-		<meta name="viewport" content="width=device-width, initial-scale=1" />,
-		<meta name="apple-mobile-web-app-capable" content="yes" />,
-		<meta name="mobile-web-app-capable" content="yes" />,
-		<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}a,a:active,a:visited{color:var(--cxl-link)}`}</style>
-	)
-)
+const MetaNodes = [
+	<meta name="viewport" content="width=device-width, initial-scale=1" />,
+	<meta name="apple-mobile-web-app-capable" content="yes" />,
+	<meta name="mobile-web-app-capable" content="yes" />,
+	<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}a,a:active,a:visited{color:var(--cxl-link)}`}</style>,
+];
+
+@Augment('cxl-meta')
 export class Meta extends Component {
 	connectedCallback() {
-		document.documentElement.lang = 'en';
+		requestAnimationFrame(() => {
+			document.documentElement.lang = 'en';
+			const head = this.ownerDocument?.head || document.head;
+			MetaNodes.forEach(child => head.appendChild(child));
+		});
 		super.connectedCallback();
 	}
 }

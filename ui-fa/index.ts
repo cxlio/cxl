@@ -989,6 +989,7 @@ style.innerHTML = `:host { display: inline-block; }`;
 export class Icon extends HTMLElement {
 	static tagName = 'cxl-fa';
 
+	jsxAttributes?: Partial<Icon>;
 	private iconNode?: Text;
 	private $icon: IconKey = '';
 

@@ -51,7 +51,7 @@ export function on(
 	});
 }
 
-export function onKeypress(el: Element, key?: string) {
+export function onKeypress(el: Element | Window, key?: string) {
 	return on(el, 'keydown').filter(
 		(ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key
 	);

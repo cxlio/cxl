@@ -1,0 +1,15 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/ui-theme-terminal/amd"
+	},
+	"files": [
+		"index.ts"
+	],
+	"references": [
+		{
+			"path": "../ui/tsconfig.amd.json"
+		}
+	]
+}

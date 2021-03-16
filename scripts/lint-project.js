@@ -82,7 +82,8 @@ async function fixTsconfig({ projectPath, baseDir, dir }) {
 				if (pkgVersion) pkg[depProp][refPkg] = `~${pkgVersion}`;
 			}
 
-			if (pkg[notDepProp][refName]) delete pkg[notDepProp][refName];
+			if (pkg[notDepProp]?.[refName])
+				pkg[notDepProp][refName] = undefined;
 		}
 	}
 
@@ -155,7 +156,8 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 
 	if (!pkg.license) pkg.license = 'GPL-3.0';
 	if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
-	if (pkg.devDependencies) delete pkg.devDependencies;
+	if (!pkg.browser && pkg.devDependencies) delete pkg.devDependencies;
+	if (pkg.browser && pkg.dependencies) delete pkg.dependencies;
 	if (pkg.peerDependencies) delete pkg.peerDependencies;
 	if (pkg.browser) pkg.browser = browser;
 
@@ -223,7 +225,14 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }) {
 			licenses.includes(pkg.license),
 			`Valid license "${pkg.license}" required.`
 		),
-		rule(!pkg.devDependencies, `Package should not have devDependencies.`),
+		rule(
+			pkg.browser || !pkg.devDependencies,
+			`Package should not have devDependencies.`
+		),
+		rule(
+			!pkg.browser || !pkg.dependencies,
+			`Browser package should only have devDependencies.`
+		),
 		rule(
 			!pkg.peerDependencies,
 			`Package should not have peerDependencies.`

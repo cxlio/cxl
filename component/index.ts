@@ -172,11 +172,7 @@ export function augment<T extends Component>(
 export function registerComponent(tagName: string, ctor: any) {
 	ctor.tagName = tagName;
 	registeredComponents[tagName] = ctor;
-	try {
-		customElements.define(tagName, ctor);
-	} catch (e) {
-		console.warn(`Component ${tagName} already registered`);
-	}
+	customElements.define(tagName, ctor);
 }
 
 export function Augment<T extends Component>(): (ctor: any) => void;
@@ -225,7 +221,7 @@ export function attributeChanged<T extends Component, K extends keyof T>(
 ): Observable<T[K]> {
 	return attributes$(element).pipe(
 		filter(ev => ev.attribute === attribute),
-		map(() => element[attribute])
+		map(ev => ev.value)
 	);
 }
 

@@ -1,18 +1,33 @@
-import { be, ref, of, merge } from '@cxl/rx';
+import { ListEvent, be, ref, of, merge } from '@cxl/rx';
 import { dom } from '@cxl/tsx';
-import { Span } from '@cxl/component';
+import { Attribute, Augment, Component, Span } from '@cxl/component';
 import { suite, triggerKeydown } from '@cxl/spec';
 import { animationFrame, trigger, on } from '@cxl/dom';
 import {
+	aria,
+	ariaValue,
+	ariaChecked,
+	checkedBehavior,
+	focusable,
+	role,
 	each,
+	focusDelegate,
 	getAttribute,
 	navigationList,
+	staticTemplate,
+	list,
 	portal,
 	teleport,
 	triggerEvent,
 	model,
+	registable,
+	registableHost,
 	render,
+	selectable,
+	selectableHost,
+	selectableHostMultiple,
 	sortBy,
+	stopChildrenEvents,
 	stopEvent,
 	syncAttribute,
 } from './index.js';
@@ -388,6 +403,283 @@ export default suite('template', test => {
 			O.next('Hello');
 			a.equal(A.children.length, 1);
 			a.equal(A.textContent, 'Hello');
+		});
+	});
+
+	test('list', it => {
+		it.should('render elements based on observable emitted values', a => {
+			const source = be<ListEvent<string, string>>({ type: 'empty' });
+			const A = (
+				<Span>
+					{list(source, item => (
+						<p>{item}</p>
+					))}
+				</Span>
+			) as Span;
+			a.dom.appendChild(A);
+			a.equal(A.children.length, 0);
+			source.next({ type: 'insert', item: 'first', key: '1' });
+			a.equal(A.children.length, 1);
+			source.next({ type: 'insert', item: 'second', key: '2' });
+			a.equal(A.children.length, 2);
+			source.next({ type: 'remove', key: '1' });
+			a.equal(A.children.length, 1);
+			a.equal(A.textContent, 'second');
+		});
+	});
+
+	test('aria', it => {
+		it.should(
+			'set initial aria attribute value when element is connected',
+			a => {
+				const A = (<Span $={aria('checked', 'yes')} />) as Span;
+				a.dom.appendChild(A);
+				a.equal(A.getAttribute('aria-checked'), 'yes');
+			}
+		);
+	});
+
+	test('ariaValue', it => {
+		it.should(
+			'set initial aria attribute value when element is connected',
+			a => {
+				const A = (
+					<Span $={el => of('test').pipe(ariaValue(el, 'label'))} />
+				) as Span;
+				a.dom.appendChild(A);
+				a.equal(A.getAttribute('aria-label'), 'test');
+			}
+		);
+	});
+
+	test('ariaValue', it => {
+		it.should(
+			'set initial aria attribute value when element is connected',
+			a => {
+				const A = (
+					<Span $={el => of('test').pipe(ariaValue(el, 'label'))} />
+				) as Span;
+				a.dom.appendChild(A);
+				a.equal(A.getAttribute('aria-label'), 'test');
+			}
+		);
+	});
+
+	test('ariaChecked', it => {
+		it.should(
+			'set initial aria attribute value when element is connected',
+			a => {
+				const checked = be<boolean | undefined>(undefined);
+				const A = (
+					<Span $={el => checked.pipe(ariaChecked(el))} />
+				) as Span;
+				a.dom.appendChild(A);
+				a.equal(A.getAttribute('aria-checked'), 'mixed');
+				checked.next(true);
+				a.equal(A.getAttribute('aria-checked'), 'true');
+				checked.next(false);
+				a.equal(A.getAttribute('aria-checked'), 'false');
+			}
+		);
+	});
+
+	test('role', it => {
+		it.should(
+			'set initial aria role attribute value when element is connected',
+			a => {
+				const A = (<Span $={role('button')} />) as Span;
+				a.dom.appendChild(A);
+				a.equal(A.getAttribute('role'), 'button');
+			}
+		);
+	});
+
+	test('focusable', it => {
+		it.should('make components focusable', a => {
+			const A = (<Span $={focusable as any} />) as Span;
+			const B = (<Span $={focusable as any} />) as Span;
+			a.dom.appendChild(A);
+			a.dom.appendChild(B);
+			A.focus();
+			a.ok(A.matches(':focus'));
+			B.focus();
+			a.ok((A as any).touched);
+			a.ok(!(B as any).touched);
+			a.ok(!A.matches(':focus'));
+			a.ok(B.matches(':focus'));
+		});
+
+		it.should('handle disabled attribute', a => {
+			const A = (<Span $={focusable as any} />) as Span;
+			a.dom.appendChild(A);
+			A.focus();
+			a.ok(A.matches(':focus'));
+			(A as any).attributes$.next({
+				target: A,
+				attribute: 'disabled',
+				value: true,
+			});
+			a.ok(!A.matches(':focus'));
+			a.equal(A.getAttribute('aria-disabled'), 'true');
+		});
+	});
+
+	test('registable', it => {
+		it.should('send a register event when connected', a => {
+			const elements = new Set<Span>();
+			const A = (
+				<Span $={el => registableHost(el, 'test', elements)} />
+			) as Span;
+			const B = (<Span $={el => registable(el, 'test')} />) as Span;
+			a.dom.appendChild(A);
+			A.appendChild(B);
+			a.equal(elements.size, 1);
+			a.equal(elements.has(B), true);
+		});
+	});
+
+	test('checkedBehavior', it => {
+		it.should('set aria attributes when checked attribute changes', a => {
+			const A = (<Span $={checkedBehavior as any} />) as Span;
+			a.dom.appendChild(A);
+			a.equal(A.getAttribute('aria-checked'), 'mixed');
+			(A as any).attributes$.next({
+				target: A,
+				attribute: 'value',
+				value: false,
+			});
+			(A as any).attributes$.next({
+				target: A,
+				attribute: 'checked',
+				value: false,
+			});
+			a.equal(A.getAttribute('aria-checked'), 'false');
+
+			(A as any).attributes$.next({
+				target: A,
+				attribute: 'checked',
+				value: true,
+			});
+			a.equal(A.getAttribute('aria-checked'), 'true');
+		});
+	});
+
+	test('stopChildrenEvents', it => {
+		it.should('stop propagation of children events', a => {
+			let i = 0;
+			const A = (
+				<Span
+					$={el =>
+						merge(
+							on(el, 'click').tap(() => i++),
+							stopChildrenEvents(el, 'click'),
+							on(el, 'click').tap(() => i++)
+						)
+					}
+				/>
+			) as Span;
+			const B = (<Span />) as Span;
+			a.dom.appendChild(A);
+			A.appendChild(B);
+			B.click();
+			a.equal(i, 1);
+			B.click();
+			a.equal(i, 2);
+		});
+	});
+
+	test('selectable', it => {
+		@Augment(`cxl-test-${it.id}`, selectable)
+		class Selectable extends Component {
+			@Attribute()
+			selected = false;
+			@Attribute()
+			value?: any;
+		}
+
+		@Augment<SelectableHost>(`cxl-test2-${it.id}`)
+		class SelectableHost extends Component {
+			options = new Set<any>();
+			value: any;
+		}
+
+		@Augment<SelectableHostMultiple>(`cxl-test3-${it.id}`)
+		class SelectableHostMultiple extends Component {
+			options = new Set<any>();
+			selected = new Set<any>();
+			value = [];
+		}
+
+		it.should('work with selectableHost', a => {
+			let selected: any;
+			const A = (
+				<SelectableHost
+					$={el => selectableHost(el).tap(val => (selected = val))}
+				>
+					<Selectable value={1} />
+					<Selectable value={2} />
+					<Selectable value={3} />
+					<Selectable value={4} />
+				</SelectableHost>
+			) as SelectableHost;
+			a.dom.appendChild(A);
+			const A0 = A.children[0] as Selectable;
+			const A1 = A.children[0] as Selectable;
+			a.equal(selected, A0);
+			A1.click();
+			a.equal(selected, A0);
+		});
+		it.should('work with selectableHostMultiple', a => {
+			let selected: any;
+			const A = (
+				<SelectableHostMultiple
+					$={el =>
+						selectableHostMultiple(el).tap(val => (selected = val))
+					}
+				>
+					<Selectable />
+					<Selectable />
+					<Selectable />
+					<Selectable />
+				</SelectableHostMultiple>
+			) as SelectableHostMultiple;
+			a.dom.appendChild(A);
+			a.ok(A);
+			const A0 = A.children[0] as Selectable;
+			A0.click();
+			a.equal(selected, A0);
+			a.ok(A.options.has(A0));
+		});
+	});
+
+	test('staticTemplate', it => {
+		it.should('create a template function', a => {
+			const tpl = staticTemplate(() => <p>{a.id}</p>);
+			const A = tpl() as HTMLParagraphElement;
+
+			a.equal(A.tagName, 'P');
+			a.equal(A.textContent, a.id.toString());
+		});
+	});
+
+	test('focusDelegate', it => {
+		it.should('delegate focus to a different element', a => {
+			@Augment<FocusableHost>(`cxl-test2-${it.id}`)
+			class FocusableHost extends Component {
+				@Attribute()
+				disabled = false;
+				touched = false;
+			}
+
+			const A = (<FocusableHost />) as FocusableHost;
+			const B = (<input />) as HTMLInputElement;
+			const subs = focusDelegate(A, B).subscribe();
+
+			a.equal(B.disabled, false);
+			A.disabled = true;
+			a.equal(B.disabled, true);
+
+			subs.unsubscribe();
 		});
 	});
 });

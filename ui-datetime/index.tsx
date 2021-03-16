@@ -1,29 +1,23 @@
 import { InputBase } from '@cxl/ui/input-base.js';
-import {
-	Augment,
-	Attribute,
-	Component,
-	StyleAttribute,
-	get,
-} from '@cxl/component';
+import { Augment, Attribute, StyleAttribute, get } from '@cxl/component';
 import { css, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import { be, ref } from '@cxl/rx';
-import { onAction } from '@cxl/dom';
+import { be, merge, ref } from '@cxl/rx';
+import { on, onAction, onKeypress } from '@cxl/dom';
 import {
 	DisabledStyles,
-	Focusable,
+	// Focusable,
 	StateStyles,
+	breakpoint,
 	disabledAttribute,
 	each,
 	focusableEvents,
 	onValue,
-	render,
 	$onAction,
 } from '@cxl/template';
-
-import { Button, Grid, Span, ContentEditable } from '@cxl/ui';
+import { Button, Grid, Span } from '@cxl/ui';
 import { ButtonBase, Svg } from '@cxl/ui/core.js';
+import { focusProxy } from '@cxl/ui/form.js';
 import { IconButton } from '@cxl/ui/icon.js';
 
 interface DateInformation {
@@ -72,20 +66,19 @@ function getMonthDates(timestamp: number) {
 	return result;
 }
 
-function getDayText(day: number): string[] {
+function getDayText(day: number, size: string): string {
 	const date = new Date();
+	const weekday =
+		size === 'xsmall' ? 'narrow' : size === 'small' ? 'short' : 'long';
 	date.setDate(date.getDate() - date.getDay() + day);
-	return [
-		date.toLocaleDateString(navigator.language, { weekday: 'narrow' }),
-		date.toLocaleDateString(navigator.language, { weekday: 'short' }),
-		date.toLocaleDateString(navigator.language, { weekday: 'long' }),
-	];
+	return date.toLocaleDateString(navigator.language, { weekday });
 }
 
 @Augment<CalendarDate>(
 	'cxl-calendar-date',
 	css({
-		$: { textAlign: 'center', cursor: 'pointer', ...padding(4) },
+		$: { textAlign: 'center', cursor: 'pointer' },
+		$flat: padding(4, 0, 4, 0),
 		btn: {
 			borderRadius: 40,
 			width: 32,
@@ -95,7 +88,7 @@ function getDayText(day: number): string[] {
 			backgroundColor: 'surface',
 			color: 'onSurface',
 		},
-		outside: { opacity: 0.38 },
+		outside: { color: 'headerText' },
 		today: {
 			borderWidth: 1,
 			borderStyle: 'solid',
@@ -123,40 +116,9 @@ export class CalendarDate extends ButtonBase {
 	date?: DateInformation;
 }
 
-@Augment<CalendarDay>(
-	'cxl-calendar-day',
-	css({
-		$: {
-			display: 'block',
-			textAlign: 'center',
-			...padding(12),
-			color: 'headerText',
-			font: 'default',
-		},
-		narrow: { display: 'none' },
-		long: { display: 'none' },
-		'@small': { short: { display: 'none' }, narrow: { display: 'block' } },
-		'@medium': {
-			short: { display: 'none' },
-			narrow: { display: 'none' },
-			long: { display: 'block' },
-		},
-	}),
-	$ => (
-		<$.Shadow>
-			{render(get($, 'day').map(getDayText), text => (
-				<>
-					<Span className="short">{text[0]}</Span>
-					<Span className="narrow">{text[1]}</Span>
-					<Span className="long">{text[2]}</Span>
-				</>
-			))}
-		</$.Shadow>
-	)
-)
-class CalendarDay extends Component {
-	@Attribute()
-	day = 0;
+function normalizeDate(val: Date) {
+	const date = new Date(val);
+	return date.setHours(0, 0, 0, 0);
 }
 
 function onMonthChange($: CalendarMonth) {
@@ -171,37 +133,53 @@ function onMonthChange($: CalendarMonth) {
 
 @Augment<CalendarMonth>(
 	'cxl-calendar-month',
-	css({ $: { display: 'block' }, $disabled: DisabledStyles }),
+	css({
+		$: { display: 'block' },
+		$disabled: DisabledStyles,
+		day: {
+			textAlign: 'center',
+			...padding(12, 0, 12, 0),
+			color: 'headerText',
+			font: 'default',
+		},
+	}),
 	disabledAttribute,
 	focusableEvents,
-	$ => (
-		<Grid columns="repeat(7, auto)" gap={0}>
-			<CalendarDay day={0} />
-			<CalendarDay day={1} />
-			<CalendarDay day={2} />
-			<CalendarDay day={3} />
-			<CalendarDay day={4} />
-			<CalendarDay day={5} />
-			<CalendarDay day={6} />
-			{each(onMonthChange($).map(getMonthDates), item => (
-				<CalendarDate
-					$={el => onAction(el).tap(() => $.onDateClick(el))}
-					selected={el =>
-						get($, 'value').map(
-							val => el.date?.time === val?.getTime()
-						)
-					}
-					date={item}
-				/>
-			))}
-		</Grid>
-	)
+	$ => {
+		const time = get($, 'value')
+			.filter<Date>(val => !!val)
+			.map(normalizeDate);
+
+		function onDateClick(el: CalendarDate) {
+			$.value = el.date?.date || new Date();
+		}
+
+		return (
+			<Grid columns="repeat(7, auto)" gap={0}>
+				{each(
+					breakpoint($).map(size =>
+						[0, 1, 2, 3, 4, 5, 6].map(n => getDayText(n, size))
+					),
+					text => (
+						<div className="day">{text}</div>
+					)
+				)}
+				{each(onMonthChange($).map(getMonthDates), item => (
+					<CalendarDate
+						$={el => onAction(el).tap(() => onDateClick(el))}
+						selected={el => time.map(val => el.date?.time === val)}
+						date={item}
+					/>
+				))}
+			</Grid>
+		);
+	}
 )
 class CalendarMonth extends InputBase {
 	@Attribute()
 	month: Date = new Date();
 
-	value: Date | undefined = new Date();
+	value: Date | undefined;
 
 	focus() {
 		const shadow = this.shadowRoot;
@@ -211,15 +189,19 @@ class CalendarMonth extends InputBase {
 			shadow.querySelector('cxl-calendar-date');
 		if (el) el.focus();
 	}
-
-	onDateClick(el: CalendarDate) {
-		this.value = el.date?.date || new Date();
-	}
 }
 
 @Augment<CalendarYear>(
 	'cxl-calendar-year',
-	css({ $disabled: DisabledStyles }),
+	css({
+		$disabled: DisabledStyles,
+		selected: {
+			borderColor: 'primary',
+			borderWidth: 1,
+			borderStyle: 'solid',
+			color: 'primary',
+		},
+	}),
 	$ => {
 		const years = be<number[]>([]);
 
@@ -240,7 +222,9 @@ class CalendarMonth extends InputBase {
 					<Button
 						$={el => onAction(el).tap(() => ($.value = year))}
 						flat
-						primary={get($, 'value').map(val => year === val)}
+						className={get($, 'value').map(val =>
+							year === val ? 'selected' : ''
+						)}
 					>
 						{year}
 					</Button>
@@ -273,14 +257,14 @@ function getMonthText(date: Date) {
 }
 
 /**
- * Calendar component.
+ * Datepicker component.
  * @example
- * <cxl-calendar></cxl-calendar>
+ * <cxl-datepicker></cxl-datepicker>
  */
-@Augment<Calendar>(
-	'cxl-calendar',
+@Augment<Datepicker>(
+	'cxl-datepicker',
 	css({
-		$: { display: 'block', backgroundColor: 'surface' },
+		$: { display: 'block', backgroundColor: 'surface', paddingBottom: 8 },
 		header: { display: 'flex', ...padding(8, 12, 8, 12), height: 52 },
 		divider: { flexGrow: 1 },
 		closed: { scaleY: 0, transformOrigin: 'top' },
@@ -288,11 +272,11 @@ function getMonthText(date: Date) {
 		year: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
 		rel: { position: 'relative' },
 	}),
-	Focusable,
+	// Focusable,
 	host => {
 		const showYear = be(false);
 		const monthText = be('');
-		const value = get(host, 'value');
+		const value = ref<Date>();
 		const startYear = be(0);
 		const selectedMonth = ref<Date>();
 		const selectedYear = ref<number>();
@@ -328,44 +312,62 @@ function getMonthText(date: Date) {
 
 		host.bind(
 			selectedMonth.tap(val => {
-				const date = new Date(val);
-				const year = date.getFullYear();
-				monthText.next(getMonthText(date));
+				const year = val.getFullYear();
+				monthText.next(getMonthText(val));
 				startYear.next(year - (year % 16));
+				selectedYear.next(val.getFullYear());
 			})
 		);
 
 		host.bind(
 			get(host, 'value').tap(val => {
-				let date = val && new Date(val);
-
-				if (date) {
-					const invalid = (host.invalid = isNaN(date.getTime()));
-					if (invalid) date = undefined;
+				if (val) {
+					if (!(val instanceof Date))
+						return (host.value = new Date(val));
+					const invalid = (host.invalid = isNaN(val.getTime()));
+					if (invalid) return (host.value = undefined);
+					value.next(val);
+					selectedMonth.next(val);
+					selectedYear.next(val.getFullYear());
+				} else {
+					selectedMonth.next(new Date());
+					if (val !== undefined) host.value = undefined;
 				}
-
-				date ??= new Date();
-				selectedMonth.next(date);
-				selectedYear.next(date.getFullYear());
 			})
 		);
 
 		return (
 			<>
 				<div className="header">
-					<Button $={el => onAction(el).tap(toggleYear)} flat>
+					<Button
+						title={showYear.map(
+							v => `${v ? 'Close' : 'Open'} Year Panel`
+						)}
+						$={el => onAction(el).tap(toggleYear)}
+						flat
+					>
 						{monthText}
 						<Svg viewBox="0 0 24 24" width={20}>
 							{`<path d="M0 0h24v24H0z" fill="none"/><path d="M7 10l5 5 5-5z"/>`}
 						</Svg>
 					</Button>
 					<span className="divider" />
-					<IconButton $={$onAction(previousMonth)}>
+					<IconButton
+						title={showYear.map(
+							v => `Previous ${v ? 'Year Page' : 'Month'}`
+						)}
+						$={$onAction(previousMonth)}
+					>
 						<Svg viewBox="0 0 24 24" width={20}>
 							{`<path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>`}
 						</Svg>
 					</IconButton>
-					<IconButton $={$onAction(nextMonth)}>
+					<IconButton
+						title={showYear.map(
+							v => `Next ${v ? 'Year Page' : 'Month'}`
+						)}
+						$={$onAction(nextMonth)}
+					>
 						<Svg viewBox="0 0 24 24" width={20}>
 							{`<path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>`}
 						</Svg>
@@ -393,16 +395,18 @@ function getMonthText(date: Date) {
 		);
 	}
 )
-export class Calendar extends InputBase {
+export class Datepicker extends InputBase {
 	value: Date | undefined = undefined;
+
+	focus() {
+		(this.shadowRoot?.querySelector('.opened') as HTMLElement)?.focus();
+	}
 }
 
-@Augment<DatePicker>(
-	'cxl-datepicker',
+@Augment<DatepickerToggle>(
+	'cxl-datepicker-toggle',
 	css({
 		trigger: {
-			marginTop: -16,
-			marginRight: -4,
 			backgroundColor: 'transparent',
 		},
 		calendar: {
@@ -411,6 +415,7 @@ export class Calendar extends InputBase {
 			right: -12,
 			top: 26,
 			display: 'none',
+			elevation: 1,
 		},
 		calendar$opened: {
 			display: 'block',
@@ -419,30 +424,39 @@ export class Calendar extends InputBase {
 	$ => (
 		<>
 			<IconButton
-				$={el => onAction(el).tap(() => ($.opened = true))}
+				$={el => onAction(el).tap(() => ($.opened = !$.opened))}
+				title={get($, 'opened').map(
+					v => `${v ? 'Open' : 'Close'} Datepicker`
+				)}
 				className="trigger"
 			>
 				<Svg viewBox="0 0 24 24" width={20}>
 					{`<path d="M0 0h24v24H0z" fill="none"/><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>`}
 				</Svg>
 			</IconButton>
-			<Calendar
+			<Datepicker
 				className="calendar"
-				value={el =>
-					get(el, 'value')
-						.log()
-						.tap(val => ($.value = val))
+				value={get($, 'value')}
+				$={el =>
+					merge(
+						get(el, 'value').tap(val => {
+							$.value = val;
+							$.opened = false;
+						}),
+						get($, 'opened').tap(opened => opened && el.focus()),
+						onKeypress($, 'escape').tap(() => ($.opened = false))
+					)
 				}
 			/>
 		</>
 	)
 )
-export class DatePicker extends InputBase {
+export class DatepickerToggle extends InputBase {
 	@StyleAttribute()
 	opened = false;
 }
 
-@Augment<DatePickerInput>(
+@Augment<DatepickerInput>(
 	'cxl-datepicker-input',
 	css({
 		$: { display: 'flex', flexGrow: 1 },
@@ -453,8 +467,49 @@ export class DatePicker extends InputBase {
 			outline: 0,
 			flexGrow: 1,
 		},
+		toggle: {
+			marginTop: -16,
+			marginRight: -4,
+		},
 	}),
-	ContentEditable,
-	$ => <DatePicker $={el => onValue(el).tap(val => ($.value = val))} />
+	host => (
+		<Span
+			className="input"
+			$={el =>
+				merge(
+					focusProxy(el, host),
+					get(host, 'value').tap(val => {
+						if (val && !(val instanceof Date))
+							return (host.value = new Date(val));
+						if (!val || isNaN(val.getTime()))
+							return (host.value = undefined);
+						const textContent = val.toLocaleDateString();
+						if (el.textContent !== textContent)
+							el.textContent = textContent;
+					}),
+					get(host, 'disabled').raf(
+						val => (el.contentEditable = val ? 'false' : 'true')
+					),
+					on(el, 'blur').tap(() => {
+						const text = el.textContent;
+						const date = text ? new Date(text) : undefined;
+						if (date && isNaN(date.getTime()))
+							host.value = undefined;
+						host.value = date;
+					}),
+					onKeypress(el, 'enter').tap(ev => ev.preventDefault())
+				)
+			}
+		/>
+	),
+	$ => (
+		<DatepickerToggle
+			className="toggle"
+			value={get($, 'value')}
+			$={el => onValue(el).tap(val => ($.value = val))}
+		/>
+	)
 )
-export class DatePickerInput extends InputBase {}
+export class DatepickerInput extends InputBase {
+	value: Date | undefined;
+}

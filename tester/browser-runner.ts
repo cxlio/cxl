@@ -95,6 +95,9 @@ function findTest(tests: Test[], id: number): Test | void {
 async function onClick(suite: Test[], ev: Event) {
 	const testId = (ev.target as HTMLElement)?.dataset.test;
 	if (testId) {
+		ev.stopPropagation();
+		ev.preventDefault();
+
 		const test = findTest(suite, +testId);
 
 		if (test) {
@@ -103,8 +106,6 @@ async function onClick(suite: Test[], ev: Event) {
 			await test.run();
 			console.log(test.results);
 		}
-		ev.stopPropagation();
-		ev.preventDefault();
 	}
 }
 

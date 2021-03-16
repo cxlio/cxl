@@ -16759,9 +16759,31 @@
                 "ch": 27
               },
               "kind": 10,
+              "name": "jsxAttributes",
+              "flags": 4,
+              "id": 985,
+              "type": {
+                "name": "Partial",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "id": 983,
+                    "name": "Icon",
+                    "kind": 6
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 991,
+                "ch": 31
+              },
+              "kind": 10,
               "name": "iconNode",
               "flags": 8,
-              "id": 985,
+              "id": 986,
               "type": {
                 "name": "Text",
                 "kind": 6
@@ -16770,13 +16792,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 991,
+                "line": 992,
                 "ch": 25
               },
               "kind": 10,
               "name": "$icon",
               "flags": 8,
-              "id": 986,
+              "id": 987,
               "type": {
                 "name": "IconKey",
                 "kind": 6
@@ -16786,13 +16808,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 992,
+                "line": 993,
                 "ch": 29
               },
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 987,
+              "id": 988,
               "parameters": [],
               "type": {
                 "id": 983,
@@ -16803,13 +16825,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 998,
+                "line": 999,
                 "ch": 2
               },
               "kind": 12,
               "name": "icon",
               "flags": 4,
-              "id": 988,
+              "id": 989,
               "parameters": [],
               "type": {
                 "name": "",
@@ -26612,24 +26634,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 1002,
+                "line": 1003,
                 "ch": 2
               },
               "kind": 13,
               "name": "icon",
               "flags": 4,
-              "id": 989,
+              "id": 990,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 1004,
+                    "line": 1005,
                     "ch": 10
                   },
                   "kind": 9,
                   "name": "iconName",
                   "flags": 0,
-                  "id": 990,
+                  "id": 991,
                   "type": {
                     "name": "IconKey",
                     "kind": 6
