@@ -140,7 +140,9 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	const pkgPath = `${projectPath}/package.json`;
 	const pkg = await readJson(pkgPath);
 	const oldPackage = JSON.stringify(pkg, null, '\t');
-	const testScript = `npm run build && cd ../dist/${dir} && node ../tester`;
+	const testScript = `npm run build && cd ../dist/${dir} && node ../tester ${
+		pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'
+	}`;
 
 	const tsconfigBundle = await readJson(
 		`${projectPath}/tsconfig.bundle.json`
@@ -161,10 +163,12 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	if (pkg.peerDependencies) delete pkg.peerDependencies;
 	if (pkg.browser) pkg.browser = browser;
 
-	if (!pkg.scripts.test.startsWith(testScript)) {
+	if (!pkg.scripts.test !== testScript) {
+		/*
 		const testerArgs =
 			/node \.\.\/tester(\s+.+)/.exec(pkg.scripts.test)?.[1] || '';
-		pkg.scripts.test = `${testScript}${testerArgs}`;
+		pkg.scripts.test = `${testScript}${testerArgs}`;*/
+		pkg.scripts.test = testScript;
 	}
 
 	const newPackage = JSON.stringify(pkg, null, '\t');
@@ -216,6 +220,10 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }) {
 			rule('scripts' in pkg, `Field "scripts" required in package.json`)
 		);
 
+	const testScript = `npm run build && cd ../dist/${dir} && node ../tester ${
+		pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'
+	}`;
+
 	rules.push(
 		rule(
 			pkg.name === `${rootPkg.name}${dir}`,
@@ -246,9 +254,7 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }) {
 			`Package "bugs" property must match root package`
 		),
 		rule(
-			pkg?.scripts?.test?.startsWith(
-				`npm run build && cd ../dist/${dir} && node ../tester`
-			),
+			pkg?.scripts?.test === testScript,
 			`Valid test script in package.json`
 		)
 	);

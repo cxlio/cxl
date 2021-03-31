@@ -4,7 +4,7 @@ import { MappingItem, SourceMapConsumer, RawSourceMap } from 'source-map';
 
 export interface Output {
 	path: string;
-	source: string;
+	source: Buffer;
 	mtime?: number;
 }
 

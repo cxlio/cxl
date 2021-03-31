@@ -13,6 +13,7 @@ const STYLES_CSS = __dirname + '/styles.css';
 export interface File {
 	name: string;
 	content: string;
+	title?: string;
 	node?: Node;
 }
 
@@ -40,6 +41,10 @@ export class DocGen extends Application {
 				name: 'scripts',
 				help:
 					'Extra scripts to include in the documentation html output',
+			},
+			{
+				name: 'demoScripts',
+				help: 'Scripts to include in the documentation demo output',
 			},
 			{
 				name: 'packageJson',

@@ -254,20 +254,62 @@
               "flags": 0,
               "id": 14,
               "type": {
-                "name": "HTMLFormElement",
-                "kind": 6
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 14,
+                  "ch": 4
+                },
+                "kind": 34,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 14,
+                      "ch": 6
+                    },
+                    "kind": 11,
+                    "name": "setCustomValidity",
+                    "flags": 0,
+                    "id": 15,
+                    "type": {
+                      "name": "void",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "index.tsx",
+                          "line": 14,
+                          "ch": 25
+                        },
+                        "kind": 9,
+                        "name": "msg",
+                        "flags": 0,
+                        "id": 16,
+                        "type": {
+                          "name": "string",
+                          "kind": 32,
+                          "flags": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             },
             {
               "source": {
                 "fileName": "index.tsx",
                 "line": 14,
-                "ch": 21
+                "ch": 46
               },
               "kind": 9,
               "name": "validators",
               "flags": 262144,
-              "id": 15,
+              "id": 17,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
@@ -301,7 +343,7 @@
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 16,
+            "id": 18,
             "parameters": [
               {
                 "source": {
@@ -312,7 +354,7 @@
                 "kind": 9,
                 "name": "value",
                 "flags": 0,
-                "id": 17,
+                "id": 19,
                 "type": {
                   "name": "any",
                   "kind": 32,
@@ -336,7 +378,7 @@
           "kind": 16,
           "name": "required",
           "flags": 1,
-          "id": 18,
+          "id": 20,
           "parameters": [
             {
               "source": {
@@ -347,7 +389,7 @@
               "kind": 9,
               "name": "val",
               "flags": 0,
-              "id": 19,
+              "id": 21,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -382,7 +424,7 @@
           "kind": 16,
           "name": "email",
           "flags": 1,
-          "id": 20,
+          "id": 22,
           "parameters": [
             {
               "source": {
@@ -393,7 +435,7 @@
               "kind": 9,
               "name": "val",
               "flags": 0,
-              "id": 21,
+              "id": 23,
               "type": {
                 "name": "string",
                 "kind": 32,

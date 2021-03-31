@@ -86,7 +86,7 @@ export default spec('ui-datetime', s => {
 			nextMonthButton.click();
 			nextMonthButton.click();
 
-			testMonth.setMonth(date.getMonth() + 1);
+			testMonth.setMonth(date.getMonth() + 2);
 			const nextMonth = testMonth.toLocaleDateString(navigator.language, {
 				year: 'numeric',
 				month: 'long',

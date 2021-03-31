@@ -30,7 +30,7 @@ import { role } from '@cxl/template';
 			left: 0,
 			bottom: 0,
 			right: 0,
-			backgroundColor: 'elevation',
+			backgroundColor: 'shadow',
 			elevation: 5,
 			overflowY: 'auto',
 		},
@@ -65,7 +65,7 @@ export class Backdrop extends Component {}
 		},
 		'@small': {
 			content: {
-				elevation: 12,
+				elevation: 5,
 				translateY: pct(-50),
 				top: pct(50),
 				bottom: 'auto',

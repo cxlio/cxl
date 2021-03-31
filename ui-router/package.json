@@ -4,7 +4,7 @@
 	"browser": "amd/index.min.js",
 	"description": "UI Router Components",
 	"scripts": {
-		"test": "npm run build && cd ../dist/ui-router && node ../tester",
+		"test": "npm run build && cd ../dist/ui-router && node ../tester --baselinePath=../../ui-router/spec",
 		"build": "node ../dist/build"
 	},
 	"homepage": "https://cxlio.github.io/cxl/ui-router",

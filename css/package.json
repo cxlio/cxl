@@ -7,7 +7,7 @@
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/css && node ../tester"
+		"test": "npm run build && cd ../dist/css && node ../tester --baselinePath=../../css/spec"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }

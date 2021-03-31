@@ -4,7 +4,7 @@
 	"description": "UI Table Components",
 	"browser": "amd/index.min.js",
 	"scripts": {
-		"test": "npm run build && cd ../dist/ui-table && node ../tester",
+		"test": "npm run build && cd ../dist/ui-table && node ../tester --baselinePath=../../ui-table/spec",
 		"build": "node ../dist/build"
 	},
 	"homepage": "https://cxlio.github.io/cxl/ui-table",

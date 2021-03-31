@@ -474,9 +474,8 @@ const radioElements = new Set<Radio>();
  * Radio buttons allow the user to select one option from a set.
  * Use radio buttons when the user needs to see all available options.
  * @example
- * <cxl-radio name="test" value="1">Radio Button 1</cxl-radio>
- * <cxl-radio name="test" value="2" checked>Radio Button 2</cxl-radio>
- * <cxl-radio name="test" value="3">Radio Button 3</cxl-radio>
+ * <cxl-radio inline name="test" value="1">Radio 1</cxl-radio>
+ * <cxl-radio inline name="test" value="2" checked>Radio 2</cxl-radio>
  */
 @Augment<Radio>(
 	'cxl-radio',

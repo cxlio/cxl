@@ -17,7 +17,13 @@ import { relative } from 'path';
 import hljs from 'highlight.js';
 import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import MarkdownIt from 'markdown-it';
-import { Section, escape, parseExample, RuntimeConfig } from './render.js';
+import {
+	ExtraDocumentation,
+	Section,
+	escape,
+	parseExample,
+	RuntimeConfig,
+} from './render.js';
 
 let application: DocGen;
 let index: Node[];
@@ -793,16 +799,19 @@ function Markdown(content: string) {
 function Route(file: File) {
 	return `<template ${
 		file.name === 'index.html' ? 'data-default="true"' : ''
-	} data-title="${file.node?.name || file.name}" data-path="${file.name}">${
-		file.content
-	}</template>`;
+	} data-title="${file.title || file.node?.name || file.name}" data-path="${
+		file.name
+	}">${file.content}</template>`;
 }
 
-function renderExtraFile(file: string, index = false) {
-	const content = readFileSync(file, 'utf8');
+function renderExtraFile({ file, index, title }: ExtraDocumentation) {
+	const source = readFileSync(file, 'utf8');
+	const content = file.endsWith('.md') ? Markdown(source) : source;
+
 	return {
+		title,
 		name: index ? 'index.html' : file,
-		content: file.endsWith('.md') ? Markdown(content) : content,
+		content,
 	};
 }
 
@@ -837,7 +846,7 @@ export function render(app: DocGen, output: Output): File[] {
 			: []);
 
 	extraFiles = extraDocs.flatMap(section =>
-		section.items.map(i => renderExtraFile(i.file, i.index))
+		section.items.map(renderExtraFile)
 	);
 
 	const result: File[] = output.modules.flatMap(Module);

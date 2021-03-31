@@ -4,7 +4,7 @@
 	"browser": "amd/index.min.js",
 	"description": "Font Awesome Icons Kit",
 	"scripts": {
-		"test": "npm run build && cd ../dist/ui-fa && node ../tester",
+		"test": "npm run build && cd ../dist/ui-fa && node ../tester --baselinePath=../../ui-fa/spec",
 		"build": "node ../dist/build"
 	},
 	"license": "GPL-3.0",

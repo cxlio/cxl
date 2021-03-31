@@ -1,27 +1,28 @@
-<cxl-t h3>Components</cxl-t>
-<p></p>
 <style>
 	.components-card {
 		transition: box-shadow var(--cxl-speed);
+		height: 100%;
 	}
 	.components-card:hover {
-		box-shadow: 2px 2px 6px var(--cxl-elevation);
+		box-shadow: 2px 2px 6px var(--cxl-shadow);
+	}
+	.components-card [subtitle2] {
+		margin-bottom: 8px;
+	}
+	.iframe {
+		border: 0;
+		height: 80px;
+		width: 100%;
 	}
 </style>
-<cxl-input-chips id="input-chips"> </cxl-input-chips>
 
-<cxl-grid id="grid"> </cxl-grid>
+<cxl-grid id="grid"></cxl-grid>
 
 <script>
 	(() => {
 		const inputChips = document.getElementById('input-chips');
 		const grid = document.getElementById('grid');
 		const ComponentKind = 35;
-		const ENTITIES_REGEX = /[&<]/g;
-		const ENTITIES_MAP = {
-			'&': '&amp;',
-			'<': '&lt;',
-		};
 
 		function sortByName(a, b) {
 			return a.name > b.name ? 1 : -1;
@@ -38,10 +39,6 @@
 			);
 		}
 
-		function escape(str) {
-			return str.replace(ENTITIES_REGEX, e => ENTITIES_MAP[e]);
-		}
-
 		function renderCard(node) {
 			const tagName = node.docs.tagName;
 			let summary = '';
@@ -49,22 +46,28 @@
 				const doc = getSummary(node.docs);
 				summary = doc ? doc.split('.')[0] : '';
 			}
-			const demo = getDemo(node.docs);
 
-			return summary
-				? `
-		<cxl-c sm6 md4><cxl-a style="text-decoration:none" href="${node.href}">
-		<cxl-card class="components-card" style="height: 100%">
-		<iframe srcdoc="${escape(demo)}"></iframe>
-		<cxl-c pad16>
-			<div>
-				<cxl-t subtitle>${node.name}</cxl-t>
-				<cxl-t subtitle2>&lt;${tagName}&gt;</cxl-t>
-			</div></cxl-c>
+			if (!summary) return;
+
+			const demo = `<script src="us0.js">\u003c/script><style>body{margin:0;padding:16px;text-align:center;overflow:hidden}</style>${getDemo(
+				node.docs
+			)}`;
+			const el = document.createElement('cxl-c');
+			el.sm = 6;
+			el.md = 4;
+
+			el.innerHTML = `
+		<cxl-card class="components-card">
+			<iframe loading=lazy class="iframe"></iframe>
+			<cxl-c pad16><cxl-a style="text-decoration:none" href="${node.href}">
+			<cxl-t subtitle>${node.name}</cxl-t>
+			<cxl-t subtitle2>&lt;${tagName}&gt;</cxl-t>
+			</cxl-a>
 			<cxl-t body2>${summary}.</cxl-t>
-		</cxl-c></cxl-card></cxl-a></cxl-c>
-			`
-				: '';
+			</cxl-c>
+		</cxl-card>`;
+			el.children[0].children[0].srcdoc = demo;
+			return el;
 		}
 
 		function parseJson(res) {
@@ -77,11 +80,10 @@
 					symbol.docs &&
 					symbol.docs.tagName
 				) {
-					gridHtml += renderCard(symbol);
+					const card = renderCard(symbol);
+					if (card) grid.appendChild(card);
 				}
 			});
-
-			grid.innerHTML = gridHtml;
 		}
 
 		const summary = fetch('summary.json')

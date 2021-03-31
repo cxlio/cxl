@@ -13,7 +13,7 @@ export interface BuildConfiguration {
 	outputDir: string;
 	tasks: Task[];
 }
-type Task = Observable<Output>;
+export type Task = Observable<Output>;
 
 function kb(bytes: number) {
 	return (bytes / 1000).toFixed(2) + 'kb';

@@ -84,38 +84,40 @@ function getRepo(repo: string | { url: string }) {
 function packageJson(p: any) {
 	return of({
 		path: 'package.json',
-		source: JSON.stringify(
-			{
-				name: p.name,
-				version: p.version,
-				description: p.description,
-				private: p.private,
-				license: p.license,
-				files: [
-					'*.js',
-					'*.d.ts',
-					'*.js.map',
-					'amd/*.js',
-					'amd/*.d.ts',
-					'amd/*.js.map',
-					'es6/*.js',
-					'es6/*.d.ts',
-					'es6/*.js.map',
-					'LICENSE',
-					'*.md',
-				],
-				main: 'index.js',
-				browser: p.browser,
-				homepage: p.homepage,
-				bugs: p.bugs,
-				bin: p.bin,
-				repository: p.repository && getRepo(p.repository),
-				dependencies: p.dependencies,
-				peerDependencies: p.peerDependencies,
-				type: p.type,
-			},
-			null,
-			2
+		source: Buffer.from(
+			JSON.stringify(
+				{
+					name: p.name,
+					version: p.version,
+					description: p.description,
+					private: p.private,
+					license: p.license,
+					files: [
+						'*.js',
+						'*.d.ts',
+						'*.js.map',
+						'amd/*.js',
+						'amd/*.d.ts',
+						'amd/*.js.map',
+						'es6/*.js',
+						'es6/*.d.ts',
+						'es6/*.js.map',
+						'LICENSE',
+						'*.md',
+					],
+					main: 'index.js',
+					browser: p.browser,
+					homepage: p.homepage,
+					bugs: p.bugs,
+					bin: p.bin,
+					repository: p.repository && getRepo(p.repository),
+					dependencies: p.dependencies,
+					peerDependencies: p.peerDependencies,
+					type: p.type,
+				},
+				null,
+				2
+			)
 		),
 	});
 }
@@ -160,7 +162,7 @@ export function readme() {
 
 		return of({
 			path: 'README.md',
-			source: `# ${pkg.name} 
+			source: Buffer.from(`# ${pkg.name} 
 	
 [![npm version](https://badge.fury.io/js/${encodedName}.svg)](https://badge.fury.io/js/${encodedName})
 
@@ -177,7 +179,7 @@ ${pkg.description}
 
 	npm install ${pkg.name}
 
-${extra}`,
+${extra}`),
 		});
 	});
 }
@@ -209,7 +211,7 @@ function createBundle(
 	resolvedFiles: string[],
 	content: string[],
 	outFile: string
-) {
+): Output {
 	const options: ts.CompilerOptions = {
 		lib: ['lib.es2017.d.ts'],
 		module: ts.ModuleKind.AMD,
@@ -244,19 +246,20 @@ function createBundle(
 	};
 
 	const program = ts.createProgram(resolvedFiles, options, host);
-	const out: Output = {
+	let source = '';
+	program.emit(undefined, (_a, b) => (source += b));
+
+	return {
 		path: outFile,
-		source: '',
+		source: Buffer.from(source),
 	};
-	program.emit(undefined, (_a, b) => (out.source += b));
-	return out;
 }
 
 export function AMD() {
 	return defer<Output>(() =>
 		of({
 			path: 'amd.js',
-			source: readFileSync(__dirname + '/amd.js', 'utf8'),
+			source: readFileSync(__dirname + '/amd.js'),
 		})
 	);
 }

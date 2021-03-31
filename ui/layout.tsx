@@ -11,7 +11,7 @@ import {
 import { css, margin, padding, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { operator } from '@cxl/rx';
-import { InversePrimary } from './theme.js';
+import { InversePrimary, InverseSecondary } from './theme.js';
 
 const colStyles = ((r: any) => {
 	for (let i = 12; i > 0; i--)
@@ -110,11 +110,13 @@ function persistWithParameter(prefix: string) {
 			color: 'onPrimaryLight',
 		},
 		$secondary: {
-			backgroundColor: 'secondary',
-			color: 'onSecondary',
+			...InverseSecondary,
+			color: 'onSurface',
+			backgroundColor: 'surface',
 		},
 		$flex: { display: 'flex' },
 		$vflex: { display: 'flex', flexDirection: 'column' },
+		$vflex$center: { justifyContent: 'center' },
 	}),
 	Slot
 )
@@ -316,11 +318,11 @@ export class Card extends C {
  * The responsive layout grid adapts to screen sizes and orientation, ensuring consistency across layouts.
  * @example
  * <cxl-grid columns="auto auto auto" style="color:#fff">
- *   <cxl-c style="background:#a00; padding: 24px">1</cxl-c>
- *   <cxl-c style="background:#0a0; padding:24px">2</cxl-c>
- *   <cxl-c style="background:#0a0; padding:24px">3</cxl-c>
- *   <cxl-c xs2 style="background:#00a; padding:24px">4</cxl-c>
- *   <cxl-c style="background:#00a; padding:24px">5</cxl-c>
+ *   <cxl-c xs1 style="background:#a00; padding: 2px">1</cxl-c>
+ *   <cxl-c xs1 style="background:#0a0; padding:2px">2</cxl-c>
+ *   <cxl-c xs1 style="background:#0a0; padding:2px">3</cxl-c>
+ *   <cxl-c xs2 style="background:#00a; padding:2px">4</cxl-c>
+ *   <cxl-c xs1 style="background:#00a; padding:2px">5</cxl-c>
  * </cxl-grid>
  */
 @Augment<Grid>(
@@ -330,9 +332,11 @@ export class Card extends C {
 	}),
 	Slot,
 	update(host => {
-		host.style.gridTemplateRows = (host.rows || 'auto').toString();
+		const colTemplate =
+			host.coltemplate ?? `repeat(${host.columns}, minmax(0,1fr))`;
+		host.style.gridTemplateRows = (host.rows ?? 'auto').toString();
 		host.style.gridGap = `${host.gap}px ${host.gap}px`;
-		host.style.gridTemplateColumns = host.columns;
+		host.style.gridTemplateColumns = colTemplate;
 	})
 )
 export class Grid extends Component {
@@ -340,7 +344,10 @@ export class Grid extends Component {
 	rows?: number;
 
 	@Attribute()
-	columns = 'repeat(12, minmax(0,1fr))';
+	columns = 12;
+
+	@Attribute()
+	coltemplate?: string;
 
 	@Attribute()
 	gap = 16;

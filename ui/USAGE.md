@@ -19,13 +19,13 @@
 
 ### Quick Start
 
-This is all you need to get started.
+This is all you need to get started. By default, all components follow the [Material Design specification](https://material.io).
 
 ```html
 <!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/@cxl/ui"></script>
 <cxl-application>
 	<cxl-appbar>
-		<cxl-navbar><cxl-item>Home</cxl-item></cxl-navbar>
 		<cxl-appbar-title>Application Title</cxl-appbar-title>
 	</cxl-appbar>
 	<cxl-content>

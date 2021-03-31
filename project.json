@@ -7,6 +7,10 @@
 				"files": ["ajax/index.ts"],
 				"tasks": "cd ajax && npm run build"
 			},
+			"blog": {
+				"files": ["blog/index.ts"],
+				"tasks": "cd blog && npm run build"
+			},
 			"build": {
 				"files": ["build/*.ts"],
 				"tasks": "cd build && npm run build"

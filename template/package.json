@@ -6,7 +6,7 @@
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/template && node ../tester"
+		"test": "npm run build && cd ../dist/template && node ../tester --baselinePath=../../template/spec"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
 	"homepage": "https://cxlio.github.io/cxl/template",

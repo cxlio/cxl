@@ -1,30 +1,39 @@
 ///<amd-module name="@cxl/css"/>
 type StyleDefinition = Partial<StrictStyleDefinition>;
 export type BaseColor = RGBA;
-
 export type CSSStyle = {
 	[P in keyof CSSStyleDeclaration]?: string | number;
 };
 export type Color = keyof Colors | BaseColor | 'inherit' | 'transparent';
 export type Percentage = '50%' | '100%' | CustomPercentage;
 export type Length = number | Percentage | 'auto';
+export type Variables = Record<string, string | { toString(): string }>;
+export type VariableList = Colors & Variables;
+export type FlexAlign =
+	| 'normal'
+	| 'stretch'
+	| 'center'
+	| 'start'
+	| 'end'
+	| 'flex-start'
+	| 'flex-end'
+	| 'baseline';
 
+export interface Colors {}
+
+export interface FontDefinition {
+	family: string;
+	url: string;
+	weight?: string;
+}
 export interface Typography {
 	default: CSSStyle;
 }
 
-export type Variables = Record<string, string | { toString(): string }>;
-
-export interface Colors {
-	surface: BaseColor;
-}
-
-export type VariableList = Colors & Variables;
-
 interface StrictStyleDefinition {
-	alignItems: string;
-	alignSelf: string;
-	animation: string;
+	alignItems: FlexAlign;
+	alignSelf: FlexAlign;
+	animation: keyof Theme['animation'];
 	animationDuration: string;
 	backgroundColor: Color;
 	borderBottom: Length;
@@ -36,7 +45,7 @@ interface StrictStyleDefinition {
 	borderRadius: Length;
 	borderStyle: 'solid' | 'none';
 	boxShadow: BoxShadow | 'none';
-	elevation: number;
+	elevation: 0 | 1 | 2 | 3 | 4 | 5;
 	fontSize: 'inherit';
 	translateX: Length;
 	translateY: Length;
@@ -141,6 +150,7 @@ export type Styles =
 	  };
 
 export type Breakpoint = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+export type CSSUnit = 'px' | 'em' | 'rem';
 
 export interface Breakpoints {
 	small: number;
@@ -154,7 +164,7 @@ export interface AnimationDefinition {
 	value: string;
 }
 
-export interface Animation {
+interface Animation {
 	[name: string]: AnimationDefinition;
 }
 
@@ -166,7 +176,19 @@ export interface Theme {
 	breakpoints: Breakpoints;
 	globalStyles?: Styles;
 	imports?: string[];
+	unit: CSSUnit;
 }
+
+export interface RGBA {
+	readonly a: number;
+	readonly r: number;
+	readonly g: number;
+	readonly b: number;
+	alpha(a: number): RGBA;
+	toString(): string;
+}
+
+export type CustomPercentage = { toString(): string };
 
 const PSEUDO = {
 	focus: ':focus',
@@ -177,13 +199,6 @@ const PSEUDO = {
 	firstChild: ':first-child',
 	lastChild: ':last-child',
 };
-
-export class CustomPercentage {
-	constructor(private n: number) {}
-	toString() {
-		return this.n + '%';
-	}
-}
 
 export function boxShadow(
 	offsetX: number,
@@ -196,67 +211,11 @@ export function boxShadow(
 }
 
 export function pct(n: number) {
-	return new CustomPercentage(n);
-}
-
-export class RGBA {
-	r: number;
-	g: number;
-	b: number;
-	a: number;
-
-	constructor(r: number, g: number, b: number, a?: number) {
-		this.r = r < 0 ? 0 : r > 255 ? 255 : r;
-		this.g = g < 0 ? 0 : g > 255 ? 255 : g;
-		this.b = b < 0 ? 0 : b > 255 ? 255 : b;
-		this.a = a === undefined ? 1 : a < 0 ? 0 : a > 1 ? 1 : a;
-	}
-
-	luminance() {
-		return (0.2126 * this.r + 0.7152 * this.g + 0.0722 * this.b) / 255;
-	}
-
-	blend(rgba: RGBA) {
-		const a = 1 - (1 - rgba.a) * (1 - this.a),
-			r =
-				a === 0
-					? 0
-					: (rgba.r * rgba.a) / a +
-					  (this.r * this.a * (1 - rgba.a)) / a,
-			g =
-				a === 0
-					? 0
-					: (rgba.g * rgba.a) / a +
-					  (this.g * this.a * (1 - rgba.a)) / a,
-			b =
-				a === 0
-					? 0
-					: (rgba.b * rgba.a) / a +
-					  (this.b * this.a * (1 - rgba.a)) / a;
-		return new RGBA(r, g, b, a);
-	}
-
-	multiply(p: number) {
-		return new RGBA(this.r * p, this.g * p, this.b * p, this.a);
-	}
-
-	alpha(a: number) {
-		return new RGBA(this.r, this.g, this.b, a);
-	}
-
-	toString() {
-		return (
-			'rgba(' +
-			(this.r | 0) +
-			',' +
-			(this.g | 0) +
-			',' +
-			(this.b | 0) +
-			',' +
-			this.a +
-			')'
-		);
-	}
+	return {
+		toString() {
+			return `${n}%`;
+		},
+	};
 }
 
 const SNAKE_CSS: Record<string, string> = {
@@ -267,7 +226,10 @@ const SNAKE_CSS: Record<string, string> = {
 export const theme: any = {
 	animation: {},
 	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
-	variables: {},
+	variables: {
+		font: 'sans-serif',
+		fontSize: '16px',
+	},
 	typography: {
 		default: {
 			fontWeight: 400,
@@ -276,7 +238,10 @@ export const theme: any = {
 			letterSpacing: 'normal',
 		},
 	},
-	colors: { surface: rgba(0, 0, 0) },
+	colors: {
+		shadow: rgba(0, 0, 0, 0.26),
+	},
+	unit: 'px',
 };
 
 type StyleMap = {
@@ -288,10 +253,8 @@ type StyleMap = {
 	) => void;
 };
 
-const UNIT = 'px';
-
 function toUnit(n: Length) {
-	return `${n}${typeof n === 'number' ? UNIT : ''}`;
+	return `${n}${typeof n === 'number' ? theme.unit : ''}`;
 }
 
 function color(val: Color) {
@@ -370,7 +333,8 @@ const renderMap: StyleMap = {
 	elevation(_def, style, _prop, n: number) {
 		const x = toUnit(n);
 		style.zIndex = n.toString();
-		style.boxShadow = `${x} ${x} ${toUnit(3 * n)} var(--cxl-elevation)`;
+		style.boxShadow =
+			n > 0 ? `${x} ${x} ${toUnit(3 * n)} var(--cxl-shadow)` : 'none';
 	},
 	font(
 		_def: StyleDefinition,
@@ -421,18 +385,14 @@ function applyStyle(style: CSSStyle, def: StyleDefinition) {
 	}
 }
 
-function renderStyle(def: StyleDefinition) {
-	const style: CSSStyle = {};
-	applyStyle(style, def);
+export function style(def: StyleDefinition) {
+	const cssStyle: CSSStyle = {};
+	applyStyle(cssStyle, def);
 	let result = '';
 
-	for (const i in style) result += `${toSnake(i)}:${style[i]};`;
+	for (const i in cssStyle) result += `${toSnake(i)}:${cssStyle[i]};`;
 
 	return result;
-}
-
-export function style(def: StyleDefinition) {
-	return renderStyle(def);
 }
 
 function parseRuleName(selector: string, name: string) {
@@ -450,12 +410,12 @@ function parseRuleName(selector: string, name: string) {
 
 const rootStyles = document.createElement('STYLE');
 
-function renderStyles(styles: Styles, selector = 'body') {
+export function render(styles: Styles, baseSelector = ':host') {
 	let css = '';
 
 	for (const i in styles) {
 		const style = (styles as any)[i];
-		css += renderRule(selector, i, style);
+		css += renderRule(baseSelector, i, style);
 
 		if (style.prepend) css = style.prepend + css;
 	}
@@ -464,38 +424,42 @@ function renderStyles(styles: Styles, selector = 'body') {
 }
 
 function renderMedia(media: number, style: Styles, selector: string) {
-	return `@media(min-width:${toUnit(media)}){${renderStyles(
-		style,
-		selector
-	)}}`;
+	return `@media(min-width:${toUnit(media)}){${render(style, selector)}}`;
 }
 
 function renderRule(
 	selector: string,
 	name: string,
-	style: StyleDefinition | Styles
+	styles: StyleDefinition | Styles
 ) {
-	if (name === '@small')
-		return renderMedia(theme.breakpoints.small, style as Styles, selector);
-	if (name === '@xlarge')
-		return renderMedia(theme.breakpoints.xlarge, style as Styles, selector);
-	if (name === '@medium')
-		return renderMedia(theme.breakpoints.medium, style as Styles, selector);
-	if (name === '@large')
-		return renderMedia(theme.breakpoints.large, style as Styles, selector);
+	if (
+		name === '@small' ||
+		name === '@xlarge' ||
+		name === '@medium' ||
+		name === '@large'
+	)
+		return renderMedia(
+			(theme.breakpoints as any)[name.slice(1)],
+			styles as Styles,
+			selector
+		);
 
-	return `${parseRuleName(selector, name)}{${renderStyle(
-		style as StyleDefinition
+	return `${parseRuleName(selector, name)}{${style(
+		styles as StyleDefinition
 	)}}`;
 }
 
-export function render(styles: Styles, selector = ':host', global = false) {
+export function createStyleElement(
+	styles: Styles,
+	selector = ':host',
+	global = false
+) {
 	const result = document.createElement('style');
 
 	result.textContent =
 		(!global && theme.globalStyles
-			? renderStyles(theme.globalStyles, selector)
-			: '') + renderStyles(styles, selector);
+			? render(theme.globalStyles, selector)
+			: '') + render(styles, selector);
 
 	return result;
 }
@@ -503,27 +467,10 @@ export function render(styles: Styles, selector = ':host', global = false) {
 export function css(styles: Styles, selector = ':host', global = false) {
 	let stylesheet: HTMLStyleElement;
 	return () => {
-		if (!stylesheet) stylesheet = render(styles, selector, global);
-		return stylesheet.cloneNode(true);
+		if (!stylesheet)
+			stylesheet = createStyleElement(styles, selector, global);
+		return stylesheet.cloneNode(true) as HTMLStyleElement;
 	};
-}
-
-export interface FontDefinition {
-	family: string;
-	url: string;
-	weight?: string;
-}
-
-export function registerFont(def: FontDefinition) {
-	const style = document.createElement('STYLE');
-
-	style.innerHTML = `@font-face{font-family:"${def.family}"${
-		def.weight ? ';font-weight:' + def.weight : ''
-	};src:url("${def.url}");}`;
-
-	document.head.appendChild(style);
-
-	return style;
 }
 
 export function padding(
@@ -553,15 +500,30 @@ export function border(
 	return { borderTop, borderRight, borderBottom, borderLeft };
 }
 
-export function rgba(r: number, g: number, b: number, a?: number) {
-	return new RGBA(r, g, b, a);
+export function rgba(r: number, g: number, b: number, a = 1): RGBA {
+	r = r < 0 ? 0 : r > 255 ? 255 : r;
+	g = g < 0 ? 0 : g > 255 ? 255 : g;
+	b = b < 0 ? 0 : b > 255 ? 255 : b;
+	a = a < 0 ? 0 : a > 1 ? 1 : a;
+	return {
+		r,
+		g,
+		b,
+		a,
+		alpha(a: number) {
+			return rgba(r, g, b, a);
+		},
+		toString() {
+			return `rgba(${r},${g},${b},${a})`;
+		},
+	};
 }
 
 export function baseColor(name: keyof Colors) {
-	return `var(--cxl-base-${toSnake(name)})`;
+	return `var(--cxl--${toSnake(name)})`;
 }
 
-export function applyTheme() {
+export function applyTheme(container = document.head) {
 	const { variables, colors, imports } = theme as Theme;
 
 	let result = '';
@@ -569,13 +531,14 @@ export function applyTheme() {
 
 	result += ':root{';
 
-	for (const i in colors)
-		result += `--cxl-${toSnake(i)}:${
-			(colors as any)[i]
-		};--cxl-base-${toSnake(i)}:${(colors as any)[i]};`;
+	for (const i in colors) {
+		const name = toSnake(i);
+		const value = (colors as any)[i];
+		result += `--cxl-${name}:${value};--cxl--${name}:${value};`;
+	}
 	for (const i in variables)
 		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
 
 	rootStyles.innerHTML = result + '}';
-	document.head.appendChild(rootStyles);
+	container.appendChild(rootStyles);
 }

@@ -12,7 +12,7 @@ export const ValidationMessage = {
 };
 
 export function validate(
-	el: HTMLFormElement,
+	el: { setCustomValidity(msg: string): void },
 	...validators: ValidateFunction<any>[]
 ) {
 	return (value: any) => {
@@ -39,19 +39,7 @@ export function email(val: string) {
 /*import { get } from '@cxl/component';
 import type { InputBase } from './input-base.js';
 
-export function validate<T extends InputBase>(
-	el: T,
-	...validators: ValidateFunction<T['value']>[]
-) {
-	return get(el, 'value').tap(value => {
-		let message: string | boolean = true;
-		validators.find(validateFn => {
-			message = validateFn(value);
-			return message !== true;
-		});
-		el.setCustomValidity(message === true ? '' : (message as any));
-	});
-}
+
 
 export function $validate<T extends InputBase>(
 	...validators: ValidateFunction<T['value']>[]

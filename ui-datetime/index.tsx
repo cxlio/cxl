@@ -155,7 +155,7 @@ function onMonthChange($: CalendarMonth) {
 		}
 
 		return (
-			<Grid columns="repeat(7, auto)" gap={0}>
+			<Grid columns={7} gap={0}>
 				{each(
 					breakpoint($).map(size =>
 						[0, 1, 2, 3, 4, 5, 6].map(n => getDayText(n, size))
@@ -217,7 +217,7 @@ class CalendarMonth extends InputBase {
 		$.bind(focusableEvents($));
 
 		return (
-			<Grid columns="1fr 1fr 1fr 1fr">
+			<Grid columns={4}>
 				{each(years, year => (
 					<Button
 						$={el => onAction(el).tap(() => ($.value = year))}

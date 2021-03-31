@@ -12,13 +12,9 @@ import {
 	createSolutionBuilderHost,
 	sys,
 } from 'typescript';
+import type { Output } from '@cxl/source';
 import { Observable, Subscriber } from '@cxl/rx';
 export { version as tscVersion, BuildOptions } from 'typescript';
-
-interface Output {
-	path: string;
-	source: string;
-}
 
 function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
 	if (typeof msg === 'string')
@@ -69,7 +65,7 @@ export function tsbuild(
 
 	function writeFile(name: string, source: string) {
 		name = relative(outputDir, name);
-		subs.next({ path: name, source });
+		subs.next({ path: name, source: Buffer.from(source) });
 	}
 
 	while ((program = builder.getNextInvalidatedProject())) {

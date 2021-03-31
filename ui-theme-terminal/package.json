@@ -7,7 +7,7 @@
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/ui-theme-terminal && node ../tester"
+		"test": "npm run build && cd ../dist/ui-theme-terminal && node ../tester --baselinePath=../../ui-theme-terminal/spec"
 	},
 	"license": "GPL-3.0",
 	"devDependencies": {

@@ -20,7 +20,7 @@ import {
 import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
-import { Span, ripple } from './core.js';
+import { Span, Toggle, ripple } from './core.js';
 import { ArrowBackIcon, MenuIcon, IconButton } from './icon.js';
 import { Drawer } from './dialog.js';
 
@@ -330,7 +330,7 @@ export class Tabs extends Component {
  * @demo
  * <cxl-appbar>
  *   <cxl-navbar></cxl-navbar>
- *   <cxl-appbar-title>Appbar with Title</cxl-appbar-title>
+ *   <cxl-appbar-title>Appbar with Navbar</cxl-appbar-title>
  * </cxl-appbar>
  */
 @Augment<Navbar>(
@@ -417,6 +417,21 @@ export class Menu extends Component {
 	@StyleAttribute()
 	dense = false;
 }
+
+/**
+ *
+ */
+@Augment('cxl-menu-toggle', () => (
+	<Toggle>
+		<IconButton slot="trigger">
+			<MenuIcon />
+		</IconButton>
+		<Menu>
+			<slot />
+		</Menu>
+	</Toggle>
+))
+export class MenuToggle extends Component {}
 
 @Augment<Item>(
 	'cxl-item',

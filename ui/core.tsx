@@ -28,7 +28,7 @@ export const FocusCircleStyle = css({
 		position: 'absolute',
 		width: 48,
 		height: 48,
-		backgroundColor: 'elevation',
+		backgroundColor: 'shadow',
 		borderRadius: 24,
 		opacity: 0,
 		scaleX: 0,
@@ -232,7 +232,6 @@ export class Avatar extends Component {
  *
  * @example
  * <cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge><br/>
- * <cxl-button primary>Badge<cxl-badge secondary small></cxl-badge></cxl-button>
  */
 @Augment(
 	'cxl-badge',
@@ -496,7 +495,7 @@ const MetaNodes = [
 	<meta name="viewport" content="width=device-width, initial-scale=1" />,
 	<meta name="apple-mobile-web-app-capable" content="yes" />,
 	<meta name="mobile-web-app-capable" content="yes" />,
-	<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}a,a:active,a:visited{color:var(--cxl-link)}`}</style>,
+	<style>{`html,body{padding:0;margin:0;min-height:100%;font-family:var(--cxl-font)}a,a:active,a:visited{color:var(--cxl-link)}`}</style>,
 ];
 
 @Augment('cxl-meta')
@@ -517,12 +516,16 @@ export class Meta extends Component {
 		$: {
 			display: 'flex',
 			flexDirection: 'column',
-			height: '100%',
 			overflowX: 'hidden',
 			zIndex: 0,
+			position: 'absolute',
+			left: 0,
+			right: 0,
+			top: 0,
+			bottom: 0,
 		},
 		'@large': {
-			$permanent: { marginLeft: 288 },
+			$permanent: { paddingLeft: 288 },
 		},
 	}),
 	_ => (

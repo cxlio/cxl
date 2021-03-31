@@ -1044,7 +1044,6 @@ function parseSourceFile(sourceFile: ts.SourceFile) {
 	}
 
 	sourceFile.forEachChild(c => visit(c, result));
-
 	return result;
 }
 

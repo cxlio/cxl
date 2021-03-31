@@ -3,10 +3,13 @@ import { dom } from '@cxl/tsx';
 import { Attribute, Augment, Component, Span } from '@cxl/component';
 import { suite, triggerKeydown } from '@cxl/spec';
 import { animationFrame, trigger, on } from '@cxl/dom';
+import { theme } from '@cxl/css';
 import {
 	aria,
 	ariaValue,
 	ariaChecked,
+	breakpoint,
+	breakpointClass,
 	checkedBehavior,
 	focusable,
 	role,
@@ -680,6 +683,54 @@ export default suite('template', test => {
 			a.equal(B.disabled, true);
 
 			subs.unsubscribe();
+		});
+	});
+
+	test('breakpoint', it => {
+		it.should('emit resize events if breakpoints', a => {
+			let expected = 'xsmall';
+			const done = a.async();
+			const el = (<div />) as HTMLDivElement;
+			a.dom.appendChild(el);
+			const subs = breakpoint(el).subscribe(bp => {
+				a.equal(bp, expected);
+				if (bp === 'xsmall') expected = 'small';
+				else if (bp === 'small') expected = 'medium';
+				else if (bp === 'medium') expected = 'large';
+				else if (bp === 'large') expected = 'xlarge';
+				else if (bp === 'xlarge') {
+					subs.unsubscribe();
+					return done();
+				}
+
+				el.style.width = `${theme.breakpoints[expected]}px`;
+			});
+			el.style.width = `10px`;
+		});
+	});
+
+	test('breakpointClass', it => {
+		it.should('set element class when element resizes', a => {
+			let expected = 'xsmall';
+			const done = a.async();
+			const el = (<div />) as HTMLDivElement;
+			a.dom.appendChild(el);
+			const subs = breakpointClass(el).subscribe(bp => {
+				a.equal(bp, expected);
+				a.equal(el.className, bp);
+
+				if (bp === 'xsmall') expected = 'small';
+				else if (bp === 'small') expected = 'medium';
+				else if (bp === 'medium') expected = 'large';
+				else if (bp === 'large') expected = 'xlarge';
+				else if (bp === 'xlarge') {
+					subs.unsubscribe();
+					return done();
+				}
+
+				el.style.width = `${theme.breakpoints[expected]}px`;
+			});
+			el.style.width = `10px`;
 		});
 	});
 });

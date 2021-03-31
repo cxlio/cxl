@@ -17,11 +17,9 @@ import { CloseIcon } from './icon.js';
 /**
  * Buttons allow users to take actions, and make choices, with a single tap.
  * @example
- * <cxl-button primary><cxl-icon icon="upload"></cxl-icon> Upload</cxl-button>
- * <cxl-button secondary>Secondary</cxl-button>
- * <cxl-button disabled>Disabled</cxl-button>
- * <cxl-button flat>Flat Button</cxl-button>
- * <cxl-button outline>With Outline</cxl-button>
+ * <cxl-button primary>Primary</cxl-button>
+ * <cxl-button flat>Flat</cxl-button>
+ * <cxl-button outline>Outlined</cxl-button>
  */
 @Augment('cxl-button', Slot)
 export class Button extends ButtonBase {}
@@ -31,6 +29,7 @@ export class Button extends ButtonBase {}
  * @example
  * <cxl-chip>Single Chip</cxl-chip>
  * <cxl-chip secondary removable>Removable Chip</cxl-chip>
+ * @example
  * <cxl-chip><cxl-avatar small></cxl-avatar> Chip with Avatar</cxl-chip>
  */
 @Augment<Chip>(

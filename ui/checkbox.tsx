@@ -17,9 +17,7 @@ import { css, padding } from '@cxl/css';
 /**
  * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.
  * @example
- * <cxl-checkbox>Checkbox Label</cxl-checkbox>
  * <cxl-checkbox checked>Checkbox Label</cxl-checkbox>
- * <cxl-checkbox indeterminate>Checkbox Indeterminate</cxl-checkbox>
  */
 @Augment<Checkbox>(
 	'cxl-checkbox',

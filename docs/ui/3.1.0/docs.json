@@ -27,7 +27,7 @@
               },
               {
                 "tag": "example",
-                "value": "<cxl-button primary><cxl-icon icon=\"upload\"></cxl-icon> Upload</cxl-button>\n<cxl-button secondary>Secondary</cxl-button>\n<cxl-button disabled>Disabled</cxl-button>\n<cxl-button flat>Flat Button</cxl-button>\n<cxl-button outline>With Outline</cxl-button>"
+                "value": "<cxl-button primary>Primary</cxl-button>\n<cxl-button flat>Flat</cxl-button>\n<cxl-button outline>Outlined</cxl-button>"
               }
             ],
             "tagName": "cxl-button"
@@ -49,7 +49,7 @@
         {
           "source": {
             "fileName": "button.tsx",
-            "line": 26,
+            "line": 24,
             "ch": 41
           },
           "kind": 35,
@@ -63,7 +63,11 @@
               },
               {
                 "tag": "example",
-                "value": "<cxl-chip>Single Chip</cxl-chip>\n<cxl-chip secondary removable>Removable Chip</cxl-chip>\n<cxl-chip><cxl-avatar small></cxl-avatar> Chip with Avatar</cxl-chip>"
+                "value": "<cxl-chip>Single Chip</cxl-chip>\n<cxl-chip secondary removable>Removable Chip</cxl-chip>"
+              },
+              {
+                "tag": "example",
+                "value": "<cxl-chip><cxl-avatar small></cxl-avatar> Chip with Avatar</cxl-chip>"
               }
             ],
             "tagName": "cxl-chip"
@@ -72,7 +76,7 @@
             {
               "source": {
                 "fileName": "button.tsx",
-                "line": 101,
+                "line": 100,
                 "ch": 37
               },
               "kind": 36,
@@ -89,7 +93,7 @@
             {
               "source": {
                 "fileName": "button.tsx",
-                "line": 103,
+                "line": 102,
                 "ch": 19
               },
               "kind": 36,
@@ -106,7 +110,7 @@
             {
               "source": {
                 "fileName": "button.tsx",
-                "line": 105,
+                "line": 104,
                 "ch": 18
               },
               "kind": 36,
@@ -123,7 +127,7 @@
             {
               "source": {
                 "fileName": "button.tsx",
-                "line": 107,
+                "line": 106,
                 "ch": 17
               },
               "kind": 36,
@@ -140,7 +144,7 @@
             {
               "source": {
                 "fileName": "button.tsx",
-                "line": 109,
+                "line": 108,
                 "ch": 17
               },
               "kind": 36,
@@ -157,7 +161,7 @@
             {
               "source": {
                 "fileName": "button.tsx",
-                "line": 111,
+                "line": 110,
                 "ch": 19
               },
               "kind": 36,
@@ -174,7 +178,7 @@
             {
               "source": {
                 "fileName": "button.tsx",
-                "line": 113,
+                "line": 112,
                 "ch": 15
               },
               "kind": 11,
@@ -230,7 +234,7 @@
               },
               {
                 "tag": "example",
-                "value": "<cxl-checkbox>Checkbox Label</cxl-checkbox>\n<cxl-checkbox checked>Checkbox Label</cxl-checkbox>\n<cxl-checkbox indeterminate>Checkbox Indeterminate</cxl-checkbox>"
+                "value": "<cxl-checkbox checked>Checkbox Label</cxl-checkbox>"
               }
             ],
             "tagName": "cxl-checkbox",
@@ -240,7 +244,7 @@
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 115,
+                "line": 113,
                 "ch": 41
               },
               "kind": 10,
@@ -250,7 +254,7 @@
               "type": {
                 "source": {
                   "fileName": "checkbox.tsx",
-                  "line": 116,
+                  "line": 114,
                   "ch": 7
                 },
                 "kind": 5,
@@ -274,7 +278,7 @@
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 116,
+                "line": 114,
                 "ch": 36
               },
               "kind": 36,
@@ -291,7 +295,7 @@
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 119,
+                "line": 117,
                 "ch": 17
               },
               "kind": 36,
@@ -308,7 +312,7 @@
             {
               "source": {
                 "fileName": "checkbox.tsx",
-                "line": 121,
+                "line": 119,
                 "ch": 23
               },
               "kind": 36,
@@ -478,11 +482,11 @@
           "name": "FocusCircleStyle",
           "flags": 1,
           "id": 22,
-          "value": "css({\n\tfocusCircle: {\n\t\tposition: 'absolute',\n\t\twidth: 48,\n\t\theight: 48,\n\t\tbackgroundColor: 'elevation',\n\t\tborderRadius: 24,\n\t\topacity: 0,\n\t\tscaleX: 0,\n\t\tscaleY: 0,\n\t\tleft: 0,\n\t\tdisplay: 'inline-block',\n\t\ttranslateX: -14,\n\t\ttranslateY: -14,\n\t},\n\tfocusCirclePrimary: { backgroundColor: 'primary' },\n\tfocusCircle$invalid$touched: { backgroundColor: 'error' },\n\tfocusCircle$hover: {\n\t\tscaleX: 1,\n\t\tscaleY: 1,\n\t\ttranslateX: -14,\n\t\ttranslateY: -14,\n\t\topacity: 0.14,\n\t},\n\tfocusCircle$focus: {\n\t\tscaleX: 1,\n\t\tscaleY: 1,\n\t\ttranslateX: -14,\n\t\ttranslateY: -14,\n\t\topacity: 0.25,\n\t},\n\tfocusCircle$disabled: { scaleX: 0, scaleY: 0 },\n})",
+          "value": "css({\n\tfocusCircle: {\n\t\tposition: 'absolute',\n\t\twidth: 48,\n\t\theight: 48,\n\t\tbackgroundColor: 'shadow',\n\t\tborderRadius: 24,\n\t\topacity: 0,\n\t\tscaleX: 0,\n\t\tscaleY: 0,\n\t\tleft: 0,\n\t\tdisplay: 'inline-block',\n\t\ttranslateX: -14,\n\t\ttranslateY: -14,\n\t},\n\tfocusCirclePrimary: { backgroundColor: 'primary' },\n\tfocusCircle$invalid$touched: { backgroundColor: 'error' },\n\tfocusCircle$hover: {\n\t\tscaleX: 1,\n\t\tscaleY: 1,\n\t\ttranslateX: -14,\n\t\ttranslateY: -14,\n\t\topacity: 0.14,\n\t},\n\tfocusCircle$focus: {\n\t\tscaleX: 1,\n\t\tscaleY: 1,\n\t\ttranslateX: -14,\n\t\ttranslateY: -14,\n\t\topacity: 0.25,\n\t},\n\tfocusCircle$disabled: { scaleX: 0, scaleY: 0 },\n})",
           "type": {
             "source": {
               "fileName": "../css/index.ts",
-              "line": 504,
+              "line": 468,
               "ch": 7
             },
             "kind": 16,
@@ -491,7 +495,7 @@
             "id": 23,
             "parameters": [],
             "type": {
-              "name": "Node",
+              "name": "HTMLStyleElement",
               "kind": 6
             }
           }
@@ -870,7 +874,7 @@
               },
               {
                 "tag": "example",
-                "value": "<cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge><br/>\n<cxl-button primary>Badge<cxl-badge secondary small></cxl-badge></cxl-button>"
+                "value": "<cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge><br/>"
               }
             ],
             "tagName": "cxl-badge"
@@ -879,7 +883,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 268,
+                "line": 267,
                 "ch": 38
               },
               "kind": 36,
@@ -896,7 +900,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 270,
+                "line": 269,
                 "ch": 15
               },
               "kind": 36,
@@ -913,7 +917,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 273,
+                "line": 272,
                 "ch": 19
               },
               "kind": 36,
@@ -930,7 +934,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 276,
+                "line": 275,
                 "ch": 15
               },
               "kind": 36,
@@ -960,7 +964,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 280,
+            "line": 279,
             "ch": 1
           },
           "kind": 35,
@@ -987,7 +991,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 293,
+            "line": 292,
             "ch": 36
           },
           "kind": 35,
@@ -1011,7 +1015,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 330,
+                "line": 329,
                 "ch": 41
               },
               "kind": 36,
@@ -1041,7 +1045,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 333,
+            "line": 332,
             "ch": 1
           },
           "kind": 16,
@@ -1052,7 +1056,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 335,
+                "line": 334,
                 "ch": 20
               },
               "kind": 9,
@@ -1062,7 +1066,7 @@
               "type": {
                 "source": {
                   "fileName": "core.tsx",
-                  "line": 335,
+                  "line": 334,
                   "ch": 22
                 },
                 "kind": 34,
@@ -1072,7 +1076,7 @@
                   {
                     "source": {
                       "fileName": "core.tsx",
-                      "line": 335,
+                      "line": 334,
                       "ch": 24
                     },
                     "kind": 10,
@@ -1088,7 +1092,7 @@
                   {
                     "source": {
                       "fileName": "core.tsx",
-                      "line": 336,
+                      "line": 335,
                       "ch": 17
                     },
                     "kind": 10,
@@ -1104,7 +1108,7 @@
                   {
                     "source": {
                       "fileName": "core.tsx",
-                      "line": 337,
+                      "line": 336,
                       "ch": 20
                     },
                     "kind": 10,
@@ -1120,7 +1124,7 @@
                   {
                     "source": {
                       "fileName": "core.tsx",
-                      "line": 338,
+                      "line": 337,
                       "ch": 16
                     },
                     "kind": 10,
@@ -1136,7 +1140,7 @@
                   {
                     "source": {
                       "fileName": "core.tsx",
-                      "line": 339,
+                      "line": 338,
                       "ch": 17
                     },
                     "kind": 10,
@@ -1161,7 +1165,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 351,
+            "line": 350,
             "ch": 1
           },
           "kind": 35,
@@ -1196,7 +1200,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 381,
+            "line": 380,
             "ch": 41
           },
           "kind": 35,
@@ -1207,7 +1211,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 407,
+                "line": 406,
                 "ch": 34
               },
               "kind": 36,
@@ -1224,7 +1228,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 409,
+                "line": 408,
                 "ch": 12
               },
               "kind": 36,
@@ -1241,7 +1245,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 411,
+                "line": 410,
                 "ch": 12
               },
               "kind": 36,
@@ -1258,7 +1262,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 413,
+                "line": 412,
                 "ch": 12
               },
               "kind": 36,
@@ -1275,7 +1279,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 415,
+                "line": 414,
                 "ch": 12
               },
               "kind": 36,
@@ -1292,7 +1296,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 417,
+                "line": 416,
                 "ch": 12
               },
               "kind": 36,
@@ -1309,7 +1313,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 419,
+                "line": 418,
                 "ch": 12
               },
               "kind": 36,
@@ -1326,7 +1330,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 421,
+                "line": 420,
                 "ch": 17
               },
               "kind": 36,
@@ -1343,7 +1347,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 423,
+                "line": 422,
                 "ch": 16
               },
               "kind": 36,
@@ -1360,7 +1364,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 425,
+                "line": 424,
                 "ch": 18
               },
               "kind": 36,
@@ -1377,7 +1381,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 427,
+                "line": 426,
                 "ch": 19
               },
               "kind": 36,
@@ -1394,7 +1398,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 429,
+                "line": 428,
                 "ch": 15
               },
               "kind": 36,
@@ -1411,7 +1415,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 431,
+                "line": 430,
                 "ch": 14
               },
               "kind": 36,
@@ -1444,7 +1448,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 434,
+            "line": 433,
             "ch": 1
           },
           "kind": 35,
@@ -1467,7 +1471,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 487,
+                "line": 486,
                 "ch": 39
               },
               "kind": 36,
@@ -1484,7 +1488,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 489,
+                "line": 488,
                 "ch": 16
               },
               "kind": 36,
@@ -1514,14 +1518,14 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 494,
+            "line": 493,
             "ch": 5
           },
           "kind": 31,
           "name": "MetaNodes",
           "flags": 0,
           "id": 74,
-          "value": "[\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />,\n\t<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />,\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\" />,\n\t<style>{`body,html{padding:0;margin:0;height:100%;font-family:var(--cxl-font)}a,a:active,a:visited{color:var(--cxl-link)}`}</style>,\n]",
+          "value": "[\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />,\n\t<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />,\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\" />,\n\t<style>{`html,body{padding:0;margin:0;min-height:100%;font-family:var(--cxl-font)}a,a:active,a:visited{color:var(--cxl-link)}`}</style>,\n]",
           "type": {
             "name": "Array",
             "kind": 6,
@@ -1536,7 +1540,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 499,
+            "line": 498,
             "ch": 2
           },
           "kind": 35,
@@ -1547,7 +1551,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 502,
+                "line": 501,
                 "ch": 37
               },
               "kind": 11,
@@ -1580,7 +1584,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 511,
+            "line": 510,
             "ch": 1
           },
           "kind": 35,
@@ -1591,7 +1595,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 534,
+                "line": 537,
                 "ch": 44
               },
               "kind": 36,
@@ -1624,7 +1628,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 537,
+            "line": 540,
             "ch": 1
           },
           "kind": 35,
@@ -1635,7 +1639,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 547,
+                "line": 550,
                 "ch": 40
               },
               "kind": 36,
@@ -1668,7 +1672,7 @@
         {
           "source": {
             "fileName": "core.tsx",
-            "line": 550,
+            "line": 553,
             "ch": 1
           },
           "kind": 35,
@@ -1712,7 +1716,7 @@
           ],
           "source": {
             "fileName": "core.tsx",
-            "line": 567,
+            "line": 570,
             "ch": 41
           },
           "kind": 35,
@@ -1722,7 +1726,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 637,
+                "line": 640,
                 "ch": 43
               },
               "kind": 36,
@@ -1739,7 +1743,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 639,
+                "line": 642,
                 "ch": 18
               },
               "kind": 36,
@@ -1756,7 +1760,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 641,
+                "line": 644,
                 "ch": 17
               },
               "kind": 36,
@@ -1773,7 +1777,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 643,
+                "line": 646,
                 "ch": 14
               },
               "kind": 36,
@@ -1790,7 +1794,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 645,
+                "line": 648,
                 "ch": 19
               },
               "kind": 36,
@@ -1807,7 +1811,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 647,
+                "line": 650,
                 "ch": 17
               },
               "kind": 36,
@@ -1824,7 +1828,7 @@
             {
               "source": {
                 "fileName": "core.tsx",
-                "line": 649,
+                "line": 652,
                 "ch": 13
               },
               "kind": 36,
@@ -1951,7 +1955,7 @@
           "type": {
             "source": {
               "fileName": "../css/index.ts",
-              "line": 504,
+              "line": 468,
               "ch": 7
             },
             "kind": 16,
@@ -1960,7 +1964,7 @@
             "id": 23,
             "parameters": [],
             "type": {
-              "name": "Node",
+              "name": "HTMLStyleElement",
               "kind": 6
             }
           }
@@ -4091,7 +4095,7 @@
               },
               {
                 "tag": "example",
-                "value": "<cxl-radio name=\"test\" value=\"1\">Radio Button 1</cxl-radio>\n<cxl-radio name=\"test\" value=\"2\" checked>Radio Button 2</cxl-radio>\n<cxl-radio name=\"test\" value=\"3\">Radio Button 3</cxl-radio>"
+                "value": "<cxl-radio inline name=\"test\" value=\"1\">Radio 1</cxl-radio>\n<cxl-radio inline name=\"test\" value=\"2\" checked>Radio 2</cxl-radio>"
               }
             ],
             "tagName": "cxl-radio",
@@ -4101,7 +4105,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 576,
+                "line": 575,
                 "ch": 38
               },
               "kind": 36,
@@ -4132,7 +4136,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 579,
+            "line": 578,
             "ch": 1
           },
           "kind": 35,
@@ -4155,7 +4159,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 639,
+                "line": 638,
                 "ch": 45
               },
               "kind": 36,
@@ -4179,7 +4183,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 644,
+                "line": 643,
                 "ch": 18
               },
               "kind": 10,
@@ -4202,7 +4206,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 646,
+                "line": 645,
                 "ch": 52
               },
               "kind": 10,
@@ -4212,7 +4216,7 @@
               "type": {
                 "source": {
                   "fileName": "form.tsx",
-                  "line": 647,
+                  "line": 646,
                   "ch": 7
                 },
                 "kind": 15,
@@ -4229,7 +4233,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 647,
+                "line": 646,
                 "ch": 19
               },
               "kind": 10,
@@ -4245,7 +4249,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 649,
+                "line": 648,
                 "ch": 34
               },
               "kind": 11,
@@ -4256,7 +4260,7 @@
                 {
                   "source": {
                     "fileName": "form.tsx",
-                    "line": 651,
+                    "line": 650,
                     "ch": 24
                   },
                   "kind": 9,
@@ -4279,7 +4283,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 660,
+                "line": 659,
                 "ch": 2
               },
               "kind": 11,
@@ -4290,7 +4294,7 @@
                 {
                   "source": {
                     "fileName": "form.tsx",
-                    "line": 662,
+                    "line": 661,
                     "ch": 23
                   },
                   "kind": 9,
@@ -4313,7 +4317,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 669,
+                "line": 668,
                 "ch": 2
               },
               "kind": 11,
@@ -4324,7 +4328,7 @@
                 {
                   "source": {
                     "fileName": "form.tsx",
-                    "line": 671,
+                    "line": 670,
                     "ch": 28
                   },
                   "kind": 9,
@@ -4347,7 +4351,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 675,
+                "line": 674,
                 "ch": 2
               },
               "kind": 11,
@@ -4364,7 +4368,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 680,
+                "line": 679,
                 "ch": 2
               },
               "kind": 11,
@@ -4381,7 +4385,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 685,
+                "line": 684,
                 "ch": 2
               },
               "kind": 11,
@@ -4412,7 +4416,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 693,
+            "line": 692,
             "ch": 1
           },
           "kind": 35,
@@ -4436,7 +4440,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 764,
+                "line": 763,
                 "ch": 39
               },
               "kind": 10,
@@ -4453,7 +4457,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 765,
+                "line": 764,
                 "ch": 15
               },
               "kind": 36,
@@ -4484,7 +4488,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 768,
+            "line": 767,
             "ch": 1
           },
           "kind": 16,
@@ -4495,7 +4499,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 770,
+                "line": 769,
                 "ch": 27
               },
               "kind": 9,
@@ -4510,7 +4514,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 770,
+                "line": 769,
                 "ch": 43
               },
               "kind": 9,
@@ -4555,7 +4559,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 773,
+            "line": 772,
             "ch": 1
           },
           "kind": 16,
@@ -4566,7 +4570,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 775,
+                "line": 774,
                 "ch": 21
               },
               "kind": 3,
@@ -4579,7 +4583,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 775,
+                "line": 774,
                 "ch": 42
               },
               "kind": 9,
@@ -4595,7 +4599,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 775,
+                "line": 774,
                 "ch": 50
               },
               "kind": 9,
@@ -4616,7 +4620,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 787,
+            "line": 786,
             "ch": 1
           },
           "kind": 16,
@@ -4627,7 +4631,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 789,
+                "line": 788,
                 "ch": 25
               },
               "kind": 3,
@@ -4640,7 +4644,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 789,
+                "line": 788,
                 "ch": 46
               },
               "kind": 9,
@@ -4655,7 +4659,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 790,
+                "line": 789,
                 "ch": 17
               },
               "kind": 9,
@@ -4671,7 +4675,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 791,
+                "line": 790,
                 "ch": 9
               },
               "kind": 9,
@@ -4769,7 +4773,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 807,
+            "line": 806,
             "ch": 1
           },
           "kind": 16,
@@ -4780,7 +4784,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 809,
+                "line": 808,
                 "ch": 32
               },
               "kind": 3,
@@ -4793,7 +4797,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 809,
+                "line": 808,
                 "ch": 53
               },
               "kind": 9,
@@ -4809,7 +4813,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 809,
+                "line": 808,
                 "ch": 61
               },
               "kind": 9,
@@ -4832,7 +4836,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 813,
+            "line": 812,
             "ch": 1
           },
           "kind": 35,
@@ -4856,7 +4860,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 844,
+                "line": 843,
                 "ch": 41
               },
               "kind": 10,
@@ -4887,7 +4891,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 846,
+            "line": 845,
             "ch": 1
           },
           "kind": 35,
@@ -4910,7 +4914,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 885,
+                "line": 884,
                 "ch": 36
               },
               "kind": 36,
@@ -4927,7 +4931,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 887,
+                "line": 886,
                 "ch": 18
               },
               "kind": 36,
@@ -4944,7 +4948,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 889,
+                "line": 888,
                 "ch": 15
               },
               "kind": 10,
@@ -4974,7 +4978,7 @@
         {
           "source": {
             "fileName": "form.tsx",
-            "line": 892,
+            "line": 891,
             "ch": 1
           },
           "kind": 35,
@@ -5001,7 +5005,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 984,
+                "line": 983,
                 "ch": 45
               },
               "kind": 36,
@@ -5018,7 +5022,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 986,
+                "line": 985,
                 "ch": 16
               },
               "kind": 10,
@@ -5034,7 +5038,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 988,
+                "line": 987,
                 "ch": 32
               },
               "kind": 10,
@@ -5050,7 +5054,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 989,
+                "line": 988,
                 "ch": 35
               },
               "kind": 10,
@@ -5067,7 +5071,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 991,
+                "line": 990,
                 "ch": 12
               },
               "kind": 11,
@@ -5084,7 +5088,7 @@
             {
               "source": {
                 "fileName": "form.tsx",
-                "line": 996,
+                "line": 995,
                 "ch": 2
               },
               "kind": 11,
@@ -5873,11 +5877,21 @@
           }
         },
         {
-          "name": "Item",
+          "name": "MenuToggle",
           "kind": 25,
           "flags": 1,
           "type": {
             "id": 254,
+            "name": "MenuToggle",
+            "kind": 6
+          }
+        },
+        {
+          "name": "Item",
+          "kind": 25,
+          "flags": 1,
+          "type": {
+            "id": 255,
             "name": "Item",
             "kind": 6
           }
@@ -5887,7 +5901,7 @@
           "kind": 25,
           "flags": 1,
           "type": {
-            "id": 255,
+            "id": 256,
             "name": "List",
             "kind": 6
           }
@@ -5981,7 +5995,7 @@
               "kind": 10,
               "name": "formAssociated",
               "flags": 36,
-              "id": 256,
+              "id": 257,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -5998,7 +6012,7 @@
               "kind": 36,
               "name": "value",
               "flags": 4,
-              "id": 257,
+              "id": 258,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -6014,7 +6028,7 @@
               "kind": 36,
               "name": "invalid",
               "flags": 4,
-              "id": 258,
+              "id": 259,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6031,7 +6045,7 @@
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 259,
+              "id": 260,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6048,7 +6062,7 @@
               "kind": 36,
               "name": "touched",
               "flags": 4,
-              "id": 260,
+              "id": 261,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6065,7 +6079,7 @@
               "kind": 36,
               "name": "name",
               "flags": 4,
-              "id": 261,
+              "id": 262,
               "value": "''",
               "type": {
                 "name": "string",
@@ -6082,7 +6096,7 @@
               "kind": 10,
               "name": "internals",
               "flags": 8,
-              "id": 262,
+              "id": 263,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -6098,7 +6112,7 @@
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 263,
+              "id": 264,
               "parameters": [],
               "type": {
                 "id": 16,
@@ -6115,7 +6129,7 @@
               "kind": 11,
               "name": "formDisabledCallback",
               "flags": 16,
-              "id": 264,
+              "id": 265,
               "parameters": [
                 {
                   "source": {
@@ -6126,7 +6140,7 @@
                   "kind": 9,
                   "name": "disabled",
                   "flags": 0,
-                  "id": 265,
+                  "id": 266,
                   "type": {
                     "name": "boolean",
                     "kind": 32,
@@ -6149,7 +6163,7 @@
               "kind": 12,
               "name": "validationMessage",
               "flags": 4,
-              "id": 266,
+              "id": 267,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -6166,7 +6180,7 @@
               "kind": 12,
               "name": "validity",
               "flags": 4,
-              "id": 267,
+              "id": 268,
               "type": {
                 "name": "ValidityState",
                 "kind": 6
@@ -6182,7 +6196,7 @@
               "kind": 11,
               "name": "setCustomValidity",
               "flags": 4,
-              "id": 268,
+              "id": 269,
               "parameters": [
                 {
                   "source": {
@@ -6193,7 +6207,7 @@
                   "kind": 9,
                   "name": "msg",
                   "flags": 0,
-                  "id": 269,
+                  "id": 270,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -6216,7 +6230,7 @@
               "kind": 10,
               "name": "focusElement",
               "flags": 4,
-              "id": 270,
+              "id": 271,
               "docs": {
                 "content": [
                   {
@@ -6238,7 +6252,7 @@
               "kind": 11,
               "name": "focus",
               "flags": 4,
-              "id": 271,
+              "id": 272,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -6280,7 +6294,7 @@
           "kind": 31,
           "name": "colStyles",
           "flags": 0,
-          "id": 272,
+          "id": 273,
           "value": "((r: any) => {\n\tfor (let i = 12; i > 0; i--)\n\t\tr.xl['$xl' + i] = r.lg['$lg' + i] = r.md['$md' + i] = r.sm[\n\t\t\t'$sm' + i\n\t\t] = r.xs['$xs' + i] = {\n\t\t\tdisplay: 'block',\n\t\t\tgridColumnEnd: 'span ' + i,\n\t\t\tflexBasis: pct((100 / 12) * i),\n\t\t};\n\treturn r;\n})({\n\txl: {},\n\tlg: {},\n\tmd: {},\n\tsm: {},\n\txs: {},\n})",
           "type": {
             "name": "any",
@@ -6297,7 +6311,7 @@
           "kind": 16,
           "name": "persistWithParameter",
           "flags": 0,
-          "id": 273,
+          "id": 274,
           "parameters": [
             {
               "source": {
@@ -6308,7 +6322,7 @@
               "kind": 9,
               "name": "prefix",
               "flags": 0,
-              "id": 274,
+              "id": 275,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -6403,13 +6417,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 120,
+                "line": 122,
                 "ch": 34
               },
               "kind": 36,
               "name": "flex",
               "flags": 4,
-              "id": 275,
+              "id": 276,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6420,13 +6434,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 122,
+                "line": 124,
                 "ch": 14
               },
               "kind": 36,
               "name": "vflex",
               "flags": 4,
-              "id": 276,
+              "id": 277,
               "docs": {
                 "content": [
                   {
@@ -6444,28 +6458,11 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 128,
+                "line": 130,
                 "ch": 15
               },
               "kind": 36,
               "name": "grow",
-              "flags": 4,
-              "id": 277,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "layout.tsx",
-                "line": 131,
-                "ch": 14
-              },
-              "kind": 36,
-              "name": "pad16",
               "flags": 4,
               "id": 278,
               "value": "false",
@@ -6478,15 +6475,16 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 134,
-                "ch": 15
+                "line": 133,
+                "ch": 14
               },
               "kind": 36,
-              "name": "xs",
+              "name": "pad16",
               "flags": 4,
               "id": 279,
+              "value": "false",
               "type": {
-                "name": "number",
+                "name": "boolean",
                 "kind": 32,
                 "flags": 0
               }
@@ -6494,11 +6492,11 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 139,
-                "ch": 13
+                "line": 136,
+                "ch": 15
               },
               "kind": 36,
-              "name": "sm",
+              "name": "xs",
               "flags": 4,
               "id": 280,
               "type": {
@@ -6510,11 +6508,11 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 143,
+                "line": 141,
                 "ch": 13
               },
               "kind": 36,
-              "name": "md",
+              "name": "sm",
               "flags": 4,
               "id": 281,
               "type": {
@@ -6526,11 +6524,11 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 147,
+                "line": 145,
                 "ch": 13
               },
               "kind": 36,
-              "name": "lg",
+              "name": "md",
               "flags": 4,
               "id": 282,
               "type": {
@@ -6542,11 +6540,11 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 151,
+                "line": 149,
                 "ch": 13
               },
               "kind": 36,
-              "name": "xl",
+              "name": "lg",
               "flags": 4,
               "id": 283,
               "type": {
@@ -6558,13 +6556,29 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 155,
+                "line": 153,
+                "ch": 13
+              },
+              "kind": 36,
+              "name": "xl",
+              "flags": 4,
+              "id": 284,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "layout.tsx",
+                "line": 157,
                 "ch": 13
               },
               "kind": 36,
               "name": "primary",
               "flags": 4,
-              "id": 284,
+              "id": 285,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6575,13 +6589,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 158,
+                "line": 160,
                 "ch": 17
               },
               "kind": 36,
               "name": "secondary",
               "flags": 4,
-              "id": 285,
+              "id": 286,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6616,7 +6630,7 @@
           "id": 242,
           "source": {
             "fileName": "layout.tsx",
-            "line": 162,
+            "line": 164,
             "ch": 1
           },
           "kind": 35,
@@ -6626,13 +6640,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 188,
+                "line": 190,
                 "ch": 39
               },
               "kind": 36,
               "name": "center",
               "flags": 4,
-              "id": 286,
+              "id": 287,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6643,13 +6657,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 190,
+                "line": 192,
                 "ch": 16
               },
               "kind": 36,
               "name": "full",
               "flags": 4,
-              "id": 287,
+              "id": 288,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6677,7 +6691,7 @@
           "id": 243,
           "source": {
             "fileName": "layout.tsx",
-            "line": 194,
+            "line": 196,
             "ch": 1
           },
           "kind": 35,
@@ -6687,13 +6701,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 233,
+                "line": 235,
                 "ch": 40
               },
               "kind": 36,
               "name": "center",
               "flags": 4,
-              "id": 288,
+              "id": 289,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6704,13 +6718,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 235,
+                "line": 237,
                 "ch": 16
               },
               "kind": 36,
               "name": "full",
               "flags": 4,
-              "id": 289,
+              "id": 290,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -6738,7 +6752,7 @@
           "id": 244,
           "source": {
             "fileName": "layout.tsx",
-            "line": 239,
+            "line": 241,
             "ch": 1
           },
           "kind": 35,
@@ -6764,7 +6778,7 @@
           "id": 245,
           "source": {
             "fileName": "layout.tsx",
-            "line": 271,
+            "line": 273,
             "ch": 38
           },
           "kind": 35,
@@ -6786,17 +6800,17 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 306,
+                "line": 308,
                 "ch": 29
               },
               "kind": 36,
               "name": "elevation",
               "flags": 4,
-              "id": 290,
+              "id": 291,
               "type": {
                 "source": {
                   "fileName": "layout.tsx",
-                  "line": 310,
+                  "line": 312,
                   "ch": 11
                 },
                 "kind": 5,
@@ -6806,7 +6820,7 @@
                   {
                     "source": {
                       "fileName": "layout.tsx",
-                      "line": 310,
+                      "line": 312,
                       "ch": 11
                     },
                     "kind": 23,
@@ -6816,7 +6830,7 @@
                   {
                     "source": {
                       "fileName": "layout.tsx",
-                      "line": 310,
+                      "line": 312,
                       "ch": 15
                     },
                     "kind": 23,
@@ -6826,7 +6840,7 @@
                   {
                     "source": {
                       "fileName": "layout.tsx",
-                      "line": 310,
+                      "line": 312,
                       "ch": 19
                     },
                     "kind": 23,
@@ -6836,7 +6850,7 @@
                   {
                     "source": {
                       "fileName": "layout.tsx",
-                      "line": 310,
+                      "line": 312,
                       "ch": 23
                     },
                     "kind": 23,
@@ -6846,7 +6860,7 @@
                   {
                     "source": {
                       "fileName": "layout.tsx",
-                      "line": 310,
+                      "line": 312,
                       "ch": 27
                     },
                     "kind": 23,
@@ -6875,7 +6889,7 @@
           "id": 246,
           "source": {
             "fileName": "layout.tsx",
-            "line": 311,
+            "line": 313,
             "ch": 1
           },
           "kind": 35,
@@ -6888,7 +6902,7 @@
               },
               {
                 "tag": "example",
-                "value": "<cxl-grid columns=\"auto auto auto\" style=\"color:#fff\">\n  <cxl-c style=\"background:#a00; padding: 24px\">1</cxl-c>\n  <cxl-c style=\"background:#0a0; padding:24px\">2</cxl-c>\n  <cxl-c style=\"background:#0a0; padding:24px\">3</cxl-c>\n  <cxl-c xs2 style=\"background:#00a; padding:24px\">4</cxl-c>\n  <cxl-c style=\"background:#00a; padding:24px\">5</cxl-c>\n</cxl-grid>"
+                "value": "<cxl-grid columns=\"auto auto auto\" style=\"color:#fff\">\n  <cxl-c xs1 style=\"background:#a00; padding: 2px\">1</cxl-c>\n  <cxl-c xs1 style=\"background:#0a0; padding:2px\">2</cxl-c>\n  <cxl-c xs1 style=\"background:#0a0; padding:2px\">3</cxl-c>\n  <cxl-c xs2 style=\"background:#00a; padding:2px\">4</cxl-c>\n  <cxl-c xs1 style=\"background:#00a; padding:2px\">5</cxl-c>\n</cxl-grid>"
               }
             ],
             "tagName": "cxl-grid"
@@ -6897,13 +6911,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 337,
+                "line": 341,
                 "ch": 37
               },
               "kind": 36,
               "name": "rows",
               "flags": 4,
-              "id": 291,
+              "id": 292,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -6913,14 +6927,30 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 339,
+                "line": 343,
                 "ch": 15
               },
               "kind": 36,
               "name": "columns",
               "flags": 4,
-              "id": 292,
-              "value": "'repeat(12, minmax(0,1fr))'",
+              "id": 293,
+              "value": "12",
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "layout.tsx",
+                "line": 346,
+                "ch": 14
+              },
+              "kind": 36,
+              "name": "coltemplate",
+              "flags": 4,
+              "id": 294,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -6930,13 +6960,13 @@
             {
               "source": {
                 "fileName": "layout.tsx",
-                "line": 342,
-                "ch": 39
+                "line": 349,
+                "ch": 22
               },
               "kind": 36,
               "name": "gap",
               "flags": 4,
-              "id": 293,
+              "id": 295,
               "value": "16",
               "type": {
                 "name": "number",
@@ -7010,7 +7040,7 @@
               "kind": 36,
               "name": "extended",
               "flags": 4,
-              "id": 294,
+              "id": 296,
               "docs": {
                 "content": [
                   {
@@ -7035,7 +7065,7 @@
               "kind": 36,
               "name": "center",
               "flags": 4,
-              "id": 295,
+              "id": 297,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7052,7 +7082,7 @@
               "kind": 36,
               "name": "contextual",
               "flags": 4,
-              "id": 296,
+              "id": 298,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -7092,7 +7122,7 @@
               "kind": 36,
               "name": "name",
               "flags": 4,
-              "id": 297,
+              "id": 299,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -7108,7 +7138,7 @@
               "kind": 36,
               "name": "visible",
               "flags": 4,
-              "id": 298,
+              "id": 300,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7161,7 +7191,7 @@
               "kind": 36,
               "name": "extended",
               "flags": 4,
-              "id": 299,
+              "id": 301,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7216,7 +7246,7 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 300,
+              "id": 302,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7274,7 +7304,7 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 301,
+              "id": 303,
               "type": {
                 "id": 250,
                 "name": "Tab",
@@ -7311,7 +7341,7 @@
               },
               {
                 "tag": "demo",
-                "value": "<cxl-appbar>\n  <cxl-navbar></cxl-navbar>\n  <cxl-appbar-title>Appbar with Title</cxl-appbar-title>\n</cxl-appbar>"
+                "value": "<cxl-appbar>\n  <cxl-navbar></cxl-navbar>\n  <cxl-appbar-title>Appbar with Navbar</cxl-appbar-title>\n</cxl-appbar>"
               }
             ],
             "tagName": "cxl-navbar",
@@ -7327,7 +7357,7 @@
               "kind": 36,
               "name": "permanent",
               "flags": 4,
-              "id": 302,
+              "id": 304,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7344,7 +7374,7 @@
               "kind": 36,
               "name": "drawer",
               "flags": 4,
-              "id": 303,
+              "id": 305,
               "type": {
                 "id": 108,
                 "name": "Drawer",
@@ -7396,7 +7426,7 @@
               "kind": 36,
               "name": "dense",
               "flags": 4,
-              "id": 304,
+              "id": 306,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7425,19 +7455,45 @@
             "ch": 1
           },
           "kind": 35,
+          "name": "MenuToggle",
+          "flags": 1,
+          "children": [],
+          "docs": {
+            "tagName": "cxl-menu-toggle"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "id": 255,
+          "source": {
+            "fileName": "navigation.tsx",
+            "line": 433,
+            "ch": 44
+          },
+          "kind": 35,
           "name": "Item",
           "flags": 1,
           "children": [
             {
               "source": {
                 "fileName": "navigation.tsx",
-                "line": 449,
+                "line": 464,
                 "ch": 37
               },
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 305,
+              "id": 307,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7448,13 +7504,13 @@
             {
               "source": {
                 "fileName": "navigation.tsx",
-                "line": 451,
+                "line": 466,
                 "ch": 18
               },
               "kind": 10,
               "name": "touched",
               "flags": 4,
-              "id": 306,
+              "id": 308,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7465,13 +7521,13 @@
             {
               "source": {
                 "fileName": "navigation.tsx",
-                "line": 453,
+                "line": 468,
                 "ch": 17
               },
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 307,
+              "id": 309,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7496,10 +7552,10 @@
           }
         },
         {
-          "id": 255,
+          "id": 256,
           "source": {
             "fileName": "navigation.tsx",
-            "line": 457,
+            "line": 472,
             "ch": 1
           },
           "kind": 35,
@@ -7563,7 +7619,7 @@
               "kind": 10,
               "name": "$value",
               "flags": 8,
-              "id": 308,
+              "id": 310,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -7579,7 +7635,7 @@
               "kind": 12,
               "name": "value",
               "flags": 4,
-              "id": 309,
+              "id": 311,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -7596,7 +7652,7 @@
               "kind": 13,
               "name": "value",
               "flags": 4,
-              "id": 310,
+              "id": 312,
               "parameters": [
                 {
                   "source": {
@@ -7607,7 +7663,7 @@
                   "kind": 9,
                   "name": "val",
                   "flags": 0,
-                  "id": 311,
+                  "id": 313,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -7630,7 +7686,7 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 312,
+              "id": 314,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7647,7 +7703,7 @@
               "kind": 36,
               "name": "focused",
               "flags": 4,
-              "id": 313,
+              "id": 315,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7664,7 +7720,7 @@
               "kind": 36,
               "name": "inactive",
               "flags": 4,
-              "id": 314,
+              "id": 316,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7681,7 +7737,7 @@
               "kind": 36,
               "name": "multiple",
               "flags": 4,
-              "id": 315,
+              "id": 317,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7726,7 +7782,7 @@
               "kind": 36,
               "name": "visible",
               "flags": 4,
-              "id": 316,
+              "id": 318,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7782,7 +7838,7 @@
               "kind": 36,
               "name": "opened",
               "flags": 4,
-              "id": 317,
+              "id": 319,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -7799,7 +7855,7 @@
               "kind": 10,
               "name": "options",
               "flags": 68,
-              "id": 318,
+              "id": 320,
               "value": "new Set<Option>()",
               "type": {
                 "name": "Set",
@@ -7822,7 +7878,7 @@
               "kind": 11,
               "name": "setSelected",
               "flags": 144,
-              "id": 319,
+              "id": 321,
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -7838,7 +7894,7 @@
                   "kind": 9,
                   "name": "option",
                   "flags": 0,
-                  "id": 320,
+                  "id": 322,
                   "type": {
                     "id": 156,
                     "name": "Option",
@@ -7856,7 +7912,7 @@
               "kind": 11,
               "name": "open",
               "flags": 132,
-              "id": 321,
+              "id": 323,
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -7873,7 +7929,7 @@
               "kind": 11,
               "name": "close",
               "flags": 132,
-              "id": 322,
+              "id": 324,
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -7934,7 +7990,7 @@
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 323,
+              "id": 325,
               "type": {
                 "id": 156,
                 "name": "Option",
@@ -7950,7 +8006,7 @@
               "kind": 10,
               "name": "selectedText$",
               "flags": 16,
-              "id": 324,
+              "id": 326,
               "value": "be('')",
               "type": {
                 "name": "BehaviorSubject",
@@ -7973,7 +8029,7 @@
               "kind": 11,
               "name": "positionMenu",
               "flags": 16,
-              "id": 325,
+              "id": 327,
               "parameters": [
                 {
                   "source": {
@@ -7984,7 +8040,7 @@
                   "kind": 9,
                   "name": "menu",
                   "flags": 0,
-                  "id": 326,
+                  "id": 328,
                   "type": {
                     "id": 198,
                     "name": "SelectMenu",
@@ -8007,7 +8063,7 @@
               "kind": 11,
               "name": "setSelected",
               "flags": 16,
-              "id": 327,
+              "id": 329,
               "parameters": [
                 {
                   "source": {
@@ -8018,7 +8074,7 @@
                   "kind": 9,
                   "name": "option",
                   "flags": 524288,
-                  "id": 328,
+                  "id": 330,
                   "type": {
                     "id": 156,
                     "name": "Option",
@@ -8041,7 +8097,7 @@
               "kind": 11,
               "name": "open",
               "flags": 4,
-              "id": 329,
+              "id": 331,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -8058,7 +8114,7 @@
               "kind": 11,
               "name": "close",
               "flags": 4,
-              "id": 330,
+              "id": 332,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -8101,7 +8157,7 @@
           "kind": 16,
           "name": "ArrowBackIcon",
           "flags": 1,
-          "id": 331,
+          "id": 333,
           "parameters": [],
           "type": {
             "name": "Node",
@@ -8117,7 +8173,7 @@
           "kind": 16,
           "name": "MenuIcon",
           "flags": 1,
-          "id": 332,
+          "id": 334,
           "parameters": [],
           "type": {
             "name": "Node",
@@ -8133,7 +8189,7 @@
           "kind": 16,
           "name": "SearchIcon",
           "flags": 1,
-          "id": 333,
+          "id": 335,
           "parameters": [],
           "type": {
             "name": "Node",
@@ -8149,7 +8205,7 @@
           "kind": 16,
           "name": "CloseIcon",
           "flags": 1,
-          "id": 334,
+          "id": 336,
           "parameters": [
             {
               "source": {
@@ -8160,7 +8216,7 @@
               "kind": 9,
               "name": "p",
               "flags": 0,
-              "id": 335,
+              "id": 337,
               "type": {
                 "source": {
                   "fileName": "icon.tsx",
@@ -8180,7 +8236,7 @@
                     "kind": 10,
                     "name": "width",
                     "flags": 4,
-                    "id": 336,
+                    "id": 338,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -8243,7 +8299,7 @@
               "kind": 36,
               "name": "icon",
               "flags": 4,
-              "id": 337,
+              "id": 339,
               "value": "''",
               "type": {
                 "name": "string",
@@ -8302,7 +8358,7 @@
           "kind": 31,
           "name": "ResetSurface",
           "flags": 1,
-          "id": 338,
+          "id": 340,
           "type": {
             "name": "any",
             "kind": 32,
@@ -8319,7 +8375,7 @@
           "kind": 31,
           "name": "InversePrimary",
           "flags": 1,
-          "id": 339,
+          "id": 341,
           "type": {
             "name": "any",
             "kind": 32,
@@ -8334,20 +8390,15 @@
             "ch": 12
           },
           "kind": 31,
-          "name": "DarkColors",
+          "name": "InverseSecondary",
           "flags": 1,
-          "id": 340,
+          "id": 342,
           "type": {
-            "name": "Partial",
-            "kind": 6,
-            "typeParameters": [
-              {
-                "name": "Colors",
-                "kind": 6
-              }
-            ]
+            "name": "any",
+            "kind": 32,
+            "flags": 0
           },
-          "value": "{\n\tbackground: rgba(0x12, 0x12, 0x12),\n\tsurface: rgba(0x12, 0x12, 0x12),\n\tonSurface: rgba(0xff, 0xff, 0xff),\n\terror: rgba(0xcf, 0x66, 0x79),\n\tonError: rgba(0, 0, 0),\n\tprimary: rgba(0xbb, 0x86, 0xfc),\n\tsecondary: rgba(0x03, 0xda, 0xc6),\n\tonPrimary: rgba(0, 0, 0),\n\tonSecondary: rgba(0, 0, 0),\n}"
+          "value": "{\n\tvariables: {\n\t\tsurface: baseColor('secondary'),\n\t\tonSurface: baseColor('onSecondary'),\n\t\tsecondary: baseColor('surface'),\n\t\tonSecondary: baseColor('onSurface'),\n\t\tlink: baseColor('onPrimary'),\n\t\terror: rgba(0xff, 0x6e, 0x40),\n\t\tonError: rgba(0, 0, 0),\n\t\tdivider: rgba(0xff, 0xff, 0xff, 0.48),\n\t},\n}"
         }
       ]
     }

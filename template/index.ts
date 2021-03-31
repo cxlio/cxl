@@ -23,6 +23,8 @@ import type { Bindable } from '@cxl/tsx';
 import { Breakpoint, css, theme } from '@cxl/css';
 import { Component, attributeChanged, get } from '@cxl/component';
 
+export type ValidateFunction<T> = (val: T) => string | true;
+
 declare global {
 	interface HTMLElement {
 		ariaLabel: string | null;
@@ -787,4 +789,22 @@ export function breakpoint(el: HTMLElement): Observable<Breakpoint> {
 
 export function breakpointClass(el: HTMLElement) {
 	return breakpoint(el).pipe(setClassName(el));
+}
+
+interface FormElement<T> extends ElementWithValue<T> {
+	setCustomValidity(msg: string): void;
+}
+
+export function validateValue<T>(
+	el: FormElement<T>,
+	...validators: ValidateFunction<T>[]
+) {
+	return getAttribute(el, 'value').tap(value => {
+		let message: string | boolean = true;
+		validators.find(validateFn => {
+			message = validateFn(value);
+			return message !== true;
+		});
+		el.setCustomValidity(message === true ? '' : (message as any));
+	});
 }

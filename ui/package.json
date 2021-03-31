@@ -7,7 +7,7 @@
 	"browser": "index.bundle.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/ui && node ../tester --baselinePath ../../ui/spec"
+		"test": "npm run build && cd ../dist/ui && node ../tester --baselinePath=../../ui/spec"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
 	"devDependencies": {

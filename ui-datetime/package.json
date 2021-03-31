@@ -4,7 +4,7 @@
 	"description": "Date and Time UI Components",
 	"browser": "amd/index.min.js",
 	"scripts": {
-		"test": "npm run build && cd ../dist/ui-datetime && node ../tester --baselinePath ../../ui-datetime/spec",
+		"test": "npm run build && cd ../dist/ui-datetime && node ../tester --baselinePath=../../ui-datetime/spec",
 		"build": "node ../dist/build"
 	},
 	"homepage": "https://cxlio.github.io/cxl/ui-datetime",

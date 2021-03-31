@@ -127,6 +127,7 @@ export class DocVersionSelect extends Component {
 
 		host.bind(get(host, 'view').tap(updateView));
 		const iframeEl = (<iframe title="Demo" />) as HTMLIFrameElement;
+		(iframeEl as any).loading = 'lazy';
 		host.bind(init(iframeEl));
 		host.bind(iframeClass.tap(val => (iframeEl.className = val)));
 

@@ -1,5 +1,5 @@
 ///<amd-module name="@cxl/ui/theme.js"/>
-import { Colors, applyTheme, baseColor, rgba, theme } from '@cxl/css';
+import { applyTheme, baseColor, rgba, theme } from '@cxl/css';
 
 export { theme } from '@cxl/css';
 
@@ -9,7 +9,7 @@ declare module '../css/index.js' {
 	}
 
 	interface Colors {
-		elevation: BaseColor;
+		shadow: BaseColor;
 		primary: BaseColor;
 		primaryLight: BaseColor;
 		secondary: BaseColor;
@@ -148,7 +148,7 @@ Object.assign(theme.typography, {
 	monospace: { fontFamily: 'var(--cxl-font-monospace)' },
 });
 Object.assign(theme.colors, {
-	elevation: rgba(0, 0, 0, 0.26),
+	shadow: rgba(0, 0, 0, 0.26),
 	primary: rgba(0x15, 0x65, 0xc0),
 	// 0.14 opacity will pass accessibility contrast requirements
 	get primaryLight() {
@@ -235,16 +235,17 @@ export const InversePrimary: any = {
 	},
 };
 
-export const DarkColors: Partial<Colors> = {
-	background: rgba(0x12, 0x12, 0x12),
-	surface: rgba(0x12, 0x12, 0x12),
-	onSurface: rgba(0xff, 0xff, 0xff),
-	error: rgba(0xcf, 0x66, 0x79),
-	onError: rgba(0, 0, 0),
-	primary: rgba(0xbb, 0x86, 0xfc),
-	secondary: rgba(0x03, 0xda, 0xc6),
-	onPrimary: rgba(0, 0, 0),
-	onSecondary: rgba(0, 0, 0),
+export const InverseSecondary: any = {
+	variables: {
+		surface: baseColor('secondary'),
+		onSurface: baseColor('onSecondary'),
+		secondary: baseColor('surface'),
+		onSecondary: baseColor('onSurface'),
+		link: baseColor('onPrimary'),
+		error: rgba(0xff, 0x6e, 0x40),
+		onError: rgba(0, 0, 0),
+		divider: rgba(0xff, 0xff, 0xff, 0.48),
+	},
 };
 
-requestAnimationFrame(applyTheme);
+requestAnimationFrame(() => applyTheme());

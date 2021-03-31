@@ -2,28 +2,12 @@ const fs = require('fs').promises;
 const path = require('path').posix;
 const { readJson, sh } = require('../dist/server');
 
-function writeIndex(content) {
-	const INDEX = `
-<!DOCTYPE html>
-<html>
-<head>
-	<title>@cxl - Build Report</title>
-	<script src="ui/index.bundle.min.js"></script>
-	<script src="ui-table/amd/index.min.js"></script>
-	<style>
-		.failure { background-color: #FFCDD2; }
-	</style>
-</head>
-<body>
-	<cxl-application>
-	<cxl-appbar><cxl-appbar-title>Build Report</cxl-appbar-title></cxl-appbar>
-	<cxl-content center>${content}</cxl-content>
-	</cxl-application>
-</body>
-</html>
-`;
+async function writeIndex(content) {
+	const [INDEX] = await Promise.all([
+		fs.readFile(__dirname + '/build-report.html', 'utf8'),
+	]);
 
-	return fs.writeFile('dist/index.html', INDEX);
+	return fs.writeFile('dist/index.html', INDEX.replace('$HOME$', content));
 }
 
 async function getTotalCoverage(dir, coverage) {
@@ -87,7 +71,7 @@ async function build() {
 	for (const pkg of stats.packages) {
 		const dir = /\/(.+)/.exec(pkg.name)[1];
 		const [npmVersion, coverage, size] = await Promise.all([
-			getNPMVersion(pkg.name),
+			'', //getNPMVersion(pkg.name),
 			getTotalCoverage(dir, pkg.testReport.coverage),
 			getScriptSize(dir, pkg.package),
 		]);
@@ -97,6 +81,10 @@ async function build() {
 		);
 		output += `<cxl-tr class="${success ? 'success' : 'failure'}">
 				<cxl-td><a href="../docs/${dir}">${pkg.name}</a></cxl-td>
+				<cxl-td>
+					<a href="../${dir}/CHANGELOG.md">CHANGELOG</a>
+					<a href="${dir}/test.html">Spec</a>
+				</cxl-td>
 				<cxl-td>${pkg.package.version} (NPM ${npmVersion})</cxl-td>
 				<cxl-td>${usedBy.map(p => p.name).join('<br>')}</cxl-td>
 				<cxl-td>${size}</cxl-td>
@@ -108,6 +96,7 @@ async function build() {
 <cxl-table>
 	<cxl-tr>
 	<cxl-th>Package</cxl-th>
+	<cxl-th>Changelog</cxl-th>
 	<cxl-th>Version</cxl-th>
 	<cxl-th>Used By</cxl-th>
 	<cxl-th>Script Size</cxl-th>
