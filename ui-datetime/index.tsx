@@ -2,7 +2,7 @@ import { InputBase } from '@cxl/ui/input-base.js';
 import { Augment, Attribute, StyleAttribute, get } from '@cxl/component';
 import { css, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import { be, merge, ref } from '@cxl/rx';
+import { Observable, be, merge, ref } from '@cxl/rx';
 import { on, onAction, onKeypress } from '@cxl/dom';
 import {
 	DisabledStyles,
@@ -218,7 +218,7 @@ class CalendarMonth extends InputBase {
 
 		return (
 			<Grid columns={4}>
-				{each(years, year => (
+				{each(years as Observable<number[]>, year => (
 					<Button
 						$={el => onAction(el).tap(() => ($.value = year))}
 						flat

@@ -19,7 +19,7 @@ import {
 	get,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
-import { EMPTY, merge } from '@cxl/rx';
+import { EMPTY, defer, from, merge } from '@cxl/rx';
 import { on, onAction, onChildrenMutation, trigger } from '@cxl/dom';
 import type {} from '@cxl/ui/theme.js';
 import { IconButton } from '@cxl/ui/icon.js';
@@ -655,3 +655,29 @@ export class DataTable extends Dataset {}
 	}
 )
 export class TableSource extends Component {}
+
+@Augment<DatasetSource>('cxl-dataset-source', $ => {
+	let data: any;
+	return merge(
+		datasetRegistable($, action => {
+			if (
+				action.type === 'update' &&
+				action.value?.detail === 'dataset-source.update'
+			) {
+				(action.target as Dataset).source = data;
+			}
+		}),
+		get($, 'src').switchMap(src =>
+			defer(() =>
+				src ? from(fetch(src).then(res => res.json())) : EMPTY
+			).tap(newData => {
+				data = newData;
+				trigger($, 'dataset.update', 'dataset-source.update');
+			})
+		)
+	);
+})
+export class DatasetSource extends Component {
+	@Attribute()
+	src?: string;
+}

@@ -1,4 +1,4 @@
-import { finalize, of, map } from '../index';
+import { finalize, of, map, be } from '../index';
 import { spec } from '@cxl/spec';
 
 export default spec('finalize', it => {
@@ -40,5 +40,20 @@ export default spec('finalize', it => {
 					thrown = true;
 				},
 			});
+	});
+
+	it.should('call finalize upon disposal', a => {
+		const done = a.async();
+		let disposed = false;
+		const subscription = be(100)
+			.pipe(
+				finalize(() => {
+					a.equal(disposed, true);
+					done();
+				})
+			)
+			.subscribe();
+		disposed = true;
+		subscription.unsubscribe();
 	});
 });

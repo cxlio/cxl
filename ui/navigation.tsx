@@ -182,11 +182,11 @@ export class AppbarContextual extends Component {
 	css({
 		$: {
 			flexGrow: 1,
-			marginBottom: 12,
+			// marginBottom: 12,
 			lineHeight: 24,
 			marginRight: 16,
 			textDecoration: 'none',
-			alignSelf: 'flex-end',
+			// alignSelf: 'flex-end',
 		},
 		parentslot: { display: 'none' },
 		'@small': {
@@ -451,7 +451,7 @@ export class MenuToggle extends Component {}
 			minHeight: 48,
 			alignItems: 'center',
 			backgroundColor: 'surface',
-			gap: 16,
+			columnGap: 16,
 		},
 		$selected: {
 			backgroundColor: 'primaryLight',

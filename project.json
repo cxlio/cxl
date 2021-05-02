@@ -67,7 +67,10 @@
 				"files": ["ui/build-icons.js"],
 				"tasks": "cd ui && node build-icons"
 			},
-
+			"ui-blog": {
+				"files": ["ui-blog/*"],
+				"tasks": "cd ui-blog && npm run build"
+			},
 			"ui-router": {
 				"files": ["ui-router/*.tsx"],
 				"tasks": "npm run build --prefix ui-router"
@@ -100,6 +103,22 @@
 			"tester": {
 				"files": ["tester/*.ts"],
 				"tasks": "npm run build --prefix tester"
+			},
+			"tsx": {
+				"files": ["tsx/*.ts"],
+				"tasks": "npm run build --prefix tsx"
+			},
+			"tsx-svg": {
+				"files": ["tsx-svg/*.ts"],
+				"tasks": "npm run build --prefix tsx-svg"
+			},
+			"program": {
+				"files": ["program/*"],
+				"tasks": "npm run build --prefix program"
+			},
+			"ui-www": {
+				"files": ["ui-www/*"],
+				"tasks": "npm run build --prefix ui-www"
 			}
 		}
 	}

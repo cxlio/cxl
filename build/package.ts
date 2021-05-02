@@ -1,4 +1,4 @@
-import { Observable, defer, merge, of } from '@cxl/rx';
+import { Observable, defer, merge, of, EMPTY } from '@cxl/rx';
 import { existsSync, readFileSync, promises } from 'fs';
 import { join } from 'path';
 import { file } from './file.js';
@@ -7,7 +7,7 @@ import { Output } from '@cxl/source';
 import { sh } from '@cxl/server';
 import * as ts from 'typescript';
 
-type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0';
+type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0' | 'UNLICENSED';
 
 export interface Package {
 	name: string;
@@ -38,6 +38,7 @@ const LICENSE_MAP: Record<License, string> = {
 	'GPL-3.0': 'license-GPL-3.0.txt',
 	'GPL-3.0-only': 'license-GPL-3.0.txt',
 	'Apache-2.0': 'license-Apache-2.0.txt',
+	UNLICENSED: '',
 };
 
 let PACKAGE: Package;
@@ -133,6 +134,7 @@ function getPublishedVersion(p: Package) {
 }
 
 function license(id: License) {
+	if (id === 'UNLICENSED') return EMPTY;
 	const licenseFile = LICENSE_MAP[id];
 	if (!licenseFile) throw new Error(`Invalid license: "${id}"`);
 

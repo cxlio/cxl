@@ -16,8 +16,10 @@ import {
 	defer,
 	merge,
 	observable,
+	operatorNext,
 	of,
 	tap,
+	map,
 } from '@cxl/rx';
 import type { Bindable } from '@cxl/tsx';
 import { Breakpoint, css, theme } from '@cxl/css';
@@ -123,8 +125,10 @@ const LOG = tap(val => console.log(val));
 
 declare module '../rx' {
 	interface Observable<T> {
+		is(equalTo: T): Observable<boolean>;
 		log(): Observable<T>;
 		raf(fn?: (val: T) => void): Observable<T>;
+		select<K extends keyof T>(key: K): Observable<T[K]>;
 	}
 }
 
@@ -135,6 +139,24 @@ Observable.prototype.log = function () {
 Observable.prototype.raf = function (fn?: (val: any) => void) {
 	return this.pipe(raf(fn));
 };
+
+Observable.prototype.is = function (equalTo: any) {
+	return this.pipe(is(equalTo));
+};
+
+Observable.prototype.select = function (key: any) {
+	return this.pipe(select(key));
+};
+
+export function select<T, K extends keyof T>(key: K) {
+	return map((val: T) => val[key]);
+}
+
+export function is<T>(equalTo: T) {
+	return operatorNext<T, boolean>(subs => (val: T) =>
+		subs.next(val === equalTo)
+	);
+}
 
 /**
  * debounce using requestAnimationFrame
@@ -250,6 +272,18 @@ export function list<T, K>(
 	};
 }
 
+export function loading(source: Observable<any>, renderFn: () => Node) {
+	return (host: Bindable) => {
+		const marker = new Marker();
+		host.bind(
+			observable(() => {
+				marker.insert(renderFn());
+			})
+		);
+		host.bind(source.tap(() => marker.empty()));
+	};
+}
+
 export function render<T>(
 	source: Observable<T>,
 	renderFn: (item: T) => Node,
@@ -276,7 +310,7 @@ export function render<T>(
 }
 
 export function each<T>(
-	source: Observable<T[]>,
+	source: Observable<Iterable<T>>,
 	renderFn: (item: T) => Node,
 	empty?: () => Node
 ) {
@@ -286,9 +320,12 @@ export function each<T>(
 		host.bind(
 			source.tap(arr => {
 				marker.empty();
-				if (arr.length)
-					for (const item of arr) marker.insert(renderFn(item));
-				else if (empty) marker.insert(empty());
+				let len = 0;
+				for (const item of arr) {
+					marker.insert(renderFn(item));
+					len++;
+				}
+				if (empty && len === 0) marker.insert(empty());
 			})
 		);
 

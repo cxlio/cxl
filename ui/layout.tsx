@@ -8,7 +8,7 @@ import {
 	StyleAttribute,
 	update,
 } from '@cxl/component';
-import { css, margin, padding, pct } from '@cxl/css';
+import { css, margin, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { operator } from '@cxl/rx';
 import { InversePrimary, InverseSecondary } from './theme.js';
@@ -20,7 +20,7 @@ const colStyles = ((r: any) => {
 		] = r.xs['$xs' + i] = {
 			display: 'block',
 			gridColumnEnd: 'span ' + i,
-			flexBasis: pct((100 / 12) * i),
+			// flexBasis: pct((100 / 12) * i),
 		};
 	return r;
 })({
@@ -117,6 +117,7 @@ function persistWithParameter(prefix: string) {
 		$flex: { display: 'flex' },
 		$vflex: { display: 'flex', flexDirection: 'column' },
 		$vflex$center: { justifyContent: 'center' },
+		$center: { textAlign: 'center' },
 	}),
 	Slot
 )
@@ -162,6 +163,9 @@ export class C extends Component {
 
 	@StyleAttribute()
 	secondary = false;
+
+	@StyleAttribute()
+	center = false;
 }
 
 /**
@@ -328,14 +332,15 @@ export class Card extends C {
 @Augment<Grid>(
 	'cxl-grid',
 	css({
-		$: { display: 'grid' },
+		$: { display: 'grid', columnGap: 0, rowGap: 16 },
+		'@small': { $: { columnGap: 16 } },
 	}),
 	Slot,
 	update(host => {
 		const colTemplate =
 			host.coltemplate ?? `repeat(${host.columns}, minmax(0,1fr))`;
 		host.style.gridTemplateRows = (host.rows ?? 'auto').toString();
-		host.style.gridGap = `${host.gap}px ${host.gap}px`;
+		// host.style.gridGap = `${host.gap}px ${host.gap}px`;
 		host.style.gridTemplateColumns = colTemplate;
 	})
 )
@@ -349,6 +354,6 @@ export class Grid extends Component {
 	@Attribute()
 	coltemplate?: string;
 
-	@Attribute()
-	gap = 16;
+	/*@Attribute()
+	gap?: number;*/
 }

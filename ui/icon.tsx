@@ -1,18 +1,8 @@
 ///<amd-module name="@cxl/ui/icon.js"/>
 import { Augment, Attribute, Component, get } from '@cxl/component';
-// import { role } from '@cxl/template';
-import { css } from '@cxl/css';
-// import { getShadow } from '@cxl/dom';
-// import { theme } from '@cxl/ui/theme.js';
+import { css, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { ButtonBase, Svg } from './core.js';
-
-/*type IconKey = keyof IconSet;
-type DefaultIconSet = typeof defaultIcons;
-
-export interface IconSet extends DefaultIconSet {
-	'': string;
-}*/
 
 export function ArrowBackIcon() {
 	return (
@@ -152,10 +142,13 @@ export class FieldIcon extends Icon {
 	'cxl-icon-button',
 	css({
 		$: {
+			display: 'inline-flex',
 			elevation: 0,
 			paddingLeft: 8,
 			paddingRight: 8,
 			verticalAlign: 'middle',
+			borderRadius: pct(100),
+			overflowX: 'hidden',
 		},
 	}),
 	() => <slot />

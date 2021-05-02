@@ -40,6 +40,7 @@ import { css } from '@cxl/css';
 const router$ = new Reference<RouterState>();
 const strategy$ = new Reference<Strategy>();
 export const router = new MainRouter(state => router$.next(state));
+export const routerState = router$;
 
 interface RouteOptions {
 	path: string;

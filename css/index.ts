@@ -50,7 +50,8 @@ interface StrictStyleDefinition {
 	translateX: Length;
 	translateY: Length;
 	translateZ: Length;
-	gap: Length;
+	rowGap: Length;
+	columnGap: Length;
 	gridColumnEnd: string;
 	gridAutoFlow: 'column';
 	gridTemplateColumns: string;

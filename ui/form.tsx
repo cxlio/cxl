@@ -7,7 +7,7 @@ import {
 	Slot,
 	get,
 } from '@cxl/component';
-import { ButtonBase, Spinner, Span, FocusHighlight } from './core.js';
+import { ButtonBase, FocusCircleStyle, Spinner, Span } from './core.js';
 import { IconButton, SearchIcon } from './icon.js';
 import { dom, expression } from '@cxl/tsx';
 import {
@@ -37,7 +37,6 @@ import {
 	role,
 } from '@cxl/template';
 import { Field } from './field.js';
-import { FocusCircleStyle } from './core.js';
 
 export { SelectBox, Option } from './select.js';
 
@@ -220,31 +219,6 @@ export class FieldHelp extends Component {
 	@StyleAttribute()
 	invalid = false;
 }
-
-/*@Augment(
-	'cxl-field-toggle',
-	FocusCircleStyle,
-	css({
-		$: {
-			paddingTop: 8,
-			paddingBottom: 8,
-			paddingLeft: 12,
-			paddingRight: 12,
-			cursor: 'pointer',
-			position: 'relative',
-		},
-		focusCircle: { left: -4 },
-	}),
-	_ => (
-		<>
-			<span className="focusCircle focusCirclePrimary"></span>
-			<Toggle>
-				<slot />
-			</Toggle>
-		</>
-	)
-)
-export class FieldToggle extends Component {}*/
 
 /**
  * Display the ratio of characters used and the total character limit.
@@ -843,52 +817,6 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
 )
 export class TextArea extends InputBase {
 	value = '';
-}
-
-/**
- * A floating action button (FAB) represents the primary action of a screen.
- * @demo
- * <cxl-fab title="Floating Action Button">&plus;</cxl-fab>
- */
-@Augment(
-	'cxl-fab',
-	Focusable,
-	css({
-		$: {
-			display: 'inline-block',
-			elevation: 2,
-			backgroundColor: 'secondary',
-			color: 'onSecondary',
-			borderRadius: 56,
-			textAlign: 'center',
-			paddingTop: 20,
-			cursor: 'pointer',
-			font: 'h6',
-			paddingBottom: 20,
-			lineHeight: 16,
-			width: 56,
-		},
-		$fixed: {
-			position: 'fixed',
-			height: 56,
-			bottom: 16,
-			right: 24,
-		},
-		'@small': {
-			$fixed: { position: 'absolute', bottom: 'auto', marginTop: -28 },
-		},
-		$focus: { elevation: 4 },
-	}),
-	css(FocusHighlight),
-	Slot
-)
-export class Fab extends Component {
-	@StyleAttribute()
-	disabled = false;
-	@StyleAttribute()
-	fixed = false;
-
-	touched = false;
 }
 
 /**

@@ -104,6 +104,9 @@ export function mapCollection<T, T2>(
 	);
 }
 
+/**
+ * Pushes a new value into the reference, and returns a new reference key
+ */
 export async function push<T>(ref: Collection<T>, initial?: T) {
 	const ref$ = firebase.database().ref(ref.path);
 	const child = await ref$.push(initial);

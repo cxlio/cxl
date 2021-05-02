@@ -446,12 +446,6 @@ export function map<T, T2>(mapFn: (val: T) => T2) {
 	});
 }
 
-export function is<T>(equalTo: T) {
-	return operatorNext<T, boolean>(subs => (val: T) =>
-		subs.next(val === equalTo)
-	);
-}
-
 /**
  * Applies an accumulator function over the source Observable, and returns the accumulated result when the source completes, given an optional seed value.
  */
@@ -935,14 +929,9 @@ export function combineLatest<T extends Observable<any>[]>(
 export function finalize<T>(fn: () => void): Operator<T, T> {
 	return operator<T, T>((subscriber: Subscriber<T>) => ({
 		next: subscriber.next.bind(subscriber),
-		error: (e: any) => {
-			subscriber.error(e);
-			fn();
-		},
-		complete() {
-			subscriber.complete();
-			fn();
-		},
+		// error: subscriber.error.bind(subscriber),
+		// complete: subscriber.complete.bind(subscriber),
+		destroy: fn,
 	}));
 }
 
@@ -993,7 +982,6 @@ export const operators: any = {
 	filter,
 	finalize,
 	first,
-	is,
 	map,
 	mergeMap,
 	publishLast,
@@ -1022,7 +1010,6 @@ export interface Observable<T> {
 	filter<T2 = T>(fn: (val: T) => boolean): Observable<T2>;
 	finalize(fn: () => void): Observable<T>;
 	first(): Observable<T>;
-	is(equalTo: T): Observable<boolean>;
 	map<T2>(mapFn: (val: T) => T2): Observable<T2>;
 	mergeMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	publishLast(): Observable<T>;

@@ -1,5 +1,5 @@
 ///<amd-module name="@cxl/ui"/>
-export { Button, Chip } from './button';
+export { Button, Chip, Fab } from './button';
 export * from './checkbox.js';
 export {
 	Application,

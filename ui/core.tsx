@@ -401,6 +401,7 @@ export class Spinner extends Component {}
 		$code: { font: 'code' },
 		$firstChild: { marginTop: 0 },
 		$lastChild: { marginBottom: 0 },
+		$justify: { textAlign: 'justify' },
 	}),
 	_ => <slot />
 )
@@ -431,6 +432,10 @@ export class T extends Component {
 	code = false;
 	@StyleAttribute()
 	inline = false;
+	@StyleAttribute()
+	button = false;
+	@StyleAttribute()
+	justify = false;
 }
 
 /**
@@ -560,7 +565,7 @@ export class Surface extends Component {
 			display: 'grid',
 			gridAutoFlow: 'column',
 			gridTemplateColumns: 'min-content',
-			gap: 16,
+			columnGap: 16,
 			alignItems: 'center',
 			height: 56,
 			...padding(4, 16, 4, 16),
@@ -590,7 +595,6 @@ export class Toolbar extends Component {}
 			textAlign: 'center',
 		},
 
-		$big: { ...padding(16), font: 'h5' },
 		$flat: {
 			elevation: 0,
 			paddingRight: 8,
