@@ -1,0 +1,13 @@
+{
+	"name": "@cxl/ui-www",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/ui-www",
+	"license": "GPLv3",
+	"description": "Website Utility Components",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/ui-www && node ../tester"
+	},
+	"dependencies": {}
+}

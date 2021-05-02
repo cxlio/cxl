@@ -1,0 +1,13 @@
+{
+	"name": "@cxl/tsx-svg",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/tsx-svg",
+	"description": "svg tsx elements",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/tsx-svg && node ../tester --node"
+	},
+	"dependencies": {},
+	"license": "GPL-3.0"
+}
