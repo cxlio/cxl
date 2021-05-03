@@ -47,7 +47,7 @@ async function release() {
 
 	if (log.length === 0) throw new Error('No changes detected');
 
-	const LOG_REGEX = /(\w+) (feat|fix|docs|style|refactor|test|chore|revert)(?:\((\w+)\))?: (.+)/;
+	const LOG_REGEX = /(\w+) (feat|fix|docs|style|refactor|test|chore|revert)(?:\(([\w-]+)\))?: (.+)/;
 	const files = { cxl: [] };
 
 	log.forEach(line => {
