@@ -41,9 +41,9 @@ async function release() {
 	}
 
 	const masterCommit = (await sh(`git rev-parse master`)).trim();
-	const log = (await sh(`git log --oneline ${masterCommit}..HEAD`)).split(
-		'\n'
-	);
+	const log = (await sh(`git log --oneline ${masterCommit}..HEAD`))
+		.trim()
+		.split('\n');
 
 	if (log.length === 0) throw new Error('No changes detected');
 
