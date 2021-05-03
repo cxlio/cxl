@@ -40,7 +40,7 @@ async function release() {
 		throw new Error('Not a clean repository');
 	}
 
-	const masterCommit = await sh(`git rev-parse master`);
+	const masterCommit = (await sh(`git rev-parse master`)).trim();
 	const log = (await sh(`git log --oneline ${masterCommit}..HEAD`)).split(
 		'\n'
 	);
