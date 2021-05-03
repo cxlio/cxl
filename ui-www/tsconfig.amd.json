@@ -1,0 +1,24 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/ui-www/amd"
+	},
+	"files": [
+		"index.tsx"
+	],
+	"references": [
+		{
+			"path": "../ui/tsconfig.amd.json"
+		},
+		{
+			"path": "../tsx-svg/tsconfig.amd.json"
+		},
+		{
+			"path": "../validation/tsconfig.amd.json"
+		},
+		{
+			"path": "../ui-router/tsconfig.amd.json"
+		}
+	]
+}

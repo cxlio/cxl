@@ -950,11 +950,18 @@
           "name": "push",
           "flags": 257,
           "id": 47,
+          "docs": {
+            "content": [
+              {
+                "value": "Pushes a new value into the reference, and returns a new reference key"
+              }
+            ]
+          },
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 106,
+                "line": 109,
                 "ch": 27
               },
               "kind": 3,
@@ -967,7 +974,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 106,
+                "line": 109,
                 "ch": 30
               },
               "kind": 9,
@@ -990,7 +997,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 106,
+                "line": 109,
                 "ch": 49
               },
               "kind": 9,
@@ -1019,7 +1026,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 111,
+            "line": 114,
             "ch": 1
           },
           "kind": 16,
@@ -1030,7 +1037,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 113,
+                "line": 116,
                 "ch": 19
               },
               "kind": 3,
@@ -1043,7 +1050,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 113,
+                "line": 116,
                 "ch": 22
               },
               "kind": 9,
@@ -1073,7 +1080,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 115,
+            "line": 118,
             "ch": 1
           },
           "kind": 16,
@@ -1084,7 +1091,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 117,
+                "line": 120,
                 "ch": 23
               },
               "kind": 9,
@@ -1120,7 +1127,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 119,
+            "line": 122,
             "ch": 1
           },
           "kind": 2,
@@ -1130,7 +1137,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 121,
+              "line": 124,
               "ch": 16
             },
             "kind": 5,
@@ -1155,7 +1162,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 121,
+                  "line": 124,
                   "ch": 44
                 },
                 "kind": 23,
@@ -1168,7 +1175,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 121,
+            "line": 124,
             "ch": 50
           },
           "kind": 2,
@@ -1179,7 +1186,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 122,
+                "line": 125,
                 "ch": 23
               },
               "kind": 3,
@@ -1191,7 +1198,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 122,
+              "line": 125,
               "ch": 27
             },
             "kind": 0,
@@ -1202,7 +1209,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 124,
+            "line": 127,
             "ch": 2
           },
           "kind": 16,
@@ -1213,7 +1220,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 126,
+                "line": 129,
                 "ch": 22
               },
               "kind": 3,
@@ -1224,7 +1231,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 126,
+                "line": 129,
                 "ch": 24
               },
               "kind": 3,
@@ -1237,7 +1244,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 126,
+                "line": 129,
                 "ch": 63
               },
               "kind": 9,
@@ -1260,7 +1267,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 127,
+                "line": 130,
                 "ch": 20
               },
               "kind": 9,
@@ -1276,7 +1283,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 128,
+                "line": 131,
                 "ch": 10
               },
               "kind": 9,
@@ -1286,7 +1293,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 129,
+                  "line": 132,
                   "ch": 9
                 },
                 "kind": 21,

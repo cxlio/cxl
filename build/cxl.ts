@@ -1,13 +1,22 @@
 import { basename } from 'path';
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
-import { EMPTY, concat, observable } from '@cxl/rx';
+import { EMPTY, concat, observable, mergeMap, of } from '@cxl/rx';
+import { Output } from '@cxl/source';
 
 import { BuildConfiguration, build } from './builder.js';
 import { docs, pkg, readPackage, readme } from './package.js';
 import { file, minify } from './file.js';
 import { eslint } from './lint.js';
 import { tsconfig } from './tsc.js';
+
+export function minifyIf(filename: string) {
+	return mergeMap((out: Output) =>
+		out.path === filename
+			? concat(of(out), file(out.path).pipe(minify()))
+			: of(out)
+	);
+}
 
 export function buildCxl(...extra: BuildConfiguration[]) {
 	const packageJson = readPackage();

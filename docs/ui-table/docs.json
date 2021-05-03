@@ -1828,6 +1828,49 @@
               }
             ]
           }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 656,
+            "ch": 45
+          },
+          "kind": 35,
+          "name": "DatasetSource",
+          "flags": 1,
+          "id": 81,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 679,
+                "ch": 46
+              },
+              "kind": 36,
+              "name": "src",
+              "flags": 4,
+              "id": 82,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-dataset-source"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
         }
       ]
     }

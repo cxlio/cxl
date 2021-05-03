@@ -472,7 +472,7 @@ export function debounceFunction<A extends any[], R>(
 	fn: (...a: A) => R,
 	delay?: number
 ) {
-	let to: number;
+	let to: NodeJS.Timeout;
 	return function (this: any, ...args: A) {
 		if (to) clearTimeout(to);
 		to = setTimeout(() => {

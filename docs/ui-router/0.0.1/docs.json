@@ -73,38 +73,44 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 41,
-            "ch": 67
+            "line": 42,
+            "ch": 12
+          },
+          "kind": 31,
+          "name": "routerState",
+          "flags": 1,
+          "id": 4,
+          "value": "router$",
+          "type": {
+            "name": "Reference",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "RouterState",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 42,
+            "ch": 35
           },
           "kind": 4,
           "name": "RouteOptions",
           "flags": 0,
-          "id": 4,
+          "id": 5,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 43,
+                "line": 44,
                 "ch": 24
               },
               "kind": 10,
               "name": "path",
-              "flags": 4,
-              "id": 5,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 44,
-                "ch": 14
-              },
-              "kind": 10,
-              "name": "id",
               "flags": 4,
               "id": 6,
               "type": {
@@ -117,10 +123,10 @@
               "source": {
                 "fileName": "index.tsx",
                 "line": 45,
-                "ch": 13
+                "ch": 14
               },
               "kind": 10,
-              "name": "parent",
+              "name": "id",
               "flags": 4,
               "id": 7,
               "type": {
@@ -133,12 +139,28 @@
               "source": {
                 "fileName": "index.tsx",
                 "line": 46,
+                "ch": 13
+              },
+              "kind": 10,
+              "name": "parent",
+              "flags": 4,
+              "id": 8,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 47,
                 "ch": 17
               },
               "kind": 10,
               "name": "redirectTo",
               "flags": 4,
-              "id": 8,
+              "id": 9,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -150,28 +172,28 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 48,
+            "line": 49,
             "ch": 1
           },
           "kind": 16,
           "name": "Route",
           "flags": 1,
-          "id": 9,
+          "id": 10,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 50,
+                "line": 51,
                 "ch": 22
               },
               "kind": 9,
               "name": "path",
               "flags": 0,
-              "id": 10,
+              "id": 11,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 50,
+                  "line": 51,
                   "ch": 27
                 },
                 "kind": 5,
@@ -184,7 +206,7 @@
                     "flags": 0
                   },
                   {
-                    "id": 4,
+                    "id": 5,
                     "name": "RouteOptions",
                     "kind": 6
                   }
@@ -195,24 +217,24 @@
           "type": {
             "source": {
               "fileName": "index.tsx",
-              "line": 51,
+              "line": 52,
               "ch": 7
             },
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 11,
+            "id": 12,
             "parameters": [
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 51,
+                  "line": 52,
                   "ch": 9
                 },
                 "kind": 9,
                 "name": "ctor",
                 "flags": 0,
-                "id": 12,
+                "id": 13,
                 "type": {
                   "name": "any",
                   "kind": 32,
@@ -230,28 +252,28 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 58,
+            "line": 59,
             "ch": 1
           },
           "kind": 16,
           "name": "DefaultRoute",
           "flags": 1,
-          "id": 13,
+          "id": 14,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 60,
+                "line": 61,
                 "ch": 29
               },
               "kind": 9,
               "name": "path",
               "flags": 0,
-              "id": 14,
+              "id": 15,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 60,
+                  "line": 61,
                   "ch": 34
                 },
                 "kind": 5,
@@ -264,7 +286,7 @@
                     "flags": 0
                   },
                   {
-                    "id": 4,
+                    "id": 5,
                     "name": "RouteOptions",
                     "kind": 6
                   }
@@ -276,24 +298,24 @@
           "type": {
             "source": {
               "fileName": "index.tsx",
-              "line": 61,
+              "line": 62,
               "ch": 7
             },
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 15,
+            "id": 16,
             "parameters": [
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 61,
+                  "line": 62,
                   "ch": 9
                 },
                 "kind": 9,
                 "name": "ctor",
                 "flags": 0,
-                "id": 16,
+                "id": 17,
                 "type": {
                   "name": "any",
                   "kind": 32,
@@ -311,24 +333,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 69,
+            "line": 70,
             "ch": 1
           },
           "kind": 16,
           "name": "routeIsActive",
           "flags": 1,
-          "id": 17,
+          "id": 18,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 71,
+                "line": 72,
                 "ch": 30
               },
               "kind": 9,
               "name": "path",
               "flags": 0,
-              "id": 18,
+              "id": 19,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -351,24 +373,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 73,
+            "line": 74,
             "ch": 1
           },
           "kind": 16,
           "name": "routerOutlet",
           "flags": 1,
-          "id": 19,
+          "id": 20,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 75,
+                "line": 76,
                 "ch": 29
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 20,
+              "id": 21,
               "type": {
                 "name": "HTMLElement",
                 "kind": 6
@@ -389,24 +411,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 94,
+            "line": 95,
             "ch": 1
           },
           "kind": 16,
           "name": "routerStrategy",
           "flags": 1,
-          "id": 21,
+          "id": 22,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 96,
+                "line": 97,
                 "ch": 31
               },
               "kind": 9,
               "name": "getUrl",
               "flags": 0,
-              "id": 22,
+              "id": 23,
               "type": {
                 "name": "Observable",
                 "kind": 6,
@@ -422,13 +444,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 97,
+                "line": 98,
                 "ch": 25
               },
               "kind": 9,
               "name": "strategy",
               "flags": 0,
-              "id": 23,
+              "id": 24,
               "type": {
                 "name": "Strategy",
                 "kind": 6
@@ -451,13 +473,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 105,
+            "line": 106,
             "ch": 1
           },
           "kind": 16,
           "name": "setDocumentTitle",
           "flags": 1,
-          "id": 24,
+          "id": 25,
           "parameters": [],
           "type": {
             "name": "Observable",
@@ -480,24 +502,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 124,
+            "line": 125,
             "ch": 1
           },
           "kind": 16,
           "name": "initializeRouter",
           "flags": 1,
-          "id": 25,
+          "id": 26,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 126,
+                "line": 127,
                 "ch": 33
               },
               "kind": 9,
               "name": "host",
               "flags": 0,
-              "id": 26,
+              "id": 27,
               "type": {
                 "name": "Component",
                 "kind": 6
@@ -506,17 +528,17 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 127,
+                "line": 128,
                 "ch": 17
               },
               "kind": 9,
               "name": "strategy",
               "flags": 0,
-              "id": 27,
+              "id": 28,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 128,
+                  "line": 129,
                   "ch": 10
                 },
                 "kind": 5,
@@ -526,7 +548,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 128,
+                      "line": 129,
                       "ch": 10
                     },
                     "kind": 23,
@@ -536,7 +558,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 128,
+                      "line": 129,
                       "ch": 19
                     },
                     "kind": 23,
@@ -546,7 +568,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 128,
+                      "line": 129,
                       "ch": 29
                     },
                     "kind": 23,
@@ -564,13 +586,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 128,
+                "line": 129,
                 "ch": 67
               },
               "kind": 9,
               "name": "getUrl",
               "flags": 524288,
-              "id": 28,
+              "id": 29,
               "type": {
                 "name": "Observable",
                 "kind": 6,
@@ -599,28 +621,28 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 142,
+            "line": 143,
             "ch": 1
           },
           "kind": 16,
           "name": "Router",
           "flags": 1,
-          "id": 29,
+          "id": 30,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 144,
+                "line": 145,
                 "ch": 23
               },
               "kind": 9,
               "name": "strategy",
               "flags": 0,
-              "id": 30,
+              "id": 31,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 145,
+                  "line": 146,
                   "ch": 10
                 },
                 "kind": 5,
@@ -630,7 +652,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 145,
+                      "line": 146,
                       "ch": 10
                     },
                     "kind": 23,
@@ -640,7 +662,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 145,
+                      "line": 146,
                       "ch": 19
                     },
                     "kind": 23,
@@ -650,7 +672,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 145,
+                      "line": 146,
                       "ch": 29
                     },
                     "kind": 23,
@@ -668,13 +690,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 145,
+                "line": 146,
                 "ch": 67
               },
               "kind": 9,
               "name": "getUrl",
               "flags": 524288,
-              "id": 31,
+              "id": 32,
               "type": {
                 "name": "Observable",
                 "kind": 6,
@@ -691,24 +713,24 @@
           "type": {
             "source": {
               "fileName": "index.tsx",
-              "line": 148,
+              "line": 149,
               "ch": 7
             },
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 32,
+            "id": 33,
             "parameters": [
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 148,
+                  "line": 149,
                   "ch": 9
                 },
                 "kind": 9,
                 "name": "ctor",
                 "flags": 0,
-                "id": 33,
+                "id": 34,
                 "type": {
                   "name": "any",
                   "kind": 32,
@@ -726,13 +748,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 155,
+            "line": 156,
             "ch": 5
           },
           "kind": 31,
           "name": "routeTitles",
           "flags": 0,
-          "id": 34,
+          "id": 35,
           "value": "router$.map(state => {\n\tconst result = [];\n\tlet route: any = state.current;\n\tdo {\n\t\tif (route.routeTitle)\n\t\t\tresult.unshift({\n\t\t\t\ttitle: route.routeTitle,\n\t\t\t\tfirst: route === state.current,\n\t\t\t\tpath: routePath(route),\n\t\t\t});\n\t} while ((route = route.parentNode));\n\n\treturn result;\n})",
           "type": {
             "name": "Observable",
@@ -745,7 +767,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 160,
+                      "line": 161,
                       "ch": 18
                     },
                     "kind": 34,
@@ -755,13 +777,13 @@
                       {
                         "source": {
                           "fileName": "index.tsx",
-                          "line": 160,
+                          "line": 161,
                           "ch": 19
                         },
                         "kind": 0,
                         "name": "title",
                         "flags": 0,
-                        "id": 35,
+                        "id": 36,
                         "value": "route.routeTitle",
                         "type": {
                           "name": "any",
@@ -772,13 +794,13 @@
                       {
                         "source": {
                           "fileName": "index.tsx",
-                          "line": 161,
+                          "line": 162,
                           "ch": 28
                         },
                         "kind": 0,
                         "name": "first",
                         "flags": 0,
-                        "id": 36,
+                        "id": 37,
                         "value": "route === state.current",
                         "type": {
                           "name": "boolean",
@@ -789,13 +811,13 @@
                       {
                         "source": {
                           "fileName": "index.tsx",
-                          "line": 162,
+                          "line": 163,
                           "ch": 35
                         },
                         "kind": 0,
                         "name": "path",
                         "flags": 0,
-                        "id": 37,
+                        "id": 38,
                         "value": "routePath(route)",
                         "type": {
                           "name": "",
@@ -825,24 +847,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 168,
+            "line": 169,
             "ch": 3
           },
           "kind": 16,
           "name": "routePath",
           "flags": 0,
-          "id": 38,
+          "id": 39,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 170,
+                "line": 171,
                 "ch": 19
               },
               "kind": 9,
               "name": "routeEl",
               "flags": 0,
-              "id": 39,
+              "id": 40,
               "type": {
                 "name": "HTMLElement",
                 "kind": 6
@@ -870,13 +892,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 179,
+            "line": 180,
             "ch": 1
           },
           "kind": 16,
           "name": "RouterTitle",
           "flags": 1,
-          "id": 40,
+          "id": 41,
           "parameters": [],
           "type": {
             "name": "Node",
@@ -886,13 +908,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 194,
+            "line": 195,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterAppbarTitle",
           "flags": 1,
-          "id": 41,
+          "id": 42,
           "children": [],
           "docs": {
             "tagName": "cxl-router-appbar-title"
@@ -912,24 +934,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 197,
+            "line": 198,
             "ch": 51
           },
           "kind": 16,
           "name": "renderTemplate",
           "flags": 0,
-          "id": 42,
+          "id": 43,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 199,
+                "line": 200,
                 "ch": 24
               },
               "kind": 9,
               "name": "tpl",
               "flags": 0,
-              "id": 43,
+              "id": 44,
               "type": {
                 "name": "HTMLTemplateElement",
                 "kind": 6
@@ -938,13 +960,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 199,
+                "line": 200,
                 "ch": 49
               },
               "kind": 9,
               "name": "title",
               "flags": 524288,
-              "id": 44,
+              "id": 45,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -960,24 +982,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 204,
+            "line": 205,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterLink",
           "flags": 1,
-          "id": 45,
+          "id": 46,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 238,
+                "line": 239,
                 "ch": 43
               },
               "kind": 36,
               "name": "href",
               "flags": 4,
-              "id": 46,
+              "id": 47,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -987,13 +1009,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 240,
+                "line": 241,
                 "ch": 15
               },
               "kind": 36,
               "name": "focusable",
               "flags": 4,
-              "id": 47,
+              "id": 48,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1018,7 +1040,7 @@
           },
           "extendedBy": [
             {
-              "id": 50,
+              "id": 51,
               "name": "A",
               "kind": 6
             }
@@ -1027,24 +1049,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 243,
+            "line": 244,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterTab",
           "flags": 1,
-          "id": 48,
+          "id": 49,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 265,
+                "line": 266,
                 "ch": 42
               },
               "kind": 36,
               "name": "href",
               "flags": 4,
-              "id": 49,
+              "id": 50,
               "value": "''",
               "type": {
                 "name": "string",
@@ -1071,24 +1093,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 268,
+            "line": 269,
             "ch": 1
           },
           "kind": 35,
           "name": "A",
           "flags": 1,
-          "id": 50,
+          "id": 51,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 277,
+                "line": 278,
                 "ch": 35
               },
               "kind": 10,
               "name": "focusable",
               "flags": 4,
-              "id": 51,
+              "id": 52,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -1106,7 +1128,7 @@
             "name": "",
             "children": [
               {
-                "id": 45,
+                "id": 46,
                 "name": "RouterLink",
                 "kind": 6
               }
@@ -1116,24 +1138,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 279,
+            "line": 280,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterItem",
           "flags": 1,
-          "id": 52,
+          "id": 53,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 315,
+                "line": 316,
                 "ch": 43
               },
               "kind": 36,
               "name": "href",
               "flags": 4,
-              "id": 53,
+              "id": 54,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1143,13 +1165,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 317,
+                "line": 318,
                 "ch": 15
               },
               "kind": 36,
               "name": "disabled",
               "flags": 4,
-              "id": 54,
+              "id": 55,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -1160,13 +1182,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 320,
+                "line": 321,
                 "ch": 18
               },
               "kind": 11,
               "name": "focus",
               "flags": 4,
-              "id": 55,
+              "id": 56,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -1193,13 +1215,13 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 325,
+            "line": 326,
             "ch": 1
           },
           "kind": 35,
           "name": "RouterOutlet",
           "flags": 1,
-          "id": 56,
+          "id": 57,
           "children": [],
           "docs": {
             "tagName": "cxl-router-outlet"
@@ -1219,28 +1241,28 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 328,
+            "line": 329,
             "ch": 46
           },
           "kind": 35,
           "name": "RouterComponent",
           "flags": 1,
-          "id": 57,
+          "id": 58,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 361,
+                "line": 362,
                 "ch": 48
               },
               "kind": 36,
               "name": "strategy",
               "flags": 4,
-              "id": 58,
+              "id": 59,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 363,
+                  "line": 364,
                   "ch": 10
                 },
                 "kind": 5,
@@ -1250,7 +1272,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 363,
+                      "line": 364,
                       "ch": 10
                     },
                     "kind": 23,
@@ -1260,7 +1282,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 363,
+                      "line": 364,
                       "ch": 19
                     },
                     "kind": 23,
@@ -1270,7 +1292,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 363,
+                      "line": 364,
                       "ch": 28
                     },
                     "kind": 23,

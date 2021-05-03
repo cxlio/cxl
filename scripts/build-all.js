@@ -3,6 +3,7 @@ const path = require('path').posix;
 const cp = require('child_process');
 
 cp.execSync('npm run build --prefix build');
+cp.execSync('npm run build --prefix tester');
 
 const { sh } = require('../dist/build');
 const { readJson } = require('../dist/server');

@@ -142,6 +142,10 @@ function onMonthChange($: CalendarMonth) {
 			color: 'headerText',
 			font: 'default',
 		},
+		grid: {
+			columnGap: 0,
+			rowGap: 0,
+		},
 	}),
 	disabledAttribute,
 	focusableEvents,
@@ -155,7 +159,7 @@ function onMonthChange($: CalendarMonth) {
 		}
 
 		return (
-			<Grid columns={7} gap={0}>
+			<Grid columns={7} className="grid">
 				{each(
 					breakpoint($).map(size =>
 						[0, 1, 2, 3, 4, 5, 6].map(n => getDayText(n, size))
