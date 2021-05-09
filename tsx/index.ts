@@ -87,7 +87,7 @@ export function renderChildren(
 	children: Children,
 	appendTo: Node = host
 ) {
-	if (!children) return;
+	if (children === undefined || children === null) return;
 
 	if (Array.isArray(children))
 		for (const child of children) renderChildren(host, child, appendTo);
