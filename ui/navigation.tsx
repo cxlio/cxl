@@ -182,11 +182,13 @@ export class AppbarContextual extends Component {
 	css({
 		$: {
 			flexGrow: 1,
-			// marginBottom: 12,
 			lineHeight: 24,
 			marginRight: 16,
 			textDecoration: 'none',
-			// alignSelf: 'flex-end',
+		},
+		$extended: {
+			marginBottom: 12,
+			alignSelf: 'flex-end',
 		},
 		parentslot: { display: 'none' },
 		'@small': {
