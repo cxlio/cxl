@@ -186,7 +186,7 @@ export class Image extends Component {
 						</RouterTab>
 					))}
 				</Tabs>
-				<MenuToggle className="menu">
+				<MenuToggle className="menu" right>
 					{each(elements$, item => (
 						<RouterLink href={item.href}>
 							<Item>{item.cloneNode(true)}</Item>

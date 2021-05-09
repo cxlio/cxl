@@ -423,8 +423,8 @@ export class Menu extends Component {
 /**
  *
  */
-@Augment('cxl-menu-toggle', () => (
-	<Toggle>
+@Augment<MenuToggle>('cxl-menu-toggle', $ => (
+	<Toggle right={get($, 'right')}>
 		<IconButton slot="trigger">
 			<MenuIcon />
 		</IconButton>
@@ -433,7 +433,10 @@ export class Menu extends Component {
 		</Menu>
 	</Toggle>
 ))
-export class MenuToggle extends Component {}
+export class MenuToggle extends Component {
+	@Attribute()
+	right = false;
+}
 
 @Augment<Item>(
 	'cxl-item',
