@@ -10,6 +10,7 @@ import {
 	each,
 	validateValue,
 } from '@cxl/template';
+import { on } from '@cxl/dom';
 import {
 	Appbar,
 	Application,
@@ -374,32 +375,52 @@ export class Page extends Application {}
 @Augment<Theme>('www-theme')
 export class Theme extends Component {}
 
-@Augment<ContactForm>('www-form-contact', () => (
-	<Form>
-		<Grid>
-			<Field>
-				<Label>Name</Label>
-				<Input $={el => validateValue(el, required)} name="name" />
-			</Field>
-			<Field>
-				<Label>E-mail</Label>
-				<Input $={el => validateValue(el, email)} name="email" />
-			</Field>
-			<Field>
-				<Label>Phone</Label>
-				<Input name="phone" />
-			</Field>
-			<Field>
-				<Label>Message</Label>
-				<TextArea
-					$={el => validateValue(el, required)}
-					name="message"
-				></TextArea>
-			</Field>
-			<C sm={12}>
-				<SubmitButton>Send Message</SubmitButton>
-			</C>
-		</Grid>
-	</Form>
-))
-export class ContactForm extends Component {}
+@Augment<ContactForm>('www-form-contact', $ => {
+	function onSubmit(ev: any) {
+		if (!$.apiurl) return;
+		const body = (ev.target as Form).getFormData();
+		return fetch($.apiurl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body),
+		});
+	}
+
+	return (
+		<Form $={el => on(el, 'submit').tap(onSubmit)}>
+			<Grid>
+				<Field>
+					<Label>Name</Label>
+					<Input $={el => validateValue(el, required)} name="name" />
+				</Field>
+				<Field>
+					<Label>E-mail</Label>
+					<Input
+						$={el => validateValue(el, email, required)}
+						name="email"
+					/>
+				</Field>
+				<Field>
+					<Label>Phone</Label>
+					<Input $={el => validateValue(el, required)} name="phone" />
+				</Field>
+				<Field>
+					<Label>Message</Label>
+					<TextArea
+						$={el => validateValue(el, required)}
+						name="message"
+					></TextArea>
+				</Field>
+				<C sm={12}>
+					<SubmitButton>Send Message</SubmitButton>
+				</C>
+			</Grid>
+		</Form>
+	);
+})
+export class ContactForm extends Component {
+	@Attribute()
+	apiurl?: string;
+}
