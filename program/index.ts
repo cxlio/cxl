@@ -1,5 +1,6 @@
 import { readFile } from 'fs/promises';
 import type { Observable } from '@cxl/rx';
+import { join } from 'path';
 
 const codes = {
 	reset: [0, 0],
@@ -95,7 +96,6 @@ export interface Parameter {
 
 export interface ProgramConfiguration {
 	name?: string;
-	parameters?: Parameter[];
 	logColor?: keyof typeof colors;
 }
 
@@ -342,12 +342,15 @@ function log(prefix: string, msg: LogMessage) {
 
 export function program(
 	name: string | ProgramConfiguration,
-	startFn: (p: Program) => void
+	startFn: (p: Program) => void | Promise<void>
 ) {
 	const config = typeof name === 'string' ? { name } : name;
 
 	return async () => {
-		const pkg = (await readJson<Package>('package.json')) || { name: '' };
+		const basePath = require.main?.path || '';
+		const pkg = (await readJson<Package>(
+			join(basePath, 'package.json')
+		)) || { name: '' };
 		const name = config.name || pkg.name;
 		const color = config.logColor || 'green';
 		const logPrefix = colors[color](name);
