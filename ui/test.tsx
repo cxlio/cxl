@@ -915,7 +915,7 @@ export default spec('ui', a => {
 		it.figure(
 			'Extended Appbar',
 			`<cxl-appbar extended>
-  <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+  <cxl-appbar-title extended>Appbar Title</cxl-appbar-title>
 </cxl-appbar>`
 		);
 	});
