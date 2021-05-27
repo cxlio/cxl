@@ -36,6 +36,8 @@ interface StrictStyleDefinition {
 	animation: keyof Theme['animation'];
 	animationDuration: string;
 	backgroundColor: Color;
+	backgroundSize: 'cover';
+	backgroundPosition: 'center';
 	borderBottom: Length;
 	borderLeft: Length;
 	borderRight: Length;

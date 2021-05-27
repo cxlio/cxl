@@ -1,5 +1,5 @@
 ///<amd-module name="@cxl/ui-www"/>
-import { Augment, Attribute, Component, get } from '@cxl/component';
+import { Augment, Attribute, Component, Span, get } from '@cxl/component';
 import { Svg, Path } from '@cxl/tsx-svg';
 import { dom } from '@cxl/tsx';
 import { be } from '@cxl/rx';
@@ -9,12 +9,16 @@ import {
 	render,
 	each,
 	validateValue,
+	role,
 } from '@cxl/template';
-import { on } from '@cxl/dom';
+import { on, onAction } from '@cxl/dom';
 import {
 	Appbar,
 	Application,
-	Content,
+	Backdrop,
+	Button,
+	Dialog,
+	Layout,
 	C,
 	Card,
 	IconButton,
@@ -28,9 +32,10 @@ import {
 	MenuToggle,
 	Item,
 	Tabs,
+	T,
 	Hr as CoreHr,
 } from '@cxl/ui';
-import { baseColor, css, padding, pct } from '@cxl/css';
+import { baseColor, border, css, rgba, padding, pct } from '@cxl/css';
 import { RouterTab, RouterLink } from '@cxl/ui-router';
 import { email, required } from '@cxl/validation';
 
@@ -98,13 +103,17 @@ export const Icons = {
 
 @Augment<BrandIcon>(
 	'cxl-www-icon',
+	role('img'),
 	css({
 		$: { display: 'inline-block' },
 		svg: { verticalAlign: 'middle' },
 	}),
 	$ => (
 		<$.Shadow>
-			{render(get($, 'icon'), name => Icons[name]?.() || Icons['']())}
+			{render(get($, 'icon'), name => {
+				$.setAttribute('alt', name);
+				return Icons[name]?.() || Icons['']();
+			})}
 		</$.Shadow>
 	)
 )
@@ -114,8 +123,12 @@ export class BrandIcon extends Component {
 }
 
 @Augment<BrandLink>('www-brand-link', $ => (
-	<A href={get($, 'href')}>
-		<IconButton>
+	<A focusable={false} href={get($, 'href')}>
+		<IconButton
+			$={el =>
+				get($, 'icon').tap(icon => el.setAttribute('aria-label', icon))
+			}
+		>
 			<BrandIcon icon={get($, 'icon')} />
 		</IconButton>
 	</A>
@@ -134,12 +147,16 @@ export class BrandLink extends Component {
 			<slot />
 		</a>
 	) as HTMLAnchorElement;
+	el.style.color = 'inherit';
 	host.bind(get(host, 'href').tap(src => (el.href = src)));
+	host.bind(get(host, 'focusable').tap(foc => (el.tabIndex = foc ? 0 : -1)));
 	return el;
 })
 export class A extends Component {
 	@Attribute()
 	href = '';
+	@Attribute()
+	focusable = true;
 }
 
 @Augment<Image>(
@@ -151,12 +168,20 @@ export class A extends Component {
 		const el = (<img />) as HTMLImageElement;
 		el.style.maxHeight = el.style.maxWidth = '100%';
 		host.bind(get(host, 'src').tap(src => (el.src = src)));
+		host.bind(
+			get(host, 'alt').tap(alt => {
+				if (alt !== undefined) el.setAttribute('alt', alt);
+			})
+		);
 		return el;
 	}
 )
 export class Image extends Component {
 	@Attribute()
 	src = '';
+
+	@Attribute()
+	alt?: string;
 }
 
 @Augment<AppbarMenu>(
@@ -215,8 +240,7 @@ export class AppbarItem extends Component {
 			zIndex: 5,
 		},
 		appbar: {
-			...padding(24, 48, 24, 48),
-			// boxShadow: 'none',
+			...padding(20, 24, 20, 24),
 			variables: {
 				surface: baseColor('surface'),
 				onSurface: baseColor('onSurface'),
@@ -224,6 +248,9 @@ export class AppbarItem extends Component {
 				onPrimary: baseColor('onPrimary'),
 				link: baseColor('onSurface'),
 			} as any,
+		},
+		'@small': {
+			appbar: { ...padding(20, 32, 20, 32) },
 		},
 	}),
 	$ =>
@@ -240,6 +267,23 @@ export class AppbarItem extends Component {
 )
 export class PageAppbar extends Component {}
 
+@Augment<PageAppbarLogo>(
+	'www-appbar-logo',
+	css({
+		$: { flexGrow: 1, height: 48 },
+		logo: { height: '100%' },
+	}),
+	$ => (
+		<RouterLink href="/">
+			<Image className="logo" alt="" src={get($, 'src')} />
+		</RouterLink>
+	)
+)
+export class PageAppbarLogo extends Component {
+	@Attribute()
+	src = '';
+}
+
 @Augment<PageText>('www-t')
 export class PageText extends Component {}
 
@@ -248,34 +292,54 @@ export class PageText extends Component {}
 	css({
 		$: {
 			display: 'block',
+			...padding(64, 0, 32, 0),
+		},
+		grid: {},
+		bottom: {
+			marginTop: 32,
+			backgroundColor: 'inherit',
+			display: 'block',
+			height: 32,
+		},
+		circle: {
+			display: 'block',
+			borderRadius: pct(50),
+			height: 64,
+			width: '100%',
+			position: 'absolute',
+			marginTop: 0,
 		},
 	}),
 	() => (
-		<header>
-			<SectionGrid>
-				<C sm={6}>
-					<slot />
+		<Layout center>
+			<Grid>
+				<C sm={6} vflex middle>
+					<div>
+						<slot />
+					</div>
 				</C>
-				<C sm={6}>
+				<C sm={6} vflex middle>
 					<slot name="right" />
 				</C>
-			</SectionGrid>
-		</header>
-	)
+			</Grid>
+		</Layout>
+	),
+	$ => <Span className={get($, 'bottom').map(v => `bottom ${v}`)}></Span>
 )
-export class Header extends Component {}
+export class Header extends Component {
+	@Attribute()
+	bottom: '' | 'circle' = '';
+}
 
 @Augment<Section>(
 	'www-section',
 	css({
-		$: { display: 'block', ...padding(64, 0, 64, 0) },
+		$: { display: 'block', ...padding(96, 0, 96, 0) },
 	}),
 	() => (
-		<section>
-			<Content center>
-				<slot />
-			</Content>
-		</section>
+		<Layout center>
+			<slot />
+		</Layout>
 	)
 )
 export class Section extends Component {}
@@ -301,7 +365,7 @@ export class SectionGrid extends Component {}
 @Augment<ServiceCard>(
 	'www-service-card',
 	css({
-		$: { ...padding(32), elevation: 0, backgroundColor: 'transparent' },
+		$: { elevation: 0, backgroundColor: 'transparent' },
 		$hover: { elevation: 4, backgroundColor: 'surface' },
 	})
 )
@@ -310,8 +374,12 @@ export class ServiceCard extends Card {}
 @Augment<ImageCard>(
 	'www-img-card',
 	css({
-		$: { display: 'block', position: 'relative' },
-		image: { maxWidth: pct(100) },
+		$: {
+			display: 'block',
+			position: 'relative',
+			backgroundSize: 'cover',
+			backgroundPosition: 'center',
+		},
 		hover: {
 			position: 'absolute',
 			opacity: 0,
@@ -322,14 +390,17 @@ export class ServiceCard extends Card {}
 		},
 		hover$hover: { display: 'block', opacity: 1 },
 	}),
-	$ => (
-		<>
+	$ => {
+		$.bind(
+			get($, 'src').tap(src => ($.style.backgroundImage = `url(${src})`))
+		);
+
+		return (
 			<div className="hover">
 				<slot></slot>
 			</div>
-			<Image src={get($, 'src')} className="image" />
-		</>
-	)
+		);
+	}
 )
 export class ImageCard extends Component {
 	@Attribute()
@@ -342,8 +413,8 @@ export class Hr extends CoreHr {}
 @Augment<Footer>(
 	'www-footer',
 	css({
-		$: { display: 'block' },
-		footer: {
+		$: {
+			display: 'block',
 			...padding(64, 0, 64, 0),
 			font: 'body2',
 			backgroundColor: 'surface',
@@ -356,11 +427,9 @@ export class Hr extends CoreHr {}
 		},
 	}),
 	() => (
-		<footer className="footer">
-			<Content center>
-				<slot />
-			</Content>
-		</footer>
+		<Layout center>
+			<slot />
+		</Layout>
 	)
 )
 export class Footer extends Component {}
@@ -375,51 +444,156 @@ export class Page extends Application {}
 @Augment<Theme>('www-theme')
 export class Theme extends Component {}
 
-@Augment<ContactForm>('www-form-contact', $ => {
-	function onSubmit(ev: any) {
-		if (!$.apiurl) return;
-		const body = (ev.target as Form).getFormData();
-		return fetch($.apiurl, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(body),
-		});
+@Augment<DialogPhoto>('www-dialog-photo', $ => {
+	function open() {
+		const dialog = (
+			<Dialog>
+				<C pad={16} center>
+					<Image src={get($, 'src')} />
+				</C>
+				<C pad={16} center>
+					<Button $={el => onAction(el).tap(() => dialog.remove())}>
+						Close
+					</Button>
+				</C>
+			</Dialog>
+		) as Dialog;
+
+		document.body.appendChild(dialog);
 	}
 
-	return (
-		<Form $={el => on(el, 'submit').tap(onSubmit)}>
-			<Grid>
-				<Field>
-					<Label>Name</Label>
-					<Input $={el => validateValue(el, required)} name="name" />
-				</Field>
-				<Field>
-					<Label>E-mail</Label>
-					<Input
-						$={el => validateValue(el, email, required)}
-						name="email"
-					/>
-				</Field>
-				<Field>
-					<Label>Phone</Label>
-					<Input $={el => validateValue(el, required)} name="phone" />
-				</Field>
-				<Field>
-					<Label>Message</Label>
-					<TextArea
-						$={el => validateValue(el, required)}
-						name="message"
-					></TextArea>
-				</Field>
-				<C sm={12}>
-					<SubmitButton>Send Message</SubmitButton>
-				</C>
-			</Grid>
-		</Form>
-	);
+	return <Button $={el => onAction(el).tap(open)}>View</Button>;
 })
+export class DialogPhoto extends Component {
+	@Attribute()
+	src = '';
+}
+
+@Augment(
+	'www-thank-you',
+	css({
+		svg: {
+			width: pct(40),
+			maxWidth: 180,
+			marginLeft: 'auto',
+			marginRight: 'auto',
+			color: rgba(0, 128, 0),
+			borderRadius: '100%',
+			...border(2),
+			borderColor: rgba(0, 128, 0),
+			borderStyle: 'solid',
+			...padding(32),
+		},
+	}),
+	() => (
+		<C vflex center middle>
+			<Svg className="svg" alt="" viewBox="0 0 32 32">
+				<Path
+					fill="currentColor"
+					d="M27 4l-15 15-7-7-5 5 12 12 20-20z"
+				/>
+			</Svg>
+			<T h4>Thank You!</T>
+			<T>Your submission has been received.</T>
+		</C>
+	)
+)
+export class ThankYou extends Component {}
+
+@Augment<ContactForm>(
+	'www-form-contact',
+	css({
+		$: { display: 'block', position: 'relative' },
+		visible: { display: 'block' },
+		invisible: { display: 'none' },
+		back: { backgroundColor: rgba(255, 255, 255, 0.5), elevation: 0 },
+		error: { backgroundColor: 'error', color: 'onError' },
+		grid: { rowGap: 24 },
+	}),
+	$ => {
+		const step = be<1 | 2 | 3>(1);
+		const error = be(false);
+
+		function onSubmit(ev: any) {
+			if (!$.apiurl) return;
+			const body = (ev.target as Form).getFormData();
+			error.next(false);
+			step.next(2);
+			return fetch($.apiurl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			}).then(
+				() => step.next(3),
+				() => {
+					step.next(1);
+					error.next(true);
+				}
+			);
+		}
+
+		return (
+			<Form $={el => on(el, 'submit').tap(onSubmit)}>
+				<ThankYou
+					className={step.map(s =>
+						s === 3 ? 'visible' : 'invisible'
+					)}
+				></ThankYou>
+				<Grid
+					className={step.map(s => (s === 3 ? 'invisible' : 'grid'))}
+				>
+					<C
+						sm={12}
+						pad={16}
+						className={error.map(e =>
+							e ? 'visible error' : 'invisible error'
+						)}
+					>
+						Error. Please try again.
+					</C>
+					<Field outline>
+						<Label>Name</Label>
+						<Input
+							$={el => validateValue(el, required)}
+							name="name"
+						/>
+					</Field>
+					<Field outline>
+						<Label>E-mail</Label>
+						<Input
+							$={el => validateValue(el, email, required)}
+							name="email"
+						/>
+					</Field>
+					<Field outline>
+						<Label>Phone</Label>
+						<Input
+							$={el => validateValue(el, required)}
+							name="phone"
+						/>
+					</Field>
+					<Field outline>
+						<Label>Message</Label>
+						<TextArea
+							$={el => validateValue(el, required)}
+							name="message"
+						></TextArea>
+					</Field>
+					<C sm={12}>
+						<SubmitButton>Send Message</SubmitButton>
+					</C>
+				</Grid>
+				<Backdrop
+					className={step.map(s =>
+						s === 2 ? 'visible back' : 'invisible back'
+					)}
+				/>
+			</Form>
+		);
+	}
+)
 export class ContactForm extends Component {
 	@Attribute()
 	apiurl?: string;
