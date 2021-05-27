@@ -1,4 +1,4 @@
-import { Observable, defer, merge, of, EMPTY } from '@cxl/rx';
+import { Observable, defer, merge, of, from, EMPTY } from '@cxl/rx';
 import { existsSync, readFileSync, promises } from 'fs';
 import { join } from 'path';
 import { file } from './file.js';
@@ -278,5 +278,45 @@ export function bundle(files: Record<string, string>, outFile: string) {
 				subs.complete();
 			}
 		);
+	});
+}
+
+const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
+const DEBUG_HEAD = `<meta charset="utf-8">
+<script src="/cxl/dist/tester/require-browser.js"></script>
+<script>
+	require.replace = function (path) {
+		return path.replace(
+			/^@cxl\\/(.+)/,
+			(str, p1) =>
+				\`/cxl/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
+		);
+	};
+	require('@cxl/ui');
+	require('@cxl/ui-router');
+	require('@cxl/ui-www');
+</script>
+`;
+
+interface TemplateConfig {
+	header: string;
+	debugHeader: string;
+}
+
+const DefaultTemplateConfig = {
+	header: INDEX_HEAD,
+	debugHeader: DEBUG_HEAD,
+};
+
+export function template(
+	filename: string,
+	config: Partial<TemplateConfig> = {}
+) {
+	return file(filename).switchMap(({ source }) => {
+		const cfg = { ...DefaultTemplateConfig, ...config };
+		return from([
+			{ path: 'index.html', source: `${cfg.header}\n${source}` },
+			{ path: 'debug.html', source: `${cfg.debugHeader}\n${source}` },
+		]);
 	});
 }
