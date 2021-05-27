@@ -272,9 +272,6 @@ export class FieldCounter extends Component {
 	)
 )
 export class Form extends Component {
-	@Attribute()
-	autocomplete = 'off';
-
 	elements = new Set<InputBase>();
 
 	submit() {
@@ -773,6 +770,13 @@ function contentEditable<T extends InputBase>(
 		get(host, 'disabled').raf(
 			val => (el.contentEditable = val ? 'false' : 'true')
 		),
+		on(host, 'paste').tap((e: any) => {
+			e.preventDefault();
+			const text = (e.originalEvent || e).clipboardData.getData(
+				'text/plain'
+			);
+			document.execCommand('insertText', false, text);
+		}),
 		on(el, 'input').tap(() => (host.value = el.textContent)),
 		onKeypress(el, 'enter').tap(ev =>
 			multiLine ? ev.stopPropagation() : ev.preventDefault()
@@ -796,7 +800,7 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
  */
 @Augment<TextArea>(
 	'cxl-textarea',
-	role('textarea'),
+	role('textbox'),
 	css({
 		$: {
 			display: 'block',

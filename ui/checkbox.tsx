@@ -54,6 +54,9 @@ import { css, padding } from '@cxl/css';
 			font: 'default',
 			textAlign: 'left',
 		},
+		$inline: {
+			display: 'inline-block',
+		},
 		$empty: {
 			display: 'inline-block',
 			...padding(0),

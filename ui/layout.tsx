@@ -116,7 +116,7 @@ function persistWithParameter(prefix: string) {
 		},
 		$flex: { display: 'flex' },
 		$vflex: { display: 'flex', flexDirection: 'column' },
-		$vflex$center: { justifyContent: 'center' },
+		$middle: { justifyContent: 'center' },
 		$center: { textAlign: 'center' },
 	}),
 	Slot
@@ -133,9 +133,6 @@ export class C extends Component {
 
 	@StyleAttribute()
 	grow = false;
-
-	@StyleAttribute()
-	pad16 = false;
 
 	@Attribute({
 		persistOperator: persistWithParameter('xs'),
@@ -158,6 +155,11 @@ export class C extends Component {
 	})
 	xl?: number;
 
+	@Attribute({
+		persistOperator: persistWithParameter('pad'),
+	})
+	pad?: 8 | 16 | 24 | 32;
+
 	@StyleAttribute()
 	primary = false;
 
@@ -166,6 +168,9 @@ export class C extends Component {
 
 	@StyleAttribute()
 	center = false;
+
+	@StyleAttribute()
+	middle = false;
 }
 
 /**
@@ -213,7 +218,6 @@ export class Layout extends Component {
 		},
 		container: {
 			...margin(32, 16, 32, 16),
-			//overflowX: 'hidden',
 		},
 		'@medium': {
 			container: margin(24, 32, 24, 32),

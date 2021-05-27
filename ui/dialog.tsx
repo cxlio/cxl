@@ -35,7 +35,7 @@ import { role } from '@cxl/template';
 			overflowY: 'auto',
 		},
 	}),
-	() => <slot></slot>
+	() => <slot />
 )
 export class Backdrop extends Component {}
 
@@ -69,6 +69,7 @@ export class Backdrop extends Component {}
 				translateY: pct(-50),
 				top: pct(50),
 				bottom: 'auto',
+				maxHeight: pct(85),
 				width: pct(80),
 				marginLeft: 'auto',
 				marginRight: 'auto',
