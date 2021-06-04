@@ -113,7 +113,8 @@ function Markdown(url: string, source: string, stats: Stats) {
 	};
 
 	const content = md.render(source);
-	const title = content.match(TITLE_REGEX)?.[1] || url.replace(/\.md$/, '');
+	const title =
+		source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
 	const summary = content.match(SUMMARY_REGEX)?.[1] || '';
 
 	return {
@@ -124,7 +125,7 @@ function Markdown(url: string, source: string, stats: Stats) {
 		uuid: meta.uuid || '',
 		mtime: stats.mtime.toISOString(),
 		author: meta.author || '',
-		type: meta.type || 'post',
+		type: meta.type || (meta.date ? 'post' : 'draft'),
 		tags: meta.tags || '',
 		content,
 	};
