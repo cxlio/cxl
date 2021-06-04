@@ -383,11 +383,22 @@ export class Router {
 		const current = this.state.url;
 		return !!Object.values(this.instances).find(el => {
 			const routeDef: Route<any> = (el as any)[routeSymbol];
-			return (
+			const currentArgs = this.state?.arguments;
+
+			if (
 				routeDef.path?.test(parsed.path) &&
-				current.path.startsWith(parsed.path) &&
 				(!parsed.hash || parsed.hash === current.hash)
-			);
+			) {
+				if (currentArgs) {
+					const args = routeDef.path.getArguments(parsed.path);
+
+					for (const i in args)
+						if (currentArgs[i] != args[i]) return false;
+				}
+
+				return true;
+			}
+			return false;
 		});
 	}
 }

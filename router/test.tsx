@@ -120,35 +120,56 @@ export default suite('router', test => {
 		});
 	});
 
-	test('isActiveUrl()', a => {
-		const router = new Router();
-		router.route({
-			id: 'home',
-			path: '/',
-			render: () => <a />,
-		});
-		router.route({
-			id: 'park',
-			parent: 'home',
-			path: '/park',
-			render: () => <b />,
+	test('isActiveUrl()', it => {
+		it.should('match parent routes', a => {
+			const router = new Router();
+			router.route({
+				id: 'home',
+				path: '/',
+				render: () => <a />,
+			});
+			router.route({
+				id: 'park',
+				parent: 'home',
+				path: '/park',
+				render: () => <b />,
+			});
+
+			router.route({
+				parent: 'park',
+				path: '/park/:item/details',
+				render: () => <b />,
+			});
+
+			router.go('/park');
+			a.ok(router.isActiveUrl('/'));
+			a.ok(router.isActiveUrl('/park'));
+			a.ok(router.isActiveUrl('/park/'));
+			router.go('/park/item/details');
+			a.ok(router.isActiveUrl('/'));
+			a.ok(router.isActiveUrl('/park'));
+			a.ok(!router.isActiveUrl('/park/item'));
+			a.ok(router.isActiveUrl('/park/item/details'));
+			a.ok(!router.isActiveUrl('/park/item2/details'));
+
+			router.go('/park/item2/details');
+			a.ok(!router.isActiveUrl('/park/item/details'));
 		});
 
-		router.route({
-			parent: 'park',
-			path: '/park/:item/details',
-			render: () => <b />,
-		});
+		it.should('match parameters', a => {
+			const router = new Router();
 
-		router.go('/park');
-		a.ok(router.isActiveUrl('/'));
-		a.ok(router.isActiveUrl('/park'));
-		a.ok(router.isActiveUrl('/park/'));
-		router.go('/park/item/details');
-		a.ok(router.isActiveUrl('/'));
-		a.ok(router.isActiveUrl('/park'));
-		a.ok(router.isActiveUrl('/park/item/details'));
-		a.ok(!router.isActiveUrl('/park/item2/details'));
+			router.route({
+				id: 'park',
+				path: '/park/:parkid',
+				render: () => <b />,
+			});
+
+			router.go('/park/item2');
+			a.ok(router.isActiveUrl('/park/item2'));
+			a.ok(router.isActiveUrl('/park/item2/'));
+			a.ok(!router.isActiveUrl('/park/item'));
+		});
 	});
 
 	test('replaceParameters', it => {
