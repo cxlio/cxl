@@ -8,6 +8,7 @@ import {
 	replaceParameters,
 } from '@cxl/router';
 import {
+	EMPTY,
 	Observable,
 	Reference,
 	combineLatest,
@@ -34,7 +35,7 @@ import {
 import { AppbarTitle, Item, Tab } from '@cxl/ui/navigation.js';
 import type {} from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
-import { StateStyles, each, triggerEvent } from '@cxl/template';
+import { StateStyles, each, role, triggerEvent } from '@cxl/template';
 import { css } from '@cxl/css';
 
 const router$ = new Reference<RouterState>();
@@ -102,7 +103,9 @@ export function routerStrategy(
 	return merge(
 		observable(() => strategy$.next(strategy)),
 		getUrl.tap(() => router.go(strategy.deserialize())),
-		router$.tap(state => strategy.serialize(state.url))
+		router$
+			.tap(state => strategy.serialize(state.url))
+			.catchError(() => EMPTY)
 	);
 }
 
@@ -229,6 +232,7 @@ function renderTemplate(tpl: HTMLTemplateElement, title?: string) {
 		return el;
 	},
 	css({
+		$: { display: 'contents' },
 		link: {
 			outline: 0,
 			textDecoration: 'none',
@@ -246,6 +250,7 @@ export class RouterLink extends Component {
 
 @Augment<RouterTab>(
 	'cxl-router-tab',
+	role('tab'),
 	css({
 		$: { flexGrow: 1 },
 	}),
