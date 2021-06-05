@@ -41,7 +41,28 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			tasks: [
 				file('index.html', 'index.html').catchError(() => EMPTY),
 				file('debug.html', 'debug.html').catchError(() => EMPTY),
-				file('test.html', 'test.html').catchError(() => EMPTY),
+				file('test.html', 'test.html').catchError(() =>
+					of({
+						path: 'test.html',
+						source: Buffer.from(`<!DOCTYPE html>
+<script src="../tester/require-browser.js"></script>
+<script type="module">
+	require.replace = function (path) {
+		return path.replace(
+			/^@cxl\\/(.+)/,
+			(str, p1) =>
+				\`../../../cxl/dist/$\{
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
+		);
+	};
+	const browserRunner = require('../tester/browser-runner.js').default;
+
+	const suite = require('./test.js').default;
+	browserRunner.run([suite]);
+</script>`),
+					})
+				),
 				tsconfig('tsconfig.test.json'),
 			],
 		},
