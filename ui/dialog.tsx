@@ -192,6 +192,15 @@ export class DialogConfirm extends Component {
 @Augment<Drawer>(
 	'cxl-drawer',
 	css({
+		'drawer::-webkit-scrollbar': {
+			width: 8,
+		},
+		'drawer::-webkit-scrollbar-track': {
+			backgroundColor: 'transparent',
+		},
+		'drawer::-webkit-scrollbar-thumb': {
+			backgroundColor: 'divider',
+		},
 		drawer: {
 			backgroundColor: 'surface',
 			position: 'absolute',
