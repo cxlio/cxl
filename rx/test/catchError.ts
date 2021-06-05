@@ -13,7 +13,7 @@ import {
 import { spec } from '@cxl/spec';
 
 export default spec('catchError', it => {
-	it.should('should catch error and replace with a cold Observable', a => {
+	it.should('catch error and replace with a cold Observable', a => {
 		const e1 = cold('--a--b--#       ');
 		const e2 = cold('-1-2-3-|');
 		const expected = '--a--b---1-2-3-|';
@@ -23,7 +23,7 @@ export default spec('catchError', it => {
 		expectLog(a, result, expected);
 	});
 
-	it.should('should catch error and replace it', a => {
+	it.should('catch error and replace it', a => {
 		const e1 = cold('--a--b--c--------|');
 		const subs = '^       !';
 		const expected = '--a--b--(XYZ|)';

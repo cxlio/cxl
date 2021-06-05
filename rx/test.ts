@@ -33,6 +33,7 @@ import takeSuite from './test/take.js';
 import publishLast from './test/publishLast.js';
 import finalizeSuite from './test/finalize.js';
 import zipSuite from './test/zip.js';
+import shareSuite from './test/share.js';
 
 import { suite, spec } from '@cxl/spec';
 
@@ -61,6 +62,7 @@ export default suite('rx', [
 	combineLatestSuite,
 	debounceTimeSuite,
 	reduceSuite,
+	shareSuite,
 	switchMapSuite,
 	takeSuite,
 	publishLast,
@@ -471,7 +473,7 @@ export default suite('rx', [
 			subject.error(c);
 		});
 
-		test('complete', function (a) {
+		test('complete', a => {
 			const subject = new Subject(),
 				done = a.async();
 			let c = 1;
@@ -483,6 +485,229 @@ export default suite('rx', [
 			c++;
 			subject.complete();
 			subject.complete();
+			// It should ignore following next
+			subject.subscribe(b => a.equal(b, c));
+			subject.next(c);
+		});
+
+		test('subscribe', it => {
+			it.should(
+				'handle subscribers that arrive and leave at different times, ' +
+					'subject does not complete',
+				a => {
+					const subject = new Subject<number>();
+					const results1: (number | string)[] = [];
+					const results2: (number | string)[] = [];
+					const results3: (number | string)[] = [];
+
+					subject.next(1);
+					subject.next(2);
+					subject.next(3);
+					subject.next(4);
+
+					const subscription1 = subject.subscribe(
+						function (x) {
+							results1.push(x);
+						},
+						function () {
+							results1.push('E');
+						},
+						() => {
+							results1.push('C');
+						}
+					);
+
+					subject.next(5);
+
+					const subscription2 = subject.subscribe(
+						function (x) {
+							results2.push(x);
+						},
+						function () {
+							results2.push('E');
+						},
+						() => {
+							results2.push('C');
+						}
+					);
+
+					subject.next(6);
+					subject.next(7);
+
+					subscription1.unsubscribe();
+
+					subject.next(8);
+
+					subscription2.unsubscribe();
+
+					subject.next(9);
+					subject.next(10);
+
+					const subscription3 = subject.subscribe(
+						function (x) {
+							results3.push(x);
+						},
+						function () {
+							results3.push('E');
+						},
+						() => {
+							results3.push('C');
+						}
+					);
+
+					subject.next(11);
+
+					subscription3.unsubscribe();
+
+					a.equalValues(results1, [5, 6, 7]);
+					a.equalValues(results2, [6, 7, 8]);
+					a.equalValues(results3, [11]);
+				}
+			);
+
+			it.should(
+				'handle subscribers that arrive and leave at different times, ' +
+					'subject completes',
+				a => {
+					const subject = new Subject<number>();
+					const results1: (number | string)[] = [];
+					const results2: (number | string)[] = [];
+					const results3: (number | string)[] = [];
+
+					subject.next(1);
+					subject.next(2);
+					subject.next(3);
+					subject.next(4);
+
+					const subscription1 = subject.subscribe(
+						function (x) {
+							results1.push(x);
+						},
+						function () {
+							results1.push('E');
+						},
+						() => {
+							results1.push('C');
+						}
+					);
+
+					subject.next(5);
+
+					const subscription2 = subject.subscribe(
+						x => results2.push(x),
+						() => results2.push('E'),
+						() => results2.push('C')
+					);
+
+					subject.next(6);
+					subject.next(7);
+
+					subscription1.unsubscribe();
+
+					subject.complete();
+
+					subscription2.unsubscribe();
+
+					const subscription3 = subject.subscribe(
+						x => results3.push(x),
+						() => results3.push('E'),
+						() => results3.push('C')
+					);
+
+					subscription3.unsubscribe();
+
+					a.equalValues(results1, [5, 6, 7]);
+					a.equalValues(results2, [6, 7, 'C']);
+					a.equalValues(results3, ['C']);
+				}
+			);
+			it.should(
+				'handle subscribers that arrive and leave at different times, ' +
+					'subject completes before nexting any value',
+				a => {
+					const subject = new Subject<number>();
+					const results1: (number | string)[] = [];
+					const results2: (number | string)[] = [];
+					const results3: (number | string)[] = [];
+
+					const subscription1 = subject.subscribe(
+						function (x) {
+							results1.push(x);
+						},
+						function () {
+							results1.push('E');
+						},
+						() => {
+							results1.push('C');
+						}
+					);
+
+					const subscription2 = subject.subscribe(
+						function (x) {
+							results2.push(x);
+						},
+						function () {
+							results2.push('E');
+						},
+						() => {
+							results2.push('C');
+						}
+					);
+
+					subscription1.unsubscribe();
+
+					subject.complete();
+
+					subscription2.unsubscribe();
+
+					const subscription3 = subject.subscribe(
+						function (x) {
+							results3.push(x);
+						},
+						function () {
+							results3.push('E');
+						},
+						() => {
+							results3.push('C');
+						}
+					);
+
+					subscription3.unsubscribe();
+
+					a.equalValues(results1, []);
+					a.equalValues(results2, ['C']);
+					a.equalValues(results3, ['C']);
+				}
+			);
+			it.should('not next after completed', a => {
+				const subject = new Subject<string>();
+				const results: string[] = [];
+				subject.subscribe(
+					x => results.push(x),
+					() => {
+						/*noop*/
+					},
+					() => results.push('C')
+				);
+				subject.next('a');
+				subject.complete();
+				subject.next('b');
+				a.equalValues(results, ['a', 'C']);
+			});
+
+			it.should('not next after error', a => {
+				const error = new Error('wut?');
+				const subject = new Subject<string>();
+				const results: string[] = [];
+				subject.subscribe(
+					x => results.push(x),
+					err => results.push(err)
+				);
+				subject.next('a');
+				subject.error(error);
+				subject.next('b');
+				a.equalValues(results, ['a', error]);
+			});
 		});
 	}),
 

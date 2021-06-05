@@ -190,26 +190,41 @@ export class Observable<T> {
  * A Subject is an Observable that allows values to be
  * multicasted to many Observers.
  */
-export class Subject<T> extends Observable<T> {
+export class Subject<T, ErrorT = any> extends Observable<T> {
 	protected observers = new Set<Subscriber<T>>();
 
 	protected onSubscribe(subscriber: Subscriber<T>): UnsubscribeFunction {
+		if (this.isStopped) {
+			subscriber.complete();
+			return () => undefined;
+		}
+
 		this.observers.add(subscriber);
 		return () => this.observers.delete(subscriber);
 	}
+
+	protected isStopped = false;
 
 	constructor() {
 		super((subscription: Subscriber<T>) => this.onSubscribe(subscription));
 	}
 
 	next(a: T): void {
-		this.observers.forEach(s => s.next(a));
+		if (!this.isStopped)
+			for (const s of Array.from(this.observers)) s.next(a);
 	}
-	error(e: ObservableError): void {
-		this.observers.forEach(s => s.error(e));
+	error(e: ErrorT): void {
+		if (!this.isStopped) {
+			this.isStopped = true;
+			this.observers.forEach(s => s.error(e));
+		}
 	}
 	complete(): void {
-		this.observers.forEach(s => s.complete());
+		if (!this.isStopped) {
+			this.isStopped = true;
+			Array.from(this.observers).forEach(s => s.complete());
+			this.observers.clear();
+		}
 	}
 }
 
@@ -243,9 +258,8 @@ export class BehaviorSubject<T> extends Subject<T> {
  * It buffers a set number of values and will emit those values immediately to any
  * new subscribers in addition to emitting new values to existing subscribers.
  */
-export class ReplaySubject<T, ErrorT = any> extends Subject<T> {
+export class ReplaySubject<T, ErrorT = any> extends Subject<T, ErrorT> {
 	private buffer: T[] = [];
-	private isComplete = false;
 	private hasError = false;
 	private lastError?: ErrorT;
 
@@ -253,17 +267,14 @@ export class ReplaySubject<T, ErrorT = any> extends Subject<T> {
 		super();
 	}
 
-	protected onSubscribe(subscription: Subscriber<T>) {
-		const result = super.onSubscribe(subscription);
-		this.buffer.forEach(val => subscription.next(val));
-		if (this.hasError) subscription.error(this.lastError as ErrorT);
-		else if (this.isComplete) subscription.complete();
-		return result;
-	}
+	protected onSubscribe(subscriber: Subscriber<T>) {
+		this.observers.add(subscriber);
 
-	complete() {
-		this.isComplete = true;
-		super.complete();
+		this.buffer.forEach(val => subscriber.next(val));
+		if (this.hasError) subscriber.error(this.lastError as ErrorT);
+		else if (this.isStopped) subscriber.complete();
+
+		return () => this.observers.delete(subscriber);
 	}
 
 	error(val: ErrorT) {
@@ -740,6 +751,29 @@ export function distinctUntilChanged<T>(): Operator<T, T> {
 	});
 }
 
+export function share<T>(): Operator<T, T> {
+	return (source: Observable<T>) => {
+		const subject = ref<T>();
+		let subscriptionCount = 0;
+		let sourceSubscription: Subscription | undefined;
+
+		return observable<T>(subs => {
+			if (!sourceSubscription) {
+				subscriptionCount++;
+				sourceSubscription = source.subscribe(subject);
+			}
+			const subscription = subject.subscribe(subs);
+			return () => {
+				subscription.unsubscribe();
+				if (--subscriptionCount === 0 && sourceSubscription) {
+					sourceSubscription.unsubscribe();
+					sourceSubscription = undefined;
+				}
+			};
+		});
+	};
+}
+
 /**
  * Returns an observable that shares a single subscription to the underlying sequence containing only the last notification.
  */
@@ -986,6 +1020,7 @@ export const operators: any = {
 	mergeMap,
 	publishLast,
 	reduce,
+	share,
 	switchMap,
 	take,
 	takeWhile,
@@ -1017,6 +1052,7 @@ export interface Observable<T> {
 		reduceFn: (acc: T2, val: T, i: number) => T2,
 		seed: T2
 	): Observable<T2>;
+	share(): Observable<T>;
 	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	take(howMany: number): Observable<T>;
 	takeWhile(fn: (val: T) => boolean): Observable<T>;
