@@ -46,7 +46,7 @@ export default spec('debounceTime', it => {
 
 	it.should('propagate errors', a => {
 		let fired = false;
-		throwError(true)
+		merge(of(), throwError(true))
 			.pipe(
 				debounceTime(0),
 				catchError(e => ((fired = e), of(e)))

@@ -1,5 +1,6 @@
 import { cold, expectLog } from './util';
 import {
+	be,
 	EMPTY,
 	catchError,
 	concat,
@@ -7,6 +8,8 @@ import {
 	observable,
 	of,
 	map,
+	merge,
+	take,
 	takeWhile,
 	throwError,
 } from '../index';
@@ -61,7 +64,7 @@ export default spec('catchError', it => {
 				})
 			);
 
-			throwError(new Error('Some error'))
+			merge(of(10), throwError(new Error('Some error')))
 				.pipe(
 					catchError(() => synchronousObservable),
 					takeWhile(x => x != 2) // unsubscribe at the second side-effect
@@ -71,6 +74,32 @@ export default spec('catchError', it => {
 				});
 
 			a.equalValues(sideEffects, [1, 2]);
+		}
+	);
+
+	it.should(
+		'properly handle async handled result if source is synchronous',
+		a => {
+			const done = a.async();
+			const source = observable<string>(observer => {
+				observer.error(new Error('kaboom!'));
+				observer.complete();
+			});
+
+			const sourceWithDelay = observable<string>(observer => {
+				observer.next('delayed');
+				observer.complete();
+			}).debounceTime(0);
+
+			const values: string[] = [];
+			source.pipe(catchError(() => sourceWithDelay)).subscribe({
+				next: value => values.push(value),
+				error: done,
+				complete: () => {
+					a.equalValues(values, ['delayed']);
+					done();
+				},
+			});
 		}
 	);
 
@@ -144,16 +173,16 @@ export default spec('catchError', it => {
 			}).debounceTime(0);
 
 			const values: string[] = [];
-			source.pipe(catchError(_ => sourceWithDelay)).subscribe(
-				value => values.push(value),
-				e => {
+			source.pipe(catchError(_ => sourceWithDelay)).subscribe({
+				next: value => values.push(value),
+				error: e => {
 					throw e;
 				},
-				() => {
+				complete: () => {
 					a.equalValues(values, ['delayed']);
 					done();
-				}
-			);
+				},
+			});
 		}
 	);
 
@@ -164,7 +193,7 @@ export default spec('catchError', it => {
 			const synchronousObservable = observable(subscriber => {
 				// This will check to see if the subscriber was closed on each loop
 				// when the unsubscribe hits (from the `take`), it should be closed
-				for (let i = 0; !subscriber.isUnsubscribed && i < 10; i++) {
+				for (let i = 0; !subscriber.closed && i < 10; i++) {
 					sideEffects.push(i);
 					subscriber.next(i);
 				}
@@ -180,4 +209,62 @@ export default spec('catchError', it => {
 			a.equalValues(sideEffects, [0, 1, 2]);
 		}
 	);
+
+	it.should('complete if you return Observable.empty()', a => {
+		const e1 = cold('--a--b--#');
+		const e1subs = '^       !';
+		const e2 = cold('|');
+		const e2subs = '        (^!)';
+		const expected = '--a--b--|';
+
+		const result = e1.pipe(catchError(() => e2));
+
+		expectLog(a, result, expected);
+		a.equal(e1.subscriptions, e1subs);
+		a.equal(e2.subscriptions, e2subs);
+	});
+
+	it.should(
+		'stop listening to a synchronous observable when unsubscribed',
+		a => {
+			const sideEffects: number[] = [];
+			const synchronousObservable = observable<number>(subscriber => {
+				// This will check to see if the subscriber was closed on each loop
+				// when the unsubscribe hits (from the `take`), it should be closed
+				for (let i = 0; !subscriber.closed && i < 10; i++) {
+					sideEffects.push(i);
+					subscriber.next(i);
+				}
+			});
+
+			synchronousObservable
+				.pipe(
+					catchError(() => EMPTY),
+					take(3)
+				)
+				.subscribe(() => {
+					/* noop */
+				});
+
+			a.equalValues(sideEffects, [0, 1, 2]);
+		}
+	);
+
+	it.should('unsubscribe from all observables', a => {
+		const done = a.async();
+		const obs = merge(
+			concat(of(0).debounceTime(0), throwError('Error')),
+			of(2).debounceTime(10)
+		).catchError(e => {
+			a.equal(e, 'Error');
+			return be(1);
+		});
+		let i = 0;
+		const subs = obs.subscribe(() => {
+			if (++i > 1) {
+				subs.unsubscribe();
+				done();
+			}
+		});
+	});
 });

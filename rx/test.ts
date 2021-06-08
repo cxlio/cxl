@@ -170,17 +170,16 @@ export default suite('rx', [
 			let mutatedByNext = false;
 			let mutatedByComplete = false;
 
-			source.subscribe(
-				x => {
+			source.subscribe({
+				next(x) {
 					nexted = x;
 					mutatedByNext = true;
 				},
-				undefined,
-				() => {
+				complete() {
 					completed = true;
 					mutatedByComplete = true;
-				}
-			);
+				},
+			});
 
 			a.ok(mutatedByNext);
 			a.ok(mutatedByComplete);
@@ -260,16 +259,16 @@ export default suite('rx', [
 				};
 			})
 				.pipe(tap(() => (times += 1)))
-				.subscribe(
-					function () {
+				.subscribe({
+					next() {
 						if (times === 2) {
 							subscription.unsubscribe();
 						}
 					},
-					function () {
+					error() {
 						errorCalled = true;
-					}
-				);
+					},
+				});
 		});
 
 		test('should ignore complete messages after unsubscription', a => {
@@ -294,17 +293,16 @@ export default suite('rx', [
 				};
 			})
 				.pipe(tap(() => (times += 1)))
-				.subscribe(
-					function () {
+				.subscribe({
+					next() {
 						if (times === 2) {
 							subscription.unsubscribe();
 						}
 					},
-					undefined,
-					function () {
+					complete() {
 						completeCalled = true;
-					}
-				);
+					},
+				});
 		});
 
 		test('should not be unsubscribed when other empty subscription completes', a => {
@@ -393,8 +391,6 @@ export default suite('rx', [
 				o.next(0);
 				o.next(0);
 				o.complete();
-				o.next(0);
-				o.next(0);
 			});
 			let complete,
 				times = 0;
@@ -460,13 +456,15 @@ export default suite('rx', [
 		test('error', function (a) {
 			const subject = new Subject();
 			let c = 1;
-			subject.subscribe(
-				b => a.equal(b, c),
-				() => {
+			subject.subscribe({
+				next(b) {
+					a.equal(b, c);
+				},
+				error() {
 					/* noop */
-				}
-			);
-			subject.subscribe(undefined, b => a.equal(b, c));
+				},
+			});
+			subject.subscribe({ error: b => a.equal(b, c) });
 
 			subject.next(c);
 			c++;
@@ -479,7 +477,7 @@ export default suite('rx', [
 			let c = 1;
 			subject.subscribe(b => a.equal(b, c));
 			subject.subscribe(b => a.equal(b, c));
-			subject.subscribe(undefined, undefined, done);
+			subject.subscribe({ complete: done });
 
 			subject.next(c);
 			c++;
@@ -505,31 +503,31 @@ export default suite('rx', [
 					subject.next(3);
 					subject.next(4);
 
-					const subscription1 = subject.subscribe(
-						function (x) {
+					const subscription1 = subject.subscribe({
+						next(x) {
 							results1.push(x);
 						},
-						function () {
+						error() {
 							results1.push('E');
 						},
-						() => {
+						complete() {
 							results1.push('C');
-						}
-					);
+						},
+					});
 
 					subject.next(5);
 
-					const subscription2 = subject.subscribe(
-						function (x) {
+					const subscription2 = subject.subscribe({
+						next(x) {
 							results2.push(x);
 						},
-						function () {
+						error() {
 							results2.push('E');
 						},
-						() => {
+						complete() {
 							results2.push('C');
-						}
-					);
+						},
+					});
 
 					subject.next(6);
 					subject.next(7);
@@ -543,17 +541,17 @@ export default suite('rx', [
 					subject.next(9);
 					subject.next(10);
 
-					const subscription3 = subject.subscribe(
-						function (x) {
+					const subscription3 = subject.subscribe({
+						next(x) {
 							results3.push(x);
 						},
-						function () {
+						error() {
 							results3.push('E');
 						},
-						() => {
+						complete() {
 							results3.push('C');
-						}
-					);
+						},
+					});
 
 					subject.next(11);
 
@@ -579,25 +577,25 @@ export default suite('rx', [
 					subject.next(3);
 					subject.next(4);
 
-					const subscription1 = subject.subscribe(
-						function (x) {
+					const subscription1 = subject.subscribe({
+						next(x) {
 							results1.push(x);
 						},
-						function () {
+						error() {
 							results1.push('E');
 						},
-						() => {
+						complete() {
 							results1.push('C');
-						}
-					);
+						},
+					});
 
 					subject.next(5);
 
-					const subscription2 = subject.subscribe(
-						x => results2.push(x),
-						() => results2.push('E'),
-						() => results2.push('C')
-					);
+					const subscription2 = subject.subscribe({
+						next: x => results2.push(x),
+						error: () => results2.push('E'),
+						complete: () => results2.push('C'),
+					});
 
 					subject.next(6);
 					subject.next(7);
@@ -608,11 +606,11 @@ export default suite('rx', [
 
 					subscription2.unsubscribe();
 
-					const subscription3 = subject.subscribe(
-						x => results3.push(x),
-						() => results3.push('E'),
-						() => results3.push('C')
-					);
+					const subscription3 = subject.subscribe({
+						next: x => results3.push(x),
+						error: () => results3.push('E'),
+						complete: () => results3.push('C'),
+					});
 
 					subscription3.unsubscribe();
 
@@ -630,29 +628,29 @@ export default suite('rx', [
 					const results2: (number | string)[] = [];
 					const results3: (number | string)[] = [];
 
-					const subscription1 = subject.subscribe(
-						function (x) {
+					const subscription1 = subject.subscribe({
+						next(x) {
 							results1.push(x);
 						},
-						function () {
+						error() {
 							results1.push('E');
 						},
-						() => {
+						complete() {
 							results1.push('C');
-						}
-					);
+						},
+					});
 
-					const subscription2 = subject.subscribe(
-						function (x) {
+					const subscription2 = subject.subscribe({
+						next(x) {
 							results2.push(x);
 						},
-						function () {
+						error() {
 							results2.push('E');
 						},
-						() => {
+						complete() {
 							results2.push('C');
-						}
-					);
+						},
+					});
 
 					subscription1.unsubscribe();
 
@@ -660,17 +658,17 @@ export default suite('rx', [
 
 					subscription2.unsubscribe();
 
-					const subscription3 = subject.subscribe(
-						function (x) {
+					const subscription3 = subject.subscribe({
+						next(x) {
 							results3.push(x);
 						},
-						function () {
+						error() {
 							results3.push('E');
 						},
-						() => {
+						complete() {
 							results3.push('C');
-						}
-					);
+						},
+					});
 
 					subscription3.unsubscribe();
 
@@ -682,13 +680,13 @@ export default suite('rx', [
 			it.should('not next after completed', a => {
 				const subject = new Subject<string>();
 				const results: string[] = [];
-				subject.subscribe(
-					x => results.push(x),
-					() => {
+				subject.subscribe({
+					next: x => results.push(x),
+					error: () => {
 						/*noop*/
 					},
-					() => results.push('C')
-				);
+					complete: () => results.push('C'),
+				});
 				subject.next('a');
 				subject.complete();
 				subject.next('b');
@@ -699,10 +697,10 @@ export default suite('rx', [
 				const error = new Error('wut?');
 				const subject = new Subject<string>();
 				const results: string[] = [];
-				subject.subscribe(
-					x => results.push(x),
-					err => results.push(err)
-				);
+				subject.subscribe({
+					next: x => results.push(x),
+					error: err => results.push(err),
+				});
 				subject.next('a');
 				subject.error(error);
 				subject.next('b');
@@ -758,7 +756,21 @@ export default suite('rx', [
 	}),
 
 	spec('Subscriber', it => {
-		it.should('ignore next messages after unsubscription', a => {
+		it.should('unsubscribe from synchronous parent after complete', a => {
+			const done = a.async();
+			of(1, 2, 3, 4)
+				.tap(val => {
+					if (val === 4) throw new Error('should not fire 4');
+				})
+				.takeWhile(val => val !== 3)
+				.subscribe(val => {
+					if (val > 1) {
+						a.equal(val, 2);
+						done();
+					}
+				});
+		});
+		/*it.should('ignore next messages after unsubscription', a => {
 			let times = 0;
 
 			const sub = new Subscriber({
@@ -819,13 +831,13 @@ export default suite('rx', [
 
 			a.equal(times, 2);
 			a.ok(!completeCalled);
-		});
+		});*/
 
 		it.should(
 			'not be closed when other subscriber with same observer instance completes',
 			a => {
 				const observer = {
-					next: function () {
+					next() {
 						/*noop*/
 					},
 				};
@@ -835,8 +847,8 @@ export default suite('rx', [
 
 				sub2.complete();
 
-				a.ok(!sub1.isUnsubscribed);
-				a.ok(sub2.isUnsubscribed);
+				a.ok(!sub1.closed);
+				a.ok(sub2.closed);
 			}
 		);
 
@@ -906,20 +918,20 @@ export default suite('rx', [
 			subject.next(1);
 			subject.next(2);
 			subject.next(3);
-			subject.subscribe(
-				(x: number) => {
+			subject.subscribe({
+				next(x: number) {
 					a.equal(x, expects[i++]);
 					if (i === 3) {
 						subject.complete();
 					}
 				},
-				() => {
+				error() {
 					throw new Error('should not be called');
 				},
-				() => {
+				complete() {
 					done();
-				}
-			);
+				},
+			});
 		});
 
 		a.should('replay values and complete', a => {
@@ -931,13 +943,12 @@ export default suite('rx', [
 			subject.next(2);
 			subject.next(3);
 			subject.complete();
-			subject.subscribe(
-				(x: number) => {
+			subject.subscribe({
+				next: (x: number) => {
 					a.equal(x, expects[i++]);
 				},
-				undefined,
-				done
-			);
+				complete: done,
+			});
 		});
 
 		a.should('replay values and error', a => {
@@ -949,15 +960,15 @@ export default suite('rx', [
 			subject.next(2);
 			subject.next(3);
 			subject.error('fooey');
-			subject.subscribe(
-				(x: number) => {
+			subject.subscribe({
+				next: (x: number) => {
 					a.equal(x, expects[i++]);
 				},
-				(err: any) => {
+				error: (err: any) => {
 					a.equal(err, 'fooey');
 					done();
-				}
-			);
+				},
+			});
 		});
 
 		a.should('only replay values within its buffer size', a => {
@@ -968,20 +979,20 @@ export default suite('rx', [
 			subject.next(1);
 			subject.next(2);
 			subject.next(3);
-			subject.subscribe(
-				(x: number) => {
+			subject.subscribe({
+				next: (x: number) => {
 					a.equal(x, expects[i++]);
 					if (i === 2) {
 						subject.complete();
 					}
 				},
-				() => {
+				error: () => {
 					throw new Error('should not be called');
 				},
-				() => {
+				complete() {
 					done();
-				}
-			);
+				},
+			});
 		});
 	}),
 
