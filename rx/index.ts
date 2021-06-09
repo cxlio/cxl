@@ -40,14 +40,16 @@ export interface Subscription {
 
 export class Subscriber<T> {
 	private onUnsubscribe: UnsubscribeFunction | void;
-
+	private teardown?: () => void;
 	closed = false;
 
 	constructor(
 		private observer: Observer<T>,
-		subscribe?: SubscribeFunction<T>
+		subscribe?: SubscribeFunction<T>,
+		fwd?: (subscriber: Subscription) => void
 	) {
 		try {
+			if (fwd) fwd(this);
 			if (subscribe) this.onUnsubscribe = subscribe(this);
 			if (this.closed && this.onUnsubscribe) this.onUnsubscribe();
 		} catch (e) {
@@ -55,10 +57,17 @@ export class Subscriber<T> {
 		}
 	}
 
+	setTeardown(teardown: () => void) {
+		if (this.teardown) throw new Error('teardown method already set');
+		this.teardown = teardown;
+	}
+
 	next(val: T) {
 		const subscriber = this.observer;
 
-		if (this.closed) this.error(new Error('Subscriber already closed'));
+		if (this.closed) {
+			return console.error('Subscriber already closed');
+		}
 
 		try {
 			if (subscriber.next) subscriber.next(val);
@@ -95,6 +104,11 @@ export class Subscriber<T> {
 	unsubscribe() {
 		if (!this.closed) {
 			this.closed = true;
+			const teardown = this.teardown;
+			if (teardown) {
+				this.teardown = undefined;
+				teardown();
+			}
 			if (this.onUnsubscribe) this.onUnsubscribe();
 		}
 	}
@@ -137,11 +151,8 @@ export class Observable<T> {
 	[observableSymbol]() {
 		return this;
 	}
-	//protected __subscribe?: SubscribeFunction<T>;
 
-	constructor(protected __subscribe: SubscribeFunction<T>) {
-		//if (subscribe) this.__subscribe = subscribe;
-	}
+	constructor(protected __subscribe: SubscribeFunction<T>) {}
 
 	then<E, R>(resolve: (val: T) => R, reject?: (e: E) => R): Promise<R> {
 		return toPromise(this).then(resolve, reject);
@@ -178,9 +189,12 @@ export class Observable<T> {
 	/**
 	 * Invokes an execution of an Observable and registers Observer handlers for notifications it will emit.
 	 */
-	subscribe(next?: NextObserver<T>): Subscription {
+	subscribe(
+		next?: NextObserver<T>,
+		fwd?: (subs: Subscription) => void
+	): Subscription {
 		const observer = !next || typeof next === 'function' ? { next } : next;
-		return new Subscriber<T>(observer, this.__subscribe);
+		return new Subscriber<T>(observer, this.__subscribe, fwd);
 	}
 }
 
@@ -322,23 +336,26 @@ export function concat<R extends Observable<any>[]>(
 	...observables: R
 ): R extends (infer U)[] ? Observable<Merge<U>> : never {
 	return new Observable(subscriber => {
-		let subscription: Subscription;
 		let index = 0;
+		let lastSubscription: Subscription | undefined;
 
 		function onComplete() {
 			const next = observables[index++];
-			if (next)
-				subscription = next.subscribe({
-					next: subscriber.next.bind(subscriber),
-					error: subscriber.error.bind(subscriber),
-					complete: onComplete,
-				});
-			else subscriber.complete();
+			if (next && !subscriber.closed) {
+				if (lastSubscription) lastSubscription.unsubscribe();
+				next.subscribe(
+					{
+						next: subscriber.next.bind(subscriber),
+						error: subscriber.error.bind(subscriber),
+						complete: onComplete,
+					},
+					subscription => (lastSubscription = subscription)
+				);
+			} else subscriber.complete();
 		}
 
 		onComplete();
-
-		return () => subscription?.unsubscribe();
+		return () => lastSubscription?.unsubscribe();
 	}) as any;
 }
 
@@ -358,7 +375,7 @@ export function isInterop<T>(obs: any): obs is InteropObservable<T> {
 
 export function fromArray<T>(input: Array<T>): Observable<T> {
 	return new Observable<T>(subs => {
-		for (const item of input) subs.next(item);
+		for (const item of input) if (!subs.closed) subs.next(item);
 		subs.complete();
 	});
 }
@@ -367,7 +384,7 @@ export function fromPromise<T>(input: Promise<T>): Observable<T> {
 	return new Observable<T>(subs => {
 		input
 			.then(result => {
-				subs.next(result);
+				if (!subs.closed) subs.next(result);
 				subs.complete();
 			})
 			.catch(err => subs.error(err));
@@ -413,16 +430,19 @@ export function operatorNext<T, T2 = T>(
 ) {
 	return (source: Observable<T>) =>
 		new Observable<T2>(subscriber => {
-			const subscription = source.subscribe({
-				next: fn(subscriber),
-				error: subscriber.error.bind(subscriber),
-				complete: subscriber.complete.bind(subscriber),
-			});
-
-			return () => {
+			let subscription: Subscription;
+			subscriber.setTeardown(() => {
 				unsubscribe?.();
 				subscription.unsubscribe();
-			};
+			});
+			source.subscribe(
+				{
+					next: fn(subscriber),
+					error: subscriber.error.bind(subscriber),
+					complete: subscriber.complete.bind(subscriber),
+				},
+				inner => (subscription = inner)
+			);
 		});
 }
 
@@ -430,21 +450,24 @@ export function operator<T, T2 = T>(
 	fn: (
 		subs: Subscriber<T2>,
 		source: Observable<T>
-	) => Observer<T> & { unsubscribe?: UnsubscribeFunction }
+	) => Observer<T> & {
+		next: NextFunction<T>;
+		unsubscribe?: UnsubscribeFunction;
+	}
 ): Operator<T, T2> {
 	return (source: Observable<T>) =>
 		new Observable<T2>(subscriber => {
+			let subscription: Subscription;
 			const next = fn(subscriber, source);
+			subscriber.setTeardown(() => {
+				next.unsubscribe?.();
+				subscription.unsubscribe();
+			});
 			if (!next.error) next.error = subscriber.error.bind(subscriber);
 			if (!next.complete)
 				next.complete = subscriber.complete.bind(subscriber);
 
-			const subscription = source.subscribe(next);
-
-			return () => {
-				next.unsubscribe?.();
-				subscription.unsubscribe.bind(subscription);
-			};
+			source.subscribe(next, inner => (subscription = inner));
 		});
 }
 
@@ -542,27 +565,32 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 				if (completed) subscriber.complete();
 			};
 
-			const sourceSubs = source.subscribe({
-				next(val: T) {
-					cleanUp();
-					const newObservable = project(val);
-					lastSubscription = newObservable.subscribe({
-						next: subscriber.next.bind(subscriber),
-						error: subscriber.error.bind(subscriber),
-						complete: cleanUp,
-					});
+			source.subscribe(
+				{
+					next(val: T) {
+						cleanUp();
+						const newObservable = project(val);
+						newObservable.subscribe(
+							{
+								next: subscriber.next.bind(subscriber),
+								error: subscriber.error.bind(subscriber),
+								complete: cleanUp,
+							},
+							subscription => (lastSubscription = subscription)
+						);
+					},
+					error: subscriber.error.bind(subscriber),
+					complete() {
+						completed = true;
+						if (!lastSubscription) subscriber.complete();
+					},
 				},
-				error: subscriber.error.bind(subscriber),
-				complete() {
-					completed = true;
-					if (!lastSubscription) subscriber.complete();
-				},
-			});
-
-			return () => {
-				cleanUp();
-				sourceSubs.unsubscribe();
-			};
+				sourceSubs =>
+					subscriber.setTeardown(() => {
+						cleanUp();
+						sourceSubs.unsubscribe();
+					})
+			);
 		});
 }
 
@@ -662,8 +690,8 @@ export function filter<T>(fn: (val: T) => boolean): Operator<T, T> {
  */
 export function take<T>(howMany: number) {
 	return operatorNext((subs: Subscriber<T>) => (val: T) => {
-		if (howMany-- > 0) subs.next(val);
-		if (howMany <= 0) subs.complete();
+		if (howMany-- > 0 && !subs.closed) subs.next(val);
+		if (howMany <= 0 || subs.closed) subs.complete();
 	});
 }
 
@@ -709,28 +737,28 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
 export function catchError<T, O extends T | never>(
 	selector: (err: any, source: Observable<T>) => Observable<O> | void
 ): Operator<T, O> {
-	return (source: Observable<T>) =>
-		new Observable<O>(subscriber => {
-			let retrySubs: Subscription | undefined;
-			const observer = {
-				next: subscriber.next.bind(subscriber),
-				complete: subscriber.complete.bind(subscriber),
-				error(err: any) {
-					try {
-						if (subscriber.closed) return;
-						const result = selector(err, source);
-						if (result) {
-							retrySubs?.unsubscribe();
-							retrySubs = result.subscribe(observer);
-						}
-					} catch (err2) {
-						return subscriber.error(err2);
+	return operator<T, O>((subscriber, source) => {
+		let retrySubs: Subscription | undefined;
+		const observer = {
+			next: subscriber.next.bind(subscriber) as NextFunction<T>,
+			error(err: any) {
+				try {
+					if (subscriber.closed) return;
+					const result = selector(err, source);
+					if (result) {
+						retrySubs?.unsubscribe();
+						result.subscribe(observer, subs => (retrySubs = subs));
 					}
-				},
-			};
-			retrySubs = source.subscribe(observer as Observer<T>);
-			return () => retrySubs?.unsubscribe();
-		});
+				} catch (err2) {
+					return subscriber.error(err2);
+				}
+			},
+			unsubscribe() {
+				retrySubs?.unsubscribe();
+			},
+		};
+		return observer;
+	});
 }
 
 const initialDistinct = {};
@@ -821,15 +849,19 @@ export function merge<R extends Observable<any>[]>(
 
 	return new Observable(subs => {
 		let refCount = observables.length;
-		const subscriptions = observables.map(o =>
-			o.subscribe({
-				next: subs.next.bind(subs),
-				error: subs.error.bind(subs),
-				complete() {
-					if (refCount-- === 1) subs.complete();
-				},
-			})
-		);
+		const subscriptions: Subscription[] = [];
+		for (const o of observables)
+			if (!subs.closed)
+				o.subscribe(
+					{
+						next: subs.next.bind(subs),
+						error: subs.error.bind(subs),
+						complete() {
+							if (refCount-- === 1) subs.complete();
+						},
+					},
+					subscription => subscriptions.push(subscription)
+				);
 
 		return () => subscriptions.forEach(s => s.unsubscribe());
 	}) as any;
