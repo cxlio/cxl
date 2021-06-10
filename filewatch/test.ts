@@ -1,4 +1,4 @@
-import { suite } from '@cxl/spec';
+import { spec } from '@cxl/spec';
 import { watch } from './index.js';
 import { writeFileSync, unlinkSync, mkdirSync, rmdirSync } from 'fs';
 import { resolve } from 'path';
@@ -13,7 +13,9 @@ function mkdir(dir: string) {
 	return result;
 }
 
-export default suite('filewatch', test => {
+export default spec('filewatch', suite => {
+	const test = suite.test.bind(suite);
+
 	test('watch file', a => {
 		const dir = mkdir(`test-${a.id}`);
 		const id = `${dir}/file-${a.id}`;
@@ -41,7 +43,6 @@ export default suite('filewatch', test => {
 				a.equal(ev.type, 'remove');
 				subs.unsubscribe();
 				done();
-				unlinkSync(id);
 				rmdirSync(dir);
 			}
 			eventNumber++;
