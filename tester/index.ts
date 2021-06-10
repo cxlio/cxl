@@ -15,6 +15,7 @@ export interface TestRunner {
 	node: boolean;
 	firefox: boolean;
 	log: Logger;
+	inspect: boolean;
 }
 
 const parameters: Parameter[] = [
@@ -27,6 +28,7 @@ const parameters: Parameter[] = [
 	{ name: 'baselinePath', type: 'string', help: 'Baseline Path' },
 	{ name: 'updateBaselines' },
 	{ name: 'ignoreCoverage', help: 'Disable coverage report.' },
+	{ name: 'inspect', help: 'Enable node debugger' },
 ];
 
 program({}, async ({ log }) => {
@@ -41,6 +43,7 @@ program({}, async ({ log }) => {
 		log,
 		...args,
 	};
+
 	const report = await (args.node ? runNode(config) : runPuppeteer(config));
 
 	if (report) {
@@ -54,29 +57,3 @@ program({}, async ({ log }) => {
 		log('Tests failed.');
 	}
 })();
-
-/*export class TestRunner extends Application {
-	version = '0.0.1';
-	name = '@cxl/tester';
-	entryFile = './test.js';
-	baselinePath?: string;
-	updateBaselines = false;
-
-	ignoreCoverage = false;
-	amd = false;
-	node = false;
-	firefox = false;
-
-	setup() {
-		this.parameters.register(
-
-		);
-	}
-
-	async run() {
-
-	}
-}
-
-const app = new TestRunner();
-app.start().then(() => process.exit());*/

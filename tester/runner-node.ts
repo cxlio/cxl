@@ -38,9 +38,18 @@ export default async function runNode(app: TestRunner) {
 	app.log(`Node ${process.version}`);
 	const suitePath = resolve(entryFile);
 	app.log(`Suite: ${suitePath}`);
+
+	if (app.inspect) {
+		inspector.open();
+		console.log(`Waiting for debugger (${inspector.url()})`);
+		inspector.waitForDebugger();
+	}
+
 	session.connect();
 
 	let result!: Test;
+
+	require('source-map-support').install();
 
 	if (app.ignoreCoverage) {
 		const suite = await runSuite(suitePath);
