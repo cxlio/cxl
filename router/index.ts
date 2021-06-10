@@ -211,7 +211,7 @@ export const QueryStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		if (url !== sys.history.state.url)
+		if (url !== sys.history.state?.url)
 			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
@@ -232,7 +232,7 @@ export const PathStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		if (url !== sys.history.state.url)
+		if (url !== sys.history.state?.url)
 			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
