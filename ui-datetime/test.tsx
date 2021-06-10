@@ -117,7 +117,7 @@ export default spec('ui-datetime', s => {
 			a.equal(el.value?.getDate(), new Date('3/14/2021').getDate());
 		});
 
-		it.figure('Datepicker', <Datepicker />);
+		it.figure('Datepicker', <Datepicker value={new Date(1984, 8, 6)} />);
 	});
 
 	s.test('DatepickerToggle', it => {

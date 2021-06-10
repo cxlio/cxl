@@ -69,9 +69,7 @@ export default spec('catchError', it => {
 					catchError(() => synchronousObservable),
 					takeWhile(x => x != 2) // unsubscribe at the second side-effect
 				)
-				.subscribe(() => {
-					/* noop */
-				});
+				.subscribe();
 
 			a.equalValues(sideEffects, [1, 2]);
 		}
@@ -108,11 +106,7 @@ export default spec('catchError', it => {
 			'(caught) argument',
 		a => {
 			const e1 = cold('--a--b--c--------|       ');
-			/*const subs = [
-        '               ^-------!                ',
-        '              --------^-------!         ',
-        '              ----------------^-------! '
-      ];*/
+			const subs = '^       (^!)       (!^)       !';
 			const expected = '--a--b----a--b----a--b--#';
 
 			let retries = 0;
@@ -132,7 +126,7 @@ export default spec('catchError', it => {
 			);
 
 			expectLog(a, result, expected);
-			//	a.equal(e1.subscriptions, subs);
+			a.equal(e1.subscriptions, subs);
 		}
 	);
 

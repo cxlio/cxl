@@ -52,27 +52,31 @@ function logOperator() {
 				subscriber.next(log);
 				subscriber.complete();
 			});
-			const subscription = source.subscribe({
-				next(val) {
-					emit(val);
+			source.subscribe(
+				{
+					next(val) {
+						emit(val);
+					},
+					error() {
+						emit('#');
+						flush();
+						subscriber.next(log);
+						subscriber.complete();
+					},
+					complete() {
+						emit('|');
+						flush();
+						subscriber.next(log);
+						subscriber.complete();
+					},
 				},
-				error() {
-					emit('#');
-					flush();
-					subscriber.next(log);
-					subscriber.complete();
-				},
-				complete() {
-					emit('|');
-					flush();
-					subscriber.next(log);
-					subscriber.complete();
-				},
-			});
-			return () => {
-				eofSub.unsubscribe();
-				subscription.unsubscribe();
-			};
+				subscription => {
+					subscriber.setTeardown(() => {
+						eofSub.unsubscribe();
+						subscription.unsubscribe();
+					});
+				}
+			);
 		});
 }
 

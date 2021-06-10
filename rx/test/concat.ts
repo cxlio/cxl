@@ -25,7 +25,7 @@ export default spec('concat', it => {
 
 	it.should('concat the same cold observable multiple times', a => {
 		const inner = cold('--i-j-k-l-|');
-		const innersubs = '^         (^!)         (^!)         (^!)         !';
+		const innersubs = '^         (!^)         (!^)         (!^)         !';
 		const expected = '--i-j-k-l---i-j-k-l---i-j-k-l---i-j-k-l-|';
 
 		const result = concat(inner, inner, inner, inner);
@@ -58,6 +58,21 @@ export default spec('concat', it => {
 			expectLog(a, concat(e1, e2), expected);
 			a.equal(e1.subscriptions, e1subs);
 			a.equal(e2.subscriptions, e2subs);
+		}
+	);
+
+	it.should(
+		'concat the same cold observable multiple times, but the result is unsubscribed early',
+		a => {
+			const innersubs = '^         (!^)   !';
+			const inner = cold('--i-j-k-l-|');
+			// const unsub = '---------------!';
+			//const expected = '--i-j-k-l---i-j-';
+			const expected = '--i-j-k-l---i-(j|)';
+			const result = concat(inner, inner, inner, inner);
+
+			expectLog(a, result.take(6), expected);
+			a.equal(inner.subscriptions, innersubs);
 		}
 	);
 });
