@@ -1,5 +1,5 @@
 import { Observable, ListEvent, observable, merge } from '@cxl/rx';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/database';
 
 export type UID = string;
@@ -13,7 +13,9 @@ export class Reference<T> extends Observable<T> {
 			const onValue = (snap: firebase.database.DataSnapshot) =>
 				subs.next(snap.val());
 			ref$.on('value', onValue);
-			return () => ref$.off('value', onValue);
+			return () => {
+				ref$.off('value', onValue);
+			};
 		});
 		this.path = key ? `${dir}/${key}` : dir;
 	}

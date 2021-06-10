@@ -9,7 +9,7 @@
 		"test": "npm run build && cd ../dist/db && node ../tester --node"
 	},
 	"dependencies": {
-		"firebase": "^7.24.0",
+		"firebase": "^8.6.5",
 		"@cxl/rx": "~0.2.0"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
