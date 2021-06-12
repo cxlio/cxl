@@ -331,7 +331,7 @@ function operation<T>(fn: OperationFunction<T>): Operation {
 	);
 }*/
 
-function log(prefix: string, msg: LogMessage) {
+export function log(prefix: string, msg: LogMessage) {
 	//, op?: OperationFunction<any>) {
 	if (msg instanceof Error) logError(prefix, msg);
 	// else if (op) return logOperation(prefix, msg, operation(op));
