@@ -17,6 +17,6 @@
 		"../drag/index.ts",
 		"../router/index.ts"
 	],
-	"exclude": ["test.tsx"],
+	"exclude": ["test.tsx", "theme-dark.tsx"],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

@@ -7,7 +7,7 @@ import {
 	StyleAttribute,
 	get,
 } from '@cxl/component';
-import { on, onAction, onLoad, trigger } from '@cxl/dom';
+import { on, onAction, onChildrenMutation, onLoad, trigger } from '@cxl/dom';
 import {
 	StateStyles,
 	focusable,
@@ -81,6 +81,10 @@ import { Drawer } from './dialog.js';
 			paddingBottom: 8,
 			height: 128,
 		},
+		'a, ::slotted(cxl-appbar-title)': {
+			marginBottom: 12,
+			alignSelf: 'flex-end',
+		},
 		$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 		'@xlarge': {
 			flex$center: {
@@ -111,11 +115,11 @@ import { Drawer } from './dialog.js';
 	}),
 	portal('cxl-appbar'),
 	$ =>
-		get($, 'contextual').tap(val =>
-			$.querySelectorAll<AppbarContextual>(
-				'cxl-appbar-contextual'
-			).forEach(el => (el.visible = el.name === val))
-		),
+		merge(onChildrenMutation($), get($, 'contextual')).raf(() => {
+			for (const el of $.children)
+				if (el instanceof AppbarContextual)
+					el.visible = el.name === $.contextual;
+		}),
 	host => (
 		<>
 			<div className="flex">
@@ -154,9 +158,21 @@ export class Appbar extends Component {
 	@StyleAttribute()
 	extended = false;
 
+	/**
+	 * Centers Appbar in large screens
+	 */
 	@StyleAttribute()
 	center = false;
 
+	/**
+	 * Set or get the active contextual menu.
+	 *
+	 * @demo
+	 * <cxl-appbar contextual="test">
+	 * <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+	 * <cxl-appbar-contextual name="test">Contextual Appbar</cxl-appbar-contextual>
+	 * </cxl-appbar>
+	 */
 	@StyleAttribute()
 	contextual?: string;
 }

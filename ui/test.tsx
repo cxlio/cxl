@@ -915,8 +915,17 @@ export default spec('ui', a => {
 		it.figure(
 			'Extended Appbar',
 			`<cxl-appbar extended>
-  <cxl-appbar-title extended>Appbar Title</cxl-appbar-title>
+  <cxl-appbar-title>Appbar Title</cxl-appbar-title>
 </cxl-appbar>`
+		);
+
+		it.figure(
+			'Appbar Contextual',
+			`
+	 <cxl-appbar contextual="test">
+	 <cxl-appbar-contextual name="test">Contextual Appbar</cxl-appbar-contextual>
+	 </cxl-appbar>
+		`
 		);
 	});
 
