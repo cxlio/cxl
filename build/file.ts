@@ -43,13 +43,12 @@ export function basename(replace?: string) {
 	);
 }
 
-/*export function prepend(str: string) {
-	return tap((val: Output) => (val.source = str + val.source));
-}*/
-
-export function concatFile(outName: string) {
+export function concatFile(outName: string, separator = '\n') {
 	return pipe(
-		reduce<Output, string>((out, src) => out + src.source, ''),
+		reduce<Output, string>(
+			(out, src) => `${out}${separator}${src.source}`,
+			''
+		),
 		map(source => ({ path: outName, source }))
 	);
 }
