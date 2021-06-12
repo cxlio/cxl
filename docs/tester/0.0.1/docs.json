@@ -16,7 +16,7 @@
             "line": 6,
             "ch": 42
           },
-          "kind": 8,
+          "kind": 4,
           "name": "TestRunner",
           "flags": 1,
           "id": 1,
@@ -25,13 +25,12 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 8,
-                "ch": 45
+                "ch": 29
               },
               "kind": 10,
-              "name": "version",
+              "name": "entryFile",
               "flags": 4,
               "id": 2,
-              "value": "'0.0.1'",
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -45,12 +44,11 @@
                 "ch": 19
               },
               "kind": 10,
-              "name": "name",
+              "name": "updateBaselines",
               "flags": 4,
               "id": 3,
-              "value": "'@cxl/tester'",
               "type": {
-                "name": "string",
+                "name": "boolean",
                 "kind": 32,
                 "flags": 0
               }
@@ -59,15 +57,14 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 10,
-                "ch": 22
+                "ch": 26
               },
               "kind": 10,
-              "name": "entryFile",
+              "name": "ignoreCoverage",
               "flags": 4,
               "id": 4,
-              "value": "'./test.js'",
               "type": {
-                "name": "string",
+                "name": "boolean",
                 "kind": 32,
                 "flags": 0
               }
@@ -92,13 +89,12 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 12,
-                "ch": 23
+                "ch": 22
               },
               "kind": 10,
-              "name": "updateBaselines",
+              "name": "amd",
               "flags": 4,
               "id": 6,
-              "value": "false",
               "type": {
                 "name": "boolean",
                 "kind": 32,
@@ -109,13 +105,28 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 13,
-                "ch": 25
+                "ch": 14
               },
               "kind": 10,
-              "name": "ignoreCoverage",
+              "name": "node",
               "flags": 4,
               "id": 7,
-              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 14,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "firefox",
+              "flags": 4,
+              "id": 8,
               "type": {
                 "name": "boolean",
                 "kind": 32,
@@ -126,17 +137,15 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 15,
-                "ch": 24
+                "ch": 18
               },
               "kind": 10,
-              "name": "amd",
+              "name": "log",
               "flags": 4,
-              "id": 8,
-              "value": "false",
+              "id": 9,
               "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
+                "name": "Logger",
+                "kind": 6
               }
             },
             {
@@ -146,102 +155,42 @@
                 "ch": 13
               },
               "kind": 10,
-              "name": "node",
-              "flags": 4,
-              "id": 9,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 17,
-                "ch": 14
-              },
-              "kind": 10,
-              "name": "firefox",
+              "name": "inspect",
               "flags": 4,
               "id": 10,
-              "value": "false",
               "type": {
                 "name": "boolean",
                 "kind": 32,
                 "flags": 0
               }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 18,
-                "ch": 17
-              },
-              "kind": 11,
-              "name": "setup",
-              "flags": 4,
-              "id": 11,
-              "parameters": [],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 32,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "run",
-              "flags": 260,
-              "id": 12,
-              "parameters": [],
-              "type": {
-                "name": "Promise",
-                "kind": 6,
-                "typeParameters": [
-                  {
-                    "name": "void",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                ]
-              }
             }
-          ],
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "name": "Application",
-                "kind": 6
-              }
-            ]
-          }
+          ]
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 46,
+            "line": 20,
             "ch": 5
           },
           "kind": 31,
-          "name": "app",
+          "name": "parameters",
           "flags": 0,
-          "id": 13,
-          "value": "new TestRunner()",
+          "id": 11,
           "type": {
-            "id": 1,
-            "name": "TestRunner",
-            "kind": 6
-          }
+            "source": {
+              "fileName": "index.ts",
+              "line": 20,
+              "ch": 17
+            },
+            "kind": 15,
+            "name": "Array",
+            "flags": 0,
+            "type": {
+              "name": "Parameter",
+              "kind": 6
+            }
+          },
+          "value": "[\n\t{ name: 'node', help: 'Run tests in node mode.' },\n\t{\n\t\tname: 'firefox',\n\t\thelp: 'Run tests in firefox through puppeteer.',\n\t},\n\t// { name: 'entryFile', rest: true },\n\t{ name: 'baselinePath', type: 'string', help: 'Baseline Path' },\n\t{ name: 'updateBaselines' },\n\t{ name: 'ignoreCoverage', help: 'Disable coverage report.' },\n\t{ name: 'inspect', help: 'Enable node debugger' },\n]"
         }
       ]
     },
@@ -264,7 +213,7 @@
           "kind": 4,
           "name": "TestResult",
           "flags": 1,
-          "id": 14,
+          "id": 12,
           "children": [
             {
               "source": {
@@ -275,7 +224,7 @@
               "kind": 10,
               "name": "success",
               "flags": 4,
-              "id": 15,
+              "id": 13,
               "type": {
                 "name": "boolean",
                 "kind": 32,
@@ -291,7 +240,7 @@
               "kind": 10,
               "name": "message",
               "flags": 4,
-              "id": 16,
+              "id": 14,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -307,7 +256,7 @@
               "kind": 10,
               "name": "stack",
               "flags": 4,
-              "id": 17,
+              "id": 15,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -323,7 +272,7 @@
               "kind": 10,
               "name": "data",
               "flags": 4,
-              "id": 18,
+              "id": 16,
               "type": {
                 "name": "FigureData",
                 "kind": 6
@@ -340,7 +289,7 @@
           "kind": 4,
           "name": "CoverageRange",
           "flags": 1,
-          "id": 19,
+          "id": 17,
           "children": [
             {
               "source": {
@@ -351,7 +300,7 @@
               "kind": 10,
               "name": "startOffset",
               "flags": 4,
-              "id": 20,
+              "id": 18,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -367,7 +316,7 @@
               "kind": 10,
               "name": "endOffset",
               "flags": 4,
-              "id": 21,
+              "id": 19,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -383,7 +332,7 @@
               "kind": 10,
               "name": "count",
               "flags": 4,
-              "id": 22,
+              "id": 20,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -401,7 +350,7 @@
           "kind": 4,
           "name": "TestReport",
           "flags": 1,
-          "id": 23,
+          "id": 21,
           "children": [
             {
               "source": {
@@ -412,7 +361,7 @@
               "kind": 10,
               "name": "name",
               "flags": 4,
-              "id": 24,
+              "id": 22,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -428,7 +377,7 @@
               "kind": 10,
               "name": "failureCount",
               "flags": 4,
-              "id": 25,
+              "id": 23,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -444,7 +393,7 @@
               "kind": 10,
               "name": "results",
               "flags": 4,
-              "id": 26,
+              "id": 24,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -455,7 +404,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 14,
+                  "id": 12,
                   "name": "TestResult",
                   "kind": 6
                 }
@@ -470,7 +419,7 @@
               "kind": 10,
               "name": "tests",
               "flags": 4,
-              "id": 27,
+              "id": 25,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -481,7 +430,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 23,
+                  "id": 21,
                   "name": "TestReport",
                   "kind": 6
                 }
@@ -498,7 +447,7 @@
           "kind": 4,
           "name": "FunctionCoverage",
           "flags": 1,
-          "id": 28,
+          "id": 26,
           "children": [
             {
               "source": {
@@ -509,7 +458,7 @@
               "kind": 10,
               "name": "functionName",
               "flags": 4,
-              "id": 29,
+              "id": 27,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -525,7 +474,7 @@
               "kind": 10,
               "name": "ranges",
               "flags": 4,
-              "id": 30,
+              "id": 28,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -536,7 +485,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 19,
+                  "id": 17,
                   "name": "CoverageRange",
                   "kind": 6
                 }
@@ -551,7 +500,7 @@
               "kind": 10,
               "name": "isBlockCoverage",
               "flags": 4,
-              "id": 31,
+              "id": 29,
               "type": {
                 "name": "boolean",
                 "kind": 32,
@@ -569,7 +518,7 @@
           "kind": 2,
           "name": "Coverage",
           "flags": 1,
-          "id": 32,
+          "id": 30,
           "type": {
             "source": {
               "fileName": "report.ts",
@@ -580,7 +529,7 @@
             "name": "Array",
             "flags": 0,
             "type": {
-              "id": 33,
+              "id": 31,
               "name": "TestCoverage",
               "kind": 6
             }
@@ -595,7 +544,7 @@
           "kind": 4,
           "name": "Report",
           "flags": 1,
-          "id": 34,
+          "id": 32,
           "children": [
             {
               "source": {
@@ -606,7 +555,7 @@
               "kind": 10,
               "name": "success",
               "flags": 4,
-              "id": 35,
+              "id": 33,
               "type": {
                 "name": "boolean",
                 "kind": 32,
@@ -622,9 +571,9 @@
               "kind": 10,
               "name": "testReport",
               "flags": 4,
-              "id": 36,
+              "id": 34,
               "type": {
-                "id": 23,
+                "id": 21,
                 "name": "TestReport",
                 "kind": 6
               }
@@ -638,7 +587,7 @@
               "kind": 10,
               "name": "coverage",
               "flags": 4,
-              "id": 37,
+              "id": 35,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -649,7 +598,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 38,
+                  "id": 36,
                   "name": "TestCoverageReport",
                   "kind": 6
                 }
@@ -658,7 +607,7 @@
           ]
         },
         {
-          "id": 33,
+          "id": 31,
           "source": {
             "fileName": "report.ts",
             "line": 37,
@@ -677,7 +626,7 @@
               "kind": 10,
               "name": "url",
               "flags": 4,
-              "id": 39,
+              "id": 37,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -693,7 +642,7 @@
               "kind": 10,
               "name": "functions",
               "flags": 4,
-              "id": 40,
+              "id": 38,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -704,7 +653,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 28,
+                  "id": 26,
                   "name": "FunctionCoverage",
                   "kind": 6
                 }
@@ -713,7 +662,7 @@
           ]
         },
         {
-          "id": 38,
+          "id": 36,
           "source": {
             "fileName": "report.ts",
             "line": 42,
@@ -732,7 +681,7 @@
               "kind": 10,
               "name": "url",
               "flags": 4,
-              "id": 41,
+              "id": 39,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -748,7 +697,7 @@
               "kind": 10,
               "name": "functions",
               "flags": 4,
-              "id": 42,
+              "id": 40,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -759,7 +708,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 28,
+                  "id": 26,
                   "name": "FunctionCoverage",
                   "kind": 6
                 }
@@ -774,7 +723,7 @@
               "kind": 10,
               "name": "functionTotal",
               "flags": 4,
-              "id": 43,
+              "id": 41,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -790,7 +739,7 @@
               "kind": 10,
               "name": "functionCovered",
               "flags": 4,
-              "id": 44,
+              "id": 42,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -806,7 +755,7 @@
               "kind": 10,
               "name": "blockTotal",
               "flags": 4,
-              "id": 45,
+              "id": 43,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -822,7 +771,7 @@
               "kind": 10,
               "name": "blockCovered",
               "flags": 4,
-              "id": 46,
+              "id": 44,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -840,7 +789,7 @@
           "kind": 16,
           "name": "calculateCoverage",
           "flags": 0,
-          "id": 47,
+          "id": 45,
           "parameters": [
             {
               "source": {
@@ -851,7 +800,7 @@
               "kind": 9,
               "name": "coverage",
               "flags": 0,
-              "id": 48,
+              "id": 46,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -862,7 +811,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 33,
+                  "id": 31,
                   "name": "TestCoverage",
                   "kind": 6
                 }
@@ -874,7 +823,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 38,
+                "id": 36,
                 "name": "TestCoverageReport",
                 "kind": 6
               }
@@ -890,7 +839,7 @@
           "kind": 16,
           "name": "translateRanges",
           "flags": 0,
-          "id": 49,
+          "id": 47,
           "type": {
             "source": {
               "fileName": "report.ts",
@@ -901,7 +850,7 @@
             "name": "Array",
             "flags": 0,
             "type": {
-              "id": 33,
+              "id": 31,
               "name": "TestCoverage",
               "kind": 6
             }
@@ -916,7 +865,7 @@
               "kind": 9,
               "name": "sourceMap",
               "flags": 0,
-              "id": 50,
+              "id": 48,
               "type": {
                 "name": "SourceMap",
                 "kind": 6
@@ -931,7 +880,7 @@
               "kind": 9,
               "name": "url",
               "flags": 0,
-              "id": 51,
+              "id": 49,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -947,7 +896,7 @@
               "kind": 9,
               "name": "functions",
               "flags": 0,
-              "id": 52,
+              "id": 50,
               "type": {
                 "source": {
                   "fileName": "report.ts",
@@ -958,7 +907,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 28,
+                  "id": 26,
                   "name": "FunctionCoverage",
                   "kind": 6
                 }
@@ -975,7 +924,7 @@
           "kind": 16,
           "name": "generateCoverageReport",
           "flags": 256,
-          "id": 53,
+          "id": 51,
           "parameters": [
             {
               "source": {
@@ -986,9 +935,9 @@
               "kind": 9,
               "name": "coverage",
               "flags": 0,
-              "id": 54,
+              "id": 52,
               "type": {
-                "id": 32,
+                "id": 30,
                 "name": "Coverage",
                 "kind": 6
               }
@@ -1003,7 +952,7 @@
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 38,
+                    "id": 36,
                     "name": "TestCoverageReport",
                     "kind": 6
                   }
@@ -1021,9 +970,9 @@
           "kind": 16,
           "name": "renderTestReport",
           "flags": 0,
-          "id": 55,
+          "id": 53,
           "type": {
-            "id": 23,
+            "id": 21,
             "name": "TestReport",
             "kind": 6
           },
@@ -1037,7 +986,7 @@
               "kind": 9,
               "name": "test",
               "flags": 0,
-              "id": 56,
+              "id": 54,
               "type": {
                 "name": "Test",
                 "kind": 6
@@ -1054,13 +1003,13 @@
           "kind": 16,
           "name": "generateReport",
           "flags": 257,
-          "id": 57,
+          "id": 55,
           "type": {
             "name": "Promise",
             "kind": 6,
             "typeParameters": [
               {
-                "id": 34,
+                "id": 32,
                 "name": "Report",
                 "kind": 6
               }
@@ -1076,7 +1025,7 @@
               "kind": 9,
               "name": "suite",
               "flags": 0,
-              "id": 58,
+              "id": 56,
               "type": {
                 "name": "Test",
                 "kind": 6
@@ -1091,9 +1040,9 @@
               "kind": 9,
               "name": "v8Coverage",
               "flags": 524288,
-              "id": 59,
+              "id": 57,
               "type": {
-                "id": 32,
+                "id": 30,
                 "name": "Coverage",
                 "kind": 6
               }
@@ -1121,7 +1070,7 @@
           "kind": 16,
           "name": "post",
           "flags": 0,
-          "id": 60,
+          "id": 58,
           "parameters": [
             {
               "source": {
@@ -1132,7 +1081,7 @@
               "kind": 9,
               "name": "session",
               "flags": 0,
-              "id": 61,
+              "id": 59,
               "type": {
                 "name": "inspector.Session",
                 "kind": 6
@@ -1147,7 +1096,7 @@
               "kind": 9,
               "name": "msg",
               "flags": 0,
-              "id": 62,
+              "id": 60,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1163,7 +1112,7 @@
               "kind": 9,
               "name": "params",
               "flags": 0,
-              "id": 63,
+              "id": 61,
               "value": "{}",
               "type": {
                 "source": {
@@ -1199,7 +1148,7 @@
           "kind": 16,
           "name": "recordCoverage",
           "flags": 256,
-          "id": 64,
+          "id": 62,
           "parameters": [
             {
               "source": {
@@ -1210,7 +1159,7 @@
               "kind": 9,
               "name": "session",
               "flags": 0,
-              "id": 65,
+              "id": 63,
               "type": {
                 "name": "inspector.Session",
                 "kind": 6
@@ -1225,7 +1174,7 @@
               "kind": 9,
               "name": "cb",
               "flags": 0,
-              "id": 66,
+              "id": 64,
               "type": {
                 "source": {
                   "fileName": "runner-node.ts",
@@ -1235,7 +1184,7 @@
                 "kind": 17,
                 "name": "",
                 "flags": 0,
-                "id": 67,
+                "id": 65,
                 "type": {
                   "name": "Promise",
                   "kind": 6,
@@ -1256,7 +1205,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 32,
+                "id": 30,
                 "name": "Coverage",
                 "kind": 6
               }
@@ -1272,7 +1221,7 @@
           "kind": 16,
           "name": "runSuite",
           "flags": 0,
-          "id": 68,
+          "id": 66,
           "parameters": [
             {
               "source": {
@@ -1283,7 +1232,7 @@
               "kind": 9,
               "name": "suitePath",
               "flags": 0,
-              "id": 69,
+              "id": 67,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1311,7 +1260,7 @@
           "kind": 16,
           "name": "runNode",
           "flags": 769,
-          "id": 70,
+          "id": 68,
           "parameters": [
             {
               "source": {
@@ -1322,7 +1271,7 @@
               "kind": 9,
               "name": "app",
               "flags": 0,
-              "id": 71,
+              "id": 69,
               "type": {
                 "id": 1,
                 "name": "TestRunner",
@@ -1335,7 +1284,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 34,
+                "id": 32,
                 "name": "Report",
                 "kind": 6
               }
@@ -1363,7 +1312,7 @@
           "kind": 4,
           "name": "Output",
           "flags": 0,
-          "id": 72,
+          "id": 70,
           "children": [
             {
               "source": {
@@ -1374,7 +1323,7 @@
               "kind": 10,
               "name": "path",
               "flags": 4,
-              "id": 73,
+              "id": 71,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1390,7 +1339,7 @@
               "kind": 10,
               "name": "source",
               "flags": 4,
-              "id": 74,
+              "id": 72,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1408,7 +1357,7 @@
           "kind": 16,
           "name": "startTracing",
           "flags": 256,
-          "id": 75,
+          "id": 73,
           "parameters": [
             {
               "source": {
@@ -1419,7 +1368,7 @@
               "kind": 9,
               "name": "page",
               "flags": 0,
-              "id": 76,
+              "id": 74,
               "type": {
                 "name": "Page",
                 "kind": 6
@@ -1447,7 +1396,7 @@
           "kind": 16,
           "name": "handleConsole",
           "flags": 0,
-          "id": 77,
+          "id": 75,
           "parameters": [
             {
               "source": {
@@ -1458,7 +1407,7 @@
               "kind": 9,
               "name": "msg",
               "flags": 0,
-              "id": 78,
+              "id": 76,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -1474,7 +1423,7 @@
               "kind": 9,
               "name": "app",
               "flags": 0,
-              "id": 79,
+              "id": 77,
               "type": {
                 "id": 1,
                 "name": "TestRunner",
@@ -1497,7 +1446,7 @@
           "kind": 16,
           "name": "openPage",
           "flags": 256,
-          "id": 80,
+          "id": 78,
           "parameters": [
             {
               "source": {
@@ -1508,7 +1457,7 @@
               "kind": 9,
               "name": "browser",
               "flags": 0,
-              "id": 81,
+              "id": 79,
               "type": {
                 "name": "Browser",
                 "kind": 6
@@ -1535,7 +1484,7 @@
           "kind": 16,
           "name": "respond",
           "flags": 256,
-          "id": 82,
+          "id": 80,
           "parameters": [
             {
               "source": {
@@ -1546,7 +1495,7 @@
               "kind": 9,
               "name": "req",
               "flags": 0,
-              "id": 83,
+              "id": 81,
               "type": {
                 "name": "Request",
                 "kind": 6
@@ -1561,7 +1510,7 @@
               "kind": 9,
               "name": "sources",
               "flags": 0,
-              "id": 84,
+              "id": 82,
               "type": {
                 "source": {
                   "fileName": "runner-puppeteer.ts",
@@ -1572,7 +1521,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 72,
+                  "id": 70,
                   "name": "Output",
                   "kind": 6
                 }
@@ -1587,7 +1536,7 @@
               "kind": 9,
               "name": "url",
               "flags": 0,
-              "id": 85,
+              "id": 83,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1616,7 +1565,7 @@
           "kind": 16,
           "name": "handleRequest",
           "flags": 256,
-          "id": 86,
+          "id": 84,
           "parameters": [
             {
               "source": {
@@ -1627,7 +1576,7 @@
               "kind": 9,
               "name": "sources",
               "flags": 0,
-              "id": 87,
+              "id": 85,
               "type": {
                 "source": {
                   "fileName": "runner-puppeteer.ts",
@@ -1638,7 +1587,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 72,
+                  "id": 70,
                   "name": "Output",
                   "kind": 6
                 }
@@ -1653,7 +1602,7 @@
               "kind": 9,
               "name": "req",
               "flags": 0,
-              "id": 88,
+              "id": 86,
               "type": {
                 "name": "Request",
                 "kind": 6
@@ -1681,7 +1630,7 @@
           "kind": 16,
           "name": "amdRunner",
           "flags": 256,
-          "id": 89,
+          "id": 87,
           "parameters": [
             {
               "source": {
@@ -1692,7 +1641,7 @@
               "kind": 9,
               "name": "page",
               "flags": 0,
-              "id": 90,
+              "id": 88,
               "type": {
                 "name": "Page",
                 "kind": 6
@@ -1707,7 +1656,7 @@
               "kind": 9,
               "name": "sources",
               "flags": 0,
-              "id": 91,
+              "id": 89,
               "type": {
                 "source": {
                   "fileName": "runner-puppeteer.ts",
@@ -1718,7 +1667,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 72,
+                  "id": 70,
                   "name": "Output",
                   "kind": 6
                 }
@@ -1745,7 +1694,7 @@
           "kind": 16,
           "name": "cjsRunner",
           "flags": 256,
-          "id": 92,
+          "id": 90,
           "parameters": [
             {
               "source": {
@@ -1756,7 +1705,7 @@
               "kind": 9,
               "name": "page",
               "flags": 0,
-              "id": 93,
+              "id": 91,
               "type": {
                 "name": "Page",
                 "kind": 6
@@ -1771,7 +1720,7 @@
               "kind": 9,
               "name": "sources",
               "flags": 0,
-              "id": 94,
+              "id": 92,
               "type": {
                 "source": {
                   "fileName": "runner-puppeteer.ts",
@@ -1782,7 +1731,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 72,
+                  "id": 70,
                   "name": "Output",
                   "kind": 6
                 }
@@ -1797,7 +1746,7 @@
               "kind": 9,
               "name": "app",
               "flags": 0,
-              "id": 95,
+              "id": 93,
               "type": {
                 "id": 1,
                 "name": "TestRunner",
@@ -1826,7 +1775,7 @@
           "kind": 16,
           "name": "Range",
           "flags": 0,
-          "id": 96,
+          "id": 94,
           "parameters": [
             {
               "source": {
@@ -1837,7 +1786,7 @@
               "kind": 9,
               "name": "startOffset",
               "flags": 0,
-              "id": 97,
+              "id": 95,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -1853,7 +1802,7 @@
               "kind": 9,
               "name": "endOffset",
               "flags": 0,
-              "id": 98,
+              "id": 96,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -1869,7 +1818,7 @@
               "kind": 9,
               "name": "count",
               "flags": 0,
-              "id": 99,
+              "id": 97,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -1896,7 +1845,7 @@
                 "kind": 0,
                 "name": "startOffset",
                 "flags": 0,
-                "id": 100,
+                "id": 98,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -1912,7 +1861,7 @@
                 "kind": 0,
                 "name": "endOffset",
                 "flags": 0,
-                "id": 101,
+                "id": 99,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -1928,7 +1877,7 @@
                 "kind": 0,
                 "name": "count",
                 "flags": 0,
-                "id": 102,
+                "id": 100,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -1944,7 +1893,7 @@
                 "kind": 0,
                 "name": "startOffset",
                 "flags": 0,
-                "id": 100,
+                "id": 98,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -1960,7 +1909,7 @@
                 "kind": 0,
                 "name": "endOffset",
                 "flags": 0,
-                "id": 101,
+                "id": 99,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -1976,7 +1925,7 @@
                 "kind": 0,
                 "name": "count",
                 "flags": 0,
-                "id": 102,
+                "id": 100,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -1995,7 +1944,7 @@
           "kind": 16,
           "name": "generateRanges",
           "flags": 0,
-          "id": 103,
+          "id": 101,
           "parameters": [
             {
               "source": {
@@ -2006,7 +1955,7 @@
               "kind": 9,
               "name": "entry",
               "flags": 0,
-              "id": 104,
+              "id": 102,
               "type": {
                 "name": "CoverageEntry",
                 "kind": 6
@@ -2036,7 +1985,7 @@
                     "kind": 0,
                     "name": "startOffset",
                     "flags": 0,
-                    "id": 100,
+                    "id": 98,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -2052,7 +2001,7 @@
                     "kind": 0,
                     "name": "endOffset",
                     "flags": 0,
-                    "id": 101,
+                    "id": 99,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -2068,7 +2017,7 @@
                     "kind": 0,
                     "name": "count",
                     "flags": 0,
-                    "id": 102,
+                    "id": 100,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -2084,7 +2033,7 @@
                     "kind": 0,
                     "name": "startOffset",
                     "flags": 0,
-                    "id": 100,
+                    "id": 98,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -2100,7 +2049,7 @@
                     "kind": 0,
                     "name": "endOffset",
                     "flags": 0,
-                    "id": 101,
+                    "id": 99,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -2116,7 +2065,7 @@
                     "kind": 0,
                     "name": "count",
                     "flags": 0,
-                    "id": 102,
+                    "id": 100,
                     "type": {
                       "name": "number",
                       "kind": 32,
@@ -2137,7 +2086,7 @@
           "kind": 16,
           "name": "generateCoverage",
           "flags": 256,
-          "id": 105,
+          "id": 103,
           "type": {
             "name": "Promise",
             "kind": 6,
@@ -2152,7 +2101,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 33,
+                  "id": 31,
                   "name": "TestCoverage",
                   "kind": 6
                 }
@@ -2169,7 +2118,7 @@
               "kind": 9,
               "name": "page",
               "flags": 0,
-              "id": 106,
+              "id": 104,
               "type": {
                 "name": "Page",
                 "kind": 6
@@ -2184,7 +2133,7 @@
               "kind": 9,
               "name": "sources",
               "flags": 0,
-              "id": 107,
+              "id": 105,
               "type": {
                 "source": {
                   "fileName": "runner-puppeteer.ts",
@@ -2195,7 +2144,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 72,
+                  "id": 70,
                   "name": "Output",
                   "kind": 6
                 }
@@ -2212,7 +2161,7 @@
           "kind": 1,
           "name": "figureReady",
           "flags": 0,
-          "id": 108,
+          "id": 106,
           "type": {
             "name": "Promise",
             "kind": 6,
@@ -2234,7 +2183,7 @@
           "kind": 1,
           "name": "screenshotQueue",
           "flags": 0,
-          "id": 109,
+          "id": 107,
           "value": "Promise.resolve()",
           "type": {
             "name": "Promise",
@@ -2257,7 +2206,7 @@
           "kind": 16,
           "name": "parsePNG",
           "flags": 0,
-          "id": 110,
+          "id": 108,
           "parameters": [
             {
               "source": {
@@ -2268,7 +2217,7 @@
               "kind": 9,
               "name": "buffer",
               "flags": 0,
-              "id": 111,
+              "id": 109,
               "type": {
                 "name": "Buffer",
                 "kind": 6
@@ -2295,7 +2244,7 @@
           "kind": 16,
           "name": "screenshot",
           "flags": 0,
-          "id": 112,
+          "id": 110,
           "parameters": [
             {
               "source": {
@@ -2306,7 +2255,7 @@
               "kind": 9,
               "name": "page",
               "flags": 0,
-              "id": 113,
+              "id": 111,
               "type": {
                 "name": "Page",
                 "kind": 6
@@ -2321,7 +2270,7 @@
               "kind": 9,
               "name": "domId",
               "flags": 0,
-              "id": 114,
+              "id": 112,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2349,7 +2298,7 @@
           "kind": 16,
           "name": "handleFigureRequest",
           "flags": 256,
-          "id": 115,
+          "id": 113,
           "parameters": [
             {
               "source": {
@@ -2360,7 +2309,7 @@
               "kind": 9,
               "name": "page",
               "flags": 0,
-              "id": 116,
+              "id": 114,
               "type": {
                 "name": "Page",
                 "kind": 6
@@ -2375,7 +2324,7 @@
               "kind": 9,
               "name": "data",
               "flags": 0,
-              "id": 117,
+              "id": 115,
               "type": {
                 "source": {
                   "fileName": "runner-puppeteer.ts",
@@ -2395,7 +2344,7 @@
                     "kind": 10,
                     "name": "name",
                     "flags": 4,
-                    "id": 118,
+                    "id": 116,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -2411,7 +2360,7 @@
                     "kind": 10,
                     "name": "domId",
                     "flags": 4,
-                    "id": 119,
+                    "id": 117,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -2427,7 +2376,7 @@
                     "kind": 10,
                     "name": "baseline",
                     "flags": 4,
-                    "id": 120,
+                    "id": 118,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -2443,7 +2392,7 @@
                     "kind": 10,
                     "name": "name",
                     "flags": 4,
-                    "id": 118,
+                    "id": 116,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -2459,7 +2408,7 @@
                     "kind": 10,
                     "name": "domId",
                     "flags": 4,
-                    "id": 119,
+                    "id": 117,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -2475,7 +2424,7 @@
                     "kind": 10,
                     "name": "baseline",
                     "flags": 4,
-                    "id": 120,
+                    "id": 118,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -2494,7 +2443,7 @@
               "kind": 9,
               "name": "app",
               "flags": 0,
-              "id": 121,
+              "id": 119,
               "type": {
                 "id": 1,
                 "name": "TestRunner",
@@ -2525,7 +2474,7 @@
                     "kind": 0,
                     "name": "success",
                     "flags": 0,
-                    "id": 122,
+                    "id": 120,
                     "value": "false",
                     "type": {
                       "name": "boolean",
@@ -2542,7 +2491,7 @@
                     "kind": 0,
                     "name": "message",
                     "flags": 0,
-                    "id": 123,
+                    "id": 121,
                     "value": "'Screenshot should match baseline: Different Size'",
                     "type": {
                       "name": "string",
@@ -2559,7 +2508,7 @@
                     "kind": 0,
                     "name": "data",
                     "flags": 0,
-                    "id": 124,
+                    "id": 122,
                     "type": {
                       "source": {
                         "fileName": "runner-puppeteer.ts",
@@ -2579,7 +2528,7 @@
                           "kind": 10,
                           "name": "name",
                           "flags": 4,
-                          "id": 118,
+                          "id": 116,
                           "type": {
                             "name": "string",
                             "kind": 32,
@@ -2595,7 +2544,7 @@
                           "kind": 10,
                           "name": "domId",
                           "flags": 4,
-                          "id": 119,
+                          "id": 117,
                           "type": {
                             "name": "string",
                             "kind": 32,
@@ -2611,7 +2560,7 @@
                           "kind": 10,
                           "name": "baseline",
                           "flags": 4,
-                          "id": 120,
+                          "id": 118,
                           "type": {
                             "name": "string",
                             "kind": 32,
@@ -2627,7 +2576,7 @@
                           "kind": 10,
                           "name": "name",
                           "flags": 4,
-                          "id": 118,
+                          "id": 116,
                           "type": {
                             "name": "string",
                             "kind": 32,
@@ -2643,7 +2592,7 @@
                           "kind": 10,
                           "name": "domId",
                           "flags": 4,
-                          "id": 119,
+                          "id": 117,
                           "type": {
                             "name": "string",
                             "kind": 32,
@@ -2659,7 +2608,7 @@
                           "kind": 10,
                           "name": "baseline",
                           "flags": 4,
-                          "id": 120,
+                          "id": 118,
                           "type": {
                             "name": "string",
                             "kind": 32,
@@ -2683,7 +2632,7 @@
           "kind": 16,
           "name": "runPuppeteer",
           "flags": 769,
-          "id": 125,
+          "id": 123,
           "parameters": [
             {
               "source": {
@@ -2694,7 +2643,7 @@
               "kind": 9,
               "name": "app",
               "flags": 0,
-              "id": 126,
+              "id": 124,
               "type": {
                 "id": 1,
                 "name": "TestRunner",
@@ -2707,7 +2656,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 34,
+                "id": 32,
                 "name": "Report",
                 "kind": 6
               }
@@ -2735,7 +2684,7 @@
           "kind": 16,
           "name": "printError",
           "flags": 0,
-          "id": 127,
+          "id": 125,
           "parameters": [
             {
               "source": {
@@ -2746,7 +2695,7 @@
               "kind": 9,
               "name": "name",
               "flags": 0,
-              "id": 128,
+              "id": 126,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -2762,9 +2711,9 @@
               "kind": 9,
               "name": "fail",
               "flags": 0,
-              "id": 129,
+              "id": 127,
               "type": {
-                "id": 14,
+                "id": 12,
                 "name": "TestResult",
                 "kind": 6
               }
@@ -2785,7 +2734,7 @@
           "kind": 16,
           "name": "printTest",
           "flags": 0,
-          "id": 130,
+          "id": 128,
           "parameters": [
             {
               "source": {
@@ -2796,9 +2745,9 @@
               "kind": 9,
               "name": "test",
               "flags": 0,
-              "id": 131,
+              "id": 129,
               "type": {
-                "id": 23,
+                "id": 21,
                 "name": "TestReport",
                 "kind": 6
               }
@@ -2809,7 +2758,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 14,
+                "id": 12,
                 "name": "TestResult",
                 "kind": 6
               }
@@ -2825,7 +2774,7 @@
           "kind": 16,
           "name": "printCoverage",
           "flags": 0,
-          "id": 132,
+          "id": 130,
           "parameters": [
             {
               "source": {
@@ -2836,7 +2785,7 @@
               "kind": 9,
               "name": "coverage",
               "flags": 0,
-              "id": 133,
+              "id": 131,
               "type": {
                 "source": {
                   "fileName": "report-stdout.ts",
@@ -2847,7 +2796,7 @@
                 "name": "Array",
                 "flags": 0,
                 "type": {
-                  "id": 38,
+                  "id": 36,
                   "name": "TestCoverageReport",
                   "kind": 6
                 }
@@ -2869,7 +2818,7 @@
           "kind": 16,
           "name": "generate",
           "flags": 513,
-          "id": 134,
+          "id": 132,
           "parameters": [
             {
               "source": {
@@ -2880,9 +2829,9 @@
               "kind": 9,
               "name": "report",
               "flags": 0,
-              "id": 135,
+              "id": 133,
               "type": {
-                "id": 34,
+                "id": 32,
                 "name": "Report",
                 "kind": 6
               }
@@ -2915,7 +2864,7 @@
           "kind": 31,
           "name": "STYLES",
           "flags": 0,
-          "id": 136,
+          "id": 134,
           "value": "`<style>\n\tbody { font-size: 16px; }\n\tem.covered { background-color: #a5d6a7 }\n\tem { background-color: #ef9a9a; }\n</style>`",
           "type": {
             "name": "\"<style>\\n\\tbody { font-size: 16px; }\\n\\tem.covered { background-color: #a5d6a7 }\\n\\tem { background-color: #ef9a9a; }\\n</style>\"",
@@ -2937,7 +2886,7 @@
           "kind": 31,
           "name": "HEADER",
           "flags": 0,
-          "id": 137,
+          "id": 135,
           "value": "`<!DOCTYPE html>\n\t<head><title>Test Report</title></head>\n`",
           "type": {
             "name": "\"<!DOCTYPE html>\\n\\t<head><title>Test Report</title></head>\\n\"",
@@ -2959,7 +2908,7 @@
           "kind": 1,
           "name": "INDEX",
           "flags": 0,
-          "id": 138,
+          "id": 136,
           "value": "''",
           "type": {
             "name": "string",
@@ -2976,7 +2925,7 @@
           "kind": 2,
           "name": "Tag",
           "flags": 0,
-          "id": 139,
+          "id": 137,
           "type": {
             "source": {
               "fileName": "report-html.ts",
@@ -2996,7 +2945,7 @@
                 "kind": 10,
                 "name": "offset",
                 "flags": 4,
-                "id": 140,
+                "id": 138,
                 "type": {
                   "name": "number",
                   "kind": 32,
@@ -3012,7 +2961,7 @@
                 "kind": 10,
                 "name": "text",
                 "flags": 4,
-                "id": 141,
+                "id": 139,
                 "type": {
                   "name": "string",
                   "kind": 32,
@@ -3031,7 +2980,7 @@
           "kind": 16,
           "name": "renderSource",
           "flags": 256,
-          "id": 142,
+          "id": 140,
           "parameters": [
             {
               "source": {
@@ -3042,9 +2991,9 @@
               "kind": 9,
               "name": "test",
               "flags": 0,
-              "id": 143,
+              "id": 141,
               "type": {
-                "id": 38,
+                "id": 36,
                 "name": "TestCoverageReport",
                 "kind": 6
               }
@@ -3071,7 +3020,7 @@
           "kind": 16,
           "name": "generate",
           "flags": 769,
-          "id": 144,
+          "id": 142,
           "parameters": [
             {
               "source": {
@@ -3082,9 +3031,9 @@
               "kind": 9,
               "name": "report",
               "flags": 0,
-              "id": 145,
+              "id": 143,
               "type": {
-                "id": 34,
+                "id": 32,
                 "name": "Report",
                 "kind": 6
               }
@@ -3123,7 +3072,7 @@
           "kind": 1,
           "name": "output",
           "flags": 0,
-          "id": 146,
+          "id": 144,
           "value": "''",
           "type": {
             "name": "string",
@@ -3134,24 +3083,40 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 3,
-            "ch": 16
+            "line": 4,
+            "ch": 3
+          },
+          "kind": 1,
+          "name": "baselinePath",
+          "flags": 0,
+          "id": 145,
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 4,
+            "ch": 25
           },
           "kind": 16,
           "name": "group",
           "flags": 0,
-          "id": 147,
+          "id": 146,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 5,
+                "line": 6,
                 "ch": 15
               },
               "kind": 9,
               "name": "testId",
               "flags": 0,
-              "id": 148,
+              "id": 147,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -3161,13 +3126,13 @@
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 5,
+                "line": 6,
                 "ch": 30
               },
               "kind": 9,
               "name": "title",
               "flags": 0,
-              "id": 149,
+              "id": 148,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -3184,13 +3149,13 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 7,
+            "line": 8,
             "ch": 1
           },
           "kind": 16,
           "name": "groupEnd",
           "flags": 0,
-          "id": 150,
+          "id": 149,
           "parameters": [],
           "type": {
             "name": "void",
@@ -3201,28 +3166,28 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 11,
+            "line": 12,
             "ch": 1
           },
           "kind": 16,
           "name": "error",
           "flags": 0,
-          "id": 151,
+          "id": 150,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 13,
+                "line": 14,
                 "ch": 15
               },
               "kind": 9,
               "name": "msg",
               "flags": 0,
-              "id": 152,
+              "id": 151,
               "type": {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 13,
+                  "line": 14,
                   "ch": 19
                 },
                 "kind": 5,
@@ -3251,11 +3216,28 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 22,
+            "line": 23,
             "ch": 1
           },
           "kind": 16,
           "name": "success",
+          "flags": 0,
+          "id": 152,
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          },
+          "parameters": []
+        },
+        {
+          "source": {
+            "fileName": "browser-runner.ts",
+            "line": 27,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "failure",
           "flags": 0,
           "id": 153,
           "type": {
@@ -3268,41 +3250,24 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 26,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "failure",
-          "flags": 0,
-          "id": 154,
-          "type": {
-            "name": "string",
-            "kind": 32,
-            "flags": 0
-          },
-          "parameters": []
-        },
-        {
-          "source": {
-            "fileName": "browser-runner.ts",
-            "line": 30,
+            "line": 31,
             "ch": 1
           },
           "kind": 16,
           "name": "printError",
           "flags": 0,
-          "id": 155,
+          "id": 154,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 32,
+                "line": 33,
                 "ch": 20
               },
               "kind": 9,
               "name": "fail",
               "flags": 0,
-              "id": 156,
+              "id": 155,
               "type": {
                 "name": "Result",
                 "kind": 6
@@ -3318,24 +3283,24 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 37,
+            "line": 38,
             "ch": 1
           },
           "kind": 16,
           "name": "printResult",
           "flags": 0,
-          "id": 157,
+          "id": 156,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 39,
+                "line": 40,
                 "ch": 21
               },
               "kind": 9,
               "name": "result",
               "flags": 0,
-              "id": 158,
+              "id": 157,
               "type": {
                 "name": "Result",
                 "kind": 6
@@ -3351,24 +3316,24 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 48,
+            "line": 49,
             "ch": 1
           },
           "kind": 16,
           "name": "renderTestReport",
           "flags": 0,
-          "id": 159,
+          "id": 158,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 50,
+                "line": 51,
                 "ch": 26
               },
               "kind": 9,
               "name": "test",
               "flags": 0,
-              "id": 160,
+              "id": 159,
               "type": {
                 "name": "Test",
                 "kind": 6
@@ -3384,17 +3349,17 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 84,
+            "line": 85,
             "ch": 1
           },
           "kind": 16,
           "name": "findTest",
           "flags": 0,
-          "id": 161,
+          "id": 160,
           "type": {
             "source": {
               "fileName": "browser-runner.ts",
-              "line": 86,
+              "line": 87,
               "ch": 45
             },
             "kind": 5,
@@ -3416,17 +3381,17 @@
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 86,
+                "line": 87,
                 "ch": 18
               },
               "kind": 9,
               "name": "tests",
               "flags": 0,
-              "id": 162,
+              "id": 161,
               "type": {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 86,
+                  "line": 87,
                   "ch": 24
                 },
                 "kind": 15,
@@ -3441,13 +3406,13 @@
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 86,
+                "line": 87,
                 "ch": 32
               },
               "kind": 9,
               "name": "id",
               "flags": 0,
-              "id": 163,
+              "id": 162,
               "type": {
                 "name": "number",
                 "kind": 32,
@@ -3459,28 +3424,28 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 92,
+            "line": 93,
             "ch": 1
           },
           "kind": 16,
           "name": "onClick",
           "flags": 256,
-          "id": 164,
+          "id": 163,
           "parameters": [
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 94,
+                "line": 95,
                 "ch": 23
               },
               "kind": 9,
               "name": "suite",
               "flags": 0,
-              "id": 165,
+              "id": 164,
               "type": {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 94,
+                  "line": 95,
                   "ch": 29
                 },
                 "kind": 15,
@@ -3495,13 +3460,13 @@
             {
               "source": {
                 "fileName": "browser-runner.ts",
-                "line": 94,
+                "line": 95,
                 "ch": 37
               },
               "kind": 9,
               "name": "ev",
               "flags": 0,
-              "id": 166,
+              "id": 165,
               "type": {
                 "name": "Event",
                 "kind": 6
@@ -3523,18 +3488,18 @@
         {
           "source": {
             "fileName": "browser-runner.ts",
-            "line": 119,
+            "line": 120,
             "ch": 5
           },
           "kind": 31,
           "name": "browserRunner",
           "flags": 0,
-          "id": 167,
-          "value": "{\n\tasync runSuite(suite: Test) {\n\t\tawait suite.run();\n\t\trenderTestReport(suite);\n\t},\n\n\tasync run(suites: Test[]) {\n\t\tawait Promise.all(suites.map(suite => this.runSuite(suite)));\n\t\tconst container = document.createElement('cxl-content');\n\t\tcontainer.innerHTML = output;\n\t\tcontainer.addEventListener('click', ev => onClick(suites, ev));\n\t\tdocument.body.appendChild(container);\n\t},\n}",
+          "id": 166,
+          "value": "{\n\tasync runSuite(suite: Test) {\n\t\tawait suite.run();\n\t\trenderTestReport(suite);\n\t},\n\n\tasync run(suites: Test[], baselineDir = '../../ui/spec') {\n\t\tbaselinePath = baselineDir;\n\t\tawait Promise.all(suites.map(suite => this.runSuite(suite)));\n\t\tconst container = document.createElement('cxl-content');\n\t\tcontainer.innerHTML = output;\n\t\tcontainer.addEventListener('click', ev => onClick(suites, ev));\n\t\tdocument.body.appendChild(container);\n\t},\n}",
           "type": {
             "source": {
               "fileName": "browser-runner.ts",
-              "line": 119,
+              "line": 120,
               "ch": 21
             },
             "kind": 34,
@@ -3544,24 +3509,24 @@
               {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 119,
+                  "line": 120,
                   "ch": 23
                 },
                 "kind": 11,
                 "name": "runSuite",
                 "flags": 260,
-                "id": 168,
+                "id": 167,
                 "parameters": [
                   {
                     "source": {
                       "fileName": "browser-runner.ts",
-                      "line": 120,
+                      "line": 121,
                       "ch": 16
                     },
                     "kind": 9,
                     "name": "suite",
                     "flags": 0,
-                    "id": 169,
+                    "id": 168,
                     "type": {
                       "name": "Test",
                       "kind": 6
@@ -3583,28 +3548,28 @@
               {
                 "source": {
                   "fileName": "browser-runner.ts",
-                  "line": 123,
+                  "line": 124,
                   "ch": 3
                 },
                 "kind": 11,
                 "name": "run",
                 "flags": 260,
-                "id": 170,
+                "id": 169,
                 "parameters": [
                   {
                     "source": {
                       "fileName": "browser-runner.ts",
-                      "line": 125,
+                      "line": 126,
                       "ch": 11
                     },
                     "kind": 9,
                     "name": "suites",
                     "flags": 0,
-                    "id": 171,
+                    "id": 170,
                     "type": {
                       "source": {
                         "fileName": "browser-runner.ts",
-                        "line": 125,
+                        "line": 126,
                         "ch": 18
                       },
                       "kind": 15,
@@ -3614,6 +3579,23 @@
                         "name": "Test",
                         "kind": 6
                       }
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "browser-runner.ts",
+                      "line": 126,
+                      "ch": 26
+                    },
+                    "kind": 9,
+                    "name": "baselineDir",
+                    "flags": 0,
+                    "id": 171,
+                    "value": "'../../ui/spec'",
+                    "type": {
+                      "name": "string",
+                      "kind": 32,
+                      "flags": 0
                     }
                   }
                 ],
