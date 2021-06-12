@@ -267,7 +267,14 @@ export function onHistoryChange() {
 }
 
 export function onLocation() {
-	return merge(onHashChange(), onHistoryChange()).map(() => window.location);
+	let lastHref: string;
+	return merge(onHashChange(), onHistoryChange())
+		.map(() => window.location)
+		.filter(loc => {
+			const res = loc.href !== lastHref;
+			lastHref = loc.href;
+			return res;
+		});
 }
 
 export const animationFrame = new Observable<number>(subs => {
