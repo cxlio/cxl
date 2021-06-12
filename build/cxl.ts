@@ -59,7 +59,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 	const browserRunner = require('../tester/browser-runner.js').default;
 
 	const suite = require('./test.js').default;
-	browserRunner.run([suite]);
+	browserRunner.run([suite], '../../${dirName}/spec');
 </script>`),
 					})
 				),
