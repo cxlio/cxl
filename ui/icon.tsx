@@ -1,7 +1,14 @@
 ///<amd-module name="@cxl/ui/icon.js"/>
-import { Augment, Attribute, Component, get } from '@cxl/component';
+import {
+	Augment,
+	Attribute,
+	Component,
+	StyleAttribute,
+	get,
+} from '@cxl/component';
+import { role } from '@cxl/template';
 import { css, pct } from '@cxl/css';
-import { dom } from '@cxl/tsx';
+import { dom, expression } from '@cxl/tsx';
 import { ButtonBase, Svg } from './core.js';
 
 export function ArrowBackIcon() {
@@ -40,103 +47,14 @@ export function CloseIcon(p: { width?: number }) {
 	);
 }
 
-/*const defaultIcons = {
-	arrow_back: 'arrow_back',
-	arrow_forward: 'arrow_forward',
-	arrow_upward: 'arrow_upward',
-	arrow_downward: 'arrow_downward',
-	arrow_drop_down: 'arrow_drop_down',
-	calendar_today: 'calendar_today',
-	first_page: 'first_page',
-	last_page: 'last_page',
-	chevron_left: 'chevron_left',
-	chevron_right: 'chevron_right',
-	home: 'home',
-	search: 'search',
-	filter_list: 'filter_list',
-	menu: 'menu',
-	more_vert: 'more_vert',
-	'': '',
-};
-
-const icons = { ...defaultIcons };
-
-export function registerIconSet<T extends IconSet>(
-	set: T,
-	typography?: CSSStyle
-) {
-	Object.assign(icons, set);
-	if (typography) theme.typography.icon = typography;
+export function PersonIcon(p: { width?: number }) {
+	return (
+		<Svg
+			viewBox="0 0 24 24"
+			width={p.width}
+		>{`<path d="M0 0h24v24H0z" fill="none"/><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>`}</Svg>
+	);
 }
-
-@Augment(
-	role('img'),
-	css({
-		$: {
-			display: 'inline-block',
-		},
-		$round: {
-			borderRadius: '50%',
-			textAlign: 'center',
-		},
-		$outline: { borderWidth: 1 },
-	})
-)
-export abstract class IconBase<IconKey> extends Component {
-	protected $icon?: IconKey;
-	protected iconNode?: Text;
-
-	protected abstract getIconGlyph(name: IconKey): string;
-
-	@Attribute()
-	get icon(): IconKey | undefined {
-		return this.$icon;
-	}
-
-	set icon(iconName: IconKey | undefined) {
-		this.$icon = iconName;
-		const icon = iconName ? this.getIconGlyph(iconName) : undefined;
-
-		if (icon) {
-			if (this.iconNode) {
-				this.iconNode.data = icon;
-			} else {
-				const typo = theme.typography.icon;
-				Object.assign(this.style, typo);
-				this.iconNode = document.createTextNode(icon);
-				getShadow(this).appendChild(this.iconNode);
-			}
-
-			if (!this.hasAttribute('aria-label'))
-				this.setAttribute('aria-label', String(iconName));
-		}
-	}
-}
-*/
-
-/*@Augment(
-	'cxl-item-icon',
-	css({
-		$: { marginRight: 16 },
-	})
-)
-export class ItemIcon extends Icon {}
-
-@Augment(
-	css({
-		$: {
-			paddingRight: 8,
-			lineHeight: 20,
-			font: 'icon_button',
-			width: 24,
-			textAlign: 'center',
-		},
-		$trailing: { paddingRight: 0, paddingLeft: 8 },
-	})
-)
-export class FieldIcon extends Icon {
-	static tagName = 'cxl-field-icon';
-}*/
 
 @Augment<IconButton>(
 	'cxl-icon-button',
@@ -192,4 +110,85 @@ export class IconButton extends ButtonBase {}
 export class SvgIcon extends Component {
 	@Attribute()
 	icon = '';
+}
+/**
+ * Avatars are circular components that usually wrap an image or icon.
+ * They can be used to represent a person or an object.
+ * @example
+ * <cxl-avatar></cxl-avatar>
+ * <cxl-avatar big></cxl-avatar>
+ * <cxl-avatar small></cxl-avatar>
+ */
+@Augment<Avatar>(
+	'cxl-avatar',
+	role('img'),
+	css({
+		$: {
+			borderRadius: 32,
+			backgroundColor: 'onSurface8',
+			backgroundPosition: 'center',
+			backgroundSize: 'contain',
+			width: 40,
+			//...padding(2),
+			height: 40,
+			display: 'inline-block',
+			lineHeight: 38,
+			textAlign: 'center',
+			overflowY: 'hidden',
+		},
+		$small: {
+			width: 32,
+			height: 32,
+			font: 'default',
+			lineHeight: 30,
+		},
+		$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
+		image: {
+			width: '100%',
+			height: '100%',
+			borderRadius: 32,
+		},
+	}),
+	node => (
+		<>
+			{() => {
+				node.bind(
+					get(node, 'src').tap(
+						src =>
+							(node.style.backgroundImage = src
+								? `url('${src}')`
+								: '')
+					)
+				);
+
+				const el = (<PersonIcon />) as HTMLElement;
+				el.setAttribute('class', 'image');
+				node.bind(
+					get(node, 'src').tap(
+						src =>
+							(el.style.display =
+								src || node.text ? 'none' : 'inline-block')
+					)
+				);
+				return el;
+			}}
+			{expression(node, get(node, 'text'))}
+		</>
+	)
+)
+export class Avatar extends Component {
+	@StyleAttribute()
+	big = false;
+	@StyleAttribute()
+	small = false;
+	@Attribute()
+	src = '';
+	/**
+	 * @example
+	 * <cxl-avatar text="GB"></cxl-avatar>
+	 * <cxl-avatar text="GB" small primary></cxl-avatar>
+	 * <cxl-avatar text="GB" big secondary></cxl-avatar>
+	 */
+	@Attribute()
+	text = '';
 }

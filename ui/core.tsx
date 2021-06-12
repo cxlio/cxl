@@ -9,7 +9,7 @@ import {
 	get,
 	onUpdate,
 } from '@cxl/component';
-import { dom, expression } from '@cxl/tsx';
+import { dom } from '@cxl/tsx';
 import { EMPTY, merge, tap } from '@cxl/rx';
 import { border, css, padding, pct } from '@cxl/css';
 import { Focusable, role } from '@cxl/template';
@@ -150,81 +150,6 @@ export class Ripple extends Component {
 	() => <slot />
 )
 export class RippleContainer extends Component {}
-
-const AVATAR_DEFAULT =
-	"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 0 26 26' %3E%3Cpath fill='currentColor' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E";
-
-/**
- * Avatars are circular components that usually wrap an image or icon.
- * They can be used to represent a person or an object.
- * @example
- * <cxl-avatar></cxl-avatar>
- * <cxl-avatar big></cxl-avatar>
- * <cxl-avatar small></cxl-avatar>
- */
-@Augment<Avatar>(
-	'cxl-avatar',
-	role('img'),
-	css({
-		$: {
-			borderRadius: 32,
-			backgroundColor: 'onSurface8',
-			width: 40,
-			...padding(2),
-			height: 40,
-			display: 'inline-block',
-			lineHeight: 38,
-			textAlign: 'center',
-			overflowY: 'hidden',
-		},
-		$small: {
-			width: 32,
-			height: 32,
-			font: 'default',
-			lineHeight: 30,
-		},
-		$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
-		image: {
-			width: '100%',
-			height: '100%',
-			borderRadius: 32,
-		},
-	}),
-	node => (
-		<>
-			{() => {
-				const el = (
-					<img className="image" alt="avatar" />
-				) as HTMLImageElement;
-
-				node.bind(
-					get(node, 'src').tap(src => {
-						el.src = src || AVATAR_DEFAULT;
-						el.style.display = src || !node.text ? 'block' : 'none';
-					})
-				);
-				return el;
-			}}
-			{expression(node, get(node, 'text'))}
-		</>
-	)
-)
-export class Avatar extends Component {
-	@StyleAttribute()
-	big = false;
-	@StyleAttribute()
-	small = false;
-	@Attribute()
-	src = '';
-	/**
-	 * @example
-	 * <cxl-avatar text="GB"></cxl-avatar>
-	 * <cxl-avatar text="GB" small primary></cxl-avatar>
-	 * <cxl-avatar text="GB" big secondary></cxl-avatar>
-	 */
-	@Attribute()
-	text = '';
-}
 
 /**
  * Chips represent complex entities in small blocks. A chip can contain several
@@ -520,6 +445,7 @@ export class Meta extends Component {
 	css({
 		$: {
 			display: 'flex',
+			backgroundColor: 'background',
 			flexDirection: 'column',
 			overflowX: 'hidden',
 			zIndex: 0,
