@@ -20,7 +20,6 @@ const colStyles = ((r: any) => {
 		] = r.xs['$xs' + i] = {
 			display: 'block',
 			gridColumnEnd: 'span ' + i,
-			// flexBasis: pct((100 / 12) * i),
 		};
 	return r;
 })({

@@ -17,6 +17,7 @@ Object.assign(theme.colors, {
 	onSecondary: rgba(0, 0, 0),
 	error: rgba(0xcf, 0x66, 0x79),
 	link: rgba(83, 155, 245),
+	divider: rgba(0xff, 0xff, 0xff, 0.48),
 	get onSurface8() {
 		return this.onSurface.alpha(0.12);
 	},
