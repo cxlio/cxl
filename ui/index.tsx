@@ -3,7 +3,6 @@ export { Button, Chip, Fab } from './button';
 export * from './checkbox.js';
 export {
 	Application,
-	Avatar,
 	Badge,
 	Hr,
 	Meta,
@@ -23,4 +22,4 @@ export * from './dialog.js';
 export * from './form.js';
 export * from './layout.js';
 export * from './navigation.js';
-export { IconButton, SvgIcon } from './icon.js';
+export { Avatar, IconButton, SvgIcon } from './icon.js';
