@@ -40,7 +40,8 @@ const POST_REGEX = /\.(html|md)$/,
 	TITLE_REGEX = /<blog-title>(.+)<\/blog-title>/,
 	META_REGEX = /<blog-meta([^>]+?)>/,
 	TAGS_REGEX = /<blog-tags>\s*(.+?)\s*</,
-	SUMMARY_REGEX = /<blog-summary>\s*(.+?)\s*</,
+	SUMMARY_TAG_REGEX = /<blog-summary>\s*([^]+?)\s*</m,
+	SUMMARY_REGEX = /<p>\s*([^]+?)\s*<\/p/m,
 	ATTR_REGEX = /\s*([\w-]+)\s*=\s*"([^"]+)"/g;
 
 const DefaultConfig = {
@@ -63,7 +64,7 @@ function Code(source: string, language?: string) {
 	);
 }
 
-const markdownMeta = /^(\w+):\s*(.+)\s*$/gm;
+const markdownMeta = /^(\w+):\s*(.+)\s*/gm;
 
 function getMetaValue(key: string, val: string) {
 	return key === 'date' ? new Date(val).toISOString() : val;
@@ -153,8 +154,10 @@ function Html(_url: string, content: string, stat: Stats): Post {
 	const meta = parseMeta(content) || {};
 	const tags = content.match(TAGS_REGEX)?.[1];
 	const title = content.match(TITLE_REGEX)?.[1] || 'Untitled Post';
-	const summary = content.match(SUMMARY_REGEX)?.[1] || '';
-
+	const summary =
+		content.match(SUMMARY_TAG_REGEX)?.[1] ||
+		content.match(SUMMARY_REGEX)?.[1] ||
+		'';
 	return {
 		id: getPostId(title),
 		title,
@@ -168,61 +171,6 @@ function Html(_url: string, content: string, stat: Stats): Post {
 		content,
 	};
 }
-
-/*class Post {
-	constructor(content, stat) {
-		const meta = (this.meta = new PostMeta(content, stat));
-
-		this.writeIfChanged(meta.id, content, stat);
-		if (meta.uuid)
-			this.writeIfChanged(
-				meta.uuid,
-				this.getCanonical(meta) + content,
-				stat
-			);
-	}
-
-	getCanonical(meta) {
-		return `<link rel="canonical" href="https://debuggerjs.com/${POST_DIR}/${meta.id}" />\n`;
-	}
-
-	async writeIfChanged(id, content, stat) {
-		const dir = POST_DIR + '/' + id,
-			url = dir + '/index.html',
-			url2 = dir + '.html';
-
-		try {
-			await fs.mkdir(dir);
-		} catch (e) {}
-
-		build
-			.stat(url)
-			.catch(() => null)
-			.then(destStat =>
-				this.writePost(
-					url,
-					TEMPLATE.replace('<!-- CONTENT -->', () => content),
-					stat,
-					destStat
-				)
-			);
-
-		/*build
-			.stat(url2)
-			.catch(() => null)
-			.then(destStat => this.writePost(url2, content, stat, destStat));
-	}
-
-	async writePost(url, content, stat, destStat) {
-		const time = (stat.mtime.getTime() / 1000) | 0,
-			destTime = destStat && (destStat.mtime.getTime() / 1000) | 0;
-		if (destTime !== time) {
-			console.log('Writing ' + url, time, destTime);
-			await build.write(url, content);
-			await fs.utimes(url, stat.atime, time);
-		}
-	}
-}*/
 
 async function getPostData(url: string): Promise<Post> {
 	const [source, stats] = await Promise.all([
