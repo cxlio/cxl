@@ -253,7 +253,7 @@ function Code(source: string, language?: string) {
 	return (
 		'<pre><code class="hljs">' +
 		(language
-			? hljs.highlight(language, source)
+			? hljs.highlight(source, { language })
 			: hljs.highlightAuto(source, [
 					'html',
 					'typescript',
