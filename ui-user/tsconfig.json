@@ -1,0 +1,13 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-user"
+	},
+	"files": ["index.tsx"],
+
+	"references": [
+		{ "path": "../ui" },
+		{ "path": "../css" },
+		{ "path": "../component" }
+	]
+}
