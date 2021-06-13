@@ -119,6 +119,14 @@
 			"ui-www": {
 				"files": ["ui-www/*"],
 				"tasks": "npm run build --prefix ui-www"
+			},
+			"ui-user": {
+				"files": ["ui-user/*"],
+				"tasks": "npm run build --prefix ui-user"
+			},
+			"render": {
+				"files": ["render/*"],
+				"tasks": "npm run build --prefix render"
 			}
 		}
 	}
