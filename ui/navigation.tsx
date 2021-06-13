@@ -150,6 +150,7 @@ import { Drawer } from './dialog.js';
 )
 export class Appbar extends Component {
 	/**
+	 * Extends the appbar height.
 	 * @demo
 	 * <cxl-appbar extended>
 	 *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
@@ -165,8 +166,8 @@ export class Appbar extends Component {
 	center = false;
 
 	/**
-	 * Set or get the active contextual menu.
-	 *
+	 * Sets or gets the active contextual menu.
+	 * @see AppbarContextual
 	 * @demo
 	 * <cxl-appbar contextual="test">
 	 * <cxl-appbar-title>Appbar Title</cxl-appbar-title>
@@ -177,6 +178,10 @@ export class Appbar extends Component {
 	contextual?: string;
 }
 
+/**
+ * A top app bar can transform into a contextual action bar to provide contextual actions to selected items. Upon closing, the contextual action bar transforms back into a top app bar.
+ * @see Appbar
+ */
 @Augment(
 	'cxl-appbar-contextual',
 	css({ $: { display: 'none' }, $visible: { display: 'block' } }),

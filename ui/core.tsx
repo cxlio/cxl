@@ -8,12 +8,13 @@ import {
 	StyleAttribute,
 	get,
 	onUpdate,
+	pushRender,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
 import { EMPTY, merge, tap } from '@cxl/rx';
-import { border, css, padding, pct } from '@cxl/css';
+import { StyleDefinition, border, css, padding, pct } from '@cxl/css';
 import { Focusable, role } from '@cxl/template';
-import { on, onAction, trigger } from '@cxl/dom';
+import { getShadow, on, onAction, trigger } from '@cxl/dom';
 import { InversePrimary, ResetSurface } from './theme.js';
 
 export { Span } from '@cxl/component';
@@ -76,6 +77,33 @@ export function ripple(element: any) {
 	return onAction(element).raf(ev => {
 		if (!element.disabled) attachRipple(element, ev as any);
 	});
+}
+
+export type Size = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 'small' | 'big';
+
+export function sizeStyles(
+	fn: (size: Exclude<Size, 'small' | 'big'>) => StyleDefinition
+) {
+	return css(
+		[-1, 0, 1, 2, 3, 4, 5, 'small', 'big'].reduce((r, val) => {
+			const sel = val === 0 ? '$' : `$size="${val}"`;
+			if (val === 'small') val = -1;
+			else if (val === 'big') val = 2;
+			r[sel] = fn(val as any);
+			return r;
+		}, {} as Record<string, StyleDefinition>)
+	);
+}
+
+export function SizeAttribute(
+	fn: (size: Exclude<Size, 'small' | 'big'>) => StyleDefinition
+) {
+	const styleAttribute = StyleAttribute();
+	const styles = sizeStyles(fn);
+	return (target: any, attribute: string) => {
+		styleAttribute(target, attribute);
+		pushRender(target, host => getShadow(host).appendChild(styles()));
+	};
 }
 
 @Augment<Ripple>(
@@ -514,7 +542,6 @@ export class Toolbar extends Component {}
 			cursor: 'pointer',
 			display: 'inline-block',
 			font: 'button',
-			borderRadius: 2,
 			userSelect: 'none',
 			backgroundColor: 'surface',
 			color: 'onSurface',
@@ -569,18 +596,46 @@ export class Toolbar extends Component {}
 	ripple
 )
 export class ButtonBase extends Component {
+	/**
+	 * Disables Focus and Input
+	 */
 	@StyleAttribute()
 	disabled = false;
+
+	/**
+	 * Sets button color to primary
+	 */
 	@StyleAttribute()
 	primary = false;
+
+	/**
+	 * Applies the flat style.
+	 */
 	@StyleAttribute()
 	flat = false;
+
+	/**
+	 * Sets button color to secondary
+	 */
 	@StyleAttribute()
 	secondary = false;
+
+	/**
+	 * Sets button's touched state
+	 */
 	@Attribute()
 	touched = false;
-	@StyleAttribute()
-	big = false;
+
+	/**
+	 * Applies the outline style
+	 */
 	@StyleAttribute()
 	outline = false;
+
+	@SizeAttribute(s => ({
+		borderRadius: 2 + s * 2,
+		fontSize: 14 + s * 4,
+		lineHeight: 20 + s * 8,
+	}))
+	size: Size = 0;
 }

@@ -9,7 +9,7 @@ import {
 import { role } from '@cxl/template';
 import { css, pct } from '@cxl/css';
 import { dom, expression } from '@cxl/tsx';
-import { ButtonBase, Svg } from './core.js';
+import { ButtonBase, Size, SizeAttribute, Svg } from './core.js';
 
 export function ArrowBackIcon() {
 	return (
@@ -124,29 +124,18 @@ export class SvgIcon extends Component {
 	role('img'),
 	css({
 		$: {
-			borderRadius: 32,
+			borderRadius: '100%',
 			backgroundColor: 'onSurface8',
 			backgroundPosition: 'center',
 			backgroundSize: 'contain',
-			width: 40,
-			//...padding(2),
-			height: 40,
 			display: 'inline-block',
-			lineHeight: 38,
 			textAlign: 'center',
 			overflowY: 'hidden',
 		},
-		$small: {
-			width: 32,
-			height: 32,
-			font: 'default',
-			lineHeight: 30,
-		},
-		$big: { width: 64, height: 64, font: 'h4', lineHeight: 62 },
+
 		image: {
 			width: '100%',
 			height: '100%',
-			borderRadius: 32,
 		},
 	}),
 	node => (
@@ -177,6 +166,14 @@ export class SvgIcon extends Component {
 	)
 )
 export class Avatar extends Component {
+	@SizeAttribute(size => ({
+		width: 40 + size * 8,
+		height: 40 + size * 8,
+		lineHeight: 38 + size * 8,
+		fontSize: 20 + size * 4,
+	}))
+	size: Size = 0;
+
 	@StyleAttribute()
 	big = false;
 	@StyleAttribute()

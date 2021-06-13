@@ -943,11 +943,11 @@ export default spec('ui', a => {
 	a.test('cxl-avatar', it => {
 		it.figure(
 			'Avatar Sizes',
-			`<cxl-avatar></cxl-avatar><cxl-avatar big></cxl-avatar><cxl-avatar small></cxl-avatar>`
+			`<cxl-avatar></cxl-avatar><cxl-avatar size="2"></cxl-avatar><cxl-avatar size="-1"></cxl-avatar>`
 		);
 		it.figure(
 			'Avatar Text',
-			`<cxl-avatar text="GB"></cxl-avatar><cxl-avatar text="GB" small></cxl-avatar><cxl-avatar text="GB" big></cxl-avatar>`
+			`<cxl-avatar text="GB"></cxl-avatar><cxl-avatar text="GB" size="-1"></cxl-avatar><cxl-avatar text="GB" size="2"></cxl-avatar>`
 		);
 		it.figure(
 			'Avatar with Image',
@@ -1030,6 +1030,15 @@ export default spec('ui', a => {
 				<Button outline secondary>
 					Secondary
 				</Button>
+			</>
+		);
+
+		a.figure(
+			'Button[size]',
+			<>
+				<Button size="small">Small</Button>
+				<Button size="big">Big</Button>
+				<Button size={1}>Medium</Button>
 			</>
 		);
 	});
