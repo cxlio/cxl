@@ -91,6 +91,7 @@ export class DocVersionSelect extends Component {
 			...padding(16),
 			whiteSpace: 'pre-wrap',
 			overflowY: 'auto',
+			minHeight: 160,
 		},
 		visible: { display: 'block' },
 		toolbar: {

@@ -280,7 +280,7 @@ function Example(doc: DocumentationContent) {
 function DocSee(doc: DocumentationContent) {
 	const names = doc.value.split(' ');
 	return (
-		`<p>${jsdocTitle('see')}:` +
+		`<p>${jsdocTitle('see')}: ` +
 		names
 			.map(name => {
 				const symbol = index.find(n => n.name === name);
