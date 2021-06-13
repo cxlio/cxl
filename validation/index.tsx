@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/validation"/>
 export type ValidateFunction<T> = (val: T) => string | true;
 
 const EMAIL = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
