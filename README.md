@@ -33,6 +33,7 @@ Collection of Libraries and Tools
 | @cxl/ui-router        | [0.0.1](https://npmjs.com/package/@cxl/ui-router/v/0.0.1) | GPL-3.0 | UI Router Components       | [Docs](https://cxlio.github.io/cxl/ui-router/0.0.1) |
 | @cxl/ui-table        | [0.1.0](https://npmjs.com/package/@cxl/ui-table/v/0.1.0) ([latest:0.0.1](https://npmjs.com/package/@cxl/ui-table/v/0.0.1)) | GPL-3.0 | UI Table Components       | [Docs](https://cxlio.github.io/cxl/ui-table/0.1.0) |
 | @cxl/ui-theme-terminal        | [0.0.1](https://npmjs.com/package/@cxl/ui-theme-terminal/v/0.0.1) | GPL-3.0 | Terminal Theme for @cxl/ui       | [Docs](https://cxlio.github.io/cxl/ui-theme-terminal/0.0.1) |
+| @cxl/ui-user        | [0.0.1](https://npmjs.com/package/@cxl/ui-user/v/0.0.1) | GPL-3.0 | User components       | [Docs](https://cxlio.github.io/cxl/ui-user/0.0.1) |
 | @cxl/ui-www        | [0.0.1](https://npmjs.com/package/@cxl/ui-www/v/0.0.1) | GPL-3.0 | Website Utility Components       | [Docs](https://cxlio.github.io/cxl/ui-www/0.0.1) |
 | @cxl/validation        | [0.0.1](https://npmjs.com/package/@cxl/validation/v/0.0.1) | Apache-2.0 | Input validation library       | [Docs](https://cxlio.github.io/cxl/validation/0.0.1) |
 | @cxl/worker        | [0.0.1](https://npmjs.com/package/@cxl/worker/v/0.0.1) | GPL-3.0 | Web Worker library       | [Docs](https://cxlio.github.io/cxl/worker/0.0.1) |

@@ -2322,7 +2322,7 @@
           "name": "attributeOperator",
           "flags": 0,
           "id": 121,
-          "value": "tap<AttributeEvent<any, any>>(\n\t({ value, target, attribute }) => {\n\t\tif (\n\t\t\t(value === false || value === undefined) &&\n\t\t\ttarget.hasAttribute(attribute)\n\t\t)\n\t\t\ttarget.removeAttribute(attribute);\n\t\telse if (typeof value === 'string')\n\t\t\ttarget.setAttribute(attribute, value);\n\t\telse if (value === true) target.setAttribute(attribute, '');\n\t}\n)",
+          "value": "tap<AttributeEvent<any, any>>(\n\t({ value, target, attribute }) => {\n\t\tif (value === false || value === undefined || value === 0) {\n\t\t\tif (target.hasAttribute(attribute))\n\t\t\t\ttarget.removeAttribute(attribute);\n\t\t} else if (value === true) target.setAttribute(attribute, '');\n\t\telse target.setAttribute(attribute, value);\n\t}\n)",
           "type": {
             "name": "Operator",
             "kind": 6,
@@ -2367,7 +2367,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 263,
+            "line": 260,
             "ch": 2
           },
           "kind": 16,
@@ -2383,7 +2383,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 265,
+                "line": 262,
                 "ch": 26
               },
               "kind": 9,
@@ -2407,7 +2407,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 313,
+            "line": 310,
             "ch": 1
           },
           "kind": 16,
@@ -2424,7 +2424,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 320,
+            "line": 317,
             "ch": 1
           },
           "kind": 16,
@@ -2435,7 +2435,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 323,
+              "line": 320,
               "ch": 7
             },
             "kind": 34,
@@ -2445,7 +2445,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 323,
+                  "line": 320,
                   "ch": 9
                 },
                 "kind": 0,
@@ -2458,7 +2458,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 324,
+            "line": 321,
             "ch": 1
           },
           "kind": 35,
@@ -2485,7 +2485,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 327,
+            "line": 324,
             "ch": 38
           },
           "kind": 16,

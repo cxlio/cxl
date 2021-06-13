@@ -610,7 +610,7 @@
           "name": "markdownMeta",
           "flags": 0,
           "id": 35,
-          "value": "/^(\\w+):\\s*(.+)\\s*$/gm",
+          "value": "/^(\\w+):\\s*(.+)\\s*/gm",
           "type": {
             "name": "RegExp",
             "kind": 6
@@ -620,7 +620,7 @@
           "source": {
             "fileName": "index.ts",
             "line": 66,
-            "ch": 44
+            "ch": 43
           },
           "kind": 16,
           "name": "getMetaValue",

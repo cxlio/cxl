@@ -18,7 +18,7 @@
           },
           "kind": 2,
           "name": "StyleDefinition",
-          "flags": 0,
+          "flags": 1,
           "id": 1,
           "type": {
             "name": "Partial",
@@ -36,7 +36,7 @@
           "source": {
             "fileName": "index.ts",
             "line": 1,
-            "ch": 54
+            "ch": 61
           },
           "kind": 2,
           "name": "BaseColor",
@@ -527,13 +527,13 @@
           },
           "kind": 4,
           "name": "StrictStyleDefinition",
-          "flags": 0,
+          "flags": 1,
           "children": [
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 32,
-                "ch": 33
+                "ch": 40
               },
               "kind": 10,
               "name": "alignItems",
@@ -657,16 +657,38 @@
                   "line": 38,
                   "ch": 16
                 },
-                "kind": 23,
-                "name": "'cover'",
-                "flags": 0
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 38,
+                      "ch": 16
+                    },
+                    "kind": 23,
+                    "name": "'cover'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 38,
+                      "ch": 26
+                    },
+                    "kind": 23,
+                    "name": "'contain'",
+                    "flags": 0
+                  }
+                ]
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 38,
-                "ch": 25
+                "ch": 37
               },
               "kind": 10,
               "name": "backgroundPosition",
@@ -975,16 +997,33 @@
                   "line": 50,
                   "ch": 10
                 },
-                "kind": 23,
-                "name": "'inherit'",
-                "flags": 0
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.ts",
+                      "line": 50,
+                      "ch": 19
+                    },
+                    "kind": 23,
+                    "name": "'inherit'",
+                    "flags": 0
+                  }
+                ]
               }
             },
             {
               "source": {
                 "fileName": "index.ts",
                 "line": 50,
-                "ch": 21
+                "ch": 30
               },
               "kind": 10,
               "name": "translateX",
