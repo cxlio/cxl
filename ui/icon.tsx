@@ -1,11 +1,5 @@
 ///<amd-module name="@cxl/ui/icon.js"/>
-import {
-	Augment,
-	Attribute,
-	Component,
-	StyleAttribute,
-	get,
-} from '@cxl/component';
+import { Augment, Attribute, Component, get } from '@cxl/component';
 import { role } from '@cxl/template';
 import { css, pct } from '@cxl/css';
 import { dom, expression } from '@cxl/tsx';
@@ -116,8 +110,8 @@ export class SvgIcon extends Component {
  * They can be used to represent a person or an object.
  * @example
  * <cxl-avatar></cxl-avatar>
- * <cxl-avatar big></cxl-avatar>
- * <cxl-avatar small></cxl-avatar>
+ * <cxl-avatar size="big"></cxl-avatar>
+ * <cxl-avatar size="small"></cxl-avatar>
  */
 @Augment<Avatar>(
 	'cxl-avatar',
@@ -174,17 +168,13 @@ export class Avatar extends Component {
 	}))
 	size: Size = 0;
 
-	@StyleAttribute()
-	big = false;
-	@StyleAttribute()
-	small = false;
 	@Attribute()
 	src = '';
 	/**
 	 * @example
 	 * <cxl-avatar text="GB"></cxl-avatar>
-	 * <cxl-avatar text="GB" small primary></cxl-avatar>
-	 * <cxl-avatar text="GB" big secondary></cxl-avatar>
+	 * <cxl-avatar text="GB" size="small" primary></cxl-avatar>
+	 * <cxl-avatar text="GB" size="big" secondary></cxl-avatar>
 	 */
 	@Attribute()
 	text = '';

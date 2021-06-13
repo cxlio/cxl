@@ -2,7 +2,6 @@
 
 -   Lightweight and Fast.
 -   Modular Architecture.
--   Focus on Accessibility.
 -   No dependecies.
 -   Framework Agnostic.
 -   Flexible Theming.
@@ -19,7 +18,7 @@
 
 ### Quick Start
 
-This is all you need to get started. By default, all components follow the [Material Design specification](https://material.io).
+This is all you need to get started. The default theme follows the [Material Design specification](https://material.io).
 
 ```html
 <!DOCTYPE html>

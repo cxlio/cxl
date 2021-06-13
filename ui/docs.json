@@ -16,6 +16,13 @@
 			"title": "Guides",
 			"items": [
 				{
+					"title": "Styles",
+					"icon": "palette",
+					"file": "docs/styles.html"
+				}
+			],
+			"other": [
+				{
 					"title": "Components",
 					"icon": "cubes",
 					"file": "docs/components.html"
@@ -26,21 +33,14 @@
 					"file": "docs/forms.html"
 				},
 				{
-					"title": "Styles",
-					"icon": "palette",
-					"file": "docs/styles.html"
-				}
-			],
-			"other": [
+					"title": "Tables",
+					"icon": "table",
+					"file": "docs/tables.html"
+				},
 				{
 					"title": "Layout",
 					"icon": "drafting-compass",
 					"file": "docs/layout.html"
-				},
-				{
-					"title": "Tables",
-					"icon": "table",
-					"file": "docs/tables.html"
 				}
 			]
 		}
