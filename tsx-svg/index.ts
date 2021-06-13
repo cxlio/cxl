@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/tsx-svg"/>
 export type SVGChildren = Path;
 
 export interface Path {
