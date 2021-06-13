@@ -15,7 +15,10 @@
 		<cxl-application>
 			<cxl-appbar>
 				<cxl-navbar>
-					<cxl-item>Home</cxl-item>
+					<cxl-router-item href="">Home</cxl-router-item>
+					<cxl-router-item href="changelog"
+						>CHANGELOG</cxl-router-item
+					>
 				</cxl-navbar>
 				<cxl-router-appbar-title></cxl-router-appbar-title>
 			</cxl-appbar>
@@ -28,6 +31,23 @@
 			<template data-path="changelog" data-title="CHANGELOG"
 				>$CHANGELOG$</template
 			>
+			<template data-path="changelog/:module">
+				<pre id="changelog-output"></pre>
+				<script>
+					(() => {
+						const router = require('@cxl/ui-router').router;
+						const moduleName = router.state?.arguments.module;
+
+						fetch(`../${moduleName}/CHANGELOG.md`)
+							.then(res => res.text())
+							.then(src => {
+								document.getElementById(
+									'changelog-output'
+								).innerHTML = src;
+							});
+					})();
+				</script>
+			</template>
 		</cxl-router>
 	</body>
 </html>

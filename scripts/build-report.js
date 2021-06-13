@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path').posix;
 const { readJson, sh } = require('../dist/server');
+const { getPublishedVersion } = require('../dist/build/npm');
 
 async function writeIndex(content) {
 	const [INDEX] = await Promise.all([
@@ -45,18 +46,6 @@ async function getPackageFiles(dir) {
 	return files.map(f => path.resolve(dir, f));
 }
 
-async function getNPMVersion(name) {
-	try {
-		return (
-			await sh(`npm show ${name} version`, {
-				encoding: 'utf8',
-			})
-		).trim();
-	} catch (e) {
-		return;
-	}
-}
-
 async function getScriptSize(dir, pkg) {
 	const main = pkg.browser || pkg.main || 'index.js';
 	const scriptPath = `dist/${dir}/${main}`;
@@ -71,7 +60,7 @@ async function build() {
 	for (const pkg of stats.packages) {
 		const dir = /\/(.+)/.exec(pkg.name)[1];
 		const [npmVersion, coverage, size] = await Promise.all([
-			'', //getNPMVersion(pkg.name),
+			getPublishedVersion(pkg.name),
 			getTotalCoverage(dir, pkg.testReport.coverage),
 			getScriptSize(dir, pkg.package),
 		]);
@@ -82,15 +71,18 @@ async function build() {
 		output += `<cxl-tr class="${success ? 'success' : 'failure'}">
 				<cxl-td><a href="../docs/${dir}">${pkg.name}</a></cxl-td>
 				<cxl-td>
-					<a href="../${dir}/CHANGELOG.md">CHANGELOG</a>
+					<cxl-a href="changelog/${dir}">CHANGELOG</cxl-a>
 					<a href="${dir}/test.html">Spec</a>
 				</cxl-td>
-				<cxl-td>${pkg.package.version} (NPM ${npmVersion})</cxl-td>
+				<cxl-td>${pkg.package.version} (${
+			npmVersion ? `NPM ${npmVersion}` : 'Not Published'
+		})</cxl-td>
 				<cxl-td>${usedBy.map(p => p.name).join('<br>')}</cxl-td>
 				<cxl-td>${size}</cxl-td>
 				<cxl-td>${pkg.buildTime}</cxl-td>
 				<cxl-td><a href="${dir}/test-report.html">${coverage} %</a></cxl-td>
 			</cxl-tr>`;
+		if (success) console.log(`Package ${pkg.name} ready to publish`);
 	}
 	await writeIndex(`
 <cxl-table>
