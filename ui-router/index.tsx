@@ -8,6 +8,7 @@ import {
 	replaceParameters,
 } from '@cxl/router';
 import {
+	EMPTY,
 	Observable,
 	Reference,
 	combineLatest,
@@ -104,7 +105,10 @@ export function routerStrategy(
 		getUrl.tap(() => router.go(strategy.deserialize())),
 		router$
 			.tap(state => strategy.serialize(state.url))
-			.catchError((_, source) => source)
+			// Prevent routing errors in iframes. Ignore other errors.
+			.catchError((e, source) =>
+				e.name === 'SecurityError' ? EMPTY : source
+			)
 	);
 }
 
@@ -156,7 +160,7 @@ export function Router(
 	};
 }
 
-const routeTitles = router$.map(state => {
+const routeTitles = router$.raf().map(state => {
 	const result = [];
 	let route: any = state.current;
 	do {
@@ -187,10 +191,10 @@ export function RouterTitle() {
 		return route.first ? (
 			<Span>{route.title}</Span>
 		) : (
-			<Span slot="parent">
+			<span slot="parent">
 				<RouterLink href={route.path}>{route.title}</RouterLink>
 				&nbsp;/&nbsp;
-			</Span>
+			</span>
 		);
 	}
 
