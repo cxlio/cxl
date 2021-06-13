@@ -252,14 +252,11 @@ function getObservedAttributes(target: typeof Component) {
 
 const attributeOperator = tap<AttributeEvent<any, any>>(
 	({ value, target, attribute }) => {
-		if (
-			(value === false || value === undefined) &&
-			target.hasAttribute(attribute)
-		)
-			target.removeAttribute(attribute);
-		else if (typeof value === 'string')
-			target.setAttribute(attribute, value);
-		else if (value === true) target.setAttribute(attribute, '');
+		if (value === false || value === undefined || value === 0) {
+			if (target.hasAttribute(attribute))
+				target.removeAttribute(attribute);
+		} else if (value === true) target.setAttribute(attribute, '');
+		else target.setAttribute(attribute, value);
 	}
 );
 
