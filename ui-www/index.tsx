@@ -240,7 +240,7 @@ export class AppbarItem extends Component {
 			zIndex: 5,
 		},
 		appbar: {
-			...padding(20, 24, 20, 24),
+			...padding(20, 8, 20, 8),
 			variables: {
 				surface: baseColor('surface'),
 				onSurface: baseColor('onSurface'),
@@ -276,6 +276,7 @@ export class PageAppbar extends Component {}
 	$ => (
 		<RouterLink href="/">
 			<Image className="logo" alt="" src={get($, 'src')} />
+			<slot />
 		</RouterLink>
 	)
 )
@@ -292,19 +293,18 @@ export class PageText extends Component {}
 	css({
 		$: {
 			display: 'block',
-			...padding(64, 0, 32, 0),
+			...padding(80, 0, 40, 0),
 		},
-		grid: {},
+		grid: { marginBottom: 40 },
 		bottom: {
-			marginTop: 32,
 			backgroundColor: 'inherit',
 			display: 'block',
-			height: 32,
+			height: 40,
 		},
 		circle: {
 			display: 'block',
 			borderRadius: pct(50),
-			height: 64,
+			height: 80,
 			width: '100%',
 			position: 'absolute',
 			marginTop: 0,
@@ -312,7 +312,7 @@ export class PageText extends Component {}
 	}),
 	() => (
 		<Layout center>
-			<Grid>
+			<Grid className="grid">
 				<C sm={6} vflex middle>
 					<div>
 						<slot />
@@ -403,6 +403,46 @@ export class ServiceCard extends Card {}
 	}
 )
 export class ImageCard extends Component {
+	@Attribute()
+	src = '';
+}
+
+@Augment<ImageThumbnail>(
+	'www-img-thumb',
+	css({
+		$: {
+			display: 'block',
+			position: 'relative',
+			backgroundSize: 'cover',
+			backgroundPosition: 'center',
+		},
+		hover: {
+			position: 'absolute',
+			opacity: 0,
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+			backgroundColor: 'shadow',
+			alignItems: 'center',
+			justifyContent: 'center',
+			display: 'flex',
+		},
+		hover$hover: { opacity: 1 },
+	}),
+	$ => {
+		$.bind(
+			get($, 'src').tap(src => ($.style.backgroundImage = `url(${src})`))
+		);
+
+		return (
+			<C className="backdrop hover">
+				<DialogPhoto src={get($, 'src')} />
+			</C>
+		);
+	}
+)
+export class ImageThumbnail extends Component {
 	@Attribute()
 	src = '';
 }
