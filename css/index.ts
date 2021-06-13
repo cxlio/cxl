@@ -1,5 +1,5 @@
 ///<amd-module name="@cxl/css"/>
-type StyleDefinition = Partial<StrictStyleDefinition>;
+export type StyleDefinition = Partial<StrictStyleDefinition>;
 export type BaseColor = RGBA;
 export type CSSStyle = {
 	[P in keyof CSSStyleDeclaration]?: string | number;
@@ -30,7 +30,7 @@ export interface Typography {
 	default: CSSStyle;
 }
 
-interface StrictStyleDefinition {
+export interface StrictStyleDefinition {
 	alignItems: FlexAlign;
 	alignSelf: FlexAlign;
 	animation: keyof Theme['animation'];
@@ -48,7 +48,7 @@ interface StrictStyleDefinition {
 	borderStyle: 'solid' | 'none';
 	boxShadow: BoxShadow | 'none';
 	elevation: 0 | 1 | 2 | 3 | 4 | 5;
-	fontSize: 'inherit';
+	fontSize: number | 'inherit';
 	translateX: Length;
 	translateY: Length;
 	translateZ: Length;
