@@ -489,6 +489,35 @@ export default suite('rx', [
 		});
 
 		test('subscribe', it => {
+			it.should('clean out unsubscribed subscribers', a => {
+				const subject = new Subject();
+				const sub1 = subject.subscribe();
+				const sub2 = subject.subscribe();
+
+				a.equal((subject as any).observers.size, 2);
+				sub1.unsubscribe();
+				a.equal((subject as any).observers.size, 1);
+				sub2.unsubscribe();
+				a.equal((subject as any).observers.size, 0);
+			});
+
+			it.should(
+				'unsubscribe when subscriber unsubscribes synchronously',
+				a => {
+					const subject = new Subject();
+					const obs = subject
+						.tap(val => a.ok(val !== 3))
+						.take(2)
+						.tap(val => a.ok(val !== 3));
+					obs.subscribe();
+					subject.next(1);
+					subject.next(2);
+					subject.next(3);
+					subject.next(4);
+					subject.next(5);
+				}
+			);
+
 			it.should(
 				'handle subscribers that arrive and leave at different times, ' +
 					'subject does not complete',

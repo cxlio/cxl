@@ -63,22 +63,17 @@ export class Subscriber<T> {
 	}
 
 	next(val: T) {
-		const subscriber = this.observer;
-
-		if (this.closed) {
-			return console.error('Subscriber already closed');
-		}
-
+		if (this.closed) return;
 		try {
-			if (subscriber.next) subscriber.next(val);
+			this.observer.next?.(val);
 		} catch (e) {
 			this.error(e);
 		}
 	}
 
 	error(e: ObservableError) {
-		const subscriber = this.observer;
 		if (!this.closed) {
+			const subscriber = this.observer;
 			if (!subscriber.error) {
 				this.unsubscribe();
 				throw e;
@@ -104,11 +99,7 @@ export class Subscriber<T> {
 	unsubscribe() {
 		if (!this.closed) {
 			this.closed = true;
-			const teardown = this.teardown;
-			if (teardown) {
-				this.teardown = undefined;
-				teardown();
-			}
+			this.teardown?.();
 			if (this.onUnsubscribe) this.onUnsubscribe();
 		}
 	}
