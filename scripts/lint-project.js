@@ -149,7 +149,7 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	);
 	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.min.js';
 
-	if (!pkg.name === `${rootPkg.name}${dir}`)
+	if (!(pkg.name === `${rootPkg.name}${dir}`))
 		pkg.name = `${rootPkg.name}${dir}`;
 	if (!pkg.scripts) pkg.scripts = {};
 	if (!pkg.scripts.test) pkg.scripts.test = testScript;
