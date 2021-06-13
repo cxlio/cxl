@@ -17,6 +17,7 @@ import {
 	merge,
 	observable,
 	operatorNext,
+	operator,
 	of,
 	tap,
 	map,
@@ -33,7 +34,7 @@ declare global {
 	}
 }
 
-interface ElementWithValue<T> extends HTMLElement {
+export interface ElementWithValue<T> extends HTMLElement {
 	value: T;
 }
 
@@ -162,33 +163,32 @@ export function is<T>(equalTo: T) {
  * debounce using requestAnimationFrame
  */
 export function raf<T>(fn?: (val: T) => void) {
-	return (source: Observable<T>) => {
+	return operator<T>(subscriber => {
 		let to: number,
 			completed = false;
 
-		return new Observable<T>(subscriber => {
-			const subs = source.subscribe({
-				next(val: T) {
-					if (to) cancelAnimationFrame(to);
-					to = requestAnimationFrame(() => {
-						if (fn) fn(val);
-						subscriber.next(val);
-						to = 0;
-						if (completed) subscriber.complete();
-					});
-				},
-				error(e) {
-					if (to) cancelAnimationFrame(to);
-					subscriber.error(e);
-				},
-				complete() {
-					if (to) completed = true;
-					else subscriber.complete();
-				},
-			});
-			return () => subs.unsubscribe();
-		});
-	};
+		return {
+			next(val: T) {
+				if (to) cancelAnimationFrame(to);
+				to = requestAnimationFrame(() => {
+					if (fn) fn(val);
+					subscriber.next(val);
+					to = 0;
+					if (completed) subscriber.complete();
+				});
+			},
+			error(e) {
+				subscriber.error(e);
+			},
+			complete() {
+				if (to) completed = true;
+				else subscriber.complete();
+			},
+			unsubscribe() {
+				if (to) cancelAnimationFrame(to);
+			},
+		};
+	});
 }
 
 export function log<T>() {
