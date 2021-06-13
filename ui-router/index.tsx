@@ -8,7 +8,6 @@ import {
 	replaceParameters,
 } from '@cxl/router';
 import {
-	EMPTY,
 	Observable,
 	Reference,
 	combineLatest,
@@ -105,7 +104,7 @@ export function routerStrategy(
 		getUrl.tap(() => router.go(strategy.deserialize())),
 		router$
 			.tap(state => strategy.serialize(state.url))
-			.catchError(() => EMPTY)
+			.catchError((_, source) => source)
 	);
 }
 
