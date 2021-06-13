@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ajax"/>
 import { observable } from '@cxl/rx';
 
 interface AjaxOptions {
