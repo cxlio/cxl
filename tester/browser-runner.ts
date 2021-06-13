@@ -2,6 +2,7 @@ import type { Result, Test } from '@cxl/spec';
 import type { TestResult } from './report';
 
 let output = '';
+let baselinePath: string;
 
 function group(testId: number, title: string) {
 	output += `<dl><dt><a data-test="${testId}" href="#">${title}</a></dt><dd>`;
@@ -44,7 +45,7 @@ function printResult(result: Result) {
 		output += `
 		<div style="vertical-align:middle;display:inline-block; width:320px;position:relative;">${data.html}</div>
 		<img style="vertical-align:middle" src="spec/${data.name}.png" />
-		<img style="vertical-align:middle" src="../../ui/spec/${data.name}.png" />`;
+		<img style="vertical-align:middle" src="${baselinePath}/${data.name}.png" />`;
 	}
 }
 
@@ -123,7 +124,8 @@ const browserRunner = {
 		renderTestReport(suite);
 	},
 
-	async run(suites: Test[]) {
+	async run(suites: Test[], baselineDir = '../../ui/spec') {
+		baselinePath = baselineDir;
 		await Promise.all(suites.map(suite => this.runSuite(suite)));
 		const container = document.createElement('cxl-content');
 		container.innerHTML = output;
