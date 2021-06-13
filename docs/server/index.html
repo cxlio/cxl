@@ -1,176 +1,150 @@
 <!DOCTYPE html>
 	<head><meta name="description" content="Documentation for @cxl/server" /><script>window.docgen={"activeVersion":"0.0.2","userScripts":[],"versions":["0.0.2","0.0.1"]};</script><script src="runtime.bundle.min.js"></script></head>
 	<link rel="stylesheet" href="styles.css" />
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}cxl-router-item>cxl-badge{margin-right:0} cxl-grid>cxl-c{overflow-wrap:break-word}.see-source{text-decoration:none;float:right;color:var(--cxl-onSurface87)}cxl-t[code][subtitle]{font-weight:700;margin-bottom:16px}</style>
 	<cxl-application permanent><title>@cxl/server</title><cxl-appbar>
-	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">@cxl/server</cxl-t><doc-version-select></doc-version-select>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline>@cxl/server</cxl-t>&nbsp;&nbsp;<doc-version-select></doc-version-select>
 	</cxl-c>
 		<cxl-hr></cxl-hr>
 		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
-		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index--Application.html"><cxl-badge style="margin-right:12px">C</cxl-badge>Application</cxl-router-item><cxl-router-item href="index-api.html#s34"><cxl-badge style="margin-right:12px">F</cxl-badge>filesNeedSync</cxl-router-item><cxl-router-item href="index-api.html#s38"><cxl-badge style="margin-right:12px">F</cxl-badge>mkdirp</cxl-router-item><cxl-router-item href="index-api.html#s65"><cxl-badge style="margin-right:12px">F</cxl-badge>readJson</cxl-router-item><cxl-router-item href="index-api.html#s40"><cxl-badge style="margin-right:12px">F</cxl-badge>sh</cxl-router-item><cxl-router-item href="index-api.html#s31"><cxl-badge style="margin-right:12px">F</cxl-badge>syncFiles</cxl-router-item><cxl-router-item href="colors.html"><i>colors.ts</i></cxl-router-item><cxl-router-item href="colors.html#s137"><cxl-badge style="margin-right:12px">K</cxl-badge>colors</cxl-router-item><cxl-router-item href="program.html"><i>program.ts</i></cxl-router-item><cxl-router-item href="program.html#s169"><cxl-badge style="margin-right:12px">K</cxl-badge>DefaultParameters</cxl-router-item><cxl-router-item href="program.html#s199"><cxl-badge style="margin-right:12px">F</cxl-badge>parseArgv</cxl-router-item><cxl-router-item href="program.html#s193"><cxl-badge style="margin-right:12px">F</cxl-badge>parseParameters</cxl-router-item><cxl-router-item href="program.html#s196"><cxl-badge style="margin-right:12px">F</cxl-badge>parseParametersArray</cxl-router-item><cxl-router-item href="program.html#s210"><cxl-badge style="margin-right:12px">F</cxl-badge>program</cxl-router-item><cxl-router-item href="program.html#s201"><cxl-badge style="margin-right:12px">F</cxl-badge>readJson</cxl-router-item>
+		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index--Application.html"><cxl-badge>C</cxl-badge>Application</cxl-router-item><cxl-router-item href="index-api.html#s34"><cxl-badge>F</cxl-badge>filesNeedSync</cxl-router-item><cxl-router-item href="index-api.html#s38"><cxl-badge>F</cxl-badge>mkdirp</cxl-router-item><cxl-router-item href="index-api.html#s65"><cxl-badge>F</cxl-badge>readJson</cxl-router-item><cxl-router-item href="index-api.html#s40"><cxl-badge>F</cxl-badge>sh</cxl-router-item><cxl-router-item href="index-api.html#s31"><cxl-badge>F</cxl-badge>syncFiles</cxl-router-item><cxl-router-item href="colors.html"><i>colors.ts</i></cxl-router-item><cxl-router-item href="colors.html#s137"><cxl-badge>K</cxl-badge>colors</cxl-router-item><cxl-router-item href="program.html"><i>program.ts</i></cxl-router-item><cxl-router-item href="program.html#s169"><cxl-badge>K</cxl-badge>DefaultParameters</cxl-router-item><cxl-router-item href="program.html#s199"><cxl-badge>F</cxl-badge>parseArgv</cxl-router-item><cxl-router-item href="program.html#s193"><cxl-badge>F</cxl-badge>parseParameters</cxl-router-item><cxl-router-item href="program.html#s196"><cxl-badge>F</cxl-badge>parseParametersArray</cxl-router-item><cxl-router-item href="program.html#s210"><cxl-badge>F</cxl-badge>program</cxl-router-item><cxl-router-item href="program.html#s201"><cxl-badge>F</cxl-badge>readJson</cxl-router-item>
 		</cxl-navbar>
-	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">@cxl/server</a></cxl-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-path="index--OperationResult.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>OperationResult</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { OperationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+	<cxl-router-appbar-title></cxl-router-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="OperationResult" data-path="index--OperationResult.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>OperationResult</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { OperationResult } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--OperationResult.html#s6">result</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--OperationResult.html#s3">start</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--OperationResult.html#s5">tasks</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--OperationResult.html#s4">time</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s6"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>result: any</cxl-t>
+		<cxl-t code subtitle>result: any</cxl-t>
 		</cxl-c></cxl-card><a name="s3"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>start: </cxl-t>
+		<cxl-t code subtitle>start: </cxl-t>
 		</cxl-c></cxl-card><a name="s5"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>tasks: number</cxl-t>
+		<cxl-t code subtitle>tasks: number</cxl-t>
 		</cxl-c></cxl-card><a name="s4"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>time: </cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="index--Parameter.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Parameter</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Parameter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Methods
+		<cxl-t code subtitle>time: </cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="Parameter" data-path="index--Parameter.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Parameter</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Parameter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Methods
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--Parameter.html#s49">handle</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--Parameter.html#s48">help</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Parameter.html#s44">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Parameter.html#s46">rest</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Parameter.html#s45">shortcut</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Parameter.html#s47">type</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Methods</cxl-t><a name="s49"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>handle(app: <cxl-a href="index--Application.html">Application</cxl-a>, value: string): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>app: <cxl-a href="index--Application.html">Application</cxl-a></li><li>value: string</li></ul>
+		<cxl-t code subtitle>handle(app: <cxl-a href="index--Application.html">Application</cxl-a>, value: string): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>app: <cxl-a href="index--Application.html">Application</cxl-a></cxl-t></li><li><cxl-t code inline>value: string</cxl-t></li></ul>
 		</cxl-c></cxl-card><cxl-t h5>Properties</cxl-t><a name="s48"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>help: string</cxl-t>
+		<cxl-t code subtitle>help: string</cxl-t>
 		</cxl-c></cxl-card><a name="s44"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
+		<cxl-t code subtitle>name: string</cxl-t>
 		</cxl-c></cxl-card><a name="s46"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>rest: boolean</cxl-t>
+		<cxl-t code subtitle>rest: boolean</cxl-t>
 		</cxl-c></cxl-card><a name="s45"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>shortcut: string</cxl-t>
+		<cxl-t code subtitle>shortcut: string</cxl-t>
 		</cxl-c></cxl-card><a name="s47"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>type: 'string' | 'boolean' | 'number'</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="index--ApplicationParameters.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span>ApplicationParameters</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { ApplicationParameters } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Constructor
+		<cxl-t code subtitle>type: 'string' | 'boolean' | 'number'</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="ApplicationParameters" data-path="index--ApplicationParameters.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span>ApplicationParameters</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { ApplicationParameters } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Constructor
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--ApplicationParameters.html#s55">constructor</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Methods
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--ApplicationParameters.html#s63">parse</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--ApplicationParameters.html#s61">parseJson</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--ApplicationParameters.html#s59">parseJsonFile</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--ApplicationParameters.html#s57">register</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--ApplicationParameters.html#s56">app</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--ApplicationParameters.html#s54">parameters</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Constructor</cxl-t><a name="s55"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>constructor(app: <cxl-a href="index--Application.html">Application</cxl-a>): <cxl-a href="index--ApplicationParameters.html">ApplicationParameters</cxl-a></cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>app: <cxl-a href="index--Application.html">Application</cxl-a></li></ul>
+		<cxl-t code subtitle>constructor(app: <cxl-a href="index--Application.html">Application</cxl-a>): <cxl-a href="index--ApplicationParameters.html">ApplicationParameters</cxl-a></cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>app: <cxl-a href="index--Application.html">Application</cxl-a></cxl-t></li></ul>
 		</cxl-c></cxl-card><cxl-t h5>Methods</cxl-t><a name="s63"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parse(args: string[]): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>args: string[]</li></ul>
+		<cxl-t code subtitle>parse(args: string[]): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>args: string[]</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s61"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parseJson(json: any): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>json: any</li></ul>
+		<cxl-t code subtitle>parseJson(json: any): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>json: any</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s59"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parseJsonFile(fileName: string): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>fileName: string</li></ul>
+		<cxl-t code subtitle>parseJsonFile(fileName: string): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>fileName: string</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s57"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>register(...p: <cxl-a href="index--Parameter.html">Parameter</cxl-a>[]): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>...p: <cxl-a href="index--Parameter.html">Parameter</cxl-a>[]</li></ul>
+		<cxl-t code subtitle>register(...p: <cxl-a href="index--Parameter.html">Parameter</cxl-a>[]): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>...p: <cxl-a href="index--Parameter.html">Parameter</cxl-a>[]</cxl-t></li></ul>
 		</cxl-c></cxl-card><cxl-t h5>Properties</cxl-t><a name="s56"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> app: <cxl-a href="index--Application.html">Application</cxl-a></cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> app: <cxl-a href="index--Application.html">Application</cxl-a></cxl-t>
 		</cxl-c></cxl-card><a name="s54"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>readonly</cxl-chip> parameters: <cxl-a href="index--Parameter.html">Parameter</cxl-a>[] = <pre><code class="hljs">[
-		{
-			<span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;help&#x27;</span>,
-			<span class="hljs-attr">shortcut</span>: <span class="hljs-string">&#x27;h&#x27;</span>,
-			<span class="hljs-function"><span class="hljs-title">handle</span>(<span class="hljs-params">app: Application</span>)</span> {
-				<span class="hljs-keyword">if</span> (app.version) app.log(app.version);
-				process.exit(<span class="hljs-number">0</span>);
-			},
-		},
-		{
-			<span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;config&#x27;</span>,
-			<span class="hljs-attr">help</span>: <span class="hljs-string">&#x27;Use JSON config file&#x27;</span>,
-			<span class="hljs-attr">shortcut</span>: <span class="hljs-string">&#x27;c&#x27;</span>,
-			<span class="hljs-function"><span class="hljs-title">handle</span>(<span class="hljs-params">app: Application, fileName: <span class="hljs-built_in">string</span></span>)</span> {
-				app.parameters.parseJsonFile(fileName);
-			},
-		},
-	]</code></pre></cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="index--Application.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span><cxl-chip small primary>abstract</cxl-chip> Application</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Application } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Methods
+		<cxl-t code subtitle><cxl-chip small primary>readonly</cxl-chip> parameters: <cxl-a href="index--Parameter.html">Parameter</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="Application" data-path="index--Application.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span><cxl-chip small primary>abstract</cxl-chip> Application</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Application } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Methods
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s79">handleError</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s76">log</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s82">run</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s75">setup</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s81">start</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s69">color</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s74">coloredPrefix</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s68">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s72">package</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s71">parameters</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s73">started</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Application.html#s70">version</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Methods</cxl-t><a name="s79"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>protected</cxl-chip> handleError(e?: any): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>e?: any</li></ul>
+		<cxl-t code subtitle><cxl-chip small primary>protected</cxl-chip> handleError(e?: any): void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>e?: any</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s76"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>log(msg: <cxl-a href="index-api.html#s12">LogMessage</cxl-a>, op?: <cxl-a href="index-api.html#s7">OperationFunction</cxl-a>&lt;any&gt;): Promise&lt;void&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>msg: <cxl-a href="index-api.html#s12">LogMessage</cxl-a></li><li>op?: <cxl-a href="index-api.html#s7">OperationFunction</cxl-a>&lt;any&gt;</li></ul>
+		<cxl-t code subtitle>log(msg: <cxl-a href="index-api.html#s12">LogMessage</cxl-a>, op?: <cxl-a href="index-api.html#s7">OperationFunction</cxl-a>&lt;any&gt;): Promise&lt;void&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>msg: <cxl-a href="index-api.html#s12">LogMessage</cxl-a></cxl-t></li><li><cxl-t code inline>op?: <cxl-a href="index-api.html#s7">OperationFunction</cxl-a>&lt;any&gt;</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s82"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>protected</cxl-chip> <cxl-chip small primary>abstract</cxl-chip> run(): Promise&lt;any&gt; | void</cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>protected</cxl-chip> <cxl-chip small primary>abstract</cxl-chip> run(): Promise&lt;any&gt; | void</cxl-t>
 		</cxl-c></cxl-card><a name="s75"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>setup(): void</cxl-t>
+		<cxl-t code subtitle>setup(): void</cxl-t>
 		</cxl-c></cxl-card><a name="s81"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>start(): Promise&lt;any&gt;</cxl-t>
+		<cxl-t code subtitle>start(): Promise&lt;any&gt;</cxl-t>
 		</cxl-c></cxl-card><cxl-t h5>Properties</cxl-t><a name="s69"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>color: keyof typeof colors = 'green'</cxl-t>
+		<cxl-t code subtitle>color: keyof typeof colors = 'green'</cxl-t>
 		</cxl-c></cxl-card><a name="s74"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> coloredPrefix: string</cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> coloredPrefix: string</cxl-t>
 		</cxl-c></cxl-card><a name="s68"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
+		<cxl-t code subtitle>name: string</cxl-t>
 		</cxl-c></cxl-card><a name="s72"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>package: any</cxl-t>
+		<cxl-t code subtitle>package: any</cxl-t>
 		</cxl-c></cxl-card><a name="s71"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parameters: <cxl-a href="index--ApplicationParameters.html">ApplicationParameters</cxl-a> = new ApplicationParameters(this)</cxl-t>
+		<cxl-t code subtitle>parameters: <cxl-a href="index--ApplicationParameters.html">ApplicationParameters</cxl-a> = new ApplicationParameters(this)</cxl-t>
 		</cxl-c></cxl-card><a name="s73"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>started: boolean = false</cxl-t>
+		<cxl-t code subtitle>started: boolean = false</cxl-t>
 		</cxl-c></cxl-card><a name="s70"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>version: string</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Classes
+		<cxl-t code subtitle>version: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="index.ts" data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Classes
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--Application.html">Application</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Functions
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s34">filesNeedSync</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s38">mkdirp</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s65">readJson</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s40">sh</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s31">syncFiles</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s34"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>filesNeedSync(file1: string, file2: string): Promise&lt;boolean&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>file1: string</li><li>file2: string</li></ul>
+		<cxl-t code subtitle>filesNeedSync(file1: string, file2: string): Promise&lt;boolean&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>file1: string</cxl-t></li><li><cxl-t code inline>file2: string</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s38"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>mkdirp(dir: string): Promise&lt;any&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>dir: string</li></ul>
+		<cxl-t code subtitle>mkdirp(dir: string): Promise&lt;any&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>dir: string</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s65"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>readJson&lt;T&gt;(fileName: string): Promise&lt;<a href="#s66">T</a> | undefined&gt;</cxl-t><p>Read and parse a JSON file, ignores errors.</p><cxl-t subtitle2>Parameters</cxl-t><ul><li>fileName: string<p>Path of file to parse</p></li></ul>
+		<cxl-t code subtitle>readJson&lt;T&gt;(fileName: string): Promise&lt;<a href="#s66">T</a> | undefined&gt;</cxl-t><p>Read and parse a JSON file, ignores errors.</p><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>fileName: string</cxl-t><p>Path of file to parse</p></li></ul>
 		</cxl-c></cxl-card><a name="s40"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>sh(cmd: string, options: SpawnOptions): Promise&lt;unknown&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>cmd: string</li><li>options: SpawnOptions</li></ul>
+		<cxl-t code subtitle>sh(cmd: string, options: SpawnOptions): Promise&lt;string&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>cmd: string</cxl-t></li><li><cxl-t code inline>options: SpawnOptions</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s31"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>syncFiles(file1: string, file2: string): Promise&lt;void&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>file1: string</li><li>file2: string</li></ul>
-		</cxl-c></cxl-card></template><template  data-path="colors.html"><cxl-t h3><span style="float:right"></span>colors.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Constants
+		<cxl-t code subtitle>syncFiles(file1: string, file2: string): Promise&lt;void&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>file1: string</cxl-t></li><li><cxl-t code inline>file2: string</cxl-t></li></ul>
+		</cxl-c></cxl-card></template><template  data-title="colors.ts" data-path="colors.html"><cxl-t h3><span style="float:right"></span>colors.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Constants
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="colors.html#s137">colors</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Constants</cxl-t><a name="s137"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>colors: <cxl-a href="colors.html#s134">Colors</cxl-a>&lt;typeof codes&gt; = styles</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="program--Parameter.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Parameter</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Parameter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		<cxl-t code subtitle>colors: <cxl-a href="colors.html#s134">Colors</cxl-a>&lt;typeof codes&gt; = styles</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="Parameter" data-path="program--Parameter.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Parameter</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Parameter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="program--Parameter.html#s151">help</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--Parameter.html#s148">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--Parameter.html#s149">short</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--Parameter.html#s150">type</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s151"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>help: string</cxl-t>
+		<cxl-t code subtitle>help: string</cxl-t>
 		</cxl-c></cxl-card><a name="s148"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
+		<cxl-t code subtitle>name: string</cxl-t>
 		</cxl-c></cxl-card><a name="s149"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>short: string</cxl-t>
+		<cxl-t code subtitle>short: string</cxl-t>
 		</cxl-c></cxl-card><a name="s150"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>type: 'string' | 'boolean' | 'number'</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="program--ProgramConfiguration.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>ProgramConfiguration</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { ProgramConfiguration } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		<cxl-t code subtitle>type: 'string' | 'boolean' | 'number'</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="ProgramConfiguration" data-path="program--ProgramConfiguration.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>ProgramConfiguration</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { ProgramConfiguration } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="program--ProgramConfiguration.html#s155">logColor</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--ProgramConfiguration.html#s153">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--ProgramConfiguration.html#s154">parameters</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s155"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>logColor: keyof typeof colors</cxl-t>
+		<cxl-t code subtitle>logColor: keyof typeof colors</cxl-t>
 		</cxl-c></cxl-card><a name="s153"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
+		<cxl-t code subtitle>name: string</cxl-t>
 		</cxl-c></cxl-card><a name="s154"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="program--Package.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Package</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Package } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		<cxl-t code subtitle>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="Package" data-path="program--Package.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Package</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Package } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="program--Package.html#s157">name</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s157"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="program--Logger.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Logger</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Logger } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Unknown
+		<cxl-t code subtitle>name: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="Logger" data-path="program--Logger.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Logger</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Logger } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Unknown
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> (Unknown)</cxl-c></cxl-grid></cxl-c><cxl-t h5>Unknown</cxl-t><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle></cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="program--Program.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Program</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Program } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		<cxl-t code subtitle></cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="Program" data-path="program--Program.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Program</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Program } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="program--Program.html#s162">log</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--Program.html#s160">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--Program.html#s161">pkg</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s162"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>log: <cxl-a href="program--Logger.html">Logger</cxl-a></cxl-t>
+		<cxl-t code subtitle>log: <cxl-a href="program--Logger.html">Logger</cxl-a></cxl-t>
 		</cxl-c></cxl-card><a name="s160"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
+		<cxl-t code subtitle>name: string</cxl-t>
 		</cxl-c></cxl-card><a name="s161"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>pkg: <cxl-a href="program--Package.html">Package</cxl-a></cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="program--Argument.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Argument</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Argument } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		<cxl-t code subtitle>pkg: <cxl-a href="program--Package.html">Package</cxl-a></cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="Argument" data-path="program--Argument.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>Argument</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { Argument } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/server/program&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="program--Argument.html#s171">name</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program--Argument.html#s172">value</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s171"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>name: string</cxl-t>
+		<cxl-t code subtitle>name: string</cxl-t>
 		</cxl-c></cxl-card><a name="s172"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>value: string</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="program.html"><cxl-t h3><span style="float:right"></span>program.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Constants
+		<cxl-t code subtitle>value: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="program.ts" data-path="program.html"><cxl-t h3><span style="float:right"></span>program.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Constants
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="program.html#s169">DefaultParameters</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Functions
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="program.html#s199">parseArgv</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program.html#s193">parseParameters</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program.html#s196">parseParametersArray</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program.html#s210">program</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="program.html#s201">readJson</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Constants</cxl-t><a name="s169"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>DefaultParameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[] = <pre><code class="hljs">[
-	{
-		<span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;help&#x27;</span>,
-		<span class="hljs-attr">short</span>: <span class="hljs-string">&#x27;h&#x27;</span>,
-	},
-	{
-		<span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;config&#x27;</span>,
-		<span class="hljs-attr">help</span>: <span class="hljs-string">&#x27;Use JSON config file&#x27;</span>,
-		<span class="hljs-attr">short</span>: <span class="hljs-string">&#x27;c&#x27;</span>,
-	},
-]</code></pre></cxl-t>
+		<cxl-t code subtitle>DefaultParameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</cxl-t>
 		</cxl-c></cxl-card><cxl-t h5>Functions</cxl-t><a name="s199"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parseArgv(parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]): any</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</li></ul>
+		<cxl-t code subtitle>parseArgv(parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]): any</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s193"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parseParameters(parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[], input: string): any</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</li><li>input: string</li></ul>
+		<cxl-t code subtitle>parseParameters(parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[], input: string): any</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</cxl-t></li><li><cxl-t code inline>input: string</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s196"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>parseParametersArray(parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[], input: string): Array&lt;<cxl-a href="program--Argument.html">Argument</cxl-a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</li><li>input: string</li></ul>
+		<cxl-t code subtitle>parseParametersArray(parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[], input: string): Array&lt;<cxl-a href="program--Argument.html">Argument</cxl-a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>parameters: <cxl-a href="program--Parameter.html">Parameter</cxl-a>[]</cxl-t></li><li><cxl-t code inline>input: string</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s210"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>program(name: string | <cxl-a href="program--ProgramConfiguration.html">ProgramConfiguration</cxl-a>, startFn: (p: <cxl-a href="program--Program.html">Program</cxl-a>) => void): () => Promise&lt;void&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>name: string | <cxl-a href="program--ProgramConfiguration.html">ProgramConfiguration</cxl-a></li><li>startFn: (p: <cxl-a href="program--Program.html">Program</cxl-a>) => void</li></ul>
+		<cxl-t code subtitle>program(name: string | <cxl-a href="program--ProgramConfiguration.html">ProgramConfiguration</cxl-a>, startFn: (p: <cxl-a href="program--Program.html">Program</cxl-a>) => void): () => Promise&lt;void&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>name: string | <cxl-a href="program--ProgramConfiguration.html">ProgramConfiguration</cxl-a></cxl-t></li><li><cxl-t code inline>startFn: (p: <cxl-a href="program--Program.html">Program</cxl-a>) => void</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s201"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>readJson&lt;T&gt;(fileName: string): Promise&lt;<a href="#s202">T</a> | undefined&gt;</cxl-t><p>Read and parse a JSON file, ignores errors.</p><cxl-t subtitle2>Parameters</cxl-t><ul><li>fileName: string<p>Path of file to parse</p></li></ul>
-		</cxl-c></cxl-card></template><template data-default="true" data-path="index.html"><cxl-t h2>@cxl/server</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fserver"><img src="https://badge.fury.io/js/%40cxl%2Fserver.svg" alt="npm version"></a></p>
+		<cxl-t code subtitle>readJson&lt;T&gt;(fileName: string): Promise&lt;<a href="#s202">T</a> | undefined&gt;</cxl-t><p>Read and parse a JSON file, ignores errors.</p><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>fileName: string</cxl-t><p>Path of file to parse</p></li></ul>
+		</cxl-c></cxl-card></template><template data-default="true" data-title="Home" data-path="index.html"><cxl-t h2>@cxl/server</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fserver"><img src="https://badge.fury.io/js/%40cxl%2Fserver.svg" alt="npm version"></a></p>
 <p>Application library</p>
 <cxl-t h3>Project Details</cxl-t><ul>
 <li>Branch Version: <a href="https://npmjs.com/package/@cxl/server/v/0.0.2">0.0.2</a></li>
 <li>License: GPL-3.0</li>
 <li>Documentation: <a href="https://cxlio.github.io/cxl/server">Link</a></li>
+<li>Report Issues: <a href="https://github.com/cxlio/cxl/issues">Github</a></li>
 </ul>
 <cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/server
 </code></pre></template></cxl-router></cxl-page></cxl-application>

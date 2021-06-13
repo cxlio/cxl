@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/select.js"/>
 import { dom, expression } from '@cxl/tsx';
 import {
 	Augment,
@@ -5,29 +6,26 @@ import {
 	Component,
 	Slot,
 	StyleAttribute,
-	bind,
 	get,
-	role,
 } from '@cxl/component';
 import { css } from '@cxl/css';
 import { be, merge } from '@cxl/rx';
 import { on, onAction, onKeypress } from '@cxl/dom';
-import { triggerEvent } from '@cxl/template';
-import { InputBase } from './input-base.js';
 import {
-	Svg,
+	role,
+	triggerEvent,
 	focusable,
-	registableHost,
 	navigationList,
 	selectable,
 	selectableHost,
-} from './core.js';
+} from '@cxl/template';
+import { InputBase } from './input-base.js';
+import { Svg } from './core.js';
 
 @Augment<Option>(
 	'cxl-option',
 	role('option'),
-	bind(selectable),
-	bind(host => get(host, 'value').pipe(triggerEvent(host, 'change'))),
+	host => get(host, 'value').pipe(triggerEvent(host, 'change')),
 	css({
 		$: {
 			cursor: 'pointer',
@@ -81,7 +79,8 @@ import {
 				<slot />
 			</div>
 		</>
-	)
+	),
+	selectable
 )
 export class Option extends Component {
 	private $value?: string;
@@ -172,9 +171,6 @@ export class SelectMenu extends Component {
 		el.bind(
 			merge(
 				focusable(el),
-				registableHost<Option>(el, 'selectable').tap(options =>
-					el.setOptions(((el as any).options = options))
-				),
 				on(el, 'blur').tap(() => el.close()),
 				onKeypress(el, 'escape').tap(() => el.close())
 			)
@@ -190,9 +186,8 @@ export abstract class SelectBase extends InputBase {
 	@StyleAttribute()
 	opened = false;
 
-	readonly options?: Set<Option>;
+	readonly options = new Set<Option>();
 
-	protected abstract setOptions(options: Set<Option>): void;
 	protected abstract setSelected(option: Option): void;
 	abstract open(): void;
 	abstract close(): void;
@@ -222,8 +217,8 @@ export abstract class SelectBase extends InputBase {
 				'cxl-option:not([disabled])',
 				'cxl-option:not([disabled])[selected]'
 			).tap(selected => host.setSelected(selected as Option)),
-			selectableHost(host).tap(selected =>
-				host.setSelected(selected as Option)
+			selectableHost<Option>(host).tap(selected =>
+				host.setSelected(selected)
 			),
 			onAction(host).tap(() => !host.opened && host.open())
 		),
@@ -279,23 +274,6 @@ export class SelectBox extends SelectBase {
 		menu.scrollTop = scrollTop;
 	}
 
-	protected setOptions(options: Set<Option>) {
-		const { value, selected } = this;
-
-		if (selected && options.has(selected)) return;
-
-		let first: Option | null = null;
-		for (const o of options) {
-			first = first || o;
-
-			if (value === o.value) return this.setSelected(o);
-		}
-
-		if (value === undefined && !this.selected && first)
-			this.setSelected(first);
-		else if (selected && !selected.parentNode) this.setSelected(undefined);
-	}
-
 	protected setSelected(option?: Option) {
 		if (option !== this.selected) {
 			if (this.selected)
@@ -307,8 +285,7 @@ export class SelectBox extends SelectBase {
 			option.selected = option.focused = true;
 			this.selectedText$.next(option.textContent || '');
 			this.value = option.value;
-		} else if (option === undefined)
-			this.selectedText$.next((this.value = ''));
+		} else if (option === undefined) this.selectedText$.next('');
 
 		this.close();
 	}

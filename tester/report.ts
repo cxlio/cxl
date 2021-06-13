@@ -1,12 +1,13 @@
 import { readFileSync } from 'fs';
 import { relative } from 'path';
-import type { Test } from '@cxl/spec';
+import type { Test, FigureData } from '@cxl/spec';
 import { SourceMap, getSourceMap, positionToIndex } from '@cxl/source';
 
 export interface TestResult {
 	success: boolean;
 	message: string;
 	stack?: string;
+	data?: FigureData;
 }
 
 export interface CoverageRange {
@@ -171,6 +172,7 @@ function renderTestReport(test: Test): TestReport {
 		return {
 			message: r.message,
 			success: r.success,
+			data: r.data,
 			stack: r.stack,
 		};
 	});

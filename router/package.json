@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/router",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Router library",
 	"license": "GPL-3.0",
 	"files": [
@@ -10,11 +10,11 @@
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/router && node ../tester"
+		"test": "npm run build && cd ../dist/router && node ../tester --baselinePath=../../router/spec"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"dependencies": {
+	"homepage": "https://cxlio.github.io/cxl/router",
+	"devDependencies": {
 		"@cxl/debug": "~0.0.1"
-	},
-	"homepage": "https://cxlio.github.io/cxl/router"
+	}
 }

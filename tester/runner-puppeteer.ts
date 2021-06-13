@@ -1,8 +1,9 @@
 import { Browser, CoverageEntry, Page, Request, launch } from 'puppeteer';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile, mkdir } from 'fs/promises';
 import { dirname, resolve } from 'path';
 import type { Test } from '@cxl/spec';
 import type { TestRunner } from './index.js';
+import { PNG } from 'pngjs';
 
 import { TestCoverage, generateReport } from './report.js';
 
@@ -51,6 +52,9 @@ async function respond(req: Request, sources: Output[], url: string) {
 
 async function handleRequest(sources: Output[], req: Request) {
 	if (req.method() !== 'POST') return req.continue();
+
+	const url = new URL(req.url());
+	if (url.hostname !== 'localhost') return req.continue();
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
 	const paths = [resolve(base)];
@@ -145,20 +149,132 @@ async function generateCoverage(
 	});
 }
 
+let figureReady: Promise<any>;
+let screenshotQueue = Promise.resolve();
+
+function parsePNG(buffer: Buffer) {
+	return new Promise<Buffer>((resolve, reject) => {
+		const png = new PNG();
+		png.parse(buffer, (e, self) => {
+			if (e) reject(e);
+			else resolve(self.data);
+		});
+	});
+}
+
+function screenshot(page: Page, domId: string) {
+	return new Promise<Buffer>((resolve, reject) => {
+		const id = `#${domId}`;
+		screenshotQueue = screenshotQueue.then(() => {
+			return page
+				.$eval(id, el => ((el as any).style.zIndex = 10))
+				.then(() => page.$(`#${domId}`))
+				.then(el =>
+					el?.screenshot({
+						type: 'png',
+						encoding: 'binary',
+					})
+				)
+				.then(buffer => {
+					buffer ? resolve(buffer) : reject();
+				});
+		});
+	});
+}
+
+async function handleFigureRequest(
+	page: Page,
+	data: { name: string; domId: string; baseline?: string },
+	app: TestRunner
+) {
+	const { name, domId } = data;
+	const baseline = (data.baseline = `${
+		app.baselinePath || 'spec'
+	}/${name}.png`);
+	const filename = `spec/${name}.png`;
+
+	await (figureReady ||
+		(figureReady = page
+			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 500 })
+			.catch(() => 1)));
+
+	page.mouse.move(321, 0);
+	const [original, buffer] = await Promise.all([
+		readFile(baseline).catch(() => undefined),
+		screenshot(page, domId),
+	]);
+
+	if (buffer)
+		mkdir('spec')
+			.catch(() => false)
+			.then(() => writeFile(filename, buffer));
+
+	if ((!original || app.updateBaselines) && buffer && app.baselinePath) {
+		mkdir(app.baselinePath)
+			.catch(() => false)
+			.then(() => writeFile(baseline, buffer));
+	} else if (original && buffer && app.baselinePath) {
+		const [originalData, newData] = await Promise.all([
+			parsePNG(original),
+			parsePNG(buffer),
+		]);
+		const len = originalData.length;
+		let diff = 0;
+
+		if (len !== newData.length) {
+			return {
+				success: false,
+				message: 'Screenshot should match baseline: Different Size',
+				data,
+			};
+		}
+		for (let i = 0; i < len; i++) {
+			if (originalData.readUInt8(i) !== newData.readUInt8(i)) diff++;
+		}
+		if (diff > 0)
+			return {
+				success: false,
+				message: `Screenshot should match baseline: Different by ${(
+					(diff / len) *
+					100
+				).toFixed(2)}%`,
+				data,
+			};
+	}
+
+	return {
+		success: true,
+		message: 'Screenshot should match baseline',
+		data,
+	};
+}
+
 export default async function runPuppeteer(app: TestRunner) {
 	const entryFile = app.entryFile;
 	const browser = await launch({
 		// product: app.firefox ? 'firefox' : 'chrome',
 		headless: true,
-		args: ['--no-sandbox', '--disable-setuid-sandbox'],
+		args: [
+			'--no-sandbox',
+			'--disable-setuid-sandbox',
+			'--disable-gpu',
+			'--font-render-hinting=none',
+			'--disable-font-subpixel-positioning',
+		],
 		timeout: 5000,
 		dumpio: true,
 	});
 	app.log(`Puppeteer ${await browser.version()}`);
 
 	const page = await openPage(browser);
+
+	function cxlRunner(cmd: any) {
+		if (cmd.type === 'figure') return handleFigureRequest(page, cmd, app);
+	}
+
 	page.on('console', msg => handleConsole(msg, app));
 	page.on('pageerror', msg => app.log(msg));
+	page.exposeFunction('__cxlRunner', cxlRunner);
 
 	if (!app.firefox) await startTracing(page);
 

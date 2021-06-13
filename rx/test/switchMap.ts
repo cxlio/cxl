@@ -1,5 +1,5 @@
 import { cold, expectLog, logEvents, replaceValues } from './util';
-import { concat, defer, observable, of } from '../index.js';
+import { be, concat, defer, observable, of } from '../index.js';
 import { spec } from '@cxl/spec';
 
 export default spec('switchMap', it => {
@@ -118,6 +118,26 @@ export default spec('switchMap', it => {
 			a.equal(e1.subscriptions, e1subs);
 		}
 	);
+
+	it.should('handle multiple subscriptions', a => {
+		let emitted = 0;
+		const done = a.async();
+		const source = be(1);
+		const o1 = source.debounceTime(0).switchMap(val => of(val));
+
+		o1.subscribe(val => {
+			a.equal(val, 1);
+			if (++emitted === 3) done();
+		});
+		o1.subscribe(val => {
+			a.equal(val, 1);
+			if (++emitted === 3) done();
+		});
+		o1.subscribe(val => {
+			a.equal(val, 1);
+			if (++emitted === 3) done();
+		});
+	});
 
 	/*it.should(
 		'unsubscribe previous inner sub when getting synchronously reentrance during subscribing the inner sub',

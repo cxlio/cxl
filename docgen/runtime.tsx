@@ -1,9 +1,10 @@
+///<amd-module name="@cxl/docgen/runtime"/>
 import { dom } from '@cxl/tsx';
+import '@cxl/ui/theme.js';
 import { Augment, Attribute, Component, get } from '@cxl/component';
 import { onAction, onChildrenMutation } from '@cxl/dom';
 import { border, css, padding } from '@cxl/css';
 import { be } from '@cxl/rx';
-import '@cxl/ui/theme.js';
 import '@cxl/ui-router';
 import { Span } from '@cxl/ui/core.js';
 import { Tabs, Tab } from '@cxl/ui/navigation.js';
@@ -90,6 +91,7 @@ export class DocVersionSelect extends Component {
 			...padding(16),
 			whiteSpace: 'pre-wrap',
 			overflowY: 'auto',
+			minHeight: 160,
 		},
 		visible: { display: 'block' },
 		toolbar: {
@@ -104,11 +106,16 @@ export class DocVersionSelect extends Component {
 		function init(parent: HTMLIFrameElement) {
 			return onChildrenMutation(host).tap(() => {
 				const content = host.childNodes[0]?.textContent?.trim() || '';
-				parent.srcdoc = `<style>body{padding:16px;margin:0;}</style>${UserScripts}${content}`;
+				parent.srcdoc = `<!DOCTYPE html><style>body{padding:12px;margin:0;}</style>${UserScripts}${content}`;
 				parent.onload = () => {
-					const height = parent.contentDocument?.body.scrollHeight;
-					if (height && height > 160)
-						parent.style.height = height + 'px';
+					const observer = new ResizeObserver(() => {
+						const height =
+							parent.contentDocument?.body.scrollHeight;
+						if (height && height > 160)
+							parent.style.height = height + 'px';
+					});
+					if (parent.contentDocument?.body)
+						observer.observe(parent.contentDocument.body);
 				};
 				content$.next(content);
 			});
@@ -121,6 +128,7 @@ export class DocVersionSelect extends Component {
 
 		host.bind(get(host, 'view').tap(updateView));
 		const iframeEl = (<iframe title="Demo" />) as HTMLIFrameElement;
+		(iframeEl as any).loading = 'lazy';
 		host.bind(init(iframeEl));
 		host.bind(iframeClass.tap(val => (iframeEl.className = val)));
 

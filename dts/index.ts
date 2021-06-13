@@ -337,9 +337,11 @@ function getNodeDocs(node: ts.Node, result: Node): Documentation {
 
 	tsLocal.getJSDocTags(node).forEach(doc => {
 		const tag = doc.tagName.escapedText as string;
-		const value = doc.comment || (doc as any).name?.getText();
+		const name = (doc as any).name?.getText();
+		let value = doc.comment || name;
 
 		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
+		if (tag === 'see' && doc.comment === '*') value = name;
 
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
 			content.push({ tag, value });
@@ -603,16 +605,15 @@ function getCxlDecorator(node: ts.Declaration, name: string) {
 			deco =>
 				tsLocal.isCallExpression(deco.expression) &&
 				tsLocal.isIdentifier(deco.expression.expression) &&
-				deco.expression.expression.escapedText === name
+				(deco.expression.expression.escapedText as string).endsWith(
+					name
+				)
 		)
 	);
 }
 
 function isCxlAttribute(node: ts.Declaration): boolean {
-	return !!(
-		getCxlDecorator(node, 'Attribute') ||
-		getCxlDecorator(node, 'StyleAttribute')
-	);
+	return !!getCxlDecorator(node, 'Attribute');
 }
 
 function getCxlRole(node: ts.CallExpression): string {
@@ -1042,7 +1043,6 @@ function parseSourceFile(sourceFile: ts.SourceFile) {
 	}
 
 	sourceFile.forEachChild(c => visit(c, result));
-
 	return result;
 }
 

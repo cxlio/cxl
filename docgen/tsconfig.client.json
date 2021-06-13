@@ -6,6 +6,7 @@
 	"references": [
 		{ "path": "../ui" },
 		{ "path": "../ui-router" },
+		{ "path": "../ui-fa" },
 		{ "path": "tsconfig.json" }
 	],
 	"files": ["runtime.tsx"]

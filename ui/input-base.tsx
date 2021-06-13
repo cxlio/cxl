@@ -1,68 +1,27 @@
+///<amd-module name="@cxl/ui/input-base.js"/>
 import {
 	Augment,
 	Attribute,
 	Component,
 	StyleAttribute,
 	attributeChanged,
-	bind,
 	get,
 } from '@cxl/component';
 import { merge } from '@cxl/rx';
-import { css } from '@cxl/css';
-import { triggerEvent } from '@cxl/template';
-import { registable } from './core.js';
+import { triggerEvent, registable } from '@cxl/template';
 
-export const FocusCircleStyle = css({
-	focusCircle: {
-		position: 'absolute',
-		width: 48,
-		height: 48,
-		backgroundColor: 'elevation',
-		borderRadius: 24,
-		opacity: 0,
-		scaleX: 0,
-		scaleY: 0,
-		display: 'inline-block',
-		translateX: -14,
-		translateY: -14,
-	},
-	focusCirclePrimary: { backgroundColor: 'primary' },
-	focusCircle$invalid$touched: { backgroundColor: 'error' },
-	focusCircle$hover: {
-		scaleX: 1,
-		scaleY: 1,
-		translateX: -14,
-		translateY: -14,
-		opacity: 0.14,
-	},
-	focusCircle$focus: {
-		scaleX: 1,
-		scaleY: 1,
-		translateX: -14,
-		translateY: -14,
-		opacity: 0.25,
-	},
-	focusCircle$disabled: { scaleX: 0, scaleY: 0 },
-});
-
-export const Undefined = {};
-
-@Augment<InputBase>(
-	bind(host =>
-		merge(
-			attributeChanged(host, 'invalid').pipe(
-				triggerEvent(host, 'invalid')
-			),
-			registable(host, 'form'),
-			get(host, 'value').tap(val =>
-				(host as any).internals?.setFormValue(val)
-			),
-			get(host, 'invalid').tap(val => {
-				if (val && !host.validationMessage)
-					host.setCustomValidity('Invalid value');
-			}),
-			attributeChanged(host, 'value').pipe(triggerEvent(host, 'change'))
-		)
+@Augment<InputBase>(host =>
+	merge(
+		attributeChanged(host, 'invalid').pipe(triggerEvent(host, 'invalid')),
+		registable(host, 'form'),
+		get(host, 'value').tap(val =>
+			(host as any).internals?.setFormValue(val)
+		),
+		get(host, 'invalid').tap(val => {
+			if (val && !host.validationMessage)
+				host.setCustomValidity('Invalid value');
+		}),
+		attributeChanged(host, 'value').pipe(triggerEvent(host, 'change'))
 	)
 )
 export class InputBase extends Component {

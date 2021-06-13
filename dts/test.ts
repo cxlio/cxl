@@ -9,10 +9,12 @@ import {
 	ScriptTarget,
 	parse,
 } from './index.js';
-import { TestApi, suite } from '@cxl/spec';
+import { TestApi, spec } from '@cxl/spec';
 
-export default suite('dts', test => {
-	test('single literal const', (a: TestApi) => {
+export default spec('dts', a => {
+	const test = a.test.bind(a);
+
+	a.test('single literal const', (a: TestApi) => {
 		const [out] = parse('export const x = 10;');
 		a.ok(out.id);
 		a.equal(out.kind, Kind.Constant);
@@ -22,7 +24,7 @@ export default suite('dts', test => {
 		a.equal(out.value, '10');
 	});
 
-	test('multiple literal const', (a: TestApi) => {
+	a.test('multiple literal const', (a: TestApi) => {
 		const [x, y] = parse('export const x = "hello", y = 10;');
 
 		a.ok(x.id);
@@ -43,7 +45,7 @@ export default suite('dts', test => {
 		a.equal(y.value, '10');
 	});
 
-	test('const reference', (a: TestApi) => {
+	a.test('const reference', (a: TestApi) => {
 		const [x, y] = parse('export const x = "hello", y = x;');
 		a.ok(x.id);
 		a.ok(y.id);
@@ -57,14 +59,14 @@ export default suite('dts', test => {
 		a.ok(y.source);
 	});
 
-	test('function - empty', (a: TestApi) => {
+	a.test('function - empty', (a: TestApi) => {
 		const [fn] = parse('function fn() { return true; }');
 		a.equal(fn.name, 'fn');
 		a.equal(fn.type, BooleanType);
 		a.ok(fn.source);
 	});
 
-	test('function - optional parameter', (a: TestApi) => {
+	a.test('function - optional parameter', (a: TestApi) => {
 		const [fn] = parse('function fn(p?: any) { return true; }');
 		a.equal(fn.name, 'fn');
 		a.equal(fn.type, BooleanType);
@@ -74,7 +76,7 @@ export default suite('dts', test => {
 		a.equal(p.flags, Flags.Optional);
 	});
 
-	test('function - parameters', (a: TestApi) => {
+	a.test('function - parameters', (a: TestApi) => {
 		const [fn] = parse(
 			'function fn(_a: boolean, b="test") { return true; }'
 		);
@@ -91,7 +93,7 @@ export default suite('dts', test => {
 		a.equal(b.name, 'b');
 	});
 
-	test('function - rest parameters', (a: TestApi) => {
+	a.test('function - rest parameters', (a: TestApi) => {
 		const [fn] = parse('function fn(...p: string[]) { return "hello"; }');
 		a.equal(fn.name, 'fn');
 		a.equal(fn.kind, Kind.Function);
@@ -105,7 +107,7 @@ export default suite('dts', test => {
 		a.equal(p.type.type, StringType);
 	});
 
-	test('function - signatures', (a: TestApi) => {
+	a.test('function - signatures', (a: TestApi) => {
 		const [fn1, fn2, fn] = parse(`
 			function fn(_a: string);
 			function fn(_a: boolean);
@@ -117,7 +119,7 @@ export default suite('dts', test => {
 		a.equal(fn.type, NumberType);
 	});
 
-	test('function - infered type', (a: TestApi) => {
+	a.test('function - infered type', (a: TestApi) => {
 		const [fn] = parse(`function fn() { return () => true; }`);
 
 		a.assert(fn.type);
@@ -127,7 +129,7 @@ export default suite('dts', test => {
 		a.equal(fn.type.name, '');
 	});
 
-	test('type declaration - type parameters', a => {
+	a.test('type declaration - type parameters', a => {
 		const [type] = parse('export type Operator<T, T2 = T> = Map<T, T2>');
 
 		a.ok(type.id);
@@ -545,6 +547,28 @@ export default suite('dts', test => {
 		a.equal(see.value, 'A');
 	});
 
+	a.test('JSDOC - see with reference', (a: TestApi) => {
+		const [fn] = parse(`
+			/**
+			 * Description
+			 * @see A
+			 * @example
+			 * <cxl-test></cxl-test>
+			 */
+			 function fn() { }
+			 class A { }
+		`);
+
+		a.assert(fn, 'Documentation generated');
+		a.assert(fn.docs);
+		a.assert(fn.docs.content);
+		a.equal(fn.docs.content.length, 3);
+
+		const see = fn.docs.content[1];
+		a.equal(see.tag, 'see');
+		a.equal(see.value, 'A');
+	});
+
 	test('type alias - function', (a: TestApi) => {
 		const [A] = parse(`type A<T> = (val: T) => void;`);
 		a.assert(A.type);
@@ -774,20 +798,16 @@ function map<T>() {	return operator<T>(); }
 		a.ok(!(B.flags & Flags.Internal));
 	});
 
-	test(
-		'method spread parameters',
-		(a: TestApi) => {
-			const [A] = parse(`class A { test(...args) { } }`);
-			a.equal(A.name, 'A');
-			a.assert(A.children);
-			a.equal(A.children.length, 1);
-			const test = A.children[0];
-			a.equal(test.name, 'test');
-			a.assert(test.parameters);
-			a.equal(test.parameters[0].name, 'args');
-		},
-		true
-	);
+	a.test('method spread parameters', (a: TestApi) => {
+		const [A] = parse(`class A { test(...args) { } }`);
+		a.equal(A.name, 'A');
+		a.assert(A.children);
+		a.equal(A.children.length, 1);
+		const test = A.children[0];
+		a.equal(test.name, 'test');
+		a.assert(test.parameters);
+		a.equal(test.parameters[0].name, 'args');
+	});
 
 	test('function spread parameters', (a: TestApi) => {
 		const [A] = parse(`function test(...args) { }`);

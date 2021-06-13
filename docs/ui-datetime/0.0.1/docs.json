@@ -13,26 +13,102 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 25,
-            "ch": 17
+            "line": 20,
+            "ch": 45
+          },
+          "kind": 4,
+          "name": "DateInformation",
+          "flags": 0,
+          "id": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 22,
+                "ch": 27
+              },
+              "kind": 10,
+              "name": "date",
+              "flags": 4,
+              "id": 2,
+              "type": {
+                "name": "Date",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 23,
+                "ch": 12
+              },
+              "kind": 10,
+              "name": "isToday",
+              "flags": 4,
+              "id": 3,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 24,
+                "ch": 18
+              },
+              "kind": 10,
+              "name": "isOutsideMonth",
+              "flags": 4,
+              "id": 4,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 25,
+                "ch": 25
+              },
+              "kind": 10,
+              "name": "time",
+              "flags": 4,
+              "id": 5,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 27,
+            "ch": 1
           },
           "kind": 16,
           "name": "getDate",
           "flags": 0,
-          "id": 1,
+          "id": 6,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 27,
+                "line": 29,
                 "ch": 17
               },
               "kind": 9,
               "name": "val",
               "flags": 524288,
-              "id": 2,
+              "id": 7,
               "type": {
-                "id": 3,
+                "id": 1,
                 "name": "DateInformation",
                 "kind": 6
               }
@@ -64,159 +140,121 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 29,
+            "line": 31,
             "ch": 1
           },
           "kind": 16,
           "name": "getDateClass",
           "flags": 0,
-          "id": 4,
+          "id": 8,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 31,
+                "line": 33,
                 "ch": 22
               },
               "kind": 9,
               "name": "val",
               "flags": 524288,
-              "id": 5,
+              "id": 9,
               "type": {
-                "id": 3,
+                "id": 1,
                 "name": "DateInformation",
                 "kind": 6
               }
             }
           ],
           "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "\"btn\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 39,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "getMonthDates",
+          "flags": 0,
+          "id": 10,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 41,
+                "ch": 23
               },
-              {
-                "name": "\"btn  \"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
+              "kind": 9,
+              "name": "timestamp",
+              "flags": 0,
+              "id": 11,
+              "type": {
+                "name": "number",
+                "kind": 32,
                 "flags": 0
-              },
+              }
+            }
+          ],
+          "type": {
+            "name": "Array",
+            "kind": 6,
+            "typeParameters": [
               {
-                "name": "\"btn  outside\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "\"btn today \"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              },
-              {
-                "name": "\"btn today outside\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
+                "id": 1,
+                "name": "DateInformation",
+                "kind": 6
               }
             ]
           }
         },
         {
-          "id": 3,
           "source": {
             "fileName": "index.tsx",
-            "line": 37,
+            "line": 66,
             "ch": 1
           },
-          "kind": 4,
-          "name": "DateInformation",
+          "kind": 16,
+          "name": "getDayText",
           "flags": 0,
-          "children": [
+          "id": 12,
+          "type": {
+            "name": "string",
+            "kind": 32,
+            "flags": 0
+          },
+          "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 39,
-                "ch": 27
+                "line": 68,
+                "ch": 20
               },
-              "kind": 10,
-              "name": "date",
-              "flags": 4,
-              "id": 6,
-              "type": {
-                "name": "Date",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 40,
-                "ch": 12
-              },
-              "kind": 10,
-              "name": "isToday",
-              "flags": 4,
-              "id": 7,
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 41,
-                "ch": 18
-              },
-              "kind": 10,
-              "name": "isOutsideMonth",
-              "flags": 4,
-              "id": 8,
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 42,
-                "ch": 25
-              },
-              "kind": 10,
-              "name": "time",
-              "flags": 4,
-              "id": 9,
+              "kind": 9,
+              "name": "day",
+              "flags": 0,
+              "id": 13,
               "type": {
                 "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 68,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "size",
+              "flags": 0,
+              "id": 14,
+              "type": {
+                "name": "string",
                 "kind": 32,
                 "flags": 0
               }
@@ -226,24 +264,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 44,
+            "line": 74,
             "ch": 1
           },
           "kind": 35,
           "name": "CalendarDate",
           "flags": 1,
-          "id": 10,
+          "id": 15,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 77,
+                "line": 108,
                 "ch": 46
               },
               "kind": 36,
               "name": "selected",
               "flags": 4,
-              "id": 11,
+              "id": 16,
               "value": "false",
               "type": {
                 "name": "boolean",
@@ -254,13 +292,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 79,
+                "line": 110,
                 "ch": 18
               },
               "kind": 10,
               "name": "flat",
               "flags": 4,
-              "id": 12,
+              "id": 17,
               "value": "true",
               "type": {
                 "name": "boolean",
@@ -271,15 +309,15 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 81,
+                "line": 112,
                 "ch": 13
               },
               "kind": 36,
               "name": "date",
               "flags": 4,
-              "id": 13,
+              "id": 18,
               "type": {
-                "id": 3,
+                "id": 1,
                 "name": "DateInformation",
                 "kind": 6
               }
@@ -303,154 +341,59 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 85,
+            "line": 116,
             "ch": 1
           },
           "kind": 16,
-          "name": "getMonthDates",
+          "name": "normalizeDate",
           "flags": 0,
-          "id": 14,
+          "id": 19,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 87,
+                "line": 118,
                 "ch": 23
               },
               "kind": 9,
-              "name": "timestamp",
+              "name": "val",
               "flags": 0,
-              "id": 15,
+              "id": 20,
               "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
+                "name": "Date",
+                "kind": 6
               }
             }
           ],
           "type": {
-            "name": "Array",
-            "kind": 6,
-            "typeParameters": [
-              {
-                "id": 3,
-                "name": "DateInformation",
-                "kind": 6
-              }
-            ]
+            "name": "number",
+            "kind": 32,
+            "flags": 0
           }
         },
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 112,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "getDayText",
-          "flags": 0,
-          "id": 16,
-          "type": {
-            "source": {
-              "fileName": "index.tsx",
-              "line": 114,
-              "ch": 33
-            },
-            "kind": 15,
-            "name": "Array",
-            "flags": 0,
-            "type": {
-              "name": "string",
-              "kind": 32,
-              "flags": 0
-            }
-          },
-          "parameters": [
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 114,
-                "ch": 20
-              },
-              "kind": 9,
-              "name": "day",
-              "flags": 0,
-              "id": 17,
-              "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ]
-        },
-        {
-          "source": {
-            "fileName": "index.tsx",
-            "line": 122,
-            "ch": 1
-          },
-          "kind": 35,
-          "name": "CalendarDay",
-          "flags": 0,
-          "id": 18,
-          "children": [
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 155,
-                "ch": 37
-              },
-              "kind": 36,
-              "name": "day",
-              "flags": 4,
-              "id": 19,
-              "value": "0",
-              "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ],
-          "docs": {
-            "tagName": "cxl-calendar-day"
-          },
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "name": "Component",
-                "kind": 6
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "index.tsx",
-            "line": 158,
+            "line": 121,
             "ch": 1
           },
           "kind": 16,
           "name": "onMonthChange",
           "flags": 0,
-          "id": 20,
+          "id": 21,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 160,
+                "line": 123,
                 "ch": 23
               },
               "kind": 9,
               "name": "$",
               "flags": 0,
-              "id": 21,
+              "id": 22,
               "type": {
-                "id": 22,
+                "id": 23,
                 "name": "CalendarMonth",
                 "kind": 6
               }
@@ -469,10 +412,10 @@
           }
         },
         {
-          "id": 22,
+          "id": 23,
           "source": {
             "fileName": "index.tsx",
-            "line": 168,
+            "line": 131,
             "ch": 1
           },
           "kind": 35,
@@ -482,82 +425,62 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 196,
+                "line": 181,
                 "ch": 39
               },
               "kind": 36,
               "name": "month",
               "flags": 4,
-              "id": 23,
-              "value": "0",
+              "id": 24,
               "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
-              }
+                "name": "Date",
+                "kind": 6
+              },
+              "value": "new Date()"
             },
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 198,
-                "ch": 11
+                "line": 183,
+                "ch": 26
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 24,
-              "value": "0",
+              "id": 25,
               "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 185,
+                  "ch": 7
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Date",
+                    "kind": 6
+                  },
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
               }
             },
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 200,
-                "ch": 11
+                "line": 185,
+                "ch": 25
               },
               "kind": 11,
               "name": "focus",
               "flags": 4,
-              "id": 25,
-              "parameters": [],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 209,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "onDateClick",
-              "flags": 4,
               "id": 26,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "index.tsx",
-                    "line": 211,
-                    "ch": 13
-                  },
-                  "kind": 9,
-                  "name": "el",
-                  "flags": 0,
-                  "id": 27,
-                  "type": {
-                    "id": 10,
-                    "name": "CalendarDate",
-                    "kind": 6
-                  }
-                }
-              ],
+              "parameters": [],
               "type": {
                 "name": "void",
                 "kind": 32,
@@ -583,22 +506,39 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 214,
+            "line": 195,
             "ch": 1
           },
           "kind": 35,
           "name": "CalendarYear",
           "flags": 0,
-          "id": 28,
+          "id": 27,
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 248,
+                "line": 239,
                 "ch": 38
               },
               "kind": 36,
               "name": "'start-year'",
+              "flags": 4,
+              "id": 28,
+              "value": "0",
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 241,
+                "ch": 18
+              },
+              "kind": 10,
+              "name": "value",
               "flags": 4,
               "id": 29,
               "value": "0",
@@ -611,30 +551,13 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 250,
-                "ch": 18
-              },
-              "kind": 10,
-              "name": "value",
-              "flags": 4,
-              "id": 30,
-              "value": "0",
-              "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.tsx",
-                "line": 252,
+                "line": 243,
                 "ch": 11
               },
               "kind": 11,
               "name": "focus",
               "flags": 4,
-              "id": 31,
+              "id": 30,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -661,24 +584,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 262,
+            "line": 253,
             "ch": 1
           },
           "kind": 16,
           "name": "getMonthText",
           "flags": 0,
-          "id": 32,
+          "id": 31,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 264,
+                "line": 255,
                 "ch": 22
               },
               "kind": 9,
               "name": "date",
               "flags": 0,
-              "id": 33,
+              "id": 32,
               "type": {
                 "name": "Date",
                 "kind": 6
@@ -694,44 +617,180 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 269,
+            "line": 260,
             "ch": 1
           },
           "kind": 35,
-          "name": "Calendar",
+          "name": "Datepicker",
           "flags": 1,
-          "id": 34,
+          "id": 33,
           "docs": {
             "content": [
               {
-                "value": "Calendar component."
+                "value": "Datepicker component."
               },
               {
                 "tag": "example",
-                "value": "<cxl-calendar></cxl-calendar>"
+                "value": "<cxl-datepicker></cxl-datepicker>"
               }
             ],
-            "tagName": "cxl-calendar"
+            "tagName": "cxl-datepicker"
           },
           "children": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 383,
-                "ch": 41
+                "line": 401,
+                "ch": 43
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 35,
-              "value": "Date.now()",
+              "id": 34,
               "type": {
-                "name": "number",
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 402,
+                  "ch": 7
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Date",
+                    "kind": 6
+                  },
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              },
+              "value": "undefined"
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 402,
+                "ch": 37
+              },
+              "kind": 11,
+              "name": "focus",
+              "flags": 4,
+              "id": 35,
+              "parameters": [],
+              "type": {
+                "name": "void",
                 "kind": 32,
                 "flags": 0
               }
             }
           ],
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "InputBase",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 407,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "DatepickerToggle",
+          "flags": 1,
+          "id": 36,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 457,
+                "ch": 49
+              },
+              "kind": 36,
+              "name": "opened",
+              "flags": 4,
+              "id": 37,
+              "value": "false",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-datepicker-toggle"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "InputBase",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 460,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "DatepickerInput",
+          "flags": 1,
+          "id": 38,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 516,
+                "ch": 48
+              },
+              "kind": 10,
+              "name": "value",
+              "flags": 4,
+              "id": 39,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 517,
+                  "ch": 7
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Date",
+                    "kind": 6
+                  },
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-datepicker-input"
+          },
           "type": {
             "flags": 0,
             "kind": 33,

@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/layout.js"/>
 import {
 	Attribute,
 	AttributeEvent,
@@ -6,12 +7,11 @@ import {
 	Slot,
 	StyleAttribute,
 	update,
-	role,
 } from '@cxl/component';
-import { css, margin, padding, pct } from '@cxl/css';
+import { css, margin, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { operator } from '@cxl/rx';
-import { InversePrimary } from './theme.js';
+import { InversePrimary, InverseSecondary } from './theme.js';
 
 const colStyles = ((r: any) => {
 	for (let i = 12; i > 0; i--)
@@ -20,7 +20,6 @@ const colStyles = ((r: any) => {
 		] = r.xs['$xs' + i] = {
 			display: 'block',
 			gridColumnEnd: 'span ' + i,
-			flexBasis: pct((100 / 12) * i),
 		};
 	return r;
 })({
@@ -34,19 +33,21 @@ const colStyles = ((r: any) => {
 function persistWithParameter(prefix: string) {
 	return operator<AttributeEvent<any>>(() => {
 		let lastAttr: string;
-		return ({ value, target }) => {
-			if (value === undefined) {
-				if (target.hasAttribute(lastAttr))
-					target.removeAttribute(lastAttr);
-			} else {
-				const attr = `${prefix}${value}`;
+		return {
+			next({ value, target }) {
+				if (value === undefined) {
+					if (target.hasAttribute(lastAttr))
+						target.removeAttribute(lastAttr);
+				} else {
+					const attr = `${prefix}${value}`;
 
-				if (lastAttr !== attr) {
-					target.removeAttribute(lastAttr);
-					target.setAttribute(attr, '');
-					lastAttr = attr;
+					if (lastAttr !== attr) {
+						target.removeAttribute(lastAttr);
+						target.setAttribute(attr, '');
+						lastAttr = attr;
+					}
 				}
-			}
+			},
 		};
 	});
 }
@@ -108,11 +109,14 @@ function persistWithParameter(prefix: string) {
 			color: 'onPrimaryLight',
 		},
 		$secondary: {
-			backgroundColor: 'secondary',
-			color: 'onSecondary',
+			...InverseSecondary,
+			color: 'onSurface',
+			backgroundColor: 'surface',
 		},
 		$flex: { display: 'flex' },
 		$vflex: { display: 'flex', flexDirection: 'column' },
+		$middle: { justifyContent: 'center' },
+		$center: { textAlign: 'center' },
 	}),
 	Slot
 )
@@ -128,9 +132,6 @@ export class C extends Component {
 
 	@StyleAttribute()
 	grow = false;
-
-	@StyleAttribute()
-	pad16 = false;
 
 	@Attribute({
 		persistOperator: persistWithParameter('xs'),
@@ -153,11 +154,22 @@ export class C extends Component {
 	})
 	xl?: number;
 
+	@Attribute({
+		persistOperator: persistWithParameter('pad'),
+	})
+	pad?: 8 | 16 | 24 | 32;
+
 	@StyleAttribute()
 	primary = false;
 
 	@StyleAttribute()
 	secondary = false;
+
+	@StyleAttribute()
+	center = false;
+
+	@StyleAttribute()
+	middle = false;
 }
 
 /**
@@ -205,7 +217,6 @@ export class Layout extends Component {
 		},
 		container: {
 			...margin(32, 16, 32, 16),
-			//overflowX: 'hidden',
 		},
 		'@medium': {
 			container: margin(24, 32, 24, 32),
@@ -248,6 +259,7 @@ export class Content extends Component {
 			overflowScrolling: 'touch',
 			backgroundColor: 'surface',
 			color: 'onSurface',
+			height: '100%',
 		},
 		container: { ...margin(16) },
 		'@medium': { container: margin(32) },
@@ -308,42 +320,31 @@ export class Card extends C {
 	elevation: 1 | 2 | 3 | 4 | 5 = 1;
 }
 
-@Augment<List>(
-	'cxl-list',
-	role('list'),
-	css({
-		$: {
-			display: 'block',
-			paddingTop: 8,
-			paddingBottom: 8,
-			marginLeft: -16,
-			marginRight: -16,
-		},
-	}),
-	Slot
-)
-export class List extends Component {}
-
 /**
+ * The Material Design responsive layout grid is an overarching guide to the placement of components and elements.
+ * The responsive layout grid adapts to screen sizes and orientation, ensuring consistency across layouts.
  * @example
  * <cxl-grid columns="auto auto auto" style="color:#fff">
- *   <cxl-c style="background:#a00; padding: 24px">1</cxl-c>
- *   <cxl-c style="background:#0a0; padding:24px">2</cxl-c>
- *   <cxl-c style="background:#0a0; padding:24px">3</cxl-c>
- *   <cxl-c xs2 style="background:#00a; padding:24px">4</cxl-c>
- *   <cxl-c style="background:#00a; padding:24px">5</cxl-c>
+ *   <cxl-c xs1 style="background:#a00; padding: 2px">1</cxl-c>
+ *   <cxl-c xs1 style="background:#0a0; padding:2px">2</cxl-c>
+ *   <cxl-c xs1 style="background:#0a0; padding:2px">3</cxl-c>
+ *   <cxl-c xs2 style="background:#00a; padding:2px">4</cxl-c>
+ *   <cxl-c xs1 style="background:#00a; padding:2px">5</cxl-c>
  * </cxl-grid>
  */
 @Augment<Grid>(
 	'cxl-grid',
 	css({
-		$: { display: 'grid' },
+		$: { display: 'grid', columnGap: 0, rowGap: 16 },
+		'@small': { $: { columnGap: 16 } },
 	}),
 	Slot,
 	update(host => {
-		host.style.gridTemplateRows = (host.rows || 'auto').toString();
-		host.style.gridGap = `${host.gap}px ${host.gap}px`;
-		host.style.gridTemplateColumns = host.columns;
+		const colTemplate =
+			host.coltemplate ?? `repeat(${host.columns}, minmax(0,1fr))`;
+		host.style.gridTemplateRows = (host.rows ?? 'auto').toString();
+		// host.style.gridGap = `${host.gap}px ${host.gap}px`;
+		host.style.gridTemplateColumns = colTemplate;
 	})
 )
 export class Grid extends Component {
@@ -351,8 +352,11 @@ export class Grid extends Component {
 	rows?: number;
 
 	@Attribute()
-	columns = 'repeat(12, minmax(0,1fr))';
+	columns = 12;
 
 	@Attribute()
-	gap = 16;
+	coltemplate?: string;
+
+	/*@Attribute()
+	gap?: number;*/
 }

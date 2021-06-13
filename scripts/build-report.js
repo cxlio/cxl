@@ -1,30 +1,14 @@
 const fs = require('fs').promises;
 const path = require('path').posix;
 const { readJson, sh } = require('../dist/server');
-//const { sh } = require('../dist/build');
+const { getPublishedVersion } = require('../dist/build/npm');
 
-function writeIndex(content) {
-	const INDEX = `
-<!DOCTYPE html>
-<html>
-<head>
-	<title>@cxl - Build Report</title>
-	<script src="ui/index.bundle.min.js"></script>
-	<script src="ui-table/amd/index.min.js"></script>
-	<style>
-		.failure { background-color: #FFCDD2; }
-	</style>
-</head>
-<body>
-	<cxl-application>
-	<cxl-appbar><cxl-appbar-title>Build Report</cxl-appbar-title></cxl-appbar>
-	<cxl-content>${content}</cxl-content>
-	</cxl-application>
-</body>
-</html>
-`;
+async function writeIndex(content) {
+	const [INDEX] = await Promise.all([
+		fs.readFile(__dirname + '/build-report.html', 'utf8'),
+	]);
 
-	return fs.writeFile('dist/index.html', INDEX);
+	return fs.writeFile('dist/index.html', INDEX.replace('$HOME$', content));
 }
 
 async function getTotalCoverage(dir, coverage) {
@@ -62,33 +46,52 @@ async function getPackageFiles(dir) {
 	return files.map(f => path.resolve(dir, f));
 }
 
+async function getScriptSize(dir, pkg) {
+	const main = pkg.browser || pkg.main || 'index.js';
+	const scriptPath = `dist/${dir}/${main}`;
+	const stat = await fs.stat(scriptPath);
+	return `${main}: ${stat.size}`;
+}
+
 async function build() {
 	const stats = await readJson('dist/stats.json');
 	let output = '';
 
 	for (const pkg of stats.packages) {
 		const dir = /\/(.+)/.exec(pkg.name)[1];
-		const coverage = await getTotalCoverage(dir, pkg.testReport.coverage);
+		const [npmVersion, coverage, size] = await Promise.all([
+			getPublishedVersion(pkg.name),
+			getTotalCoverage(dir, pkg.testReport.coverage),
+			getScriptSize(dir, pkg.package),
+		]);
 		const success = coverage > 90;
 		const usedBy = stats.packages.filter(
 			p => p.package.dependencies?.[pkg.name]
 		);
-		// const pkgFiles = await sh(`npm pack ./dist/${dir} --dry-run`);
-		// parseNpmPack(pkgFiles);
 		output += `<cxl-tr class="${success ? 'success' : 'failure'}">
 				<cxl-td><a href="../docs/${dir}">${pkg.name}</a></cxl-td>
-				<cxl-td>${pkg.package.version}</cxl-td>
+				<cxl-td>
+					<cxl-a href="changelog/${dir}">CHANGELOG</cxl-a>
+					<a href="${dir}/test.html">Spec</a>
+				</cxl-td>
+				<cxl-td>${pkg.package.version} (${
+			npmVersion ? `NPM ${npmVersion}` : 'Not Published'
+		})</cxl-td>
 				<cxl-td>${usedBy.map(p => p.name).join('<br>')}</cxl-td>
+				<cxl-td>${size}</cxl-td>
 				<cxl-td>${pkg.buildTime}</cxl-td>
 				<cxl-td><a href="${dir}/test-report.html">${coverage} %</a></cxl-td>
 			</cxl-tr>`;
+		if (success) console.log(`Package ${pkg.name} ready to publish`);
 	}
 	await writeIndex(`
 <cxl-table>
 	<cxl-tr>
 	<cxl-th>Package</cxl-th>
+	<cxl-th>Changelog</cxl-th>
 	<cxl-th>Version</cxl-th>
 	<cxl-th>Used By</cxl-th>
+	<cxl-th>Script Size</cxl-th>
 	<cxl-th>Build Time</cxl-th>
 	<cxl-th>Coverage</cxl-th>
 	</cxl-tr>

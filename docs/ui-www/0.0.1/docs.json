@@ -1,0 +1,1131 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.tsx",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.tsx",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 39,
+            "ch": 50
+          },
+          "kind": 2,
+          "name": "IconKey",
+          "flags": 1,
+          "id": 1,
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 41,
+              "ch": 21
+            },
+            "kind": 26,
+            "name": "",
+            "flags": 0,
+            "type": {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 41,
+                "ch": 27
+              },
+              "kind": 27,
+              "name": "Icons",
+              "flags": 0
+            }
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 41,
+            "ch": 41
+          },
+          "kind": 4,
+          "name": "PageElement",
+          "flags": 0,
+          "id": 2,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 43,
+                "ch": 23
+              },
+              "kind": 11,
+              "name": "update",
+              "flags": 0,
+              "id": 3,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 44,
+                    "ch": 8
+                  },
+                  "kind": 9,
+                  "name": "page",
+                  "flags": 0,
+                  "id": 4,
+                  "type": {
+                    "id": 5,
+                    "name": "Page",
+                    "kind": 6
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 47,
+            "ch": 12
+          },
+          "kind": 31,
+          "name": "Icons",
+          "flags": 1,
+          "id": 6,
+          "value": "{\n\t'': () => <span></span>,\n\tgithub: () => (\n\t\t<Svg className=\"svg\" alt=\"github\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M16 0.395c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t),\n\n\tinstagram: () => (\n\t\t<Svg className=\"svg\" alt=\"instagram\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M16 2.881c4.275 0 4.781 0.019 6.462 0.094 1.563 0.069 2.406 0.331 2.969 0.55 0.744 0.288 1.281 0.638 1.837 1.194 0.563 0.563 0.906 1.094 1.2 1.838 0.219 0.563 0.481 1.412 0.55 2.969 0.075 1.688 0.094 2.194 0.094 6.463s-0.019 4.781-0.094 6.463c-0.069 1.563-0.331 2.406-0.55 2.969-0.288 0.744-0.637 1.281-1.194 1.837-0.563 0.563-1.094 0.906-1.837 1.2-0.563 0.219-1.413 0.481-2.969 0.55-1.688 0.075-2.194 0.094-6.463 0.094s-4.781-0.019-6.463-0.094c-1.563-0.069-2.406-0.331-2.969-0.55-0.744-0.288-1.281-0.637-1.838-1.194-0.563-0.563-0.906-1.094-1.2-1.837-0.219-0.563-0.481-1.413-0.55-2.969-0.075-1.688-0.094-2.194-0.094-6.463s0.019-4.781 0.094-6.463c0.069-1.563 0.331-2.406 0.55-2.969 0.288-0.744 0.638-1.281 1.194-1.838 0.563-0.563 1.094-0.906 1.838-1.2 0.563-0.219 1.412-0.481 2.969-0.55 1.681-0.075 2.188-0.094 6.463-0.094zM16 0c-4.344 0-4.887 0.019-6.594 0.094-1.7 0.075-2.869 0.35-3.881 0.744-1.056 0.412-1.95 0.956-2.837 1.85-0.894 0.888-1.438 1.781-1.85 2.831-0.394 1.019-0.669 2.181-0.744 3.881-0.075 1.713-0.094 2.256-0.094 6.6s0.019 4.887 0.094 6.594c0.075 1.7 0.35 2.869 0.744 3.881 0.413 1.056 0.956 1.95 1.85 2.837 0.887 0.887 1.781 1.438 2.831 1.844 1.019 0.394 2.181 0.669 3.881 0.744 1.706 0.075 2.25 0.094 6.594 0.094s4.888-0.019 6.594-0.094c1.7-0.075 2.869-0.35 3.881-0.744 1.050-0.406 1.944-0.956 2.831-1.844s1.438-1.781 1.844-2.831c0.394-1.019 0.669-2.181 0.744-3.881 0.075-1.706 0.094-2.25 0.094-6.594s-0.019-4.887-0.094-6.594c-0.075-1.7-0.35-2.869-0.744-3.881-0.394-1.063-0.938-1.956-1.831-2.844-0.887-0.887-1.781-1.438-2.831-1.844-1.019-0.394-2.181-0.669-3.881-0.744-1.712-0.081-2.256-0.1-6.6-0.1v0z\"\n\t\t\t></Path>\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M16 7.781c-4.537 0-8.219 3.681-8.219 8.219s3.681 8.219 8.219 8.219 8.219-3.681 8.219-8.219c0-4.537-3.681-8.219-8.219-8.219zM16 21.331c-2.944 0-5.331-2.387-5.331-5.331s2.387-5.331 5.331-5.331c2.944 0 5.331 2.387 5.331 5.331s-2.387 5.331-5.331 5.331z\"\n\t\t\t></Path>\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M26.462 7.456c0 1.060-0.859 1.919-1.919 1.919s-1.919-0.859-1.919-1.919c0-1.060 0.859-1.919 1.919-1.919s1.919 0.859 1.919 1.919z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t),\n\n\ttwitter: () => (\n\t\t<Svg className=\"svg\" alt=\"twitter\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M32 7.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t),\n\n\tlinkedin: () => (\n\t\t<Svg className=\"svg\" alt=\"linkedin\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M29 0h-26c-1.65 0-3 1.35-3 3v26c0 1.65 1.35 3 3 3h26c1.65 0 3-1.35 3-3v-26c0-1.65-1.35-3-3-3zM12 26h-4v-14h4v14zM10 10c-1.106 0-2-0.894-2-2s0.894-2 2-2c1.106 0 2 0.894 2 2s-0.894 2-2 2zM26 26h-4v-8c0-1.106-0.894-2-2-2s-2 0.894-2 2v8h-4v-14h4v2.481c0.825-1.131 2.087-2.481 3.5-2.481 2.488 0 4.5 2.238 4.5 5v9z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t),\n\n\tfacebook: () => (\n\t\t<Svg className=\"svg\" alt=\"facebook\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M19 6h5v-6h-5c-3.86 0-7 3.14-7 7v3h-4v6h4v16h6v-16h5l1-6h-6v-3c0-0.542 0.458-1 1-1z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t),\n}",
+          "type": {
+            "source": {
+              "fileName": "index.tsx",
+              "line": 47,
+              "ch": 20
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 47,
+                  "ch": 22
+                },
+                "kind": 0,
+                "name": "''",
+                "flags": 0,
+                "id": 7,
+                "value": "() => <span></span>",
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 48,
+                    "ch": 4
+                  },
+                  "kind": 16,
+                  "name": "",
+                  "flags": 0,
+                  "id": 8,
+                  "parameters": [],
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 48,
+                  "ch": 25
+                },
+                "kind": 0,
+                "name": "github",
+                "flags": 0,
+                "id": 9,
+                "value": "() => (\n\t\t<Svg className=\"svg\" alt=\"github\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M16 0.395c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t)",
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 49,
+                    "ch": 8
+                  },
+                  "kind": 16,
+                  "name": "",
+                  "flags": 0,
+                  "id": 10,
+                  "parameters": [],
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 56,
+                  "ch": 3
+                },
+                "kind": 0,
+                "name": "instagram",
+                "flags": 0,
+                "id": 11,
+                "value": "() => (\n\t\t<Svg className=\"svg\" alt=\"instagram\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M16 2.881c4.275 0 4.781 0.019 6.462 0.094 1.563 0.069 2.406 0.331 2.969 0.55 0.744 0.288 1.281 0.638 1.837 1.194 0.563 0.563 0.906 1.094 1.2 1.838 0.219 0.563 0.481 1.412 0.55 2.969 0.075 1.688 0.094 2.194 0.094 6.463s-0.019 4.781-0.094 6.463c-0.069 1.563-0.331 2.406-0.55 2.969-0.288 0.744-0.637 1.281-1.194 1.837-0.563 0.563-1.094 0.906-1.837 1.2-0.563 0.219-1.413 0.481-2.969 0.55-1.688 0.075-2.194 0.094-6.463 0.094s-4.781-0.019-6.463-0.094c-1.563-0.069-2.406-0.331-2.969-0.55-0.744-0.288-1.281-0.637-1.838-1.194-0.563-0.563-0.906-1.094-1.2-1.837-0.219-0.563-0.481-1.413-0.55-2.969-0.075-1.688-0.094-2.194-0.094-6.463s0.019-4.781 0.094-6.463c0.069-1.563 0.331-2.406 0.55-2.969 0.288-0.744 0.638-1.281 1.194-1.838 0.563-0.563 1.094-0.906 1.838-1.2 0.563-0.219 1.412-0.481 2.969-0.55 1.681-0.075 2.188-0.094 6.463-0.094zM16 0c-4.344 0-4.887 0.019-6.594 0.094-1.7 0.075-2.869 0.35-3.881 0.744-1.056 0.412-1.95 0.956-2.837 1.85-0.894 0.888-1.438 1.781-1.85 2.831-0.394 1.019-0.669 2.181-0.744 3.881-0.075 1.713-0.094 2.256-0.094 6.6s0.019 4.887 0.094 6.594c0.075 1.7 0.35 2.869 0.744 3.881 0.413 1.056 0.956 1.95 1.85 2.837 0.887 0.887 1.781 1.438 2.831 1.844 1.019 0.394 2.181 0.669 3.881 0.744 1.706 0.075 2.25 0.094 6.594 0.094s4.888-0.019 6.594-0.094c1.7-0.075 2.869-0.35 3.881-0.744 1.050-0.406 1.944-0.956 2.831-1.844s1.438-1.781 1.844-2.831c0.394-1.019 0.669-2.181 0.744-3.881 0.075-1.706 0.094-2.25 0.094-6.594s-0.019-4.887-0.094-6.594c-0.075-1.7-0.35-2.869-0.744-3.881-0.394-1.063-0.938-1.956-1.831-2.844-0.887-0.887-1.781-1.438-2.831-1.844-1.019-0.394-2.181-0.669-3.881-0.744-1.712-0.081-2.256-0.1-6.6-0.1v0z\"\n\t\t\t></Path>\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M16 7.781c-4.537 0-8.219 3.681-8.219 8.219s3.681 8.219 8.219 8.219 8.219-3.681 8.219-8.219c0-4.537-3.681-8.219-8.219-8.219zM16 21.331c-2.944 0-5.331-2.387-5.331-5.331s2.387-5.331 5.331-5.331c2.944 0 5.331 2.387 5.331 5.331s-2.387 5.331-5.331 5.331z\"\n\t\t\t></Path>\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M26.462 7.456c0 1.060-0.859 1.919-1.919 1.919s-1.919-0.859-1.919-1.919c0-1.060 0.859-1.919 1.919-1.919s1.919 0.859 1.919 1.919z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t)",
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 58,
+                    "ch": 11
+                  },
+                  "kind": 16,
+                  "name": "",
+                  "flags": 0,
+                  "id": 12,
+                  "parameters": [],
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 73,
+                  "ch": 3
+                },
+                "kind": 0,
+                "name": "twitter",
+                "flags": 0,
+                "id": 13,
+                "value": "() => (\n\t\t<Svg className=\"svg\" alt=\"twitter\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M32 7.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t)",
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 75,
+                    "ch": 9
+                  },
+                  "kind": 16,
+                  "name": "",
+                  "flags": 0,
+                  "id": 14,
+                  "parameters": [],
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 82,
+                  "ch": 3
+                },
+                "kind": 0,
+                "name": "linkedin",
+                "flags": 0,
+                "id": 15,
+                "value": "() => (\n\t\t<Svg className=\"svg\" alt=\"linkedin\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M29 0h-26c-1.65 0-3 1.35-3 3v26c0 1.65 1.35 3 3 3h26c1.65 0 3-1.35 3-3v-26c0-1.65-1.35-3-3-3zM12 26h-4v-14h4v14zM10 10c-1.106 0-2-0.894-2-2s0.894-2 2-2c1.106 0 2 0.894 2 2s-0.894 2-2 2zM26 26h-4v-8c0-1.106-0.894-2-2-2s-2 0.894-2 2v8h-4v-14h4v2.481c0.825-1.131 2.087-2.481 3.5-2.481 2.488 0 4.5 2.238 4.5 5v9z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t)",
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 84,
+                    "ch": 10
+                  },
+                  "kind": 16,
+                  "name": "",
+                  "flags": 0,
+                  "id": 16,
+                  "parameters": [],
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 91,
+                  "ch": 3
+                },
+                "kind": 0,
+                "name": "facebook",
+                "flags": 0,
+                "id": 17,
+                "value": "() => (\n\t\t<Svg className=\"svg\" alt=\"facebook\" width={24} viewBox=\"0 0 32 32\">\n\t\t\t<Path\n\t\t\t\tfill=\"currentColor\"\n\t\t\t\td=\"M19 6h5v-6h-5c-3.86 0-7 3.14-7 7v3h-4v6h4v16h6v-16h5l1-6h-6v-3c0-0.542 0.458-1 1-1z\"\n\t\t\t></Path>\n\t\t</Svg>\n\t)",
+                "type": {
+                  "source": {
+                    "fileName": "index.tsx",
+                    "line": 93,
+                    "ch": 10
+                  },
+                  "kind": 16,
+                  "name": "",
+                  "flags": 0,
+                  "id": 18,
+                  "parameters": [],
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 101,
+            "ch": 2
+          },
+          "kind": 35,
+          "name": "BrandIcon",
+          "flags": 1,
+          "id": 19,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 119,
+                "ch": 42
+              },
+              "kind": 36,
+              "name": "icon",
+              "flags": 4,
+              "id": 20,
+              "type": {
+                "name": "IconKey",
+                "kind": 6
+              },
+              "value": "''"
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-www-icon",
+            "role": "img"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 122,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "BrandLink",
+          "flags": 1,
+          "id": 21,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 135,
+                "ch": 42
+              },
+              "kind": 36,
+              "name": "icon",
+              "flags": 4,
+              "id": 22,
+              "type": {
+                "name": "IconKey",
+                "kind": 6
+              },
+              "value": "''"
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 137,
+                "ch": 20
+              },
+              "kind": 36,
+              "name": "href",
+              "flags": 4,
+              "id": 23,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-brand-link"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 141,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "A",
+          "flags": 1,
+          "id": 24,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 154,
+                "ch": 34
+              },
+              "kind": 36,
+              "name": "href",
+              "flags": 4,
+              "id": 25,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 156,
+                "ch": 11
+              },
+              "kind": 36,
+              "name": "focusable",
+              "flags": 4,
+              "id": 26,
+              "value": "true",
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-a"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 159,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "Image",
+          "flags": 1,
+          "id": 27,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 178,
+                "ch": 38
+              },
+              "kind": 36,
+              "name": "src",
+              "flags": 4,
+              "id": 28,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 180,
+                "ch": 10
+              },
+              "kind": 36,
+              "name": "alt",
+              "flags": 4,
+              "id": 29,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-img"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 184,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "AppbarMenu",
+          "flags": 1,
+          "id": 30,
+          "children": [],
+          "docs": {
+            "tagName": "www-appbar-menu"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 224,
+            "ch": 44
+          },
+          "kind": 35,
+          "name": "AppbarItem",
+          "flags": 1,
+          "id": 31,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 227,
+                "ch": 43
+              },
+              "kind": 36,
+              "name": "href",
+              "flags": 4,
+              "id": 32,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-appbar-item"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 230,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "PageAppbar",
+          "flags": 1,
+          "id": 33,
+          "children": [],
+          "docs": {
+            "tagName": "www-appbar"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 267,
+            "ch": 44
+          },
+          "kind": 35,
+          "name": "PageAppbarLogo",
+          "flags": 1,
+          "id": 34,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 282,
+                "ch": 47
+              },
+              "kind": 36,
+              "name": "src",
+              "flags": 4,
+              "id": 35,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-appbar-logo"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 285,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "PageText",
+          "flags": 1,
+          "id": 36,
+          "children": [],
+          "docs": {
+            "tagName": "www-t"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 288,
+            "ch": 42
+          },
+          "kind": 35,
+          "name": "Header",
+          "flags": 1,
+          "id": 37,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 328,
+                "ch": 39
+              },
+              "kind": 36,
+              "name": "bottom",
+              "flags": 4,
+              "id": 38,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 330,
+                  "ch": 8
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 330,
+                      "ch": 8
+                    },
+                    "kind": 23,
+                    "name": "''",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 330,
+                      "ch": 13
+                    },
+                    "kind": 23,
+                    "name": "'circle'",
+                    "flags": 0
+                  }
+                ]
+              },
+              "value": "''"
+            }
+          ],
+          "docs": {
+            "tagName": "www-header"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 331,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "Section",
+          "flags": 1,
+          "id": 39,
+          "children": [],
+          "docs": {
+            "tagName": "www-section"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 344,
+            "ch": 41
+          },
+          "kind": 35,
+          "name": "SectionGrid",
+          "flags": 1,
+          "id": 40,
+          "children": [],
+          "docs": {
+            "tagName": "www-section-grid"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 362,
+            "ch": 45
+          },
+          "kind": 35,
+          "name": "ServiceCard",
+          "flags": 1,
+          "id": 41,
+          "children": [],
+          "docs": {
+            "tagName": "www-service-card"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Card",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 371,
+            "ch": 40
+          },
+          "kind": 35,
+          "name": "ImageCard",
+          "flags": 1,
+          "id": 42,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 404,
+                "ch": 42
+              },
+              "kind": 36,
+              "name": "src",
+              "flags": 4,
+              "id": 43,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-img-card"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 407,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "ImageThumbnail",
+          "flags": 1,
+          "id": 44,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 444,
+                "ch": 47
+              },
+              "kind": 36,
+              "name": "src",
+              "flags": 4,
+              "id": 45,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-img-thumb"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 447,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "Hr",
+          "flags": 1,
+          "id": 46,
+          "children": [],
+          "docs": {
+            "tagName": "www-hr"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "CoreHr",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 450,
+            "ch": 33
+          },
+          "kind": 35,
+          "name": "Footer",
+          "flags": 1,
+          "id": 47,
+          "children": [],
+          "docs": {
+            "tagName": "www-footer"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "id": 5,
+          "source": {
+            "fileName": "index.tsx",
+            "line": 474,
+            "ch": 40
+          },
+          "kind": 35,
+          "name": "Page",
+          "flags": 1,
+          "children": [],
+          "docs": {
+            "tagName": "www-page"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Application",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 481,
+            "ch": 40
+          },
+          "kind": 35,
+          "name": "Theme",
+          "flags": 1,
+          "id": 48,
+          "children": [],
+          "docs": {
+            "tagName": "www-theme"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 484,
+            "ch": 39
+          },
+          "kind": 35,
+          "name": "DialogPhoto",
+          "flags": 1,
+          "id": 49,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 506,
+                "ch": 44
+              },
+              "kind": 36,
+              "name": "src",
+              "flags": 4,
+              "id": 50,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-dialog-photo"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 509,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "ThankYou",
+          "flags": 1,
+          "id": 51,
+          "children": [],
+          "docs": {
+            "tagName": "www-thank-you"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 540,
+            "ch": 42
+          },
+          "kind": 35,
+          "name": "ContactForm",
+          "flags": 1,
+          "id": 52,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 636,
+                "ch": 44
+              },
+              "kind": 36,
+              "name": "apiurl",
+              "flags": 4,
+              "id": 53,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "www-form-contact"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

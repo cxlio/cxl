@@ -1,5 +1,7 @@
 import { subject, toPromise } from '@cxl/rx';
 
+declare function __cxlRunner(msg: any): any;
+
 export type Measurements = Record<string, any>;
 
 type EventType = 'afterAll' | 'afterEach' | 'beforeAll' | 'beforeEach';
@@ -38,9 +40,18 @@ interface SpyProp<T> {
 	value: T;
 }
 
+export interface FigureData {
+	type: 'figure';
+	name: string;
+	html: string;
+	baseline?: string;
+	match: number;
+}
+
 export interface Result {
 	success: boolean;
 	message: string;
+	data?: FigureData;
 	stack?: any;
 }
 
@@ -71,16 +82,11 @@ export class TestApi {
 		if (!this.$test.domContainer)
 			document.body.appendChild((this.$test.domContainer = el));
 
-		return el;
+		return el as HTMLElement;
 	}
 
 	afterAll(fn: () => Promise<any> | void) {
-		this.$test.events.subscribe(ev => {
-			if (ev.type === 'afterAll') {
-				const result = fn();
-				if (result) ev.promises.push(result);
-			}
-		});
+		this.$test.onEvent('afterAll', fn);
 	}
 
 	ok(condition: any, message = 'Assertion failed') {
@@ -167,8 +173,9 @@ export class TestApi {
 	 * you want to run in that test file.
 	 */
 	testOnly(name: string, testFn: TestFn) {
-		this.$test.tests.push(new Test(name, testFn));
-		this.$test.only.push(new Test(name, testFn));
+		const test = new Test(name, testFn);
+		this.$test.tests.push(test);
+		this.$test.only.push(test);
 	}
 
 	should(name: string, testFn: TestFn) {
@@ -177,6 +184,17 @@ export class TestApi {
 
 	test(name: string, testFn: TestFn) {
 		this.$test.tests.push(new Test(name, testFn));
+	}
+
+	mock<T, K extends keyof FunctionsOf<T>>(object: T, method: K, fn: T[K]) {
+		const old = object[method];
+		object[method] = fn;
+		this.$test.events.subscribe({
+			complete() {
+				object[method] = old;
+			},
+		});
+		return fn;
 	}
 
 	spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
@@ -222,6 +240,39 @@ export class TestApi {
 			trigger(el);
 		});
 	}
+
+	figure(name: string, html: Node | string) {
+		if (typeof __cxlRunner !== 'undefined')
+			this.test(name, async a => {
+				const domId = (a.dom.id = `dom${a.id}`);
+
+				if (typeof html === 'string') a.dom.innerHTML = html;
+				else {
+					a.dom.appendChild(html);
+					html = a.dom.innerHTML;
+				}
+
+				const style = a.dom.style;
+				style.position = 'absolute';
+				style.overflowX = 'hidden';
+				style.top = style.left = '0';
+				style.width = '320px';
+				style.backgroundColor = 'white';
+
+				const data: any = {
+					type: 'figure',
+					name,
+					domId,
+					html,
+				};
+				const match = await __cxlRunner(data);
+				a.$test.push(match);
+			});
+		else {
+			console.warn('figure method not supported');
+			this.ok(true, 'figure method not supported');
+		}
+	}
 }
 
 export class Test {
@@ -240,6 +291,15 @@ export class Test {
 	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
 		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
 		else this.name = nameOrConfig.name;
+	}
+
+	onEvent(id: EventType, fn: () => Promise<any> | void) {
+		this.events.subscribe(ev => {
+			if (ev.type === id) {
+				const result = fn();
+				if (result) ev.promises.push(result);
+			}
+		});
 	}
 
 	push(result: Result) {
@@ -281,6 +341,7 @@ export class Test {
 
 	async run(): Promise<Result[]> {
 		try {
+			this.completed = false;
 			this.promise = undefined;
 			const testApi = new TestApi(this);
 			const result = this.testFn(testApi);

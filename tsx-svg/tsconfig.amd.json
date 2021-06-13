@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/tsx-svg/amd"
+	},
+	"files": [
+		"index.ts"
+	],
+	"references": []
+}

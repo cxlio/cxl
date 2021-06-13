@@ -6,9 +6,10 @@ TSX library
 
 ## Project Details
 
--   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/tsx/v/0.0.1)
+-   Branch Version: [0.1.0](https://npmjs.com/package/@cxl/tsx/v/0.1.0)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/tsx)
+-   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
 
 ## Installation
 

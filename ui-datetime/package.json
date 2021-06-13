@@ -3,20 +3,20 @@
 	"version": "0.0.1",
 	"description": "Date and Time UI Components",
 	"browser": "amd/index.min.js",
-	"dependencies": {
-		"@cxl/tsx": "~0.0.1",
-		"@cxl/ui": "~3.0.0",
-		"@cxl/component": "~0.0.1",
-		"@cxl/css": "~0.0.1",
-		"@cxl/rx": "~0.2.0",
-		"@cxl/dom": "~0.0.1",
-		"@cxl/template": "~1.0.0"
-	},
 	"scripts": {
-		"test": "npm run build && cd ../dist/ui-datetime && node ../tester",
+		"test": "npm run build && cd ../dist/ui-datetime && node ../tester --baselinePath=../../ui-datetime/spec",
 		"build": "node ../dist/build"
 	},
 	"homepage": "https://cxlio.github.io/cxl/ui-datetime",
 	"license": "GPL-3.0",
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"devDependencies": {
+		"@cxl/tsx": "~0.1.0",
+		"@cxl/ui": "~3.1.0",
+		"@cxl/component": "~0.1.0",
+		"@cxl/css": "~0.0.1",
+		"@cxl/rx": "~0.5.0",
+		"@cxl/dom": "~0.0.1",
+		"@cxl/template": "~1.0.0"
+	}
 }

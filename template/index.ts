@@ -1,7 +1,11 @@
+///<amd-module name="@cxl/template"/>
 import {
 	AttributeObserver,
-	setContent as domSetContent,
+	findNextNode,
+	findNextNodeBySelector,
 	on,
+	onAction,
+	onResize,
 	trigger,
 } from '@cxl/dom';
 import {
@@ -12,19 +16,26 @@ import {
 	defer,
 	merge,
 	observable,
+	operatorNext,
+	operator,
 	of,
 	tap,
+	map,
 } from '@cxl/rx';
-import { Bindable, NativeChildren, dom } from '@cxl/tsx';
-import { Styles, render as renderCSS } from '@cxl/css';
-import { Component, staticTemplate } from '@cxl/component';
+import type { Bindable } from '@cxl/tsx';
+import { Breakpoint, css, theme } from '@cxl/css';
+import { Component, attributeChanged, get } from '@cxl/component';
 
-interface ElementWithValue<T> extends HTMLElement {
-	value: T;
+export type ValidateFunction<T> = (val: T) => string | true;
+
+declare global {
+	interface HTMLElement {
+		ariaLabel: string | null;
+	}
 }
 
-interface ValueElement extends Element {
-	value: boolean | undefined;
+export interface ElementWithValue<T> extends HTMLElement {
+	value: T;
 }
 
 function isObservedAttribute(el: any, attr: any) {
@@ -59,35 +70,23 @@ export function getAttribute<T extends Node, K extends keyof T>(
 }
 
 export function triggerEvent<R>(element: EventTarget, event: string) {
-	return tap<R>((val: R) => trigger(element, event, val));
-}
-
-export function setAttribute(el: Element, attribute: string) {
-	return tap(val => ((el as any)[attribute] = val));
+	return tap<R>(trigger.bind(null, element, event));
 }
 
 export function stopEvent<T extends Event>() {
 	return tap<T>((ev: T) => ev.stopPropagation());
 }
 
-export function show(el: HTMLElement) {
-	return tap<boolean>(val => (el.style.display = val ? '' : 'none'));
-}
-
-export function hide(el: HTMLElement) {
-	return tap<boolean>(val => (el.style.display = val ? 'none' : ''));
-}
-
 export function sync<T>(
 	getA: Observable<T>,
 	setA: (val: T) => void,
 	getB: Observable<T>,
-	setB: (val: T) => void
+	setB: (val: T) => void,
+	value?: T
 ) {
-	let value: T;
 	return merge(
-		getA.tap(val => val !== value && setB((value = val))),
-		getB.tap(val => val !== value && setA((value = val)))
+		getA.filter(val => val !== value).tap(val => setB((value = val))),
+		getB.filter(val => val !== value).tap(val => setA((value = val)))
 	);
 }
 
@@ -96,7 +95,8 @@ export function syncAttribute(A: Node, B: Node, attr: string) {
 		getAttribute(A, attr as any),
 		val => ((A as any)[attr] = val),
 		getAttribute(B, attr as any),
-		val => ((B as any)[attr] = val)
+		val => ((B as any)[attr] = val),
+		(B as any)[attr]
 	);
 }
 
@@ -122,16 +122,14 @@ export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
 		.raf();
 }
 
-export function setContent(el: Element) {
-	return tap((val: any) => domSetContent(el, val));
-}
-
 const LOG = tap(val => console.log(val));
 
 declare module '../rx' {
 	interface Observable<T> {
+		is(equalTo: T): Observable<boolean>;
 		log(): Observable<T>;
 		raf(fn?: (val: T) => void): Observable<T>;
+		select<K extends keyof T>(key: K): Observable<T[K]>;
 	}
 }
 
@@ -143,37 +141,54 @@ Observable.prototype.raf = function (fn?: (val: any) => void) {
 	return this.pipe(raf(fn));
 };
 
+Observable.prototype.is = function (equalTo: any) {
+	return this.pipe(is(equalTo));
+};
+
+Observable.prototype.select = function (key: any) {
+	return this.pipe(select(key));
+};
+
+export function select<T, K extends keyof T>(key: K) {
+	return map((val: T) => val[key]);
+}
+
+export function is<T>(equalTo: T) {
+	return operatorNext<T, boolean>(subs => (val: T) =>
+		subs.next(val === equalTo)
+	);
+}
+
 /**
  * debounce using requestAnimationFrame
  */
 export function raf<T>(fn?: (val: T) => void) {
-	return (source: Observable<T>) => {
+	return operator<T>(subscriber => {
 		let to: number,
 			completed = false;
 
-		return new Observable<T>(subscriber => {
-			const subs = source.subscribe({
-				next(val: T) {
-					if (to) cancelAnimationFrame(to);
-					to = requestAnimationFrame(() => {
-						if (fn) fn(val);
-						subscriber.next(val);
-						to = 0;
-						if (completed) subscriber.complete();
-					});
-				},
-				error(e) {
-					if (to) cancelAnimationFrame(to);
-					subscriber.error(e);
-				},
-				complete() {
-					if (to) completed = true;
-					else subscriber.complete();
-				},
-			});
-			return () => subs.unsubscribe();
-		});
-	};
+		return {
+			next(val: T) {
+				if (to) cancelAnimationFrame(to);
+				to = requestAnimationFrame(() => {
+					if (fn) fn(val);
+					subscriber.next(val);
+					to = 0;
+					if (completed) subscriber.complete();
+				});
+			},
+			error(e) {
+				subscriber.error(e);
+			},
+			complete() {
+				if (to) completed = true;
+				else subscriber.complete();
+			},
+			unsubscribe() {
+				if (to) cancelAnimationFrame(to);
+			},
+		};
+	});
 }
 
 export function log<T>() {
@@ -210,29 +225,62 @@ class Marker {
 		this.node.parentNode?.insertBefore(content, nextNode);
 	}
 
+	remove(node: Node) {
+		const index = this.children.indexOf(node);
+		if (index === -1) throw new Error('node not found');
+		this.children.splice(index, 1);
+		const parent = this.node.parentNode;
+		if (!parent) return;
+		parent.removeChild(node);
+	}
+
 	empty() {
 		const parent = this.node.parentNode;
-
 		if (!parent) return;
-
 		this.children.forEach(snap => parent.removeChild(snap));
-		this.children = [];
+		this.children.length = 0;
 	}
 }
 
-export function list<T>(
-	source: Observable<ListEvent<T>>,
+export function list<T, K>(
+	source: Observable<ListEvent<T, K>>,
 	renderFn: (item: T) => Node
 ) {
-	const marker = new Marker();
 	return (host: Bindable) => {
+		const marker = new Marker();
+		const map = new Map<K, Node | Node[]>();
 		host.bind(
 			source.tap(ev => {
-				if (ev.type === 'insert') marker.insert(renderFn(ev.item));
-				else if (ev.type === 'empty') marker.empty();
+				if (ev.type === 'insert') {
+					const node = renderFn(ev.item);
+					map.set(
+						ev.key,
+						node instanceof DocumentFragment
+							? Array.from(node.childNodes)
+							: node
+					);
+					marker.insert(node);
+				} else if (ev.type === 'remove') {
+					const node = map.get(ev.key);
+					if (Array.isArray(node))
+						node.forEach(n => marker.remove(n));
+					else if (node) marker.remove(node);
+				} else if (ev.type === 'empty') marker.empty();
 			})
 		);
 		return marker.node;
+	};
+}
+
+export function loading(source: Observable<any>, renderFn: () => Node) {
+	return (host: Bindable) => {
+		const marker = new Marker();
+		host.bind(
+			observable(() => {
+				marker.insert(renderFn());
+			})
+		);
+		host.bind(source.tap(() => marker.empty()));
 	};
 }
 
@@ -241,10 +289,15 @@ export function render<T>(
 	renderFn: (item: T) => Node,
 	loading?: () => Node
 ) {
-	const marker = new Marker();
-	if (loading) marker.insert(loading());
-
 	return (host: Bindable) => {
+		const marker = new Marker();
+		if (loading)
+			host.bind(
+				observable(() => {
+					marker.insert(loading());
+				})
+			);
+
 		host.bind(
 			source.tap(item => {
 				marker.empty();
@@ -257,7 +310,7 @@ export function render<T>(
 }
 
 export function each<T>(
-	source: Observable<T[]>,
+	source: Observable<Iterable<T>>,
 	renderFn: (item: T) => Node,
 	empty?: () => Node
 ) {
@@ -267,9 +320,12 @@ export function each<T>(
 		host.bind(
 			source.tap(arr => {
 				marker.empty();
-				if (arr.length)
-					for (const item of arr) marker.insert(renderFn(item));
-				else if (empty) marker.insert(empty());
+				let len = 0;
+				for (const item of arr) {
+					marker.insert(renderFn(item));
+					len++;
+				}
+				if (empty && len === 0) marker.insert(empty());
 			})
 		);
 
@@ -277,13 +333,13 @@ export function each<T>(
 	};
 }
 
-export function Style(p: { children: Styles }) {
+/*export function Style(p: { children: Styles }) {
 	return renderCSS(p.children);
 }
 
 export function Static(p: { children: NativeChildren }): any {
 	return staticTemplate(() => dom(dom, undefined, p.children));
-}
+}*/
 
 type AriaProperties = {
 	atomic: string;
@@ -329,28 +385,463 @@ type AriaProperties = {
 
 type AriaProperty = keyof AriaProperties;
 
-export function aria<T extends Component>(prop: AriaProperty, value: string) {
+function attrInitial<T extends Component>(name: string, value: string) {
 	return (ctx: T) =>
-		ctx.bind(observable(() => ctx.setAttribute(`aria-${prop}`, value)));
+		observable(() => {
+			if (!ctx.hasAttribute(name)) ctx.setAttribute(name, value);
+		});
+}
+
+export function aria<T extends Component>(prop: AriaProperty, value: string) {
+	return attrInitial<T>(`aria-${prop}`, value);
 }
 
 export function ariaValue(host: Element, prop: AriaProperty) {
-	return tap<string | number>(val =>
-		host.setAttribute('aria-' + prop, val.toString())
-	);
-}
-
-export function ariaProp(host: Element, prop: AriaProperty) {
-	return tap<boolean>(val =>
-		host.setAttribute('aria-' + prop, val ? 'true' : 'false')
-	);
-}
-
-export function ariaChecked(host: ValueElement) {
-	return tap<boolean>(val =>
+	return tap<string | number | boolean>(val =>
 		host.setAttribute(
-			'aria-checked',
-			host.value === undefined ? 'mixed' : val ? 'true' : 'false'
+			'aria-' + prop,
+			val === true ? 'true' : val === false ? 'false' : val.toString()
 		)
 	);
+}
+
+export function ariaChecked(host: Element) {
+	return tap<boolean | undefined>(val =>
+		host.setAttribute(
+			'aria-checked',
+			val === undefined ? 'mixed' : val ? 'true' : 'false'
+		)
+	);
+}
+
+export function role<T extends Component>(roleName: string) {
+	return attrInitial<T>('role', roleName);
+}
+
+interface SelectableNode extends ParentNode, EventTarget {}
+
+/**
+ * Handles keyboard navigation, emits the next selected item.
+ */
+export function navigationList(
+	host: SelectableNode,
+	selector: string,
+	startSelector: string
+) {
+	return on(host, 'keydown')
+		.map(ev => {
+			let el = host.querySelector(startSelector);
+			const key = ev.key;
+
+			function findByFirstChar(item: Element) {
+				return (
+					item.matches(selector) &&
+					item.textContent?.[0].toLowerCase() === key
+				);
+			}
+
+			switch (key) {
+				case 'ArrowDown':
+					if (el) el = findNextNodeBySelector(el, selector) || el;
+					else {
+						const first = host.firstElementChild;
+
+						if (first)
+							el = first.matches(selector)
+								? first
+								: findNextNodeBySelector(first, selector);
+					}
+					if (el) ev.preventDefault();
+
+					break;
+				case 'ArrowUp':
+					if (el)
+						el =
+							findNextNodeBySelector(
+								el,
+								selector,
+								'previousElementSibling'
+							) || el;
+					else {
+						const first = host.lastElementChild;
+
+						if (first)
+							el = first.matches(selector)
+								? first
+								: findNextNodeBySelector(
+										first,
+										selector,
+										'previousElementSibling'
+								  );
+					}
+					if (el) ev.preventDefault();
+					break;
+				default:
+					if (/^\w$/.test(key)) {
+						const first = host.firstElementChild;
+						el =
+							(el && findNextNode(el, findByFirstChar)) ||
+							(first && findNextNode(first, findByFirstChar)) ||
+							null;
+						ev.preventDefault();
+					}
+			}
+			return el;
+		})
+		.filter(el => !!el);
+}
+
+interface FocusableComponent extends Component {
+	disabled: boolean;
+	touched: boolean;
+}
+
+export function focusableEvents<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return merge(
+		on(element, 'focus').pipe(triggerEvent(host, 'focusable.focus')),
+		on(element, 'blur').tap(() => {
+			host.touched = true;
+			trigger(host, 'focusable.blur');
+		}),
+		attributeChanged(host, 'disabled').pipe(
+			triggerEvent(host, 'focusable.change')
+		),
+		attributeChanged(host, 'touched').pipe(
+			triggerEvent(host, 'focusable.change')
+		)
+	);
+}
+
+export function disabledAttribute<T extends FocusableComponent>(host: T) {
+	return get(host, 'disabled').tap(value =>
+		host.setAttribute('aria-disabled', value ? 'true' : 'false')
+	);
+}
+
+export function focusableDisabled<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return disabledAttribute(host).tap(value => {
+		if (value) element.removeAttribute('tabindex');
+		else element.tabIndex = 0;
+	});
+}
+
+export function focusable<T extends FocusableComponent>(
+	host: T,
+	element: HTMLElement = host
+) {
+	return merge(
+		focusableDisabled(host, element),
+		focusableEvents(host, element)
+	);
+}
+
+export const DisabledStyles = {
+	cursor: 'default',
+	filter: 'saturate(0)',
+	opacity: 0.38,
+	pointerEvents: 'none',
+};
+
+export const StateStyles = {
+	$focus: { outline: 0 },
+	$disabled: DisabledStyles,
+};
+
+const stateStyles = css(StateStyles);
+
+const disabledCss = css({ $disabled: DisabledStyles });
+
+interface DisableElement extends HTMLElement {
+	disabled: boolean;
+}
+
+export function focusDelegate<T extends FocusableComponent>(
+	host: T,
+	delegate: DisableElement
+) {
+	host.Shadow({ children: disabledCss });
+	return merge(
+		disabledAttribute(host).tap(val => (delegate.disabled = val)),
+		focusableEvents(host, delegate)
+	);
+}
+
+/**
+ * Adds focusable functionality to input components.
+ */
+export function Focusable(host: Bindable) {
+	host.bind(focusable(host as FocusableComponent));
+	return stateStyles();
+}
+
+export function registable<T extends Component, ControllerT>(
+	host: T,
+	id: string,
+	controller?: ControllerT
+) {
+	return observable<never>(() => {
+		const detail: any = { controller };
+		trigger(host, id + '.register', detail);
+		return () => detail.unsubscribe?.();
+	});
+}
+
+export function registableHost<ControllerT>(
+	host: EventTarget,
+	id: string,
+	elements = new Set<ControllerT>()
+) {
+	return observable<Set<ControllerT>>(subs => {
+		function register(ev: CustomEvent) {
+			if (ev.target) {
+				const detail = ev.detail;
+				const target = (detail.controller || ev.target) as ControllerT;
+				elements.add(target);
+				subs.next(elements);
+				ev.detail.unsubscribe = () => {
+					elements.delete(target);
+					subs.next(elements);
+				};
+			}
+		}
+
+		const inner = on(host, id + '.register').subscribe(register);
+		return () => inner.unsubscribe();
+	});
+}
+
+interface SelectableComponent extends Component {
+	selected: boolean;
+}
+
+interface SelectableTarget extends Node {
+	value: any;
+	selected: boolean;
+	multiple?: boolean;
+}
+
+interface SelectableHost<T> extends Element {
+	value?: any;
+	options: Set<T>;
+	selected?: T;
+}
+
+interface SelectableMultiHost<T> extends Element {
+	value: any[];
+	options: Set<T>;
+	selected: Set<T>;
+}
+
+export function selectableHostMultiple<TargetT extends SelectableTarget>(
+	host: SelectableMultiHost<TargetT>
+) {
+	return new Observable<TargetT>(subscriber => {
+		function setSelected(option: TargetT) {
+			subscriber.next(option);
+		}
+
+		function onChange() {
+			const { value, options } = host;
+
+			for (const o of options) {
+				if (value.indexOf(o.value) !== -1) {
+					if (!o.selected) setSelected(o);
+				} else o.selected = false;
+			}
+		}
+
+		function setOptions() {
+			const { value, options, selected } = host;
+
+			options.forEach(o => (o.multiple = true));
+
+			for (const o of options) {
+				if (
+					(o.selected && !selected.has(o)) ||
+					(!o.selected && value.indexOf(o.value) !== -1)
+				)
+					setSelected(o);
+			}
+		}
+
+		const subscription = merge(
+			registableHost<TargetT>(host, 'selectable', host.options).tap(
+				setOptions
+			),
+			getAttribute(host, 'value').tap(onChange),
+			on(host, 'selectable.action').tap(ev => {
+				if (ev.target && host.options?.has(ev.target as TargetT)) {
+					ev.stopImmediatePropagation();
+					ev.stopPropagation();
+					setSelected(ev.target as TargetT);
+				}
+			})
+		).subscribe();
+
+		return () => subscription.unsubscribe();
+	});
+}
+
+/**
+ * Handles element selection events. Emits everytime a new item is selected.
+ */
+export function selectableHost<TargetT extends SelectableTarget>(
+	host: SelectableHost<TargetT>
+) {
+	return new Observable<TargetT | undefined>(subscriber => {
+		function setSelected(option: TargetT | undefined) {
+			subscriber.next(option);
+		}
+
+		function onChange() {
+			const { value, options, selected } = host;
+
+			if (selected && selected.value === value) return;
+
+			for (const o of options)
+				if (o.parentNode && o.value === value) return setSelected(o);
+				else o.selected = false;
+
+			setSelected(undefined);
+		}
+
+		function setOptions() {
+			const { value, options, selected } = host;
+
+			if (selected && options.has(selected)) return;
+
+			let first: TargetT | null = null;
+			for (const o of options) {
+				first = first || o;
+
+				if (value === o.value) return setSelected(o);
+			}
+
+			if (value === undefined && !selected && first) setSelected(first);
+			else if (selected && !selected.parentNode) setSelected(undefined);
+		}
+
+		const subscription = merge(
+			registableHost<TargetT>(host, 'selectable', host.options).tap(
+				setOptions
+			),
+			getAttribute(host, 'value').tap(onChange),
+			on(host, 'selectable.action').tap(ev => {
+				if (ev.target && host.options?.has(ev.target as TargetT)) {
+					ev.stopImmediatePropagation();
+					ev.stopPropagation();
+					setSelected(ev.target as TargetT);
+				}
+			})
+		).subscribe();
+
+		return () => subscription.unsubscribe();
+	});
+}
+
+export function selectable<T extends SelectableComponent>(host: T) {
+	return merge(
+		registable(host, 'selectable'),
+		onAction(host).pipe(
+			triggerEvent(host, 'selectable.action'),
+			stopEvent()
+		),
+		get(host, 'selected').pipe(ariaValue(host, 'selected'))
+	);
+}
+
+interface CheckedComponent extends Component {
+	value: any;
+	checked: boolean;
+}
+
+export function checkedBehavior<T extends CheckedComponent>(host: T) {
+	let first = true;
+	return merge(
+		get(host, 'value')
+			.tap(val => {
+				if (first) {
+					if (val === true) host.checked = true;
+					first = false;
+				} else host.checked = val === true;
+			})
+			.filter(() => false),
+		get(host, 'checked').pipe(ariaChecked(host))
+	);
+}
+
+export function stopChildrenEvents(target: EventTarget, event: string) {
+	return on(target, event).tap(ev => {
+		if (ev.target !== target) {
+			ev.stopPropagation();
+			ev.stopImmediatePropagation();
+		}
+	});
+}
+
+export function $onAction<T extends Element>(
+	cb: (ev: KeyboardEvent | MouseEvent) => void
+) {
+	return (el: T) => onAction(el).tap(cb);
+}
+
+export function staticTemplate(template: () => Node) {
+	let rendered: Node;
+	return () => {
+		return (rendered || (rendered = template())).cloneNode(true);
+	};
+}
+
+export function setClassName(el: HTMLElement) {
+	let className: string;
+	return tap<string>(newClass => {
+		if (className !== newClass) {
+			el.classList.remove(className);
+			className = newClass;
+			if (className) el.classList.add(className);
+		}
+	});
+}
+
+export function breakpoint(el: HTMLElement): Observable<Breakpoint> {
+	return onResize(el)
+		.raf()
+		.map(() => {
+			const breakpoints = theme.breakpoints;
+			const width = el.clientWidth;
+			let newClass: Breakpoint = 'xsmall';
+			for (const bp in breakpoints) {
+				if ((breakpoints as any)[bp] > width) return newClass;
+				newClass = bp as Breakpoint;
+			}
+			return newClass;
+		});
+}
+
+export function breakpointClass(el: HTMLElement) {
+	return breakpoint(el).pipe(setClassName(el));
+}
+
+interface FormElement<T> extends ElementWithValue<T> {
+	setCustomValidity(msg: string): void;
+}
+
+export function validateValue<T>(
+	el: FormElement<T>,
+	...validators: ValidateFunction<T>[]
+) {
+	return getAttribute(el, 'value').tap(value => {
+		let message: string | boolean = true;
+		validators.find(validateFn => {
+			message = validateFn(value);
+			return message !== true;
+		});
+		el.setCustomValidity(message === true ? '' : (message as any));
+	});
 }

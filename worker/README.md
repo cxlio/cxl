@@ -9,6 +9,7 @@ Web Worker library
 -   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/worker/v/0.0.1)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/worker)
+-   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
 
 ## Installation
 

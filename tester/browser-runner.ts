@@ -2,13 +2,14 @@ import type { Result, Test } from '@cxl/spec';
 import type { TestResult } from './report';
 
 let output = '';
+let baselinePath: string;
 
 function group(testId: number, title: string) {
-	output += `<dl><dt><a data-test="${testId}" href="#">${title}</a></dt><dd><ul>`;
+	output += `<dl><dt><a data-test="${testId}" href="#">${title}</a></dt><dd>`;
 }
 
 function groupEnd() {
-	output += '</ul></dd></dl>';
+	output += '</dd></dl>';
 }
 
 function error(msg: string | Error) {
@@ -39,23 +40,25 @@ function printError(fail: Result) {
 
 function printResult(result: Result) {
 	output += result.success ? success() : failure();
+	const data = result.data;
+	if (data?.type === 'figure') {
+		output += `
+		<div style="vertical-align:middle;display:inline-block; width:320px;position:relative;">${data.html}</div>
+		<img style="vertical-align:middle" src="spec/${data.name}.png" />
+		<img style="vertical-align:middle" src="${baselinePath}/${data.name}.png" />`;
+	}
 }
 
 function renderTestReport(test: Test) {
 	let failureCount = 0;
 	const failures: TestResult[] = [];
+	const results = test.results;
 
-	const results: TestResult[] = test.results.map(r => {
+	results.forEach(r => {
 		if (r.success === false) {
 			failureCount++;
 			failures.push(r);
 		}
-
-		return {
-			message: r.message,
-			success: r.success,
-			stack: r.stack,
-		};
 	});
 
 	if (
@@ -71,6 +74,7 @@ function renderTestReport(test: Test) {
 		test.id,
 		`${test.name}${failureCount > 0 ? ` (${failureCount} failures)` : ''}`
 	);
+
 	results.forEach(r => {
 		printResult(r);
 		if (!r.success) printError(r);
@@ -92,6 +96,9 @@ function findTest(tests: Test[], id: number): Test | void {
 async function onClick(suite: Test[], ev: Event) {
 	const testId = (ev.target as HTMLElement)?.dataset.test;
 	if (testId) {
+		ev.stopPropagation();
+		ev.preventDefault();
+
 		const test = findTest(suite, +testId);
 
 		if (test) {
@@ -100,10 +107,16 @@ async function onClick(suite: Test[], ev: Event) {
 			await test.run();
 			console.log(test.results);
 		}
-		ev.stopPropagation();
-		ev.preventDefault();
 	}
 }
+
+(window as any).__cxlRunner = (data: any) => {
+	return {
+		success: true,
+		message: 'Screenshot should match baseline',
+		data,
+	};
+};
 
 const browserRunner = {
 	async runSuite(suite: Test) {
@@ -111,7 +124,8 @@ const browserRunner = {
 		renderTestReport(suite);
 	},
 
-	async run(suites: Test[]) {
+	async run(suites: Test[], baselineDir = '../../ui/spec') {
+		baselinePath = baselineDir;
 		await Promise.all(suites.map(suite => this.runSuite(suite)));
 		const container = document.createElement('cxl-content');
 		container.innerHTML = output;

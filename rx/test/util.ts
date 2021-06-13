@@ -1,32 +1,30 @@
-import { Observable, Subject, toPromise } from '../index.js';
+import { Observable, BehaviorSubject, Subject, toPromise } from '../index.js';
 import { TestApi } from '@cxl/spec';
 
 interface Log {
 	events: string;
 }
 
-class Scheduler extends Subject<number> {
-	time = 0;
+class Scheduler extends BehaviorSubject<number> {
 	run() {
 		let maxCycles = 100;
 		while (this.observers.size && maxCycles-- > 0) {
-			this.next(this.time);
-			this.time++;
+			this.next(this.value + 1);
 		}
-		eof$.next(this.time - 1);
-		this.time = 0;
+		eof$.next(this.value);
+		this.next(0);
 	}
 }
 
-const scheduler = new Scheduler();
+const scheduler = new Scheduler(0);
 const eof$ = new Subject<number>();
 
 function logOperator() {
 	const log: Log = { events: '' };
 	let events: string[] = [];
-	let time = scheduler.time;
+	let time = scheduler.value;
 
-	function flush(schedulerTime = scheduler.time) {
+	function flush(schedulerTime = scheduler.value) {
 		let diff = schedulerTime - time;
 		if (events.length) {
 			log.events +=
@@ -38,10 +36,10 @@ function logOperator() {
 	}
 
 	function emit(ev: string) {
-		const diff = scheduler.time - time;
+		const diff = scheduler.value - time;
 		if (diff) {
 			flush();
-			time = scheduler.time;
+			time = scheduler.value;
 		}
 
 		events.push(ev);
@@ -54,27 +52,31 @@ function logOperator() {
 				subscriber.next(log);
 				subscriber.complete();
 			});
-			const subscription = source.subscribe({
-				next(val) {
-					emit(val);
+			source.subscribe(
+				{
+					next(val) {
+						emit(val);
+					},
+					error() {
+						emit('#');
+						flush();
+						subscriber.next(log);
+						subscriber.complete();
+					},
+					complete() {
+						emit('|');
+						flush();
+						subscriber.next(log);
+						subscriber.complete();
+					},
 				},
-				error() {
-					emit('#');
-					flush();
-					subscriber.next(log);
-					subscriber.complete();
-				},
-				complete() {
-					emit('|');
-					flush();
-					subscriber.next(log);
-					subscriber.complete();
-				},
-			});
-			return () => {
-				eofSub.unsubscribe();
-				subscription.unsubscribe();
-			};
+				subscription => {
+					subscriber.setTeardown(() => {
+						eofSub.unsubscribe();
+						subscription.unsubscribe();
+					});
+				}
+			);
 		});
 }
 
@@ -93,10 +95,10 @@ export function expectLog(a: TestApi, obs: Observable<any>, events: string) {
 
 class ColdObservable extends Observable<string> {
 	subscriptions = '';
-	time = scheduler.time;
+	time = scheduler.value;
 
 	log(ev: string) {
-		const diff = scheduler.time - this.time;
+		const diff = scheduler.value - this.time;
 		if (diff === 0 && this.subscriptions.length)
 			this.subscriptions = this.subscriptions.replace(
 				/(.)$/,
@@ -107,7 +109,7 @@ class ColdObservable extends Observable<string> {
 				(diff > 0
 					? ' '.repeat(diff - (this.subscriptions ? 1 : 0))
 					: '') + ev;
-		this.time = scheduler.time;
+		this.time = scheduler.value;
 	}
 
 	constructor(stream: string, values?: any, error?: any) {

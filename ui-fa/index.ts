@@ -1,7 +1,5 @@
-import { Augment, Component, Attribute, role } from '@cxl/component';
-import { css, registerFont } from '@cxl/css';
-import { getShadow } from '@cxl/dom';
-import { theme } from '@cxl/ui/theme.js';
+///<amd-module name="@cxl/ui-fa"/>
+type IconKey = keyof typeof icons;
 
 const icons = {
 	ad: '\uf641',
@@ -39,9 +37,13 @@ const icons = {
 	'arrow-circle-right': '\uf0a9',
 	'arrow-circle-up': '\uf0aa',
 	'arrow-down': '\uf063',
+	arrow_downward: '\uf063',
 	'arrow-left': '\uf060',
+	arrow_back: '\uf060',
 	'arrow-right': '\uf061',
+	arrow_forward: '\uf061',
 	'arrow-up': '\uf062',
+	arrow_upward: '\uf062',
 	'arrows-alt': '\uf0b2',
 	'arrows-alt-h': '\uf337',
 	'arrows-alt-v': '\uf338',
@@ -65,6 +67,7 @@ const icons = {
 	'band-aid': '\uf462',
 	barcode: '\uf02a',
 	bars: '\uf0c9',
+	menu: '\uf0c9',
 	'baseball-ball': '\uf433',
 	'basketball-ball': '\uf434',
 	bath: '\uf2cd',
@@ -124,6 +127,7 @@ const icons = {
 	'business-time': '\uf64a',
 	calculator: '\uf1ec',
 	calendar: '\uf133',
+	calendar_today: '\uf133',
 	'calendar-alt': '\uf073',
 	'calendar-check': '\uf274',
 	'calendar-day': '\uf783',
@@ -144,6 +148,7 @@ const icons = {
 	'car-side': '\uf5e4',
 	caravan: '\uf8ff',
 	'caret-down': '\uf0d7',
+	arrow_drop_down: '\uf0d7',
 	'caret-left': '\uf0d9',
 	'caret-right': '\uf0da',
 	'caret-square-down': '\uf150',
@@ -184,7 +189,9 @@ const icons = {
 	'chevron-circle-up': '\uf139',
 	'chevron-down': '\uf078',
 	'chevron-left': '\uf053',
+	chevron_left: '\uf053',
 	'chevron-right': '\uf054',
+	chevron_right: '\uf054',
 	'chevron-up': '\uf077',
 	child: '\uf1ae',
 	church: '\uf51d',
@@ -291,6 +298,7 @@ const icons = {
 	eject: '\uf052',
 	'ellipsis-h': '\uf141',
 	'ellipsis-v': '\uf142',
+	more_vert: '\uf142',
 	envelope: '\uf0e0',
 	'envelope-open': '\uf2b6',
 	'envelope-open-text': '\uf658',
@@ -346,6 +354,7 @@ const icons = {
 	'fill-drip': '\uf576',
 	film: '\uf008',
 	filter: '\uf0b0',
+	filter_list: '\uf0b0',
 	fingerprint: '\uf577',
 	fire: '\uf06d',
 	'fire-alt': '\uf7e4',
@@ -796,7 +805,9 @@ const icons = {
 	'star-of-david': '\uf69a',
 	'star-of-life': '\uf621',
 	'step-backward': '\uf048',
+	first_page: '\uf048',
 	'step-forward': '\uf051',
+	last_page: '\uf051',
 	stethoscope: '\uf0f1',
 	'sticky-note': '\uf249',
 	stop: '\uf04d',
@@ -972,80 +983,54 @@ const icons = {
 	'': '',
 };
 
-type IconKey = keyof typeof icons;
+const style = document.createElement('style');
+style.innerHTML = `:host { display: inline-block; }`;
 
-registerFont({
-	family: 'Font Awesome\\ 5 Free',
-	url:
-		'https://use.fontawesome.com/releases/v5.1.0/webfonts/fa-solid-900.woff2',
-	weight: '900',
-});
+export class Icon extends HTMLElement {
+	static tagName = 'cxl-fa';
 
-declare module '../css/index.js' {
-	interface Typography {
-		icon?: CSSStyle;
+	jsxAttributes?: Partial<Icon>;
+	private iconNode?: Text;
+	private $icon: IconKey = '';
+
+	constructor() {
+		super();
+		const shadow = this.shadowRoot || this.attachShadow({ mode: 'open' });
+		shadow.appendChild(style.cloneNode(true));
 	}
-}
 
-theme.typography['icon'] = {
-	fontFamily: 'Font Awesome\\ 5 Free',
-	fontSize: 'inherit',
-};
-
-@Augment(
-	role('img'),
-	css({
-		$: {
-			display: 'inline-block',
-			font: 'icon',
-		},
-		$round: {
-			borderRadius: 1,
-			textAlign: 'center',
-		},
-		$outline: { borderWidth: 1 },
-	})
-)
-export class Icon extends Component {
-	static tagName = 'cxl-icon';
-
-	protected $icon: IconKey = '';
-	protected iconNode?: Text;
-
-	@Attribute()
 	get icon() {
 		return this.$icon;
 	}
 
 	set icon(iconName: IconKey) {
 		this.$icon = iconName;
-		const icon = iconName && icons[iconName];
+		const icon = iconName ? icons[iconName] : undefined;
 
 		if (icon) {
 			if (this.iconNode) {
 				this.iconNode.data = icon;
 			} else {
 				this.iconNode = document.createTextNode(icon);
-				getShadow(this).appendChild(this.iconNode);
+				this.shadowRoot?.appendChild(this.iconNode);
 			}
 
 			if (!this.hasAttribute('aria-label'))
-				this.setAttribute('aria-label', this.icon);
+				this.setAttribute('aria-label', String(iconName));
 		}
 	}
 }
 
-@Augment(
-	css({
-		$: {
-			paddingRight: 8,
-			lineHeight: 20,
-			width: 24,
-			textAlign: 'center',
-		},
-		$trailing: { paddingRight: 0, paddingLeft: 8 },
-	})
-)
-export class FieldIcon extends Icon {
-	static tagName = 'cxl-field-icon';
-}
+customElements.define('cxl-fa', Icon);
+
+/*registerFont({
+	family: 'Font Awesome\\ 5 Free',
+	url:
+		'https://use.fontawesome.com/releases/v5.1.0/webfonts/fa-solid-900.woff2',
+	weight: '900',
+});
+
+registerIconSet(icons, {
+	fontFamily: 'Font Awesome\\ 5 Free',
+	fontSize: 'inherit',
+});*/

@@ -1,41 +1,31 @@
+///<amd-module name="@cxl/ui/checkbox.js"/>
 import { dom } from '@cxl/tsx';
+import { Augment, StyleAttribute, get } from '@cxl/component';
+import { Svg } from './core.js';
+import { merge } from '@cxl/rx';
+import { FocusCircleStyle } from './core.js';
+import { InputBase } from './input-base.js';
+import { onAction } from '@cxl/dom';
 import {
-	Augment,
-	Attribute,
-	StyleAttribute,
-	bind,
-	get,
+	Focusable,
+	checkedBehavior,
 	role,
 	staticTemplate,
-} from '@cxl/component';
-import { Focusable, Svg } from './core.js';
-import { tap, merge } from '@cxl/rx';
-import { FocusCircleStyle, InputBase } from './input-base.js';
-import { onAction } from '@cxl/dom';
-import { Style, ariaChecked } from '@cxl/template';
-
-const Undefined = {};
+} from '@cxl/template';
+import { css, padding } from '@cxl/css';
 
 /**
  * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.
  * @example
- * <cxl-checkbox>Checkbox Label</cxl-checkbox>
  * <cxl-checkbox checked>Checkbox Label</cxl-checkbox>
- * <cxl-checkbox indeterminate>Checkbox Indeterminate</cxl-checkbox>
- * <cxl-checkbox indeterminate checked>Checkbox Checked Indeterminate</cxl-checkbox>
  */
 @Augment<Checkbox>(
 	'cxl-checkbox',
 	role('checkbox'),
-	bind(host => {
-		const update = tap<any>(
-			() =>
-				(host.value = host.indeterminate
-					? undefined
-					: host.checked
-					? host['true-value']
-					: host['false-value'])
-		);
+	host => {
+		const update = () =>
+			(host.value = host.indeterminate ? undefined : host.checked);
+
 		return merge(
 			onAction(host).tap(ev => {
 				if (host.disabled) return;
@@ -46,65 +36,69 @@ const Undefined = {};
 
 				ev.preventDefault();
 			}),
-			get(host, 'value').tap(val => {
-				if (val !== Undefined)
-					host.checked = val === host['true-value'];
-			}),
-			get(host, 'checked').pipe(ariaChecked(host), update),
-			get(host, 'indeterminate').pipe(update),
-			get(host, 'true-value').pipe(update),
-			get(host, 'false-value').pipe(update)
+			checkedBehavior(host).tap(update),
+			get(host, 'indeterminate').tap(update)
 		);
-	}),
+	},
 	FocusCircleStyle,
 	Focusable,
+	css({
+		$: {
+			position: 'relative',
+			cursor: 'pointer',
+			...padding(10, 0, 10, 46),
+			lineHeight: 20,
+			marginLeft: -10,
+			display: 'block',
+			verticalAlign: 'middle',
+			font: 'default',
+			textAlign: 'left',
+		},
+		$inline: {
+			display: 'inline-block',
+		},
+		$empty: {
+			display: 'inline-block',
+			...padding(0),
+			marginLeft: 0,
+			width: 20,
+			height: 20,
+		},
+		$invalid$touched: { color: 'error' },
+		box$empty: {
+			left: 0,
+		},
+		box: {
+			left: 10,
+			width: 20,
+			height: 20,
+			borderWidth: 2,
+			lineHeight: 16,
+			borderColor: 'onSurface',
+			borderStyle: 'solid',
+			position: 'absolute',
+			color: 'transparent',
+		},
+		check: { display: 'none' },
+		minus: { display: 'none' },
+		check$checked: { display: 'initial' },
+		check$indeterminate: { display: 'none' },
+		minus$indeterminate: { display: 'initial' },
+		box$checked: {
+			borderColor: 'primary',
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		box$indeterminate: {
+			borderColor: 'primary',
+			backgroundColor: 'primary',
+			color: 'onPrimary',
+		},
+		box$invalid$touched: { borderColor: 'error' },
+		focusCircle: { top: -2, left: -2 },
+	}),
 	staticTemplate(() => (
 		<>
-			<Style>
-				{{
-					$: {
-						font: 'default',
-						position: 'relative',
-						cursor: 'pointer',
-						paddingTop: 12,
-						paddingBottom: 12,
-						display: 'block',
-						paddingLeft: 36,
-						lineHeight: 20,
-					},
-					$inline: { display: 'inline-block' },
-					$invalid$touched: { color: 'error' },
-					box: {
-						display: 'inline-block',
-						width: 20,
-						height: 20,
-						borderWidth: 2,
-						borderColor: 'onSurface',
-						borderStyle: 'solid',
-						top: 11,
-						left: 0,
-						position: 'absolute',
-						color: 'transparent',
-					},
-					check: { display: 'none' },
-					minus: { display: 'none' },
-					check$checked: { display: 'initial' },
-					check$indeterminate: { display: 'none' },
-					minus$indeterminate: { display: 'initial' },
-					box$checked: {
-						borderColor: 'primary',
-						backgroundColor: 'primary',
-						color: 'onPrimary',
-					},
-					box$indeterminate: {
-						borderColor: 'primary',
-						backgroundColor: 'primary',
-						color: 'onPrimary',
-					},
-					box$invalid$touched: { borderColor: 'error' },
-					focusCircle: { top: -2, left: -2 },
-				}}
-			</Style>
 			<div className="box">
 				<span className="focusCircle focusCirclePrimary" />
 				<Svg
@@ -121,7 +115,7 @@ const Undefined = {};
 	))
 )
 export class Checkbox extends InputBase {
-	value: any = Undefined;
+	value: boolean | undefined = false;
 
 	@StyleAttribute()
 	checked = false;
@@ -129,9 +123,4 @@ export class Checkbox extends InputBase {
 	indeterminate = false;
 	@StyleAttribute()
 	inline = false;
-
-	@Attribute()
-	'true-value': any = true;
-	@Attribute()
-	'false-value': any = false;
 }

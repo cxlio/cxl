@@ -51,6 +51,8 @@ async function fixTsconfig({ projectPath, baseDir, dir }) {
 	const pkg = await readJson(pkgPath);
 	let tsconfig = await readJson(`${projectPath}/tsconfig.json`);
 	const oldPackage = JSON.stringify(pkg, null, '\t');
+	const depProp = pkg.browser ? 'devDependencies' : 'dependencies';
+	const notDepProp = pkg.browser ? 'dependencies' : 'devDependencies';
 
 	if (!tsconfig) {
 		tsconfig = {
@@ -71,14 +73,17 @@ async function fixTsconfig({ projectPath, baseDir, dir }) {
 		const refName = /^\.\.\/([^/]+)/.exec(ref.path)?.[1];
 		if (refName) {
 			const refPkg = `@cxl/${refName}`;
-			if (!pkg.dependencies) pkg.dependencies = {};
+			if (!pkg[depProp]) pkg[depProp] = {};
 
-			if (!pkg.dependencies[refName]) {
+			if (!pkg[depProp][refName]) {
 				const pkgVersion = (
 					await readJson(`${baseDir}/${refName}/package.json`)
 				)?.version;
-				if (pkgVersion) pkg.dependencies[refPkg] = `~${pkgVersion}`;
+				if (pkgVersion) pkg[depProp][refPkg] = `~${pkgVersion}`;
 			}
+
+			if (pkg[notDepProp]?.[refName])
+				pkg[notDepProp][refName] = undefined;
 		}
 	}
 
@@ -135,9 +140,16 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	const pkgPath = `${projectPath}/package.json`;
 	const pkg = await readJson(pkgPath);
 	const oldPackage = JSON.stringify(pkg, null, '\t');
-	const testScript = `npm run build && cd ../dist/${dir} && node ../tester`;
+	const testScript = `npm run build && cd ../dist/${dir} && node ../tester ${
+		pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'
+	}`;
 
-	if (!pkg.name === `${rootPkg.name}${dir}`)
+	const tsconfigBundle = await readJson(
+		`${projectPath}/tsconfig.bundle.json`
+	);
+	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.min.js';
+
+	if (!(pkg.name === `${rootPkg.name}${dir}`))
 		pkg.name = `${rootPkg.name}${dir}`;
 	if (!pkg.scripts) pkg.scripts = {};
 	if (!pkg.scripts.test) pkg.scripts.test = testScript;
@@ -146,14 +158,17 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 
 	if (!pkg.license) pkg.license = 'GPL-3.0';
 	if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
-	if (pkg.devDependencies) delete pkg.devDependencies;
+	if (!pkg.browser && pkg.devDependencies) delete pkg.devDependencies;
+	if (pkg.browser && pkg.dependencies) delete pkg.dependencies;
 	if (pkg.peerDependencies) delete pkg.peerDependencies;
-	if (pkg.browser) pkg.browser = 'amd/index.min.js';
+	if (pkg.browser) pkg.browser = browser;
 
-	if (!pkg.scripts.test.startsWith(testScript)) {
+	if (!pkg.scripts.test !== testScript) {
+		/*
 		const testerArgs =
 			/node \.\.\/tester(\s+.+)/.exec(pkg.scripts.test)?.[1] || '';
-		pkg.scripts.test = `${testScript}${testerArgs}`;
+		pkg.scripts.test = `${testScript}${testerArgs}`;*/
+		pkg.scripts.test = testScript;
 	}
 
 	const newPackage = JSON.stringify(pkg, null, '\t');
@@ -161,10 +176,35 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	if (oldPackage !== newPackage) await fs.writeFile(pkgPath, newPackage);
 }
 
-function lintPackage({ pkg, dir, rootPkg }) {
+async function lintTsconfigBundle({ projectPath, pkg }) {
+	const tsconfig = await readJson(`${projectPath}/tsconfig.bundle.json`);
+
+	if (!tsconfig)
+		return {
+			id: 'tsconfig.bundle',
+			rules: [],
+		};
+
+	return {
+		id: 'tsconfig.bundle',
+		rules: [
+			rule(
+				!pkg.browser || pkg.browser === 'index.bundle.min.js',
+				`Package "browser" property should use minified bundle version`
+			),
+		],
+	};
+}
+
+async function lintPackage({ projectPath, pkg, dir, rootPkg }) {
 	const rules = requiredPackageFields.map(field =>
 		rule(field in pkg, `Field "${field}" required in package.json`)
 	);
+
+	const tsconfigBundle = await readJson(
+		`${projectPath}/tsconfig.bundle.json`
+	);
+	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.min.js';
 
 	if (pkg.scripts)
 		rules.push(
@@ -180,6 +220,10 @@ function lintPackage({ pkg, dir, rootPkg }) {
 			rule('scripts' in pkg, `Field "scripts" required in package.json`)
 		);
 
+	const testScript = `npm run build && cd ../dist/${dir} && node ../tester ${
+		pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'
+	}`;
+
 	rules.push(
 		rule(
 			pkg.name === `${rootPkg.name}${dir}`,
@@ -189,13 +233,20 @@ function lintPackage({ pkg, dir, rootPkg }) {
 			licenses.includes(pkg.license),
 			`Valid license "${pkg.license}" required.`
 		),
-		rule(!pkg.devDependencies, `Package should not have devDependencies.`),
+		rule(
+			pkg.browser || !pkg.devDependencies,
+			`Package should not have devDependencies.`
+		),
+		rule(
+			!pkg.browser || !pkg.dependencies,
+			`Browser package should only have devDependencies.`
+		),
 		rule(
 			!pkg.peerDependencies,
 			`Package should not have peerDependencies.`
 		),
 		rule(
-			!pkg.browser || pkg.browser === 'amd/index.min.js',
+			!pkg.browser || pkg.browser === browser,
 			`Package "browser" property should use minified amd version`
 		),
 		rule(
@@ -203,9 +254,7 @@ function lintPackage({ pkg, dir, rootPkg }) {
 			`Package "bugs" property must match root package`
 		),
 		rule(
-			pkg?.scripts?.test?.startsWith(
-				`npm run build && cd ../dist/${dir} && node ../tester`
-			),
+			pkg?.scripts?.test === testScript,
 			`Valid test script in package.json`
 		)
 	);
@@ -280,6 +329,7 @@ async function lintTsconfig({ projectPath, pkg, dir }) {
 		),
 	];
 	const references = tsconfig?.references;
+	const depProp = pkg.browser ? 'devDependencies' : 'dependencies';
 
 	if (references)
 		for (const ref of references) {
@@ -289,8 +339,8 @@ async function lintTsconfig({ projectPath, pkg, dir }) {
 				const refPkg = `@cxl/${refName}`;
 				rules.push(
 					rule(
-						pkg.dependencies?.[refPkg],
-						`reference ${refPkg} should be declared as dependency`
+						pkg[depProp]?.[refPkg],
+						`reference ${refPkg} should be declared as ${depProp}`
 					)
 				);
 			}
@@ -316,7 +366,7 @@ async function fixTsconfigAmd({ projectPath, baseDir, dir, pkg }) {
 		tsconfig.compilerOptions.module = 'amd';
 	if (tsconfig.compilerOptions.outDir !== outDir)
 		tsconfig.compilerOptions.outDir = outDir;
-	if (!tsconfig.files) tsconfig.files = baseTsconfig.files;
+	tsconfig.files = baseTsconfig.files;
 
 	tsconfig.references = baseTsconfig.references?.map(ref => {
 		const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
@@ -421,6 +471,7 @@ const linters = [
 	lintTsconfig,
 	lintImports,
 	lintTsconfigAmd,
+	lintTsconfigBundle,
 ];
 
 async function verifyProject(dir, rootPkg) {

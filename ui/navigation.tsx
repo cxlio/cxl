@@ -1,19 +1,27 @@
+///<amd-module name="@cxl/ui/navigation.js"/>
 import { dom } from '@cxl/tsx';
 import {
 	Augment,
 	Attribute,
 	Component,
 	StyleAttribute,
-	bind,
 	get,
-	role,
 } from '@cxl/component';
-import { on, onAction, onLoad, trigger } from '@cxl/dom';
-import { aria, portal, triggerEvent } from '@cxl/template';
+import { on, onAction, onChildrenMutation, onLoad, trigger } from '@cxl/dom';
+import {
+	StateStyles,
+	focusable,
+	navigationList,
+	aria,
+	portal,
+	role,
+	triggerEvent,
+} from '@cxl/template';
 import { css, padding, rgba } from '@cxl/css';
 import { EMPTY, merge } from '@cxl/rx';
 import { InversePrimary, ResetSurface } from './theme.js';
-import { IconButton, Span, Svg, ripple } from './core.js';
+import { Span, Toggle, ripple } from './core.js';
+import { ArrowBackIcon, MenuIcon, IconButton } from './icon.js';
 import { Drawer } from './dialog.js';
 
 /**
@@ -24,8 +32,6 @@ import { Drawer } from './dialog.js';
  * <cxl-appbar>
  *   <cxl-navbar></cxl-navbar>
  *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
- *   <cxl-icon-button><cxl-icon icon="search"></cxl-icon></cxl-icon-button>
- *   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
  * </cxl-appbar>
  *
  * @demo <caption>Appbar with Tabs</caption>
@@ -51,6 +57,7 @@ import { Drawer } from './dialog.js';
 			...InversePrimary,
 			backgroundColor: 'surface',
 			flexShrink: 0,
+			textAlign: 'left',
 			color: 'onSurface',
 			elevation: 2,
 		},
@@ -73,6 +80,10 @@ import { Drawer } from './dialog.js';
 			alignItems: 'start',
 			paddingBottom: 8,
 			height: 128,
+		},
+		'a, ::slotted(cxl-appbar-title)': {
+			marginBottom: 12,
+			alignSelf: 'flex-end',
 		},
 		$fixed: { position: 'fixed', top: 0, right: 0, left: 0 },
 		'@xlarge': {
@@ -104,11 +115,11 @@ import { Drawer } from './dialog.js';
 	}),
 	portal('cxl-appbar'),
 	$ =>
-		get($, 'contextual').tap(val =>
-			$.querySelectorAll<AppbarContextual>(
-				'cxl-appbar-contextual'
-			).forEach(el => (el.visible = el.name === val))
-		),
+		merge(onChildrenMutation($), get($, 'contextual')).raf(() => {
+			for (const el of $.children)
+				if (el instanceof AppbarContextual)
+					el.visible = el.name === $.contextual;
+		}),
 	host => (
 		<>
 			<div className="flex">
@@ -122,10 +133,7 @@ import { Drawer } from './dialog.js';
 						onAction(el).tap(() => (host.contextual = undefined))
 					}
 				>
-					<Svg
-						viewBox="0 0 24 24"
-						height={24}
-					>{`<path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>`}</Svg>
+					<ArrowBackIcon />
 				</IconButton>
 				<div className="grow">
 					<host.Slot selector="cxl-appbar-contextual" />
@@ -134,27 +142,46 @@ import { Drawer } from './dialog.js';
 			<div className="tabs">
 				<host.Slot selector="cxl-tabs" />
 			</div>
+			<div className="fab">
+				<host.Slot selector="cxl-fab" />
+			</div>
 		</>
 	)
 )
 export class Appbar extends Component {
 	/**
+	 * Extends the appbar height.
 	 * @demo
 	 * <cxl-appbar extended>
 	 *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
-	 *   <cxl-icon-button><cxl-icon icon="ellipsis-v"></cxl-icon></cxl-icon-button>
 	 * </cxl-appbar>
 	 */
 	@StyleAttribute()
 	extended = false;
 
+	/**
+	 * Centers Appbar in large screens
+	 */
 	@StyleAttribute()
 	center = false;
 
+	/**
+	 * Sets or gets the active contextual menu.
+	 * @see AppbarContextual
+	 * @demo
+	 * <cxl-appbar contextual="test">
+	 * <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+	 * <cxl-appbar-contextual name="test">Contextual Appbar</cxl-appbar-contextual>
+	 * </cxl-appbar>
+	 */
 	@StyleAttribute()
 	contextual?: string;
 }
 
+/**
+ * A top app bar can transform into a contextual action bar to provide contextual actions to selected items. Upon closing, the contextual action bar transforms back into a top app bar.
+ * @see Appbar
+ */
 @Augment(
 	'cxl-appbar-contextual',
 	css({ $: { display: 'none' }, $visible: { display: 'block' } }),
@@ -176,14 +203,25 @@ export class AppbarContextual extends Component {
 	css({
 		$: {
 			flexGrow: 1,
-			marginBottom: 12,
 			lineHeight: 24,
 			marginRight: 16,
 			textDecoration: 'none',
+		},
+		$extended: {
+			marginBottom: 12,
 			alignSelf: 'flex-end',
 		},
+		parentslot: { display: 'none' },
+		'@small': {
+			parentslot: { display: 'contents' },
+		},
 	}),
-	() => <slot />
+	() => (
+		<>
+			<slot className="parentslot" name="parent"></slot>
+			<slot />
+		</>
+	)
 )
 export class AppbarTitle extends Component {
 	@StyleAttribute()
@@ -215,6 +253,7 @@ export class AppbarTitle extends Component {
 			textAlign: 'center',
 			display: 'block',
 			outline: 0,
+			minWidth: 90,
 		},
 		'@small': {
 			$: { display: 'inline-block' },
@@ -275,14 +314,13 @@ export class Tab extends Component {
 			<slot />
 		</div>
 	),
-	bind(el =>
+	el =>
 		on(el, 'cxl-tab.selected').tap(ev => {
 			if (el.selected) el.selected.selected = false;
 			if (ev.target instanceof Tab) el.selected = ev.target;
 			else if ((ev as any).detail instanceof Tab)
 				el.selected = (ev as any).detail;
-		})
-	),
+		}),
 	host => (
 		<Span
 			className="selected"
@@ -310,15 +348,13 @@ export class Tabs extends Component {
 	selected?: Tab;
 }
 
-const MenuIcon = (
-	<Svg
-		viewBox="0 0 24 24"
-		width={24}
-	>{`<path style="fill:currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />`}</Svg>
-);
-
 /**
  * Navigation drawers provide access to destinations in your app.
+ * @demo
+ * <cxl-appbar>
+ *   <cxl-navbar></cxl-navbar>
+ *   <cxl-appbar-title>Appbar with Navbar</cxl-appbar-title>
+ * </cxl-appbar>
  */
 @Augment<Navbar>(
 	'cxl-navbar',
@@ -351,7 +387,7 @@ const MenuIcon = (
 				}
 				className="toggler"
 			>
-				{MenuIcon}
+				<MenuIcon />
 			</IconButton>
 			<Drawer
 				className="drawer"
@@ -405,32 +441,88 @@ export class Menu extends Component {
 	dense = false;
 }
 
+/**
+ *
+ */
+@Augment<MenuToggle>('cxl-menu-toggle', $ => (
+	<Toggle right={get($, 'right')}>
+		<IconButton slot="trigger">
+			<MenuIcon />
+		</IconButton>
+		<Menu>
+			<slot />
+		</Menu>
+	</Toggle>
+))
+export class MenuToggle extends Component {
+	@Attribute()
+	right = false;
+}
+
 @Augment<Item>(
 	'cxl-item',
-	bind(ripple),
+	ripple,
+	focusable,
 	css({
 		$: {
-			display: 'block',
+			display: 'flex',
 			position: 'relative',
 			color: 'onSurface',
 			font: 'default',
 			lineHeight: 24,
 			paddingRight: 16,
 			paddingLeft: 16,
-			paddingTop: 12,
-			paddingBottom: 12,
+			paddingTop: 8,
+			paddingBottom: 8,
+			minHeight: 48,
 			alignItems: 'center',
 			backgroundColor: 'surface',
+			columnGap: 16,
 		},
 		$selected: {
 			backgroundColor: 'primaryLight',
 			color: 'onPrimaryLight',
 		},
+		...StateStyles,
 	}),
-	bind(host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))),
-	() => <slot />
+	host => onAction(host).pipe(triggerEvent(host, 'drawer.close')),
+	_ => <slot />
 )
 export class Item extends Component {
 	@StyleAttribute()
+	disabled = false;
+
+	touched = false;
+
+	@StyleAttribute()
 	selected = false;
 }
+
+/**
+ * Lists are continuous, vertical indexes of text or images.
+ * @demo
+ * <cxl-list>
+ *   <cxl-item><cxl-avatar></cxl-avatar> One Line Item</cxl-item>
+ *   <cxl-item><cxl-avatar></cxl-avatar> One Line Item</cxl-item>
+ *   <cxl-item><cxl-avatar></cxl-avatar> One Line Item</cxl-item>
+ * </cxl-list>
+ */
+@Augment<List>(
+	'cxl-list',
+	role('list'),
+	$ =>
+		navigationList(
+			$,
+			':not([disabled])',
+			':focus, :focus-within'
+		).tap((el: any) => el?.focus?.()),
+	css({
+		$: {
+			display: 'block',
+			paddingTop: 8,
+			paddingBottom: 8,
+		},
+	}),
+	_ => <slot />
+)
+export class List extends Component {}

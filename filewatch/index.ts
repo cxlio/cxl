@@ -50,11 +50,13 @@ function poll(path: string, baseInterval = 1000) {
 			} else if (nochange > 30) interval = baseInterval * 5;
 			else if (nochange > 5) interval = baseInterval * 2;
 			else interval = baseInterval;
-			timeout = setTimeout(next, interval);
+			if (!subs.closed) timeout = setTimeout(next, interval);
 		}
 
 		next();
-		return () => timeout && clearTimeout(timeout);
+		return () => {
+			if (timeout !== undefined) clearTimeout(timeout);
+		};
 	});
 }
 
@@ -94,7 +96,10 @@ function createWatcher(path: string, options: WatchOptions) {
 		const w = fsWatch(path, { encoding: 'utf8' });
 		w.on('change', onChange);
 		w.on('error', e => subs.error(e));
-		return () => w.close();
+		return () => {
+			w.close();
+			for (const ev in events) clearTimeout(events[ev]);
+		};
 	});
 }
 

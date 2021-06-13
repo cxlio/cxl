@@ -55,8 +55,8 @@ function formatTime(time: bigint) {
 function logOperation(prefix: string, msg: LogMessage, op: Operation) {
 	let totalTime = BigInt(0);
 	return new Promise<void>((resolve, reject) =>
-		op.subscribe(
-			({ tasks, time, result }) => {
+		op.subscribe({
+			next: ({ tasks, time, result }) => {
 				totalTime += time;
 				const formattedTime =
 					formatTime(time) +
@@ -64,9 +64,9 @@ function logOperation(prefix: string, msg: LogMessage, op: Operation) {
 				const message = typeof msg === 'function' ? msg(result) : msg;
 				console.log(`${prefix} ${message} (${formattedTime})`);
 			},
-			reject,
-			resolve
-		)
+			error: reject,
+			complete: resolve,
+		})
 	);
 }
 
@@ -104,7 +104,7 @@ export function mkdirp(dir: string): Promise<any> {
 }
 
 export function sh(cmd: string, options: SpawnOptions = {}) {
-	return new Promise((resolve, reject) => {
+	return new Promise<string>((resolve, reject) => {
 		const proc = spawn(cmd, [], { shell: true, ...options });
 		let output = '';
 		proc.stdout?.on('data', data => (output += data?.toString() || ''));

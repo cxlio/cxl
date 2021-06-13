@@ -1,16 +1,16 @@
 {
 	"name": "@cxl/tsx",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "TSX library",
 	"license": "GPL-3.0",
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/tsx && node ../tester"
+		"test": "npm run build && cd ../dist/tsx && node ../tester --baselinePath=../../tsx/spec"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"dependencies": {
-		"@cxl/rx": "~0.2.0"
-	},
-	"homepage": "https://cxlio.github.io/cxl/tsx"
+	"homepage": "https://cxlio.github.io/cxl/tsx",
+	"devDependencies": {
+		"@cxl/rx": "~0.5.0"
+	}
 }

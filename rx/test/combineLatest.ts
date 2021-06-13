@@ -62,21 +62,21 @@ export default spec('combineLatest', it => {
 			];
 			let index = 0;
 
-			combineLatest(e1, e2, e3).subscribe(
-				vals => {
+			combineLatest(e1, e2, e3).subscribe({
+				next: vals => {
 					const row = r[index++];
 					a.equal(vals[0], row[0]);
 					a.equal(vals[1], row[1]);
 					a.equal(vals[2], row[2]);
 				},
-				() => {
+				error: () => {
 					throw new Error('should not be called');
 				},
-				() => {
+				complete: () => {
 					a.equal(index, r.length);
 					done();
-				}
-			);
+				},
+			});
 		}
 	);
 

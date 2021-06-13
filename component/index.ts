@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/component"/>
 import { AttributeType, Children, renderChildren } from '@cxl/tsx';
 import { getShadow, onChildrenMutation } from '@cxl/dom';
 import {
@@ -34,7 +35,7 @@ const subscriber = {
 
 export class Bindings {
 	private subscriptions?: Subscription[];
-	private bindings?: Observable<any>[];
+	bindings?: Observable<any>[];
 
 	bind(binding: Observable<any>) {
 		if (this.subscriptions)
@@ -45,8 +46,8 @@ export class Bindings {
 
 	connect() {
 		if (!this.subscriptions && this.bindings)
-			this.subscriptions = this.bindings.map(b =>
-				b.subscribe(subscriber)
+			this.subscriptions = this.bindings.map(s =>
+				s.subscribe(subscriber)
 			);
 	}
 	disconnect() {
@@ -64,6 +65,7 @@ export abstract class Component extends HTMLElement {
 	}
 
 	private $$bindings?: Bindings;
+	private $$prebind?: Observable<any>[];
 	private render?: (node: any) => void;
 	protected jsxAttributes!: AttributeType<this>;
 	protected attributes$ = new Subject<AttributeEvent<any, any>>();
@@ -73,9 +75,10 @@ export abstract class Component extends HTMLElement {
 		return this;
 	};
 
-	Slot = (p: { selector: string }) => {
+	Slot = (p: { selector: string; name?: string }) => {
 		const el = document.createElement('slot');
-		const selector = (el.name = p.selector);
+		const name = (el.name = p.name || p.selector);
+		const selector = p.selector;
 		this.bind(
 			defer(() => {
 				for (const node of this.children)
@@ -87,7 +90,7 @@ export abstract class Component extends HTMLElement {
 						node instanceof HTMLElement &&
 						node.matches(selector)
 					)
-						node.slot = selector;
+						node.slot = name;
 				});
 			})
 		);
@@ -96,16 +99,24 @@ export abstract class Component extends HTMLElement {
 	};
 
 	bind(obs: Observable<any>) {
-		if (!this.$$bindings) this.$$bindings = new Bindings();
-		this.$$bindings.bind(obs);
+		const render = this.render as any;
+		if (render) {
+			const bindings = this.$$prebind || (this.$$prebind = []);
+			bindings.push(obs);
+		} else {
+			if (!this.$$bindings) this.$$bindings = new Bindings();
+			this.$$bindings.bind(obs);
+		}
 	}
 
 	protected connectedCallback() {
-		if (this.render) {
-			this.render(this);
+		const render = this.render as any;
+		if (render) {
 			this.render = undefined;
+			render(this);
+			if (this.$$prebind)
+				this.$$prebind.forEach((b: Observable<any>) => this.bind(b));
 		}
-
 		if (this.$$bindings) this.$$bindings.connect();
 	}
 
@@ -140,9 +151,10 @@ export function appendShadow<T extends Component>(
 	host: T,
 	child: Node | Observable<any>
 ) {
-	const shadow = getShadow(host);
-	if (child instanceof Node) shadow.appendChild(child);
-	else host.bind(child);
+	if (child instanceof Node) {
+		const shadow = getShadow(host);
+		shadow.appendChild(child);
+	} else host.bind(child);
 }
 
 export function augment<T extends Component>(
@@ -160,11 +172,7 @@ export function augment<T extends Component>(
 export function registerComponent(tagName: string, ctor: any) {
 	ctor.tagName = tagName;
 	registeredComponents[tagName] = ctor;
-	try {
-		customElements.define(tagName, ctor);
-	} catch (e) {
-		console.warn(`Component ${tagName} already registered`);
-	}
+	customElements.define(tagName, ctor);
 }
 
 export function Augment<T extends Component>(): (ctor: any) => void;
@@ -188,12 +196,6 @@ export function Augment(...augs: any[]) {
 	};
 }
 
-export function bind<T extends Component>(
-	bindFn: (node: T) => Observable<any>
-) {
-	return (host: T) => host.bind(bindFn(host));
-}
-
 export function connect<T extends Component>(bindFn: (node: T) => void) {
 	return (host: T) => host.bind(observable(() => bindFn(host)));
 }
@@ -203,7 +205,7 @@ function attributes$(host: Component): Observable<AttributeEvent<any, any>> {
 }
 
 export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
-	return concat(of(host), attributes$(host)).pipe(tap(() => fn(host)));
+	return concat(of(host), attributes$(host)).tap(() => fn(host));
 }
 
 /**
@@ -219,7 +221,7 @@ export function attributeChanged<T extends Component, K extends keyof T>(
 ): Observable<T[K]> {
 	return attributes$(element).pipe(
 		filter(ev => ev.attribute === attribute),
-		map(() => element[attribute])
+		map(ev => ev.value)
 	);
 }
 
@@ -250,14 +252,11 @@ function getObservedAttributes(target: typeof Component) {
 
 const attributeOperator = tap<AttributeEvent<any, any>>(
 	({ value, target, attribute }) => {
-		if (
-			(value === false || value === undefined) &&
-			target.hasAttribute(attribute)
-		)
-			target.removeAttribute(attribute);
-		else if (typeof value === 'string')
-			target.setAttribute(attribute, value);
-		else if (value === true) target.setAttribute(attribute, '');
+		if (value === false || value === undefined || value === 0) {
+			if (target.hasAttribute(attribute))
+				target.removeAttribute(attribute);
+		} else if (value === true) target.setAttribute(attribute, '');
+		else target.setAttribute(attribute, value);
 	}
 );
 
@@ -322,26 +321,9 @@ export function getRegisteredComponents() {
 	return { ...registeredComponents };
 }
 
-export function role<T extends Component>(roleName: string) {
-	return (host: T) =>
-		host.bind(
-			observable(() => {
-				const el = host as any;
-				!el.hasAttribute('role') && el.setAttribute('role', roleName);
-			})
-		);
-}
-
 @Augment('cxl-span')
 export class Span extends Component {}
 
 export function Slot() {
 	return document.createElement('slot');
-}
-
-export function staticTemplate(template: () => Node) {
-	let rendered: Node;
-	return () => {
-		return (rendered || (rendered = template())).cloneNode(true);
-	};
 }

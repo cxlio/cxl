@@ -1,0 +1,5416 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.ts",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.ts",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 0,
+            "ch": 0
+          },
+          "kind": 4,
+          "name": "ModuleDefinition",
+          "flags": 0,
+          "id": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 0,
+                "ch": 28
+              },
+              "kind": 0,
+              "name": "",
+              "flags": 0
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 2,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Module",
+          "flags": 0,
+          "id": 2,
+          "children": []
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 4,
+            "ch": 19
+          },
+          "kind": 4,
+          "name": "Window",
+          "flags": 0,
+          "id": 3,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 6,
+                "ch": 18
+              },
+              "kind": 10,
+              "name": "define",
+              "flags": 4,
+              "id": 4,
+              "type": {
+                "id": 5,
+                "name": "Define",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18546,
+                "ch": 173
+              },
+              "kind": 10,
+              "name": "applicationCache",
+              "flags": 68,
+              "id": 6,
+              "type": {
+                "name": "ApplicationCache",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18547,
+                "ch": 48
+              },
+              "kind": 10,
+              "name": "clientInformation",
+              "flags": 68,
+              "id": 7,
+              "type": {
+                "name": "Navigator",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18548,
+                "ch": 42
+              },
+              "kind": 10,
+              "name": "closed",
+              "flags": 68,
+              "id": 8,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18549,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "customElements",
+              "flags": 4,
+              "id": 9,
+              "type": {
+                "name": "CustomElementRegistry",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18550,
+                "ch": 42
+              },
+              "kind": 10,
+              "name": "defaultStatus",
+              "flags": 4,
+              "id": 10,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18551,
+                "ch": 26
+              },
+              "kind": 10,
+              "name": "devicePixelRatio",
+              "flags": 68,
+              "id": 11,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18552,
+                "ch": 38
+              },
+              "kind": 10,
+              "name": "doNotTrack",
+              "flags": 68,
+              "id": 12,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18553,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "document",
+              "flags": 68,
+              "id": 13,
+              "type": {
+                "name": "Document",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18554,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "event",
+              "flags": 8260,
+              "id": 14,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18556,
+                  "ch": 19
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Event",
+                    "kind": 6
+                  },
+                  {
+                    "name": "undefined",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18556,
+                "ch": 38
+              },
+              "kind": 10,
+              "name": "external",
+              "flags": 8260,
+              "id": 15,
+              "type": {
+                "name": "External",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18558,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "frameElement",
+              "flags": 68,
+              "id": 16,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18559,
+                  "ch": 26
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Element",
+                    "kind": 6
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18559,
+                      "ch": 36
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18559,
+                "ch": 42
+              },
+              "kind": 10,
+              "name": "frames",
+              "flags": 68,
+              "id": 17,
+              "type": {
+                "name": "Window",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18560,
+                "ch": 28
+              },
+              "kind": 10,
+              "name": "history",
+              "flags": 68,
+              "id": 18,
+              "type": {
+                "name": "History",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18561,
+                "ch": 30
+              },
+              "kind": 10,
+              "name": "innerHeight",
+              "flags": 68,
+              "id": 19,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18562,
+                "ch": 33
+              },
+              "kind": 10,
+              "name": "innerWidth",
+              "flags": 68,
+              "id": 20,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18563,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "length",
+              "flags": 68,
+              "id": 21,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18564,
+                "ch": 28
+              },
+              "kind": 10,
+              "name": "location",
+              "flags": 4,
+              "id": 22,
+              "type": {
+                "name": "Location",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18565,
+                "ch": 23
+              },
+              "kind": 10,
+              "name": "locationbar",
+              "flags": 68,
+              "id": 23,
+              "type": {
+                "name": "BarProp",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18566,
+                "ch": 34
+              },
+              "kind": 10,
+              "name": "menubar",
+              "flags": 68,
+              "id": 24,
+              "type": {
+                "name": "BarProp",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18567,
+                "ch": 30
+              },
+              "kind": 10,
+              "name": "msContentScript",
+              "flags": 68,
+              "id": 25,
+              "type": {
+                "name": "ExtensionScriptApis",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18568,
+                "ch": 50
+              },
+              "kind": 10,
+              "name": "name",
+              "flags": 4,
+              "id": 26,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18569,
+                "ch": 17
+              },
+              "kind": 10,
+              "name": "navigator",
+              "flags": 68,
+              "id": 27,
+              "type": {
+                "name": "Navigator",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18570,
+                "ch": 34
+              },
+              "kind": 10,
+              "name": "offscreenBuffering",
+              "flags": 4,
+              "id": 28,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18571,
+                  "ch": 23
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "boolean",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18571,
+                "ch": 41
+              },
+              "kind": 10,
+              "name": "oncompassneedscalibration",
+              "flags": 4,
+              "id": 29,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18572,
+                  "ch": 30
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18572,
+                      "ch": 30
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 30,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18572,
+                        "ch": 32
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 31,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18572,
+                            "ch": 46
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 32,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18572,
+                      "ch": 67
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18572,
+                "ch": 73
+              },
+              "kind": 10,
+              "name": "ondevicelight",
+              "flags": 4,
+              "id": 33,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18573,
+                  "ch": 18
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18573,
+                      "ch": 18
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 34,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18573,
+                        "ch": 20
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 35,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18573,
+                            "ch": 34
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 36,
+                          "type": {
+                            "name": "DeviceLightEvent",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18573,
+                      "ch": 66
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18573,
+                "ch": 72
+              },
+              "kind": 10,
+              "name": "ondevicemotion",
+              "flags": 4,
+              "id": 37,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18574,
+                  "ch": 19
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18574,
+                      "ch": 19
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 38,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18574,
+                        "ch": 21
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 39,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18574,
+                            "ch": 35
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 40,
+                          "type": {
+                            "name": "DeviceMotionEvent",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18574,
+                      "ch": 68
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18574,
+                "ch": 74
+              },
+              "kind": 10,
+              "name": "ondeviceorientation",
+              "flags": 4,
+              "id": 41,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18575,
+                  "ch": 24
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18575,
+                      "ch": 24
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 42,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18575,
+                        "ch": 26
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 43,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18575,
+                            "ch": 40
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 44,
+                          "type": {
+                            "name": "DeviceOrientationEvent",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18575,
+                      "ch": 78
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18575,
+                "ch": 84
+              },
+              "kind": 10,
+              "name": "ondeviceorientationabsolute",
+              "flags": 4,
+              "id": 45,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18576,
+                  "ch": 32
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18576,
+                      "ch": 32
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 46,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18576,
+                        "ch": 34
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 47,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18576,
+                            "ch": 48
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 48,
+                          "type": {
+                            "name": "DeviceOrientationEvent",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18576,
+                      "ch": 86
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18576,
+                "ch": 92
+              },
+              "kind": 10,
+              "name": "ongamepadconnected",
+              "flags": 4,
+              "id": 49,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18577,
+                  "ch": 23
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18577,
+                      "ch": 23
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 50,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18577,
+                        "ch": 25
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 51,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18577,
+                            "ch": 39
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 52,
+                          "type": {
+                            "name": "GamepadEvent",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18577,
+                      "ch": 67
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18577,
+                "ch": 73
+              },
+              "kind": 10,
+              "name": "ongamepaddisconnected",
+              "flags": 4,
+              "id": 53,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18578,
+                  "ch": 26
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18578,
+                      "ch": 26
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 54,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18578,
+                        "ch": 28
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 55,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18578,
+                            "ch": 42
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 56,
+                          "type": {
+                            "name": "GamepadEvent",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18578,
+                      "ch": 70
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18578,
+                "ch": 76
+              },
+              "kind": 10,
+              "name": "onmousewheel",
+              "flags": 4,
+              "id": 57,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18579,
+                  "ch": 17
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18579,
+                      "ch": 17
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 58,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18579,
+                        "ch": 19
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 59,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18579,
+                            "ch": 33
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 60,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18579,
+                      "ch": 54
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18579,
+                "ch": 60
+              },
+              "kind": 10,
+              "name": "onmsgesturechange",
+              "flags": 4,
+              "id": 61,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18580,
+                  "ch": 22
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18580,
+                      "ch": 22
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 62,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18580,
+                        "ch": 24
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 63,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18580,
+                            "ch": 38
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 64,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18580,
+                      "ch": 59
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18580,
+                "ch": 65
+              },
+              "kind": 10,
+              "name": "onmsgesturedoubletap",
+              "flags": 4,
+              "id": 65,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18581,
+                  "ch": 25
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18581,
+                      "ch": 25
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 66,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18581,
+                        "ch": 27
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 67,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18581,
+                            "ch": 41
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 68,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18581,
+                      "ch": 62
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18581,
+                "ch": 68
+              },
+              "kind": 10,
+              "name": "onmsgestureend",
+              "flags": 4,
+              "id": 69,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18582,
+                  "ch": 19
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18582,
+                      "ch": 19
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 70,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18582,
+                        "ch": 21
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 71,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18582,
+                            "ch": 35
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 72,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18582,
+                      "ch": 56
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18582,
+                "ch": 62
+              },
+              "kind": 10,
+              "name": "onmsgesturehold",
+              "flags": 4,
+              "id": 73,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18583,
+                  "ch": 20
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18583,
+                      "ch": 20
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 74,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18583,
+                        "ch": 22
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 75,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18583,
+                            "ch": 36
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 76,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18583,
+                      "ch": 57
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18583,
+                "ch": 63
+              },
+              "kind": 10,
+              "name": "onmsgesturestart",
+              "flags": 4,
+              "id": 77,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18584,
+                  "ch": 21
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18584,
+                      "ch": 21
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 78,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18584,
+                        "ch": 23
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 79,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18584,
+                            "ch": 37
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 80,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18584,
+                      "ch": 58
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18584,
+                "ch": 64
+              },
+              "kind": 10,
+              "name": "onmsgesturetap",
+              "flags": 4,
+              "id": 81,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18585,
+                  "ch": 19
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18585,
+                      "ch": 19
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 82,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18585,
+                        "ch": 21
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 83,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18585,
+                            "ch": 35
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 84,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18585,
+                      "ch": 56
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18585,
+                "ch": 62
+              },
+              "kind": 10,
+              "name": "onmsinertiastart",
+              "flags": 4,
+              "id": 85,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18586,
+                  "ch": 21
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18586,
+                      "ch": 21
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 86,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18586,
+                        "ch": 23
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 87,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18586,
+                            "ch": 37
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 88,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18586,
+                      "ch": 58
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18586,
+                "ch": 64
+              },
+              "kind": 10,
+              "name": "onmspointercancel",
+              "flags": 4,
+              "id": 89,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18587,
+                  "ch": 22
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18587,
+                      "ch": 22
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 90,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18587,
+                        "ch": 24
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 91,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18587,
+                            "ch": 38
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 92,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18587,
+                      "ch": 59
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18587,
+                "ch": 65
+              },
+              "kind": 10,
+              "name": "onmspointerdown",
+              "flags": 4,
+              "id": 93,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18588,
+                  "ch": 20
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18588,
+                      "ch": 20
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 94,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18588,
+                        "ch": 22
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 95,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18588,
+                            "ch": 36
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 96,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18588,
+                      "ch": 57
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18588,
+                "ch": 63
+              },
+              "kind": 10,
+              "name": "onmspointerenter",
+              "flags": 4,
+              "id": 97,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18589,
+                  "ch": 21
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18589,
+                      "ch": 21
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 98,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18589,
+                        "ch": 23
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 99,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18589,
+                            "ch": 37
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 100,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18589,
+                      "ch": 58
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18589,
+                "ch": 64
+              },
+              "kind": 10,
+              "name": "onmspointerleave",
+              "flags": 4,
+              "id": 101,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18590,
+                  "ch": 21
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18590,
+                      "ch": 21
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 102,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18590,
+                        "ch": 23
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 103,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18590,
+                            "ch": 37
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 104,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18590,
+                      "ch": 58
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18590,
+                "ch": 64
+              },
+              "kind": 10,
+              "name": "onmspointermove",
+              "flags": 4,
+              "id": 105,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18591,
+                  "ch": 20
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18591,
+                      "ch": 20
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 106,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18591,
+                        "ch": 22
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 107,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18591,
+                            "ch": 36
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 108,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18591,
+                      "ch": 57
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18591,
+                "ch": 63
+              },
+              "kind": 10,
+              "name": "onmspointerout",
+              "flags": 4,
+              "id": 109,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18592,
+                  "ch": 19
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18592,
+                      "ch": 19
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 110,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18592,
+                        "ch": 21
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 111,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18592,
+                            "ch": 35
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 112,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18592,
+                      "ch": 56
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18592,
+                "ch": 62
+              },
+              "kind": 10,
+              "name": "onmspointerover",
+              "flags": 4,
+              "id": 113,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18593,
+                  "ch": 20
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18593,
+                      "ch": 20
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 114,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18593,
+                        "ch": 22
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 115,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18593,
+                            "ch": 36
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 116,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18593,
+                      "ch": 57
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18593,
+                "ch": 63
+              },
+              "kind": 10,
+              "name": "onmspointerup",
+              "flags": 4,
+              "id": 117,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18594,
+                  "ch": 18
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18594,
+                      "ch": 18
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 118,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18594,
+                        "ch": 20
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 119,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18594,
+                            "ch": 34
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 120,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18594,
+                      "ch": 55
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18594,
+                "ch": 61
+              },
+              "kind": 10,
+              "name": "onorientationchange",
+              "flags": 8196,
+              "id": 121,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18596,
+                  "ch": 24
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18596,
+                      "ch": 24
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 122,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18596,
+                        "ch": 26
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 123,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18596,
+                            "ch": 40
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 124,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18596,
+                      "ch": 61
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18596,
+                "ch": 67
+              },
+              "kind": 10,
+              "name": "onreadystatechange",
+              "flags": 4,
+              "id": 125,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18597,
+                  "ch": 23
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18597,
+                      "ch": 23
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 126,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18597,
+                        "ch": 25
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 127,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18597,
+                            "ch": 39
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 128,
+                          "type": {
+                            "name": "ProgressEvent",
+                            "kind": 6,
+                            "typeParameters": [
+                              {
+                                "name": "Window",
+                                "kind": 6
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18597,
+                      "ch": 76
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18597,
+                "ch": 82
+              },
+              "kind": 10,
+              "name": "onvrdisplayactivate",
+              "flags": 4,
+              "id": 129,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18598,
+                  "ch": 24
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18598,
+                      "ch": 24
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 130,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18598,
+                        "ch": 26
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 131,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18598,
+                            "ch": 40
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 132,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18598,
+                      "ch": 61
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18598,
+                "ch": 67
+              },
+              "kind": 10,
+              "name": "onvrdisplayblur",
+              "flags": 4,
+              "id": 133,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18599,
+                  "ch": 20
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18599,
+                      "ch": 20
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 134,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18599,
+                        "ch": 22
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 135,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18599,
+                            "ch": 36
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 136,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18599,
+                      "ch": 57
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18599,
+                "ch": 63
+              },
+              "kind": 10,
+              "name": "onvrdisplayconnect",
+              "flags": 4,
+              "id": 137,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18600,
+                  "ch": 23
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18600,
+                      "ch": 23
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 138,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18600,
+                        "ch": 25
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 139,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18600,
+                            "ch": 39
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 140,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18600,
+                      "ch": 60
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18600,
+                "ch": 66
+              },
+              "kind": 10,
+              "name": "onvrdisplaydeactivate",
+              "flags": 4,
+              "id": 141,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18601,
+                  "ch": 26
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18601,
+                      "ch": 26
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 142,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18601,
+                        "ch": 28
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 143,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18601,
+                            "ch": 42
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 144,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18601,
+                      "ch": 63
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18601,
+                "ch": 69
+              },
+              "kind": 10,
+              "name": "onvrdisplaydisconnect",
+              "flags": 4,
+              "id": 145,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18602,
+                  "ch": 26
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18602,
+                      "ch": 26
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 146,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18602,
+                        "ch": 28
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 147,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18602,
+                            "ch": 42
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 148,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18602,
+                      "ch": 63
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18602,
+                "ch": 69
+              },
+              "kind": 10,
+              "name": "onvrdisplayfocus",
+              "flags": 4,
+              "id": 149,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18603,
+                  "ch": 21
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18603,
+                      "ch": 21
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 150,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18603,
+                        "ch": 23
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 151,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18603,
+                            "ch": 37
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 152,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18603,
+                      "ch": 58
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18603,
+                "ch": 64
+              },
+              "kind": 10,
+              "name": "onvrdisplaypointerrestricted",
+              "flags": 4,
+              "id": 153,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18604,
+                  "ch": 33
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18604,
+                      "ch": 33
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 154,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18604,
+                        "ch": 35
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 155,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18604,
+                            "ch": 49
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 156,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18604,
+                      "ch": 70
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18604,
+                "ch": 76
+              },
+              "kind": 10,
+              "name": "onvrdisplaypointerunrestricted",
+              "flags": 4,
+              "id": 157,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18605,
+                  "ch": 35
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18605,
+                      "ch": 35
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 158,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18605,
+                        "ch": 37
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 159,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18605,
+                            "ch": 51
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 160,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18605,
+                      "ch": 72
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18605,
+                "ch": 78
+              },
+              "kind": 10,
+              "name": "onvrdisplaypresentchange",
+              "flags": 4,
+              "id": 161,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18606,
+                  "ch": 29
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18606,
+                      "ch": 29
+                    },
+                    "kind": 19,
+                    "name": "",
+                    "flags": 0,
+                    "id": 162,
+                    "type": {
+                      "source": {
+                        "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                        "line": 18606,
+                        "ch": 31
+                      },
+                      "kind": 17,
+                      "name": "",
+                      "flags": 0,
+                      "id": 163,
+                      "type": {
+                        "name": "any",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      "parameters": [
+                        {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18606,
+                            "ch": 45
+                          },
+                          "kind": 9,
+                          "name": "ev",
+                          "flags": 0,
+                          "id": 164,
+                          "type": {
+                            "name": "Event",
+                            "kind": 6
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18606,
+                      "ch": 66
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18606,
+                "ch": 72
+              },
+              "kind": 10,
+              "name": "opener",
+              "flags": 4,
+              "id": 165,
+              "type": {
+                "name": "any",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18607,
+                "ch": 16
+              },
+              "kind": 10,
+              "name": "orientation",
+              "flags": 8260,
+              "id": 166,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18609,
+                  "ch": 25
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                ]
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18609,
+                "ch": 42
+              },
+              "kind": 10,
+              "name": "outerHeight",
+              "flags": 68,
+              "id": 167,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18610,
+                "ch": 33
+              },
+              "kind": 10,
+              "name": "outerWidth",
+              "flags": 68,
+              "id": 168,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18611,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "pageXOffset",
+              "flags": 68,
+              "id": 169,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18612,
+                "ch": 33
+              },
+              "kind": 10,
+              "name": "pageYOffset",
+              "flags": 68,
+              "id": 170,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18613,
+                "ch": 33
+              },
+              "kind": 10,
+              "name": "parent",
+              "flags": 68,
+              "id": 171,
+              "type": {
+                "name": "Window",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18614,
+                "ch": 28
+              },
+              "kind": 10,
+              "name": "personalbar",
+              "flags": 68,
+              "id": 172,
+              "type": {
+                "name": "BarProp",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18615,
+                "ch": 34
+              },
+              "kind": 10,
+              "name": "screen",
+              "flags": 68,
+              "id": 173,
+              "type": {
+                "name": "Screen",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18616,
+                "ch": 28
+              },
+              "kind": 10,
+              "name": "screenLeft",
+              "flags": 68,
+              "id": 174,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18617,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "screenTop",
+              "flags": 68,
+              "id": 175,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18618,
+                "ch": 31
+              },
+              "kind": 10,
+              "name": "screenX",
+              "flags": 68,
+              "id": 176,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18619,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "screenY",
+              "flags": 68,
+              "id": 177,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18620,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "scrollX",
+              "flags": 68,
+              "id": 178,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18621,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "scrollY",
+              "flags": 68,
+              "id": 179,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18622,
+                "ch": 29
+              },
+              "kind": 10,
+              "name": "scrollbars",
+              "flags": 68,
+              "id": 180,
+              "type": {
+                "name": "BarProp",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18623,
+                "ch": 33
+              },
+              "kind": 10,
+              "name": "self",
+              "flags": 68,
+              "id": 181,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18624,
+                  "ch": 18
+                },
+                "kind": 0,
+                "name": "",
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18624,
+                "ch": 46
+              },
+              "kind": 10,
+              "name": "speechSynthesis",
+              "flags": 68,
+              "id": 182,
+              "type": {
+                "name": "SpeechSynthesis",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18625,
+                "ch": 46
+              },
+              "kind": 10,
+              "name": "status",
+              "flags": 4,
+              "id": 183,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18626,
+                "ch": 19
+              },
+              "kind": 10,
+              "name": "statusbar",
+              "flags": 68,
+              "id": 184,
+              "type": {
+                "name": "BarProp",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18627,
+                "ch": 32
+              },
+              "kind": 10,
+              "name": "styleMedia",
+              "flags": 68,
+              "id": 185,
+              "type": {
+                "name": "StyleMedia",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18628,
+                "ch": 36
+              },
+              "kind": 10,
+              "name": "toolbar",
+              "flags": 68,
+              "id": 186,
+              "type": {
+                "name": "BarProp",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18629,
+                "ch": 30
+              },
+              "kind": 10,
+              "name": "top",
+              "flags": 68,
+              "id": 187,
+              "type": {
+                "name": "Window",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18630,
+                "ch": 25
+              },
+              "kind": 10,
+              "name": "visualViewport",
+              "flags": 68,
+              "id": 188,
+              "type": {
+                "name": "VisualViewport",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18631,
+                "ch": 44
+              },
+              "kind": 10,
+              "name": "window",
+              "flags": 68,
+              "id": 189,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18632,
+                  "ch": 20
+                },
+                "kind": 0,
+                "name": "",
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18632,
+                "ch": 48
+              },
+              "kind": 11,
+              "name": "alert",
+              "flags": 0,
+              "id": 190,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18633,
+                    "ch": 10
+                  },
+                  "kind": 9,
+                  "name": "message",
+                  "flags": 524288,
+                  "id": 191,
+                  "type": {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18633,
+                "ch": 31
+              },
+              "kind": 11,
+              "name": "blur",
+              "flags": 0,
+              "id": 192,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18634,
+                "ch": 17
+              },
+              "kind": 11,
+              "name": "captureEvents",
+              "flags": 8192,
+              "id": 193,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18636,
+                "ch": 26
+              },
+              "kind": 11,
+              "name": "close",
+              "flags": 0,
+              "id": 194,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18637,
+                "ch": 18
+              },
+              "kind": 11,
+              "name": "confirm",
+              "flags": 0,
+              "id": 195,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18638,
+                    "ch": 12
+                  },
+                  "kind": 9,
+                  "name": "message",
+                  "flags": 524288,
+                  "id": 196,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18638,
+                "ch": 39
+              },
+              "kind": 11,
+              "name": "departFocus",
+              "flags": 0,
+              "id": 197,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18639,
+                    "ch": 16
+                  },
+                  "kind": 9,
+                  "name": "navigationReason",
+                  "flags": 0,
+                  "id": 198,
+                  "type": {
+                    "name": "NavigationReason",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18639,
+                    "ch": 51
+                  },
+                  "kind": 9,
+                  "name": "origin",
+                  "flags": 0,
+                  "id": 199,
+                  "type": {
+                    "name": "FocusNavigationOrigin",
+                    "kind": 6
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18639,
+                "ch": 89
+              },
+              "kind": 11,
+              "name": "focus",
+              "flags": 0,
+              "id": 200,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18640,
+                "ch": 18
+              },
+              "kind": 11,
+              "name": "getComputedStyle",
+              "flags": 0,
+              "id": 201,
+              "type": {
+                "name": "CSSStyleDeclaration",
+                "kind": 6
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18641,
+                    "ch": 21
+                  },
+                  "kind": 9,
+                  "name": "elt",
+                  "flags": 0,
+                  "id": 202,
+                  "type": {
+                    "name": "Element",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18641,
+                    "ch": 34
+                  },
+                  "kind": 9,
+                  "name": "pseudoElt",
+                  "flags": 524288,
+                  "id": 203,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18641,
+                      "ch": 46
+                    },
+                    "kind": 5,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "string",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      {
+                        "source": {
+                          "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                          "line": 18641,
+                          "ch": 55
+                        },
+                        "kind": 23,
+                        "name": "null",
+                        "flags": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18641,
+                "ch": 83
+              },
+              "kind": 11,
+              "name": "getMatchedCSSRules",
+              "flags": 0,
+              "id": 204,
+              "type": {
+                "name": "CSSRuleList",
+                "kind": 6
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18642,
+                    "ch": 23
+                  },
+                  "kind": 9,
+                  "name": "elt",
+                  "flags": 0,
+                  "id": 205,
+                  "type": {
+                    "name": "Element",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18642,
+                    "ch": 36
+                  },
+                  "kind": 9,
+                  "name": "pseudoElt",
+                  "flags": 524288,
+                  "id": 206,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18642,
+                      "ch": 48
+                    },
+                    "kind": 5,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "string",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      {
+                        "source": {
+                          "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                          "line": 18642,
+                          "ch": 57
+                        },
+                        "kind": 23,
+                        "name": "null",
+                        "flags": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18642,
+                "ch": 77
+              },
+              "kind": 11,
+              "name": "getSelection",
+              "flags": 0,
+              "id": 207,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18643,
+                  "ch": 19
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Selection",
+                    "kind": 6
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18643,
+                      "ch": 31
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18643,
+                "ch": 37
+              },
+              "kind": 11,
+              "name": "matchMedia",
+              "flags": 0,
+              "id": 208,
+              "type": {
+                "name": "MediaQueryList",
+                "kind": 6
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18644,
+                    "ch": 15
+                  },
+                  "kind": 9,
+                  "name": "query",
+                  "flags": 0,
+                  "id": 209,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18644,
+                "ch": 46
+              },
+              "kind": 11,
+              "name": "moveBy",
+              "flags": 0,
+              "id": 210,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18645,
+                    "ch": 11
+                  },
+                  "kind": 9,
+                  "name": "x",
+                  "flags": 0,
+                  "id": 211,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18645,
+                    "ch": 21
+                  },
+                  "kind": 9,
+                  "name": "y",
+                  "flags": 0,
+                  "id": 212,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18645,
+                "ch": 39
+              },
+              "kind": 11,
+              "name": "moveTo",
+              "flags": 0,
+              "id": 213,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18646,
+                    "ch": 11
+                  },
+                  "kind": 9,
+                  "name": "x",
+                  "flags": 0,
+                  "id": 214,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18646,
+                    "ch": 21
+                  },
+                  "kind": 9,
+                  "name": "y",
+                  "flags": 0,
+                  "id": 215,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18646,
+                "ch": 39
+              },
+              "kind": 11,
+              "name": "msWriteProfilerMark",
+              "flags": 0,
+              "id": 216,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18647,
+                    "ch": 24
+                  },
+                  "kind": 9,
+                  "name": "profilerMarkName",
+                  "flags": 0,
+                  "id": 217,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18647,
+                "ch": 56
+              },
+              "kind": 11,
+              "name": "open",
+              "flags": 0,
+              "id": 218,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18648,
+                  "ch": 78
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "Window",
+                    "kind": 6
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18648,
+                      "ch": 87
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18648,
+                    "ch": 9
+                  },
+                  "kind": 9,
+                  "name": "url",
+                  "flags": 524288,
+                  "id": 219,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18648,
+                    "ch": 22
+                  },
+                  "kind": 9,
+                  "name": "target",
+                  "flags": 524288,
+                  "id": 220,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18648,
+                    "ch": 39
+                  },
+                  "kind": 9,
+                  "name": "features",
+                  "flags": 524288,
+                  "id": 221,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18648,
+                    "ch": 58
+                  },
+                  "kind": 9,
+                  "name": "replace",
+                  "flags": 524288,
+                  "id": 222,
+                  "type": {
+                    "name": "boolean",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18648,
+                "ch": 93
+              },
+              "kind": 11,
+              "name": "postMessage",
+              "flags": 0,
+              "id": 223,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18649,
+                    "ch": 16
+                  },
+                  "kind": 9,
+                  "name": "message",
+                  "flags": 0,
+                  "id": 224,
+                  "type": {
+                    "name": "any",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18649,
+                    "ch": 29
+                  },
+                  "kind": 9,
+                  "name": "targetOrigin",
+                  "flags": 0,
+                  "id": 225,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18649,
+                    "ch": 51
+                  },
+                  "kind": 9,
+                  "name": "transfer",
+                  "flags": 524288,
+                  "id": 226,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18649,
+                      "ch": 62
+                    },
+                    "kind": 15,
+                    "name": "Array",
+                    "flags": 0,
+                    "type": {
+                      "name": "Transferable",
+                      "kind": 6
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18649,
+                "ch": 85
+              },
+              "kind": 11,
+              "name": "print",
+              "flags": 0,
+              "id": 227,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18650,
+                "ch": 18
+              },
+              "kind": 11,
+              "name": "prompt",
+              "flags": 0,
+              "id": 228,
+              "type": {
+                "source": {
+                  "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                  "line": 18651,
+                  "ch": 48
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18651,
+                      "ch": 57
+                    },
+                    "kind": 23,
+                    "name": "null",
+                    "flags": 0
+                  }
+                ]
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18651,
+                    "ch": 11
+                  },
+                  "kind": 9,
+                  "name": "message",
+                  "flags": 524288,
+                  "id": 229,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18651,
+                    "ch": 28
+                  },
+                  "kind": 9,
+                  "name": "_default",
+                  "flags": 524288,
+                  "id": 230,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18651,
+                "ch": 63
+              },
+              "kind": 11,
+              "name": "releaseEvents",
+              "flags": 8192,
+              "id": 231,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18653,
+                "ch": 26
+              },
+              "kind": 11,
+              "name": "resizeBy",
+              "flags": 0,
+              "id": 232,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18654,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "x",
+                  "flags": 0,
+                  "id": 233,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18654,
+                    "ch": 23
+                  },
+                  "kind": 9,
+                  "name": "y",
+                  "flags": 0,
+                  "id": 234,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18654,
+                "ch": 41
+              },
+              "kind": 11,
+              "name": "resizeTo",
+              "flags": 0,
+              "id": 235,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18655,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "width",
+                  "flags": 0,
+                  "id": 236,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18655,
+                    "ch": 27
+                  },
+                  "kind": 9,
+                  "name": "height",
+                  "flags": 0,
+                  "id": 237,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18655,
+                "ch": 50
+              },
+              "kind": 11,
+              "name": "scroll",
+              "flags": 16384,
+              "id": 238,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18656,
+                    "ch": 11
+                  },
+                  "kind": 9,
+                  "name": "options",
+                  "flags": 524288,
+                  "id": 239,
+                  "type": {
+                    "name": "ScrollToOptions",
+                    "kind": 6
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18656,
+                "ch": 44
+              },
+              "kind": 11,
+              "name": "scroll",
+              "flags": 16384,
+              "id": 240,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18657,
+                    "ch": 11
+                  },
+                  "kind": 9,
+                  "name": "x",
+                  "flags": 0,
+                  "id": 241,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18657,
+                    "ch": 21
+                  },
+                  "kind": 9,
+                  "name": "y",
+                  "flags": 0,
+                  "id": 242,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18657,
+                "ch": 39
+              },
+              "kind": 11,
+              "name": "scrollBy",
+              "flags": 16384,
+              "id": 243,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18658,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "options",
+                  "flags": 524288,
+                  "id": 244,
+                  "type": {
+                    "name": "ScrollToOptions",
+                    "kind": 6
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18658,
+                "ch": 46
+              },
+              "kind": 11,
+              "name": "scrollBy",
+              "flags": 16384,
+              "id": 245,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18659,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "x",
+                  "flags": 0,
+                  "id": 246,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18659,
+                    "ch": 23
+                  },
+                  "kind": 9,
+                  "name": "y",
+                  "flags": 0,
+                  "id": 247,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18659,
+                "ch": 41
+              },
+              "kind": 11,
+              "name": "scrollTo",
+              "flags": 16384,
+              "id": 248,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18660,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "options",
+                  "flags": 524288,
+                  "id": 249,
+                  "type": {
+                    "name": "ScrollToOptions",
+                    "kind": 6
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18660,
+                "ch": 46
+              },
+              "kind": 11,
+              "name": "scrollTo",
+              "flags": 16384,
+              "id": 250,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18661,
+                    "ch": 13
+                  },
+                  "kind": 9,
+                  "name": "x",
+                  "flags": 0,
+                  "id": 251,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18661,
+                    "ch": 23
+                  },
+                  "kind": 9,
+                  "name": "y",
+                  "flags": 0,
+                  "id": 252,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18661,
+                "ch": 41
+              },
+              "kind": 11,
+              "name": "stop",
+              "flags": 0,
+              "id": 253,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": []
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18662,
+                "ch": 17
+              },
+              "kind": 11,
+              "name": "webkitCancelAnimationFrame",
+              "flags": 0,
+              "id": 254,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18663,
+                    "ch": 31
+                  },
+                  "kind": 9,
+                  "name": "handle",
+                  "flags": 0,
+                  "id": 255,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18663,
+                "ch": 53
+              },
+              "kind": 11,
+              "name": "webkitConvertPointFromNodeToPage",
+              "flags": 0,
+              "id": 256,
+              "type": {
+                "name": "WebKitPoint",
+                "kind": 6
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18664,
+                    "ch": 37
+                  },
+                  "kind": 9,
+                  "name": "node",
+                  "flags": 0,
+                  "id": 257,
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18664,
+                    "ch": 48
+                  },
+                  "kind": 9,
+                  "name": "pt",
+                  "flags": 0,
+                  "id": 258,
+                  "type": {
+                    "name": "WebKitPoint",
+                    "kind": 6
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18664,
+                "ch": 79
+              },
+              "kind": 11,
+              "name": "webkitConvertPointFromPageToNode",
+              "flags": 0,
+              "id": 259,
+              "type": {
+                "name": "WebKitPoint",
+                "kind": 6
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18665,
+                    "ch": 37
+                  },
+                  "kind": 9,
+                  "name": "node",
+                  "flags": 0,
+                  "id": 260,
+                  "type": {
+                    "name": "Node",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18665,
+                    "ch": 48
+                  },
+                  "kind": 9,
+                  "name": "pt",
+                  "flags": 0,
+                  "id": 261,
+                  "type": {
+                    "name": "WebKitPoint",
+                    "kind": 6
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18665,
+                "ch": 79
+              },
+              "kind": 11,
+              "name": "webkitRequestAnimationFrame",
+              "flags": 0,
+              "id": 262,
+              "type": {
+                "name": "number",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18666,
+                    "ch": 32
+                  },
+                  "kind": 9,
+                  "name": "callback",
+                  "flags": 0,
+                  "id": 263,
+                  "type": {
+                    "name": "FrameRequestCallback",
+                    "kind": 6
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18666,
+                "ch": 72
+              },
+              "kind": 11,
+              "name": "addEventListener",
+              "flags": 16384,
+              "id": 264,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18667,
+                    "ch": 21
+                  },
+                  "kind": 3,
+                  "name": "K",
+                  "flags": 0,
+                  "id": 265
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18667,
+                    "ch": 53
+                  },
+                  "kind": 9,
+                  "name": "type",
+                  "flags": 0,
+                  "id": 266,
+                  "type": {
+                    "id": 265,
+                    "name": "K",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18667,
+                    "ch": 61
+                  },
+                  "kind": 9,
+                  "name": "listener",
+                  "flags": 0,
+                  "id": 267,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18667,
+                      "ch": 71
+                    },
+                    "kind": 17,
+                    "name": "",
+                    "flags": 0,
+                    "id": 268,
+                    "type": {
+                      "name": "any",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                          "line": 18667,
+                          "ch": 86
+                        },
+                        "kind": 9,
+                        "name": "ev",
+                        "flags": 0,
+                        "id": 269,
+                        "type": {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18667,
+                            "ch": 90
+                          },
+                          "kind": 21,
+                          "name": "",
+                          "flags": 0,
+                          "children": [
+                            {
+                              "name": "WindowEventMap",
+                              "kind": 6
+                            },
+                            {
+                              "id": 265,
+                              "name": "K",
+                              "kind": 6
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18667,
+                    "ch": 117
+                  },
+                  "kind": 9,
+                  "name": "options",
+                  "flags": 524288,
+                  "id": 270,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18667,
+                      "ch": 127
+                    },
+                    "kind": 5,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "boolean",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      {
+                        "name": "AddEventListenerOptions",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18667,
+                "ch": 169
+              },
+              "kind": 11,
+              "name": "addEventListener",
+              "flags": 16384,
+              "id": 271,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18668,
+                    "ch": 21
+                  },
+                  "kind": 9,
+                  "name": "type",
+                  "flags": 0,
+                  "id": 272,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18668,
+                    "ch": 34
+                  },
+                  "kind": 9,
+                  "name": "listener",
+                  "flags": 0,
+                  "id": 273,
+                  "type": {
+                    "name": "EventListenerOrEventListenerObject",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18668,
+                    "ch": 80
+                  },
+                  "kind": 9,
+                  "name": "options",
+                  "flags": 524288,
+                  "id": 274,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18668,
+                      "ch": 90
+                    },
+                    "kind": 5,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "boolean",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      {
+                        "name": "AddEventListenerOptions",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18668,
+                "ch": 132
+              },
+              "kind": 11,
+              "name": "removeEventListener",
+              "flags": 16384,
+              "id": 275,
+              "typeParameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18669,
+                    "ch": 24
+                  },
+                  "kind": 3,
+                  "name": "K",
+                  "flags": 0,
+                  "id": 276
+                }
+              ],
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18669,
+                    "ch": 56
+                  },
+                  "kind": 9,
+                  "name": "type",
+                  "flags": 0,
+                  "id": 277,
+                  "type": {
+                    "id": 276,
+                    "name": "K",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18669,
+                    "ch": 64
+                  },
+                  "kind": 9,
+                  "name": "listener",
+                  "flags": 0,
+                  "id": 278,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18669,
+                      "ch": 74
+                    },
+                    "kind": 17,
+                    "name": "",
+                    "flags": 0,
+                    "id": 279,
+                    "type": {
+                      "name": "any",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                          "line": 18669,
+                          "ch": 89
+                        },
+                        "kind": 9,
+                        "name": "ev",
+                        "flags": 0,
+                        "id": 280,
+                        "type": {
+                          "source": {
+                            "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                            "line": 18669,
+                            "ch": 93
+                          },
+                          "kind": 21,
+                          "name": "",
+                          "flags": 0,
+                          "children": [
+                            {
+                              "name": "WindowEventMap",
+                              "kind": 6
+                            },
+                            {
+                              "id": 276,
+                              "name": "K",
+                              "kind": 6
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18669,
+                    "ch": 120
+                  },
+                  "kind": 9,
+                  "name": "options",
+                  "flags": 524288,
+                  "id": 281,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18669,
+                      "ch": 130
+                    },
+                    "kind": 5,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "boolean",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      {
+                        "name": "EventListenerOptions",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18669,
+                "ch": 169
+              },
+              "kind": 11,
+              "name": "removeEventListener",
+              "flags": 16384,
+              "id": 282,
+              "type": {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              },
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18670,
+                    "ch": 24
+                  },
+                  "kind": 9,
+                  "name": "type",
+                  "flags": 0,
+                  "id": 283,
+                  "type": {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18670,
+                    "ch": 37
+                  },
+                  "kind": 9,
+                  "name": "listener",
+                  "flags": 0,
+                  "id": 284,
+                  "type": {
+                    "name": "EventListenerOrEventListenerObject",
+                    "kind": 6
+                  }
+                },
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18670,
+                    "ch": 83
+                  },
+                  "kind": 9,
+                  "name": "options",
+                  "flags": 524288,
+                  "id": 285,
+                  "type": {
+                    "source": {
+                      "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                      "line": 18670,
+                      "ch": 93
+                    },
+                    "kind": 5,
+                    "name": "",
+                    "flags": 0,
+                    "children": [
+                      {
+                        "name": "boolean",
+                        "kind": 32,
+                        "flags": 0
+                      },
+                      {
+                        "name": "EventListenerOptions",
+                        "kind": 6
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "source": {
+                "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                "line": 18670,
+                "ch": 132
+              },
+              "kind": 24,
+              "name": "",
+              "flags": 0,
+              "parameters": [
+                {
+                  "source": {
+                    "fileName": "../node_modules/typescript/lib/lib.dom.d.ts",
+                    "line": 18671,
+                    "ch": 5
+                  },
+                  "kind": 9,
+                  "name": "index",
+                  "flags": 0,
+                  "id": 286,
+                  "type": {
+                    "name": "number",
+                    "kind": 32,
+                    "flags": 0
+                  }
+                }
+              ],
+              "type": {
+                "name": "Window",
+                "kind": 6
+              }
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "source": {
+            "fileName": "index.ts",
+            "line": 8,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Define",
+          "flags": 0,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 10,
+                "ch": 18
+              },
+              "kind": 0,
+              "name": "",
+              "flags": 0
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 15,
+                "ch": 9
+              },
+              "kind": 10,
+              "name": "amd",
+              "flags": 4,
+              "id": 287,
+              "type": {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 16,
+                  "ch": 5
+                },
+                "kind": 23,
+                "name": "true",
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 16,
+                "ch": 11
+              },
+              "kind": 10,
+              "name": "modules",
+              "flags": 4,
+              "id": 288,
+              "type": {
+                "name": "Record",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "string",
+                    "kind": 32,
+                    "flags": 0
+                  },
+                  {
+                    "id": 2,
+                    "name": "Module",
+                    "kind": 6
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import {
 	catchError,
 	debounceTime,
+	observable,
 	of,
 	from,
 	merge,
@@ -45,12 +46,44 @@ export default spec('debounceTime', it => {
 
 	it.should('propagate errors', a => {
 		let fired = false;
-		throwError(true)
+		merge(of(), throwError(true))
 			.pipe(
-				debounceTime(100),
+				debounceTime(0),
 				catchError(e => ((fired = e), of(e)))
 			)
 			.subscribe();
 		a.equal(fired, true);
+	});
+
+	it.should('cancel on unsubscribe', a => {
+		const done = a.async();
+		let timeoutCleared = 0;
+
+		function timer(delay: number) {
+			return observable<void>(subscriber => {
+				const to = setTimeout(() => {
+					subscriber.next();
+					subscriber.complete();
+				}, delay);
+				return () => {
+					timeoutCleared++;
+					clearTimeout(to);
+				};
+			});
+		}
+
+		const obs = of(1, 2, 3)
+			.debounceTime(0, timer)
+			.tap(() => {
+				throw new Error('Should not run');
+			});
+		const obs2 = of(0)
+			.debounceTime(5)
+			.tap(() => {
+				a.equal(timeoutCleared, 3);
+				done();
+			});
+		obs.subscribe().unsubscribe();
+		obs2.subscribe();
 	});
 });

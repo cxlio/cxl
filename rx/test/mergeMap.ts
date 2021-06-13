@@ -29,16 +29,15 @@ export default spec('mergeMap', it => {
 		const expected = ['1!', '2!', '3!', '4!'];
 		let completed = false;
 
-		source.subscribe(
-			x => {
+		source.subscribe({
+			next: x => {
 				a.equal(x, expected.shift());
 			},
-			undefined,
-			() => {
+			complete: () => {
 				a.equal(expected.length, 0);
 				completed = true;
-			}
-		);
+			},
+		});
 
 		a.ok(completed);
 	});

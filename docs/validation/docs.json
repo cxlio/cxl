@@ -24,7 +24,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 0,
+                "line": 1,
                 "ch": 29
               },
               "kind": 3,
@@ -36,7 +36,7 @@
           "type": {
             "source": {
               "fileName": "index.tsx",
-              "line": 0,
+              "line": 1,
               "ch": 33
             },
             "kind": 17,
@@ -46,7 +46,7 @@
             "type": {
               "source": {
                 "fileName": "index.tsx",
-                "line": 0,
+                "line": 1,
                 "ch": 45
               },
               "kind": 5,
@@ -61,7 +61,7 @@
                 {
                   "source": {
                     "fileName": "index.tsx",
-                    "line": 0,
+                    "line": 1,
                     "ch": 54
                   },
                   "kind": 23,
@@ -74,7 +74,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 0,
+                  "line": 1,
                   "ch": 35
                 },
                 "kind": 9,
@@ -93,7 +93,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 2,
+            "line": 3,
             "ch": 5
           },
           "kind": 31,
@@ -109,7 +109,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 4,
+            "line": 5,
             "ch": 12
           },
           "kind": 31,
@@ -120,7 +120,7 @@
           "type": {
             "source": {
               "fileName": "index.tsx",
-              "line": 4,
+              "line": 5,
               "ch": 32
             },
             "kind": 34,
@@ -130,7 +130,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 4,
+                  "line": 5,
                   "ch": 34
                 },
                 "kind": 0,
@@ -147,7 +147,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 5,
+                  "line": 6,
                   "ch": 28
                 },
                 "kind": 0,
@@ -164,7 +164,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 6,
+                  "line": 7,
                   "ch": 42
                 },
                 "kind": 0,
@@ -181,7 +181,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 7,
+                  "line": 8,
                   "ch": 32
                 },
                 "kind": 0,
@@ -198,7 +198,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 8,
+                  "line": 9,
                   "ch": 36
                 },
                 "kind": 0,
@@ -215,7 +215,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 9,
+                  "line": 10,
                   "ch": 33
                 },
                 "kind": 0,
@@ -235,7 +235,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 11,
+            "line": 12,
             "ch": 2
           },
           "kind": 16,
@@ -246,7 +246,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 13,
+                "line": 14,
                 "ch": 25
               },
               "kind": 9,
@@ -254,24 +254,66 @@
               "flags": 0,
               "id": 14,
               "type": {
-                "name": "HTMLFormElement",
-                "kind": 6
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 15,
+                  "ch": 4
+                },
+                "kind": 34,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 15,
+                      "ch": 6
+                    },
+                    "kind": 11,
+                    "name": "setCustomValidity",
+                    "flags": 0,
+                    "id": 15,
+                    "type": {
+                      "name": "void",
+                      "kind": 32,
+                      "flags": 0
+                    },
+                    "parameters": [
+                      {
+                        "source": {
+                          "fileName": "index.tsx",
+                          "line": 15,
+                          "ch": 25
+                        },
+                        "kind": 9,
+                        "name": "msg",
+                        "flags": 0,
+                        "id": 16,
+                        "type": {
+                          "name": "string",
+                          "kind": 32,
+                          "flags": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             },
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 14,
-                "ch": 21
+                "line": 15,
+                "ch": 46
               },
               "kind": 9,
               "name": "validators",
               "flags": 262144,
-              "id": 15,
+              "id": 17,
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 15,
+                  "line": 16,
                   "ch": 15
                 },
                 "kind": 15,
@@ -295,24 +337,24 @@
           "type": {
             "source": {
               "fileName": "index.tsx",
-              "line": 17,
+              "line": 18,
               "ch": 7
             },
             "kind": 16,
             "name": "",
             "flags": 0,
-            "id": 16,
+            "id": 18,
             "parameters": [
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 17,
+                  "line": 18,
                   "ch": 9
                 },
                 "kind": 9,
                 "name": "value",
                 "flags": 0,
-                "id": 17,
+                "id": 19,
                 "type": {
                   "name": "any",
                   "kind": 32,
@@ -330,24 +372,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 25,
+            "line": 26,
             "ch": 1
           },
           "kind": 16,
           "name": "required",
           "flags": 1,
-          "id": 18,
+          "id": 20,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 27,
+                "line": 28,
                 "ch": 25
               },
               "kind": 9,
               "name": "val",
               "flags": 0,
-              "id": 19,
+              "id": 21,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -376,24 +418,24 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 32,
+            "line": 33,
             "ch": 1
           },
           "kind": 16,
           "name": "email",
           "flags": 1,
-          "id": 20,
+          "id": 22,
           "parameters": [
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 34,
+                "line": 35,
                 "ch": 22
               },
               "kind": 9,
               "name": "val",
               "flags": 0,
-              "id": 21,
+              "id": 23,
               "type": {
                 "name": "string",
                 "kind": 32,

@@ -19,7 +19,7 @@ interface MinifyConfig {
 }
 
 export async function read(source: string): Promise<Output> {
-	const content = await fs.readFile(source, 'utf8');
+	const content = await fs.readFile(source);
 	return {
 		path: source,
 		source: content,
@@ -43,13 +43,12 @@ export function basename(replace?: string) {
 	);
 }
 
-export function prepend(str: string) {
-	return tap((val: Output) => (val.source = str + val.source));
-}
-
-export function concatFile(outName: string) {
+export function concatFile(outName: string, separator = '\n') {
 	return pipe(
-		reduce<Output, string>((out, src) => out + src.source, ''),
+		reduce<Output, string>(
+			(out, src) => `${out}${separator}${src.source}`,
+			''
+		),
 		map(source => ({ path: outName, source }))
 	);
 }
@@ -89,11 +88,11 @@ export function copyDir(fromPath: string, toPath: string) {
 }
 
 export function getSourceMap(out: Output): Output | undefined {
-	const match = /\/\/# sourceMappingURL=(.+)/.exec(out.source);
+	const source = out.source.toString();
+	const match = /\/\/# sourceMappingURL=(.+)/.exec(source);
 	const path = match ? resolve(dirname(out.path), match?.[1]) : null;
 
-	if (path)
-		return { path: pathBasename(path), source: readFileSync(path, 'utf8') };
+	if (path) return { path: pathBasename(path), source: readFileSync(path) };
 }
 
 export function minify(config: MinifyConfig = {}) {
@@ -107,19 +106,20 @@ export function minify(config: MinifyConfig = {}) {
 					const sourceMap = getSourceMap(out);
 					if (sourceMap)
 						config.sourceMap = {
-							content: sourceMap.source,
+							content: sourceMap.source.toString(),
 							url: destPath + '.map',
 						};
 				}
-				const { code, map } = await Terser.minify(out.source, config);
+				const source = out.source.toString();
+				const { code, map } = await Terser.minify(source, config);
 				if (!code) throw new Error('No code generated');
 
-				subscriber.next({ path: destPath, source: code });
+				subscriber.next({ path: destPath, source: Buffer.from(code) });
 
 				if (map && config.sourceMap)
 					subscriber.next({
 						path: config.sourceMap.url,
-						source: map.toString(),
+						source: Buffer.from(map.toString()),
 					});
 				subscriber.complete();
 			});

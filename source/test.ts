@@ -31,26 +31,6 @@ export * from './layout.js';
 export * from './navigation.js';
 export * from './input-base.js';`;
 
-		/*const coverage = {
-			url: 'index.js',
-			functions: [
-				{
-					functionName: '',
-					ranges: [
-						{ startOffset: 0, endOffset: 42, count: 1 },
-						{ startOffset: 42, endOffset: 65, count: 0 },
-						{ startOffset: 65, endOffset: 239, count: 1 },
-						{ startOffset: 239, endOffset: 320, count: 0 },
-						{ startOffset: 320, endOffset: 348, count: 1 },
-						{ startOffset: 348, endOffset: 368, count: 0 },
-						{ startOffset: 368, endOffset: 954, count: 1 },
-					],
-					isBlockCoverage: true,
-				},
-			],
-			blockTotal: 954,
-			blockCovered: 706,
-		};*/
 		const sm = await getSourceMap('../../source/test/index.js');
 		a.assert(sm);
 		const range = sm.translateRange(index_js, { start: 368, end: 954 });

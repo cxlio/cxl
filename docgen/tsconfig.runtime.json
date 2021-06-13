@@ -2,14 +2,14 @@
 	"extends": "../tsconfig.json",
 	"ignore": true,
 	"compilerOptions": {
-		"bundledPackageName": "@cxl/docgen-runtime",
 		"outDir": "../dist/docgen",
 		"outFile": "../dist/docgen/runtime.bundle.js",
 		"rootDir": "..",
 		"module": "amd"
 	},
-	"include": [
+	"files": [
 		"../rx/index.ts",
+		"../ui/theme.tsx",
 		"../css/index.ts",
 		"../tsx/index.ts",
 		"../dom/index.ts",
@@ -17,16 +17,16 @@
 		"../template/index.ts",
 		"../router/index.ts",
 		"../ui/core.tsx",
-		"../ui/theme.tsx",
 		"../ui/layout.tsx",
-		"../ui-fa/index.tsx",
 		"../ui/dialog.tsx",
 		"../ui/navigation.tsx",
-		"../ui-table/index.tsx",
 		"../ui/input-base.tsx",
 		"../ui/checkbox.tsx",
 		"../ui-router/index.tsx",
 		"../ui/select.tsx",
+		"../ui/icon.tsx",
+		"../ui/field.tsx",
+		"../ui/button.tsx",
 		"runtime.tsx"
 	],
 	"references": [

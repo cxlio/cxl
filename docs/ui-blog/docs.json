@@ -1,0 +1,498 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.tsx",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.tsx",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 5,
+            "ch": 31
+          },
+          "kind": 4,
+          "name": "BlogPosts",
+          "flags": 1,
+          "id": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 7,
+                "ch": 28
+              },
+              "kind": 10,
+              "name": "posts",
+              "flags": 4,
+              "id": 2,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 8,
+                  "ch": 7
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "id": 3,
+                  "name": "Post",
+                  "kind": 6
+                }
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 8,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "tags",
+              "flags": 4,
+              "id": 4,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 9,
+                  "ch": 6
+                },
+                "kind": 15,
+                "name": "Array",
+                "flags": 0,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "source": {
+            "fileName": "index.tsx",
+            "line": 10,
+            "ch": 1
+          },
+          "kind": 4,
+          "name": "Post",
+          "flags": 1,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 12,
+                "ch": 23
+              },
+              "kind": 10,
+              "name": "uuid",
+              "flags": 4,
+              "id": 5,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 13,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "id",
+              "flags": 4,
+              "id": 6,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 14,
+                "ch": 12
+              },
+              "kind": 10,
+              "name": "title",
+              "flags": 4,
+              "id": 7,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 15,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "date",
+              "flags": 4,
+              "id": 8,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 16,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "mtime",
+              "flags": 4,
+              "id": 9,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 17,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "author",
+              "flags": 4,
+              "id": 10,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 18,
+                "ch": 16
+              },
+              "kind": 10,
+              "name": "type",
+              "flags": 4,
+              "id": 11,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 19,
+                "ch": 14
+              },
+              "kind": 10,
+              "name": "tags",
+              "flags": 4,
+              "id": 12,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 20,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "content",
+              "flags": 4,
+              "id": 13,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 21,
+                "ch": 17
+              },
+              "kind": 10,
+              "name": "summary",
+              "flags": 4,
+              "id": 14,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ]
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 23,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "highlight",
+          "flags": 0,
+          "id": 15,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 25,
+                "ch": 19
+              },
+              "kind": 9,
+              "name": "code",
+              "flags": 0,
+              "id": 16,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "",
+            "flags": 0,
+            "kind": 5,
+            "children": [
+              {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "name": "AutoHighlightResult",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 37,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "BlogDemo",
+          "flags": 1,
+          "id": 17,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 131,
+                "ch": 41
+              },
+              "kind": 36,
+              "name": "view",
+              "flags": 4,
+              "id": 18,
+              "type": {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 133,
+                  "ch": 6
+                },
+                "kind": 5,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 133,
+                      "ch": 6
+                    },
+                    "kind": 23,
+                    "name": "'desktop'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 133,
+                      "ch": 18
+                    },
+                    "kind": 23,
+                    "name": "'mobile'",
+                    "flags": 0
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 133,
+                      "ch": 29
+                    },
+                    "kind": 23,
+                    "name": "'source'",
+                    "flags": 0
+                  }
+                ]
+              },
+              "value": "'desktop'"
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 133,
+                "ch": 51
+              },
+              "kind": 36,
+              "name": "label",
+              "flags": 4,
+              "id": 19,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "blog-demo"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 136,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "BlogCode",
+          "flags": 1,
+          "id": 20,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 157,
+                "ch": 41
+              },
+              "kind": 36,
+              "name": "source",
+              "flags": 4,
+              "id": 21,
+              "value": "''",
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 159,
+                "ch": 13
+              },
+              "kind": 36,
+              "name": "type",
+              "flags": 4,
+              "id": 22,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 162,
+                "ch": 15
+              },
+              "kind": 36,
+              "name": "'source-id'",
+              "flags": 4,
+              "id": 23,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "blog-code"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 166,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "BlogSummary",
+          "flags": 1,
+          "id": 24,
+          "children": [],
+          "docs": {
+            "tagName": "blog-summary"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

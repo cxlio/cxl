@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/dom"/>
 import {
 	BehaviorSubject,
 	Observable,
@@ -10,32 +11,12 @@ import {
 	merge,
 } from '@cxl/rx';
 
-type ElementContent = string | Node;
+export type ElementContent = string | Node;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
 
 export function empty(el: Element) {
 	let c: Node;
 	while ((c = el.childNodes[0])) el.removeChild(c);
-}
-
-export function createElement<T extends keyof HTMLElementTagNameMap>(
-	name: T,
-	attributes?: Partial<HTMLElementTagNameMap[T]>
-): HTMLElementTagNameMap[T];
-export function createElement<T>(
-	elementType: { create(): any; new (): T },
-	attributes?: Partial<T>
-): T;
-export function createElement(elementType: any, attributes?: any) {
-	const element =
-		typeof elementType === 'string'
-			? document.createElement(elementType)
-			: elementType.create();
-
-	if (attributes)
-		for (const attr in attributes) element[attr] = attributes[attr];
-
-	return element;
 }
 
 export function on<K extends keyof WindowEventMap>(
@@ -70,7 +51,7 @@ export function on(
 	});
 }
 
-export function onKeypress(el: Element, key?: string) {
+export function onKeypress(el: Element | Window, key?: string) {
 	return on(el, 'keydown').filter(
 		(ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key
 	);
@@ -94,7 +75,9 @@ export function onLoad() {
 	return defer(() =>
 		document.readyState === 'complete'
 			? of(true)
-			: on(window, 'load').map(() => true)
+			: on(window, 'load')
+					.first()
+					.map(() => true)
 	);
 }
 
@@ -118,69 +101,9 @@ export function setAttribute(el: Element, attr: string, val: any) {
 	return val;
 }
 
-function insertContent(el: Element, content: ElementContent) {
-	if (content === undefined || content === null) return;
-	if (!(content instanceof Node)) content = document.createTextNode(content);
-	el.appendChild(content);
-}
-
-export function insertArray(el: Element, content: ElementContent[]) {
-	for (const child of content) insertContent(el, child);
-}
-
-export function insert(
-	el: Element,
-	content: ElementContent | ElementContent[]
-) {
-	if (Array.isArray(content)) {
-		insertArray(el, content);
-		return;
-	} else insertContent(el, content);
-}
-
-export function setContent(el: Element, content: ElementContent) {
-	empty(el);
-	insert(el, content);
-}
-
-export function isEmpty(el: Element) {
-	return el.childNodes.length === 0;
-}
-
-function removeChild(el: Element, child: Node) {
-	el.removeChild(child);
-}
-
-export function remove(child: ChildNode) {
-	if (Array.isArray(child))
-		return child.forEach(c => removeChild(c.parentNode, c));
-
-	if (child.parentNode) removeChild(child.parentNode as Element, child);
-}
-
-export function setStyle(el: Element, className: string, enable: boolean) {
-	el.classList[enable || enable === undefined ? 'add' : 'remove'](className);
-}
-
 export function trigger(el: EventTarget, event: string, detail?: any) {
 	const ev = new CustomEvent(event, { detail: detail, bubbles: true });
 	el.dispatchEvent(ev);
-}
-
-export class NodeSnapshot {
-	nodes: Node[] = [];
-
-	constructor(nodes: NodeList) {
-		for (const n of nodes) this.nodes.push(n);
-	}
-
-	appendTo(el: HTMLElement) {
-		this.nodes.forEach(n => el.appendChild(n));
-	}
-
-	remove() {
-		this.nodes.forEach(n => n.parentNode && n.parentNode.removeChild(n));
-	}
 }
 
 export interface MutationEvent<T extends EventTarget = EventTarget> {
@@ -235,22 +158,23 @@ export class AttributeObserver extends Subject<MutationEvent> {
 		(element as any).$$attributeObserver = this;
 	}
 
-	onSubscribe(subscription: any) {
+	protected onSubscribe(subscription: any) {
 		const el = this.element as any;
 		// Use mutation observer for native dom elements
 		if (!el.$view && !this.observer) this.$initializeNative(el);
+		const unsubscribe = super.onSubscribe(subscription);
 
-		return super.onSubscribe(subscription);
-	}
-
-	unsubscribe() {
-		if (this.observers.size === 0) this.disconnect();
+		return () => {
+			unsubscribe();
+			if (this.observers.size === 0) this.disconnect();
+		};
 	}
 
 	disconnect() {
 		if (this.observer) {
 			this.observer.disconnect();
-			if (this.bindings) this.bindings.forEach(b => b.unsubscribe());
+			this.observer = undefined;
+			this.bindings?.forEach(b => b.unsubscribe());
 		}
 	}
 
@@ -261,56 +185,14 @@ export class AttributeObserver extends Subject<MutationEvent> {
 			value: attributeName,
 		});
 	}
-
-	destroy() {
-		this.disconnect();
-	}
-}
-
-export class Marker {
-	node: Comment;
-	children: NodeSnapshot[] = [];
-
-	constructor(public element: Element, text: string) {
-		const parent = element.parentNode;
-		const node = (this.node = document.createComment(text || ''));
-
-		if (parent) {
-			parent.insertBefore(node, element);
-		} else throw new Error('Invalid Parent Node');
-
-		remove(element);
-		// TODO. Used by marker.empty directive
-		(element as any).$marker = this;
-	}
-
-	toggle(val: boolean, removeTo: Element) {
-		const el = this.element,
-			parent = this.node.parentNode;
-
-		if (val && parent) parent.insertBefore(el, this.node);
-		else {
-			if (removeTo) removeTo.appendChild(el);
-			else remove(el);
-		}
-	}
-
-	insert(content: Element, nextNode: Node) {
-		// TODO performance.
-		this.children.push(new NodeSnapshot(content.childNodes));
-
-		if (this.node.parentNode)
-			this.node.parentNode.insertBefore(content, nextNode || this.node);
-	}
-
-	empty() {
-		this.children.forEach(snap => snap.remove());
-		this.children = [];
-	}
 }
 
 export function onChildrenMutation(el: Element) {
 	return new ChildrenObserver(el);
+}
+
+export function onAttributeChange(el: Element) {
+	return new AttributeObserver(el);
 }
 
 export class ChildrenObserver extends Subject<MutationEvent> {
@@ -348,67 +230,15 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 			for (const node of el.childNodes)
 				subscription.next({ type: 'added', target: el, value: node });
 
-		return super.onSubscribe(subscription);
-	}
+		const unsubscribe = super.onSubscribe(subscription);
 
-	unsubscribe() {
-		if (this.observers.size === 0 && this.observer)
-			this.observer.disconnect();
-	}
-
-	destroy() {
-		if (this.observer) this.observer.disconnect();
-	}
-}
-
-export class ElementChildren {
-	constructor(private element: HTMLElement) {
-		if ((element as any).$$elementChildren)
-			return (element as any).$$elementChildren;
-	}
-
-	get first() {
-		return this.element.firstElementChild;
-	}
-	get last() {
-		return this.element.lastElementChild;
-	}
-}
-
-export class Fragment {
-	static getFragmentFromString(content: string) {
-		// We use <template> so components are not initialized
-		const template = document.createElement('template');
-		template.innerHTML = content.trim();
-		return template.content;
-	}
-
-	static getDocumentFragment(content: TemplateContent) {
-		if (typeof content === 'string')
-			return Fragment.getFragmentFromString(content);
-
-		if (content instanceof HTMLTemplateElement) return content.content;
-		else if (content instanceof Element) {
-			const result = document.createDocumentFragment();
-			result.appendChild(content);
-			return result;
-		}
-
-		const result = document.createDocumentFragment();
-
-		while (content.length) result.appendChild(content[0]);
-
-		return result;
-	}
-
-	private content: DocumentFragment;
-
-	constructor(content: TemplateContent) {
-		this.content = Fragment.getDocumentFragment(content);
-	}
-
-	clone() {
-		return document.importNode(this.content, true);
+		return () => {
+			unsubscribe();
+			if (this.observers.size === 0 && this.observer) {
+				this.observer.disconnect();
+				this.observer = undefined;
+			}
+		};
 	}
 }
 
@@ -436,13 +266,15 @@ export function onHistoryChange() {
 	);
 }
 
-/**
- * requestAnimationFrame wrapper
- */
-export const raf = requestAnimationFrame.bind(window);
-
 export function onLocation() {
-	return merge(onHashChange(), onHistoryChange()).map(() => window.location);
+	let lastHref: string;
+	return merge(onHashChange(), onHistoryChange())
+		.map(() => window.location)
+		.filter(loc => {
+			const res = loc.href !== lastHref;
+			lastHref = loc.href;
+			return res;
+		});
 }
 
 export const animationFrame = new Observable<number>(subs => {
@@ -454,3 +286,45 @@ export const animationFrame = new Observable<number>(subs => {
 	}
 	return () => cancelAnimationFrame(rafid);
 });
+
+export function findNextNode<T extends ChildNode>(
+	el: T,
+	fn: (el: T) => boolean,
+	direction: 'nextSibling' | 'previousSibling' = 'nextSibling'
+) {
+	let node = el[direction] as T;
+
+	while (node) {
+		if (fn(node)) return node;
+		node = node[direction] as T;
+	}
+}
+
+export function findNextNodeBySelector(
+	el: Element,
+	selector: string,
+	direction:
+		| 'nextElementSibling'
+		| 'previousElementSibling' = 'nextElementSibling'
+) {
+	let node = el[direction];
+
+	while (node) {
+		if (node.matches(selector)) return node;
+		node = node[direction];
+	}
+	return null;
+}
+
+export function onResize(el: Element) {
+	return new Observable(subs => {
+		const observer = new ResizeObserver(ev => subs.next(ev));
+		observer.observe(el);
+		return () => observer.unobserve(el);
+	});
+}
+
+export function insert(el: Element, content: ElementContent) {
+	if (!(content instanceof Node)) content = document.createTextNode(content);
+	el.appendChild(content);
+}

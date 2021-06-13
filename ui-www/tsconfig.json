@@ -1,0 +1,13 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-www"
+	},
+	"files": ["index.tsx"],
+	"references": [
+		{ "path": "../ui" },
+		{ "path": "../tsx-svg" },
+		{ "path": "../validation" },
+		{ "path": "../ui-router" }
+	]
+}

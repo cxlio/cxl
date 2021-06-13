@@ -5,20 +5,16 @@
 	><!--
 <cxl-grid>
 	<cxl-c sm6>
-		<cxl-field leading>
+		<cxl-field>
 			<cxl-label>Field Label</cxl-label>
-			<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
 			<cxl-input value="Input Value"></cxl-input>
-			<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
 			<cxl-field-help>Helper Text</cxl-field-help>
 		</cxl-field>
 	</cxl-c>
 	<cxl-c sm6>
 		<cxl-field outline>
 			<cxl-label>Field Label</cxl-label>
-			<cxl-field-icon icon="calendar" title="Leading Icon"></cxl-field-icon>
 			<cxl-input value="Input Value"></cxl-input>
-			<cxl-field-icon trailing icon="percent" title="Trailing Icon"></cxl-field-icon>
 			<cxl-field-help>Helper Text</cxl-field-help>
 		</cxl-field>
 	</cxl-c>
@@ -30,12 +26,16 @@
 <cxl-grid>
 	<cxl-c sm6>
 		<cxl-field-input label="Enabled"></cxl-field-input>
+	</cxl-c><cxl-c sm6>
 		<cxl-field-input disabled label="Disabled"></cxl-field-input>
+	</cxl-c><cxl-c sm6>
 		<cxl-field-input invalid touched label="Invalid"></cxl-field-input>
 	</cxl-c>
 	<cxl-c sm6>
 		<cxl-field-input outline label="Enabled"></cxl-field-input>
+	</cxl-c><cxl-c sm6>
 		<cxl-field-input outline disabled label="Disabled"></cxl-field-input>
+	</cxl-c><cxl-c sm6>
 		<cxl-field-input outline invalid touched label="Invalid"></cxl-field-input>
 	</cxl-c>
 </cxl-grid>
@@ -43,12 +43,15 @@
 <cxl-t h5>Floating Labels</cxl-t>
 <doc-demo
 	><!--
+<cxl-grid>
 <cxl-field-input floating label="Floating Label Input Box"></cxl-field-input>
 <cxl-field-input outline floating label="Floating Label with Outline"></cxl-field-input>
+</cxl-grid>
 --></doc-demo>
 <cxl-t h5>Field Outline</cxl-t>
 <doc-demo
 	><!--
+<cxl-grid>
 <cxl-field-input label="Outline Label" outline>
 	<cxl-field-help>Help Text</cxl-field-help>
 </cxl-field-input>
@@ -56,6 +59,37 @@
 <cxl-field-input invalid touched outline label="Invalid Input Outline">
 	<cxl-input-help>Invalid Input Message</cxl-input-help>
 </cxl-field-input>
+</cxl-grid>
+--></doc-demo>
+<cxl-t h5>Dense Fields</cxl-t>
+<doc-demo
+	><!--
+<cxl-grid>
+	<cxl-c sm6>
+		<cxl-field dense>
+			<cxl-label>Filled Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field>
+	</cxl-c>
+	<cxl-c sm6>
+		<cxl-field outline dense>
+			<cxl-label>Outlined Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field>
+	</cxl-c>
+	<cxl-c sm6>
+		<cxl-field dense floating>
+			<cxl-label>Filled Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field>
+	</cxl-c>
+	<cxl-c sm6>
+		<cxl-field outline dense floating>
+			<cxl-label>Outlined Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field>
+	</cxl-c>
+</cxl-grid>
 --></doc-demo>
 <cxl-t h5>Help Text</cxl-t>
 <doc-demo
@@ -63,7 +97,7 @@
 <cxl-field>
 	<cxl-label>Input with Help Text</cxl-label>
 	<cxl-input></cxl-input>
-	<cxl-field-help><cxl-icon icon="info" round outline></cxl-icon> Help Text with Icon</cxl-field-help>
+	<cxl-field-help>Field Help Text</cxl-field-help>
 </cxl-field>
 --></doc-demo>
 <cxl-t h5>Character Counter</cxl-t>
@@ -78,32 +112,34 @@
 <cxl-t h5>Field Decoration</cxl-t>
 <doc-demo
 	><!--
+<cxl-grid>
 <cxl-field>
-	<cxl-label>Leading Icon</cxl-label>
-	<cxl-field-icon icon="dollar-sign"></cxl-field-icon>
-	<cxl-input></cxl-input>
+	<cxl-label>Leading Text</cxl-label>
+	$&nbsp;<cxl-input></cxl-input>
 </cxl-field>
 <cxl-field>
-	<cxl-label>Trailing Icon</cxl-label>
-	<cxl-input></cxl-input>
-	<cxl-field-icon trailing icon="percent"></cxl-field-icon>
+	<cxl-label>Trailing Text</cxl-label>
+	<cxl-input></cxl-input>%
 </cxl-field>
 <cxl-field>
 	<cxl-label>Field Label with Suffix Text</cxl-label>
-	<cxl-input style="text-align: right" value="form.input.value"></cxl-input>
+	<cxl-input style="text-align: right"></cxl-input>
 	<div>@gmail.com</div>
 	<cxl-field-help>Helper Text</cxl-field-help>
 </cxl-field>
+</cxl-grid>
 --></doc-demo>
 
 <cxl-t h4>Components</cxl-t>
 <cxl-t h5>Text Fields</cxl-t>
 <doc-demo
 	><!--
+<cxl-grid>
 <cxl-field-input label="Single Line Text Field"></cxl-field-input>
 <cxl-field-textarea label="Multiple Line Expandable Text Area"></cxl-field-textarea>
 <cxl-field-input label="Text Field with Outline" outline></cxl-field-input>
 <cxl-field-textarea label="Expandable Text Area with Outline" outline></cxl-field-textarea>
+</cxl-grid>
 --></doc-demo>
 
 <cxl-t h5>Selection Controls</cxl-t>
@@ -139,6 +175,7 @@
 <cxl-t h5>Dropdown Menus</cxl-t>
 <doc-demo
 	><!--
+<cxl-grid>
 <cxl-field>
 	<cxl-label>Single Selection Menu</cxl-label>
 	<cxl-select>
@@ -171,6 +208,7 @@
 		<cxl-option>Select Item Three</cxl-option>
 	</cxl-select>
 </cxl-field>
+</cxl-grid>
 --></doc-demo>
 <cxl-t h4>Fieldsets</cxl-t>
 <doc-demo

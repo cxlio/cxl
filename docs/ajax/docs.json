@@ -163,24 +163,113 @@
                   }
                 ]
               }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 8,
+                "ch": 40
+              },
+              "kind": 10,
+              "name": "credentials",
+              "flags": 4,
+              "id": 10,
+              "type": {
+                "name": "boolean",
+                "kind": 32,
+                "flags": 0
+              }
             }
           ]
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 11,
+            "line": 10,
+            "ch": 1
+          },
+          "kind": 2,
+          "name": "ResponseParser",
+          "flags": 1,
+          "id": 11,
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 12,
+              "ch": 28
+            },
+            "kind": 17,
+            "name": "",
+            "flags": 0,
+            "id": 12,
+            "type": {
+              "name": "any",
+              "kind": 32,
+              "flags": 0
+            },
+            "parameters": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 12,
+                  "ch": 30
+                },
+                "kind": 9,
+                "name": "data",
+                "flags": 0,
+                "id": 13,
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 13,
+            "ch": 12
+          },
+          "kind": 31,
+          "name": "Parsers",
+          "flags": 1,
+          "id": 14,
+          "type": {
+            "name": "Record",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              },
+              {
+                "id": 11,
+                "name": "ResponseParser",
+                "kind": 6
+              }
+            ]
+          },
+          "value": "{\n\t'application/json': JSON.parse.bind(JSON),\n}"
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 17,
             "ch": 5
           },
           "kind": 31,
           "name": "AjaxDefaults",
           "flags": 0,
-          "id": 10,
-          "value": "{\n\tmethod: 'GET',\n\tcontentType: 'application/json',\n\tbaseURL: '',\n}",
+          "id": 15,
+          "value": "{\n\tmethod: 'GET',\n\tbaseURL: '',\n\tcredentials: false,\n}",
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 11,
+              "line": 17,
               "ch": 20
             },
             "kind": 34,
@@ -190,13 +279,13 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 11,
+                  "line": 17,
                   "ch": 22
                 },
                 "kind": 0,
                 "name": "method",
                 "flags": 0,
-                "id": 11,
+                "id": 16,
                 "value": "'GET'",
                 "type": {
                   "name": "string",
@@ -207,14 +296,14 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 12,
+                  "line": 18,
                   "ch": 15
                 },
                 "kind": 0,
-                "name": "contentType",
+                "name": "baseURL",
                 "flags": 0,
-                "id": 12,
-                "value": "'application/json'",
+                "id": 17,
+                "value": "''",
                 "type": {
                   "name": "string",
                   "kind": 32,
@@ -224,16 +313,16 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 13,
-                  "ch": 33
+                  "line": 19,
+                  "ch": 13
                 },
                 "kind": 0,
-                "name": "baseURL",
+                "name": "credentials",
                 "flags": 0,
-                "id": 13,
-                "value": "''",
+                "id": 18,
+                "value": "false",
                 "type": {
-                  "name": "string",
+                  "name": "boolean",
                   "kind": 32,
                   "flags": 0
                 }
@@ -244,84 +333,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 15,
+            "line": 21,
             "ch": 2
-          },
-          "kind": 16,
-          "name": "isJSON",
-          "flags": 0,
-          "id": 14,
-          "parameters": [
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 17,
-                "ch": 16
-              },
-              "kind": 9,
-              "name": "xhr",
-              "flags": 0,
-              "id": 15,
-              "type": {
-                "name": "XMLHttpRequest",
-                "kind": 6
-              }
-            }
-          ],
-          "type": {
-            "name": "",
-            "flags": 0,
-            "kind": 5,
-            "children": [
-              {
-                "name": "null",
-                "kind": 32,
-                "flags": 0
-              },
-              {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              },
-              {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              },
-              {
-                "name": "\"\"",
-                "kind": 23,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "index.ts",
-            "line": 20,
-            "ch": 1
           },
           "kind": 16,
           "name": "parse",
           "flags": 0,
-          "id": 16,
+          "id": 19,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 22,
+                "line": 23,
                 "ch": 15
               },
               "kind": 9,
               "name": "xhr",
               "flags": 0,
-              "id": 17,
+              "id": 20,
               "type": {
                 "name": "XMLHttpRequest",
                 "kind": 6
@@ -337,37 +366,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 24,
+            "line": 31,
             "ch": 1
           },
           "kind": 16,
           "name": "request",
           "flags": 1,
-          "id": 18,
-          "typeParameters": [
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 26,
-                "ch": 24
-              },
-              "kind": 3,
-              "name": "T",
-              "flags": 0,
-              "id": 19
-            }
-          ],
+          "id": 21,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 26,
-                "ch": 27
+                "line": 33,
+                "ch": 24
               },
               "kind": 9,
               "name": "options",
               "flags": 0,
-              "id": 20,
+              "id": 22,
               "type": {
                 "id": 1,
                 "name": "AjaxOptions",
@@ -380,8 +396,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 19,
-                "name": "T",
+                "name": "XMLHttpRequest",
                 "kind": 6
               }
             ]
@@ -390,41 +405,41 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 38,
+            "line": 43,
             "ch": 1
           },
           "kind": 16,
           "name": "get",
           "flags": 1,
-          "id": 21,
+          "id": 23,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 40,
+                "line": 45,
                 "ch": 20
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 22
+              "id": 24
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 40,
+                "line": 45,
                 "ch": 23
               },
               "kind": 9,
               "name": "url",
               "flags": 0,
-              "id": 23,
+              "id": 25,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 40,
+                  "line": 45,
                   "ch": 27
                 },
                 "kind": 5,
@@ -450,7 +465,7 @@
             "kind": 6,
             "typeParameters": [
               {
-                "id": 22,
+                "id": 24,
                 "name": "T",
                 "kind": 6
               }
@@ -460,24 +475,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 43,
+            "line": 48,
             "ch": 1
           },
           "kind": 16,
           "name": "xhr",
           "flags": 1,
-          "id": 24,
+          "id": 26,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 45,
+                "line": 50,
                 "ch": 20
               },
               "kind": 9,
               "name": "def",
               "flags": 0,
-              "id": 25,
+              "id": 27,
               "type": {
                 "id": 1,
                 "name": "AjaxOptions",

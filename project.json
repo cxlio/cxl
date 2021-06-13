@@ -7,6 +7,10 @@
 				"files": ["ajax/index.ts"],
 				"tasks": "cd ajax && npm run build"
 			},
+			"blog": {
+				"files": ["blog/index.ts"],
+				"tasks": "cd blog && npm run build"
+			},
 			"build": {
 				"files": ["build/*.ts"],
 				"tasks": "cd build && npm run build"
@@ -63,25 +67,26 @@
 				"files": ["ui/build-icons.js"],
 				"tasks": "cd ui && node build-icons"
 			},
-
-			"ui-legacy": {
-				"files": [
-					"template/src/*",
-					"ui-legacy/src/*",
-					"template/build.js",
-					"ui-legacy/build.js"
-				],
-				"tasks": "npm run build --prefix ui-legacy"
+			"ui-blog": {
+				"files": ["ui-blog/*"],
+				"tasks": "cd ui-blog && npm run build"
 			},
-
-			"fb": {
-				"files": ["fb/src/*", "fb/build.js"],
-				"tasks": "npm run build --prefix fb"
+			"ui-router": {
+				"files": ["ui-router/*.tsx"],
+				"tasks": "npm run build --prefix ui-router"
 			},
 
 			"ui": {
 				"files": ["ui/*.tsx", "ui/build.js", "ui/*.html"],
 				"tasks": "cd ui && npm run build"
+			},
+			"ui-table": {
+				"files": ["ui-table/*.tsx", "ui-table/*.html"],
+				"tasks": "npm run build --prefix ui-table"
+			},
+			"ui-datetime": {
+				"files": ["ui-datetime/*.tsx", "ui-datetime/*.html"],
+				"tasks": "npm run build --prefix ui-datetime"
 			},
 			"server": {
 				"files": ["server/*.ts", "server/build.js"],
@@ -98,6 +103,30 @@
 			"tester": {
 				"files": ["tester/*.ts"],
 				"tasks": "npm run build --prefix tester"
+			},
+			"tsx": {
+				"files": ["tsx/*.ts"],
+				"tasks": "npm run build --prefix tsx"
+			},
+			"tsx-svg": {
+				"files": ["tsx-svg/*.ts"],
+				"tasks": "npm run build --prefix tsx-svg"
+			},
+			"program": {
+				"files": ["program/*"],
+				"tasks": "npm run build --prefix program"
+			},
+			"ui-www": {
+				"files": ["ui-www/*"],
+				"tasks": "npm run build --prefix ui-www"
+			},
+			"ui-user": {
+				"files": ["ui-user/*"],
+				"tasks": "npm run build --prefix ui-user"
+			},
+			"render": {
+				"files": ["render/*"],
+				"tasks": "npm run build --prefix render"
 			}
 		}
 	}

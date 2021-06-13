@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/validation"/>
 export type ValidateFunction<T> = (val: T) => string | true;
 
 const EMAIL = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
@@ -12,7 +13,7 @@ export const ValidationMessage = {
 };
 
 export function validate(
-	el: HTMLFormElement,
+	el: { setCustomValidity(msg: string): void },
 	...validators: ValidateFunction<any>[]
 ) {
 	return (value: any) => {
@@ -35,3 +36,15 @@ export function required(val: any) {
 export function email(val: string) {
 	return val === '' || EMAIL.test(val) || ValidationMessage.email;
 }
+
+/*import { get } from '@cxl/component';
+import type { InputBase } from './input-base.js';
+
+
+
+export function $validate<T extends InputBase>(
+	...validators: ValidateFunction<T['value']>[]
+) {
+	return (el: T) => validate(el, ...validators);
+}
+*/

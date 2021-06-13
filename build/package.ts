@@ -1,4 +1,4 @@
-import { Observable, defer, merge, of } from '@cxl/rx';
+import { Observable, defer, merge, of, from, EMPTY } from '@cxl/rx';
 import { existsSync, readFileSync, promises } from 'fs';
 import { join } from 'path';
 import { file } from './file.js';
@@ -7,7 +7,7 @@ import { Output } from '@cxl/source';
 import { sh } from '@cxl/server';
 import * as ts from 'typescript';
 
-type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0';
+type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0' | 'UNLICENSED';
 
 export interface Package {
 	name: string;
@@ -17,6 +17,7 @@ export interface Package {
 	files: string[];
 	main: string;
 	bin?: string;
+	keywords?: string[];
 	browser?: string;
 	homepage: string;
 	private: boolean;
@@ -37,6 +38,7 @@ const LICENSE_MAP: Record<License, string> = {
 	'GPL-3.0': 'license-GPL-3.0.txt',
 	'GPL-3.0-only': 'license-GPL-3.0.txt',
 	'Apache-2.0': 'license-Apache-2.0.txt',
+	UNLICENSED: '',
 };
 
 let PACKAGE: Package;
@@ -83,38 +85,40 @@ function getRepo(repo: string | { url: string }) {
 function packageJson(p: any) {
 	return of({
 		path: 'package.json',
-		source: JSON.stringify(
-			{
-				name: p.name,
-				version: p.version,
-				description: p.description,
-				private: p.private,
-				license: p.license,
-				files: [
-					'*.js',
-					'*.d.ts',
-					'*.js.map',
-					'amd/*.js',
-					'amd/*.d.ts',
-					'amd/*.js.map',
-					'es6/*.js',
-					'es6/*.d.ts',
-					'es6/*.js.map',
-					'LICENSE',
-					'*.md',
-				],
-				main: 'index.js',
-				browser: p.browser,
-				homepage: p.homepage,
-				bugs: p.bugs,
-				bin: p.bin,
-				repository: p.repository && getRepo(p.repository),
-				dependencies: p.dependencies,
-				peerDependencies: p.peerDependencies,
-				type: p.type,
-			},
-			null,
-			2
+		source: Buffer.from(
+			JSON.stringify(
+				{
+					name: p.name,
+					version: p.version,
+					description: p.description,
+					private: p.private,
+					license: p.license,
+					files: [
+						'*.js',
+						'*.d.ts',
+						'*.js.map',
+						'amd/*.js',
+						'amd/*.d.ts',
+						'amd/*.js.map',
+						'es6/*.js',
+						'es6/*.d.ts',
+						'es6/*.js.map',
+						'LICENSE',
+						'*.md',
+					],
+					main: 'index.js',
+					browser: p.browser,
+					homepage: p.homepage,
+					bugs: p.bugs,
+					bin: p.bin,
+					repository: p.repository && getRepo(p.repository),
+					dependencies: p.dependencies,
+					peerDependencies: p.peerDependencies,
+					type: p.type,
+				},
+				null,
+				2
+			)
 		),
 	});
 }
@@ -130,6 +134,7 @@ function getPublishedVersion(p: Package) {
 }
 
 function license(id: License) {
+	if (id === 'UNLICENSED') return EMPTY;
 	const licenseFile = LICENSE_MAP[id];
 	if (!licenseFile) throw new Error(`Invalid license: "${id}"`);
 
@@ -159,7 +164,7 @@ export function readme() {
 
 		return of({
 			path: 'README.md',
-			source: `# ${pkg.name} 
+			source: Buffer.from(`# ${pkg.name} 
 	
 [![npm version](https://badge.fury.io/js/${encodedName}.svg)](https://badge.fury.io/js/${encodedName})
 
@@ -170,12 +175,13 @@ ${pkg.description}
 -   Branch Version: [${pkg.version}](${npmLink(pkg.name, pkg.version)})
 -   License: ${pkg.license}
 -   Documentation: [Link](${pkg.homepage})
+-   Report Issues: [Github](${pkg.bugs})
 
 ## Installation
 
 	npm install ${pkg.name}
 
-${extra}`,
+${extra}`),
 		});
 	});
 }
@@ -207,7 +213,7 @@ function createBundle(
 	resolvedFiles: string[],
 	content: string[],
 	outFile: string
-) {
+): Output {
 	const options: ts.CompilerOptions = {
 		lib: ['lib.es2017.d.ts'],
 		module: ts.ModuleKind.AMD,
@@ -242,19 +248,20 @@ function createBundle(
 	};
 
 	const program = ts.createProgram(resolvedFiles, options, host);
-	const out: Output = {
+	let source = '';
+	program.emit(undefined, (_a, b) => (source += b));
+
+	return {
 		path: outFile,
-		source: '',
+		source: Buffer.from(source),
 	};
-	program.emit(undefined, (_a, b) => (out.source += b));
-	return out;
 }
 
 export function AMD() {
 	return defer<Output>(() =>
 		of({
 			path: 'amd.js',
-			source: readFileSync(__dirname + '/amd.js', 'utf8'),
+			source: readFileSync(__dirname + '/amd.js'),
 		})
 	);
 }
@@ -271,5 +278,45 @@ export function bundle(files: Record<string, string>, outFile: string) {
 				subs.complete();
 			}
 		);
+	});
+}
+
+const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
+const DEBUG_HEAD = `<meta charset="utf-8">
+<script src="/cxl/dist/tester/require-browser.js"></script>
+<script>
+	require.replace = function (path) {
+		return path.replace(
+			/^@cxl\\/(.+)/,
+			(str, p1) =>
+				\`/cxl/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
+		);
+	};
+	require('@cxl/ui');
+	require('@cxl/ui-router');
+	require('@cxl/ui-www');
+</script>
+`;
+
+interface TemplateConfig {
+	header: string;
+	debugHeader: string;
+}
+
+const DefaultTemplateConfig = {
+	header: INDEX_HEAD,
+	debugHeader: DEBUG_HEAD,
+};
+
+export function template(
+	filename: string,
+	config: Partial<TemplateConfig> = {}
+) {
+	return file(filename).switchMap(({ source }) => {
+		const cfg = { ...DefaultTemplateConfig, ...config };
+		return from([
+			{ path: 'index.html', source: `${cfg.header}\n${source}` },
+			{ path: 'debug.html', source: `${cfg.debugHeader}\n${source}` },
+		]);
 	});
 }

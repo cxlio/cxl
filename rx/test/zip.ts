@@ -22,13 +22,12 @@ export default spec('zip', it => {
 
 		zip(from(['a', 'b', 'c']), from([1, 2, 3]))
 			.map(([A, B]) => A + B)
-			.subscribe(
-				(x: string) => {
+			.subscribe({
+				next: (x: string) => {
 					a.equal(x, expected[i++]);
 				},
-				undefined,
-				done
-			);
+				complete: done,
+			});
 	});
 
 	it.should(

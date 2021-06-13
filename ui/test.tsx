@@ -1,24 +1,28 @@
 import { TestApi, spec, triggerKeydown } from '@cxl/spec';
-import { on } from '@cxl/dom';
 import { dom } from '@cxl/tsx';
 import { getRegisteredComponents, Component } from '@cxl/component';
-import '@cxl/template';
-import { of } from '@cxl/rx';
+import { each } from '@cxl/template';
+import { be, of } from '@cxl/rx';
 import {
 	Drawer,
 	Button,
+	C,
+	Checkbox,
 	DialogAlert,
 	DialogConfirm,
 	Field,
 	Form,
 	Label,
 	Input,
-	InputBase,
 	MultiSelect,
+	PasswordInput,
 	Radio,
-	Span,
 	SelectBox,
 	SubmitButton,
+	List,
+	Item,
+	Avatar,
+	T,
 	Tabs,
 	Tab,
 	TextArea,
@@ -27,14 +31,9 @@ import {
 	Slider,
 	alert,
 	confirm,
-	navigationList,
 	notify,
 	setSnackbarContainer,
 } from './index.js';
-
-async function connect<T extends Node>(el: T, callback: (el: T) => any) {
-	await callback(el);
-}
 
 const Measure: Record<string, any> = {
 	'CXL-APPBAR'(test: TestApi) {
@@ -48,7 +47,7 @@ const Measure: Record<string, any> = {
 
 function testInvalid(ctor: typeof Component, test: TestApi) {
 	test.test('[invalid]', a => {
-		const el = test.element(ctor.tagName) as InputBase;
+		const el = test.element(ctor.tagName) as Input;
 		a.equal(el.invalid, false, 'Should be valid by default');
 
 		if (el.validity) {
@@ -112,11 +111,13 @@ function testBooleanValue(ctor: typeof Component, test: TestApi) {
 		a.equal(el.value, true);
 		el.value = false;
 		a.equal(el.value, false, 'value should be set immediately');
+		el.value = true;
+		a.equal(el.value, true, 'value should be set immediately');
 	});
 }
 
 function testValue(ctor: typeof Component, a: TestApi) {
-	const el1 = a.element(ctor.tagName) as InputBase;
+	const el1 = a.element(ctor.tagName) as Input;
 	if (typeof el1.value === 'string') testStringValue(ctor, a);
 	else if (el1.value === false || el1.value === true)
 		testBooleanValue(ctor, a);
@@ -146,6 +147,22 @@ function testChecked(ctor: typeof Component, test: TestApi) {
 		}
 		c.addEventListener('change', handler);
 		c.checked = true;
+
+		if (c.value !== undefined) {
+			a.test('checked attribute set', a => {
+				a.dom.innerHTML = `<${ctor.tagName} checked>`;
+				const c = a.dom.children[0] as any;
+				a.equal(c.checked, true);
+				a.equal(c.value, true);
+			});
+
+			a.test('value attribute set', a => {
+				a.dom.innerHTML = `<${ctor.tagName} value>`;
+				const c = a.dom.children[0] as any;
+				a.equal(c.checked, true);
+				a.equal(c.value, true);
+			});
+		}
 	});
 }
 
@@ -168,7 +185,7 @@ function testTouched(ctor: typeof Component, test: TestApi) {
 
 function testDisabled(ctor: typeof Component, test: TestApi) {
 	test.test('[disabled]', a => {
-		const el = test.element(ctor.tagName) as InputBase;
+		const el = test.element(ctor.tagName) as Input;
 		a.equal(
 			el.disabled,
 			false,
@@ -258,6 +275,14 @@ export default spec('ui', a => {
 			el.value = 'test';
 			a.ok(el.value, 'test');
 		});
+
+		a.figure(
+			'TextArea',
+			`<cxl-field>
+			<cxl-label>Prefilled Text Area</cxl-label>
+			<cxl-textarea value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut"></cxl-textarea>
+			</cxl-field>`
+		);
 	});
 
 	a.test('cxl-option', a => {
@@ -311,7 +336,7 @@ export default spec('ui', a => {
 		a.test('should add options synchronously', a => {
 			const el = a.element('cxl-select') as SelectBox;
 			a.equal(el.children.length, 0);
-			a.ok(!el.options);
+			a.equal(el.options.size, 0);
 			el.appendChild(<Option>A</Option>);
 			a.equal(el.children.length, 1);
 			a.equal(el.options?.size, 1);
@@ -350,7 +375,7 @@ export default spec('ui', a => {
 		});
 
 		a.test(
-			'should set value to empty string if not found in options',
+			'should set selected to undefined if not found in options',
 			async a => {
 				a.dom.innerHTML = `<cxl-select value="b">
 				<cxl-option value="">A</cxl-option>
@@ -360,17 +385,11 @@ export default spec('ui', a => {
 				const select = a.dom.firstElementChild as SelectBox;
 				a.equal(select.selected?.value, 'b');
 				select.value = 'd';
-				a.equal(select.selected?.value, '');
-				a.equal(select.value, '');
+				a.equal(select.selected, undefined);
+				a.equal(select.value, 'd');
 				select.removeChild(select.firstElementChild as any);
 				a.equal(select.children.length, 2);
 				a.equal(select.options?.size, 2);
-				await of(true).raf();
-				a.ok(!select.selected);
-				a.equal(select.value, '');
-				select.value = 'f';
-				a.ok(!select.selected);
-				a.equal(select.value, '');
 			}
 		);
 
@@ -432,6 +451,21 @@ export default spec('ui', a => {
 			select.click();
 			a.equal(select.opened, true);
 		});
+
+		a.should('handle dynamic options', a => {
+			const rows = be(5);
+			const options = be([5, 10, 25, 50]);
+			const el = (
+				<SelectBox className="rows" value={rows}>
+					{each(options, op => (
+						<Option value={op}>{op.toString()}</Option>
+					))}
+				</SelectBox>
+			) as SelectBox;
+			a.dom.appendChild(el);
+			a.equal(el.value, 5);
+			a.ok(el.selected);
+		});
 	});
 
 	a.test('cxl-multiselect', a => {
@@ -467,7 +501,7 @@ export default spec('ui', a => {
 		a.test('should add options synchronously', a => {
 			const el = a.element('cxl-multiselect') as MultiSelect;
 			a.equal(el.children.length, 0);
-			a.ok(!el.options);
+			a.equal(el.options.size, 0);
 			el.appendChild(<Option>A</Option>);
 			a.equal(el.children.length, 1);
 			a.equal(el.options?.size, 1);
@@ -486,24 +520,6 @@ export default spec('ui', a => {
 			const el = a.element('cxl-multiselect') as MultiSelect;
 			a.equal(el.value.length, 0);
 		});
-
-		/*a.test('attribute value set', async (a: TestApi) => {
-			a.dom.innerHTML = `<cxl-multiselect value="b">
-				<cxl-option value="a">A</cxl-option>
-				<cxl-option value="b">B</cxl-option>
-				<cxl-option value="c">C</cxl-option>
-			</cxl-multiselect>`;
-			const select = a.dom.firstElementChild as MultiSelect;
-			a.equal(select.options?.size, 3);
-			a.equal(select.selected.has, 'b');
-			a.equal(select.value, 'b');
-			select.value = 'c';
-			a.equal(select.selected?.value, 'c');
-			a.equal(select.value, 'c');
-			await of(true).raf();
-			a.equal(select.selected?.value, 'c');
-			a.equal(select.value, 'c');
-		});*/
 
 		a.test(
 			'should set value to empty array if not found in options',
@@ -562,6 +578,47 @@ export default spec('ui', a => {
 			option1.click();
 			a.ok(!select.selected.has(option1));
 		});
+
+		a.should('display placeholder if no options are selected', async a => {
+			a.dom.innerHTML = `<cxl-multiselect placeholder="(Select)">
+				<cxl-option value="a">A</cxl-option>
+				<cxl-option value="b">B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+			</cxl-multiselect>`;
+			const select = a.dom.firstElementChild as MultiSelect;
+			await of(1).raf();
+			const placeholderEl = select.shadowRoot?.querySelector(
+				'.placeholder'
+			) as HTMLElement;
+			a.ok(placeholderEl?.innerText.includes('(Select)'));
+		});
+
+		a.should('handle preselected options', async a => {
+			a.dom.innerHTML = `<cxl-multiselect>
+				<cxl-option value="a" selected>A</cxl-option>
+				<cxl-option value="b" selected>B</cxl-option>
+				<cxl-option value="c">C</cxl-option>
+			</cxl-multiselect>`;
+			const select = a.dom.firstElementChild as MultiSelect;
+			a.equalValues(select.value, ['a', 'b']);
+			await of(1).raf();
+			const placeholderEl = select.shadowRoot?.querySelector(
+				'.placeholder'
+			) as HTMLElement;
+			a.ok(placeholderEl?.innerText.includes('A, B'));
+		});
+
+		a.figure(
+			'MultiSelect',
+			<Field>
+				<Label>Multiple Selection</Label>
+				<MultiSelect>
+					<Option selected>Option A</Option>
+					<Option selected>Option B</Option>
+					<Option>Option C</Option>
+				</MultiSelect>
+			</Field>
+		);
 	});
 
 	a.test('cxl-dialog-alert', a => {
@@ -613,7 +670,10 @@ export default spec('ui', a => {
 			) as Button;
 			button.click();
 			a.ok(el);
-			el.promise.then(done);
+			el.promise.then(val => {
+				a.equal(val, true);
+				done();
+			});
 		});
 		a.should('reject promise on cancel', a => {
 			const done = a.async();
@@ -623,7 +683,10 @@ export default spec('ui', a => {
 			) as Button;
 			button?.click();
 			a.ok(el);
-			el.promise.catch(done);
+			el.promise.then(val => {
+				a.equal(val, false);
+				done();
+			});
 		});
 		a.should('show dialog with the confirm function', async a => {
 			const promise = confirm(
@@ -676,124 +739,6 @@ export default spec('ui', a => {
 		a.ok(notify({ content: 'message', delay: 0 }).then(done));
 	});
 
-	a.test('navigationList', it => {
-		it.should('navigate by keyup and keydown', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			let eventIndex = 0;
-			let lastEl: Element;
-			const subs = navigationList(ul, 'li', 'li.selected').subscribe(
-				el => {
-					if (eventIndex === 0) a.equal(el, ul.firstElementChild);
-					else if (eventIndex === 1) a.equal(el, ul.children[1]);
-					else if (eventIndex === 2) a.equal(el, ul.children[2]);
-					else if (eventIndex === 3) a.equal(el, ul.children[2]);
-					else if (eventIndex === 4) a.equal(el, ul.children[1]);
-					else if (eventIndex === 5) a.equal(el, ul.children[0]);
-					else if (eventIndex === 6) a.equal(el, ul.children[0]);
-					else {
-						subs.unsubscribe();
-						done();
-					}
-					if (lastEl) lastEl.className = '';
-					if (el) {
-						el.className = 'selected';
-						lastEl = el;
-					}
-					eventIndex++;
-				}
-			);
-
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowDown');
-			triggerKeydown(ul, 'ArrowUp');
-			triggerKeydown(ul, 'ArrowUp');
-			triggerKeydown(ul, 'ArrowUp');
-			triggerKeydown(ul, 'ArrowUp');
-		});
-
-		it.should('select first element on keydown', a => {
-			a.dom.innerHTML = `<ul><li disabled>One</li><li>Two</li><li>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			const subs = navigationList(
-				ul,
-				'li:not([disabled])',
-				'li.selected'
-			).subscribe(el => {
-				a.equal(el, ul.children[1]);
-				subs.unsubscribe();
-				done();
-			});
-			triggerKeydown(ul, 'ArrowDown');
-		});
-
-		it.should('select last element on keyup that matches selector', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li disabled>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			const subs = navigationList(
-				ul,
-				'li:not([disabled])',
-				'li.selected'
-			).subscribe(el => {
-				a.equal(el, ul.children[1]);
-				subs.unsubscribe();
-				done();
-			});
-			triggerKeydown(ul, 'ArrowUp');
-		});
-
-		it.should('select last element on keyup', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li>Three</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			const subs = navigationList(ul, 'li', 'li.selected').subscribe(
-				el => {
-					a.equal(el, ul.children[2]);
-					subs.unsubscribe();
-					done();
-				}
-			);
-			triggerKeydown(ul, 'ArrowUp');
-		});
-
-		it.should('select by character key', a => {
-			a.dom.innerHTML = `<ul><li>One</li><li>Two</li><li disabled>Three</li><li>tour</li></ul>`;
-			const done = a.async();
-			const ul = a.dom.firstElementChild as HTMLUListElement;
-			let eventIndex = 0;
-			let lastEl: Element;
-			const subs = navigationList(
-				ul,
-				'li:not([disabled])',
-				'li.selected'
-			).subscribe(el => {
-				if (eventIndex === 0) a.equal(el, ul.children[1]);
-				else if (eventIndex === 1) a.equal(el, ul.children[3]);
-				else if (eventIndex === 2) a.equal(el, ul.children[1]);
-				else {
-					a.equal(el, ul.children[3]);
-					subs.unsubscribe();
-					done();
-				}
-				if (lastEl) lastEl.className = '';
-				if (el) {
-					el.className = 'selected';
-					lastEl = el;
-				}
-				eventIndex++;
-			});
-			triggerKeydown(ul, 't');
-			triggerKeydown(ul, 't');
-			triggerKeydown(ul, 't');
-			triggerKeydown(ul, 't');
-		});
-	});
-
 	a.test('cxl-slider', it => {
 		it.should('change value on keypress', a => {
 			const slider = (<Slider />) as Slider;
@@ -820,6 +765,8 @@ export default spec('ui', a => {
 			triggerKeydown(slider, 'ArrowRight');
 			a.equal(slider.value, 1);
 		});
+
+		it.figure('Slider', <Slider value={0.5} />);
 	});
 
 	a.test('cxl-chip', it => {
@@ -909,7 +856,7 @@ export default spec('ui', a => {
 	});
 
 	a.test('cxl-radio', it => {
-		it.should('', a => {
+		it.should('group radio buttons that share the same name', a => {
 			a.dom.innerHTML = `
 				<cxl-radio name="rad" value="1"></cxl-radio>
 				<cxl-radio checked name="rad" value="2"></cxl-radio>
@@ -943,6 +890,337 @@ export default spec('ui', a => {
 		});
 	});
 
+	a.test('cxl-appbar', it => {
+		it.figure(
+			'Appbar With Title',
+			`<cxl-appbar>
+				<cxl-navbar></cxl-navbar>
+				<cxl-appbar-title>Appbar Title</cxl-appbar-title>
+			 </cxl-appbar>`
+		);
+
+		it.figure(
+			'Appbar With Tabs',
+			`<cxl-appbar>
+				<cxl-navbar></cxl-navbar>
+				<cxl-appbar-title>Appbar with Tabs</cxl-appbar-title>
+				<cxl-tabs>
+					<cxl-tab selected>Tab 1</cxl-tab>
+					<cxl-tab>Tab 2</cxl-tab>
+					<cxl-tab>Tab 3</cxl-tab>
+				</cxl-tabs>
+			</cxl-appbar>`
+		);
+
+		it.figure(
+			'Extended Appbar',
+			`<cxl-appbar extended>
+  <cxl-appbar-title>Appbar Title</cxl-appbar-title>
+</cxl-appbar>`
+		);
+
+		it.figure(
+			'Appbar Contextual',
+			`
+	 <cxl-appbar contextual="test">
+	 <cxl-appbar-contextual name="test">Contextual Appbar</cxl-appbar-contextual>
+	 </cxl-appbar>
+		`
+		);
+	});
+
+	a.test('cxl-appbar-search', it => {
+		it.figure(
+			'AppbarSearch',
+			`
+ <cxl-appbar>
+ <cxl-appbar-title>Title</cxl-appbar-title>
+ <cxl-appbar-search></cxl-appbar-search>
+ </cxl-appbar>`
+		);
+	});
+
+	a.test('cxl-avatar', it => {
+		it.figure(
+			'Avatar Sizes',
+			`<cxl-avatar></cxl-avatar><cxl-avatar size="2"></cxl-avatar><cxl-avatar size="-1"></cxl-avatar>`
+		);
+		it.figure(
+			'Avatar Text',
+			`<cxl-avatar text="GB"></cxl-avatar><cxl-avatar text="GB" size="-1"></cxl-avatar><cxl-avatar text="GB" size="2"></cxl-avatar>`
+		);
+		it.figure(
+			'Avatar with Image',
+			`<cxl-avatar src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="></cxl-avatar>`
+		);
+	});
+
+	a.test('cxl-checkbox', it => {
+		it.test('[indeterminate] attribute set', a => {
+			a.dom.innerHTML = `<cxl-checkbox indeterminate></cxl-checkbox>`;
+			const c = a.dom.children[0] as Checkbox;
+			a.equal(c.value, undefined);
+			a.equal(c.indeterminate, true);
+		});
+
+		it.test('[indeterminate] action handling', a => {
+			a.dom.innerHTML = `<cxl-checkbox indeterminate></cxl-checkbox>`;
+			const c = a.dom.children[0] as Checkbox;
+			c.click();
+			a.equal(c.value, false);
+			a.equal(c.checked, false);
+			a.equal(c.indeterminate, false);
+			c.click();
+			a.equal(c.value, true);
+			a.equal(c.checked, true);
+			a.equal(c.indeterminate, false);
+		});
+	});
+
+	a.test('cxl-badge', a => {
+		a.figure(
+			'Badge Positioning',
+			`
+		<cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge>
+		<br/>
+		<cxl-button primary>Badge<cxl-badge secondary small></cxl-badge></cxl-button>
+		`
+		);
+	});
+
+	a.test('cxl-button', a => {
+		a.figure(
+			'Button Styles',
+			`<cxl-button primary>Primary</cxl-button><cxl-button secondary>Secondary</cxl-button><cxl-button disabled>Disabled</cxl-button><cxl-button flat>Flat Button</cxl-button><cxl-button outline>With Outline</cxl-button>`
+		);
+
+		a.figure(
+			'Button[disabled]',
+			<>
+				<Button disabled>Disabled</Button>
+				<Button primary disabled>
+					Primary Disabled
+				</Button>
+				<Button secondary disabled>
+					Secondary Disabled
+				</Button>
+			</>
+		);
+
+		a.figure(
+			'Button[flat]',
+			<>
+				<Button flat>Flat</Button>
+				<Button flat primary>
+					Primary Flat
+				</Button>
+				<Button flat secondary>
+					Secondary Flat
+				</Button>
+			</>
+		);
+
+		a.figure(
+			'Button[outline]',
+			<>
+				<Button outline>Outline</Button>
+				<Button outline primary>
+					Primary
+				</Button>
+				<Button outline secondary>
+					Secondary
+				</Button>
+			</>
+		);
+
+		a.figure(
+			'Button[size]',
+			<>
+				<Button size="small">Small</Button>
+				<Button size="big">Big</Button>
+				<Button size={1}>Medium</Button>
+			</>
+		);
+	});
+
+	a.test('cxl-checkbox', a => {
+		a.figure('Empty Checkbox', `<cxl-checkbox></cxl-checkbox>`);
+		a.figure(
+			'Checkbox with Content',
+			`<cxl-checkbox>Checkbox With Content</cxl-checkbox>`
+		);
+
+		a.figure(
+			'Checkbox States',
+			`<cxl-checkbox checked></cxl-checkbox>
+		<cxl-checkbox indeterminate></cxl-checkbox>`
+		);
+	});
+
+	a.test('cxl-chip', a => {
+		a.figure(
+			'Chip Styles',
+			`<cxl-chip>Chip</cxl-chip><cxl-chip secondary>Secondary</cxl-chip><cxl-chip primary>Primary</cxl-chip><cxl-chip small>Small</cxl-chip>`
+		);
+		a.figure(
+			'Chip[removable]',
+			`<cxl-chip removable>Chip</cxl-chip><cxl-chip secondary removable>Secondary</cxl-chip><cxl-chip primary removable>Primary</cxl-chip><cxl-chip small removable>Small</cxl-chip>`
+		);
+	});
+
+	a.test('cxl-field', a => {
+		a.figure(
+			'Filled Text Field',
+			<Field>
+				<Label>Label</Label>
+				<Input value="Input" />
+			</Field>
+		);
+
+		a.figure(
+			'Filled and Outlined Fields',
+			`
+		<cxl-field>
+			<cxl-label>Field Label</cxl-label>
+			<cxl-input value="Input Value"></cxl-input>
+			<cxl-field-help>Helper Text</cxl-field-help>
+		</cxl-field>
+		<cxl-field outline>
+			<cxl-label>Field Label</cxl-label>
+			<cxl-input value="Input Value"></cxl-input>
+			<cxl-field-help>Helper Text</cxl-field-help>
+		</cxl-field>
+		`
+		);
+
+		a.figure(
+			'Field States',
+			`<cxl-field-input label="Enabled"></cxl-field-input>
+		<cxl-field-input disabled label="Disabled"></cxl-field-input>
+		<cxl-field-input invalid touched label="Invalid"></cxl-field-input>`
+		);
+
+		a.figure(
+			'Field States outline',
+			`<br/><cxl-field-input outline label="Enabled"></cxl-field-input>
+		<br/><cxl-field-input outline disabled label="Disabled"></cxl-field-input>
+		<br/><cxl-field-input outline invalid touched label="Invalid"></cxl-field-input>`
+		);
+
+		a.figure(
+			'Dense Fields',
+			`
+		<cxl-field dense>
+			<cxl-label>Filled Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field><br/>
+		<cxl-field outline dense>
+			<cxl-label>Outlined Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field><br/>
+		<cxl-field dense floating>
+			<cxl-label>Filled Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field><br/>
+		<cxl-field outline dense floating>
+			<cxl-label>Outlined Text Field</cxl-label>
+			<cxl-input></cxl-input>
+		</cxl-field>
+		`
+		);
+	});
+
+	a.test('cxl-field-counter', it => {
+		it.figure(
+			'FieldCounter empty',
+			`<cxl-field><cxl-label>Input Label</cxl-label><cxl-input></cxl-input><cxl-field-counter max="100"></cxl-field-counter></cxl-field>
+	`
+		);
+		it.figure(
+			'FieldCounter with value',
+			`<cxl-field><cxl-label>Input Label</cxl-label><cxl-input value="Value"></cxl-input><cxl-field-counter max="100"></cxl-field-counter></cxl-field>
+	`
+		);
+	});
+
+	a.test('cxl-fieldset', it => {
+		it.figure(
+			'Fieldset',
+			`<br/><cxl-fieldset>
+	<cxl-label>Checkbox Fieldset</cxl-label>
+	<cxl-checkbox checked>Checkbox 1 Selected</cxl-checkbox>
+	<cxl-checkbox>Checkbox 2</cxl-checkbox>
+</cxl-fieldset>`
+		);
+
+		it.figure(
+			'Fieldset invalid',
+			`<br/><cxl-fieldset>
+	<cxl-label>Invalid Radio Group</cxl-label>
+	<cxl-radio invalid touched name="form-radio">Radio Option 1</cxl-radio>
+	<cxl-radio invalid touched name="form-radio">Radio Option 2</cxl-radio>
+	<cxl-radio invalid touched name="form-radio">Radio Option 3</cxl-radio>
+</cxl-fieldset>`
+		);
+	});
+
+	a.test('cxl-item', it => {
+		function Icon(p: { width?: number }) {
+			const el = (<span />) as HTMLElement;
+			const style = el.style;
+			style.display = 'inline-block';
+			style.width = style.height = (p.width || 24) + 'px';
+			style.backgroundColor = '#ccc';
+			return el;
+		}
+		it.figure('Item One Line', <Item>Single Line Item</Item>);
+		it.figure(
+			'Item One Line With Icon',
+			<Item>
+				<Icon /> Single Line Item Icon
+			</Item>
+		);
+		it.figure(
+			'Item One Line With Avatar',
+			<Item>
+				<Avatar /> Single Line Item Icon
+			</Item>
+		);
+		it.figure(
+			'Item One Line With Image',
+			<Item>
+				<Icon width={56} /> Single Line Item Icon
+			</Item>
+		);
+		it.figure(
+			'Item One Line With Checkbox',
+			<Item>
+				<Checkbox checked />
+				<C grow>Single Line Item</C>
+			</Item>
+		);
+		it.figure(
+			'Item One Line With Avatar and Checkbox',
+			<Item>
+				<Avatar />
+				<C grow>Single Line Item</C>
+				<Checkbox checked />
+			</Item>
+		);
+
+		it.figure(
+			'Item Two Line',
+			<Item>
+				<Avatar />
+				<C grow>
+					<T subtitle>Two Line Item</T>
+					<T subtitle2>Secondary Text</T>
+				</C>
+				<Icon />
+			</Item>
+		);
+	});
+
 	a.test('cxl-tabs', it => {
 		it.should('switch tabs when a child tab is selected', a => {
 			a.dom.innerHTML = `<cxl-tabs><cxl-tab>Tab1</cxl-tab><cxl-tab selected>Tab2</cxl-tab></cxl-tabs>`;
@@ -955,20 +1233,56 @@ export default spec('ui', a => {
 		});
 	});
 
-	a.test('ripple', a => {
-		let clickHandled = false;
+	a.test('cxl-list', a => {
+		a.figure(
+			'Single Line List',
+			<List>
+				<Item>
+					<Avatar /> One Line Item
+				</Item>
+				<Item>
+					<Avatar /> One Line Item
+				</Item>
+				<Item>
+					<Avatar /> One Line Item
+				</Item>
+			</List>
+		);
+	});
 
-		function ripple(el: HTMLElement) {
-			el.title = 'hello';
-			return on(el, 'click').tap(() => (clickHandled = true));
-		}
+	a.test('cxl-password', a => {
+		a.figure(
+			'PasswordInput',
+			<Field>
+				<Label>Password Input</Label>
+				<PasswordInput value="password" />
+			</Field>
+		);
+	});
 
-		connect(<Span $={ripple}>Container</Span>, (el: any) => {
-			a.dom.appendChild(el);
-			a.ok(el);
-			el.click();
-			a.equal(el.title, 'hello');
-			a.ok(clickHandled);
-		});
+	a.test('cxl-progress', a => {
+		a.figure(
+			'Progress',
+			`<cxl-progress value=0></cxl-progress>
+			<cxl-progress value=0.5></cxl-progress>
+			<cxl-progress value=1></cxl-progress>`
+		);
+	});
+
+	a.test('cxl-menu', a => {
+		a.figure(
+			'Menu',
+			`<cxl-menu>
+<cxl-item disabled>Option disabled</cxl-item>
+<cxl-item selected>Option Selected</cxl-item>
+<cxl-item>Option 2</cxl-item>
+<cxl-hr></cxl-hr>
+<cxl-item>Option 3</cxl-item>
+</cxl-menu><br/><br/>`
+		);
+	});
+
+	a.test('cxl-switch', it => {
+		it.figure('Switch', '<cxl-switch checked></cxl-switch>');
 	});
 });

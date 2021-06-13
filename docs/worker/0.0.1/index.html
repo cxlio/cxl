@@ -1,59 +1,58 @@
 <!DOCTYPE html>
 	<head><meta name="description" content="Documentation for @cxl/worker" /><script>window.docgen={"activeVersion":"0.0.1","userScripts":[],"versions":["0.0.1"]};</script><script src="runtime.bundle.min.js"></script></head>
 	<link rel="stylesheet" href="styles.css" />
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}cxl-router-item>cxl-badge{margin-right:0} cxl-grid>cxl-c{overflow-wrap:break-word}.see-source{text-decoration:none;float:right;color:var(--cxl-onSurface87)}cxl-t[code][subtitle]{font-weight:700;margin-bottom:16px}</style>
 	<cxl-application permanent><title>@cxl/worker</title><cxl-appbar>
-	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline style="margin-right:12px">@cxl/worker</cxl-t><small>0.0.1</small>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline>@cxl/worker</cxl-t>&nbsp;&nbsp;<small>0.0.1</small>
 	</cxl-c>
 		<cxl-hr></cxl-hr>
 		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
-		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index--WorkerManager.html"><cxl-badge style="margin-right:12px">C</cxl-badge>WorkerManager</cxl-router-item><cxl-router-item href="index-api.html#s33"><cxl-badge style="margin-right:12px">F</cxl-badge>compile</cxl-router-item>
+		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index--WorkerManager.html"><cxl-badge>C</cxl-badge>WorkerManager</cxl-router-item><cxl-router-item href="index-api.html#s33"><cxl-badge>F</cxl-badge>compile</cxl-router-item>
 		</cxl-navbar>
-	<cxl-appbar-title><a href="index.html" style="color:inherit;text-decoration:none">@cxl/worker</a></cxl-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-path="index--InternalMessage.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>InternalMessage&lt;T&gt;</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { InternalMessage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+	<cxl-router-appbar-title></cxl-router-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="InternalMessage" data-path="index--InternalMessage.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>InternalMessage&lt;T&gt;</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { InternalMessage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--InternalMessage.html#s11">id</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--InternalMessage.html#s13">payload</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--InternalMessage.html#s12">type</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s11"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>id: number</cxl-t>
+		<cxl-t code subtitle>id: number</cxl-t>
 		</cxl-c></cxl-card><a name="s13"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>payload: <a href="#s10">T</a></cxl-t>
+		<cxl-t code subtitle>payload: <a href="#s10">T</a></cxl-t>
 		</cxl-c></cxl-card><a name="s12"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>type: 'next' | 'error' | 'complete'</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="index--WorkerManager.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span>WorkerManager</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { WorkerManager } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Constructor
+		<cxl-t code subtitle>type: 'next' | 'error' | 'complete'</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="WorkerManager" data-path="index--WorkerManager.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span>WorkerManager</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { WorkerManager } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Constructor
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s22">constructor</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Getters
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s15">connected</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Methods
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s28">connect</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s29">disconnect</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s30">post</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s24">request</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s16">id</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s18">onMessage</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s21">refCount</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s17">subject</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s23">worker</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Constructor</cxl-t><a name="s22"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>constructor(worker: Worker): <cxl-a href="index--WorkerManager.html">WorkerManager</cxl-a></cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>worker: Worker</li></ul>
+		<cxl-t code subtitle>constructor(worker: Worker): <cxl-a href="index--WorkerManager.html">WorkerManager</cxl-a></cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>worker: Worker</cxl-t></li></ul>
 		</cxl-c></cxl-card><cxl-t h5>Getters</cxl-t><a name="s15"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>connected(): boolean</cxl-t>
+		<cxl-t code subtitle>connected(): boolean</cxl-t>
 		</cxl-c></cxl-card><cxl-t h5>Methods</cxl-t><a name="s28"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> connect(): void</cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> connect(): void</cxl-t>
 		</cxl-c></cxl-card><a name="s29"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> disconnect(): void</cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> disconnect(): void</cxl-t>
 		</cxl-c></cxl-card><a name="s30"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> post(id: number, payload: any): number</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>id: number</li><li>payload: any</li></ul>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> post(id: number, payload: any): number</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>id: number</cxl-t></li><li><cxl-t code inline>payload: any</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s24"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>request&lt;ResponseT, MessageT&gt;(payload: <a href="#s26">MessageT</a>): Observable&lt;<a href="#s25">ResponseT</a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>payload: <a href="#s26">MessageT</a></li></ul>
+		<cxl-t code subtitle>request&lt;ResponseT, MessageT&gt;(payload: <a href="#s26">MessageT</a>): Observable&lt;<a href="#s25">ResponseT</a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>payload: <a href="#s26">MessageT</a></cxl-t></li></ul>
 		</cxl-c></cxl-card><cxl-t h5>Properties</cxl-t><a name="s16"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> id: number = 0</cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> id: number = 0</cxl-t>
 		</cxl-c></cxl-card><a name="s18"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> onMessage: (ev: any) => void = <pre><code class="hljs">IS_NODE
-		? <span class="hljs-function">(<span class="hljs-params">ev: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">this</span>.subject.next(ev)
-		: <span class="hljs-function">(<span class="hljs-params">ev: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">this</span>.subject.next(ev.data)</code></pre></cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> onMessage: (ev: any) => void</cxl-t>
 		</cxl-c></cxl-card><a name="s21"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> refCount: number = 0</cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> refCount: number = 0</cxl-t>
 		</cxl-c></cxl-card><a name="s17"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle><cxl-chip small primary>private</cxl-chip> subject: Subject&lt;<cxl-a href="index--InternalMessage.html">InternalMessage</cxl-a>&lt;any&gt;&gt; = new Subject&lt;InternalMessage&lt;any>>()</cxl-t>
+		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> subject: Subject&lt;<cxl-a href="index--InternalMessage.html">InternalMessage</cxl-a>&lt;any&gt;, any&gt; = new Subject&lt;InternalMessage&lt;any>>()</cxl-t>
 		</cxl-c></cxl-card><a name="s23"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>worker: Worker</cxl-t>
-		</cxl-c></cxl-card></template><template  data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Classes
+		<cxl-t code subtitle>worker: Worker</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="index.ts" data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Classes
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html">WorkerManager</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Functions
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s33">compile</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s33"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t style="font-weight: 500; margin-bottom: 16px;" code subtitle>compile(workerFn: <cxl-a href="index-api.html#s5">WorkerFunction</cxl-a>): <cxl-a href="index--WorkerManager.html">WorkerManager</cxl-a></cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li>workerFn: <cxl-a href="index-api.html#s5">WorkerFunction</cxl-a></li></ul>
-		</cxl-c></cxl-card></template><template data-default="true" data-path="index.html"><cxl-t h2>@cxl/worker</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fworker"><img src="https://badge.fury.io/js/%40cxl%2Fworker.svg" alt="npm version"></a></p>
+		<cxl-t code subtitle>compile(workerFn: <cxl-a href="index-api.html#s5">WorkerFunction</cxl-a>): <cxl-a href="index--WorkerManager.html">WorkerManager</cxl-a></cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>workerFn: <cxl-a href="index-api.html#s5">WorkerFunction</cxl-a></cxl-t></li></ul>
+		</cxl-c></cxl-card></template><template data-default="true" data-title="Home" data-path="index.html"><cxl-t h2>@cxl/worker</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fworker"><img src="https://badge.fury.io/js/%40cxl%2Fworker.svg" alt="npm version"></a></p>
 <p>Web Worker library</p>
 <cxl-t h3>Project Details</cxl-t><ul>
 <li>Branch Version: <a href="https://npmjs.com/package/@cxl/worker/v/0.0.1">0.0.1</a></li>
 <li>License: GPL-3.0</li>
 <li>Documentation: <a href="https://cxlio.github.io/cxl/worker">Link</a></li>
+<li>Report Issues: <a href="https://github.com/cxlio/cxl/issues">Github</a></li>
 </ul>
 <cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/worker
 </code></pre></template></cxl-router></cxl-page></cxl-application>

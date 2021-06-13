@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/router"/>
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	PARAM_REGEX = /:([\w_$@]+)/g,
 	optionalParam = /\((.*?)\)/g,
@@ -7,7 +8,6 @@ const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 
 const routeSymbol = '@@cxlRoute';
 
-type Dictionary = Record<string, string>;
 type RouteArguments = { [key: string]: any };
 type RouteElement = Node;
 
@@ -44,6 +44,11 @@ export interface Strategy {
 	deserialize(): Url;
 }
 
+export const sys = {
+	location: window.location,
+	history: window.history,
+};
+
 function routeToRegExp(route: string): [RegExp, string[]] {
 	const names: string[] = [],
 		result = new RegExp(
@@ -60,6 +65,12 @@ function routeToRegExp(route: string): [RegExp, string[]] {
 		);
 
 	return [result, names];
+}
+
+export function normalize(path: string) {
+	if (path[0] === '/') path = path.slice(1);
+	if (path.endsWith('/')) path = path.slice(0, -1);
+	return path;
 }
 
 export function replaceParameters(
@@ -79,32 +90,27 @@ export function parseQueryParameters(query: string) {
 }
 
 class Fragment {
+	path: string;
 	regex: RegExp;
 	parameters: string[];
 
-	constructor(public path: string) {
-		if (path[0] === '/') path = path.slice(1);
-
+	constructor(path: string) {
+		this.path = path = normalize(path);
 		[this.regex, this.parameters] = routeToRegExp(path);
 	}
 
-	_extractQuery(frag: string, result: Dictionary) {
-		const pos = frag.indexOf('?'),
-			query = pos !== -1 ? frag.slice(pos + 1) : null;
-		let m;
-
-		while (query && (m = PARAM_QUERY_REGEX.exec(query)))
-			result[m[1]] = decodeURIComponent(m[2]);
-
-		return result;
+	_extractQuery(frag: string) {
+		const pos = frag.indexOf('?');
+		return pos === -1 ? {} : parseQueryParameters(frag.slice(pos + 1));
 	}
 
 	getArguments(fragment: string) {
-		const match = this.regex.exec(fragment),
-			params = match && match.slice(1),
-			result: Dictionary = {};
+		const match = this.regex.exec(fragment);
+		const params = match && match.slice(1);
 
 		if (!params) return;
+
+		const result = this._extractQuery(fragment);
 
 		params.forEach((param, i) => {
 			// Don't decode the search params.
@@ -118,7 +124,7 @@ class Fragment {
 			result[this.parameters[i]] = p;
 		});
 
-		return this._extractQuery(fragment, result);
+		return result;
 	}
 
 	test(url: string) {
@@ -181,13 +187,9 @@ export class RouteManager {
 		if (route.isDefault) this.defaultRoute = route;
 		this.routes.unshift(route);
 	}
-
-	reset() {
-		this.routes = [];
-	}
 }
 
-const URL_REGEX = /([^#]+)(?:#(.+))?/;
+const URL_REGEX = /([^#]*)(?:#(.+))?/;
 
 export function getElementRoute<T extends RouteElement>(
 	el: T
@@ -197,26 +199,27 @@ export function getElementRoute<T extends RouteElement>(
 
 export function parseUrl(url: string): Url {
 	const match = URL_REGEX.exec(url);
-	return { path: match?.[1] || '', hash: match?.[2] || '' };
+	return { path: normalize(match?.[1] || ''), hash: match?.[2] || '' };
 }
 
 export const QueryStrategy: Strategy = {
 	getHref(url: Url | string) {
 		url = typeof url === 'string' ? parseUrl(url) : url;
-		return `${url.path ? `?${url.path}` : ''}${
+		return `${url.path ? `?${url.path}` : '?'}${
 			url.hash ? `#${url.hash}` : ''
 		}`;
 	},
 
 	serialize(url) {
-		history.pushState({ url }, '', this.getHref(url));
+		if (url !== sys.history.state?.url)
+			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
 	deserialize() {
 		return (
-			history.state?.url || {
-				path: location.search.slice(1),
-				hash: location.hash.slice(1),
+			sys.history.state?.url || {
+				path: sys.location.search.slice(1),
+				hash: sys.location.hash.slice(1),
 			}
 		);
 	},
@@ -229,14 +232,15 @@ export const PathStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		history.pushState({ url }, '', this.getHref(url));
+		if (url !== sys.history.state?.url)
+			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
 	deserialize() {
 		return (
-			history.state?.url || {
-				path: location.pathname,
-				hash: location.hash.slice(1),
+			sys.history.state?.url || {
+				path: sys.location.pathname,
+				hash: sys.location.hash.slice(1),
 			}
 		);
 	},
@@ -249,12 +253,12 @@ export const HashStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		const href = this.getHref(url);
-		if (location.hash !== href) location.hash = href;
+		const href = HashStrategy.getHref(url);
+		if (sys.location.hash !== href) sys.location.hash = href;
 	},
 
 	deserialize() {
-		return parseUrl(location.hash.slice(1));
+		return parseUrl(sys.location.hash.slice(1));
 	},
 };
 
@@ -324,10 +328,6 @@ export class Router {
 		return result;
 	}
 
-	reset() {
-		this.routes.reset();
-	}
-
 	/**
 	 * Register a new route
 	 */
@@ -385,10 +385,22 @@ export class Router {
 		const current = this.state.url;
 		return !!Object.values(this.instances).find(el => {
 			const routeDef: Route<any> = (el as any)[routeSymbol];
-			return (
+			const currentArgs = this.state?.arguments;
+
+			if (
 				routeDef.path?.test(parsed.path) &&
 				(!parsed.hash || parsed.hash === current.hash)
-			);
+			) {
+				if (currentArgs) {
+					const args = routeDef.path.getArguments(parsed.path);
+
+					for (const i in args)
+						if (currentArgs[i] != args[i]) return false;
+				}
+
+				return true;
+			}
+			return false;
 		});
 	}
 }

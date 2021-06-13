@@ -1,0 +1,15 @@
+{
+	"name": "@cxl/blog",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/blog",
+	"description": "blog utilities",
+	"license": "Apache-2.0",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/blog && node ../tester --node"
+	},
+	"dependencies": {
+		"@cxl/build": "~0.1.0"
+	}
+}

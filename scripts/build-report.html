@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>@cxl - Build Report</title>
+		<script src="ui/index.bundle.min.js"></script>
+		<script src="ui-table/amd/index.min.js"></script>
+		<script src="ui-router/amd/index.min.js"></script>
+		<style>
+			.failure {
+				background-color: #ffcdd2;
+			}
+		</style>
+	</head>
+	<body>
+		<cxl-application>
+			<cxl-appbar>
+				<cxl-navbar>
+					<cxl-router-item href="">Home</cxl-router-item>
+					<cxl-router-item href="changelog"
+						>CHANGELOG</cxl-router-item
+					>
+				</cxl-navbar>
+				<cxl-router-appbar-title></cxl-router-appbar-title>
+			</cxl-appbar>
+			<cxl-content center>
+				<cxl-router-outlet></cxl-router-outlet>
+			</cxl-content>
+		</cxl-application>
+		<cxl-router>
+			<template data-path="" data-title="Build Report">$HOME$</template>
+			<template data-path="changelog" data-title="CHANGELOG"
+				>$CHANGELOG$</template
+			>
+			<template data-path="changelog/:module">
+				<pre id="changelog-output"></pre>
+				<script>
+					(() => {
+						const router = require('@cxl/ui-router').router;
+						const moduleName = router.state?.arguments.module;
+
+						fetch(`../${moduleName}/CHANGELOG.md`)
+							.then(res => res.text())
+							.then(src => {
+								document.getElementById(
+									'changelog-output'
+								).innerHTML = src;
+							});
+					})();
+				</script>
+			</template>
+		</cxl-router>
+	</body>
+</html>

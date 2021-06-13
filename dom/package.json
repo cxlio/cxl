@@ -6,11 +6,11 @@
 	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/dom && node ../tester"
+		"test": "npm run build && cd ../dist/dom && node ../tester --baselinePath=../../dom/spec"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"dependencies": {
-		"@cxl/rx": "~0.2.0"
-	},
-	"homepage": "https://cxlio.github.io/cxl/dom"
+	"homepage": "https://cxlio.github.io/cxl/dom",
+	"devDependencies": {
+		"@cxl/rx": "~0.5.0"
+	}
 }

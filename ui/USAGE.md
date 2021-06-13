@@ -2,7 +2,6 @@
 
 -   Lightweight and Fast.
 -   Modular Architecture.
--   Focus on Accessibility.
 -   No dependecies.
 -   Framework Agnostic.
 -   Flexible Theming.
@@ -19,21 +18,17 @@
 
 ### Quick Start
 
-This is all you need to get started. This example uses the CDN version of the library. We recommend installing the npm package if you need more customization options.
+This is all you need to get started. The default theme follows the [Material Design specification](https://material.io).
 
 ```html
 <!DOCTYPE html>
-<script src="https://coaxialhost.com/ui/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@cxl/ui"></script>
 <cxl-application>
-	<cxl-navbar><cxl-item>Home</cxl-item></cxl-navbar>
-	<cxl-appbar>Your Application Title</cxl-appbar>
+	<cxl-appbar>
+		<cxl-appbar-title>Application Title</cxl-appbar-title>
+	</cxl-appbar>
 	<cxl-content>
 		<cxl-t h1>Hello World</cxl-t>
 	</cxl-content>
 </cxl-application>
 ```
-
-### Support
-
--   Report any bugs or issues in our [Github Issues](https://github.com/cxlio/cxl/issues) page.
--   Follow our [twitter](https://twitter.com/cxlhq) account for news and updates.

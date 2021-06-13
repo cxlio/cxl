@@ -3,14 +3,14 @@
 	"version": "0.0.1",
 	"description": "Input validation library",
 	"license": "Apache-2.0",
-	"private": true,
+	"browser": "amd/index.min.js",
 	"scripts": {
 		"build": "node ../dist/build",
-		"test": "npm run build && cd ../dist/validation && node ../tester"
+		"test": "npm run build && cd ../dist/validation && node ../tester --baselinePath=../../validation/spec"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"dependencies": {
-		"@cxl/rx": "~0.2.0"
-	},
-	"homepage": "https://cxlio.github.io/cxl/validation"
+	"homepage": "https://cxlio.github.io/cxl/validation",
+	"devDependencies": {
+		"@cxl/rx": "~0.5.0"
+	}
 }

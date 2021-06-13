@@ -1,7 +1,6 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"bundledPackageName": "@cxl",
 		"outDir": "../dist/ui",
 		"outFile": "../dist/ui/index.bundle.js",
 		"rootDir": "..",
@@ -18,6 +17,6 @@
 		"../drag/index.ts",
 		"../router/index.ts"
 	],
-	"exclude": ["test.tsx"],
+	"exclude": ["test.tsx", "theme-dark.tsx"],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

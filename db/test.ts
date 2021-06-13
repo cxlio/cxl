@@ -1,5 +1,5 @@
-import * as firebase from 'firebase';
-import { suite, TestApi } from '@cxl/spec';
+import firebase from 'firebase';
+import { spec, TestApi } from '@cxl/spec';
 import { merge } from '@cxl/rx';
 import { collection, db } from './index.js';
 
@@ -11,7 +11,8 @@ interface Schema {
 	};
 }
 
-export default suite('db', test => {
+export default spec('db', suite => {
+	const test = suite.test.bind(suite);
 	const config = {
 		apiKey: 'AIzaSyAjD_mhMqwRcTRiJ8fYNJteERHdKJaPq-Y',
 		databaseURL: 'https://cxl-test.firebaseio.com',
@@ -35,9 +36,13 @@ export default suite('db', test => {
 		const ref = db<Schema>('fb').ref('test').ref('module');
 		let count = 0;
 		a.equal(ref.path, 'fb/test/module');
-		merge(ref, ref).subscribe(val => {
+		const subs = merge(ref, ref).subscribe(val => {
 			a.equal(val, 'fb');
-			if (++count === 2) done();
+			if (++count === 2) {
+				a.equal(count, 2);
+				done();
+				subs.unsubscribe();
+			}
 		});
 	});
 
@@ -88,5 +93,9 @@ export default suite('db', test => {
 			}
 			count++;
 		});
+	});
+
+	suite.afterAll(() => {
+		firebase.app().delete();
 	});
 });

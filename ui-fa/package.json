@@ -2,18 +2,18 @@
 	"name": "@cxl/ui-fa",
 	"version": "0.0.1",
 	"browser": "amd/index.min.js",
-	"dependencies": {
-		"@cxl/component": "~0.0.1",
-		"@cxl/css": "~0.0.1",
-		"@cxl/dom": "~0.0.1",
-		"@cxl/ui": "~3.0.0"
-	},
 	"description": "Font Awesome Icons Kit",
 	"scripts": {
-		"test": "npm run build && cd ../dist/ui-fa && node ../tester",
+		"test": "npm run build && cd ../dist/ui-fa && node ../tester --baselinePath=../../ui-fa/spec",
 		"build": "node ../dist/build"
 	},
 	"license": "GPL-3.0",
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"homepage": "https://cxlio.github.io/cxl/ui-fa"
+	"homepage": "https://cxlio.github.io/cxl/ui-fa",
+	"devDependencies": {
+		"@cxl/component": "~0.1.0",
+		"@cxl/css": "~0.0.1",
+		"@cxl/dom": "~0.0.1",
+		"@cxl/ui": "~3.1.0"
+	}
 }

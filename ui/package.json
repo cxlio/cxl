@@ -1,24 +1,22 @@
 {
 	"name": "@cxl/ui",
-	"version": "3.0.0",
+	"version": "3.1.0",
 	"description": "High-performance Web Components",
 	"license": "GPL-3.0",
 	"homepage": "https://cxlio.github.io/cxl/ui",
-	"browser": "amd/index.min.js",
+	"browser": "index.bundle.min.js",
 	"scripts": {
-		"build": "node build",
-		"build-icons": "node build-icons",
-		"test": "npm run build && cd ../dist/ui && node ../tester"
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/ui && node ../tester --baselinePath=../../ui/spec"
 	},
-	"dependencies": {
-		"@cxl/tsx": "~0.0.1",
-		"@cxl/component": "~0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"devDependencies": {
+		"@cxl/rx": "~0.5.0",
+		"@cxl/tsx": "~0.1.0",
+		"@cxl/component": "~0.1.0",
 		"@cxl/template": "~1.0.0",
 		"@cxl/css": "~0.0.1",
-		"@cxl/router": "~0.1.0",
 		"@cxl/dom": "~0.0.1",
-		"@cxl/drag": "~0.1.0",
-		"@cxl/rx": "~0.2.0"
-	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+		"@cxl/drag": "~0.1.0"
+	}
 }

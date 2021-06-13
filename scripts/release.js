@@ -40,14 +40,14 @@ async function release() {
 		throw new Error('Not a clean repository');
 	}
 
-	const masterCommit = await sh(`git rev-parse master`);
-	const log = (await sh(`git log --oneline ${masterCommit}..HEAD`)).split(
-		'\n'
-	);
+	const masterCommit = (await sh(`git rev-parse master`)).trim();
+	const log = (await sh(`git log --oneline ${masterCommit}..HEAD`))
+		.trim()
+		.split('\n');
 
 	if (log.length === 0) throw new Error('No changes detected');
 
-	const LOG_REGEX = /(\w+) (feat|fix|docs|style|refactor|test|chore|revert)(?:\((\w+)\))?: (.+)/;
+	const LOG_REGEX = /(\w+) (feat|fix|docs|style|refactor|test|chore|revert)(?:\(([\w-]+)\))?: (.+)/;
 	const files = { cxl: [] };
 
 	log.forEach(line => {

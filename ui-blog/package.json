@@ -1,0 +1,16 @@
+{
+	"name": "@cxl/ui-blog",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/ui-blog",
+	"browser": "amd/index.min.js",
+	"description": "Blog UI Components",
+	"license": "GPL-3.0",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/ui-blog && node ../tester --baselinePath=../../ui-blog/spec"
+	},
+	"devDependencies": {
+		"@cxl/ui": "~3.1.0"
+	}
+}

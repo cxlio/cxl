@@ -1,20 +1,25 @@
+///<amd-module name="@cxl/ui/dialog.js"/>
 import {
 	Attribute,
 	StyleAttribute,
 	Augment,
 	Component,
+	attributeChanged,
 	connect,
-	role,
 	get,
 } from '@cxl/component';
 import { css, padding, pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import { createElement, insert, on, onAction, trigger, remove } from '@cxl/dom';
+import { insert, on, onAction, trigger } from '@cxl/dom';
 import { merge } from '@cxl/rx';
-import { T, Button, Span } from './core.js';
+import { T, Span } from './core.js';
+import { Button } from './button.js';
+import { role } from '@cxl/template';
 
 /**
  * A backdrop appears behind all other surfaces in an app, displaying contextual and actionable content.
+ * @demo
+ * <cxl-backdrop></cxl-backdrop>
  */
 @Augment(
 	'cxl-backdrop',
@@ -25,11 +30,12 @@ import { T, Button, Span } from './core.js';
 			left: 0,
 			bottom: 0,
 			right: 0,
-			backgroundColor: 'elevation',
+			backgroundColor: 'shadow',
 			elevation: 5,
+			overflowY: 'auto',
 		},
 	}),
-	() => <slot></slot>
+	() => <slot />
 )
 export class Backdrop extends Component {}
 
@@ -59,10 +65,11 @@ export class Backdrop extends Component {}
 		},
 		'@small': {
 			content: {
-				elevation: 12,
+				elevation: 5,
 				translateY: pct(-50),
 				top: pct(50),
 				bottom: 'auto',
+				maxHeight: pct(85),
 				width: pct(80),
 				marginLeft: 'auto',
 				marginRight: 'auto',
@@ -141,10 +148,10 @@ export class DialogAlert extends Component {
 				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={el => onAction(el).tap(() => $.reject())}>
+				<Button flat $={el => onAction(el).tap(() => $.resolve(false))}>
 					{get($, 'cancel-text')}
 				</Button>
-				<Button flat $={el => onAction(el).tap(() => $.resolve())}>
+				<Button flat $={el => onAction(el).tap(() => $.resolve(true))}>
 					{get($, 'action')}
 				</Button>
 			</div>
@@ -152,8 +159,7 @@ export class DialogAlert extends Component {
 	)
 )
 export class DialogConfirm extends Component {
-	resolve!: () => void;
-	reject!: () => void;
+	resolve!: (val: boolean) => void;
 
 	@Attribute()
 	'cancel-text' = 'Cancel';
@@ -167,9 +173,8 @@ export class DialogConfirm extends Component {
 	@Attribute()
 	action = 'Ok';
 
-	readonly promise = new Promise<void>((resolve, reject) => {
+	readonly promise = new Promise<boolean>(resolve => {
 		this.resolve = resolve;
-		this.reject = reject;
 	});
 }
 
@@ -187,6 +192,15 @@ export class DialogConfirm extends Component {
 @Augment<Drawer>(
 	'cxl-drawer',
 	css({
+		'drawer::-webkit-scrollbar': {
+			width: 8,
+		},
+		'drawer::-webkit-scrollbar-track': {
+			backgroundColor: 'transparent',
+		},
+		'drawer::-webkit-scrollbar-thumb': {
+			backgroundColor: 'divider',
+		},
 		drawer: {
 			backgroundColor: 'surface',
 			position: 'absolute',
@@ -253,7 +267,7 @@ export class DialogConfirm extends Component {
 							() => (host.visible = false)
 						),
 						on(el, 'click').tap(ev => ev.stopPropagation()),
-						get(host, 'visible')
+						attributeChanged(host, 'visible')
 							.raf()
 							.tap(visible => {
 								if (!visible) el.scrollTo(0, 0);
@@ -288,6 +302,7 @@ export class Drawer extends Component {
 	css({
 		$: {
 			display: 'block',
+			textAlign: 'center',
 			opacity: 0,
 			scaleX: 0.5,
 			scaleY: 0.5,
@@ -337,7 +352,7 @@ export class SnackbarContainer extends Component {
 		this.appendChild(next);
 
 		setTimeout(() => {
-			remove(next);
+			next.remove();
 			this.queue.shift();
 			resolve();
 
@@ -368,15 +383,17 @@ export function alert(
 			? { message: optionsOrMessage }
 			: optionsOrMessage;
 
-	const modal = createElement(DialogAlert, {
-		'title-text': options.titleText || '',
-		message: options.message,
-		action: options.actionText || DialogAlert.prototype.action,
-	});
+	const modal = (
+		<DialogAlert
+			title-text={options.titleText || ''}
+			message={options.message}
+			action={options.actionText || DialogAlert.prototype.action}
+		/>
+	) as DialogAlert;
 
 	container.appendChild(modal);
 
-	return modal.promise.then(() => remove(modal));
+	return modal.promise.then(() => modal.remove());
 }
 
 /**
@@ -388,28 +405,28 @@ export function confirm(
 ) {
 	if (typeof options === 'string') options = { message: options };
 
-	const modal = createElement(DialogConfirm, options);
-
+	const modal = (<DialogConfirm />) as DialogConfirm;
+	Object.assign(modal, options);
 	container.appendChild(modal);
 
-	return modal.promise;
+	return modal.promise.then(val => (modal.remove(), val));
 }
 
 let snackbarContainer: SnackbarContainer;
 
 export function notify(
-	options: string | (Partial<Snackbar> & { content: string }),
+	options: string | { delay?: number; content: string | Node },
 	bar = snackbarContainer
 ) {
 	if (!bar) {
-		bar = snackbarContainer = createElement(SnackbarContainer);
+		bar = snackbarContainer = (<SnackbarContainer />) as SnackbarContainer;
 		document.body.appendChild(bar);
 	}
 
 	if (typeof options === 'string') options = { content: options };
 
-	const snackbar = createElement(Snackbar, options);
-
+	const snackbar = (<Snackbar />) as Snackbar;
+	if (options.delay) snackbar.delay = options.delay;
 	if (options.content) insert(snackbar, options.content);
 
 	return bar.notify(snackbar);

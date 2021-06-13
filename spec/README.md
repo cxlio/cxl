@@ -6,9 +6,10 @@ Testing Library
 
 ## Project Details
 
--   Branch Version: [0.0.2](https://npmjs.com/package/@cxl/spec/v/0.0.2)
+-   Branch Version: [0.1.0](https://npmjs.com/package/@cxl/spec/v/0.1.0)
 -   License: Apache-2.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/spec)
+-   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
 
 ## Installation
 

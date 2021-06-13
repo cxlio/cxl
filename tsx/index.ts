@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/tsx"/>
 import { Observable } from '@cxl/rx';
 
 /* eslint @typescript-eslint/no-namespace: 'off' */
@@ -17,7 +18,12 @@ declare global {
 				[P in keyof HTMLElementTagNameMap]: NativeType<
 					HTMLElementTagNameMap[P]
 				>;
-			};
+			}; /*&
+				{
+					[P in keyof SVGElementTagNameMap]: NativeType<
+						SVGElementTagNameMap[P]
+					>;
+				};
 			/*	type IntrinsicClassAttributes<T> = {
 				[K in keyof Omit<T, 'children'>]?:
 					| T[K]
@@ -45,7 +51,6 @@ export type NativeChildren = NativeChild | NativeChild[];
 export type NativeType<T> = {
 	[K in keyof Omit<T, 'children'>]?: T[K];
 } & {
-	//	$?: (el: T) => void;
 	children?: NativeChildren;
 };
 
@@ -82,7 +87,7 @@ export function renderChildren(
 	children: Children,
 	appendTo: Node = host
 ) {
-	if (!children) return;
+	if (children === undefined || children === null) return;
 
 	if (Array.isArray(children))
 		for (const child of children) renderChildren(host, child, appendTo);
@@ -133,6 +138,10 @@ interface ComponentConstructor<T extends Bindable> {
 	create(): T;
 }
 
+/*function isSvg(tag: string) {
+	return tag === 'svg' || tag === 'path';
+}*/
+
 export function dom<T extends Bindable>(
 	elementType: ComponentConstructor<T>,
 	attributes?: AttributeType<T>,
@@ -165,6 +174,12 @@ export function dom(
 		return renderElement(elementType.create(), attributes, children);
 	if (!elementType.apply)
 		return renderNative(
+			/*isSvg(elementType)
+				? document.createElementNS(
+						'http://www.w3.org/2000/svg',
+						elementType
+				  )
+				: */
 			document.createElement(elementType),
 			attributes,
 			children

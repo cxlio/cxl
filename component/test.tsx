@@ -4,15 +4,76 @@ import {
 	Component,
 	Slot,
 	StyleAttribute,
-	bind,
+	connect,
 	get,
+	getRegisteredComponents,
+	update,
 	registerComponent,
 } from './index';
 import { dom } from '@cxl/tsx';
-import { be, of, tap } from '@cxl/rx';
+import { be, observable, of, tap } from '@cxl/rx';
+import { onChildrenMutation } from '@cxl/dom';
 import { spec } from '@cxl/spec';
 
 export default spec('component', a => {
+	a.test('Component', it => {
+		it.should('prioritize internal bindings', a => {
+			let order = 0;
+			const id = 'cxl-test' + a.id;
+			@Augment(
+				id,
+				() => observable(() => a.equal(order++, 0)),
+				() => observable(() => a.equal(order++, 1))
+			)
+			class Test extends Component {}
+
+			const el = (
+				<Test $={observable(() => a.equal(order++, 2))} />
+			) as Test;
+			el.bind(observable(() => a.equal(order++, 3)));
+			a.dom.appendChild(el);
+			a.equal((el as any).$$bindings.bindings.length, 4);
+			a.equal((el as any).$$bindings.subscriptions.length, 4);
+
+			order = 0;
+
+			const el2 = (
+				<Test $={observable(() => a.equal(order++, 2))} />
+			) as Test;
+			el2.bind(observable(() => a.equal(order++, 3)));
+			a.dom.appendChild(el2);
+			a.equal((el2 as any).$$bindings.bindings.length, 4);
+			a.equal((el2 as any).$$bindings.subscriptions.length, 4);
+		});
+	});
+
+	a.test('Component#Slot', it => {
+		it.should('return a new slot element', a => {
+			const done = a.async();
+			const id = 'cxl-test' + a.id;
+			@Augment(id)
+			class Test extends Component {}
+			const el = (<Test />) as Test;
+			const slot = (
+				<el.Slot selector="div"></el.Slot>
+			) as HTMLSlotElement;
+			const shadow = (<el.Shadow>{slot}</el.Shadow>) as Test;
+			a.equal(shadow, el);
+			a.equal(el.shadowRoot?.children[0], slot);
+
+			el.bind(
+				onChildrenMutation(el).tap(() => {
+					a.equal(div.slot, slot.name);
+					done();
+				})
+			);
+
+			a.dom.appendChild(el);
+			const div = (<div />) as HTMLDivElement;
+			el.appendChild(div);
+		});
+	});
+
 	a.test('Component - empty', a => {
 		class TestComponent extends Component {
 			static tagName = 'div';
@@ -72,14 +133,14 @@ export default spec('component', a => {
 		a.ok(el instanceof HTMLSlotElement);
 	});
 
-	a.test('bind()', a => {
+	a.test('Augment - bind', a => {
 		const id = 'cxl-test' + a.id;
 		function bindTest(node: Test) {
 			a.equal(node.tagName, id.toUpperCase());
 			return of('hello').pipe(tap(val => (node.title = val)));
 		}
 
-		@Augment(bind(bindTest))
+		@Augment(bindTest)
 		class Test extends Component {
 			static tagName = id;
 		}
@@ -350,6 +411,59 @@ export default spec('component', a => {
 			a.equal(el.attr, 'two');
 			a.equal(el.$attr, 'two');
 			a.equal(event.value, 'two');
+		});
+	});
+
+	a.test('connect', it => {
+		it.should('emit when component is connected', a => {
+			const id = `cxl-test${a.id}`;
+			const done = a.async();
+			let i = 0;
+
+			@Augment(
+				connect($ => {
+					a.equal($.tagName, id.toUpperCase());
+					if (i++ === 1) done();
+				})
+			)
+			class Test extends Component {
+				static tagName = id;
+			}
+			const el = <Test />;
+			a.dom.appendChild(el);
+			a.dom.removeChild(el);
+			a.dom.appendChild(el);
+		});
+	});
+
+	a.test('update', it => {
+		it.should('emit on connect and when an attribute changes', a => {
+			const id = `cxl-test${a.id}`;
+			const done = a.async();
+			let i = 0;
+
+			@Augment(
+				update($ => {
+					a.equal($.tagName, id.toUpperCase());
+					if (i++ === 1) done();
+				})
+			)
+			class Test extends Component {
+				static tagName = id;
+				@Attribute()
+				hello = 'world';
+			}
+			const el = (<Test />) as Test;
+			a.dom.appendChild(el);
+			el.hello = 'hello';
+		});
+	});
+
+	a.test('getRegisteredComponents', it => {
+		it.should('return registered components', a => {
+			const components = getRegisteredComponents();
+			a.ok(components);
+			a.ok(components['cxl-span']);
 		});
 	});
 });
