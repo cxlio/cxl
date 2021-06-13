@@ -605,16 +605,15 @@ function getCxlDecorator(node: ts.Declaration, name: string) {
 			deco =>
 				tsLocal.isCallExpression(deco.expression) &&
 				tsLocal.isIdentifier(deco.expression.expression) &&
-				deco.expression.expression.escapedText === name
+				(deco.expression.expression.escapedText as string).endsWith(
+					name
+				)
 		)
 	);
 }
 
 function isCxlAttribute(node: ts.Declaration): boolean {
-	return !!(
-		getCxlDecorator(node, 'Attribute') ||
-		getCxlDecorator(node, 'StyleAttribute')
-	);
+	return !!getCxlDecorator(node, 'Attribute');
 }
 
 function getCxlRole(node: ts.CallExpression): string {
