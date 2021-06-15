@@ -205,13 +205,14 @@ export function parseUrl(url: string): Url {
 export const QueryStrategy: Strategy = {
 	getHref(url: Url | string) {
 		url = typeof url === 'string' ? parseUrl(url) : url;
-		return `${url.path ? `?${url.path}` : '?'}${
+		return `${url.path ? `?${url.path}` : ''}${
 			url.hash ? `#${url.hash}` : ''
 		}`;
 	},
 
 	serialize(url) {
-		if (url !== sys.history.state?.url)
+		const oldUrl = sys.history.state?.url;
+		if (!oldUrl || url.hash !== oldUrl.hash || url.path !== oldUrl.path)
 			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
@@ -232,7 +233,8 @@ export const PathStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		if (url !== sys.history.state?.url)
+		const oldUrl = sys.history.state?.url;
+		if (!oldUrl || url.hash !== oldUrl.hash || url.path !== oldUrl.path)
 			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
