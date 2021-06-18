@@ -1,0 +1,13 @@
+{
+	"name": "@cxl/i18n",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/i18n",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/i18n && node ../tester --node"
+	},
+	"dependencies": {},
+	"description": "Internationalization tools",
+	"license": "GPL-3.0"
+}
