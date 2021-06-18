@@ -1,0 +1,17 @@
+{
+	"name": "@cxl/ui-image",
+	"version": "0.0.1",
+	"browser": "amd/index.min.js",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/ui-image",
+	"license": "GPL-3.0",
+	"description": "Image Tools",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/ui-image && node ../tester --baselinePath=../../ui-image/spec"
+	},
+	"devDependencies": {
+		"@cxl/tsx": "~0.1.0",
+		"@cxl/ui": "~3.1.0"
+	}
+}

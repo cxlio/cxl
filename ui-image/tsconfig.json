@@ -1,0 +1,8 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-image"
+	},
+	"files": ["index.tsx"],
+	"references": [{ "path": "../tsx" }, { "path": "../ui" }]
+}
