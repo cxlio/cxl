@@ -1,0 +1,21 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/ui-carousel/amd"
+	},
+	"files": [
+		"index.tsx"
+	],
+	"references": [
+		{
+			"path": "../tsx/tsconfig.amd.json"
+		},
+		{
+			"path": "../ui/tsconfig.amd.json"
+		},
+		{
+			"path": "../tsx-svg/tsconfig.amd.json"
+		}
+	]
+}

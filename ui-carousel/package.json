@@ -1,0 +1,18 @@
+{
+	"name": "@cxl/ui-carousel",
+	"version": "0.0.1",
+	"browser": "amd/index.min.js",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/ui-carousel",
+	"license": "GPL-3.0",
+	"description": "Carousel Components",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/ui-carousel && node ../tester --baselinePath=../../ui-carousel/spec"
+	},
+	"devDependencies": {
+		"@cxl/tsx": "~0.1.0",
+		"@cxl/ui": "~3.1.0",
+		"@cxl/tsx-svg": "~0.0.1"
+	}
+}

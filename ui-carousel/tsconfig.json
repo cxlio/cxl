@@ -1,0 +1,12 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/ui-carousel"
+	},
+	"files": ["index.tsx"],
+	"references": [
+		{ "path": "../tsx" },
+		{ "path": "../ui" },
+		{ "path": "../tsx-svg" }
+	]
+}
