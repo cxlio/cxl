@@ -7,6 +7,7 @@ import {
 	be,
 	concat,
 	defer,
+	from,
 	of,
 	merge,
 } from '@cxl/rx';
@@ -79,6 +80,10 @@ export function onLoad() {
 					.first()
 					.map(() => true)
 	);
+}
+
+export function onFontsReady(): Observable<void> {
+	return from((document as any).fonts.ready);
 }
 
 export function getShadow(el: Element) {
@@ -256,12 +261,16 @@ export function onHistoryChange() {
 		const old = history.pushState;
 		history.pushState = function (...args: any) {
 			const result = old.apply(this, args);
+			if (history.state) history.state.lastAction = 'push';
 			pushSubject.next(history.state);
 			return result;
 		};
 	}
 	return merge(
-		on(window, 'popstate').map(() => history.state),
+		on(window, 'popstate').map(() => {
+			if (history.state) history.state.lastAction = 'pop';
+			return history.state;
+		}),
 		pushSubject
 	);
 }
