@@ -7,7 +7,14 @@ import {
 	StyleAttribute,
 	get,
 } from '@cxl/component';
-import { on, onAction, onChildrenMutation, onLoad, trigger } from '@cxl/dom';
+import {
+	on,
+	onAction,
+	onChildrenMutation,
+	onFontsReady,
+	onResize,
+	trigger,
+} from '@cxl/dom';
 import {
 	StateStyles,
 	focusable,
@@ -324,21 +331,22 @@ export class Tab extends Component {
 	host => (
 		<Span
 			className="selected"
-			$={el =>
-				onLoad().switchMap(() =>
-					merge(get(host, 'selected'), on(window, 'resize')).tap(
-						() => {
-							const sel = host.selected;
-							if (!sel) return (el.style.transform = 'scaleX(0)');
-							// Add delay so styles finish rendering...
-							requestAnimationFrame(() => {
-								const scaleX = sel.clientWidth / 100;
-								el.style.transform = `translate(${sel.offsetLeft}px, 0) scaleX(${scaleX})`;
-								el.style.display = 'block';
-							});
-						}
-					)
-				)
+			$={
+				el =>
+					// onLoad().switchMap(() =>
+					merge(
+						onChildrenMutation(host),
+						onFontsReady(),
+						get(host, 'selected'),
+						onResize(el)
+					).raf(() => {
+						const sel = host.selected;
+						if (!sel) return (el.style.transform = 'scaleX(0)');
+						const scaleX = sel.clientWidth / 100;
+						el.style.transform = `translate(${sel.offsetLeft}px, 0) scaleX(${scaleX})`;
+						el.style.display = 'block';
+					})
+				// )
 			}
 		/>
 	)
