@@ -38,6 +38,7 @@ export interface StrictStyleDefinition {
 	backgroundColor: Color;
 	backgroundSize: 'cover' | 'contain';
 	backgroundPosition: 'center';
+	backgroundRepeat: 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y';
 	borderBottom: Length;
 	borderLeft: Length;
 	borderRight: Length;
@@ -89,6 +90,7 @@ export interface StrictStyleDefinition {
 	filter: string;
 	flexGrow: number;
 	flexShrink: number;
+	flexBasis: Length;
 	flexDirection: string;
 	justifyContent: string;
 	pointerEvents: string;
