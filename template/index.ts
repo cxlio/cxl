@@ -311,7 +311,7 @@ export function render<T>(
 
 export function each<T>(
 	source: Observable<Iterable<T>>,
-	renderFn: (item: T) => Node,
+	renderFn: (item: T, index: number) => Node,
 	empty?: () => Node
 ) {
 	const marker = new Marker();
@@ -322,7 +322,7 @@ export function each<T>(
 				marker.empty();
 				let len = 0;
 				for (const item of arr) {
-					marker.insert(renderFn(item));
+					marker.insert(renderFn(item, len));
 					len++;
 				}
 				if (empty && len === 0) marker.insert(empty());
