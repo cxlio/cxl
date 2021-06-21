@@ -91,7 +91,7 @@ export function routerOutlet(host: HTMLElement) {
 
 		if (url.hash)
 			host.querySelector(`a[name="${url.hash}"]`)?.scrollIntoView();
-		else if (host.parentElement)
+		else if (host.parentElement && history.state?.lastAction !== 'pop')
 			requestAnimationFrame(() => host.parentElement?.scrollTo(0, 0));
 	});
 }
