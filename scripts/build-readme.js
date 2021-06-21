@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const cp = require('child_process');
+const { sh } = require('../dist/build');
 
 const HEADER = `# cxl
 
@@ -71,6 +72,12 @@ async function renderPackage(dir) {
 
 	if (!pkg) return '';
 
+	console.log(`Building docs for ${dir}`);
+	await sh(`node ../dist/docgen --clean -o ../docs/${dir} --summary`, {
+		cwd: dir,
+		stdio: 'ignore',
+	});
+
 	const latestVersion = await getPublishedVersion(pkg.name);
 	const version =
 		`[${pkg.version}](${npmLink(pkg.name, pkg.version)})` +
@@ -81,9 +88,9 @@ async function renderPackage(dir) {
 			  )}))`
 			: '');
 
-	return `| ${pkg.name}        | ${version} | ${pkg.license} | ${
-		pkg.description
-	}       | ${
+	return `| ${pkg.name.padEnd(20)} | ${version} | ${pkg.license.padEnd(
+		10
+	)} | ${pkg.description} | ${
 		pkg.homepage ? `[Docs](${pkg.homepage}/${pkg.version})` : ''
 	} |\n`;
 }
@@ -95,7 +102,11 @@ function render(rows) {
 
 module.exports = fs
 	.readdir('.')
-	.then(dirs => Promise.all(dirs.map(renderPackage)))
+	.then(async dirs => {
+		const result = [];
+		for (const dir of dirs) result.push(await renderPackage(dir));
+		return result;
+	})
 	.then(render)
 	.catch(e => {
 		console.error(e);

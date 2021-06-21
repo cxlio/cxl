@@ -3,7 +3,6 @@ const path = require('path').posix;
 const cp = require('child_process');
 
 cp.execSync('npm run build --prefix build');
-cp.execSync('npm run build --prefix tester');
 
 const { sh } = require('../dist/build');
 const { readJson } = require('../dist/server');
@@ -11,13 +10,20 @@ const stats = {
 	packages: [],
 };
 
+async function getScriptSize(dir, pkg) {
+	const main = pkg.browser || pkg.main || 'index.js';
+	const scriptPath = `dist/${dir}/${main}`;
+	const stat = await fs.stat(scriptPath);
+	return `${main}: ${stat.size}`;
+}
+
 async function build(dir) {
 	const pkg = await readJson(path.join(dir, 'package.json'));
 
 	if (!pkg) return;
 
 	const cmd = !pkg.scripts?.package
-		? `npm test && npm run build docs package`
+		? `npm test && npm run build package`
 		: `npm run package`;
 
 	console.log(`Building ${pkg.name}`);
@@ -25,28 +31,33 @@ async function build(dir) {
 	const start = Date.now();
 	await sh(cmd, { cwd: dir, stdio: 'ignore' });
 	const buildTime = Date.now() - start;
-	const testReport = await readJson(
-		path.join('dist', dir, 'test-report.json')
-	);
+	const [tsconfig, testReport, mainScriptSize] = await Promise.all([
+		readJson(path.join('dist', dir, 'test-report.json')),
+		readJson(`${dir}/tsconfig.json`),
+		getScriptSize(dir, pkg),
+	]);
 
 	stats.packages.push({
 		dir,
 		name: pkg.name,
 		package: pkg,
+		tsconfig,
 		testReport,
 		buildTime,
+		stats: {
+			mainScriptSize,
+		},
 	});
 }
 
 module.exports = fs.readdir('.').then(async all => {
 	const start = Date.now();
 
-	await build('docgen');
 	await build('tester');
 
 	for (const dir of all) {
 		try {
-			if (dir !== 'docgen' && dir !== 'tester') await build(dir);
+			if (dir !== 'tester') await build(dir);
 		} catch (e) {
 			console.error(`Failed to build: ${dir}`);
 			console.error(e);

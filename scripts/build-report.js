@@ -33,7 +33,6 @@ function parseNpmPack(output) {
 		.replace(/npm notice /g, '')
 		.split('\n');
 	const packageSize = /package size:\s*([\d.]+)/;
-	console.log(files);
 }
 
 function getTsconfig(dir) {
@@ -50,11 +49,12 @@ async function getScriptSize(dir, pkg) {
 	const main = pkg.browser || pkg.main || 'index.js';
 	const scriptPath = `dist/${dir}/${main}`;
 	const stat = await fs.stat(scriptPath);
-	return `${main}: ${stat.size}`;
+	return stat.size;
 }
 
 async function build() {
-	const stats = await readJson('dist/stats.json');
+	await sh('cp scripts/build-report.html dist/index.html');
+	/*	const stats = await readJson('dist/stats.json');
 	let output = '';
 
 	for (const pkg of stats.packages) {
@@ -82,7 +82,8 @@ async function build() {
 				<cxl-td>${pkg.buildTime}</cxl-td>
 				<cxl-td><a href="${dir}/test-report.html">${coverage} %</a></cxl-td>
 			</cxl-tr>`;
-		if (success) console.log(`Package ${pkg.name} ready to publish`);
+		if (success && npmVersion !== pkg.package.version)
+			console.log(`Package ${pkg.name} ready to publish`);
 	}
 	await writeIndex(`
 <cxl-table>
@@ -97,6 +98,7 @@ async function build() {
 	</cxl-tr>
 	${output}
 </cxl-table>`);
+*/
 }
 
 build();
