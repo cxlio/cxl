@@ -5,6 +5,7 @@ const cp = require('child_process');
 cp.execSync('npm run build --prefix build');
 
 const { sh } = require('../dist/build');
+const { checkNpms } = require('../dist/build/npm');
 const { readJson } = require('../dist/server');
 const stats = {
 	packages: [],
@@ -31,10 +32,11 @@ async function build(dir) {
 	const start = Date.now();
 	await sh(cmd, { cwd: dir, stdio: 'ignore' });
 	const buildTime = Date.now() - start;
-	const [tsconfig, testReport, mainScriptSize] = await Promise.all([
-		readJson(path.join('dist', dir, 'test-report.json')),
+	const [tsconfig, testReport, mainScriptSize, npms] = await Promise.all([
 		readJson(`${dir}/tsconfig.json`),
+		readJson(path.join('dist', dir, 'test-report.json')),
 		getScriptSize(dir, pkg),
+		checkNpms(pkg.name),
 	]);
 
 	stats.packages.push({
@@ -44,6 +46,7 @@ async function build(dir) {
 		tsconfig,
 		testReport,
 		buildTime,
+		npms,
 		stats: {
 			mainScriptSize,
 		},

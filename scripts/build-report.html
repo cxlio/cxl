@@ -44,12 +44,8 @@
 			const table = document.getElementById('build-table');
 			const stats = await get('stats.json');
 
-			function getPublishedVersion(name) {
-				return get(
-					`https://api.npms.io/v2/package/${name.replace('/', '%2f')}`
-				)
-					.catchError(() => of({}))
-					.map(info => info?.collected?.metadata.version);
+			function getPublishedVersion(pkg) {
+				return pkg.npms?.collected?.metadata?.version;
 			}
 
 			async function getTotalCoverage(dir, coverage) {
@@ -71,7 +67,7 @@
 			for (const pkg of stats.packages) {
 				const dir = /\/(.+)/.exec(pkg.name)[1];
 				const [npmVersion, coverage] = await Promise.all([
-					'', //pkg.private ? '' : getPublishedVersion(pkg.name),
+					pkg.private ? '' : getPublishedVersion(pkg),
 					getTotalCoverage(dir, pkg.testReport.coverage),
 				]);
 				const size = pkg.stats?.mainScriptSize || 0;
