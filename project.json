@@ -124,6 +124,14 @@
 				"files": ["ui-user/*"],
 				"tasks": "npm run build --prefix ui-user"
 			},
+			"ui-carousel": {
+				"files": ["ui-carousel/*"],
+				"tasks": "npm run build --prefix ui-carousel"
+			},
+			"ui-image": {
+				"files": ["ui-image/*"],
+				"tasks": "npm run build --prefix ui-image"
+			},
 			"render": {
 				"files": ["render/*"],
 				"tasks": "npm run build --prefix render"

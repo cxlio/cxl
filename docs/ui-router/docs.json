@@ -473,7 +473,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 109,
+            "line": 112,
             "ch": 1
           },
           "kind": 16,
@@ -502,7 +502,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 128,
+            "line": 131,
             "ch": 1
           },
           "kind": 16,
@@ -513,7 +513,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 130,
+                "line": 133,
                 "ch": 33
               },
               "kind": 9,
@@ -528,7 +528,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 131,
+                "line": 134,
                 "ch": 17
               },
               "kind": 9,
@@ -538,7 +538,7 @@
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 132,
+                  "line": 135,
                   "ch": 10
                 },
                 "kind": 5,
@@ -548,7 +548,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 132,
+                      "line": 135,
                       "ch": 10
                     },
                     "kind": 23,
@@ -558,7 +558,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 132,
+                      "line": 135,
                       "ch": 19
                     },
                     "kind": 23,
@@ -568,7 +568,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 132,
+                      "line": 135,
                       "ch": 29
                     },
                     "kind": 23,
@@ -586,7 +586,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 132,
+                "line": 135,
                 "ch": 67
               },
               "kind": 9,
@@ -621,7 +621,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 146,
+            "line": 149,
             "ch": 1
           },
           "kind": 16,
@@ -632,7 +632,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 148,
+                "line": 151,
                 "ch": 23
               },
               "kind": 9,
@@ -642,7 +642,7 @@
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 149,
+                  "line": 152,
                   "ch": 10
                 },
                 "kind": 5,
@@ -652,7 +652,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 149,
+                      "line": 152,
                       "ch": 10
                     },
                     "kind": 23,
@@ -662,7 +662,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 149,
+                      "line": 152,
                       "ch": 19
                     },
                     "kind": 23,
@@ -672,7 +672,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 149,
+                      "line": 152,
                       "ch": 29
                     },
                     "kind": 23,
@@ -690,7 +690,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 149,
+                "line": 152,
                 "ch": 67
               },
               "kind": 9,
@@ -713,7 +713,7 @@
           "type": {
             "source": {
               "fileName": "index.tsx",
-              "line": 152,
+              "line": 155,
               "ch": 7
             },
             "kind": 16,
@@ -724,7 +724,7 @@
               {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 152,
+                  "line": 155,
                   "ch": 9
                 },
                 "kind": 9,
@@ -748,14 +748,14 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 159,
+            "line": 162,
             "ch": 5
           },
           "kind": 31,
           "name": "routeTitles",
           "flags": 0,
           "id": 35,
-          "value": "router$.map(state => {\n\tconst result = [];\n\tlet route: any = state.current;\n\tdo {\n\t\tif (route.routeTitle)\n\t\t\tresult.unshift({\n\t\t\t\ttitle: route.routeTitle,\n\t\t\t\tfirst: route === state.current,\n\t\t\t\tpath: routePath(route),\n\t\t\t});\n\t} while ((route = route.parentNode));\n\n\treturn result;\n})",
+          "value": "router$.raf().map(state => {\n\tconst result = [];\n\tlet route: any = state.current;\n\tdo {\n\t\tif (route.routeTitle)\n\t\t\tresult.unshift({\n\t\t\t\ttitle: route.routeTitle,\n\t\t\t\tfirst: route === state.current,\n\t\t\t\tpath: routePath(route),\n\t\t\t});\n\t} while ((route = route.parentNode));\n\n\treturn result;\n})",
           "type": {
             "name": "Observable",
             "kind": 6,
@@ -767,7 +767,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 164,
+                      "line": 167,
                       "ch": 18
                     },
                     "kind": 34,
@@ -777,7 +777,7 @@
                       {
                         "source": {
                           "fileName": "index.tsx",
-                          "line": 164,
+                          "line": 167,
                           "ch": 19
                         },
                         "kind": 0,
@@ -794,7 +794,7 @@
                       {
                         "source": {
                           "fileName": "index.tsx",
-                          "line": 165,
+                          "line": 168,
                           "ch": 28
                         },
                         "kind": 0,
@@ -811,7 +811,7 @@
                       {
                         "source": {
                           "fileName": "index.tsx",
-                          "line": 166,
+                          "line": 169,
                           "ch": 35
                         },
                         "kind": 0,
@@ -847,7 +847,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 172,
+            "line": 175,
             "ch": 3
           },
           "kind": 16,
@@ -858,7 +858,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 174,
+                "line": 177,
                 "ch": 19
               },
               "kind": 9,
@@ -892,7 +892,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 183,
+            "line": 186,
             "ch": 1
           },
           "kind": 16,
@@ -908,7 +908,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 198,
+            "line": 201,
             "ch": 1
           },
           "kind": 35,
@@ -934,7 +934,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 201,
+            "line": 204,
             "ch": 51
           },
           "kind": 16,
@@ -945,7 +945,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 203,
+                "line": 206,
                 "ch": 24
               },
               "kind": 9,
@@ -960,7 +960,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 203,
+                "line": 206,
                 "ch": 49
               },
               "kind": 9,
@@ -982,7 +982,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 208,
+            "line": 211,
             "ch": 1
           },
           "kind": 35,
@@ -993,7 +993,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 243,
+                "line": 246,
                 "ch": 43
               },
               "kind": 36,
@@ -1009,7 +1009,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 245,
+                "line": 248,
                 "ch": 15
               },
               "kind": 36,
@@ -1049,7 +1049,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 248,
+            "line": 251,
             "ch": 1
           },
           "kind": 35,
@@ -1060,7 +1060,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 271,
+                "line": 274,
                 "ch": 42
               },
               "kind": 36,
@@ -1094,7 +1094,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 274,
+            "line": 277,
             "ch": 1
           },
           "kind": 35,
@@ -1105,7 +1105,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 283,
+                "line": 286,
                 "ch": 35
               },
               "kind": 10,
@@ -1139,7 +1139,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 285,
+            "line": 288,
             "ch": 1
           },
           "kind": 35,
@@ -1150,7 +1150,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 321,
+                "line": 324,
                 "ch": 43
               },
               "kind": 36,
@@ -1166,7 +1166,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 323,
+                "line": 326,
                 "ch": 15
               },
               "kind": 36,
@@ -1183,7 +1183,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 326,
+                "line": 329,
                 "ch": 18
               },
               "kind": 11,
@@ -1216,7 +1216,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 331,
+            "line": 334,
             "ch": 1
           },
           "kind": 35,
@@ -1242,7 +1242,7 @@
         {
           "source": {
             "fileName": "index.tsx",
-            "line": 334,
+            "line": 337,
             "ch": 46
           },
           "kind": 35,
@@ -1253,7 +1253,7 @@
             {
               "source": {
                 "fileName": "index.tsx",
-                "line": 367,
+                "line": 370,
                 "ch": 48
               },
               "kind": 36,
@@ -1263,7 +1263,7 @@
               "type": {
                 "source": {
                   "fileName": "index.tsx",
-                  "line": 369,
+                  "line": 372,
                   "ch": 10
                 },
                 "kind": 5,
@@ -1273,7 +1273,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 369,
+                      "line": 372,
                       "ch": 10
                     },
                     "kind": 23,
@@ -1283,7 +1283,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 369,
+                      "line": 372,
                       "ch": 19
                     },
                     "kind": 23,
@@ -1293,7 +1293,7 @@
                   {
                     "source": {
                       "fileName": "index.tsx",
-                      "line": 369,
+                      "line": 372,
                       "ch": 28
                     },
                     "kind": 23,
