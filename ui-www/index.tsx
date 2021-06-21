@@ -1,5 +1,12 @@
 ///<amd-module name="@cxl/ui-www"/>
-import { Augment, Attribute, Component, Span, get } from '@cxl/component';
+import {
+	Augment,
+	Attribute,
+	Component,
+	Span,
+	StyleAttribute,
+	get,
+} from '@cxl/component';
 import { Svg, Path } from '@cxl/tsx-svg';
 import { dom } from '@cxl/tsx';
 import { be } from '@cxl/rx';
@@ -189,7 +196,7 @@ export class Image extends Component {
 	css({
 		$: { display: 'block', flexShrink: 0 },
 		tabs: { display: 'none', overflowX: 'hidden' },
-		'@small': {
+		'@medium': {
 			tabs: { display: 'block' },
 			menu: { display: 'none' },
 		},
@@ -239,6 +246,9 @@ export class AppbarItem extends Component {
 			top: 0,
 			zIndex: 5,
 		},
+		appbar$flat: {
+			elevation: 0,
+		},
 		appbar: {
 			...padding(20, 8, 20, 8),
 			variables: {
@@ -265,7 +275,10 @@ export class AppbarItem extends Component {
 		</Appbar>
 	)
 )
-export class PageAppbar extends Component {}
+export class PageAppbar extends Component {
+	@StyleAttribute()
+	flat = false;
+}
 
 @Augment<PageAppbarLogo>(
 	'www-appbar-logo',
@@ -361,6 +374,20 @@ export class Section extends Component {}
 	)
 )
 export class SectionGrid extends Component {}
+
+@Augment<PageHeader>(
+	'www-page-header',
+	css({
+		$: { display: 'block', paddingTop: 48, paddingBottom: 48, font: 'h3' },
+		$center: { textAlign: 'center' },
+	}),
+	() => (
+		<Layout center>
+			<slot />
+		</Layout>
+	)
+)
+export class PageHeader extends Component {}
 
 @Augment<ServiceCard>(
 	'www-service-card',
