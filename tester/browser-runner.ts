@@ -39,13 +39,12 @@ function printError(fail: Result) {
 }
 
 function printResult(result: Result) {
+	require('@cxl/ui-image');
 	output += result.success ? success() : failure();
 	const data = result.data;
 	if (data?.type === 'figure') {
-		output += `
-		<div style="vertical-align:middle;display:inline-block; width:320px;position:relative;">${data.html}</div>
-		<img style="vertical-align:middle" src="spec/${data.name}.png" />
-		<img style="vertical-align:middle" src="${baselinePath}/${data.name}.png" />`;
+		output += `<div style="vertical-align:middle;display:inline-block; width:320px;position:relative;">${data.html}</div>
+		<cxl-image-diff src1="spec/${data.name}.png" src2="${baselinePath}/${data.name}.png"></cxl-image-diff>`;
 	}
 }
 
