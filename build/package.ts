@@ -5,6 +5,7 @@ import { file } from './file.js';
 import { execSync } from 'child_process';
 import { Output } from '@cxl/source';
 import { sh } from '@cxl/server';
+import { getPublishedVersion } from './npm';
 import * as ts from 'typescript';
 
 type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0' | 'UNLICENSED';
@@ -25,6 +26,7 @@ export interface Package {
 	repository: string;
 	dependencies: any;
 	peerDependencies: any;
+	bundledDependecies: any;
 	type: string;
 }
 
@@ -114,6 +116,7 @@ function packageJson(p: any) {
 					repository: p.repository && getRepo(p.repository),
 					dependencies: p.dependencies,
 					peerDependencies: p.peerDependencies,
+					bundledDependencies: p.bundledDependencies,
 					type: p.type,
 				},
 				null,
@@ -121,16 +124,6 @@ function packageJson(p: any) {
 			)
 		),
 	});
-}
-
-function getPublishedVersion(p: Package) {
-	try {
-		return execSync(`npm show ${p.name}@${p.version} version`, {
-			encoding: 'utf8',
-		}).trim();
-	} catch (e) {
-		return;
-	}
 }
 
 function license(id: License) {
@@ -190,8 +183,8 @@ export function pkg() {
 	return defer(() => {
 		const p = readPackage();
 		const licenseId = p.license;
-		const isPublished = getPublishedVersion(p);
-		if (isPublished) throw new Error(`Package version already published.`);
+		// const isPublished = getPublishedVersion(p);
+		// if (isPublished) throw new Error(`Package version already published.`);
 
 		const output: Observable<Output>[] = [packageJson(p)];
 
@@ -204,7 +197,7 @@ export function pkg() {
 
 export function publish() {
 	const p = readPackage();
-	const isPublished = getPublishedVersion(p);
+	const isPublished = getPublishedVersion(p.name);
 	if (isPublished) throw new Error(`Package version already published.`);
 }
 
