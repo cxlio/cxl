@@ -3,6 +3,7 @@ import { css, padding, border } from '@cxl/css';
 import { Button, T } from '@cxl/ui';
 import { EMPTY, be } from '@cxl/rx';
 import { on, onAction, onChildrenMutation, onResize } from '@cxl/dom';
+import '@cxl/template';
 import { dom } from '@cxl/tsx';
 
 export interface BlogPosts {
@@ -93,10 +94,11 @@ function highlight(code: string) {
 				return on(parent, 'load').switchMap(() => {
 					const body = parent.contentDocument?.body;
 					return body
-						? onResize(body).tap(() => {
+						? onResize(body).raf(() => {
 								const height =
 									parent.contentDocument?.body.scrollHeight;
-								if (height) parent.style.height = height + 'px';
+								if (height)
+									parent.style.height = height + 16 + 'px';
 						  })
 						: EMPTY;
 				});
