@@ -82,7 +82,6 @@ type LogMessage<T = any> = string | ((p: T) => string) | Error;
 export interface Parameter {
 	name: string;
 	short?: string;
-	/// @default 'boolean'
 	type?: 'string' | 'boolean' | 'number';
 	help?: string;
 }
@@ -170,30 +169,30 @@ function findParameter(
 	return result;
 }
 
-function parseValue(param: Parameter, value: string) {
-	if (param.type === 'number') return parseInt(value);
-	if (param.type === 'string') return unquote(value);
-	if (param.type === 'boolean') return value !== 'false';
+function parseValue(param: Parameter, value: string | undefined) {
+	if (param.type === 'boolean') return true;
+	if (param.type === 'number')
+		return value === undefined ? 0 : parseInt(value);
+	if (param.type === 'string')
+		return value === undefined ? '' : unquote(value);
 
-	return value === '' || value === 'true' || value === undefined
-		? true
-		: value === 'false'
-		? false
-		: unquote(value);
+	return value === undefined ? true : unquote(value);
 }
 
-function setParam(result: any, param: Parameter, value: string) {
+function setParam(result: any, param: Parameter, value?: string) {
 	const key = param.name;
 	const newValue = parseValue(param, value);
 	const lastValue = result[key];
 
+	if (param.type === 'boolean') {
+		if (value !== undefined)
+			setParam(result, { name: '$', type: 'string' }, value);
+
+		return (result[key] = newValue);
+	}
+
 	if (lastValue === undefined) result[key] = newValue;
 	else if (Array.isArray(lastValue)) result[key].push(newValue);
-	else if (
-		(newValue === true || newValue === false) &&
-		(lastValue === true || lastValue === false)
-	)
-		result[key] = newValue;
 	else result[key] = [result[key], newValue];
 }
 
@@ -214,9 +213,7 @@ export function parseParameters(parameters: Parameter[], input: string) {
 		if (multipleShort)
 			multipleShort
 				.split('')
-				.forEach(p =>
-					setParam(result, findParameter(parameters, p), '')
-				);
+				.forEach(p => setParam(result, findParameter(parameters, p)));
 		else if (short)
 			setParam(result, findParameter(parameters, short), shortValue);
 		else if (long)
