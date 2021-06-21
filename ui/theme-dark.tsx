@@ -2,10 +2,7 @@ import { theme } from '@cxl/ui/theme.js';
 import { rgba } from '@cxl/css';
 
 Object.assign(theme.colors, {
-	//primary: rgba(0x29, 0xb6, 0xf6),
 	primary: rgba(0x03, 0xa9, 0xf4),
-	// primary: rgba(0x44, 0x8a, 0xff),
-	//onPrimary: rgba(0, 0, 0),
 	onPrimary: rgba(0xff, 0xff, 0xff),
 	primaryLight: rgba(0x03, 0xa9, 0xf4, 0.24),
 	onPrimaryLight: rgba(0xe1, 0xf5, 0xfe),
@@ -22,7 +19,3 @@ Object.assign(theme.colors, {
 		return this.onSurface.alpha(0.12);
 	},
 });
-
-theme.imports = [
-	'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300,400,500&display=swap',
-];

@@ -537,8 +537,6 @@ export class Toolbar extends Component {}
 			elevation: 1,
 			paddingTop: 8,
 			paddingBottom: 8,
-			paddingRight: 16,
-			paddingLeft: 16,
 			cursor: 'pointer',
 			display: 'inline-block',
 			font: 'button',
@@ -636,6 +634,8 @@ export class ButtonBase extends Component {
 		borderRadius: 2 + s * 2,
 		fontSize: 14 + s * 4,
 		lineHeight: 20 + s * 8,
+		paddingRight: 16 + s * 4,
+		paddingLeft: 16 + s * 4,
 	}))
 	size: Size = 0;
 }

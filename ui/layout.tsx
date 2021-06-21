@@ -96,6 +96,7 @@ function persistWithParameter(prefix: string) {
 		$pad16: { ...padding(16) },
 		$pad8: { ...padding(8) },
 		$pad24: { ...padding(24) },
+		$pad32: { ...padding(32) },
 		// Colors
 		$surface: { backgroundColor: 'surface', color: 'onSurface' },
 		$error: { backgroundColor: 'error', color: 'onError' },
