@@ -84,7 +84,7 @@ const FenceHandler: Record<string, (content: string, meta: any) => string> = {
 	},
 };
 
-function Markdown(url: string, source: string, stats: Stats) {
+export function renderMarkdown(source: string) {
 	const md = new MarkdownIt({
 		highlight: Code,
 		html: true,
@@ -113,7 +113,11 @@ function Markdown(url: string, source: string, stats: Stats) {
 		return handler ? handler(token.content, meta) : Code(token.content);
 	};
 
-	const content = md.render(source);
+	return { meta, content: md.render(source) };
+}
+
+function Markdown(url: string, source: string, stats: Stats) {
+	const { meta, content } = renderMarkdown(source);
 	const title =
 		source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
 	const summary = content.match(SUMMARY_REGEX)?.[1] || '';
