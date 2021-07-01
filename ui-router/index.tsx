@@ -32,7 +32,9 @@ import {
 	onLocation,
 	on,
 } from '@cxl/dom';
-import { AppbarTitle, Item, Tab } from '@cxl/ui/navigation.js';
+import { AppbarTitle } from '@cxl/ui/appbar.js';
+import { Item } from '@cxl/ui/item.js';
+import { Tab } from '@cxl/ui/tabs.js';
 import type {} from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
 import { StateStyles, each, role, triggerEvent } from '@cxl/template';
@@ -239,7 +241,7 @@ function renderTemplate(tpl: HTMLTemplateElement, title?: string) {
 		link: {
 			outline: 0,
 			textDecoration: 'none',
-			color: 'link',
+			color: 'inherit',
 			cursor: 'pointer',
 		},
 	})
@@ -342,11 +344,12 @@ export class RouterOutlet extends Component {}
 		const dataset = el.dataset;
 		if (dataset.registered) return;
 		dataset.registered = 'true';
-		const path = dataset.path || '';
 		const title = dataset.title || undefined;
 
 		router.route({
-			path,
+			path: dataset.path,
+			id: dataset.id || undefined,
+			parent: dataset.parent || undefined,
 			isDefault: el.hasAttribute('data-default'),
 			render: renderTemplate.bind(null, el, title),
 		});
