@@ -8,28 +8,17 @@ import {
 	get,
 } from '@cxl/component';
 import { ButtonBase, FocusCircleStyle, Spinner, Span } from './core.js';
-import { IconButton, SearchIcon } from './icon.js';
 import { dom, expression } from '@cxl/tsx';
-import {
-	aria,
-	ariaValue,
-	onValue,
-	syncAttribute,
-	triggerEvent,
-	teleport,
-} from '@cxl/template';
+import { aria, ariaValue, onValue, triggerEvent } from '@cxl/template';
 import { trigger, onKeypress, on, onAction } from '@cxl/dom';
 import { border, css, padding } from '@cxl/css';
 import { EMPTY, Observable, observable, defer, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
 import { InputBase } from './input-base.js';
 import { Option, SelectMenu, SelectBase } from './select.js';
-import { Appbar, AppbarContextual } from './navigation.js';
 import {
-	DisabledStyles,
 	Focusable,
 	checkedBehavior,
-	focusDelegate,
 	focusable,
 	navigationList,
 	registableHost,
@@ -821,114 +810,4 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
 )
 export class TextArea extends InputBase {
 	value = '';
-}
-
-/**
- * Search Input for Appbar
- * @demo
- * <cxl-appbar>
- *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
- *   <cxl-appbar-search></cxl-appbar-search>
- * </cxl-appbar>
- * @beta
- * @see Appbar
- */
-@Augment<AppbarSearch>(
-	'cxl-appbar-search',
-	css({
-		$: { display: 'flex', position: 'relative' },
-		$opened: {
-			backgroundColor: 'surface',
-		},
-		input: { display: 'none', marginBottom: 0, position: 'relative' },
-		input$opened: {
-			display: 'block',
-		},
-		button$opened: { display: 'none' },
-		'@medium': {
-			input: {
-				width: 200,
-				display: 'block',
-			},
-			button: { display: 'none' },
-		},
-		$disabled: DisabledStyles,
-	}),
-	$ => {
-		let inputEl: Input;
-
-		function onContextual(val: boolean) {
-			if (val) requestAnimationFrame(() => inputEl.focus());
-		}
-
-		return teleport(
-			<AppbarContextual
-				$={el => get(el, 'visible').tap(onContextual)}
-				name="search"
-			>
-				<Field className="input">
-					<Input
-						$={el =>
-							merge(
-								get($, 'name').pipe(ariaValue(el, 'label')),
-								syncAttribute($, (inputEl = el), 'value')
-							)
-						}
-					/>
-					<SearchIcon />
-				</Field>
-			</AppbarContextual>,
-			'cxl-appbar'
-		);
-	},
-	host => {
-		return (
-			<>
-				<IconButton
-					$={el =>
-						merge(
-							onAction((host.mobileIcon = el)).tap(() =>
-								host.open()
-							),
-							on(el, 'blur').tap(() => (host.touched = true))
-						)
-					}
-					className="button"
-				>
-					<SearchIcon />
-				</IconButton>
-				<Field className="input">
-					<Input
-						$={el =>
-							merge(
-								get(host, 'name').pipe(ariaValue(el, 'label')),
-								syncAttribute(host, el, 'value'),
-								focusDelegate(host, (host.desktopInput = el))
-							)
-						}
-					/>
-					<SearchIcon />
-				</Field>
-			</>
-		);
-	}
-)
-export class AppbarSearch extends InputBase {
-	@StyleAttribute()
-	opened = false;
-
-	protected desktopInput?: Input;
-	protected mobileIcon?: IconButton;
-
-	value = '';
-
-	open() {
-		const appbar: Appbar | null = this.parentElement as Appbar;
-		if (appbar) appbar.contextual = 'search';
-	}
-
-	focus() {
-		if (this.desktopInput?.offsetParent) this.desktopInput.focus();
-		else if (this.mobileIcon?.offsetParent) this.mobileIcon.focus();
-	}
 }

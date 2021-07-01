@@ -29,7 +29,7 @@ import { FocusHighlight, Size, SizeAttribute } from './core.js';
 			backgroundColor: 'onSurface12',
 			display: 'inline-flex',
 			color: 'onSurface',
-			verticalAlign: 'top',
+			verticalAlign: 'middle',
 			alignItems: 'center',
 		},
 		$primary: {

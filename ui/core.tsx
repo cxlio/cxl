@@ -179,59 +179,6 @@ export class Ripple extends Component {
 )
 export class RippleContainer extends Component {}
 
-/**
- * Chips represent complex entities in small blocks. A chip can contain several
- * different elements such as avatars, text, and icons.
- *
- * @example
- * <cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge><br/>
- */
-@Augment(
-	'cxl-badge',
-	css({
-		$: {
-			display: 'inline-block',
-			position: 'relative',
-			width: 20,
-			height: 20,
-			marginRight: -10,
-			lineHeight: 20,
-			font: 'caption',
-			borderRadius: 11,
-			color: 'onPrimary',
-			backgroundColor: 'primary',
-			textAlign: 'center',
-			verticalAlign: 'top',
-			flexShrink: 0,
-		},
-		$secondary: {
-			color: 'onSecondary',
-			backgroundColor: 'secondary',
-		},
-		$small: {
-			width: 8,
-			height: 8,
-			marginRight: -4,
-		},
-		$error: { color: 'onError', backgroundColor: 'error' },
-		$over: { marginLeft: -8 },
-	}),
-	() => <slot />
-)
-export class Badge extends Component {
-	@StyleAttribute()
-	small = false;
-
-	@StyleAttribute()
-	secondary = false;
-
-	@StyleAttribute()
-	error = false;
-
-	@StyleAttribute()
-	over = false;
-}
-
 @Augment(
 	'cxl-hr',
 	role('separator'),
@@ -521,7 +468,7 @@ export class Surface extends Component {
 			gridTemplateColumns: 'min-content',
 			columnGap: 16,
 			alignItems: 'center',
-			height: 56,
+			minHeight: 56,
 			...padding(4, 16, 4, 16),
 		},
 	}),

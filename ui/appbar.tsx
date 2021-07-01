@@ -8,7 +8,7 @@ import {
 } from '@cxl/component';
 import { onAction, onChildrenMutation } from '@cxl/dom';
 import { aria, portal, role } from '@cxl/template';
-import { css, padding, rgba } from '@cxl/css';
+import { css, padding } from '@cxl/css';
 import { merge } from '@cxl/rx';
 import { InversePrimary } from './theme.js';
 import { Span } from './core.js';
@@ -51,11 +51,13 @@ import { ArrowBackIcon, IconButton } from './icon.js';
 			color: 'onSurface',
 			elevation: 2,
 		},
-		$transparent: {
+		$sticky: {
+			position: 'sticky',
+			top: 0,
+			zIndex: 5,
+		},
+		$flat: {
 			boxShadow: 'none',
-			variables: {
-				surface: rgba(0, 0, 0, 0),
-			},
 		},
 		grow: { flexGrow: 1 },
 		flex: {
@@ -101,6 +103,12 @@ import { ArrowBackIcon, IconButton } from './icon.js';
 		},
 		back: {
 			marginLeft: -8,
+		},
+		$padded: {
+			...padding(20, 8, 20, 8),
+		},
+		'@small': {
+			$padded: { ...padding(20, 32, 20, 32) },
 		},
 	}),
 	portal('cxl-appbar'),
@@ -166,6 +174,24 @@ export class Appbar extends Component {
 	 */
 	@StyleAttribute()
 	contextual?: string;
+
+	/**
+	 * Enables sticky mode.
+	 */
+	@StyleAttribute()
+	sticky = false;
+
+	/**
+	 * Removes elevation
+	 */
+	@StyleAttribute()
+	flat = false;
+
+	/**
+	 * Adds extra padding.
+	 */
+	@StyleAttribute()
+	padded = false;
 }
 
 /**
@@ -178,9 +204,15 @@ export class Appbar extends Component {
 	_ => <slot />
 )
 export class AppbarContextual extends Component {
+	/**
+	 * The name of the contextual menu. Used by the contextual property of the Appbar component.
+	 */
 	@Attribute()
 	name?: string;
 
+	/**
+	 * Determines the visibility of the component when attached to an Appbar.
+	 */
 	@StyleAttribute()
 	visible = false;
 }
@@ -197,10 +229,6 @@ export class AppbarContextual extends Component {
 			marginRight: 16,
 			textDecoration: 'none',
 		},
-		$extended: {
-			marginBottom: 12,
-			alignSelf: 'flex-end',
-		},
 		parentslot: { display: 'none' },
 		'@small': {
 			parentslot: { display: 'contents' },
@@ -213,7 +241,4 @@ export class AppbarContextual extends Component {
 		</>
 	)
 )
-export class AppbarTitle extends Component {
-	@StyleAttribute()
-	extended = false;
-}
+export class AppbarTitle extends Component {}
