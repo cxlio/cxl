@@ -9,7 +9,7 @@ Object.assign(theme.colors, {
 	secondary: rgba(249, 130, 108),
 	surface: rgba(34, 39, 46),
 	background: rgba(34, 39, 46),
-	onBackground: rgba(0xff, 0xff, 0xff),
+	onBackground: rgba(173, 186, 199),
 	onSurface: rgba(173, 186, 199),
 	onSecondary: rgba(0, 0, 0),
 	error: rgba(0xcf, 0x66, 0x79),

@@ -230,7 +230,7 @@ const SNAKE_CSS: Record<string, string> = {
 
 export const theme: any = {
 	animation: {},
-	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
+	breakpoints: { small: 600, medium: 905, large: 1240, xlarge: 1440 },
 	variables: {
 		font: 'sans-serif',
 		fontSize: '16px',

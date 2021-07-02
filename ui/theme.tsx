@@ -25,6 +25,7 @@ declare module '../css/index.js' {
 		onSurface87: BaseColor;
 		onError: BaseColor;
 		background: BaseColor;
+		onBackground: BaseColor;
 		link: BaseColor;
 		headerText: BaseColor;
 		divider: BaseColor;
@@ -182,6 +183,9 @@ Object.assign(theme.colors, {
 
 	get background() {
 		return this.surface;
+	},
+	get onBackground() {
+		return this.onSurface;
 	},
 	get link() {
 		return this.primary;
