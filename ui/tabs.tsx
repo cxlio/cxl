@@ -108,22 +108,20 @@ export class Tab extends Component {
 	host => (
 		<Span
 			className="selected"
-			$={
-				el =>
-					// onLoad().switchMap(() =>
-					merge(
-						onChildrenMutation(host),
-						onFontsReady(),
-						get(host, 'selected'),
-						onResize(el)
-					).raf(() => {
-						const sel = host.selected;
-						if (!sel) return (el.style.transform = 'scaleX(0)');
-						const scaleX = sel.clientWidth / 100;
-						el.style.transform = `translate(${sel.offsetLeft}px, 0) scaleX(${scaleX})`;
-						el.style.display = 'block';
-					})
-				// )
+			$={el =>
+				merge(
+					onChildrenMutation(host),
+					onFontsReady(),
+					get(host, 'selected'),
+					on(window, 'resize'),
+					onResize(el)
+				).raf(() => {
+					const sel = host.selected;
+					if (!sel) return (el.style.transform = 'scaleX(0)');
+					const scaleX = sel.clientWidth / 100;
+					el.style.transform = `translate(${sel.offsetLeft}px, 0) scaleX(${scaleX})`;
+					el.style.display = 'block';
+				})
 			}
 		/>
 	)
