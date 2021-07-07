@@ -271,6 +271,9 @@ export default async function runPuppeteer(app: TestRunner) {
 
 	const page = await openPage(browser);
 
+	if (app.startServer) await page.waitForTimeout(1000);
+	if (app.browserUrl) await page.goto(app.browserUrl);
+
 	function cxlRunner(cmd: any) {
 		if (cmd.type === 'figure') return handleFigureRequest(page, cmd, app);
 	}
