@@ -83,6 +83,28 @@ export default spec('program', s => {
 			a.equal(r5.$, 'filename');
 			a.equal(r5.help, true);
 		});
+
+		a.test('Complex strings', a => {
+			const r = parseParameters(
+				[
+					{
+						name: 'browserUrl',
+						type: 'string',
+						help: 'Browser runner initial URL',
+					},
+					{
+						name: 'startServer',
+						type: 'string',
+						help:
+							'Start a server application while the tests are running',
+					},
+				],
+				'--startServer "npm run start:test --prefix .." --browserUrl http://localhost:9009'
+			);
+			a.equal(r.browserUrl, 'http://localhost:9009');
+			a.equal(r.startServer, 'npm run start:test --prefix ..');
+			a.ok(r);
+		});
 	});
 
 	s.test('parseParametersArray', a => {
