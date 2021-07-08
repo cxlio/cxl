@@ -22,6 +22,8 @@ import {
 import { InputBase } from './input-base.js';
 import { Svg } from './core.js';
 
+const Undefined = {};
+
 @Augment<Option>(
 	'cxl-option',
 	role('option'),
@@ -83,11 +85,11 @@ import { Svg } from './core.js';
 	selectable
 )
 export class Option extends Component {
-	private $value?: string;
+	private $value: any = Undefined;
 
 	@Attribute()
 	get value(): any {
-		return this.$value === undefined ? this.textContent || '' : this.$value;
+		return this.$value === Undefined ? this.textContent || '' : this.$value;
 	}
 
 	set value(val: any) {
@@ -257,7 +259,7 @@ export class SelectBox extends SelectBase {
 		let translateY = option ? option.offsetTop : 0;
 
 		if (translateY > maxTranslateY) {
-			scrollTop = translateY - menuTopPadding;
+			scrollTop = translateY - maxTranslateY;
 			translateY = maxTranslateY;
 		}
 
@@ -283,7 +285,9 @@ export class SelectBox extends SelectBase {
 
 		if (option) {
 			option.selected = option.focused = true;
-			this.selectedText$.next(option.textContent || '');
+			requestAnimationFrame(() => {
+				this.selectedText$.next(option.textContent || '');
+			});
 			this.value = option.value;
 		} else if (option === undefined) this.selectedText$.next('');
 
