@@ -208,6 +208,7 @@ export class RouterAppbarTitle extends Component {}
 
 function renderTemplate(tpl: HTMLTemplateElement, title?: string) {
 	const result = document.createElement('div');
+	result.style.display = 'contents';
 	(result as any).routeTitle = title;
 	result.appendChild(tpl.content.cloneNode(true));
 	return result;
@@ -356,7 +357,7 @@ export class RouterOutlet extends Component {}
 	}
 
 	return onReady().switchMap(() => {
-		for (const child of host.children)
+		for (const child of Array.from(host.children))
 			if (child.tagName === 'TEMPLATE') register(child as any);
 
 		return merge(
