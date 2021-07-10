@@ -30,6 +30,7 @@ import { Drawer } from './dialog.js';
 		$: {
 			display: 'inline-block',
 			overflowScrolling: 'touch',
+			font: 'default',
 		},
 		toggler: {
 			backgroundColor: 'surface',

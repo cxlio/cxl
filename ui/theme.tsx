@@ -252,4 +252,14 @@ export const InverseSecondary: any = {
 	},
 };
 
-requestAnimationFrame(() => applyTheme());
+export const ColorStyles = {
+	surface: ResetSurface,
+	primary: InversePrimary,
+	secondary: InverseSecondary,
+};
+
+export function delayTheme() {
+	cancelAnimationFrame(loadingId);
+}
+
+const loadingId = requestAnimationFrame(() => applyTheme());
