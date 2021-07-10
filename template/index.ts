@@ -9,6 +9,7 @@ import {
 	trigger,
 } from '@cxl/dom';
 import {
+	EMPTY,
 	ListEvent,
 	Observable,
 	Operator,
@@ -209,7 +210,12 @@ export function portal(id: string) {
 
 export function teleport(el: Node, portalName: string) {
 	return new Observable<void>(() => {
-		portals.get(portalName)?.appendChild(el);
+		requestAnimationFrame(() => {
+			const portal = portals.get(portalName);
+			if (!portal)
+				throw new Error(`Portal "${portalName}" does not exist`);
+			portal.appendChild(el);
+		});
 		return () => el.parentElement?.removeChild(el);
 	});
 }
@@ -287,7 +293,8 @@ export function loading(source: Observable<any>, renderFn: () => Node) {
 export function render<T>(
 	source: Observable<T>,
 	renderFn: (item: T) => Node,
-	loading?: () => Node
+	loading?: () => Node,
+	error?: (e: any) => Node
 ) {
 	return (host: Bindable) => {
 		const marker = new Marker();
@@ -299,10 +306,19 @@ export function render<T>(
 			);
 
 		host.bind(
-			source.tap(item => {
-				marker.empty();
-				marker.insert(renderFn(item));
-			})
+			source
+				.tap(item => {
+					marker.empty();
+					marker.insert(renderFn(item));
+				})
+				.catchError(e => {
+					if (error) {
+						marker.empty();
+						marker.insert(error(e));
+						return EMPTY;
+					}
+					throw e;
+				})
 		);
 
 		return marker.node;
