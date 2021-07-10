@@ -28,6 +28,8 @@ import {
 	Layout,
 	C,
 	Card,
+	ColorAttribute,
+	ColorValue,
 	IconButton,
 	Form,
 	Field,
@@ -240,15 +242,6 @@ export class AppbarItem extends Component {
 @Augment<PageAppbar>(
 	'www-appbar',
 	css({
-		$: {
-			display: 'block',
-			position: 'sticky',
-			top: 0,
-			zIndex: 5,
-		},
-		appbar$flat: {
-			elevation: 0,
-		},
 		appbar: {
 			...padding(20, 8, 20, 8),
 			variables: {
@@ -263,14 +256,8 @@ export class AppbarItem extends Component {
 			appbar: { ...padding(20, 32, 20, 32) },
 		},
 	}),
-	$ =>
-		registable($, 'www', {
-			update() {
-				/* TODO */
-			},
-		}),
 	() => (
-		<Appbar className="appbar" center>
+		<Appbar sticky flat className="appbar" center>
 			<slot />
 		</Appbar>
 	)
@@ -348,6 +335,7 @@ export class Header extends Component {
 	'www-section',
 	css({
 		$: { display: 'block', ...padding(96, 0, 96, 0) },
+		$dense: { paddingTop: 48, paddingBottom: 48 },
 	}),
 	() => (
 		<Layout center>
@@ -355,7 +343,10 @@ export class Header extends Component {
 		</Layout>
 	)
 )
-export class Section extends Component {}
+export class Section extends Component {
+	@StyleAttribute()
+	dense = false;
+}
 
 @Augment<SectionGrid>(
 	'www-section-grid',
@@ -486,11 +477,6 @@ export class Hr extends CoreHr {}
 			font: 'body2',
 			backgroundColor: 'surface',
 			color: 'onSurface',
-			variables: {
-				link: baseColor('surface'),
-				surface: baseColor('onSurface87'),
-				onSurface: baseColor('surface'),
-			} as any,
 		},
 	}),
 	() => (
@@ -499,7 +485,10 @@ export class Hr extends CoreHr {}
 		</Layout>
 	)
 )
-export class Footer extends Component {}
+export class Footer extends Component {
+	@ColorAttribute('primary')
+	color?: ColorValue;
+}
 
 @Augment<Page>('www-page', $ =>
 	registableHost<PageElement>($, 'www').tap(elements => {
@@ -588,9 +577,6 @@ export class ThankYou extends Component {}
 			step.next(2);
 			return fetch($.apiurl, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
 				body: JSON.stringify(body),
 			}).then(
 				() => step.next(3),
