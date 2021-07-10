@@ -60,21 +60,30 @@ export async function imageDiff(srcA: string, srcB: string) {
 	}),
 	$ => {
 		const C = document.createElement('canvas');
+		C.className = 'absolute';
+		const A = (<img className="absolute" />) as HTMLImageElement;
 		const ctx = C.getContext('2d');
 
 		async function render() {
 			if (!ctx) throw new Error('No rendering context');
 			if (!$.src1 || !$.src2) return;
 
+			A.src = $.src2;
+			$.style.backgroundImage = `url(${$.src1})`;
 			const { diff } = await imageDiff($.src1, $.src2);
-			C.width = diff.width;
-			C.height = diff.height;
+			$.style.width = `${(C.width = diff.width)}px`;
+			$.style.height = `${(C.height = diff.height)}px`;
 			ctx.putImageData(diff, 0, 0);
 		}
 
 		$.bind(merge(get($, 'src1'), get($, 'src2')).raf(render));
 
-		return C;
+		return (
+			<>
+				{A}
+				{C}
+			</>
+		);
 	}
 )
 export class ImageDiff extends Component {
