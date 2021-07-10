@@ -339,7 +339,7 @@ const renderMap: StyleMap = {
 		const x = toUnit(n);
 		style.zIndex = n.toString();
 		style.boxShadow =
-			n > 0 ? `${x} ${x} ${toUnit(3 * n)} var(--cxl-shadow)` : 'none';
+			n > 0 ? `${x} ${x} ${toUnit(5 * n)} var(--cxl-shadow)` : 'none';
 	},
 	font(
 		_def: StyleDefinition,
@@ -454,7 +454,7 @@ function renderRule(
 	)}}`;
 }
 
-export function createStyleElement(
+function createStyleElement(
 	styles: Styles,
 	selector = ':host',
 	global = false
