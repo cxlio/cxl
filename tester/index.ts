@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { writeFile } from 'fs/promises';
 import { exec } from 'child_process';
 import { Logger, Parameter, program, parseArgv } from '@cxl/program';
