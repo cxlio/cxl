@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/diff/amd"
+	},
+	"files": ["index.ts"],
+	"references": []
+}
