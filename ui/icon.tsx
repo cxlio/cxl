@@ -66,6 +66,9 @@ export function PersonIcon(p: { width?: number }) {
 )
 export class IconButton extends ButtonBase {}
 
+/**
+ * Use with SVG Sprites.
+ */
 @Augment<SvgIcon>(
 	'cxl-svg-icon',
 	css({
@@ -74,8 +77,8 @@ export class IconButton extends ButtonBase {}
 			lineHeight: 0,
 		},
 		icon: {
-			width: '1em',
-			height: '1em',
+			width: '1.5em',
+			height: '1.5em',
 			stroke: 'currentColor',
 			fill: 'currentColor',
 		} as any,
@@ -101,6 +104,9 @@ export class IconButton extends ButtonBase {}
 	}
 )
 export class SvgIcon extends Component {
+	/**
+	 * Icon name or href to an svg sprite. The sprite must exist in the document.
+	 */
 	@Attribute()
 	icon = '';
 }
