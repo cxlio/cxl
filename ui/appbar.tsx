@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/appbar.js"/>
 import { dom } from '@cxl/tsx';
 import {
 	Augment,
@@ -10,8 +11,7 @@ import { onAction, onChildrenMutation } from '@cxl/dom';
 import { aria, portal, role } from '@cxl/template';
 import { css, padding } from '@cxl/css';
 import { merge } from '@cxl/rx';
-import { InversePrimary } from './theme.js';
-import { Span } from './core.js';
+import { ColorAttribute, ColorValue, Span } from './core.js';
 import { ArrowBackIcon, IconButton } from './icon.js';
 
 /**
@@ -44,7 +44,6 @@ import { ArrowBackIcon, IconButton } from './icon.js';
 	css({
 		$: {
 			display: 'block',
-			...InversePrimary,
 			backgroundColor: 'surface',
 			flexShrink: 0,
 			textAlign: 'left',
@@ -192,6 +191,9 @@ export class Appbar extends Component {
 	 */
 	@StyleAttribute()
 	padded = false;
+
+	@ColorAttribute('primary')
+	color?: ColorValue;
 }
 
 /**
