@@ -41,6 +41,8 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			tasks: [
 				file('index.html', 'index.html').catchError(() => EMPTY),
 				file('debug.html', 'debug.html').catchError(() => EMPTY),
+				file('icons.svg', 'icons.svg').catchError(() => EMPTY),
+				file('favicon.ico', 'favicon.ico').catchError(() => EMPTY),
 				file('test.html', 'test.html').catchError(() =>
 					of({
 						path: 'test.html',

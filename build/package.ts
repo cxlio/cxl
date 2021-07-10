@@ -195,9 +195,9 @@ export function pkg() {
 	});
 }
 
-export function publish() {
+export async function publish() {
 	const p = readPackage();
-	const isPublished = getPublishedVersion(p.name);
+	const isPublished = await getPublishedVersion(p.name);
 	if (isPublished) throw new Error(`Package version already published.`);
 }
 
@@ -262,7 +262,7 @@ export function AMD() {
 export function bundle(files: Record<string, string>, outFile: string) {
 	return new Observable<Output>(subs => {
 		const moduleNames = Object.keys(files);
-		const resolvedFiles = Object.values(files); //.map(f => require.resolve(f));
+		const resolvedFiles = Object.values(files);
 		Promise.all(resolvedFiles.map(f => promises.readFile(f, 'utf8'))).then(
 			content => {
 				subs.next(
@@ -275,7 +275,7 @@ export function bundle(files: Record<string, string>, outFile: string) {
 }
 
 const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
-const DEBUG_HEAD = `<meta charset="utf-8">
+const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 <script src="/cxl/dist/tester/require-browser.js"></script>
 <script>
 	require.replace = function (path) {

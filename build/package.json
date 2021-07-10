@@ -2,6 +2,9 @@
 	"name": "@cxl/build",
 	"version": "0.1.0",
 	"private": true,
+	"bin": {
+		"cxl-build": "index.js"
+	},
 	"description": "Build Tool",
 	"license": "GPL-3.0",
 	"main": "index.js",
