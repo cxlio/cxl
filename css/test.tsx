@@ -2,7 +2,6 @@ import { spec } from '@cxl/spec';
 import {
 	applyTheme,
 	boxShadow,
-	createStyleElement,
 	pct,
 	css,
 	rgba,
@@ -61,7 +60,7 @@ export default spec('css', s => {
 		it.should('render elevation', a => {
 			a.equal(
 				style({ elevation: 1 }),
-				'z-index:1;box-shadow:1px 1px 3px var(--cxl-shadow);'
+				'z-index:1;box-shadow:1px 1px 5px var(--cxl-shadow);'
 			);
 			a.equal(style({ elevation: 0 }), 'z-index:0;box-shadow:none;');
 		});
@@ -77,13 +76,6 @@ export default spec('css', s => {
 				style({ variables: { camelCase: '16px' } }),
 				'--cxl-camel-case:16px;'
 			);
-		});
-	});
-
-	s.test('createStyleElement', it => {
-		it.should('create a new style dom element', a => {
-			const el = createStyleElement({});
-			a.equal(el.textContent, '');
 		});
 	});
 
@@ -162,7 +154,7 @@ export default spec('css', s => {
 						$: { color: 'transparent' },
 					},
 				}),
-				'@media(min-width:480px){:host{color:transparent;}}'
+				'@media(min-width:600px){:host{color:transparent;}}'
 			);
 		});
 		it.should('support special rules', a => {
