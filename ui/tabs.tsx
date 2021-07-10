@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/tabs.js"/>
 import { dom } from '@cxl/tsx';
 import { Augment, Attribute, Component, get } from '@cxl/component';
 import {
