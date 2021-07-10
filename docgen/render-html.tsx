@@ -160,7 +160,7 @@ function SignatureParameters(parameters?: Node[]) {
 }
 
 function Chip(label: string) {
-	return `<cxl-chip small primary>${label}</cxl-chip> `;
+	return `<cxl-chip size="small" primary>${label}</cxl-chip> `;
 }
 
 function NodeChips({ flags }: Node) {
@@ -631,7 +631,7 @@ function Extra(docs: Section[]) {
 	return docs
 		.map(docs => {
 			const title = docs.title
-				? `<cxl-c pad16><cxl-t subtitle>${docs.title}</cxl-t></cxl-c>`
+				? `<cxl-c style="padding-bottom:8px" pad16><cxl-t subtitle2 button>${docs.title}</cxl-t></cxl-c>`
 				: '';
 			const items = docs.items
 				.map(i => Item(i.title, i.file, i.icon))

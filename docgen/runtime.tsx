@@ -7,7 +7,7 @@ import { border, css, padding } from '@cxl/css';
 import { be } from '@cxl/rx';
 import '@cxl/ui-router';
 import { Span } from '@cxl/ui/core.js';
-import { Tabs, Tab } from '@cxl/ui/navigation.js';
+import { Tabs, Tab } from '@cxl/ui/tabs.js';
 import { SelectBox, Option } from '@cxl/ui/select.js';
 import { onValue } from '@cxl/template/index.js';
 
