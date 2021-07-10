@@ -1,6 +1,7 @@
 ///<amd-module name="@cxl/ui/core.js"/>
 import {
 	Attribute,
+	AttributeEvent,
 	Augment,
 	Component,
 	Span,
@@ -8,14 +9,13 @@ import {
 	StyleAttribute,
 	get,
 	onUpdate,
-	pushRender,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
-import { EMPTY, merge, tap } from '@cxl/rx';
-import { StyleDefinition, border, css, padding, pct } from '@cxl/css';
+import { EMPTY, merge, tap, operator } from '@cxl/rx';
+import { Styles, StyleDefinition, border, css, padding, pct } from '@cxl/css';
 import { Focusable, role } from '@cxl/template';
 import { getShadow, on, onAction, trigger } from '@cxl/dom';
-import { InversePrimary, ResetSurface } from './theme.js';
+import { InversePrimary, ResetSurface, ColorStyles } from './theme.js';
 
 export { Span } from '@cxl/component';
 
@@ -58,6 +58,28 @@ export const FocusCircleStyle = css({
 	focusCircle$disabled: { scaleX: 0, scaleY: 0 },
 });
 
+export function persistWithParameter(prefix: string) {
+	return operator<AttributeEvent<any>>(() => {
+		let lastAttr: string;
+		return {
+			next({ value, target }) {
+				if (value === undefined) {
+					if (target.hasAttribute(lastAttr))
+						target.removeAttribute(lastAttr);
+				} else {
+					const attr = `${prefix}${value}`;
+
+					if (lastAttr !== attr) {
+						target.removeAttribute(lastAttr);
+						target.setAttribute(attr, '');
+						lastAttr = attr;
+					}
+				}
+			},
+		};
+	});
+}
+
 function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
 	const x = ev.x,
 		y = ev.y,
@@ -81,10 +103,10 @@ export function ripple(element: any) {
 
 export type Size = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 'small' | 'big';
 
-export function sizeStyles(
+export function SizeAttribute(
 	fn: (size: Exclude<Size, 'small' | 'big'>) => StyleDefinition
 ) {
-	return css(
+	return CssAttribute(
 		[-1, 0, 1, 2, 3, 4, 5, 'small', 'big'].reduce((r, val) => {
 			const sel = val === 0 ? '$' : `$size="${val}"`;
 			if (val === 'small') val = -1;
@@ -95,15 +117,23 @@ export function sizeStyles(
 	);
 }
 
-export function SizeAttribute(
-	fn: (size: Exclude<Size, 'small' | 'big'>) => StyleDefinition
-) {
-	const styleAttribute = StyleAttribute();
-	const styles = sizeStyles(fn);
-	return (target: any, attribute: string) => {
-		styleAttribute(target, attribute);
-		pushRender(target, host => getShadow(host).appendChild(styles()));
-	};
+export type ColorValue = keyof typeof ColorStyles;
+
+export function ColorAttribute(defaultColor: ColorValue) {
+	return CssAttribute({
+		$: ColorStyles[defaultColor],
+		'$color="surface"': ColorStyles.surface,
+		'$color="primary"': ColorStyles.primary,
+		'$color="secondary"': ColorStyles.secondary,
+	});
+}
+
+export function CssAttribute(styles: Styles) {
+	const el = css(styles);
+	return Attribute({
+		persist: true,
+		render: host => getShadow(host).appendChild(el()),
+	});
 }
 
 @Augment<Ripple>(
@@ -188,9 +218,16 @@ export class RippleContainer extends Component {}
 			height: 1,
 			backgroundColor: 'divider',
 		},
+		'$pad="8"': { marginTop: 8, marginBottom: 8 },
+		'$pad="16"': { marginTop: 16, marginBottom: 16 },
+		'$pad="24"': { marginTop: 24, marginBottom: 24 },
+		'$pad="32"': { marginTop: 32, marginBottom: 32 },
 	})
 )
-export class Hr extends Component {}
+export class Hr extends Component {
+	@StyleAttribute()
+	pad?: 8 | 16 | 24 | 32;
+}
 
 /**
  * Linear progress indicators display progress by animating an indicator along the length of a fixed, visible track.
@@ -286,7 +323,6 @@ export class Spinner extends Component {}
 		$: { display: 'block', font: 'default', marginBottom: 8 },
 		$center: { textAlign: 'center' },
 		$inline: { display: 'inline', marginTop: 0, marginBottom: 0 },
-
 		$caption: { font: 'caption' },
 		$h1: { font: 'h1', marginTop: 32, marginBottom: 64 },
 		$h2: { font: 'h2', marginTop: 24, marginBottom: 48 },
@@ -464,8 +500,9 @@ export class Surface extends Component {
 	css({
 		$: {
 			display: 'grid',
+			gridColumnEnd: 'span 12',
 			gridAutoFlow: 'column',
-			gridTemplateColumns: 'min-content',
+			gridTemplateColumns: 'repeat(auto-fit, minmax(0, max-content))',
 			columnGap: 16,
 			alignItems: 'center',
 			minHeight: 56,
