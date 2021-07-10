@@ -28,10 +28,12 @@ export interface Post {
 	id: string;
 	title: string;
 	date: string;
+	version?: string;
 	mtime: string;
 	author: string;
 	type: string;
 	tags?: string;
+	href?: string;
 	content: string;
 	summary: string;
 }
@@ -127,11 +129,13 @@ function Markdown(url: string, source: string, stats: Stats) {
 		title,
 		summary,
 		date: meta.date || stats.mtime.toISOString(),
+		version: meta.version,
 		uuid: meta.uuid || '',
 		mtime: stats.mtime.toISOString(),
 		author: meta.author || '',
 		type: meta.type || (meta.date ? 'post' : 'draft'),
 		tags: meta.tags || '',
+		href: meta.href,
 		content,
 	};
 }
@@ -156,10 +160,12 @@ function getPostId(title: string) {
 
 function Html(_url: string, content: string, stat: Stats): Post {
 	const meta = parseMeta(content) || {};
-	const tags = content.match(TAGS_REGEX)?.[1];
-	const title = content.match(TITLE_REGEX)?.[1] || 'Untitled Post';
+	const tags = content.match(TAGS_REGEX)?.[1] || meta.tags;
+	const title =
+		content.match(TITLE_REGEX)?.[1] || meta.title || 'Untitled Post';
 	const summary =
 		content.match(SUMMARY_TAG_REGEX)?.[1] ||
+		meta.summary ||
 		content.match(SUMMARY_REGEX)?.[1] ||
 		'';
 	return {
@@ -167,11 +173,13 @@ function Html(_url: string, content: string, stat: Stats): Post {
 		title,
 		summary,
 		date: meta.date,
+		version: meta.version,
 		uuid: meta.uuid || '',
 		mtime: stat.mtime.toISOString(),
 		author: meta.author || '',
 		type: meta.type || 'post',
 		tags,
+		href: meta.href,
 		content,
 	};
 }
