@@ -140,3 +140,24 @@ export function dragMove(element: HTMLElement, axis?: 'x' | 'y') {
 		element.style.transform = transform;
 	});
 }
+
+/**
+ * Applies the dragover attribute for drop targets
+ */
+export function dropTarget<T extends HTMLElement>($: T) {
+	let count = 0;
+	return merge(
+		on($, 'dragenter').tap(() => {
+			if (++count === 1) $.setAttribute('dragover', '');
+		}),
+		on($, 'dragleave').tap(() => {
+			if (--count === 0) $.removeAttribute('dragover');
+		}),
+		on($, 'dragover').tap(ev => ev.preventDefault()),
+		on($, 'drop').tap(ev => {
+			ev.preventDefault();
+			$.removeAttribute('dragover');
+			count = 0;
+		})
+	).filter(ev => ev.type === 'drop');
+}
