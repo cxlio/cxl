@@ -4,5 +4,5 @@
 		"outDir": "../dist/ui-blog"
 	},
 	"files": ["index.tsx"],
-	"references": [{ "path": "../ui" }]
+	"references": [{ "path": "../ui" }, { "path": "../blog" }]
 }

@@ -10,6 +10,9 @@
 	"references": [
 		{
 			"path": "../ui/tsconfig.amd.json"
+		},
+		{
+			"path": "../blog/tsconfig.amd.json"
 		}
 	]
 }

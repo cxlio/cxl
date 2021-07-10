@@ -1,27 +1,18 @@
+///<amd-module name="@cxl/ui-blog"/>
 import { Augment, Attribute, Component, Span, get } from '@cxl/component';
 import { css, padding, border } from '@cxl/css';
-import { Button, T } from '@cxl/ui';
+import { Button, Chip, T } from '@cxl/ui';
 import { EMPTY, be } from '@cxl/rx';
 import { on, onAction, onChildrenMutation, onResize } from '@cxl/dom';
-import '@cxl/template';
+import { each } from '@cxl/template';
 import { dom } from '@cxl/tsx';
+import type { Post } from '@cxl/blog';
+
+export type { Post } from '@cxl/blog';
 
 export interface BlogPosts {
 	posts: Post[];
 	tags: string[];
-}
-
-export interface Post {
-	uuid: string;
-	id: string;
-	title: string;
-	date: string;
-	mtime: string;
-	author: string;
-	type: string;
-	tags?: string;
-	content: string;
-	summary: string;
 }
 
 function highlight(code: string) {
@@ -174,6 +165,29 @@ export class BlogCode extends Component {
 	</p>
 ))
 export class BlogSummary extends Component {}
+
+@Augment(
+	'blog-tags',
+	css({
+		$: { display: 'block', marginTop: 32, marginBottom: 32 },
+		tag: { marginRight: 8, marginBottom: 8 },
+	}),
+	$ => (
+		<$.Shadow>
+			{each(
+				onChildrenMutation($).map(
+					() => $.textContent?.split(' ') || []
+				),
+				tag => (
+					<Chip className="tag" primary size="small">
+						{tag}
+					</Chip>
+				)
+			)}
+		</$.Shadow>
+	)
+)
+export class BlogTags extends Component {}
 
 /*component(
 	{
@@ -440,26 +454,6 @@ component(
 component({
 	name: 'blog-main-tweet',
 	extend: 'blog-tweet',
-});
-
-component({
-	name: 'blog-tags',
-	attributes: ['tags'],
-	template: `
-<cxl-t h6>Tags</cxl-t>
-<template &="=tags:each:repeat">
-<cxl-chip primary &="item:text"></cxl-chip>
-</template>
-	`,
-	initialize(state) {
-		function onMutate(el) {
-			el.tags = el.innerHTML.split(' ');
-		}
-
-		document.readyState !== 'loading'
-			? onMutate(this)
-			: window.addEventListener('DOMContentLoaded', () => onMutate(this));
-	},
 });
 
 component({
