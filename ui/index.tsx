@@ -5,6 +5,8 @@ export { Button } from './button';
 export * from './checkbox.js';
 export {
 	Application,
+	ColorAttribute,
+	ColorValue,
 	Hr,
 	Meta,
 	Progress,
@@ -17,7 +19,7 @@ export {
 	Toolbar,
 	ripple,
 } from './core.js';
-export { Field } from './field.js';
+export { Field, Fieldset } from './field.js';
 export { theme } from './theme.js';
 export * from './menu.js';
 export * from './fab.js';
@@ -29,5 +31,8 @@ export * from './item.js';
 export * from './tabs.js';
 export * from './navigation.js';
 export * from './avatar.js';
+export * from './multiselect.js';
+export { SelectBox, Option } from './select.js';
 export { IconButton, SvgIcon } from './icon.js';
 export { AppbarSearch } from './appbar-search.js';
+export * from './drag.js';
