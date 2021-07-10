@@ -337,3 +337,14 @@ export function insert(el: Element, content: ElementContent) {
 	if (!(content instanceof Node)) content = document.createTextNode(content);
 	el.appendChild(content);
 }
+
+export function fileReaderString(file: File) {
+	return new Observable<string>(subs => {
+		const fr = new FileReader();
+		fr.readAsBinaryString(file);
+		fr.addEventListener('load', () => {
+			subs.next(fr.result as string);
+			subs.complete();
+		});
+	});
+}

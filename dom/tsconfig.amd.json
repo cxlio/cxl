@@ -4,6 +4,6 @@
 		"module": "amd",
 		"outDir": "../dist/dom/amd"
 	},
-	"files": ["index.ts", "virtual.ts"],
+	"files": ["index.ts"],
 	"references": [{ "path": "../rx/tsconfig.amd.json" }]
 }
