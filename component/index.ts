@@ -239,6 +239,8 @@ interface AttributeOptions {
 	persist: boolean;
 	persistOperator: Operator<any, any>;
 	observe: boolean;
+	/// Render function to be called on component initialization
+	render: RenderFunction<any>;
 }
 
 function getObservedAttributes(target: typeof Component) {
@@ -290,6 +292,8 @@ export function Attribute(options?: Partial<AttributeOptions>): any {
 					).pipe(options.persistOperator || attributeOperator)
 				);
 			});
+
+		if (options?.render) pushRender(target, options.render);
 
 		return {
 			get(this: any) {
