@@ -135,6 +135,10 @@
 			"render": {
 				"files": ["render/*"],
 				"tasks": "npm run build --prefix render"
+			},
+			"runner": {
+				"files": ["runner/*"],
+				"tasks": "npm run build --prefix runner"
 			}
 		}
 	}
