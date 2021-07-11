@@ -148,7 +148,7 @@ export class Route<T extends RouteElement> {
 		if (def.path !== undefined) this.path = new Fragment(def.path);
 		else if (!def.id) throw new Error('An id or path is required.');
 
-		this.id = def.id || def.path || `route${Math.random().toString()}`;
+		this.id = def.id || (def.path ?? `route${Math.random().toString()}`);
 		this.isDefault = def.isDefault || false;
 		this.parent = def.parent;
 		this.redirectTo = def.redirectTo;

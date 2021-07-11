@@ -14,6 +14,12 @@ import {
 } from './index.js';
 
 export default suite('router', test => {
+	sys.location = {
+		pathname: '',
+		hash: '',
+		search: '',
+	} as any;
+
 	test('Router#go - no parameters', a => {
 		const router = new Router();
 		router.route({
@@ -294,7 +300,7 @@ export default suite('router', test => {
 		it.should('update history state', a => {
 			const url = { path: 'path', hash: 'hash' };
 			HashStrategy.serialize(url);
-			a.equal(location.hash, '#path#hash');
+			a.equal(sys.location.hash, '#path#hash');
 		});
 		it.should('get state from hash', a => {
 			const url = { path: 'path', hash: 'hash' };

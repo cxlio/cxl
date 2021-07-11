@@ -102,11 +102,12 @@ export default suite('template', test => {
 	test('portal', async a => {
 		const id = 'cxl-test' + a.id;
 
-		await connect<HTMLDivElement>(<Span $={portal(id)} />, el => {
+		await connect<HTMLDivElement>(<Span $={portal(id)} />, async el => {
 			const subs = teleport(
 				(<span>Hello</span>) as HTMLSpanElement,
 				id
 			).subscribe();
+			await animationFrame.first();
 			a.ok(el);
 			a.equal(el.childNodes.length, 1);
 			a.equal(el.childNodes[0]?.textContent, 'Hello');
