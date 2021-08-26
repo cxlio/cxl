@@ -78,6 +78,7 @@ const FieldBase = [
 			paddingTop: 8,
 			paddingBottom: 2,
 			lineHeight: 10,
+			minHeight: 13,
 			verticalAlign: 'bottom',
 		},
 		label$focusWithin: { color: 'primary' },
@@ -87,6 +88,7 @@ const FieldBase = [
 			translateY: -17,
 			paddingTop: 0,
 			height: 5,
+			minHeight: 'auto',
 			backgroundColor: 'surface',
 			display: 'inline-block',
 		},
@@ -221,9 +223,9 @@ export class Fieldset extends Component {
 			const input = host.input;
 			if (input) {
 				invalid.next(input.touched && input.invalid);
-				host.inputdisabled = input.disabled;
-				host.invalid = invalid.value;
-				if (host.invalid) invalidMessage.next(input.validationMessage);
+				host.toggleAttribute('inputdisabled', input.disabled);
+				host.toggleAttribute('invalid', invalid.value);
+				if (invalid.value) invalidMessage.next(input.validationMessage);
 				if (!ev) return;
 				if (ev.type === 'focusable.focus') focused.next(true);
 				else if (ev.type === 'focusable.blur') focused.next(false);
@@ -232,7 +234,7 @@ export class Fieldset extends Component {
 
 		function onChange() {
 			const value = host.input?.value;
-			host.novalue = !value || value.length === 0;
+			host.toggleAttribute('novalue', !value || value.length === 0);
 		}
 
 		host.bind(
@@ -289,15 +291,9 @@ export class Field extends Component {
 	@StyleAttribute()
 	outline = false;
 	@StyleAttribute()
-	protected inputdisabled = false;
-	@StyleAttribute()
-	invalid = false;
-	@StyleAttribute()
 	floating = false;
 	@StyleAttribute()
 	leading = false;
-	@StyleAttribute()
-	novalue = true;
 	/**
 	 * @example
 	 * <cxl-field dense>

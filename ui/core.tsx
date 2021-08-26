@@ -1,6 +1,7 @@
 ///<amd-module name="@cxl/ui/core.js"/>
 import {
 	Attribute,
+	AttributeEvent,
 	Augment,
 	Component,
 	Span,
@@ -8,15 +9,24 @@ import {
 	StyleAttribute,
 	get,
 	onUpdate,
-	pushRender,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
-import { EMPTY, merge, tap } from '@cxl/rx';
-import { StyleDefinition, border, css, padding, pct } from '@cxl/css';
+import { EMPTY, merge, tap, operator } from '@cxl/rx';
+import {
+	Typography,
+	Styles,
+	StyleDefinition,
+	border,
+	css,
+	padding,
+	pct,
+} from '@cxl/css';
 import { Focusable, role } from '@cxl/template';
 import { getShadow, on, onAction, trigger } from '@cxl/dom';
-import { InversePrimary, ResetSurface } from './theme.js';
+import { InversePrimary, ResetSurface, ColorStyles } from './theme.js';
+import { Svg, Circle } from './svg.js';
 
+export { Circle, Svg, Path } from './svg.js';
 export { Span } from '@cxl/component';
 
 export const FocusHighlight = {
@@ -58,6 +68,28 @@ export const FocusCircleStyle = css({
 	focusCircle$disabled: { scaleX: 0, scaleY: 0 },
 });
 
+export function persistWithParameter(prefix: string) {
+	return operator<AttributeEvent<any>>(() => {
+		let lastAttr: string;
+		return {
+			next({ value, target }) {
+				if (value === undefined) {
+					if (target.hasAttribute(lastAttr))
+						target.removeAttribute(lastAttr);
+				} else {
+					const attr = `${prefix}${value}`;
+
+					if (lastAttr !== attr) {
+						target.removeAttribute(lastAttr);
+						target.setAttribute(attr, '');
+						lastAttr = attr;
+					}
+				}
+			},
+		};
+	});
+}
+
 function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
 	const x = ev.x,
 		y = ev.y,
@@ -76,15 +108,16 @@ function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
 export function ripple(element: any) {
 	return onAction(element).raf(ev => {
 		if (!element.disabled) attachRipple(element, ev as any);
+		ev.stopPropagation();
 	});
 }
 
 export type Size = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 'small' | 'big';
 
-export function sizeStyles(
+export function SizeAttribute(
 	fn: (size: Exclude<Size, 'small' | 'big'>) => StyleDefinition
 ) {
-	return css(
+	return CssAttribute(
 		[-1, 0, 1, 2, 3, 4, 5, 'small', 'big'].reduce((r, val) => {
 			const sel = val === 0 ? '$' : `$size="${val}"`;
 			if (val === 'small') val = -1;
@@ -95,15 +128,23 @@ export function sizeStyles(
 	);
 }
 
-export function SizeAttribute(
-	fn: (size: Exclude<Size, 'small' | 'big'>) => StyleDefinition
-) {
-	const styleAttribute = StyleAttribute();
-	const styles = sizeStyles(fn);
-	return (target: any, attribute: string) => {
-		styleAttribute(target, attribute);
-		pushRender(target, host => getShadow(host).appendChild(styles()));
-	};
+export type ColorValue = keyof typeof ColorStyles;
+
+export function ColorAttribute(defaultColor: ColorValue) {
+	return CssAttribute({
+		$: ColorStyles[defaultColor],
+		'$color="surface"': ColorStyles.surface,
+		'$color="primary"': ColorStyles.primary,
+		'$color="secondary"': ColorStyles.secondary,
+	});
+}
+
+export function CssAttribute(styles: Styles) {
+	const el = css(styles);
+	return Attribute({
+		persist: true,
+		render: host => getShadow(host).appendChild(el()),
+	});
 }
 
 @Augment<Ripple>(
@@ -179,59 +220,6 @@ export class Ripple extends Component {
 )
 export class RippleContainer extends Component {}
 
-/**
- * Chips represent complex entities in small blocks. A chip can contain several
- * different elements such as avatars, text, and icons.
- *
- * @example
- * <cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge><br/>
- */
-@Augment(
-	'cxl-badge',
-	css({
-		$: {
-			display: 'inline-block',
-			position: 'relative',
-			width: 20,
-			height: 20,
-			marginRight: -10,
-			lineHeight: 20,
-			font: 'caption',
-			borderRadius: 11,
-			color: 'onPrimary',
-			backgroundColor: 'primary',
-			textAlign: 'center',
-			verticalAlign: 'top',
-			flexShrink: 0,
-		},
-		$secondary: {
-			color: 'onSecondary',
-			backgroundColor: 'secondary',
-		},
-		$small: {
-			width: 8,
-			height: 8,
-			marginRight: -4,
-		},
-		$error: { color: 'onError', backgroundColor: 'error' },
-		$over: { marginLeft: -8 },
-	}),
-	() => <slot />
-)
-export class Badge extends Component {
-	@StyleAttribute()
-	small = false;
-
-	@StyleAttribute()
-	secondary = false;
-
-	@StyleAttribute()
-	error = false;
-
-	@StyleAttribute()
-	over = false;
-}
-
 @Augment(
 	'cxl-hr',
 	role('separator'),
@@ -241,9 +229,16 @@ export class Badge extends Component {
 			height: 1,
 			backgroundColor: 'divider',
 		},
+		'$pad="8"': { marginTop: 8, marginBottom: 8 },
+		'$pad="16"': { marginTop: 16, marginBottom: 16 },
+		'$pad="24"': { marginTop: 24, marginBottom: 24 },
+		'$pad="32"': { marginTop: 32, marginBottom: 32 },
 	})
 )
-export class Hr extends Component {}
+export class Hr extends Component {
+	@StyleAttribute()
+	pad?: 8 | 16 | 24 | 32;
+}
 
 /**
  * Linear progress indicators display progress by animating an indicator along the length of a fixed, visible track.
@@ -285,24 +280,6 @@ export class Progress extends Component {
 	value = Infinity;
 }
 
-export function Svg(p: {
-	viewBox: string;
-	className?: string;
-	width?: number;
-	height?: number;
-	children: string;
-}) {
-	const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	el.style.fill = 'currentColor';
-	el.style.verticalAlign = 'middle';
-	el.innerHTML = p.children;
-	el.setAttribute('viewBox', p.viewBox);
-	if (p.width !== undefined) el.setAttribute('width', p.width.toString());
-	if (p.height !== undefined) el.setAttribute('height', p.height.toString());
-	if (p.className !== undefined) el.setAttribute('class', p.className);
-	return el;
-}
-
 /**
  * Spinners are used to indicate that the app is performing an action that the user needs to wait on.
  *
@@ -322,13 +299,15 @@ export function Svg(p: {
 		svg: { width: pct(100), height: pct(100) },
 	}),
 	_ => (
-		<Svg viewBox="0 0 100 100" className="svg">{`<circle
+		<Svg viewBox="0 0 100 100" className="svg">
+			<Circle
 				cx="50%"
 				cy="50%"
 				r="45"
 				style="stroke:var(--cxl-primary);fill:transparent;transition:stroke-dashoffset var(--cxl-speed);stroke-width:10%;transform-origin:center;stroke-dasharray:282.743px"
-				class="circle"
-			/>`}</Svg>
+				className="circle"
+			/>
+		</Svg>
 	)
 )
 export class Spinner extends Component {}
@@ -339,7 +318,6 @@ export class Spinner extends Component {}
 		$: { display: 'block', font: 'default', marginBottom: 8 },
 		$center: { textAlign: 'center' },
 		$inline: { display: 'inline', marginTop: 0, marginBottom: 0 },
-
 		$caption: { font: 'caption' },
 		$h1: { font: 'h1', marginTop: 32, marginBottom: 64 },
 		$h2: { font: 'h2', marginTop: 24, marginBottom: 48 },
@@ -359,6 +337,11 @@ export class Spinner extends Component {}
 	_ => <slot />
 )
 export class T extends Component {
+	@Attribute({
+		persistOperator: persistWithParameter(''),
+	})
+	font?: keyof Typography;
+
 	@StyleAttribute()
 	h1 = false;
 	@StyleAttribute()
@@ -516,12 +499,12 @@ export class Surface extends Component {
 	'cxl-toolbar',
 	css({
 		$: {
-			display: 'grid',
-			gridAutoFlow: 'column',
-			gridTemplateColumns: 'min-content',
+			display: 'flex',
+			// Expand in default Grid
+			gridColumnEnd: 'span 12',
 			columnGap: 16,
 			alignItems: 'center',
-			height: 56,
+			minHeight: 56,
 			...padding(4, 16, 4, 16),
 		},
 	}),
@@ -537,8 +520,6 @@ export class Toolbar extends Component {}
 			elevation: 1,
 			paddingTop: 8,
 			paddingBottom: 8,
-			paddingRight: 16,
-			paddingLeft: 16,
 			cursor: 'pointer',
 			display: 'inline-block',
 			font: 'button',
@@ -636,6 +617,8 @@ export class ButtonBase extends Component {
 		borderRadius: 2 + s * 2,
 		fontSize: 14 + s * 4,
 		lineHeight: 20 + s * 8,
+		paddingRight: 16 + s * 4,
+		paddingLeft: 16 + s * 4,
 	}))
 	size: Size = 0;
 }

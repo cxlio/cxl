@@ -2,5 +2,5 @@
 
 ## [0.0.1]
 
-- fix: style fixes [657a27f]
-- feat: updated highlight js [3ee7bf5]
+- feat: package bin [cd4b4df]
+- feat: updated typescript version [2caf0fb]

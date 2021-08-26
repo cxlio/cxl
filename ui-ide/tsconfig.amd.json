@@ -1,0 +1,21 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "amd",
+		"outDir": "../dist/ui-ide/amd"
+	},
+	"references": [
+		{
+			"path": "../tsx/tsconfig.amd.json"
+		},
+		{
+			"path": "../ui/tsconfig.amd.json"
+		}
+	],
+	"include": [
+		"*.tsx"
+	],
+	"exclude": [
+		"test.tsx"
+	]
+}

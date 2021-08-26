@@ -1,10 +1,12 @@
 {
 	"name": "@cxl/diff",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "String diff tool",
 	"license": "Apache-2.0",
+	"browser": "amd/index.min.js",
+	"main": "index.js",
 	"scripts": {
-		"test": "npm run build && cd ../dist/diff && node ../tester --node",
+		"test": "npm run build && cd ../dist/diff && node ../tester --baselinePath=../../diff/spec",
 		"build": "node ../dist/build"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",

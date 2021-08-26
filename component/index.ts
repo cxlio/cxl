@@ -1,6 +1,6 @@
 ///<amd-module name="@cxl/component"/>
 import { AttributeType, Children, renderChildren } from '@cxl/tsx';
-import { getShadow, onChildrenMutation } from '@cxl/dom';
+import { getShadow, onChildrenMutation, animationFrame } from '@cxl/dom';
 import {
 	Observable,
 	Operator,
@@ -13,6 +13,7 @@ import {
 	observable,
 	of,
 	tap,
+	merge,
 } from '@cxl/rx';
 
 type RenderFunction<T> = (node: T) => void;
@@ -80,10 +81,12 @@ export abstract class Component extends HTMLElement {
 		const name = (el.name = p.name || p.selector);
 		const selector = p.selector;
 		this.bind(
-			defer(() => {
-				for (const node of this.children)
-					if (node.matches(selector)) node.slot = selector;
-				return onChildrenMutation(this).tap(ev => {
+			merge(
+				animationFrame.first().tap(() => {
+					for (const node of this.children)
+						if (node.matches(selector)) node.slot = selector;
+				}),
+				onChildrenMutation(this).tap(ev => {
 					const node = ev.value;
 					if (
 						ev.type === 'added' &&
@@ -91,8 +94,8 @@ export abstract class Component extends HTMLElement {
 						node.matches(selector)
 					)
 						node.slot = name;
-				});
-			})
+				})
+			)
 		);
 
 		return el;
@@ -239,6 +242,8 @@ interface AttributeOptions {
 	persist: boolean;
 	persistOperator: Operator<any, any>;
 	observe: boolean;
+	/// Render function to be called on component initialization
+	render: RenderFunction<any>;
 }
 
 function getObservedAttributes(target: typeof Component) {
@@ -291,7 +296,10 @@ export function Attribute(options?: Partial<AttributeOptions>): any {
 				);
 			});
 
+		if (options?.render) pushRender(target, options.render);
+
 		return {
+			enumerable: true,
 			get(this: any) {
 				return this[prop];
 			},

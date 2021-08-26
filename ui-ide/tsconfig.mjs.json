@@ -1,0 +1,17 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"outDir": "../dist/ui-ide/mjs"
+	},
+	"include": ["*.tsx"],
+	"exclude": ["test.tsx"],
+	"references": [
+		{
+			"path": "../tsx/tsconfig.mjs.json"
+		},
+		{
+			"path": "../ui/tsconfig.mjs.json"
+		}
+	]
+}

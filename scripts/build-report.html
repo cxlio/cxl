@@ -1,53 +1,121 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>@cxl - Build Report</title>
-		<script src="ui/index.bundle.min.js"></script>
-		<script src="ui-table/amd/index.min.js"></script>
-		<script src="ui-router/amd/index.min.js"></script>
-		<style>
-			.failure {
-				background-color: #ffcdd2;
-			}
-		</style>
-	</head>
-	<body>
-		<cxl-application>
-			<cxl-appbar>
-				<cxl-navbar>
-					<cxl-router-item href="">Home</cxl-router-item>
-					<cxl-router-item href="changelog"
-						>CHANGELOG</cxl-router-item
-					>
-				</cxl-navbar>
-				<cxl-router-appbar-title></cxl-router-appbar-title>
-			</cxl-appbar>
-			<cxl-content center>
-				<cxl-router-outlet></cxl-router-outlet>
-			</cxl-content>
-		</cxl-application>
-		<cxl-router>
-			<template data-path="" data-title="Build Report">$HOME$</template>
-			<template data-path="changelog" data-title="CHANGELOG"
-				>$CHANGELOG$</template
-			>
-			<template data-path="changelog/:module">
-				<pre id="changelog-output"></pre>
-				<script>
-					(() => {
-						const router = require('@cxl/ui-router').router;
-						const moduleName = router.state?.arguments.module;
+<title>@cxl - Build Report</title>
+<script src="ui/index.bundle.min.js"></script>
+<script src="ajax/amd/index.min.js"></script>
+<script src="router/amd/index.min.js"></script>
+<script src="ui-router/amd/index.min.js"></script>
+<style>
+	.failure {
+		background-color: #ffcdd2;
+	}
+	pre {
+		font-family: var(--cxl-font-monospace);
+		font-size: var(--cxl-font-size);
+	}
+</style>
+<cxl-application>
+	<cxl-appbar>
+		<cxl-navbar>
+			<cxl-router-item href="">Home</cxl-router-item>
+			<cxl-router-item href="changelog/cxl">CHANGELOG</cxl-router-item>
+		</cxl-navbar>
+		<cxl-router-appbar-title></cxl-router-appbar-title>
+	</cxl-appbar>
+	<cxl-content center>
+		<cxl-router-outlet></cxl-router-outlet>
+	</cxl-content>
+</cxl-application>
+<cxl-router>
+	<template data-path="" data-title="Build Report">
+		<cxl-table>
+			<cxl-tr>
+				<cxl-th>Package</cxl-th>
+				<cxl-th>Version</cxl-th>
+				<cxl-th>Used By</cxl-th>
+				<cxl-th>Script Size</cxl-th>
+				<cxl-th>Build Time</cxl-th>
+				<cxl-th>Links</cxl-th>
+			</cxl-tr>
+			<cxl-tbody id="build-table"></cxl-tbody>
+		</cxl-table>
+		<script type="module">
+			const { get } = require('@cxl/ajax');
+			const { of } = require('@cxl/rx');
+			const table = document.getElementById('build-table');
+			const stats = await get('stats.json');
 
-						fetch(`../${moduleName}/CHANGELOG.md`)
-							.then(res => res.text())
-							.then(src => {
-								document.getElementById(
-									'changelog-output'
-								).innerHTML = src;
-							});
-					})();
-				</script>
-			</template>
-		</cxl-router>
-	</body>
-</html>
+			function getPublishedVersion(pkg) {
+				return pkg.npms?.collected?.metadata?.version;
+			}
+
+			async function getTotalCoverage(dir, coverage) {
+				const regex = new RegExp(`\/${dir}\/.+.\.ts`);
+				let total = 0;
+				let count = 0;
+				for (const cov of coverage) {
+					if (regex.test(cov.url)) {
+						total += cov.blockCovered / cov.blockTotal;
+						count++;
+					}
+				}
+
+				return ((total / count) * 100).toFixed(2);
+			}
+
+			let output = '';
+
+			for (const pkg of stats.packages) {
+				const dir = /\/(.+)/.exec(pkg.name)[1];
+				const [npmVersion, coverage] = await Promise.all([
+					pkg.private ? '' : getPublishedVersion(pkg),
+					getTotalCoverage(dir, pkg.testReport.coverage),
+				]);
+				const size = pkg.stats?.mainScriptSize || 0;
+				const success = coverage > 90;
+				const usedBy = stats.packages.filter(
+					p => p.package.dependencies?.[pkg.name]
+				);
+				output += `<cxl-tr class="${success ? 'success' : 'failure'}">
+				<cxl-td><a href="../docs/${dir}">${pkg.name}</a></cxl-td>
+				<cxl-td>${pkg.package.version} (${
+					npmVersion ? `NPM ${npmVersion}` : 'Not Published'
+				})</cxl-td>
+				<cxl-td>${usedBy.map(p => p.name).join('<br>')}</cxl-td>
+				<cxl-td>${size}</cxl-td>
+				<cxl-td>${pkg.buildTime}</cxl-td>
+				<cxl-td>
+					<cxl-a href="changelog/${dir}">CHANGELOG</cxl-a>
+					<a href="${dir}/test.html">Spec</a>
+					<a href="${dir}/test-report.html">${coverage} %</a>
+				</cxl-td>
+			</cxl-tr>`;
+			}
+			table.innerHTML = output;
+		</script>
+	</template>
+	<template data-path="changelog/:module">
+		<pre id="changelog-output"></pre>
+		<script>
+			(() => {
+				const router = require('@cxl/ui-router').router;
+				const moduleName = router.state?.arguments.module;
+				router.state.current.routeTitle =
+					moduleName === 'cxl'
+						? 'CHANGELOG'
+						: `@cxl/${moduleName} CHANGELOG`;
+
+				fetch(
+					moduleName === 'cxl'
+						? '../CHANGELOG.md'
+						: `../${moduleName}/CHANGELOG.md`
+				)
+					.then(res => res.text())
+					.then(src => {
+						document.getElementById(
+							'changelog-output'
+						).innerHTML = src;
+					});
+			})();
+		</script>
+	</template>
+</cxl-router>

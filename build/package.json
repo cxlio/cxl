@@ -2,6 +2,9 @@
 	"name": "@cxl/build",
 	"version": "0.1.0",
 	"private": true,
+	"bin": {
+		"cxl-build": "index.js"
+	},
 	"description": "Build Tool",
 	"license": "GPL-3.0",
 	"main": "index.js",
@@ -14,7 +17,7 @@
 	"dependencies": {
 		"eslint": "^7.14.0",
 		"terser": "^5.5.1",
-		"typescript": "^4.2.3",
+		"typescript": "^4.3.5",
 		"@cxl/rx": "~0.2.0",
 		"@cxl/server": "~0.0.2",
 		"@cxl/source": "~0.0.1"

@@ -111,6 +111,10 @@ export class TestApi {
 		}
 	}
 
+	addSpec(test: Test) {
+		this.$test.addTest(test);
+	}
+
 	throws(fn: () => any) {
 		let success = false;
 		try {
@@ -233,6 +237,7 @@ export class TestApi {
 			const resolve = a.async();
 			function handler(ev: Event) {
 				a.equal(ev.type, name, `"${name}" event fired`);
+				a.equal(ev.target, el);
 				el.removeEventListener(name, handler);
 				resolve();
 			}

@@ -2,4 +2,4 @@
 
 ## [0.2.0]
 
-- feat: better attribute detection [92600eb]
+- feat: updated typescript [2a67092]

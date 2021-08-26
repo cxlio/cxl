@@ -1,8 +1,10 @@
 import { sh } from './index.js';
 
-export async function getPublishedVersion(packageName: string) {
+export async function getPublishedVersion(
+	packageName: string
+): Promise<string | undefined> {
 	const info = await checkNpms(packageName);
-	return info?.collected?.metadata.version;
+	return info?.collected?.metadata.version || undefined;
 }
 
 export async function checkNpms(name: string) {

@@ -1,0 +1,33 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"outDir": "../dist/ui-router/mjs"
+	},
+	"files": [
+		"index.tsx"
+	],
+	"references": [
+		{
+			"path": "../tsx/tsconfig.mjs.json"
+		},
+		{
+			"path": "../dom/tsconfig.mjs.json"
+		},
+		{
+			"path": "../rx/tsconfig.mjs.json"
+		},
+		{
+			"path": "../component/tsconfig.mjs.json"
+		},
+		{
+			"path": "../css/tsconfig.mjs.json"
+		},
+		{
+			"path": "../ui/tsconfig.mjs.json"
+		},
+		{
+			"path": "../router/tsconfig.mjs.json"
+		}
+	]
+}

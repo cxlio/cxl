@@ -1,0 +1,297 @@
+{
+  "modules": [
+    {
+      "source": {
+        "fileName": "index.tsx",
+        "line": 0,
+        "ch": 0
+      },
+      "kind": 7,
+      "name": "index.tsx",
+      "flags": 0,
+      "children": [
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 4,
+            "ch": 23
+          },
+          "kind": 16,
+          "name": "loadImage",
+          "flags": 257,
+          "id": 1,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 6,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "src",
+              "flags": 0,
+              "id": 2,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "HTMLImageElement",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 11,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "imageData",
+          "flags": 257,
+          "id": 3,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 13,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "srcA",
+              "flags": 0,
+              "id": 4,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "ImageData",
+                "kind": 6
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 23,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "image",
+          "flags": 1,
+          "id": 5,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 25,
+                "ch": 22
+              },
+              "kind": 9,
+              "name": "src",
+              "flags": 0,
+              "id": 6,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "HTMLImageElement",
+            "kind": 6
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 29,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "imageDiff",
+          "flags": 257,
+          "id": 7,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 31,
+                "ch": 32
+              },
+              "kind": 9,
+              "name": "srcA",
+              "flags": 0,
+              "id": 8,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 31,
+                "ch": 45
+              },
+              "kind": 9,
+              "name": "srcB",
+              "flags": 0,
+              "id": 9,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "type": {
+            "name": "Promise",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "source": {
+                  "fileName": "index.tsx",
+                  "line": 47,
+                  "ch": 7
+                },
+                "kind": 34,
+                "name": "",
+                "flags": 0,
+                "children": [
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 47,
+                      "ch": 9
+                    },
+                    "kind": 0,
+                    "name": "imageA",
+                    "flags": 0,
+                    "id": 10,
+                    "value": "A",
+                    "type": {
+                      "name": "ImageData",
+                      "kind": 6
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 47,
+                      "ch": 20
+                    },
+                    "kind": 0,
+                    "name": "imageB",
+                    "flags": 0,
+                    "id": 11,
+                    "value": "B",
+                    "type": {
+                      "name": "ImageData",
+                      "kind": 6
+                    }
+                  },
+                  {
+                    "source": {
+                      "fileName": "index.tsx",
+                      "line": 47,
+                      "ch": 31
+                    },
+                    "kind": 0,
+                    "name": "diff",
+                    "flags": 0,
+                    "id": 12,
+                    "value": "new ImageData(diff, w, h)",
+                    "type": {
+                      "name": "ImageData",
+                      "kind": 6
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.tsx",
+            "line": 48,
+            "ch": 1
+          },
+          "kind": 35,
+          "name": "ImageDiff",
+          "flags": 1,
+          "id": 13,
+          "children": [
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 88,
+                "ch": 42
+              },
+              "kind": 36,
+              "name": "src1",
+              "flags": 4,
+              "id": 14,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.tsx",
+                "line": 90,
+                "ch": 15
+              },
+              "kind": 36,
+              "name": "src2",
+              "flags": 4,
+              "id": 15,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            }
+          ],
+          "docs": {
+            "tagName": "cxl-image-diff"
+          },
+          "type": {
+            "flags": 0,
+            "kind": 33,
+            "name": "",
+            "children": [
+              {
+                "name": "Component",
+                "kind": 6
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

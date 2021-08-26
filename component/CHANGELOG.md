@@ -2,4 +2,5 @@
 
 ## [0.1.0]
 
-- fix: persist numeric attributes [8763125]
+- fix: onMutationHandler handle non upgraded children [9414938]
+- feat: attribute render option [81d1d33]

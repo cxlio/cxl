@@ -22,7 +22,7 @@ const requiredPackageFields = [
 	'bugs',
 ];
 const requiredPackageScripts = ['build', 'test'];
-const licenses = ['GPL-3.0', 'GPL-3.0-only', 'Apache-2.0'];
+const licenses = ['GPL-3.0', 'GPL-3.0-only', 'Apache-2.0', 'UNLICENSED'];
 const dependencies = [];
 
 function Result(id, valid, message, fix) {
@@ -231,7 +231,7 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }) {
 		),
 		rule(
 			licenses.includes(pkg.license),
-			`Valid license "${pkg.license}" required.`
+			`"${pkg.license}" is not a valid license.`
 		),
 		rule(
 			pkg.browser || !pkg.devDependencies,
@@ -353,6 +353,32 @@ async function lintTsconfig({ projectPath, pkg, dir }) {
 	};
 }
 
+async function fixTsconfigMjs({ projectPath, baseDir, dir, pkg }) {
+	if (!pkg.browser) return;
+
+	const baseTsconfig = await readJson(`${projectPath}/tsconfig.json`);
+	let tsconfig = (await readJson(`${projectPath}/tsconfig.mjs.json`)) || {};
+	const outDir = `../dist/${dir}/mjs`;
+
+	if (!tsconfig.extends) tsconfig.extends = '../tsconfig.json';
+	if (!tsconfig.compilerOptions) tsconfig.compilerOptions = {};
+	if (tsconfig.compilerOptions.module !== 'ESNext')
+		tsconfig.compilerOptions.module = 'ESNext';
+	if (tsconfig.compilerOptions.outDir !== outDir)
+		tsconfig.compilerOptions.outDir = outDir;
+	tsconfig.files = baseTsconfig.files;
+
+	tsconfig.references = baseTsconfig.references?.map(ref => {
+		const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
+		return { path: `${refName}/tsconfig.mjs.json` };
+	});
+
+	await fs.writeFile(
+		`${projectPath}/tsconfig.mjs.json`,
+		JSON.stringify(tsconfig, null, '\t')
+	);
+}
+
 async function fixTsconfigAmd({ projectPath, baseDir, dir, pkg }) {
 	if (!pkg.browser) return;
 
@@ -367,6 +393,8 @@ async function fixTsconfigAmd({ projectPath, baseDir, dir, pkg }) {
 	if (tsconfig.compilerOptions.outDir !== outDir)
 		tsconfig.compilerOptions.outDir = outDir;
 	tsconfig.files = baseTsconfig.files;
+	tsconfig.include = baseTsconfig.include;
+	tsconfig.exclude = baseTsconfig.exclude;
 
 	tsconfig.references = baseTsconfig.references?.map(ref => {
 		const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
@@ -377,6 +405,57 @@ async function fixTsconfigAmd({ projectPath, baseDir, dir, pkg }) {
 		`${projectPath}/tsconfig.amd.json`,
 		JSON.stringify(tsconfig, null, '\t')
 	);
+}
+
+async function lintTsconfigEs6({ projectPath, pkg, dir }) {
+	if (!pkg.browser)
+		return {
+			id: 'tsconfig.es6',
+			rules: [],
+		};
+
+	const tsconfig = await readJson(`${projectPath}/tsconfig.mjs.json`);
+	const baseTsconfig = await readJson(`${projectPath}/tsconfig.json`);
+	const references = tsconfig?.references;
+	const expectedReferences = baseTsconfig.references?.map(ref => {
+		const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
+		return { path: `${refName}/tsconfig.mjs.json` };
+	});
+	const rules = [
+		rule(tsconfig, 'tsconfig.mjs.json should be present'),
+		rule(
+			tsconfig?.compilerOptions,
+			'tsconfig.mjs.json should have compilerOptions'
+		),
+		rule(
+			tsconfig?.compilerOptions?.outDir === `../dist/${dir}/mjs`,
+			'tsconfig.mjs.json should have a valid outDir compiler option'
+		),
+		rule(
+			tsconfig?.compilerOptions?.module === 'ESNext',
+			'tsconfig.mjs.json should have a module set as ESNext'
+		),
+		rule(
+			tsconfig?.files?.join('|') === baseTsconfig.files?.join('|'),
+			'tsconfig.mjs.json files should match base tsconfig.json'
+		),
+		rule(
+			!baseTsconfig.references || references,
+			'tsconfig.mjs.json should have references if base tsconfig.json has them'
+		),
+		rule(
+			!expectedReferences ||
+				JSON.stringify(references) ===
+					JSON.stringify(expectedReferences),
+			'tsconfig.mjs.json should match base tsconfig references'
+		),
+	];
+
+	return {
+		id: 'tsconfig.mjs',
+		fix: fixTsconfigMjs,
+		rules,
+	};
 }
 
 async function lintTsconfigAmd({ projectPath, pkg, dir }) {
@@ -411,6 +490,14 @@ async function lintTsconfigAmd({ projectPath, pkg, dir }) {
 		rule(
 			tsconfig?.files?.join('|') === baseTsconfig.files?.join('|'),
 			'tsconfig.amd.json files should match base tsconfig.json'
+		),
+		rule(
+			tsconfig?.include?.join('|') === baseTsconfig.include?.join('|'),
+			'tsconfig.amd.json "include" should match base tsconfig.json'
+		),
+		rule(
+			tsconfig?.exclude?.join('|') === baseTsconfig.exclude?.join('|'),
+			'tsconfig.amd.json "exclude" should match base tsconfig.json'
 		),
 		rule(
 			!baseTsconfig.references || references,
@@ -471,6 +558,7 @@ const linters = [
 	lintTsconfig,
 	lintImports,
 	lintTsconfigAmd,
+	lintTsconfigEs6,
 	lintTsconfigBundle,
 ];
 

@@ -16,7 +16,7 @@
 				"tasks": "cd build && npm run build"
 			},
 			"component": {
-				"files": ["component/index.ts"],
+				"files": ["component/*"],
 				"tasks": "cd component && npm run build"
 			},
 			"css": {
@@ -124,9 +124,25 @@
 				"files": ["ui-user/*"],
 				"tasks": "npm run build --prefix ui-user"
 			},
+			"ui-carousel": {
+				"files": ["ui-carousel/*"],
+				"tasks": "npm run build --prefix ui-carousel"
+			},
+			"ui-image": {
+				"files": ["ui-image/*"],
+				"tasks": "npm run build --prefix ui-image"
+			},
 			"render": {
 				"files": ["render/*"],
 				"tasks": "npm run build --prefix render"
+			},
+			"runner": {
+				"files": ["runner/*"],
+				"tasks": "npm run build --prefix runner"
+			},
+			"ui-ide": {
+				"files": ["ui-ide/*"],
+				"tasks": "npm run build --prefix ui-ide"
 			}
 		}
 	}

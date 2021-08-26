@@ -506,7 +506,14 @@ export function debounceFunction<A extends any[], R>(
 	};
 }
 
-function timeout(delay: number) {
+export function interval(period: number) {
+	return new Observable<void>(subscriber => {
+		const to = setInterval(subscriber.next.bind(subscriber), period);
+		return () => clearInterval(to);
+	});
+}
+
+export function timer(delay: number) {
 	return new Observable<void>(subscriber => {
 		const to = setTimeout(() => {
 			subscriber.next();
@@ -519,14 +526,14 @@ function timeout(delay: number) {
 /**
  * Emits a value from the source Observable only after a particular time span has passed without another source emission.
  */
-export function debounceTime<T>(time = 0, timer = timeout) {
+export function debounceTime<T>(time = 0, useTimer = timer) {
 	return operator<T>(subscriber => {
 		let inner: Subscription | undefined,
 			completed = false;
 		return {
 			next(val: T) {
 				inner?.unsubscribe();
-				inner = timer(time).subscribe(() => {
+				inner = useTimer(time).subscribe(() => {
 					inner = undefined;
 					subscriber.next(val);
 					if (completed) subscriber.complete();

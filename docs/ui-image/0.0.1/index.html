@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+	<head><meta name="description" content="Documentation for @cxl/ui-image" /><script>window.docgen={"activeVersion":"0.0.1","userScripts":[],"versions":["0.0.1"]};</script><script src="runtime.bundle.min.js"></script></head>
+	<link rel="stylesheet" href="styles.css" />
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}cxl-router-item>cxl-badge{margin-right:0} cxl-grid>cxl-c{overflow-wrap:break-word}.see-source{text-decoration:none;float:right;color:var(--cxl-onSurface87)}cxl-t[code][subtitle]{font-weight:700;margin-bottom:16px}</style>
+	<cxl-application permanent><title>@cxl/ui-image</title><cxl-appbar>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline>@cxl/ui-image</cxl-t>&nbsp;&nbsp;<small>0.0.1</small>
+	</cxl-c>
+		<cxl-hr></cxl-hr>
+		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
+		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index--ImageDiff.html"><cxl-badge>C</cxl-badge>ImageDiff</cxl-router-item><cxl-router-item href="index-api.html#s5"><cxl-badge>F</cxl-badge>image</cxl-router-item><cxl-router-item href="index-api.html#s3"><cxl-badge>F</cxl-badge>imageData</cxl-router-item><cxl-router-item href="index-api.html#s7"><cxl-badge>F</cxl-badge>imageDiff</cxl-router-item><cxl-router-item href="index-api.html#s1"><cxl-badge>F</cxl-badge>loadImage</cxl-router-item>
+		</cxl-navbar>
+	<cxl-router-appbar-title></cxl-router-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="ImageDiff" data-path="index--ImageDiff.html"><cxl-t h3><span style="float:right"><cxl-chip size="small" primary>component</cxl-chip> </span>ImageDiff <cxl-t h6 inline>extends Component</cxl-t></cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>HTML</cxl-t><pre><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">cxl-image-diff</span>&gt;</span></code></pre><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { ImageDiff } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/ui-image&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Attributes
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--ImageDiff.html#s14">src1</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--ImageDiff.html#s15">src2</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Attributes</cxl-t><a name="s14"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t code subtitle>src1: string</cxl-t>
+		</cxl-c></cxl-card><a name="s15"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t code subtitle>src2: string</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="index.tsx" data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.tsx</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Components
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--ImageDiff.html">ImageDiff</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index-api.html#s5">image</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s3">imageData</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s7">imageDiff</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index-api.html#s1">loadImage</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s5"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t code subtitle>image(src: string): HTMLImageElement</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>src: string</cxl-t></li></ul>
+		</cxl-c></cxl-card><a name="s3"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t code subtitle>imageData(srcA: string): Promise&lt;ImageData&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>srcA: string</cxl-t></li></ul>
+		</cxl-c></cxl-card><a name="s7"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t code subtitle>imageDiff(srcA: string, srcB: string): Promise&lt;{ imageA: ImageData, imageB: ImageData, diff: ImageData }&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>srcA: string</cxl-t></li><li><cxl-t code inline>srcB: string</cxl-t></li></ul>
+		</cxl-c></cxl-card><a name="s1"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<cxl-t code subtitle>loadImage(src: string): Promise&lt;HTMLImageElement&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>src: string</cxl-t></li></ul>
+		</cxl-c></cxl-card></template><template data-default="true" data-title="Home" data-path="index.html"><cxl-t h2>@cxl/ui-image</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fui-image"><img src="https://badge.fury.io/js/%40cxl%2Fui-image.svg" alt="npm version"></a></p>
+<p>Image Tools</p>
+<cxl-t h3>Project Details</cxl-t><ul>
+<li>Branch Version: <a href="https://npmjs.com/package/@cxl/ui-image/v/0.0.1">0.0.1</a></li>
+<li>License: GPL-3.0</li>
+<li>Documentation: <a href="https://cxlio.github.io/cxl/ui-image">Link</a></li>
+<li>Report Issues: <a href="https://github.com/cxlio/cxl/issues">Github</a></li>
+</ul>
+<cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/ui-image
+</code></pre></template></cxl-router></cxl-page></cxl-application>

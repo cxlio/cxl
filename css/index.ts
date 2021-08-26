@@ -38,6 +38,7 @@ export interface StrictStyleDefinition {
 	backgroundColor: Color;
 	backgroundSize: 'cover' | 'contain';
 	backgroundPosition: 'center';
+	backgroundRepeat: 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y';
 	borderBottom: Length;
 	borderLeft: Length;
 	borderRight: Length;
@@ -89,6 +90,7 @@ export interface StrictStyleDefinition {
 	filter: string;
 	flexGrow: number;
 	flexShrink: number;
+	flexBasis: Length;
 	flexDirection: string;
 	justifyContent: string;
 	pointerEvents: string;
@@ -228,7 +230,7 @@ const SNAKE_CSS: Record<string, string> = {
 
 export const theme: any = {
 	animation: {},
-	breakpoints: { small: 480, medium: 960, large: 1280, xlarge: 1600 },
+	breakpoints: { small: 600, medium: 905, large: 1240, xlarge: 1440 },
 	variables: {
 		font: 'sans-serif',
 		fontSize: '16px',
@@ -337,7 +339,7 @@ const renderMap: StyleMap = {
 		const x = toUnit(n);
 		style.zIndex = n.toString();
 		style.boxShadow =
-			n > 0 ? `${x} ${x} ${toUnit(3 * n)} var(--cxl-shadow)` : 'none';
+			n > 0 ? `${x} ${x} ${toUnit(5 * n)} var(--cxl-shadow)` : 'none';
 	},
 	font(
 		_def: StyleDefinition,
@@ -452,7 +454,7 @@ function renderRule(
 	)}}`;
 }
 
-export function createStyleElement(
+function createStyleElement(
 	styles: Styles,
 	selector = ':host',
 	global = false

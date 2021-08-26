@@ -41,22 +41,31 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			tasks: [
 				file('index.html', 'index.html').catchError(() => EMPTY),
 				file('debug.html', 'debug.html').catchError(() => EMPTY),
+				file('icons.svg', 'icons.svg').catchError(() => EMPTY),
+				file('favicon.ico', 'favicon.ico').catchError(() => EMPTY),
 				file('test.html', 'test.html').catchError(() =>
 					of({
 						path: 'test.html',
 						source: Buffer.from(`<!DOCTYPE html>
-<script src="../tester/require-browser.js"></script>
+<script type="module" src="/cxl/dist/tester/require-browser.js"></script>
 <script type="module">
 	require.replace = function (path) {
 		return path.replace(
+			/^@cxl\\/dbg\\.(.+)/,
+			(str, p1) =>
+				\`/debuggerjs/dist/$\{
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
+		)
+		.replace(
 			/^@cxl\\/(.+)/,
 			(str, p1) =>
-				\`../../../cxl/dist/$\{
+				\`/cxl/dist/$\{
 					str.endsWith('.js') ? p1 : p1 + '/index.js'
 				}\`
 		);
 	};
-	const browserRunner = require('../tester/browser-runner.js').default;
+	const browserRunner = require('/cxl/dist/tester/browser-runner.js').default;
 
 	const suite = require('./test.js').default;
 	browserRunner.run([suite], '../../${dirName}/spec');
@@ -98,15 +107,15 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 					},
 			  ]
 			: []),
-		...(existsSync('tsconfig.es6.json')
+		...(existsSync('tsconfig.mjs.json')
 			? [
 					{
 						target: 'package',
-						outputDir: outputDir + '/es6',
+						outputDir: outputDir + '/mjs',
 						tasks: [
-							tsconfig('tsconfig.es6.json'),
+							tsconfig('tsconfig.mjs.json'),
 							packageJson.browser
-								? file(`${outputDir}/es6/index.js`).pipe(
+								? file(`${outputDir}/mjs/index.js`).pipe(
 										minify()
 								  )
 								: EMPTY,

@@ -7,16 +7,22 @@ import {
 	be,
 	concat,
 	defer,
+	from,
 	of,
 	merge,
 } from '@cxl/rx';
 
-export type ElementContent = string | Node;
+export type ElementContent = string | Node | undefined;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
 
 export function empty(el: Element) {
 	let c: Node;
 	while ((c = el.childNodes[0])) el.removeChild(c);
+}
+
+export function setContent(el: Element, content: ElementContent) {
+	empty(el);
+	insert(el, content);
 }
 
 export function on<K extends keyof WindowEventMap>(
@@ -79,6 +85,10 @@ export function onLoad() {
 					.first()
 					.map(() => true)
 	);
+}
+
+export function onFontsReady(): Observable<void> {
+	return from((document as any).fonts.ready);
 }
 
 export function getShadow(el: Element) {
@@ -223,12 +233,8 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 			this.observer = new MutationObserver(events =>
 				events.forEach(this.$handleEvent, this)
 			);
-			if (el) this.observer.observe(el, { childList: true });
+			this.observer.observe(el, { childList: true });
 		}
-
-		if (el)
-			for (const node of el.childNodes)
-				subscription.next({ type: 'added', target: el, value: node });
 
 		const unsubscribe = super.onSubscribe(subscription);
 
@@ -256,12 +262,16 @@ export function onHistoryChange() {
 		const old = history.pushState;
 		history.pushState = function (...args: any) {
 			const result = old.apply(this, args);
+			if (history.state) history.state.lastAction = 'push';
 			pushSubject.next(history.state);
 			return result;
 		};
 	}
 	return merge(
-		on(window, 'popstate').map(() => history.state),
+		on(window, 'popstate').map(() => {
+			if (history.state) history.state.lastAction = 'pop';
+			return history.state;
+		}),
 		pushSubject
 	);
 }
@@ -281,6 +291,7 @@ export const animationFrame = new Observable<number>(subs => {
 	let frame = 0;
 	let rafid = requestAnimationFrame(next);
 	function next() {
+		if (subs.closed) return;
 		subs.next(frame++);
 		rafid = requestAnimationFrame(next);
 	}
@@ -325,6 +336,42 @@ export function onResize(el: Element) {
 }
 
 export function insert(el: Element, content: ElementContent) {
+	if (content === undefined) return;
 	if (!(content instanceof Node)) content = document.createTextNode(content);
 	el.appendChild(content);
+}
+
+export function fileReaderString(file: File) {
+	return new Observable<string>(subs => {
+		const fr = new FileReader();
+		fr.readAsBinaryString(file);
+		fr.addEventListener('load', () => {
+			subs.next(fr.result as string);
+			subs.complete();
+		});
+	});
+}
+
+export function onMutation(
+	target: Element,
+	options: MutationObserverInit = { attributes: true, childList: true }
+) {
+	return new Observable<MutationEvent>(subs => {
+		const observer = new MutationObserver(events =>
+			events.forEach(ev => {
+				for (const value of ev.addedNodes)
+					subs.next({ type: 'added', target, value });
+				for (const value of ev.removedNodes)
+					subs.next({ type: 'removed', target, value });
+				if (ev.attributeName)
+					subs.next({
+						type: 'attribute',
+						target,
+						value: ev.attributeName,
+					});
+			})
+		);
+		observer.observe(target, options);
+		return () => observer.disconnect();
+	});
 }

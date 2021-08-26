@@ -328,12 +328,19 @@ function getFlags(node: ts.Node, flags: ts.ModifierFlags) {
 	return result;
 }
 
+function parseJsDocComment(node: ts.JSDoc, content: DocumentationContent[]) {
+	if (!node.comment) return;
+
+	if (typeof node.comment === 'string') content.push({ value: node.comment });
+	else node.comment.forEach(n => content.push({ value: n.text }));
+}
+
 function getNodeDocs(node: ts.Node, result: Node): Documentation {
 	const jsDoc = (node as any).jsDoc as ts.JSDoc[];
 	const content: DocumentationContent[] = [];
 	const docs: any = { content };
 
-	jsDoc?.forEach(doc => doc.comment && content.push({ value: doc.comment }));
+	jsDoc?.forEach(doc => doc.comment && parseJsDocComment(doc, content));
 
 	tsLocal.getJSDocTags(node).forEach(doc => {
 		const tag = doc.tagName.escapedText as string;
@@ -437,7 +444,8 @@ function getSymbolReference(
 	symbol: ts.Symbol,
 	typeArgs?: readonly ts.Type[]
 ): Node {
-	const node = symbol.valueDeclaration || symbol.declarations[0];
+	const node = symbol.valueDeclaration || symbol.declarations?.[0];
+	if (!node) throw new Error('No symbol declaration found');
 
 	if (tsLocal.isExportSpecifier(node)) {
 		const local = typeChecker.getExportSpecifierLocalTargetSymbol(node);
@@ -482,8 +490,14 @@ function serializeIndexedAccessType(type: ts.IndexedAccessType): Node {
 	};
 }
 
+function getSymbolDeclaration(symbol: ts.Symbol) {
+	const result = symbol.valueDeclaration || symbol.declarations?.[0];
+	if (!result) throw new Error('No symbol declaration found');
+	return result;
+}
+
 function serializeSymbol(symbol: ts.Symbol): Node {
-	return serialize(symbol.valueDeclaration || symbol.declarations[0]);
+	return serialize(getSymbolDeclaration(symbol));
 }
 
 function serializeKeyofType(type: ts.IndexType): Node {
@@ -727,6 +741,7 @@ function serializeClass(node: ts.ClassDeclaration) {
 			exportedSymbol?.members?.forEach(
 				s =>
 					!(s.flags & tsLocal.SymbolFlags.TypeParameter) &&
+					s.declarations &&
 					pushChildren(
 						result,
 						s.declarations.flatMap(d => {
@@ -771,7 +786,8 @@ function serializeClass(node: ts.ClassDeclaration) {
 function serializeReference(node: ts.TypeReferenceType) {
 	const type = typeChecker.getTypeFromTypeNode(node);
 	const symbol = type.aliasSymbol || type.symbol;
-	const decl = symbol && (symbol.valueDeclaration || symbol.declarations[0]);
+	const decl =
+		symbol && (symbol.valueDeclaration || symbol.declarations?.[0]);
 	const name = (tsLocal.isTypeReferenceNode(node)
 		? node.typeName
 		: node.expression
@@ -846,21 +862,24 @@ function serializeModule(node: ts.ModuleDeclaration) {
 		(node.name && typeChecker.getSymbolAtLocation(node.name));
 
 	if (symbol) {
-		const symbolNode = symbol.valueDeclaration || symbol.declarations[0];
+		const symbolNode = symbol.valueDeclaration || symbol.declarations?.[0];
+		if (!symbolNode) return;
 		const result = serializeDeclaration(symbolNode);
 
 		if (!extraModules.includes(result)) {
-			symbol.exports?.forEach(s =>
-				pushChildren(
-					result,
-					s.declarations.flatMap(d => {
-						const existing: Node = (d as any)[dtsNode];
-						return existing &&
-							result.children?.indexOf(existing) !== -1
-							? []
-							: serialize(d);
-					})
-				)
+			symbol.exports?.forEach(
+				s =>
+					s.declarations &&
+					pushChildren(
+						result,
+						s.declarations.flatMap(d => {
+							const existing: Node = (d as any)[dtsNode];
+							return existing &&
+								result.children?.indexOf(existing) !== -1
+								? []
+								: serialize(d);
+						})
+					)
 			);
 
 			extraModules.push(result);
@@ -975,7 +994,7 @@ function visit(n: ts.Node, parent: Node): void {
 }
 
 function isLocalSymbol(symbol: ts.Symbol, sourceFile: ts.SourceFile) {
-	return !!symbol.declarations.find(
+	return !!symbol.declarations?.find(
 		decl => decl.getSourceFile() === sourceFile
 	);
 }
@@ -1003,7 +1022,7 @@ function markExported(
 			},
 		]);
 	else
-		symbol.declarations.forEach(d => {
+		symbol.declarations?.forEach(d => {
 			if (tsLocal.isExportSpecifier(d) && !(d as any).$$exported) {
 				const localSymbol = typeChecker.getExportSpecifierLocalTargetSymbol(
 					d

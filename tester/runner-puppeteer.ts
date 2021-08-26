@@ -167,7 +167,9 @@ function screenshot(page: Page, domId: string) {
 		const id = `#${domId}`;
 		screenshotQueue = screenshotQueue.then(() => {
 			return page
-				.$eval(id, el => ((el as any).style.zIndex = 10))
+				.$eval(id, el => {
+					(el as any).style.zIndex = 10;
+				})
 				.then(() => page.$(`#${domId}`))
 				.then(el =>
 					el?.screenshot({
@@ -198,7 +200,8 @@ async function handleFigureRequest(
 			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 500 })
 			.catch(() => 1)));
 
-	page.mouse.move(321, 0);
+	page.mouse.move(350, -100);
+	await page.waitForTimeout(300);
 	const [original, buffer] = await Promise.all([
 		readFile(baseline).catch(() => undefined),
 		screenshot(page, domId),
@@ -260,13 +263,16 @@ export default async function runPuppeteer(app: TestRunner) {
 			'--disable-gpu',
 			'--font-render-hinting=none',
 			'--disable-font-subpixel-positioning',
+			'--animation-duration-scale=0',
 		],
 		timeout: 5000,
-		dumpio: true,
 	});
 	app.log(`Puppeteer ${await browser.version()}`);
 
 	const page = await openPage(browser);
+
+	if (app.startServer) await page.waitForTimeout(500);
+	if (app.browserUrl) await page.goto(app.browserUrl);
 
 	function cxlRunner(cmd: any) {
 		if (cmd.type === 'figure') return handleFigureRequest(page, cmd, app);

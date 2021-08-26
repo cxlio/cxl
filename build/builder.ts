@@ -1,6 +1,6 @@
 import { dirname, join, resolve } from 'path';
 import { existsSync, mkdirSync, utimesSync, writeFileSync } from 'fs';
-import { execSync } from 'child_process';
+import { SpawnOptions, spawn, execSync } from 'child_process';
 
 import { Application, sh } from '@cxl/server';
 import { Observable } from '@cxl/rx';
@@ -101,10 +101,7 @@ export async function build(...targets: BuildConfiguration[]) {
 	if (!builder.started) await builder.start();
 
 	return await targets.reduce(
-		(result, config) =>
-			result.then(() => {
-				builder.build(config);
-			}),
+		(result, config) => result.then(() => builder.build(config)),
 
 		Promise.resolve()
 	);
@@ -116,5 +113,34 @@ export function exec(cmd: string) {
 			() => subs.complete(),
 			e => subs.error(e)
 		);
+	});
+}
+
+export function shell(cmd: string, options: SpawnOptions = {}) {
+	return new Observable<Buffer>(subs => {
+		const proc = spawn(cmd, [], { shell: true, ...options });
+		let output: Buffer;
+		let error: Buffer;
+		proc.stdout?.on(
+			'data',
+			data =>
+				(output = output
+					? Buffer.concat([output, Buffer.from(data)])
+					: Buffer.from(data))
+		);
+		proc.stderr?.on(
+			'data',
+			data =>
+				(error = error
+					? Buffer.concat([error, Buffer.from(data)])
+					: Buffer.from(data))
+		);
+		proc.on('close', code => {
+			if (code) subs.error(error || output);
+			else {
+				subs.next(output);
+				subs.complete();
+			}
+		});
 	});
 }

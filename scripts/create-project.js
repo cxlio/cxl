@@ -12,7 +12,6 @@ async function createFile(file, dir = '') {
 		await Promise.all(file.content.map(f => createFile(f, filePath)));
 	} else {
 		await writeFile(filePath, file.content);
-		// console.log(filePath, file.content);
 	}
 }
 
@@ -24,7 +23,9 @@ async function projectFiles({ tsx, $ }) {
 	const name = $;
 	const rootPkg = JSON.parse(await readFile('package.json', 'utf8'));
 	const tsxVersion = tsx
-		? JSON.parse(await readFile('tsx/package.json', 'utf8')).version
+		? JSON.parse(
+				await readFile(join(__dirname, '../tsx/package.json'), 'utf8')
+		  ).version
 		: '';
 
 	return [
@@ -91,6 +92,6 @@ export default spec('${name}', s => {
 }
 
 program('generate', async () => {
-	const config = parseArgv([{ name: 'tsx' }]);
+	const config = parseArgv([{ name: 'tsx', type: 'boolean' }]);
 	createFileSystem(await projectFiles(config));
 })();

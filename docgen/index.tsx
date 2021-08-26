@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { promises as fs, existsSync } from 'fs';
 import { join } from 'path';
 

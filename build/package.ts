@@ -5,6 +5,7 @@ import { file } from './file.js';
 import { execSync } from 'child_process';
 import { Output } from '@cxl/source';
 import { sh } from '@cxl/server';
+import { getPublishedVersion } from './npm';
 import * as ts from 'typescript';
 
 type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0' | 'UNLICENSED';
@@ -25,6 +26,7 @@ export interface Package {
 	repository: string;
 	dependencies: any;
 	peerDependencies: any;
+	bundledDependecies: any;
 	type: string;
 }
 
@@ -114,6 +116,7 @@ function packageJson(p: any) {
 					repository: p.repository && getRepo(p.repository),
 					dependencies: p.dependencies,
 					peerDependencies: p.peerDependencies,
+					bundledDependencies: p.bundledDependencies,
 					type: p.type,
 				},
 				null,
@@ -121,16 +124,6 @@ function packageJson(p: any) {
 			)
 		),
 	});
-}
-
-function getPublishedVersion(p: Package) {
-	try {
-		return execSync(`npm show ${p.name}@${p.version} version`, {
-			encoding: 'utf8',
-		}).trim();
-	} catch (e) {
-		return;
-	}
 }
 
 function license(id: License) {
@@ -190,8 +183,8 @@ export function pkg() {
 	return defer(() => {
 		const p = readPackage();
 		const licenseId = p.license;
-		const isPublished = getPublishedVersion(p);
-		if (isPublished) throw new Error(`Package version already published.`);
+		// const isPublished = getPublishedVersion(p);
+		// if (isPublished) throw new Error(`Package version already published.`);
 
 		const output: Observable<Output>[] = [packageJson(p)];
 
@@ -202,9 +195,9 @@ export function pkg() {
 	});
 }
 
-export function publish() {
+export async function publish() {
 	const p = readPackage();
-	const isPublished = getPublishedVersion(p);
+	const isPublished = await getPublishedVersion(p.name);
 	if (isPublished) throw new Error(`Package version already published.`);
 }
 
@@ -216,6 +209,7 @@ function createBundle(
 ): Output {
 	const options: ts.CompilerOptions = {
 		lib: ['lib.es2017.d.ts'],
+		target: ts.ScriptTarget.ES2019,
 		module: ts.ModuleKind.AMD,
 		allowJs: true,
 		declaration: false,
@@ -230,7 +224,6 @@ function createBundle(
 	const host = ts.createCompilerHost(options);
 	const oldGetSourceFile = host.getSourceFile;
 	const sourceFiles: ts.SourceFile[] = [];
-
 	host.getSourceFile = function (fn: string, target: ts.ScriptTarget) {
 		const i = resolvedFiles.indexOf(fn);
 
@@ -269,20 +262,20 @@ export function AMD() {
 export function bundle(files: Record<string, string>, outFile: string) {
 	return new Observable<Output>(subs => {
 		const moduleNames = Object.keys(files);
-		const resolvedFiles = Object.values(files); //.map(f => require.resolve(f));
-		Promise.all(resolvedFiles.map(f => promises.readFile(f, 'utf8'))).then(
-			content => {
+		const resolvedFiles = Object.values(files);
+		Promise.all(resolvedFiles.map(f => promises.readFile(f, 'utf8')))
+			.then(content => {
 				subs.next(
 					createBundle(moduleNames, resolvedFiles, content, outFile)
 				);
 				subs.complete();
-			}
-		);
+			})
+			.catch(e => subs.error(e));
 	});
 }
 
 const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
-const DEBUG_HEAD = `<meta charset="utf-8">
+const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 <script src="/cxl/dist/tester/require-browser.js"></script>
 <script>
 	require.replace = function (path) {

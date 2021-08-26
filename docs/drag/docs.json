@@ -643,6 +643,65 @@
               }
             ]
           }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 141,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "dropTarget",
+          "flags": 1,
+          "id": 33,
+          "docs": {
+            "content": [
+              {
+                "value": "Applies the dragover attribute for drop targets"
+              }
+            ]
+          },
+          "typeParameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 146,
+                "ch": 27
+              },
+              "kind": 3,
+              "name": "T",
+              "flags": 0,
+              "id": 34
+            }
+          ],
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 146,
+                "ch": 50
+              },
+              "kind": 9,
+              "name": "$",
+              "flags": 0,
+              "id": 35,
+              "type": {
+                "id": 34,
+                "name": "T",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "DragEvent",
+                "kind": 6
+              }
+            ]
+          }
         }
       ]
     }

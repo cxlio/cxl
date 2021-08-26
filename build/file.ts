@@ -13,6 +13,7 @@ import { Output } from '@cxl/source';
 import { promises as fs, readFileSync } from 'fs';
 import { basename as pathBasename, dirname, resolve } from 'path';
 import { sh } from '@cxl/server';
+import { shell } from './builder.js';
 
 interface MinifyConfig {
 	sourceMap?: { content?: string; url: string };
@@ -126,4 +127,8 @@ export function minify(config: MinifyConfig = {}) {
 
 			return () => subscription.unsubscribe();
 		});
+}
+
+export function zip(src: string[], path: string): Observable<Output> {
+	return shell(`zip - ${src.join(' ')}`).map(source => ({ path, source }));
 }

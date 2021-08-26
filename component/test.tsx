@@ -72,6 +72,24 @@ export default spec('component', a => {
 			const div = (<div />) as HTMLDivElement;
 			el.appendChild(div);
 		});
+
+		it.should('update after element is connected', a => {
+			const done = a.async();
+			const id = 'cxl-test' + Date.now();
+			@Augment(id, $ => <$.Slot selector="div" />)
+			class Test extends Component {}
+			const html = `<${id}><div>Test</div></${id}>`;
+
+			a.ok(Test);
+			a.dom.innerHTML = html;
+			const el = a.dom.children[0];
+			const div = el.children[0];
+
+			setTimeout(() => {
+				a.equal(div.slot, 'div');
+				done();
+			});
+		});
 	});
 
 	a.test('Component - empty', a => {

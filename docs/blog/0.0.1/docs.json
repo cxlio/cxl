@@ -306,7 +306,7 @@
                 "ch": 14
               },
               "kind": 10,
-              "name": "mtime",
+              "name": "version",
               "flags": 4,
               "id": 17,
               "type": {
@@ -319,10 +319,10 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 30,
-                "ch": 15
+                "ch": 18
               },
               "kind": 10,
-              "name": "author",
+              "name": "mtime",
               "flags": 4,
               "id": 18,
               "type": {
@@ -335,10 +335,10 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 31,
-                "ch": 16
+                "ch": 15
               },
               "kind": 10,
-              "name": "type",
+              "name": "author",
               "flags": 4,
               "id": 19,
               "type": {
@@ -351,10 +351,10 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 32,
-                "ch": 14
+                "ch": 16
               },
               "kind": 10,
-              "name": "tags",
+              "name": "type",
               "flags": 4,
               "id": 20,
               "type": {
@@ -367,10 +367,10 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 33,
-                "ch": 15
+                "ch": 14
               },
               "kind": 10,
-              "name": "content",
+              "name": "tags",
               "flags": 4,
               "id": 21,
               "type": {
@@ -383,12 +383,44 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 34,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "href",
+              "flags": 4,
+              "id": 22,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 35,
+                "ch": 15
+              },
+              "kind": 10,
+              "name": "content",
+              "flags": 4,
+              "id": 23,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 36,
                 "ch": 17
               },
               "kind": 10,
               "name": "summary",
               "flags": 4,
-              "id": 22,
+              "id": 24,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -400,13 +432,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 38,
+            "line": 40,
             "ch": 5
           },
           "kind": 31,
           "name": "POST_REGEX",
           "flags": 0,
-          "id": 23,
+          "id": 25,
           "value": "/\\.(html|md)$/",
           "type": {
             "name": "RegExp",
@@ -416,13 +448,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 38,
+            "line": 40,
             "ch": 34
           },
           "kind": 31,
           "name": "TITLE_REGEX",
           "flags": 0,
-          "id": 24,
+          "id": 26,
           "value": "/<blog-title>(.+)<\\/blog-title>/",
           "type": {
             "name": "RegExp",
@@ -432,13 +464,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 39,
+            "line": 41,
             "ch": 48
           },
           "kind": 31,
           "name": "META_REGEX",
           "flags": 0,
-          "id": 25,
+          "id": 27,
           "value": "/<blog-meta([^>]+?)>/",
           "type": {
             "name": "RegExp",
@@ -448,13 +480,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 40,
+            "line": 42,
             "ch": 36
           },
           "kind": 31,
           "name": "TAGS_REGEX",
           "flags": 0,
-          "id": 26,
+          "id": 28,
           "value": "/<blog-tags>\\s*(.+?)\\s*</",
           "type": {
             "name": "RegExp",
@@ -464,13 +496,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 41,
+            "line": 43,
             "ch": 40
           },
           "kind": 31,
           "name": "SUMMARY_TAG_REGEX",
           "flags": 0,
-          "id": 27,
+          "id": 29,
           "value": "/<blog-summary>\\s*([^]+?)\\s*</m",
           "type": {
             "name": "RegExp",
@@ -480,13 +512,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 42,
+            "line": 44,
             "ch": 53
           },
           "kind": 31,
           "name": "SUMMARY_REGEX",
           "flags": 0,
-          "id": 28,
+          "id": 30,
           "value": "/<p>\\s*([^]+?)\\s*<\\/p/m",
           "type": {
             "name": "RegExp",
@@ -496,13 +528,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 43,
+            "line": 45,
             "ch": 41
           },
           "kind": 31,
           "name": "ATTR_REGEX",
           "flags": 0,
-          "id": 29,
+          "id": 31,
           "value": "/\\s*([\\w-]+)\\s*=\\s*\"([^\"]+)\"/g",
           "type": {
             "name": "RegExp",
@@ -512,18 +544,18 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 46,
+            "line": 48,
             "ch": 5
           },
           "kind": 31,
           "name": "DefaultConfig",
           "flags": 0,
-          "id": 30,
+          "id": 32,
           "value": "{\n\tpostsDir: 'posts',\n}",
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 46,
+              "line": 48,
               "ch": 21
             },
             "kind": 34,
@@ -533,13 +565,13 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 46,
+                  "line": 48,
                   "ch": 23
                 },
                 "kind": 0,
                 "name": "postsDir",
                 "flags": 0,
-                "id": 31,
+                "id": 33,
                 "value": "'posts'",
                 "type": {
                   "name": "string",
@@ -553,24 +585,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 48,
+            "line": 50,
             "ch": 2
           },
           "kind": 16,
           "name": "Code",
           "flags": 0,
-          "id": 32,
+          "id": 34,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 50,
+                "line": 52,
                 "ch": 14
               },
               "kind": 9,
               "name": "source",
               "flags": 0,
-              "id": 33,
+              "id": 35,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -580,13 +612,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 50,
+                "line": 52,
                 "ch": 29
               },
               "kind": 9,
               "name": "language",
               "flags": 524288,
-              "id": 34,
+              "id": 36,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -603,13 +635,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 66,
+            "line": 68,
             "ch": 5
           },
           "kind": 31,
           "name": "markdownMeta",
           "flags": 0,
-          "id": 35,
+          "id": 37,
           "value": "/^(\\w+):\\s*(.+)\\s*/gm",
           "type": {
             "name": "RegExp",
@@ -619,24 +651,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 66,
+            "line": 68,
             "ch": 43
           },
           "kind": 16,
           "name": "getMetaValue",
           "flags": 0,
-          "id": 36,
+          "id": 38,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 68,
+                "line": 70,
                 "ch": 22
               },
               "kind": 9,
               "name": "key",
               "flags": 0,
-              "id": 37,
+              "id": 39,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -646,13 +678,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 68,
+                "line": 70,
                 "ch": 34
               },
               "kind": 9,
               "name": "val",
               "flags": 0,
-              "id": 38,
+              "id": 40,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -669,13 +701,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 72,
+            "line": 74,
             "ch": 5
           },
           "kind": 31,
           "name": "FenceHandler",
           "flags": 0,
-          "id": 39,
+          "id": 41,
           "type": {
             "name": "Record",
             "kind": 6,
@@ -688,13 +720,13 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 72,
+                  "line": 74,
                   "ch": 34
                 },
                 "kind": 17,
                 "name": "",
                 "flags": 0,
-                "id": 40,
+                "id": 42,
                 "type": {
                   "name": "string",
                   "kind": 32,
@@ -704,13 +736,13 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 72,
+                      "line": 74,
                       "ch": 36
                     },
                     "kind": 9,
                     "name": "content",
                     "flags": 0,
-                    "id": 41,
+                    "id": 43,
                     "type": {
                       "name": "string",
                       "kind": 32,
@@ -720,13 +752,13 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 72,
+                      "line": 74,
                       "ch": 52
                     },
                     "kind": 9,
                     "name": "meta",
                     "flags": 0,
-                    "id": 42,
+                    "id": 44,
                     "type": {
                       "name": "any",
                       "kind": 32,
@@ -742,66 +774,35 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 84,
+            "line": 86,
             "ch": 2
           },
           "kind": 16,
-          "name": "Markdown",
-          "flags": 0,
-          "id": 43,
+          "name": "renderMarkdown",
+          "flags": 1,
+          "id": 45,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 86,
-                "ch": 18
-              },
-              "kind": 9,
-              "name": "url",
-              "flags": 0,
-              "id": 44,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 86,
-                "ch": 30
+                "line": 88,
+                "ch": 31
               },
               "kind": 9,
               "name": "source",
               "flags": 0,
-              "id": 45,
+              "id": 46,
               "type": {
                 "name": "string",
                 "kind": 32,
                 "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "index.ts",
-                "line": 86,
-                "ch": 46
-              },
-              "kind": 9,
-              "name": "stats",
-              "flags": 0,
-              "id": 46,
-              "type": {
-                "name": "Stats",
-                "kind": 6
               }
             }
           ],
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 120,
+              "line": 117,
               "ch": 7
             },
             "kind": 34,
@@ -811,63 +812,13 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 120,
+                  "line": 117,
                   "ch": 9
                 },
                 "kind": 0,
-                "name": "id",
+                "name": "meta",
                 "flags": 0,
                 "id": 47,
-                "value": "getPostId(title)",
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 121,
-                  "ch": 23
-                },
-                "kind": 0,
-                "name": "title",
-                "flags": 0,
-                "id": 48,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 122,
-                  "ch": 8
-                },
-                "kind": 0,
-                "name": "summary",
-                "flags": 0,
-                "id": 49,
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 123,
-                  "ch": 10
-                },
-                "kind": 0,
-                "name": "date",
-                "flags": 0,
-                "id": 50,
-                "value": "meta.date || stats.mtime.toISOString()",
                 "type": {
                   "name": "any",
                   "kind": 32,
@@ -877,98 +828,14 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 124,
-                  "ch": 47
-                },
-                "kind": 0,
-                "name": "uuid",
-                "flags": 0,
-                "id": 51,
-                "value": "meta.uuid || ''",
-                "type": {
-                  "name": "any",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 125,
-                  "ch": 24
-                },
-                "kind": 0,
-                "name": "mtime",
-                "flags": 0,
-                "id": 52,
-                "value": "stats.mtime.toISOString()",
-                "type": {
-                  "name": "string",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 126,
-                  "ch": 35
-                },
-                "kind": 0,
-                "name": "author",
-                "flags": 0,
-                "id": 53,
-                "value": "meta.author || ''",
-                "type": {
-                  "name": "any",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 127,
-                  "ch": 28
-                },
-                "kind": 0,
-                "name": "type",
-                "flags": 0,
-                "id": 54,
-                "value": "meta.type || (meta.date ? 'post' : 'draft')",
-                "type": {
-                  "name": "any",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 128,
-                  "ch": 52
-                },
-                "kind": 0,
-                "name": "tags",
-                "flags": 0,
-                "id": 55,
-                "value": "meta.tags || ''",
-                "type": {
-                  "name": "any",
-                  "kind": 32,
-                  "flags": 0
-                }
-              },
-              {
-                "source": {
-                  "fileName": "index.ts",
-                  "line": 129,
-                  "ch": 24
+                  "line": 117,
+                  "ch": 15
                 },
                 "kind": 0,
                 "name": "content",
                 "flags": 0,
-                "id": 56,
+                "id": 48,
+                "value": "md.render(source)",
                 "type": {
                   "name": "string",
                   "kind": 32,
@@ -981,24 +848,297 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 132,
+            "line": 118,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "Markdown",
+          "flags": 0,
+          "id": 49,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 120,
+                "ch": 18
+              },
+              "kind": 9,
+              "name": "url",
+              "flags": 0,
+              "id": 50,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 120,
+                "ch": 30
+              },
+              "kind": 9,
+              "name": "source",
+              "flags": 0,
+              "id": 51,
+              "type": {
+                "name": "string",
+                "kind": 32,
+                "flags": 0
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 120,
+                "ch": 46
+              },
+              "kind": 9,
+              "name": "stats",
+              "flags": 0,
+              "id": 52,
+              "type": {
+                "name": "Stats",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "source": {
+              "fileName": "index.ts",
+              "line": 126,
+              "ch": 7
+            },
+            "kind": 34,
+            "name": "",
+            "flags": 0,
+            "children": [
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 126,
+                  "ch": 9
+                },
+                "kind": 0,
+                "name": "id",
+                "flags": 0,
+                "id": 53,
+                "value": "getPostId(title)",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 127,
+                  "ch": 23
+                },
+                "kind": 0,
+                "name": "title",
+                "flags": 0,
+                "id": 54,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 128,
+                  "ch": 8
+                },
+                "kind": 0,
+                "name": "summary",
+                "flags": 0,
+                "id": 55,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 129,
+                  "ch": 10
+                },
+                "kind": 0,
+                "name": "date",
+                "flags": 0,
+                "id": 56,
+                "value": "meta.date || stats.mtime.toISOString()",
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 130,
+                  "ch": 47
+                },
+                "kind": 0,
+                "name": "version",
+                "flags": 0,
+                "id": 57,
+                "value": "meta.version",
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 131,
+                  "ch": 24
+                },
+                "kind": 0,
+                "name": "uuid",
+                "flags": 0,
+                "id": 58,
+                "value": "meta.uuid || ''",
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 132,
+                  "ch": 24
+                },
+                "kind": 0,
+                "name": "mtime",
+                "flags": 0,
+                "id": 59,
+                "value": "stats.mtime.toISOString()",
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 133,
+                  "ch": 35
+                },
+                "kind": 0,
+                "name": "author",
+                "flags": 0,
+                "id": 60,
+                "value": "meta.author || ''",
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 134,
+                  "ch": 28
+                },
+                "kind": 0,
+                "name": "type",
+                "flags": 0,
+                "id": 61,
+                "value": "meta.type || (meta.date ? 'post' : 'draft')",
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 135,
+                  "ch": 52
+                },
+                "kind": 0,
+                "name": "tags",
+                "flags": 0,
+                "id": 62,
+                "value": "meta.tags || ''",
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 136,
+                  "ch": 24
+                },
+                "kind": 0,
+                "name": "href",
+                "flags": 0,
+                "id": 63,
+                "value": "meta.href",
+                "type": {
+                  "name": "any",
+                  "kind": 32,
+                  "flags": 0
+                }
+              },
+              {
+                "source": {
+                  "fileName": "index.ts",
+                  "line": 137,
+                  "ch": 18
+                },
+                "kind": 0,
+                "name": "content",
+                "flags": 0,
+                "id": 64,
+                "type": {
+                  "name": "string",
+                  "kind": 32,
+                  "flags": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 140,
             "ch": 1
           },
           "kind": 16,
           "name": "parseMeta",
           "flags": 0,
-          "id": 57,
+          "id": 65,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 134,
+                "line": 142,
                 "ch": 19
               },
               "kind": 9,
               "name": "content",
               "flags": 0,
-              "id": 58,
+              "id": 66,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1038,24 +1178,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 146,
+            "line": 154,
             "ch": 1
           },
           "kind": 16,
           "name": "getPostId",
           "flags": 0,
-          "id": 59,
+          "id": 67,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 148,
+                "line": 156,
                 "ch": 19
               },
               "kind": 9,
               "name": "title",
               "flags": 0,
-              "id": 60,
+              "id": 68,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1072,13 +1212,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 150,
+            "line": 158,
             "ch": 1
           },
           "kind": 16,
           "name": "Html",
           "flags": 0,
-          "id": 61,
+          "id": 69,
           "type": {
             "id": 6,
             "name": "Post",
@@ -1088,13 +1228,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 152,
+                "line": 160,
                 "ch": 14
               },
               "kind": 9,
               "name": "_url",
               "flags": 0,
-              "id": 62,
+              "id": 70,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1104,13 +1244,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 152,
+                "line": 160,
                 "ch": 27
               },
               "kind": 9,
               "name": "content",
               "flags": 0,
-              "id": 63,
+              "id": 71,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1120,13 +1260,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 152,
+                "line": 160,
                 "ch": 44
               },
               "kind": 9,
               "name": "stat",
               "flags": 0,
-              "id": 64,
+              "id": 72,
               "type": {
                 "name": "Stats",
                 "kind": 6
@@ -1137,13 +1277,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 172,
+            "line": 184,
             "ch": 1
           },
           "kind": 16,
           "name": "getPostData",
           "flags": 256,
-          "id": 65,
+          "id": 73,
           "type": {
             "name": "Promise",
             "kind": 6,
@@ -1159,13 +1299,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 174,
+                "line": 186,
                 "ch": 27
               },
               "kind": 9,
               "name": "url",
               "flags": 0,
-              "id": 66,
+              "id": 74,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1177,24 +1317,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 183,
+            "line": 195,
             "ch": 1
           },
           "kind": 16,
           "name": "buildPosts",
           "flags": 256,
-          "id": 67,
+          "id": 75,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 185,
+                "line": 197,
                 "ch": 26
               },
               "kind": 9,
               "name": "config",
               "flags": 0,
-              "id": 68,
+              "id": 76,
               "type": {
                 "id": 1,
                 "name": "BlogConfig",
@@ -1204,17 +1344,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 185,
+                "line": 197,
                 "ch": 45
               },
               "kind": 9,
               "name": "posts",
               "flags": 0,
-              "id": 69,
+              "id": 77,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 185,
+                  "line": 197,
                   "ch": 52
                 },
                 "kind": 15,
@@ -1239,7 +1379,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 189,
+                      "line": 201,
                       "ch": 24
                     },
                     "kind": 34,
@@ -1249,13 +1389,13 @@
                       {
                         "source": {
                           "fileName": "index.ts",
-                          "line": 189,
+                          "line": 201,
                           "ch": 25
                         },
                         "kind": 0,
                         "name": "path",
                         "flags": 0,
-                        "id": 70,
+                        "id": 78,
                         "value": "p.id",
                         "type": {
                           "name": "string",
@@ -1266,13 +1406,13 @@
                       {
                         "source": {
                           "fileName": "index.ts",
-                          "line": 190,
+                          "line": 202,
                           "ch": 13
                         },
                         "kind": 0,
                         "name": "source",
                         "flags": 0,
-                        "id": 71,
+                        "id": 79,
                         "value": "Buffer.from(`${HEADER}${p.content}`)",
                         "type": {
                           "name": "Buffer",
@@ -1289,24 +1429,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 193,
+            "line": 205,
             "ch": 1
           },
           "kind": 16,
           "name": "buildFromSource",
           "flags": 256,
-          "id": 72,
+          "id": 80,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 195,
+                "line": 207,
                 "ch": 31
               },
               "kind": 9,
               "name": "postsDir",
               "flags": 0,
-              "id": 73,
+              "id": 81,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1335,13 +1475,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 198,
+            "line": 210,
             "ch": 1
           },
           "kind": 16,
           "name": "build",
           "flags": 256,
-          "id": 74,
+          "id": 82,
           "type": {
             "name": "Promise",
             "kind": 6,
@@ -1349,7 +1489,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 200,
+                  "line": 212,
                   "ch": 50
                 },
                 "kind": 15,
@@ -1366,13 +1506,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 200,
+                "line": 212,
                 "ch": 21
               },
               "kind": 9,
               "name": "config",
               "flags": 0,
-              "id": 75,
+              "id": 83,
               "type": {
                 "id": 1,
                 "name": "BlogConfig",
@@ -1384,13 +1524,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 239,
+            "line": 251,
             "ch": 1
           },
           "kind": 16,
           "name": "buildBlog",
           "flags": 1,
-          "id": 76,
+          "id": 84,
           "type": {
             "name": "Task",
             "kind": 6
@@ -1399,13 +1539,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 241,
+                "line": 253,
                 "ch": 26
               },
               "kind": 9,
               "name": "config",
               "flags": 0,
-              "id": 77,
+              "id": 85,
               "type": {
                 "id": 1,
                 "name": "BlogConfig",

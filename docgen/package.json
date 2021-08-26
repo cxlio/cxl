@@ -4,7 +4,9 @@
 	"description": "Documentation generator for typescript",
 	"homepage": "https://cxlio.github.io/cxl/docgen",
 	"license": "GPL-3.0",
-	"bin": "index.js",
+	"bin": {
+		"cxl-docgen": "index.js"
+	},
 	"dependencies": {
 		"highlight.js": "^10.1.1",
 		"markdown-it": "^11.0.0",

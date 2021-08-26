@@ -2,5 +2,5 @@
 
 ## [0.0.1]
 
-- fix: markdown meta tags parsing [f986da2]
-- fix: get title from markdown source [699cd3e]
+- feat: better support for meta tags [fdcf52f]
+- feat: export markdown function [a148f02]

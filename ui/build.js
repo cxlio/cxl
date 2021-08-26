@@ -8,19 +8,13 @@ const {
 	concat,
 } = require('../dist/build');
 
-buildCxl(
-	{
-		outputDir: '../dist/ui',
-		tasks: [file('test.html', 'test.html')],
-	},
-	{
-		target: 'package',
-		outputDir: '../dist/ui',
-		tasks: [
-			concat(
-				tsconfig('tsconfig.bundle.json'),
-				file('../dist/ui/index.bundle.js').pipe(minify())
-			),
-		],
-	}
-);
+buildCxl({
+	target: 'package',
+	outputDir: '../dist/ui',
+	tasks: [
+		concat(
+			tsconfig('tsconfig.bundle.json'),
+			file('../dist/ui/index.bundle.js').pipe(minify())
+		),
+	],
+});

@@ -25,7 +25,7 @@ export interface RouterState {
 
 export interface RouteDefinition<T extends RouteElement> {
 	id?: string;
-	path: string;
+	path?: string;
 	isDefault?: boolean;
 	parent?: string;
 	redirectTo?: string;
@@ -146,8 +146,9 @@ export class Route<T extends RouteElement> {
 
 	constructor(def: RouteDefinition<T>) {
 		if (def.path !== undefined) this.path = new Fragment(def.path);
+		else if (!def.id) throw new Error('An id or path is required.');
 
-		this.id = def.id || def.path;
+		this.id = def.id || (def.path ?? `route${Math.random().toString()}`);
 		this.isDefault = def.isDefault || false;
 		this.parent = def.parent;
 		this.redirectTo = def.redirectTo;
@@ -205,13 +206,14 @@ export function parseUrl(url: string): Url {
 export const QueryStrategy: Strategy = {
 	getHref(url: Url | string) {
 		url = typeof url === 'string' ? parseUrl(url) : url;
-		return `${url.path ? `?${url.path}` : '?'}${
+		return `${sys.location.pathname}${url.path ? `?${url.path}` : ''}${
 			url.hash ? `#${url.hash}` : ''
 		}`;
 	},
 
 	serialize(url) {
-		if (url !== sys.history.state?.url)
+		const oldUrl = sys.history.state?.url;
+		if (!oldUrl || url.hash !== oldUrl.hash || url.path !== oldUrl.path)
 			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 
@@ -232,7 +234,8 @@ export const PathStrategy: Strategy = {
 	},
 
 	serialize(url) {
-		if (url !== sys.history.state?.url)
+		const oldUrl = sys.history.state?.url;
+		if (!oldUrl || url.hash !== oldUrl.hash || url.path !== oldUrl.path)
 			sys.history.pushState({ url }, '', this.getHref(url));
 	},
 

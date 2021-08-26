@@ -8,37 +8,21 @@ import {
 	get,
 } from '@cxl/component';
 import { ButtonBase, FocusCircleStyle, Spinner, Span } from './core.js';
-import { IconButton, SearchIcon } from './icon.js';
-import { dom, expression } from '@cxl/tsx';
-import {
-	aria,
-	ariaValue,
-	onValue,
-	syncAttribute,
-	triggerEvent,
-	teleport,
-} from '@cxl/template';
+import { dom } from '@cxl/tsx';
+import { aria, ariaValue, onValue, triggerEvent } from '@cxl/template';
 import { trigger, onKeypress, on, onAction } from '@cxl/dom';
 import { border, css, padding } from '@cxl/css';
 import { EMPTY, Observable, observable, defer, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
 import { InputBase } from './input-base.js';
-import { Option, SelectMenu, SelectBase } from './select.js';
-import { Appbar, AppbarContextual } from './navigation.js';
 import {
-	DisabledStyles,
 	Focusable,
 	checkedBehavior,
-	focusDelegate,
 	focusable,
-	navigationList,
 	registableHost,
-	selectableHostMultiple,
 	role,
 } from '@cxl/template';
 import { Field } from './field.js';
-
-export { SelectBox, Option } from './select.js';
 
 /**
  * Sliders allow users to make selections from a range of values.
@@ -550,120 +534,6 @@ export class Radio extends InputBase {
 }
 
 /**
- * A form input component that allows the user to select multiple option from a dropdown list
- * @example
- * <cxl-field>
- *   <cxl-label>Multi Select Box with label</cxl-label>
- *   <cxl-multiselect placeholder="(Select an Option)">
- *     <cxl-option selected value="1">Option 1</cxl-option>
- *     <cxl-option selected value="2">Option 2</cxl-option>
- *     <cxl-option value="3">Option 3</cxl-option>
- *   </cxl-multiselect>
- * </cxl-field>
- */
-@Augment<MultiSelect>(
-	'cxl-multiselect',
-	css({
-		menu: { left: -12, right: -12, top: 26, height: 0 },
-		menu$opened: { height: 'auto' },
-	}),
-	host => (
-		<SelectMenu
-			$={el => get(host, 'opened').raf(() => host.positionMenu(el))}
-			className="menu"
-			visible={get(host, 'opened')}
-		>
-			<slot />
-		</SelectMenu>
-	),
-	host =>
-		merge(
-			onAction(host).tap(() => {
-				if (host.focusedOption) host.setSelected(host.focusedOption);
-				else host.open();
-			}),
-			selectableHostMultiple(host).tap(selected =>
-				host.setSelected(selected as Option)
-			),
-			navigationList(
-				host,
-				'cxl-option:not([disabled])',
-				'cxl-option[focused]'
-			).tap(selected => host.setFocusedOption(selected as Option))
-		),
-	host => (
-		<div className="placeholder">
-			{expression(
-				host,
-				get(host, 'value')
-					.raf()
-					.map(
-						() =>
-							[...host.selected]
-								.map(s => s.textContent)
-								.join(', ') || host.placeholder
-					)
-			)}
-		</div>
-	)
-)
-export class MultiSelect extends SelectBase {
-	/**
-	 * Placeholder value if nothing is selected.
-	 */
-	@Attribute()
-	placeholder = '';
-
-	readonly selected: Set<Option> = new Set<Option>();
-	value: any[] = [];
-
-	protected focusedOption?: Option;
-
-	protected positionMenu(menu: SelectMenu) {
-		let height: number;
-		const rect = this.getBoundingClientRect();
-		height = menu.scrollHeight;
-		const maxHeight = window.innerHeight - rect.bottom;
-
-		if (height > maxHeight) height = maxHeight;
-		const style = menu.style;
-		style.height = height + 'px';
-	}
-
-	protected setSelected(option: Option) {
-		option.selected = !this.selected.has(option);
-		const method = option.selected ? 'add' : 'delete';
-		this.selected[method](option);
-		const selected = [...this.selected];
-		this.value = selected.map(o => o.value);
-		if (this.opened) this.setFocusedOption(option);
-	}
-
-	protected setFocusedOption(option: Option) {
-		this.clearFocusedOption();
-		this.focusedOption = option;
-		option.focused = true;
-	}
-
-	protected clearFocusedOption() {
-		this.options?.forEach(o => (o.focused = false));
-		this.focusedOption = undefined;
-	}
-
-	open() {
-		if (this.disabled || this.opened) return;
-		this.opened = true;
-	}
-
-	close() {
-		if (this.opened) {
-			this.opened = false;
-			this.clearFocusedOption();
-		}
-	}
-}
-
-/**
  * Switches toggle the state of a single item on or off.
  * @example
  * <cxl-switch></cxl-switch>
@@ -806,10 +676,12 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
 			display: 'block',
 			position: 'relative',
 			flexGrow: 1,
+			overflowX: 'hidden',
 		},
 		input: {
 			minHeight: 20,
 			lineHeight: 20,
+			height: '100%',
 			whiteSpace: 'pre-wrap',
 			color: 'onSurface',
 			outline: 'none',
@@ -817,118 +689,8 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
 		},
 		$disabled: { pointerEvents: 'none' },
 	}),
-	$ => ContentEditable($)
+	$ => ContentEditable($, true)
 )
 export class TextArea extends InputBase {
 	value = '';
-}
-
-/**
- * Search Input for Appbar
- * @demo
- * <cxl-appbar>
- *   <cxl-appbar-title>Appbar Title</cxl-appbar-title>
- *   <cxl-appbar-search></cxl-appbar-search>
- * </cxl-appbar>
- * @beta
- * @see Appbar
- */
-@Augment<AppbarSearch>(
-	'cxl-appbar-search',
-	css({
-		$: { display: 'flex', position: 'relative' },
-		$opened: {
-			backgroundColor: 'surface',
-		},
-		input: { display: 'none', marginBottom: 0, position: 'relative' },
-		input$opened: {
-			display: 'block',
-		},
-		button$opened: { display: 'none' },
-		'@medium': {
-			input: {
-				width: 200,
-				display: 'block',
-			},
-			button: { display: 'none' },
-		},
-		$disabled: DisabledStyles,
-	}),
-	$ => {
-		let inputEl: Input;
-
-		function onContextual(val: boolean) {
-			if (val) requestAnimationFrame(() => inputEl.focus());
-		}
-
-		return teleport(
-			<AppbarContextual
-				$={el => get(el, 'visible').tap(onContextual)}
-				name="search"
-			>
-				<Field className="input">
-					<Input
-						$={el =>
-							merge(
-								get($, 'name').pipe(ariaValue(el, 'label')),
-								syncAttribute($, (inputEl = el), 'value')
-							)
-						}
-					/>
-					<SearchIcon />
-				</Field>
-			</AppbarContextual>,
-			'cxl-appbar'
-		);
-	},
-	host => {
-		return (
-			<>
-				<IconButton
-					$={el =>
-						merge(
-							onAction((host.mobileIcon = el)).tap(() =>
-								host.open()
-							),
-							on(el, 'blur').tap(() => (host.touched = true))
-						)
-					}
-					className="button"
-				>
-					<SearchIcon />
-				</IconButton>
-				<Field className="input">
-					<Input
-						$={el =>
-							merge(
-								get(host, 'name').pipe(ariaValue(el, 'label')),
-								syncAttribute(host, el, 'value'),
-								focusDelegate(host, (host.desktopInput = el))
-							)
-						}
-					/>
-					<SearchIcon />
-				</Field>
-			</>
-		);
-	}
-)
-export class AppbarSearch extends InputBase {
-	@StyleAttribute()
-	opened = false;
-
-	protected desktopInput?: Input;
-	protected mobileIcon?: IconButton;
-
-	value = '';
-
-	open() {
-		const appbar: Appbar | null = this.parentElement as Appbar;
-		if (appbar) appbar.contextual = 'search';
-	}
-
-	focus() {
-		if (this.desktopInput?.offsetParent) this.desktopInput.focus();
-		else if (this.mobileIcon?.offsetParent) this.mobileIcon.focus();
-	}
 }

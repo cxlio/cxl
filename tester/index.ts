@@ -1,4 +1,6 @@
+#!/usr/bin/env node
 import { writeFile } from 'fs/promises';
+import { exec } from 'child_process';
 import { Logger, Parameter, program, parseArgv } from '@cxl/program';
 
 import runNode from './runner-node.js';
@@ -11,11 +13,13 @@ export interface TestRunner {
 	updateBaselines: boolean;
 	ignoreCoverage: boolean;
 	baselinePath: string;
+	browserUrl: string;
 	amd: boolean;
 	node: boolean;
 	firefox: boolean;
 	log: Logger;
 	inspect: boolean;
+	startServer?: string;
 }
 
 const parameters: Parameter[] = [
@@ -29,6 +33,12 @@ const parameters: Parameter[] = [
 	{ name: 'updateBaselines' },
 	{ name: 'ignoreCoverage', help: 'Disable coverage report.' },
 	{ name: 'inspect', help: 'Enable node debugger' },
+	{ name: 'browserUrl', type: 'string', help: 'Browser runner initial URL' },
+	{
+		name: 'startServer',
+		type: 'string',
+		help: 'Start a server application while the tests are running',
+	},
 ];
 
 program({}, async ({ log }) => {
@@ -44,7 +54,16 @@ program({}, async ({ log }) => {
 		...args,
 	};
 
+	const server = config.startServer && exec(args.startServer);
+	if (server) log(`"${args.startServer}" started`);
+
 	const report = await (args.node ? runNode(config) : runPuppeteer(config));
+
+	try {
+		if (server) process.kill(server.pid);
+	} catch (e) {
+		//
+	}
 
 	if (report) {
 		printReportV2(report);

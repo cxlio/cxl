@@ -34,6 +34,9 @@ import {
 	notify,
 	setSnackbarContainer,
 } from './index.js';
+import carouselSpec from './spec/carousel.js';
+import datepickerSpec from './spec/datepicker.js';
+import tableSpec from './spec/table.js';
 
 const Measure: Record<string, any> = {
 	'CXL-APPBAR'(test: TestApi) {
@@ -269,6 +272,10 @@ export default spec('ui', a => {
 		a.test(tagName, a => testComponent(components[tagName], a));
 	}
 
+	a.addSpec(carouselSpec);
+	a.addSpec(datepickerSpec);
+	a.addSpec(tableSpec);
+
 	a.test('cxl-textarea', a => {
 		a.test('should support multiple lines', a => {
 			const el = a.element('cxl-textarea') as TextArea;
@@ -466,6 +473,11 @@ export default spec('ui', a => {
 			a.equal(el.value, 5);
 			a.ok(el.selected);
 		});
+
+		a.figure(
+			'SelectBox with value',
+			`<cxl-select value="clock"><cxl-option>clock</cxl-option></cxl-select>`
+		);
 	});
 
 	a.test('cxl-multiselect', a => {
@@ -983,7 +995,7 @@ export default spec('ui', a => {
 			`
 		<cxl-avatar></cxl-avatar><cxl-badge top over>5</cxl-badge>
 		<br/>
-		<cxl-button primary>Badge<cxl-badge secondary small></cxl-badge></cxl-button>
+		<cxl-button primary>Badge<cxl-badge top secondary size="small"></cxl-badge></cxl-button>
 		`
 		);
 	});
@@ -1060,11 +1072,15 @@ export default spec('ui', a => {
 	a.test('cxl-chip', a => {
 		a.figure(
 			'Chip Styles',
-			`<cxl-chip>Chip</cxl-chip><cxl-chip secondary>Secondary</cxl-chip><cxl-chip primary>Primary</cxl-chip><cxl-chip small>Small</cxl-chip>`
+			`<cxl-chip>Chip</cxl-chip><cxl-chip secondary>Secondary</cxl-chip><cxl-chip primary>Primary</cxl-chip><cxl-chip size="small">Small</cxl-chip>`
 		);
 		a.figure(
 			'Chip[removable]',
-			`<cxl-chip removable>Chip</cxl-chip><cxl-chip secondary removable>Secondary</cxl-chip><cxl-chip primary removable>Primary</cxl-chip><cxl-chip small removable>Small</cxl-chip>`
+			`<cxl-chip removable>Chip</cxl-chip><cxl-chip secondary removable>Secondary</cxl-chip><cxl-chip primary removable>Primary</cxl-chip><cxl-chip size="small" removable>Small</cxl-chip>`
+		);
+		a.figure(
+			'Chip With Avatar',
+			`<cxl-chip><cxl-avatar size="small"></cxl-avatar>Chip With Avatar</cxl-chip>`
 		);
 	});
 

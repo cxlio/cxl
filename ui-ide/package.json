@@ -1,0 +1,17 @@
+{
+	"name": "@cxl/ui-ide",
+	"version": "0.0.2",
+	"browser": "amd/index.min.js",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/ui-ide",
+	"license": "UNLICENSED",
+	"description": "IDE Components",
+	"scripts": {
+		"build": "node build",
+		"test": "npm run build && cd ../dist/ui-ide && node ../tester --baselinePath=../../ui-ide/spec"
+	},
+	"devDependencies": {
+		"@cxl/tsx": "~0.1.0",
+		"@cxl/ui": "~3.1.0"
+	}
+}

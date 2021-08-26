@@ -25,6 +25,7 @@ declare module '../css/index.js' {
 		onSurface87: BaseColor;
 		onError: BaseColor;
 		background: BaseColor;
+		onBackground: BaseColor;
 		link: BaseColor;
 		headerText: BaseColor;
 		divider: BaseColor;
@@ -183,6 +184,9 @@ Object.assign(theme.colors, {
 	get background() {
 		return this.surface;
 	},
+	get onBackground() {
+		return this.onSurface;
+	},
 	get link() {
 		return this.primary;
 	},
@@ -248,4 +252,14 @@ export const InverseSecondary: any = {
 	},
 };
 
-requestAnimationFrame(() => applyTheme());
+export const ColorStyles = {
+	surface: ResetSurface,
+	primary: InversePrimary,
+	secondary: InverseSecondary,
+};
+
+export function delayTheme() {
+	cancelAnimationFrame(loadingId);
+}
+
+const loadingId = requestAnimationFrame(() => applyTheme());

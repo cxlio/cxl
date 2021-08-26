@@ -7,7 +7,7 @@ import { border, css, padding } from '@cxl/css';
 import { be } from '@cxl/rx';
 import '@cxl/ui-router';
 import { Span } from '@cxl/ui/core.js';
-import { Tabs, Tab } from '@cxl/ui/navigation.js';
+import { Tabs, Tab } from '@cxl/ui/tabs.js';
 import { SelectBox, Option } from '@cxl/ui/select.js';
 import { onValue } from '@cxl/template/index.js';
 
@@ -104,21 +104,18 @@ export class DocVersionSelect extends Component {
 		const iframeClass = be('container');
 
 		function init(parent: HTMLIFrameElement) {
-			return onChildrenMutation(host).tap(() => {
-				const content = host.childNodes[0]?.textContent?.trim() || '';
-				parent.srcdoc = `<!DOCTYPE html><style>body{padding:12px;margin:0;}</style>${UserScripts}${content}`;
-				parent.onload = () => {
-					const observer = new ResizeObserver(() => {
-						const height =
-							parent.contentDocument?.body.scrollHeight;
-						if (height && height > 160)
-							parent.style.height = height + 'px';
-					});
-					if (parent.contentDocument?.body)
-						observer.observe(parent.contentDocument.body);
-				};
-				content$.next(content);
-			});
+			const content = host.childNodes[0]?.textContent?.trim() || '';
+			parent.srcdoc = `<!DOCTYPE html><style>body{padding:12px;margin:0;}</style>${UserScripts}${content}`;
+			parent.onload = () => {
+				const observer = new ResizeObserver(() => {
+					const height = parent.contentDocument?.body.scrollHeight;
+					if (height && height > 160)
+						parent.style.height = height + 'px';
+				});
+				if (parent.contentDocument?.body)
+					observer.observe(parent.contentDocument.body);
+			};
+			content$.next(content);
 		}
 
 		function updateView(val: string) {
@@ -129,7 +126,8 @@ export class DocVersionSelect extends Component {
 		host.bind(get(host, 'view').tap(updateView));
 		const iframeEl = (<iframe title="Demo" />) as HTMLIFrameElement;
 		(iframeEl as any).loading = 'lazy';
-		host.bind(init(iframeEl));
+		init(iframeEl);
+		host.bind(onChildrenMutation(host).tap(() => init(iframeEl)));
 		host.bind(iframeClass.tap(val => (iframeEl.className = val)));
 
 		return (

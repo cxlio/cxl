@@ -13,7 +13,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 11,
+            "line": 12,
             "ch": 17
           },
           "kind": 2,
@@ -23,7 +23,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 13,
+              "line": 14,
               "ch": 28
             },
             "kind": 5,
@@ -38,6 +38,11 @@
               {
                 "name": "Node",
                 "kind": 6
+              },
+              {
+                "name": "undefined",
+                "kind": 32,
+                "flags": 0
               }
             ]
           }
@@ -45,8 +50,8 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 13,
-            "ch": 43
+            "line": 14,
+            "ch": 55
           },
           "kind": 2,
           "name": "TemplateContent",
@@ -55,7 +60,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 14,
+              "line": 15,
               "ch": 29
             },
             "kind": 5,
@@ -85,7 +90,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 14,
+            "line": 15,
             "ch": 80
           },
           "kind": 16,
@@ -96,7 +101,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 16,
+                "line": 17,
                 "ch": 22
               },
               "kind": 9,
@@ -118,24 +123,73 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 19,
+            "line": 20,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "setContent",
+          "flags": 1,
+          "id": 5,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 22,
+                "ch": 27
+              },
+              "kind": 9,
+              "name": "el",
+              "flags": 0,
+              "id": 6,
+              "type": {
+                "name": "Element",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 22,
+                "ch": 39
+              },
+              "kind": 9,
+              "name": "content",
+              "flags": 0,
+              "id": 7,
+              "type": {
+                "id": 1,
+                "name": "ElementContent",
+                "kind": 6
+              }
+            }
+          ],
+          "type": {
+            "name": "void",
+            "kind": 32,
+            "flags": 0
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 25,
             "ch": 1
           },
           "kind": 16,
           "name": "on",
           "flags": 16385,
-          "id": 5,
+          "id": 8,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 21,
+                "line": 27,
                 "ch": 19
               },
               "kind": 3,
               "name": "K",
               "flags": 0,
-              "id": 6
+              "id": 9
             }
           ],
           "type": {
@@ -145,7 +199,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 25,
+                  "line": 31,
                   "ch": 14
                 },
                 "kind": 21,
@@ -157,7 +211,7 @@
                     "kind": 6
                   },
                   {
-                    "id": 6,
+                    "id": 9,
                     "name": "K",
                     "kind": 6
                   }
@@ -169,13 +223,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 21,
+                "line": 27,
                 "ch": 51
               },
               "kind": 9,
               "name": "element",
               "flags": 0,
-              "id": 7,
+              "id": 10,
               "type": {
                 "name": "Window",
                 "kind": 6
@@ -184,15 +238,15 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 22,
+                "line": 28,
                 "ch": 17
               },
               "kind": 9,
               "name": "event",
               "flags": 0,
-              "id": 8,
+              "id": 11,
               "type": {
-                "id": 6,
+                "id": 9,
                 "name": "K",
                 "kind": 6
               }
@@ -200,13 +254,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 23,
+                "line": 29,
                 "ch": 10
               },
               "kind": 9,
               "name": "options",
               "flags": 524288,
-              "id": 9,
+              "id": 12,
               "type": {
                 "name": "AddEventListenerOptions",
                 "kind": 6
@@ -217,24 +271,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 25,
+            "line": 31,
             "ch": 33
           },
           "kind": 16,
           "name": "on",
           "flags": 16385,
-          "id": 10,
+          "id": 13,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 26,
+                "line": 32,
                 "ch": 19
               },
               "kind": 3,
               "name": "K",
               "flags": 0,
-              "id": 11
+              "id": 14
             }
           ],
           "type": {
@@ -244,7 +298,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 30,
+                  "line": 36,
                   "ch": 14
                 },
                 "kind": 21,
@@ -256,7 +310,7 @@
                     "kind": 6
                   },
                   {
-                    "id": 11,
+                    "id": 14,
                     "name": "K",
                     "kind": 6
                   }
@@ -268,13 +322,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 26,
+                "line": 32,
                 "ch": 64
               },
               "kind": 9,
               "name": "element",
               "flags": 0,
-              "id": 12,
+              "id": 15,
               "type": {
                 "name": "EventTarget",
                 "kind": 6
@@ -283,15 +337,15 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 27,
+                "line": 33,
                 "ch": 22
               },
               "kind": 9,
               "name": "event",
               "flags": 0,
-              "id": 13,
+              "id": 16,
               "type": {
-                "id": 11,
+                "id": 14,
                 "name": "K",
                 "kind": 6
               }
@@ -299,13 +353,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 28,
+                "line": 34,
                 "ch": 10
               },
               "kind": 9,
               "name": "options",
               "flags": 524288,
-              "id": 14,
+              "id": 17,
               "type": {
                 "name": "AddEventListenerOptions",
                 "kind": 6
@@ -316,13 +370,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 30,
+            "line": 36,
             "ch": 46
           },
           "kind": 16,
           "name": "on",
           "flags": 16385,
-          "id": 15,
+          "id": 18,
           "type": {
             "name": "Observable",
             "kind": 6,
@@ -337,17 +391,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 31,
+                "line": 37,
                 "ch": 19
               },
               "kind": 9,
               "name": "element",
               "flags": 0,
-              "id": 16,
+              "id": 19,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 32,
+                  "line": 38,
                   "ch": 9
                 },
                 "kind": 5,
@@ -368,13 +422,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 32,
+                "line": 38,
                 "ch": 31
               },
               "kind": 9,
               "name": "event",
               "flags": 0,
-              "id": 17,
+              "id": 20,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -384,13 +438,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 33,
+                "line": 39,
                 "ch": 15
               },
               "kind": 9,
               "name": "options",
               "flags": 524288,
-              "id": 18,
+              "id": 21,
               "type": {
                 "name": "AddEventListenerOptions",
                 "kind": 6
@@ -401,13 +455,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 35,
+            "line": 41,
             "ch": 27
           },
           "kind": 16,
           "name": "on",
           "flags": 1,
-          "id": 19,
+          "id": 22,
           "type": {
             "name": "Observable",
             "kind": 6,
@@ -422,17 +476,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 36,
+                "line": 42,
                 "ch": 19
               },
               "kind": 9,
               "name": "element",
               "flags": 0,
-              "id": 20,
+              "id": 23,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 37,
+                  "line": 43,
                   "ch": 9
                 },
                 "kind": 5,
@@ -453,13 +507,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 37,
+                "line": 43,
                 "ch": 31
               },
               "kind": 9,
               "name": "event",
               "flags": 0,
-              "id": 21,
+              "id": 24,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -469,13 +523,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 38,
+                "line": 44,
                 "ch": 15
               },
               "kind": 9,
               "name": "options",
               "flags": 524288,
-              "id": 22,
+              "id": 25,
               "type": {
                 "name": "AddEventListenerOptions",
                 "kind": 6
@@ -486,28 +540,28 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 51,
+            "line": 57,
             "ch": 1
           },
           "kind": 16,
           "name": "onKeypress",
           "flags": 1,
-          "id": 23,
+          "id": 26,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 53,
+                "line": 59,
                 "ch": 27
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 24,
+              "id": 27,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 53,
+                  "line": 59,
                   "ch": 30
                 },
                 "kind": 5,
@@ -528,13 +582,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 53,
+                "line": 59,
                 "ch": 48
               },
               "kind": 9,
               "name": "key",
               "flags": 524288,
-              "id": 25,
+              "id": 28,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -556,24 +610,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 57,
+            "line": 63,
             "ch": 1
           },
           "kind": 16,
           "name": "onAction",
           "flags": 1,
-          "id": 26,
+          "id": 29,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 59,
+                "line": 65,
                 "ch": 25
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 27,
+              "id": 30,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -605,13 +659,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 61,
+            "line": 67,
             "ch": 1
           },
           "kind": 16,
           "name": "onReady",
           "flags": 1,
-          "id": 28,
+          "id": 31,
           "parameters": [],
           "type": {
             "name": "Observable",
@@ -628,13 +682,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 71,
+            "line": 77,
             "ch": 1
           },
           "kind": 16,
           "name": "onLoad",
           "flags": 1,
-          "id": 29,
+          "id": 32,
           "parameters": [],
           "type": {
             "name": "Observable",
@@ -651,24 +705,47 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 81,
+            "line": 87,
+            "ch": 1
+          },
+          "kind": 16,
+          "name": "onFontsReady",
+          "flags": 1,
+          "id": 33,
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "name": "void",
+                "kind": 32,
+                "flags": 0
+              }
+            ]
+          },
+          "parameters": []
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 91,
             "ch": 1
           },
           "kind": 16,
           "name": "getShadow",
           "flags": 1,
-          "id": 30,
+          "id": 34,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 83,
+                "line": 93,
                 "ch": 26
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 31,
+              "id": 35,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -683,24 +760,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 90,
+            "line": 100,
             "ch": 1
           },
           "kind": 16,
           "name": "setAttribute",
           "flags": 1,
-          "id": 32,
+          "id": 36,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 92,
+                "line": 102,
                 "ch": 29
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 33,
+              "id": 37,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -709,13 +786,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 92,
+                "line": 102,
                 "ch": 41
               },
               "kind": 9,
               "name": "attr",
               "flags": 0,
-              "id": 34,
+              "id": 38,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -725,13 +802,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 92,
+                "line": 102,
                 "ch": 55
               },
               "kind": 9,
               "name": "val",
               "flags": 0,
-              "id": 35,
+              "id": 39,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -748,24 +825,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 101,
+            "line": 111,
             "ch": 1
           },
           "kind": 16,
           "name": "trigger",
           "flags": 1,
-          "id": 36,
+          "id": 40,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 103,
+                "line": 113,
                 "ch": 24
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 37,
+              "id": 41,
               "type": {
                 "name": "EventTarget",
                 "kind": 6
@@ -774,13 +851,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 103,
+                "line": 113,
                 "ch": 40
               },
               "kind": 9,
               "name": "event",
               "flags": 0,
-              "id": 38,
+              "id": 42,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -790,13 +867,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 103,
+                "line": 113,
                 "ch": 55
               },
               "kind": 9,
               "name": "detail",
               "flags": 524288,
-              "id": 39,
+              "id": 43,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -813,24 +890,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 106,
+            "line": 116,
             "ch": 1
           },
           "kind": 4,
           "name": "MutationEvent",
           "flags": 1,
-          "id": 40,
+          "id": 44,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 108,
+                "line": 118,
                 "ch": 31
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 41,
+              "id": 45,
               "value": "EventTarget"
             }
           ],
@@ -838,17 +915,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 108,
+                "line": 118,
                 "ch": 69
               },
               "kind": 10,
               "name": "type",
               "flags": 4,
-              "id": 42,
+              "id": 46,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 109,
+                  "line": 119,
                   "ch": 6
                 },
                 "kind": 5,
@@ -858,7 +935,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 109,
+                      "line": 119,
                       "ch": 6
                     },
                     "kind": 23,
@@ -868,7 +945,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 109,
+                      "line": 119,
                       "ch": 16
                     },
                     "kind": 23,
@@ -878,7 +955,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 109,
+                      "line": 119,
                       "ch": 28
                     },
                     "kind": 23,
@@ -891,15 +968,15 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 109,
+                "line": 119,
                 "ch": 41
               },
               "kind": 10,
               "name": "target",
               "flags": 4,
-              "id": 43,
+              "id": 47,
               "type": {
-                "id": 41,
+                "id": 45,
                 "name": "T",
                 "kind": 6
               }
@@ -907,13 +984,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 110,
+                "line": 120,
                 "ch": 11
               },
               "kind": 10,
               "name": "value",
               "flags": 4,
-              "id": 44,
+              "id": 48,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -925,24 +1002,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 112,
+            "line": 122,
             "ch": 1
           },
           "kind": 8,
           "name": "AttributeObserver",
           "flags": 1,
-          "id": 45,
+          "id": 49,
           "children": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 114,
+                "line": 124,
                 "ch": 63
               },
               "kind": 10,
               "name": "$value",
               "flags": 8,
-              "id": 46,
+              "id": 50,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -952,13 +1029,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 115,
+                "line": 125,
                 "ch": 21
               },
               "kind": 10,
               "name": "$checked",
               "flags": 8,
-              "id": 47,
+              "id": 51,
               "type": {
                 "name": "any",
                 "kind": 32,
@@ -968,13 +1045,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 116,
+                "line": 126,
                 "ch": 23
               },
               "kind": 10,
               "name": "observer",
               "flags": 4,
-              "id": 48,
+              "id": 52,
               "type": {
                 "name": "MutationObserver",
                 "kind": 6
@@ -983,17 +1060,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 118,
+                "line": 128,
                 "ch": 29
               },
               "kind": 10,
               "name": "bindings",
               "flags": 4,
-              "id": 49,
+              "id": 53,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 119,
+                  "line": 129,
                   "ch": 11
                 },
                 "kind": 15,
@@ -1008,28 +1085,28 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 119,
+                "line": 129,
                 "ch": 27
               },
               "kind": 11,
               "name": "$onMutation",
               "flags": 4,
-              "id": 50,
+              "id": 54,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 121,
+                    "line": 131,
                     "ch": 13
                   },
                   "kind": 9,
                   "name": "events",
                   "flags": 0,
-                  "id": 51,
+                  "id": 55,
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 121,
+                      "line": 131,
                       "ch": 20
                     },
                     "kind": 15,
@@ -1051,13 +1128,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 125,
+                "line": 135,
                 "ch": 2
               },
               "kind": 11,
               "name": "$onEvent",
               "flags": 4,
-              "id": 52,
+              "id": 56,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -1068,24 +1145,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 139,
+                "line": 149,
                 "ch": 2
               },
               "kind": 11,
               "name": "$initializeNative",
               "flags": 4,
-              "id": 53,
+              "id": 57,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 141,
+                    "line": 151,
                     "ch": 19
                   },
                   "kind": 9,
                   "name": "element",
                   "flags": 0,
-                  "id": 54,
+                  "id": 58,
                   "type": {
                     "name": "Element",
                     "kind": 6
@@ -1101,24 +1178,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 148,
+                "line": 158,
                 "ch": 2
               },
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 55,
+              "id": 59,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 150,
+                    "line": 160,
                     "ch": 13
                   },
                   "kind": 10,
                   "name": "element",
                   "flags": 4,
-                  "id": 56,
+                  "id": 60,
                   "type": {
                     "name": "Node",
                     "kind": 6
@@ -1126,7 +1203,7 @@
                 }
               ],
               "type": {
-                "id": 45,
+                "id": 49,
                 "name": "AttributeObserver",
                 "kind": 6
               }
@@ -1134,24 +1211,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 158,
+                "line": 168,
                 "ch": 2
               },
               "kind": 11,
               "name": "onSubscribe",
               "flags": 16,
-              "id": 57,
+              "id": 61,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 160,
+                    "line": 170,
                     "ch": 23
                   },
                   "kind": 9,
                   "name": "subscription",
                   "flags": 0,
-                  "id": 58,
+                  "id": 62,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -1162,13 +1239,13 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 166,
+                  "line": 176,
                   "ch": 8
                 },
                 "kind": 16,
                 "name": "",
                 "flags": 0,
-                "id": 59,
+                "id": 63,
                 "parameters": [],
                 "type": {
                   "name": "void",
@@ -1180,13 +1257,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 170,
+                "line": 180,
                 "ch": 2
               },
               "kind": 11,
               "name": "disconnect",
               "flags": 4,
-              "id": 60,
+              "id": 64,
               "parameters": [],
               "type": {
                 "name": "void",
@@ -1197,24 +1274,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 178,
+                "line": 188,
                 "ch": 2
               },
               "kind": 11,
               "name": "trigger",
               "flags": 4,
-              "id": 61,
+              "id": 65,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 180,
+                    "line": 190,
                     "ch": 9
                   },
                   "kind": 9,
                   "name": "attributeName",
                   "flags": 0,
-                  "id": 62,
+                  "id": 66,
                   "type": {
                     "name": "string",
                     "kind": 32,
@@ -1231,13 +1308,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 150,
+                "line": 160,
                 "ch": 13
               },
               "kind": 10,
               "name": "element",
               "flags": 4,
-              "id": 56,
+              "id": 60,
               "type": {
                 "name": "Node",
                 "kind": 6
@@ -1254,7 +1331,7 @@
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 40,
+                    "id": 44,
                     "name": "MutationEvent",
                     "kind": 6
                   }
@@ -1266,24 +1343,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 187,
+            "line": 197,
             "ch": 1
           },
           "kind": 16,
           "name": "onChildrenMutation",
           "flags": 1,
-          "id": 63,
+          "id": 67,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 189,
+                "line": 199,
                 "ch": 35
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 64,
+              "id": 68,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -1291,7 +1368,7 @@
             }
           ],
           "type": {
-            "id": 65,
+            "id": 69,
             "name": "ChildrenObserver",
             "kind": 6
           }
@@ -1299,24 +1376,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 191,
+            "line": 201,
             "ch": 1
           },
           "kind": 16,
           "name": "onAttributeChange",
           "flags": 1,
-          "id": 66,
+          "id": 70,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 193,
+                "line": 203,
                 "ch": 34
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 67,
+              "id": 71,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -1324,16 +1401,16 @@
             }
           ],
           "type": {
-            "id": 45,
+            "id": 49,
             "name": "AttributeObserver",
             "kind": 6
           }
         },
         {
-          "id": 65,
+          "id": 69,
           "source": {
             "fileName": "index.ts",
-            "line": 195,
+            "line": 205,
             "ch": 1
           },
           "kind": 8,
@@ -1343,13 +1420,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 197,
+                "line": 207,
                 "ch": 62
               },
               "kind": 10,
               "name": "observer",
               "flags": 8,
-              "id": 68,
+              "id": 72,
               "type": {
                 "name": "MutationObserver",
                 "kind": 6
@@ -1358,24 +1435,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 198,
+                "line": 208,
                 "ch": 37
               },
               "kind": 14,
               "name": "constructor",
               "flags": 0,
-              "id": 69,
+              "id": 73,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 200,
+                    "line": 210,
                     "ch": 13
                   },
                   "kind": 10,
                   "name": "element",
                   "flags": 8,
-                  "id": 70,
+                  "id": 74,
                   "type": {
                     "name": "Element",
                     "kind": 6
@@ -1383,7 +1460,7 @@
                 }
               ],
               "type": {
-                "id": 65,
+                "id": 69,
                 "name": "ChildrenObserver",
                 "kind": 6
               }
@@ -1391,24 +1468,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 208,
+                "line": 218,
                 "ch": 2
               },
               "kind": 11,
               "name": "$handleEvent",
               "flags": 4,
-              "id": 71,
+              "id": 75,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 210,
+                    "line": 220,
                     "ch": 14
                   },
                   "kind": 9,
                   "name": "ev",
                   "flags": 0,
-                  "id": 72,
+                  "id": 76,
                   "type": {
                     "name": "MutationRecord",
                     "kind": 6
@@ -1424,24 +1501,24 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 216,
+                "line": 226,
                 "ch": 2
               },
               "kind": 11,
               "name": "onSubscribe",
               "flags": 16,
-              "id": 73,
+              "id": 77,
               "parameters": [
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 218,
+                    "line": 228,
                     "ch": 23
                   },
                   "kind": 9,
                   "name": "subscription",
                   "flags": 0,
-                  "id": 74,
+                  "id": 78,
                   "type": {
                     "name": "any",
                     "kind": 32,
@@ -1452,13 +1529,13 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 234,
+                  "line": 240,
                   "ch": 8
                 },
                 "kind": 16,
                 "name": "",
                 "flags": 0,
-                "id": 75,
+                "id": 79,
                 "parameters": [],
                 "type": {
                   "name": "void",
@@ -1470,13 +1547,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 200,
+                "line": 210,
                 "ch": 13
               },
               "kind": 10,
               "name": "element",
               "flags": 8,
-              "id": 70,
+              "id": 74,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -1493,7 +1570,7 @@
                 "kind": 6,
                 "typeParameters": [
                   {
-                    "id": 40,
+                    "id": 44,
                     "name": "MutationEvent",
                     "kind": 6
                   }
@@ -1505,13 +1582,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 242,
+            "line": 248,
             "ch": 1
           },
           "kind": 16,
           "name": "onHashChange",
           "flags": 1,
-          "id": 76,
+          "id": 80,
           "parameters": [],
           "type": {
             "name": "Observable",
@@ -1528,13 +1605,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 251,
+            "line": 257,
             "ch": 3
           },
           "kind": 1,
           "name": "pushSubject",
           "flags": 0,
-          "id": 77,
+          "id": 81,
           "type": {
             "name": "BehaviorSubject",
             "kind": 6,
@@ -1550,13 +1627,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 251,
+            "line": 257,
             "ch": 38
           },
           "kind": 16,
           "name": "onHistoryChange",
           "flags": 1,
-          "id": 78,
+          "id": 82,
           "parameters": [],
           "type": {
             "name": "Observable",
@@ -1573,13 +1650,13 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 266,
+            "line": 276,
             "ch": 1
           },
           "kind": 16,
           "name": "onLocation",
           "flags": 1,
-          "id": 79,
+          "id": 83,
           "parameters": [],
           "type": {
             "name": "Observable",
@@ -1595,14 +1672,14 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 279,
+            "line": 289,
             "ch": 12
           },
           "kind": 31,
           "name": "animationFrame",
           "flags": 1,
-          "id": 80,
-          "value": "new Observable<number>(subs => {\n\tlet frame = 0;\n\tlet rafid = requestAnimationFrame(next);\n\tfunction next() {\n\t\tsubs.next(frame++);\n\t\trafid = requestAnimationFrame(next);\n\t}\n\treturn () => cancelAnimationFrame(rafid);\n})",
+          "id": 84,
+          "value": "new Observable<number>(subs => {\n\tlet frame = 0;\n\tlet rafid = requestAnimationFrame(next);\n\tfunction next() {\n\t\tif (subs.closed) return;\n\t\tsubs.next(frame++);\n\t\trafid = requestAnimationFrame(next);\n\t}\n\treturn () => cancelAnimationFrame(rafid);\n})",
           "type": {
             "name": "Observable",
             "kind": 6,
@@ -1618,39 +1695,39 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 287,
+            "line": 298,
             "ch": 3
           },
           "kind": 16,
           "name": "findNextNode",
           "flags": 1,
-          "id": 81,
+          "id": 85,
           "typeParameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 289,
+                "line": 300,
                 "ch": 29
               },
               "kind": 3,
               "name": "T",
               "flags": 0,
-              "id": 82
+              "id": 86
             }
           ],
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 289,
+                "line": 300,
                 "ch": 50
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 83,
+              "id": 87,
               "type": {
-                "id": 82,
+                "id": 86,
                 "name": "T",
                 "kind": 6
               }
@@ -1658,23 +1735,23 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 290,
+                "line": 301,
                 "ch": 7
               },
               "kind": 9,
               "name": "fn",
               "flags": 0,
-              "id": 84,
+              "id": 88,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 291,
+                  "line": 302,
                   "ch": 4
                 },
                 "kind": 17,
                 "name": "",
                 "flags": 0,
-                "id": 85,
+                "id": 89,
                 "type": {
                   "name": "boolean",
                   "kind": 32,
@@ -1684,15 +1761,15 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 291,
+                      "line": 302,
                       "ch": 6
                     },
                     "kind": 9,
                     "name": "el",
                     "flags": 0,
-                    "id": 86,
+                    "id": 90,
                     "type": {
-                      "id": 82,
+                      "id": 86,
                       "name": "T",
                       "kind": 6
                     }
@@ -1703,17 +1780,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 291,
+                "line": 302,
                 "ch": 24
               },
               "kind": 9,
               "name": "direction",
               "flags": 0,
-              "id": 87,
+              "id": 91,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 292,
+                  "line": 303,
                   "ch": 11
                 },
                 "kind": 5,
@@ -1723,7 +1800,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 292,
+                      "line": 303,
                       "ch": 11
                     },
                     "kind": 23,
@@ -1733,7 +1810,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 292,
+                      "line": 303,
                       "ch": 27
                     },
                     "kind": 23,
@@ -1756,7 +1833,7 @@
                 "flags": 0
               },
               {
-                "id": 82,
+                "id": 86,
                 "name": "T",
                 "kind": 6
               }
@@ -1766,24 +1843,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 300,
+            "line": 311,
             "ch": 1
           },
           "kind": 16,
           "name": "findNextNodeBySelector",
           "flags": 1,
-          "id": 88,
+          "id": 92,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 302,
+                "line": 313,
                 "ch": 39
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 89,
+              "id": 93,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -1792,13 +1869,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 303,
+                "line": 314,
                 "ch": 13
               },
               "kind": 9,
               "name": "selector",
               "flags": 0,
-              "id": 90,
+              "id": 94,
               "type": {
                 "name": "string",
                 "kind": 32,
@@ -1808,17 +1885,17 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 304,
+                "line": 315,
                 "ch": 18
               },
               "kind": 9,
               "name": "direction",
               "flags": 0,
-              "id": 91,
+              "id": 95,
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 305,
+                  "line": 316,
                   "ch": 11
                 },
                 "kind": 5,
@@ -1828,7 +1905,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 306,
+                      "line": 317,
                       "ch": 3
                     },
                     "kind": 23,
@@ -1838,7 +1915,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 307,
+                      "line": 318,
                       "ch": 3
                     },
                     "kind": 23,
@@ -1870,24 +1947,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 316,
+            "line": 327,
             "ch": 1
           },
           "kind": 16,
           "name": "onResize",
           "flags": 1,
-          "id": 92,
+          "id": 96,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 318,
+                "line": 329,
                 "ch": 25
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 93,
+              "id": 97,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -1909,24 +1986,24 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 324,
+            "line": 335,
             "ch": 1
           },
           "kind": 16,
           "name": "insert",
           "flags": 1,
-          "id": 94,
+          "id": 98,
           "parameters": [
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 326,
+                "line": 337,
                 "ch": 23
               },
               "kind": 9,
               "name": "el",
               "flags": 0,
-              "id": 95,
+              "id": 99,
               "type": {
                 "name": "Element",
                 "kind": 6
@@ -1935,13 +2012,13 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 326,
+                "line": 337,
                 "ch": 35
               },
               "kind": 9,
               "name": "content",
               "flags": 0,
-              "id": 96,
+              "id": 100,
               "type": {
                 "id": 1,
                 "name": "ElementContent",
@@ -1954,1781 +2031,106 @@
             "kind": 32,
             "flags": 0
           }
-        }
-      ]
-    },
-    {
-      "source": {
-        "fileName": "virtual.ts",
-        "line": 0,
-        "ch": 0
-      },
-      "kind": 7,
-      "name": "virtual.ts",
-      "flags": 0,
-      "children": [
+        },
         {
           "source": {
-            "fileName": "virtual.ts",
-            "line": 0,
-            "ch": 0
+            "fileName": "index.ts",
+            "line": 341,
+            "ch": 1
           },
-          "kind": 8,
-          "name": "VirtualNode",
-          "flags": 128,
-          "id": 97,
-          "children": [
+          "kind": 16,
+          "name": "fileReaderString",
+          "flags": 1,
+          "id": 101,
+          "parameters": [
             {
               "source": {
-                "fileName": "virtual.ts",
-                "line": 0,
-                "ch": 28
+                "fileName": "index.ts",
+                "line": 343,
+                "ch": 33
               },
-              "kind": 10,
-              "name": "ELEMENT_NODE",
-              "flags": 100,
-              "id": 98,
-              "value": "1",
-              "type": {
-                "name": "1",
-                "kind": 23,
-                "type": {
-                  "name": "number",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 1,
-                "ch": 34
-              },
-              "kind": 10,
-              "name": "TEXT_NODE",
-              "flags": 100,
-              "id": 99,
-              "value": "3",
-              "type": {
-                "name": "3",
-                "kind": 23,
-                "type": {
-                  "name": "number",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 2,
-                "ch": 31
-              },
-              "kind": 10,
-              "name": "COMMENT_NODE",
-              "flags": 100,
-              "id": 100,
-              "value": "8",
-              "type": {
-                "name": "8",
-                "kind": 23,
-                "type": {
-                  "name": "number",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 3,
-                "ch": 34
-              },
-              "kind": 10,
-              "name": "DOCUMENT_FRAGMENT_NODE",
-              "flags": 100,
-              "id": 101,
-              "value": "11",
-              "type": {
-                "name": "11",
-                "kind": 23,
-                "type": {
-                  "name": "number",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 4,
-                "ch": 45
-              },
-              "kind": 10,
-              "name": "textContent",
-              "flags": 132,
+              "kind": 9,
+              "name": "file",
+              "flags": 0,
               "id": 102,
               "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 6,
-                "ch": 30
-              },
-              "kind": 10,
-              "name": "nodeType",
-              "flags": 196,
-              "id": 103,
-              "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 7,
-                "ch": 36
-              },
-              "kind": 10,
-              "name": "parentNode",
-              "flags": 4,
-              "id": 104,
-              "type": {
-                "source": {
-                  "fileName": "virtual.ts",
-                  "line": 9,
-                  "ch": 12
-                },
-                "kind": 5,
-                "name": "",
-                "flags": 0,
-                "children": [
-                  {
-                    "id": 105,
-                    "name": "VirtualElement",
-                    "kind": 6
-                  },
-                  {
-                    "source": {
-                      "fileName": "virtual.ts",
-                      "line": 9,
-                      "ch": 29
-                    },
-                    "kind": 23,
-                    "name": "null",
-                    "flags": 0
-                  }
-                ]
-              },
-              "value": "null"
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 9,
-                "ch": 42
-              },
-              "kind": 10,
-              "name": "isConnected",
-              "flags": 4,
-              "id": 106,
-              "value": "false",
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 10,
-                "ch": 21
-              },
-              "kind": 11,
-              "name": "getIndex",
-              "flags": 8,
-              "id": 107,
-              "parameters": [],
-              "type": {
-                "name": "",
-                "flags": 0,
-                "kind": 5,
-                "children": [
-                  {
-                    "name": "null",
-                    "kind": 32,
-                    "flags": 0
-                  },
-                  {
-                    "name": "number",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                ]
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 16,
-                "ch": 2
-              },
-              "kind": 12,
-              "name": "nextSibling",
-              "flags": 4,
-              "id": 108,
-              "type": {
-                "source": {
-                  "fileName": "virtual.ts",
-                  "line": 18,
-                  "ch": 19
-                },
-                "kind": 5,
-                "name": "",
-                "flags": 0,
-                "children": [
-                  {
-                    "id": 97,
-                    "name": "VirtualNode",
-                    "kind": 6
-                  },
-                  {
-                    "source": {
-                      "fileName": "virtual.ts",
-                      "line": 18,
-                      "ch": 33
-                    },
-                    "kind": 23,
-                    "name": "null",
-                    "flags": 0
-                  }
-                ]
-              },
-              "parameters": []
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 24,
-                "ch": 2
-              },
-              "kind": 12,
-              "name": "previousSibling",
-              "flags": 4,
-              "id": 109,
-              "parameters": [],
-              "type": {
-                "name": "",
-                "flags": 0,
-                "kind": 5,
-                "children": [
-                  {
-                    "name": "null",
-                    "kind": 32,
-                    "flags": 0
-                  },
-                  {
-                    "id": 97,
-                    "name": "VirtualNode",
-                    "kind": 6
-                  }
-                ]
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 32,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "cloneNode",
-              "flags": 4,
-              "id": 110,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 34,
-                    "ch": 11
-                  },
-                  "kind": 9,
-                  "name": "_deep",
-                  "flags": 0,
-                  "id": 111,
-                  "value": "true",
-                  "type": {
-                    "name": "boolean",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ],
-          "extendedBy": [
-            {
-              "id": 127,
-              "name": "VirtualTextNode",
-              "kind": 6
-            },
-            {
-              "id": 105,
-              "name": "VirtualElement",
-              "kind": 6
-            }
-          ]
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 37,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "remove",
-          "flags": 0,
-          "id": 112,
-          "parameters": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 39,
-                "ch": 16
-              },
-              "kind": 9,
-              "name": "el",
-              "flags": 0,
-              "id": 113,
-              "type": {
-                "id": 97,
-                "name": "VirtualNode",
+                "name": "File",
                 "kind": 6
               }
             }
           ],
           "type": {
-            "name": "void",
-            "kind": 32,
-            "flags": 0
-          }
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 42,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "empty",
-          "flags": 0,
-          "id": 114,
-          "parameters": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 44,
-                "ch": 15
-              },
-              "kind": 9,
-              "name": "el",
-              "flags": 0,
-              "id": 115,
-              "type": {
-                "id": 105,
-                "name": "VirtualElement",
-                "kind": 6
-              }
-            }
-          ],
-          "type": {
-            "name": "void",
-            "kind": 32,
-            "flags": 0
-          }
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 47,
-            "ch": 1
-          },
-          "kind": 16,
-          "name": "insert",
-          "flags": 0,
-          "id": 116,
-          "parameters": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 49,
-                "ch": 16
-              },
-              "kind": 9,
-              "name": "host",
-              "flags": 0,
-              "id": 117,
-              "type": {
-                "id": 105,
-                "name": "VirtualElement",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 49,
-                "ch": 37
-              },
-              "kind": 9,
-              "name": "el",
-              "flags": 0,
-              "id": 118,
-              "type": {
-                "id": 97,
-                "name": "VirtualNode",
-                "kind": 6
-              }
-            }
-          ],
-          "type": {
-            "name": "void",
-            "kind": 32,
-            "flags": 0
-          }
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 51,
-            "ch": 1
-          },
-          "kind": 8,
-          "name": "VirtualMutationObserver",
-          "flags": 0,
-          "id": 119,
-          "children": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 53,
-                "ch": 31
-              },
-              "kind": 14,
-              "name": "constructor",
-              "flags": 0,
-              "id": 120,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 54,
-                    "ch": 13
-                  },
-                  "kind": 10,
-                  "name": "callback",
-                  "flags": 8,
-                  "id": 121,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "id": 119,
-                "name": "VirtualMutationObserver",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 54,
-                "ch": 38
-              },
-              "kind": 11,
-              "name": "$trigger",
-              "flags": 4,
-              "id": 122,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 56,
-                    "ch": 10
-                  },
-                  "kind": 9,
-                  "name": "event",
-                  "flags": 0,
-                  "id": 123,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 58,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "observe",
-              "flags": 4,
-              "id": 124,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 60,
-                    "ch": 9
-                  },
-                  "kind": 9,
-                  "name": "element",
-                  "flags": 0,
-                  "id": 125,
-                  "type": {
-                    "id": 105,
-                    "name": "VirtualElement",
-                    "kind": 6
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 60,
-                    "ch": 33
-                  },
-                  "kind": 9,
-                  "name": "_options",
-                  "flags": 524288,
-                  "id": 126,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 54,
-                "ch": 13
-              },
-              "kind": 10,
-              "name": "callback",
-              "flags": 8,
-              "id": 121,
-              "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ]
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 63,
-            "ch": 1
-          },
-          "kind": 8,
-          "name": "VirtualTextNode",
-          "flags": 0,
-          "id": 127,
-          "children": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 65,
-                "ch": 43
-              },
-              "kind": 10,
-              "name": "textContent",
-              "flags": 4,
-              "id": 128,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 66,
-                "ch": 21
-              },
-              "kind": 10,
-              "name": "nodeType",
-              "flags": 4,
-              "id": 129,
-              "value": "3",
-              "type": {
-                "name": "number",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 67,
-                "ch": 14
-              },
-              "kind": 14,
-              "name": "constructor",
-              "flags": 0,
-              "id": 130,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 69,
-                    "ch": 13
-                  },
-                  "kind": 9,
-                  "name": "content",
-                  "flags": 0,
-                  "id": 131,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "id": 127,
-                "name": "VirtualTextNode",
-                "kind": 6
-              }
-            }
-          ],
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "id": 97,
-                "name": "VirtualNode",
-                "kind": 6
-              }
-            ]
-          }
-        },
-        {
-          "id": 105,
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 73,
-            "ch": 1
-          },
-          "kind": 8,
-          "name": "VirtualElement",
-          "flags": 0,
-          "children": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 75,
-                "ch": 42
-              },
-              "kind": 10,
-              "name": "$attributes",
-              "flags": 8,
-              "id": 132,
-              "type": {
-                "source": {
-                  "fileName": "virtual.ts",
-                  "line": 76,
-                  "ch": 21
-                },
-                "kind": 34,
-                "name": "",
-                "flags": 0,
-                "children": [
-                  {
-                    "source": {
-                      "fileName": "virtual.ts",
-                      "line": 76,
-                      "ch": 23
-                    },
-                    "kind": 24,
-                    "name": "",
-                    "flags": 0,
-                    "parameters": [
-                      {
-                        "source": {
-                          "fileName": "virtual.ts",
-                          "line": 76,
-                          "ch": 25
-                        },
-                        "kind": 9,
-                        "name": "name",
-                        "flags": 0,
-                        "id": 133,
-                        "type": {
-                          "name": "string",
-                          "kind": 32,
-                          "flags": 0
-                        }
-                      }
-                    ],
-                    "type": {
-                      "name": "string",
-                      "kind": 32,
-                      "flags": 0
-                    }
-                  }
-                ]
-              },
-              "value": "{}"
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 76,
-                "ch": 54
-              },
-              "kind": 10,
-              "name": "tagName",
-              "flags": 68,
-              "id": 134,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 78,
-                "ch": 26
-              },
-              "kind": 10,
-              "name": "nodeType",
-              "flags": 68,
-              "id": 135,
-              "value": "VirtualNode.ELEMENT_NODE",
-              "type": {
-                "name": "1",
-                "kind": 23,
-                "type": {
-                  "name": "number",
-                  "kind": 32,
-                  "flags": 0
-                },
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 79,
-                "ch": 46
-              },
-              "kind": 10,
-              "name": "childNodes",
-              "flags": 4,
-              "id": 136,
-              "type": {
-                "source": {
-                  "fileName": "virtual.ts",
-                  "line": 81,
-                  "ch": 12
-                },
-                "kind": 15,
-                "name": "Array",
-                "flags": 0,
-                "type": {
-                  "id": 97,
-                  "name": "VirtualNode",
-                  "kind": 6
-                }
-              },
-              "value": "[]"
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 81,
-                "ch": 32
-              },
-              "kind": 10,
-              "name": "$observer",
-              "flags": 4,
-              "id": 137,
-              "type": {
-                "id": 119,
-                "name": "VirtualMutationObserver",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 82,
-                "ch": 37
-              },
-              "kind": 10,
-              "name": "shadowRoot",
-              "flags": 4,
-              "id": 138,
-              "type": {
-                "id": 139,
-                "name": "VirtualFragment",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 83,
-                "ch": 30
-              },
-              "kind": 14,
-              "name": "constructor",
-              "flags": 0,
-              "id": 140,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 85,
-                    "ch": 13
-                  },
-                  "kind": 9,
-                  "name": "tagName",
-                  "flags": 0,
-                  "id": 141,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "id": 105,
-                "name": "VirtualElement",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 88,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "appendChild",
-              "flags": 4,
-              "id": 142,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 90,
-                    "ch": 13
-                  },
-                  "kind": 9,
-                  "name": "node",
-                  "flags": 0,
-                  "id": 143,
-                  "type": {
-                    "id": 97,
-                    "name": "VirtualNode",
-                    "kind": 6
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 92,
-                "ch": 2
-              },
-              "kind": 12,
-              "name": "textContent",
-              "flags": 4,
-              "id": 144,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              },
-              "parameters": []
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 96,
-                "ch": 2
-              },
-              "kind": 13,
-              "name": "textContent",
-              "flags": 4,
-              "id": 145,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 98,
-                    "ch": 17
-                  },
-                  "kind": 9,
-                  "name": "val",
-                  "flags": 0,
-                  "id": 146,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 101,
-                "ch": 2
-              },
-              "kind": 12,
-              "name": "firstChild",
-              "flags": 4,
-              "id": 147,
-              "parameters": [],
-              "type": {
-                "id": 97,
-                "name": "VirtualNode",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 105,
-                "ch": 2
-              },
-              "kind": 12,
-              "name": "lastChild",
-              "flags": 4,
-              "id": 148,
-              "parameters": [],
-              "type": {
-                "id": 97,
-                "name": "VirtualNode",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 109,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "attachShadow",
-              "flags": 4,
-              "id": 149,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 111,
-                    "ch": 14
-                  },
-                  "kind": 9,
-                  "name": "_options",
-                  "flags": 524288,
-                  "id": 150,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "id": 139,
-                "name": "VirtualFragment",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 113,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "addEventListener",
-              "flags": 4,
-              "id": 151,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 115,
-                    "ch": 18
-                  },
-                  "kind": 9,
-                  "name": "_event",
-                  "flags": 0,
-                  "id": 152,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 115,
-                    "ch": 33
-                  },
-                  "kind": 9,
-                  "name": "_handler",
-                  "flags": 0,
-                  "id": 153,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 115,
-                    "ch": 48
-                  },
-                  "kind": 9,
-                  "name": "_options",
-                  "flags": 0,
-                  "id": 154,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 117,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "removeEventListener",
-              "flags": 4,
-              "id": 155,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 119,
-                    "ch": 21
-                  },
-                  "kind": 9,
-                  "name": "_event",
-                  "flags": 0,
-                  "id": 156,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 119,
-                    "ch": 36
-                  },
-                  "kind": 9,
-                  "name": "_handler",
-                  "flags": 0,
-                  "id": 157,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 119,
-                    "ch": 51
-                  },
-                  "kind": 9,
-                  "name": "_options",
-                  "flags": 0,
-                  "id": 158,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 121,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "setAttribute",
-              "flags": 4,
-              "id": 159,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 123,
-                    "ch": 14
-                  },
-                  "kind": 9,
-                  "name": "attr",
-                  "flags": 0,
-                  "id": 160,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 123,
-                    "ch": 27
-                  },
-                  "kind": 9,
-                  "name": "value",
-                  "flags": 0,
-                  "id": 161,
-                  "type": {
-                    "name": "any",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 128,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "getAttribute",
-              "flags": 4,
-              "id": 162,
-              "type": {
-                "name": "string",
-                "kind": 32,
-                "flags": 0
-              },
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 130,
-                    "ch": 14
-                  },
-                  "kind": 9,
-                  "name": "attr",
-                  "flags": 0,
-                  "id": 163,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ]
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 132,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "hasAttribute",
-              "flags": 4,
-              "id": 164,
-              "type": {
-                "name": "boolean",
-                "kind": 32,
-                "flags": 0
-              },
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 134,
-                    "ch": 14
-                  },
-                  "kind": 9,
-                  "name": "attr",
-                  "flags": 0,
-                  "id": 165,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ]
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 136,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "removeAttribute",
-              "flags": 4,
-              "id": 166,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 138,
-                    "ch": 17
-                  },
-                  "kind": 9,
-                  "name": "attr",
-                  "flags": 0,
-                  "id": 167,
-                  "type": {
-                    "name": "string",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 140,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "insertBefore",
-              "flags": 4,
-              "id": 168,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 142,
-                    "ch": 14
-                  },
-                  "kind": 9,
-                  "name": "node",
-                  "flags": 0,
-                  "id": 169,
-                  "type": {
-                    "id": 97,
-                    "name": "VirtualNode",
-                    "kind": 6
-                  }
-                },
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 142,
-                    "ch": 32
-                  },
-                  "kind": 9,
-                  "name": "before",
-                  "flags": 524288,
-                  "id": 170,
-                  "type": {
-                    "id": 97,
-                    "name": "VirtualNode",
-                    "kind": 6
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 152,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "removeChild",
-              "flags": 4,
-              "id": 171,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 154,
-                    "ch": 13
-                  },
-                  "kind": 9,
-                  "name": "child",
-                  "flags": 0,
-                  "id": 172,
-                  "type": {
-                    "id": 97,
-                    "name": "VirtualNode",
-                    "kind": 6
-                  }
-                }
-              ],
-              "type": {
-                "name": "void",
-                "kind": 32,
-                "flags": 0
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 160,
-                "ch": 2
-              },
-              "kind": 11,
-              "name": "cloneNode",
-              "flags": 4,
-              "id": 173,
-              "parameters": [
-                {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 162,
-                    "ch": 11
-                  },
-                  "kind": 9,
-                  "name": "deep",
-                  "flags": 524288,
-                  "id": 174,
-                  "type": {
-                    "name": "boolean",
-                    "kind": 32,
-                    "flags": 0
-                  }
-                }
-              ],
-              "type": {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
-              }
-            }
-          ],
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "id": 97,
-                "name": "VirtualNode",
-                "kind": 6
-              }
-            ]
-          },
-          "extendedBy": [
-            {
-              "id": 139,
-              "name": "VirtualFragment",
-              "kind": 6
-            },
-            {
-              "id": 176,
-              "name": "VirtualTemplateElement",
-              "kind": 6
-            },
-            {
-              "id": 176,
-              "name": "VirtualTemplateElement",
-              "kind": 6
-            }
-          ]
-        },
-        {
-          "id": 139,
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 173,
-            "ch": 1
-          },
-          "kind": 8,
-          "name": "VirtualFragment",
-          "flags": 0,
-          "children": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 175,
-                "ch": 46
-              },
-              "kind": 14,
-              "name": "constructor",
-              "flags": 0,
-              "id": 175,
-              "parameters": [],
-              "type": {
-                "id": 139,
-                "name": "VirtualFragment",
-                "kind": 6
-              }
-            }
-          ],
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "id": 105,
-                "name": "VirtualElement",
-                "kind": 6
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 181,
-            "ch": 1
-          },
-          "kind": 8,
-          "name": "VirtualTemplateElement",
-          "flags": 0,
-          "id": 176,
-          "children": [
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 183,
-                "ch": 53
-              },
-              "kind": 10,
-              "name": "content",
-              "flags": 4,
-              "id": 177,
-              "type": {
-                "id": 139,
-                "name": "VirtualFragment",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 184,
-                "ch": 26
-              },
-              "kind": 14,
-              "name": "constructor",
-              "flags": 0,
-              "id": 178,
-              "parameters": [],
-              "type": {
-                "id": 176,
-                "name": "VirtualTemplateElement",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 183,
-                "ch": 53
-              },
-              "kind": 10,
-              "name": "content",
-              "flags": 4,
-              "id": 177,
-              "type": {
-                "id": 139,
-                "name": "VirtualFragment",
-                "kind": 6
-              }
-            },
-            {
-              "source": {
-                "fileName": "virtual.ts",
-                "line": 184,
-                "ch": 26
-              },
-              "kind": 14,
-              "name": "constructor",
-              "flags": 0,
-              "id": 178,
-              "parameters": [],
-              "type": {
-                "id": 176,
-                "name": "VirtualTemplateElement",
-                "kind": 6
-              }
-            }
-          ],
-          "type": {
-            "flags": 0,
-            "kind": 33,
-            "name": "",
-            "children": [
-              {
-                "id": 105,
-                "name": "VirtualElement",
-                "kind": 6
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 191,
-            "ch": 5
-          },
-          "kind": 31,
-          "name": "TAG_MAP",
-          "flags": 0,
-          "id": 179,
-          "value": "{\n\tTEMPLATE: VirtualTemplateElement\n}",
-          "type": {
-            "source": {
-              "fileName": "virtual.ts",
-              "line": 191,
-              "ch": 15
-            },
-            "kind": 34,
-            "name": "",
-            "flags": 0,
-            "children": [
-              {
-                "source": {
-                  "fileName": "virtual.ts",
-                  "line": 191,
-                  "ch": 17
-                },
-                "kind": 0,
-                "name": "TEMPLATE",
-                "flags": 0,
-                "id": 180,
-                "value": "VirtualTemplateElement",
-                "type": {
-                  "source": {
-                    "fileName": "virtual.ts",
-                    "line": 181,
-                    "ch": 1
-                  },
-                  "kind": 8,
-                  "name": "VirtualTemplateElement",
-                  "flags": 0,
-                  "id": 176,
-                  "children": [
-                    {
-                      "source": {
-                        "fileName": "virtual.ts",
-                        "line": 183,
-                        "ch": 53
-                      },
-                      "kind": 10,
-                      "name": "content",
-                      "flags": 4,
-                      "id": 177,
-                      "type": {
-                        "id": 139,
-                        "name": "VirtualFragment",
-                        "kind": 6
-                      }
-                    },
-                    {
-                      "source": {
-                        "fileName": "virtual.ts",
-                        "line": 184,
-                        "ch": 26
-                      },
-                      "kind": 14,
-                      "name": "constructor",
-                      "flags": 0,
-                      "id": 178,
-                      "parameters": [],
-                      "type": {
-                        "id": 176,
-                        "name": "VirtualTemplateElement",
-                        "kind": 6
-                      }
-                    },
-                    {
-                      "source": {
-                        "fileName": "virtual.ts",
-                        "line": 183,
-                        "ch": 53
-                      },
-                      "kind": 10,
-                      "name": "content",
-                      "flags": 4,
-                      "id": 177,
-                      "type": {
-                        "id": 139,
-                        "name": "VirtualFragment",
-                        "kind": 6
-                      }
-                    },
-                    {
-                      "source": {
-                        "fileName": "virtual.ts",
-                        "line": 184,
-                        "ch": 26
-                      },
-                      "kind": 14,
-                      "name": "constructor",
-                      "flags": 0,
-                      "id": 178,
-                      "parameters": [],
-                      "type": {
-                        "id": 176,
-                        "name": "VirtualTemplateElement",
-                        "kind": 6
-                      }
-                    }
-                  ],
-                  "type": {
-                    "flags": 0,
-                    "kind": 33,
-                    "name": "",
-                    "children": [
-                      {
-                        "id": 105,
-                        "name": "VirtualElement",
-                        "kind": 6
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "source": {
-            "fileName": "virtual.ts",
-            "line": 199,
-            "ch": 5
-          },
-          "kind": 31,
-          "name": "CUSTOM_ELEMENT_REGISTRY",
-          "flags": 0,
-          "id": 181,
-          "type": {
-            "name": "Record",
+            "name": "Observable",
             "kind": 6,
             "typeParameters": [
               {
                 "name": "string",
                 "kind": 32,
                 "flags": 0
-              },
-              {
-                "name": "any",
-                "kind": 32,
-                "flags": 0
               }
             ]
+          }
+        },
+        {
+          "source": {
+            "fileName": "index.ts",
+            "line": 352,
+            "ch": 1
           },
-          "value": "{}"
+          "kind": 16,
+          "name": "onMutation",
+          "flags": 1,
+          "id": 103,
+          "parameters": [
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 354,
+                "ch": 27
+              },
+              "kind": 9,
+              "name": "target",
+              "flags": 0,
+              "id": 104,
+              "type": {
+                "name": "Element",
+                "kind": 6
+              }
+            },
+            {
+              "source": {
+                "fileName": "index.ts",
+                "line": 355,
+                "ch": 17
+              },
+              "kind": 9,
+              "name": "options",
+              "flags": 0,
+              "id": 105,
+              "type": {
+                "name": "MutationObserverInit",
+                "kind": 6
+              },
+              "value": "{ attributes: true, childList: true }"
+            }
+          ],
+          "type": {
+            "name": "Observable",
+            "kind": 6,
+            "typeParameters": [
+              {
+                "id": 44,
+                "name": "MutationEvent",
+                "kind": 6,
+                "typeParameters": [
+                  {
+                    "name": "EventTarget",
+                    "kind": 6
+                  }
+                ]
+              }
+            ]
+          }
         }
       ]
     }

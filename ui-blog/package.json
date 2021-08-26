@@ -11,6 +11,7 @@
 		"test": "npm run build && cd ../dist/ui-blog && node ../tester --baselinePath=../../ui-blog/spec"
 	},
 	"devDependencies": {
-		"@cxl/ui": "~3.1.0"
+		"@cxl/ui": "~3.1.0",
+		"@cxl/blog": "~0.0.1"
 	}
 }

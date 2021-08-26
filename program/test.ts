@@ -1,10 +1,10 @@
 import { spec } from '@cxl/spec';
-import { parseParameters, parseParametersArray } from './index.js';
+import { Parameter, parseParameters, parseParametersArray } from './index.js';
 
 export default spec('program', s => {
 	s.test('parseParameters', a => {
-		const parameters = [
-			{ short: 'h', name: 'help' },
+		const parameters: Parameter[] = [
+			{ short: 'h', name: 'help', type: 'boolean' },
 			{ short: 'v', name: 'version' },
 		];
 
@@ -19,8 +19,8 @@ export default spec('program', s => {
 			a.equal(r1.help, true);
 
 			const r2 = parseParameters(parameters, '-hv');
-			a.ok(r2.help);
-			a.ok(r2.version);
+			a.equal(r2.help, true);
+			a.equal(r2.version, true);
 		});
 
 		a.test('multiple long', a => {
@@ -30,6 +30,7 @@ export default spec('program', s => {
 		});
 
 		a.test('short with value', a => {
+			const parameters = [{ name: 'help', short: 'h' }];
 			const r1 = parseParameters(parameters, '-h test');
 			a.equal(r1.help, 'test');
 			const r2 = parseParameters(parameters, '-h = test');
@@ -52,14 +53,14 @@ export default spec('program', s => {
 			a.equal(r2.version, 'test-with-dash');
 			const r3 = parseParameters(parameters, '--version=test');
 			a.equal(r3.version, 'test');
-			const r4 = parseParameters(parameters, '--help= "test value"');
-			a.equal(r4.help, 'test value');
+			const r4 = parseParameters(parameters, '--version= "test value"');
+			a.equal(r4.version, 'test value');
 
 			const r5 = parseParameters(
 				parameters,
-				'--help "escaped \\" string"'
+				'--version "escaped \\" string"'
 			);
-			a.equal(r5.help, 'escaped \\" string');
+			a.equal(r5.version, 'escaped \\" string');
 		});
 
 		a.test('Rest values', a => {
@@ -72,6 +73,37 @@ export default spec('program', s => {
 			const r3 = parseParameters(parameters, '"file name.json" --help');
 			a.equal(r3.$, 'file name.json');
 			a.equal(r3.help, true);
+		});
+		a.test('Rest value with boolean', a => {
+			const r4 = parseParameters(parameters, '--help "file name.json"');
+			a.equal(r4.$, 'file name.json');
+			a.equal(r4.help, true);
+
+			const r5 = parseParameters(parameters, '--help filename');
+			a.equal(r5.$, 'filename');
+			a.equal(r5.help, true);
+		});
+
+		a.test('Complex strings', a => {
+			const r = parseParameters(
+				[
+					{
+						name: 'browserUrl',
+						type: 'string',
+						help: 'Browser runner initial URL',
+					},
+					{
+						name: 'startServer',
+						type: 'string',
+						help:
+							'Start a server application while the tests are running',
+					},
+				],
+				'--startServer "npm run start:test --prefix .." --browserUrl http://localhost:9009'
+			);
+			a.equal(r.browserUrl, 'http://localhost:9009');
+			a.equal(r.startServer, 'npm run start:test --prefix ..');
+			a.ok(r);
 		});
 	});
 

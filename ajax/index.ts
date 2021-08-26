@@ -1,4 +1,7 @@
+///<amd-module name="@cxl/ajax"/>
 import { observable } from '@cxl/rx';
+
+export type HttpHeaders = Record<string, string | undefined>;
 
 interface AjaxOptions {
 	url: string;
@@ -7,6 +10,7 @@ interface AjaxOptions {
 	data?: string | Blob | ArrayBuffer;
 	responseType?: XMLHttpRequestResponseType;
 	progress?: (ev: ProgressEvent) => void;
+	headers?: HttpHeaders;
 	credentials?: boolean;
 }
 
@@ -63,6 +67,12 @@ export function xhr(def: AjaxOptions) {
 				else reject(xhr);
 			}
 		};
+
+		if (options.headers)
+			for (const i in options.headers) {
+				const val = options.headers[i];
+				if (val !== undefined) xhr.setRequestHeader(i, val);
+			}
 
 		if (options.contentType)
 			xhr.setRequestHeader('Content-Type', options.contentType);

@@ -6,19 +6,28 @@
 			"items": [
 				{
 					"title": "Home",
-					"icon": "home",
 					"file": "README.md",
 					"index": true
 				}
 			]
 		},
 		{
-			"title": "Guides",
+			"title": "Getting Started",
 			"items": [
 				{
+					"icon": "",
+					"title": "Installation",
+					"file": "docs/install.md"
+				},
+				{
+					"icon": "",
 					"title": "Styles",
-					"icon": "palette",
 					"file": "docs/styles.html"
+				},
+				{
+					"icon": "",
+					"title": "Forms",
+					"file": "docs/forms.html"
 				}
 			],
 			"other": [
@@ -27,11 +36,7 @@
 					"icon": "cubes",
 					"file": "docs/components.html"
 				},
-				{
-					"title": "Forms",
-					"icon": "window-restore",
-					"file": "docs/forms.html"
-				},
+
 				{
 					"title": "Tables",
 					"icon": "table",

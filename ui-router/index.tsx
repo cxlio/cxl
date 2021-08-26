@@ -31,8 +31,11 @@ import {
 	onChildrenMutation,
 	onLocation,
 	on,
+	trigger,
 } from '@cxl/dom';
-import { AppbarTitle, Item, Tab } from '@cxl/ui/navigation.js';
+import { AppbarTitle } from '@cxl/ui/appbar.js';
+import { Item } from '@cxl/ui/item.js';
+import { Tab } from '@cxl/ui/tabs.js';
 import type {} from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
 import { StateStyles, each, role, triggerEvent } from '@cxl/template';
@@ -91,7 +94,7 @@ export function routerOutlet(host: HTMLElement) {
 
 		if (url.hash)
 			host.querySelector(`a[name="${url.hash}"]`)?.scrollIntoView();
-		else if (host.parentElement)
+		else if (host.parentElement && history.state?.lastAction !== 'pop')
 			requestAnimationFrame(() => host.parentElement?.scrollTo(0, 0));
 	});
 }
@@ -105,7 +108,10 @@ export function routerStrategy(
 		getUrl.tap(() => router.go(strategy.deserialize())),
 		router$
 			.tap(state => strategy.serialize(state.url))
-			.catchError(() => EMPTY)
+			// Prevent routing errors in iframes. Ignore other errors.
+			.catchError((e, source) =>
+				e.name === 'SecurityError' ? EMPTY : source
+			)
 	);
 }
 
@@ -157,7 +163,7 @@ export function Router(
 	};
 }
 
-const routeTitles = router$.map(state => {
+const routeTitles = router$.raf().map(state => {
 	const result = [];
 	let route: any = state.current;
 	do {
@@ -188,10 +194,10 @@ export function RouterTitle() {
 		return route.first ? (
 			<Span>{route.title}</Span>
 		) : (
-			<Span slot="parent">
+			<span slot="parent">
 				<RouterLink href={route.path}>{route.title}</RouterLink>
 				&nbsp;/&nbsp;
-			</Span>
+			</span>
 		);
 	}
 
@@ -203,6 +209,7 @@ export class RouterAppbarTitle extends Component {}
 
 function renderTemplate(tpl: HTMLTemplateElement, title?: string) {
 	const result = document.createElement('div');
+	result.style.display = 'contents';
 	(result as any).routeTitle = title;
 	result.appendChild(tpl.content.cloneNode(true));
 	return result;
@@ -236,7 +243,7 @@ function renderTemplate(tpl: HTMLTemplateElement, title?: string) {
 		link: {
 			outline: 0,
 			textDecoration: 'none',
-			color: 'link',
+			color: 'inherit',
 			cursor: 'pointer',
 		},
 	})
@@ -258,9 +265,9 @@ export class RouterLink extends Component {
 		<RouterLink href={get($, 'href')}>
 			<Tab
 				$={el =>
-					on(el, 'cxl-tab.selected')
-						.map(() => el)
-						.pipe(triggerEvent($, 'cxl-tab.selected'))
+					on(el, 'cxl-tab.selected').tap(() =>
+						trigger($, 'cxl-tab.selected', el)
+					)
 				}
 				selected={get($, 'href').switchMap(routeIsActive)}
 			>
@@ -339,18 +346,19 @@ export class RouterOutlet extends Component {}
 		const dataset = el.dataset;
 		if (dataset.registered) return;
 		dataset.registered = 'true';
-		const path = dataset.path || '';
 		const title = dataset.title || undefined;
 
 		router.route({
-			path,
+			path: dataset.path,
+			id: dataset.id || undefined,
+			parent: dataset.parent || undefined,
 			isDefault: el.hasAttribute('data-default'),
 			render: renderTemplate.bind(null, el, title),
 		});
 	}
 
 	return onReady().switchMap(() => {
-		for (const child of host.children)
+		for (const child of Array.from(host.children))
 			if (child.tagName === 'TEMPLATE') register(child as any);
 
 		return merge(

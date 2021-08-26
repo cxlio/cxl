@@ -2,7 +2,6 @@
 	"name": "@cxl/source",
 	"version": "0.0.1",
 	"description": "Source file management library",
-	"private": true,
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/source && node ../tester --node"

@@ -1,0 +1,16 @@
+{
+	"name": "@cxl/runner",
+	"bin": {
+		"cxl-runner": "index.js"
+	},
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/runner",
+	"description": "Helper tool to run server applications",
+	"license": "GPL-3.0",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/runner && node ../tester --node"
+	},
+	"dependencies": {}
+}

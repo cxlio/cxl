@@ -1,8 +1,6 @@
 window.define =
 	window.define ||
 	function define(name, injects, module) {
-		define.amd = true;
-
 		function _require(path, resolve, reject) {
 			if (Array.isArray(path)) {
 				path = path[0];
@@ -19,18 +17,16 @@ window.define =
 		if (arguments.length === 2 && Array.isArray(name)) {
 			module = injects;
 			injects = name;
-			name = null;
+			name = new Error().fileName;
 		}
 		const modules =
-			define.modules ||
-			(define.modules = {
-				require: _require,
-			});
+			define.modules || (define.modules = window.require.modules || {});
 		const moduleExports = (name && modules[name]) || {};
 		if (name) modules[name] = moduleExports;
 
 		function findModule(name) {
 			if (name === 'exports') return moduleExports;
+			if (name === 'require') return window.require;
 
 			const id = name.replace(/\.js$/, '');
 			return modules[id] || _require(name);
@@ -44,3 +40,4 @@ window.define =
 			modules[name] = window.module.exports;
 		window.module = oldModule;
 	};
+window.define.amd = true;

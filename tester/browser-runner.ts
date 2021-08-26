@@ -1,7 +1,8 @@
 import type { Result, Test } from '@cxl/spec';
 import type { TestResult } from './report';
 
-let output = '';
+let output =
+	'<style>.thumb{vertical-align:middle;display:inline-block;overflow:hidden;width:320px;position:relative;vertical-align:top}</style>';
 let baselinePath: string;
 
 function group(testId: number, title: string) {
@@ -39,13 +40,12 @@ function printError(fail: Result) {
 }
 
 function printResult(result: Result) {
+	require('@cxl/ui-ide/image-diff.js');
 	output += result.success ? success() : failure();
 	const data = result.data;
 	if (data?.type === 'figure') {
-		output += `
-		<div style="vertical-align:middle;display:inline-block; width:320px;position:relative;">${data.html}</div>
-		<img style="vertical-align:middle" src="spec/${data.name}.png" />
-		<img style="vertical-align:middle" src="${baselinePath}/${data.name}.png" />`;
+		output += `<div class="thumb">${data.html}</div>
+		<cxl-image-diff src1="spec/${data.name}.png" src2="${baselinePath}/${data.name}.png"></cxl-image-diff>`;
 	}
 }
 

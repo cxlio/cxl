@@ -9,6 +9,7 @@ import {
 	trigger,
 } from '@cxl/dom';
 import {
+	EMPTY,
 	ListEvent,
 	Observable,
 	Operator,
@@ -42,7 +43,7 @@ function isObservedAttribute(el: any, attr: any) {
 	return (el.constructor as any).observedAttributes?.includes(attr);
 }
 
-export function sortBy<T, K extends keyof T>(key: K) {
+export function sortBy<T = any, K extends keyof T = any>(key: K) {
 	return (a: T, b: T) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0);
 }
 
@@ -209,7 +210,12 @@ export function portal(id: string) {
 
 export function teleport(el: Node, portalName: string) {
 	return new Observable<void>(() => {
-		portals.get(portalName)?.appendChild(el);
+		requestAnimationFrame(() => {
+			const portal = portals.get(portalName);
+			if (!portal)
+				throw new Error(`Portal "${portalName}" does not exist`);
+			portal.appendChild(el);
+		});
 		return () => el.parentElement?.removeChild(el);
 	});
 }
@@ -287,7 +293,8 @@ export function loading(source: Observable<any>, renderFn: () => Node) {
 export function render<T>(
 	source: Observable<T>,
 	renderFn: (item: T) => Node,
-	loading?: () => Node
+	loading?: () => Node,
+	error?: (e: any) => Node
 ) {
 	return (host: Bindable) => {
 		const marker = new Marker();
@@ -299,10 +306,19 @@ export function render<T>(
 			);
 
 		host.bind(
-			source.tap(item => {
-				marker.empty();
-				marker.insert(renderFn(item));
-			})
+			source
+				.tap(item => {
+					marker.empty();
+					marker.insert(renderFn(item));
+				})
+				.catchError(e => {
+					if (error) {
+						marker.empty();
+						marker.insert(error(e));
+						return EMPTY;
+					}
+					throw e;
+				})
 		);
 
 		return marker.node;
@@ -311,7 +327,7 @@ export function render<T>(
 
 export function each<T>(
 	source: Observable<Iterable<T>>,
-	renderFn: (item: T) => Node,
+	renderFn: (item: T, index: number) => Node,
 	empty?: () => Node
 ) {
 	const marker = new Marker();
@@ -322,7 +338,7 @@ export function each<T>(
 				marker.empty();
 				let len = 0;
 				for (const item of arr) {
-					marker.insert(renderFn(item));
+					marker.insert(renderFn(item, len));
 					len++;
 				}
 				if (empty && len === 0) marker.insert(empty());
@@ -728,9 +744,9 @@ export function selectableHost<TargetT extends SelectableTarget>(
 		}
 
 		const subscription = merge(
-			registableHost<TargetT>(host, 'selectable', host.options).tap(
-				setOptions
-			),
+			registableHost<TargetT>(host, 'selectable', host.options)
+				.tap(setOptions)
+				.raf(setOptions),
 			getAttribute(host, 'value').tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
 				if (ev.target && host.options?.has(ev.target as TargetT)) {

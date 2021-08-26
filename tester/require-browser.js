@@ -7,14 +7,16 @@
 		eval(__src);
 		return module;
 	}
+	function basename(url) {
+		const baseMatch = /(.*\/).*/.exec(url);
+		return baseMatch ? normalizePath(baseMatch[1]) : '';
+	}
+	function normalizePath(basePath) {
+		const a = new URL(basePath, top.location.href);
+		return a.href;
+	}
 
 	function require(path) {
-		function normalizePath(basePath) {
-			const a = document.createElement('a');
-			a.href = basePath || '';
-			return a.pathname;
-		}
-
 		const mods = require.modules;
 
 		if (require.replace) path = require.replace(path, require.base);
@@ -24,8 +26,12 @@
 			return mods[path];
 		}
 
-		const actualPath = path.endsWith('.js') ? path : path + '.js';
-		let url = path[0] === '/' ? actualPath : require.base + actualPath;
+		const actualPath = /\.c?js$/.test(path) ? path : path + '.js';
+		let url = normalizePath(
+			path[0] === '/' ? actualPath : require.base + actualPath
+		);
+		if (mods[url]) return mods[url];
+
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', url, false);
 		xhr.send();
@@ -41,15 +47,14 @@
 		if (mods[id]) return mods[id];
 
 		const oldBase = require.base;
-		const baseMatch = /(.*\/).*/.exec(url);
-		require.base = baseMatch ? normalizePath(baseMatch[1]) : '';
+		require.base = basename(url);
 		const module = appendScript(source);
 		require.base = oldBase;
 		mods[id] = module.exports;
 		return module.exports;
 	}
 	require.modules = {};
-	require.base = '';
+	require.base = basename(location.pathname);
 
 	window.require = require;
 })();

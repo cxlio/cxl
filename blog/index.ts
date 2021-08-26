@@ -28,10 +28,12 @@ export interface Post {
 	id: string;
 	title: string;
 	date: string;
+	version?: string;
 	mtime: string;
 	author: string;
 	type: string;
 	tags?: string;
+	href?: string;
 	content: string;
 	summary: string;
 }
@@ -84,7 +86,7 @@ const FenceHandler: Record<string, (content: string, meta: any) => string> = {
 	},
 };
 
-function Markdown(url: string, source: string, stats: Stats) {
+export function renderMarkdown(source: string) {
 	const md = new MarkdownIt({
 		highlight: Code,
 		html: true,
@@ -113,7 +115,11 @@ function Markdown(url: string, source: string, stats: Stats) {
 		return handler ? handler(token.content, meta) : Code(token.content);
 	};
 
-	const content = md.render(source);
+	return { meta, content: md.render(source) };
+}
+
+function Markdown(url: string, source: string, stats: Stats) {
+	const { meta, content } = renderMarkdown(source);
 	const title =
 		source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
 	const summary = content.match(SUMMARY_REGEX)?.[1] || '';
@@ -123,11 +129,13 @@ function Markdown(url: string, source: string, stats: Stats) {
 		title,
 		summary,
 		date: meta.date || stats.mtime.toISOString(),
+		version: meta.version,
 		uuid: meta.uuid || '',
 		mtime: stats.mtime.toISOString(),
 		author: meta.author || '',
 		type: meta.type || (meta.date ? 'post' : 'draft'),
 		tags: meta.tags || '',
+		href: meta.href,
 		content,
 	};
 }
@@ -152,10 +160,12 @@ function getPostId(title: string) {
 
 function Html(_url: string, content: string, stat: Stats): Post {
 	const meta = parseMeta(content) || {};
-	const tags = content.match(TAGS_REGEX)?.[1];
-	const title = content.match(TITLE_REGEX)?.[1] || 'Untitled Post';
+	const tags = content.match(TAGS_REGEX)?.[1] || meta.tags;
+	const title =
+		content.match(TITLE_REGEX)?.[1] || meta.title || 'Untitled Post';
 	const summary =
 		content.match(SUMMARY_TAG_REGEX)?.[1] ||
+		meta.summary ||
 		content.match(SUMMARY_REGEX)?.[1] ||
 		'';
 	return {
@@ -163,11 +173,13 @@ function Html(_url: string, content: string, stat: Stats): Post {
 		title,
 		summary,
 		date: meta.date,
+		version: meta.version,
 		uuid: meta.uuid || '',
 		mtime: stat.mtime.toISOString(),
 		author: meta.author || '',
 		type: meta.type || 'post',
 		tags,
+		href: meta.href,
 		content,
 	};
 }
@@ -241,6 +253,9 @@ async function build(config: BlogConfig): Promise<Output[]> {
 
 export function buildBlog(config: BlogConfig): Task {
 	return observable(subs => {
-		build(config).then(out => out.forEach(o => subs.next(o)));
+		build(config).then(out => {
+			out.forEach(o => subs.next(o));
+			subs.complete();
+		});
 	});
 }

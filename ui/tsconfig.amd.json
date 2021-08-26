@@ -27,20 +27,6 @@
 			"path": "../drag/tsconfig.amd.json"
 		}
 	],
-	"files": [
-		"button.tsx",
-		"checkbox.tsx",
-		"core.tsx",
-		"dialog.tsx",
-		"field.tsx",
-		"form.tsx",
-		"index.tsx",
-		"input-base.tsx",
-		"layout.tsx",
-		"navigation.tsx",
-		"select.tsx",
-		"icon.tsx",
-		"theme.tsx",
-		"theme-dark.tsx"
-	]
+	"include": ["*.tsx"],
+	"exclude": ["test.tsx"]
 }

@@ -2,5 +2,5 @@
 
 ## [0.0.1]
 
-- feat: export logger [dd3bd34]
-- feat: make log public [b4daa60]
+- feat: clean up, more tests [e8869b7]
+- feat: better argument parsing [8ca2c33]

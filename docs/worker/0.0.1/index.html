@@ -9,14 +9,14 @@
 		<cxl-router-item href="README.md">Home</cxl-router-item><cxl-hr></cxl-hr>	
 		<cxl-router-item href="index-api.html"><i>Index</i></cxl-router-item><cxl-router-item href="index--WorkerManager.html"><cxl-badge>C</cxl-badge>WorkerManager</cxl-router-item><cxl-router-item href="index-api.html#s33"><cxl-badge>F</cxl-badge>compile</cxl-router-item>
 		</cxl-navbar>
-	<cxl-router-appbar-title></cxl-router-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="InternalMessage" data-path="index--InternalMessage.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>interface</cxl-chip> </span>InternalMessage&lt;T&gt;</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { InternalMessage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+	<cxl-router-appbar-title></cxl-router-appbar-title></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="InternalMessage" data-path="index--InternalMessage.html"><cxl-t h3><span style="float:right"><cxl-chip size="small" primary>interface</cxl-chip> </span>InternalMessage&lt;T&gt;</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { InternalMessage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--InternalMessage.html#s11">id</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--InternalMessage.html#s13">payload</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--InternalMessage.html#s12">type</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s11"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t code subtitle>id: number</cxl-t>
 		</cxl-c></cxl-card><a name="s13"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t code subtitle>payload: <a href="#s10">T</a></cxl-t>
 		</cxl-c></cxl-card><a name="s12"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t code subtitle>type: 'next' | 'error' | 'complete'</cxl-t>
-		</cxl-c></cxl-card></template><template  data-title="WorkerManager" data-path="index--WorkerManager.html"><cxl-t h3><span style="float:right"><cxl-chip small primary>class</cxl-chip> </span>WorkerManager</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { WorkerManager } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Constructor
+		</cxl-c></cxl-card></template><template  data-title="WorkerManager" data-path="index--WorkerManager.html"><cxl-t h3><span style="float:right"><cxl-chip size="small" primary>class</cxl-chip> </span>WorkerManager</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { WorkerManager } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/worker&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Constructor
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s22">constructor</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Getters
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s15">connected</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Methods
 		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s28">connect</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s29">disconnect</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s30">post</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--WorkerManager.html#s24">request</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Properties
@@ -25,21 +25,21 @@
 		</cxl-c></cxl-card><cxl-t h5>Getters</cxl-t><a name="s15"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t code subtitle>connected(): boolean</cxl-t>
 		</cxl-c></cxl-card><cxl-t h5>Methods</cxl-t><a name="s28"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> connect(): void</cxl-t>
+		<cxl-t code subtitle><cxl-chip size="small" primary>private</cxl-chip> connect(): void</cxl-t>
 		</cxl-c></cxl-card><a name="s29"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> disconnect(): void</cxl-t>
+		<cxl-t code subtitle><cxl-chip size="small" primary>private</cxl-chip> disconnect(): void</cxl-t>
 		</cxl-c></cxl-card><a name="s30"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> post(id: number, payload: any): number</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>id: number</cxl-t></li><li><cxl-t code inline>payload: any</cxl-t></li></ul>
+		<cxl-t code subtitle><cxl-chip size="small" primary>private</cxl-chip> post(id: number, payload: any): number</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>id: number</cxl-t></li><li><cxl-t code inline>payload: any</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s24"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t code subtitle>request&lt;ResponseT, MessageT&gt;(payload: <a href="#s26">MessageT</a>): Observable&lt;<a href="#s25">ResponseT</a>&gt;</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>payload: <a href="#s26">MessageT</a></cxl-t></li></ul>
 		</cxl-c></cxl-card><cxl-t h5>Properties</cxl-t><a name="s16"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> id: number = 0</cxl-t>
+		<cxl-t code subtitle><cxl-chip size="small" primary>private</cxl-chip> id: number = 0</cxl-t>
 		</cxl-c></cxl-card><a name="s18"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> onMessage: (ev: any) => void</cxl-t>
+		<cxl-t code subtitle><cxl-chip size="small" primary>private</cxl-chip> onMessage: (ev: any) => void</cxl-t>
 		</cxl-c></cxl-card><a name="s21"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> refCount: number = 0</cxl-t>
+		<cxl-t code subtitle><cxl-chip size="small" primary>private</cxl-chip> refCount: number = 0</cxl-t>
 		</cxl-c></cxl-card><a name="s17"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<cxl-t code subtitle><cxl-chip small primary>private</cxl-chip> subject: Subject&lt;<cxl-a href="index--InternalMessage.html">InternalMessage</cxl-a>&lt;any&gt;, any&gt; = new Subject&lt;InternalMessage&lt;any>>()</cxl-t>
+		<cxl-t code subtitle><cxl-chip size="small" primary>private</cxl-chip> subject: Subject&lt;<cxl-a href="index--InternalMessage.html">InternalMessage</cxl-a>&lt;any&gt;, any&gt; = new Subject&lt;InternalMessage&lt;any>>()</cxl-t>
 		</cxl-c></cxl-card><a name="s23"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<cxl-t code subtitle>worker: Worker</cxl-t>
 		</cxl-c></cxl-card></template><template  data-title="index.ts" data-path="index-api.html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Classes

@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/diff"/>
 export type Diff = any[];
 
 const DIFF_DELETE = -1,
@@ -441,6 +442,18 @@ function push(result: Diff, ch: string, a: string, b: number, c: number) {
 	} else result.push(a, b, c);
 }
 
+/**
+	This function takes a source string <code>src</code>, and a destination
+	string <code>dest</code>. It returns a patch object that can be later used
+	by <code>ide.patch</code> to reconstruct the destination string.
+
+	The <code>size</code> parameter determines the minimum length of a single
+	patch string, the algorithm will optimize the result based on this number.
+
+	A patch object consists of an array of triplets, where the first item is the
+	string to be inserted, the second, the characters to be skipped from the
+	original string and the third the characters removed after inserting.
+ */
 export function diff(A: string, B: string) {
 	const result: Diff = [],
 		d = diff_main(A, B);
@@ -464,6 +477,11 @@ export function diff(A: string, B: string) {
 	return result;
 }
 
+/**
+	This function takes the original source string <code>str</code> and the
+	result of a previous diff <code>patch</code>. The result will be the
+	destination string <code>dest</code>.
+*/
 export function patch(A: string, diff: Diff) {
 	let i,
 		cursor = 0,

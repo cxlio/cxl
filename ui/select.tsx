@@ -20,7 +20,9 @@ import {
 	selectableHost,
 } from '@cxl/template';
 import { InputBase } from './input-base.js';
-import { Svg } from './core.js';
+import { Svg, Path } from './core.js';
+
+const Undefined = {};
 
 @Augment<Option>(
 	'cxl-option',
@@ -70,10 +72,13 @@ import { Svg } from './core.js';
 		<>
 			<div className="box">
 				<span className="focusCircle focusCirclePrimary" />
-				<Svg
-					className="check"
-					viewBox="0 0 24 24"
-				>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
+				<Svg className="check" viewBox="0 0 24 24">
+					<Path
+						stroke-width="4"
+						style="fill:currentColor;stroke:currentColor"
+						d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
+					/>
+				</Svg>
 			</div>
 			<div className="content">
 				<slot />
@@ -83,11 +88,11 @@ import { Svg } from './core.js';
 	selectable
 )
 export class Option extends Component {
-	private $value?: string;
+	private $value: any = Undefined;
 
 	@Attribute()
 	get value(): any {
-		return this.$value === undefined ? this.textContent || '' : this.$value;
+		return this.$value === Undefined ? this.textContent || '' : this.$value;
 	}
 
 	set value(val: any) {
@@ -177,7 +182,7 @@ export class SelectMenu extends Component {
 		);
 		return (
 			<Svg className="caret" viewBox="0 0 24 24">
-				{'<path d="M7 10l5 5 5-5z"></path>'}
+				<Path d="M7 10l5 5 5-5z" />
 			</Svg>
 		);
 	}
@@ -257,7 +262,7 @@ export class SelectBox extends SelectBase {
 		let translateY = option ? option.offsetTop : 0;
 
 		if (translateY > maxTranslateY) {
-			scrollTop = translateY - menuTopPadding;
+			scrollTop = translateY - maxTranslateY;
 			translateY = maxTranslateY;
 		}
 
@@ -283,7 +288,9 @@ export class SelectBox extends SelectBase {
 
 		if (option) {
 			option.selected = option.focused = true;
-			this.selectedText$.next(option.textContent || '');
+			requestAnimationFrame(() => {
+				this.selectedText$.next(option.textContent || '');
+			});
 			this.value = option.value;
 		} else if (option === undefined) this.selectedText$.next('');
 

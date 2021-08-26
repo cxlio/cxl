@@ -23,7 +23,7 @@ async function renderLog(project, logs) {
 	);
 	let outText = changelog.replace(appendRegex, logText);
 	if (outText === changelog)
-		outText = changelog.replace(/(##)|$/, n => `${logText}\n${n || ''}`);
+		outText = changelog.replace(/(##)|$/, n => `${logText}\n\n${n || ''}`);
 
 	await fs.writeFile(outFile, outText);
 }
@@ -60,7 +60,7 @@ async function release() {
 			? files[project] || (files[project] = [])
 			: files.cxl;
 
-		projectLog.push(`- ${type}: ${message} [${commit}]`);
+		projectLog.push(`-   ${type}: ${message} [${commit}]`);
 	});
 
 	for (const project in files)

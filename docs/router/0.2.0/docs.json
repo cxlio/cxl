@@ -401,7 +401,7 @@
               "source": {
                 "fileName": "index.ts",
                 "line": 27,
-                "ch": 14
+                "ch": 15
               },
               "kind": 10,
               "name": "isDefault",
@@ -1394,7 +1394,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 154,
+                "line": 155,
                 "ch": 2
               },
               "kind": 11,
@@ -1405,7 +1405,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 156,
+                    "line": 157,
                     "ch": 15
                   },
                   "kind": 9,
@@ -1434,7 +1434,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 161,
+                "line": 162,
                 "ch": 2
               },
               "kind": 11,
@@ -1445,7 +1445,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 163,
+                    "line": 164,
                     "ch": 8
                   },
                   "kind": 9,
@@ -1488,7 +1488,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 171,
+            "line": 172,
             "ch": 1
           },
           "kind": 8,
@@ -1499,7 +1499,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 173,
+                "line": 174,
                 "ch": 27
               },
               "kind": 10,
@@ -1509,7 +1509,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 174,
+                  "line": 175,
                   "ch": 16
                 },
                 "kind": 15,
@@ -1533,7 +1533,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 174,
+                "line": 175,
                 "ch": 35
               },
               "kind": 10,
@@ -1556,7 +1556,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 175,
+                "line": 176,
                 "ch": 27
               },
               "kind": 11,
@@ -1567,7 +1567,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 177,
+                    "line": 178,
                     "ch": 11
                   },
                   "kind": 9,
@@ -1609,7 +1609,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 179,
+                "line": 180,
                 "ch": 2
               },
               "kind": 11,
@@ -1620,7 +1620,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 181,
+                    "line": 182,
                     "ch": 5
                   },
                   "kind": 9,
@@ -1662,7 +1662,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 183,
+                "line": 184,
                 "ch": 2
               },
               "kind": 11,
@@ -1673,7 +1673,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 185,
+                    "line": 186,
                     "ch": 10
                   },
                   "kind": 9,
@@ -1705,7 +1705,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 191,
+            "line": 192,
             "ch": 5
           },
           "kind": 31,
@@ -1721,7 +1721,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 191,
+            "line": 192,
             "ch": 38
           },
           "kind": 16,
@@ -1732,7 +1732,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 193,
+                "line": 194,
                 "ch": 32
               },
               "kind": 3,
@@ -1744,7 +1744,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 195,
+              "line": 196,
               "ch": 2
             },
             "kind": 5,
@@ -1774,7 +1774,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 193,
+                "line": 194,
                 "ch": 56
               },
               "kind": 9,
@@ -1792,7 +1792,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 197,
+            "line": 198,
             "ch": 1
           },
           "kind": 16,
@@ -1808,7 +1808,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 199,
+                "line": 200,
                 "ch": 25
               },
               "kind": 9,
@@ -1826,7 +1826,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 204,
+            "line": 205,
             "ch": 12
           },
           "kind": 31,
@@ -1838,12 +1838,12 @@
             "name": "Strategy",
             "kind": 6
           },
-          "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `${url.path ? `?${url.path}` : '?'}${\n\t\t\turl.hash ? `#${url.hash}` : ''\n\t\t}`;\n\t},\n\n\tserialize(url) {\n\t\tif (url !== sys.history.state?.url)\n\t\t\tsys.history.pushState({ url }, '', this.getHref(url));\n\t},\n\n\tdeserialize() {\n\t\treturn (\n\t\t\tsys.history.state?.url || {\n\t\t\t\tpath: sys.location.search.slice(1),\n\t\t\t\thash: sys.location.hash.slice(1),\n\t\t\t}\n\t\t);\n\t},\n}"
+          "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `${sys.location.pathname}${url.path ? `?${url.path}` : ''}${\n\t\t\turl.hash ? `#${url.hash}` : ''\n\t\t}`;\n\t},\n\n\tserialize(url) {\n\t\tconst oldUrl = sys.history.state?.url;\n\t\tif (!oldUrl || url.hash !== oldUrl.hash || url.path !== oldUrl.path)\n\t\t\tsys.history.pushState({ url }, '', this.getHref(url));\n\t},\n\n\tdeserialize() {\n\t\treturn (\n\t\t\tsys.history.state?.url || {\n\t\t\t\tpath: sys.location.search.slice(1),\n\t\t\t\thash: sys.location.hash.slice(1),\n\t\t\t}\n\t\t);\n\t},\n}"
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 227,
+            "line": 229,
             "ch": 12
           },
           "kind": 31,
@@ -1855,12 +1855,12 @@
             "name": "Strategy",
             "kind": 6
           },
-          "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `${url.path}${url.hash ? `#${url.hash}` : ''}`;\n\t},\n\n\tserialize(url) {\n\t\tif (url !== sys.history.state?.url)\n\t\t\tsys.history.pushState({ url }, '', this.getHref(url));\n\t},\n\n\tdeserialize() {\n\t\treturn (\n\t\t\tsys.history.state?.url || {\n\t\t\t\tpath: sys.location.pathname,\n\t\t\t\thash: sys.location.hash.slice(1),\n\t\t\t}\n\t\t);\n\t},\n}"
+          "value": "{\n\tgetHref(url: Url | string) {\n\t\turl = typeof url === 'string' ? parseUrl(url) : url;\n\t\treturn `${url.path}${url.hash ? `#${url.hash}` : ''}`;\n\t},\n\n\tserialize(url) {\n\t\tconst oldUrl = sys.history.state?.url;\n\t\tif (!oldUrl || url.hash !== oldUrl.hash || url.path !== oldUrl.path)\n\t\t\tsys.history.pushState({ url }, '', this.getHref(url));\n\t},\n\n\tdeserialize() {\n\t\treturn (\n\t\t\tsys.history.state?.url || {\n\t\t\t\tpath: sys.location.pathname,\n\t\t\t\thash: sys.location.hash.slice(1),\n\t\t\t}\n\t\t);\n\t},\n}"
         },
         {
           "source": {
             "fileName": "index.ts",
-            "line": 248,
+            "line": 251,
             "ch": 12
           },
           "kind": 31,
@@ -1877,7 +1877,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 264,
+            "line": 267,
             "ch": 12
           },
           "kind": 31,
@@ -1888,7 +1888,7 @@
           "type": {
             "source": {
               "fileName": "index.ts",
-              "line": 264,
+              "line": 267,
               "ch": 25
             },
             "kind": 34,
@@ -1898,7 +1898,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 264,
+                  "line": 267,
                   "ch": 27
                 },
                 "kind": 0,
@@ -1915,7 +1915,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 265,
+                  "line": 268,
                   "ch": 20
                 },
                 "kind": 0,
@@ -1932,7 +1932,7 @@
               {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 266,
+                  "line": 269,
                   "ch": 20
                 },
                 "kind": 0,
@@ -1952,7 +1952,7 @@
         {
           "source": {
             "fileName": "index.ts",
-            "line": 268,
+            "line": 271,
             "ch": 2
           },
           "kind": 8,
@@ -1963,7 +1963,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 270,
+                "line": 273,
                 "ch": 21
               },
               "kind": 10,
@@ -1979,7 +1979,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 271,
+                "line": 274,
                 "ch": 21
               },
               "kind": 10,
@@ -1996,7 +1996,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 272,
+                "line": 275,
                 "ch": 29
               },
               "kind": 10,
@@ -2013,7 +2013,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 273,
+                "line": 276,
                 "ch": 32
               },
               "kind": 10,
@@ -2028,7 +2028,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 274,
+                "line": 277,
                 "ch": 21
               },
               "kind": 14,
@@ -2039,7 +2039,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 276,
+                    "line": 279,
                     "ch": 13
                   },
                   "kind": 10,
@@ -2049,7 +2049,7 @@
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 276,
+                      "line": 279,
                       "ch": 33
                     },
                     "kind": 17,
@@ -2065,7 +2065,7 @@
                       {
                         "source": {
                           "fileName": "index.ts",
-                          "line": 276,
+                          "line": 279,
                           "ch": 35
                         },
                         "kind": 9,
@@ -2091,7 +2091,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 276,
+                "line": 279,
                 "ch": 66
               },
               "kind": 11,
@@ -2102,7 +2102,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 278,
+                    "line": 281,
                     "ch": 19
                   },
                   "kind": 9,
@@ -2118,7 +2118,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 278,
+                    "line": 281,
                     "ch": 30
                   },
                   "kind": 9,
@@ -2140,7 +2140,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 285,
+                "line": 288,
                 "ch": 2
               },
               "kind": 11,
@@ -2151,7 +2151,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 287,
+                    "line": 290,
                     "ch": 22
                   },
                   "kind": 3,
@@ -2164,7 +2164,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 287,
+                    "line": 290,
                     "ch": 46
                   },
                   "kind": 9,
@@ -2187,7 +2187,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 288,
+                    "line": 291,
                     "ch": 18
                   },
                   "kind": 9,
@@ -2209,7 +2209,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 289,
+                    "line": 292,
                     "ch": 19
                   },
                   "kind": 9,
@@ -2231,7 +2231,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 305,
+                "line": 308,
                 "ch": 2
               },
               "kind": 11,
@@ -2242,7 +2242,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 307,
+                    "line": 310,
                     "ch": 26
                   },
                   "kind": 9,
@@ -2265,7 +2265,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 317,
+                "line": 320,
                 "ch": 2
               },
               "kind": 11,
@@ -2276,7 +2276,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 319,
+                    "line": 322,
                     "ch": 17
                   },
                   "kind": 3,
@@ -2289,7 +2289,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 319,
+                    "line": 322,
                     "ch": 41
                   },
                   "kind": 9,
@@ -2312,7 +2312,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 320,
+                    "line": 323,
                     "ch": 18
                   },
                   "kind": 9,
@@ -2340,7 +2340,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 328,
+                "line": 331,
                 "ch": 2
               },
               "kind": 11,
@@ -2358,7 +2358,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 333,
+                    "line": 336,
                     "ch": 7
                   },
                   "kind": 3,
@@ -2371,7 +2371,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 333,
+                    "line": 336,
                     "ch": 31
                   },
                   "kind": 9,
@@ -2408,7 +2408,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 337,
+                "line": 340,
                 "ch": 2
               },
               "kind": 11,
@@ -2424,7 +2424,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 339,
+                    "line": 342,
                     "ch": 4
                   },
                   "kind": 9,
@@ -2434,7 +2434,7 @@
                   "type": {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 339,
+                      "line": 342,
                       "ch": 8
                     },
                     "kind": 5,
@@ -2459,7 +2459,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 372,
+                "line": 375,
                 "ch": 2
               },
               "kind": 11,
@@ -2470,7 +2470,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 374,
+                    "line": 377,
                     "ch": 9
                   },
                   "kind": 9,
@@ -2486,7 +2486,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 374,
+                    "line": 377,
                     "ch": 25
                   },
                   "kind": 9,
@@ -2521,7 +2521,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 379,
+                "line": 382,
                 "ch": 2
               },
               "kind": 11,
@@ -2532,7 +2532,7 @@
                 {
                   "source": {
                     "fileName": "index.ts",
-                    "line": 381,
+                    "line": 384,
                     "ch": 13
                   },
                   "kind": 9,
@@ -2555,7 +2555,7 @@
             {
               "source": {
                 "fileName": "index.ts",
-                "line": 276,
+                "line": 279,
                 "ch": 13
               },
               "kind": 10,
@@ -2565,7 +2565,7 @@
               "type": {
                 "source": {
                   "fileName": "index.ts",
-                  "line": 276,
+                  "line": 279,
                   "ch": 33
                 },
                 "kind": 17,
@@ -2581,7 +2581,7 @@
                   {
                     "source": {
                       "fileName": "index.ts",
-                      "line": 276,
+                      "line": 279,
                       "ch": 35
                     },
                     "kind": 9,

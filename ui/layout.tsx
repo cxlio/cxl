@@ -1,7 +1,6 @@
 ///<amd-module name="@cxl/ui/layout.js"/>
 import {
 	Attribute,
-	AttributeEvent,
 	Augment,
 	Component,
 	Slot,
@@ -10,8 +9,8 @@ import {
 } from '@cxl/component';
 import { css, margin, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import { operator } from '@cxl/rx';
 import { InversePrimary, InverseSecondary } from './theme.js';
+import { persistWithParameter } from './core.js';
 
 const colStyles = ((r: any) => {
 	for (let i = 12; i > 0; i--)
@@ -29,28 +28,6 @@ const colStyles = ((r: any) => {
 	sm: {},
 	xs: {},
 });
-
-function persistWithParameter(prefix: string) {
-	return operator<AttributeEvent<any>>(() => {
-		let lastAttr: string;
-		return {
-			next({ value, target }) {
-				if (value === undefined) {
-					if (target.hasAttribute(lastAttr))
-						target.removeAttribute(lastAttr);
-				} else {
-					const attr = `${prefix}${value}`;
-
-					if (lastAttr !== attr) {
-						target.removeAttribute(lastAttr);
-						target.setAttribute(attr, '');
-						lastAttr = attr;
-					}
-				}
-			},
-		};
-	});
-}
 
 @Augment(
 	'cxl-c',
@@ -96,6 +73,7 @@ function persistWithParameter(prefix: string) {
 		$pad16: { ...padding(16) },
 		$pad8: { ...padding(8) },
 		$pad24: { ...padding(24) },
+		$pad32: { ...padding(32) },
 		// Colors
 		$surface: { backgroundColor: 'surface', color: 'onSurface' },
 		$error: { backgroundColor: 'error', color: 'onError' },
@@ -180,19 +158,27 @@ export class C extends Component {
 	css({
 		$: {
 			display: 'block',
-			...margin(0, 16, 0, 16),
+			/* Use padding instead of margin so there's no unnecessary scrolling
+			 caused by box-shadow */
+			paddingLeft: 16,
+			paddingRight: 16,
 		},
 		'@medium': {
-			$: margin(0, 32, 0, 32),
+			$: { paddingLeft: 32, paddingRight: 32 },
 		},
 		'@large': {
-			$: margin(0, 64, 0, 64),
+			$: { paddingLeft: 64, paddingRight: 64 },
 		},
 		'@xlarge': {
 			$: { width: 1200 },
-			$center: margin(0, 'auto', 0, 'auto'),
+			$center: {
+				paddingLeft: 0,
+				paddingRight: 0,
+				marginLeft: 'auto',
+				marginRight: 'auto',
+			},
 		},
-		container$full: { width: 'auto' },
+		$full: { width: 'auto' },
 	}),
 	_ => <slot />
 )
@@ -208,45 +194,25 @@ export class Layout extends Component {
 	'cxl-content',
 	css({
 		$: {
-			display: 'block',
 			position: 'relative',
 			flexGrow: 1,
 			overflowY: 'auto',
 			overflowScrolling: 'touch',
 			willChange: 'transform',
-		},
-		container: {
-			...margin(32, 16, 32, 16),
-		},
-		'@medium': {
-			container: margin(24, 32, 24, 32),
+			paddingTop: 24,
+			paddingBottom: 24,
+			color: 'onBackground',
+			backgroundColor: 'background',
 		},
 		'@large': {
-			container: margin(32, 64, 32, 64),
+			$: { paddingTop: 32, paddingBottom: 32 },
 		},
 		'@xlarge': {
-			container: { width: 1200 },
-			container$center: margin(64, 'auto', 64, 'auto'),
+			$: { paddingTop: 64, paddingBottom: 64 },
 		},
-		container$full: { width: 'auto' },
-	}),
-	_ => (
-		<>
-			<slot name="header" />
-			<div className="container">
-				<slot />
-			</div>
-			<slot name="footer" />
-		</>
-	)
+	})
 )
-export class Content extends Component {
-	@StyleAttribute()
-	center = false;
-
-	@StyleAttribute()
-	full = false;
-}
+export class Content extends Layout {}
 
 @Augment(
 	'cxl-page',
@@ -324,7 +290,7 @@ export class Card extends C {
  * The Material Design responsive layout grid is an overarching guide to the placement of components and elements.
  * The responsive layout grid adapts to screen sizes and orientation, ensuring consistency across layouts.
  * @example
- * <cxl-grid columns="auto auto auto" style="color:#fff">
+ * <cxl-grid coltemplate="auto auto auto" style="color:#fff">
  *   <cxl-c xs1 style="background:#a00; padding: 2px">1</cxl-c>
  *   <cxl-c xs1 style="background:#0a0; padding:2px">2</cxl-c>
  *   <cxl-c xs1 style="background:#0a0; padding:2px">3</cxl-c>
@@ -343,7 +309,6 @@ export class Card extends C {
 		const colTemplate =
 			host.coltemplate ?? `repeat(${host.columns}, minmax(0,1fr))`;
 		host.style.gridTemplateRows = (host.rows ?? 'auto').toString();
-		// host.style.gridGap = `${host.gap}px ${host.gap}px`;
 		host.style.gridTemplateColumns = colTemplate;
 	})
 )
@@ -356,7 +321,4 @@ export class Grid extends Component {
 
 	@Attribute()
 	coltemplate?: string;
-
-	/*@Attribute()
-	gap?: number;*/
 }

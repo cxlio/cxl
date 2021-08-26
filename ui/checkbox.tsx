@@ -1,7 +1,7 @@
 ///<amd-module name="@cxl/ui/checkbox.js"/>
 import { dom } from '@cxl/tsx';
 import { Augment, StyleAttribute, get } from '@cxl/component';
-import { Svg } from './core.js';
+import { Svg, Path } from './core.js';
 import { merge } from '@cxl/rx';
 import { FocusCircleStyle } from './core.js';
 import { InputBase } from './input-base.js';
@@ -101,14 +101,18 @@ import { css, padding } from '@cxl/css';
 		<>
 			<div className="box">
 				<span className="focusCircle focusCirclePrimary" />
-				<Svg
-					className="check"
-					viewBox="0 0 24 24"
-				>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>`}</Svg>
-				<Svg
-					className="minus"
-					viewBox="0 0 24 24"
-				>{`<path stroke-width="4" style="fill:currentColor;stroke:currentColor" d="M19 13H5v-2h14v2z" />`}</Svg>
+				<Svg className="check" viewBox="0 0 24 24">
+					<Path
+						style="stroke-width:4;fill:currentColor;stroke:currentColor"
+						d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
+					/>
+				</Svg>
+				<Svg className="minus" viewBox="0 0 24 24">
+					<Path
+						style="stroke-width:4;fill:currentColor;stroke:currentColor"
+						d="M19 13H5v-2h14v2z"
+					/>
+				</Svg>
 			</div>
 			<slot />
 		</>

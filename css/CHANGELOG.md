@@ -2,5 +2,6 @@
 
 ## [0.0.1]
 
-- feat: allow numeric values for fontSize [b5d4ac3]
-- feat: backgroundImage 'contain' value [fc252c6]
+- test: updated tests [4fdbcea]
+- feat: change shadow calculation [8eae0ec]
+- feat: more css attributes [6227ee1]

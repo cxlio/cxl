@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<script src="../tester/require-browser.js"></script>
+<script>
+	require.replace = function (path) {
+		return path.replace(
+			/^@cxl\/(.+)/,
+			(str, p1) =>
+				`/cxl/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`
+		);
+	};
+	require('../dist/ui/index.js');
+	// require('../dist/ui-table/index.js');
+	// require('../dist/ui-datetime/index.js');
+	require('@cxl/ui-www');
+</script>
+<cxl-meta></cxl-meta>
+
+<cxl-page>
+	<!--www-slider
+		delay="1000"
+		style="width: 300px; border: 1px solid #ccc; font-size: 72px"
+	>
+		<www-slide>One</www-slide>
+		<www-slide>Two</www-slide>
+		<www-slide>Three</www-slide>
+	</www-slider>
+	<www-slider
+		delay="1000"
+		type="continuous"
+		style="width: 800px; border: 1px solid #ccc; font-size: 72px"
+	>
+		<www-slide>One</www-slide>
+		<www-slide>Two</www-slide>
+		<www-slide>Three</www-slide>
+		<www-slider-pagination></www-slider-pagination>
+	</www-slider-->
+	<www-slider
+		type="continuous"
+		style="width: 800px; border: 1px solid #ccc; font-size: 72px"
+	>
+		<www-slide>One</www-slide>
+		<www-slide>Two</www-slide>
+		<www-slide>Three</www-slide>
+		<www-slider-pagination></www-slider-pagination>
+		<www-slider-arrows></www-slider-arrows>
+	</www-slider>
+</cxl-page>
+
+<!--<cxl-page>
+	<h1>@cxl/ui-datetime</h1>
+	<h2>Datepicker</h2>
+	<cxl-datepicker></cxl-datepicker>
+	<h2>DatepickerInput</h2>
+	<cxl-field>
+		<cxl-label>Date</cxl-label>
+		<cxl-datepicker-input></cxl-datepicker-input>
+	</cxl-field>
+</cxl-page>
+
+<!--
+<cxl-page>
+	<h1>@cxl/ui-table</h1>
+	<h2>Static Table with Pagination</h2>
+	<cxl-datatable>
+		<cxl-tr>
+			<cxl-th><cxl-table-select-all></cxl-table-select-all></cxl-th>
+			<cxl-th sortable sort="asc" field="name">Name</cxl-th>
+			<cxl-th sortable field="tagName">Tag Name</cxl-th>
+			<cxl-th sortable field="role">Role</cxl-th>
+			<cxl-th>Kind</cxl-th>
+			<cxl-th>Flags</cxl-th>
+			<cxl-th>Link</cxl-th>
+		</cxl-tr>
+		<cxl-table-source id="static-table"> </cxl-table-source>
+		<cxl-table-pagination slot="footer"></cxl-table-pagination>
+	</cxl-datatable>
+
+	<h2>Dynamic Table</h2>
+	<cxl-dataset id="table">
+		<cxl-table>
+			<cxl-tr>
+				<cxl-th>
+					<cxl-table-select-all></cxl-table-select-all>
+				</cxl-th>
+				<cxl-th sortable sort="asc" field="name">Name</cxl-th>
+				<cxl-th sortable field="tagName">Tag Name</cxl-th>
+				<cxl-th sortable field="role">Role</cxl-th>
+				<cxl-th>Kind</cxl-th>
+				<cxl-th>Flags</cxl-th>
+				<cxl-th>Link</cxl-th>
+			</cxl-tr>
+			<cxl-tbody id="tbody"></cxl-tbody>
+		</cxl-table>
+		<cxl-table-pagination></cxl-table-pagination>
+	</cxl-dataset>
+</cxl-page>
+<script>
+	async function render() {
+		const data = (
+			await fetch('../docs/ui/summary.json').then(res => res.json())
+		).map(r => ({
+			name: r.name,
+			tagName: r.docs?.tagName || '',
+			role: r.docs?.role || '',
+			kind: r.kind,
+			flags: r.flags,
+		}));
+		const table = document.getElementById('table');
+		const tbody = document.getElementById('tbody');
+		const staticBody = document.getElementById('static-table');
+
+		function renderRow(row) {
+			const tr = document.createElement('cxl-tr-selectable');
+			tr.value = row;
+			tr.innerHTML = `
+				<cxl-td>${row.name}</cxl-td>
+				<cxl-td>${row.tagName}</cxl-td>
+				<cxl-td>${row.role}</cxl-td>
+				<cxl-td>${row.kind}</cxl-td>
+				<cxl-td>${row.flags}</cxl-td>
+				<cxl-td><a target="_top" href="../ui/?${row.href}">Docs</a></cxl-td>
+			`;
+			return tr;
+		}
+
+		for (const row of data) staticBody.appendChild(renderRow(row));
+
+		table.addEventListener('change', ev => {
+			const data = table.value;
+			tbody.innerHTML = '';
+			for (const row of data) tbody.appendChild(renderRow(row));
+		});
+
+		table.source = data;
+	}
+
+	render();
+</script>
+-->
