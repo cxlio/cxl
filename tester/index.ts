@@ -23,7 +23,7 @@ export interface TestRunner {
 }
 
 const parameters: Parameter[] = [
-	{ name: 'node', help: 'Run tests in node mode.' },
+	{ name: 'node', type: 'boolean', help: 'Run tests in node mode.' },
 	{
 		name: 'firefox',
 		help: 'Run tests in firefox through puppeteer.',
@@ -44,7 +44,7 @@ const parameters: Parameter[] = [
 program({}, async ({ log }) => {
 	const args = parseArgv(parameters);
 	const config: TestRunner = {
-		entryFile: './test.js' || args['*'],
+		entryFile: args.$ || './test.js',
 		updateBaselines: false,
 		ignoreCoverage: false,
 		amd: false,

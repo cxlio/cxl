@@ -39,6 +39,7 @@ export default async function runNode(app: TestRunner) {
 	const suitePath = resolve(entryFile);
 	app.log(`Suite: ${suitePath}`);
 
+	require.resolve('@cxl/spec');
 	if (app.inspect) {
 		inspector.open();
 		console.log(`Waiting for debugger (${inspector.url()})`);
