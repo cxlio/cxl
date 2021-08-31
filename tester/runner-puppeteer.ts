@@ -1,4 +1,5 @@
-import { Browser, CoverageEntry, Page, Request, launch } from 'puppeteer';
+import { Browser, CoverageEntry, Page, HTTPRequest } from 'puppeteer';
+import * as puppeteer from 'puppeteer';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { dirname, resolve } from 'path';
 import type { Test } from '@cxl/spec';
@@ -33,7 +34,7 @@ async function openPage(browser: Browser) {
 	return await context.newPage();
 }
 
-async function respond(req: Request, sources: Output[], url: string) {
+async function respond(req: HTTPRequest, sources: Output[], url: string) {
 	const content = await readFile(url, 'utf8');
 	sources.push({
 		path: url,
@@ -50,7 +51,7 @@ async function respond(req: Request, sources: Output[], url: string) {
 	});
 }
 
-async function handleRequest(sources: Output[], req: Request) {
+async function handleRequest(sources: Output[], req: HTTPRequest) {
 	if (req.method() !== 'POST') return req.continue();
 
 	const url = new URL(req.url());
@@ -90,7 +91,7 @@ async function cjsRunner(page: Page, sources: Output[], app: TestRunner) {
 	await page.addScriptTag({ path: __dirname + '/require.js' });
 	await page.setRequestInterception(true);
 
-	page.on('request', (req: Request) => {
+	page.on('request', (req: HTTPRequest) => {
 		try {
 			handleRequest(sources, req);
 		} catch (e) {
@@ -178,7 +179,8 @@ function screenshot(page: Page, domId: string) {
 					})
 				)
 				.then(buffer => {
-					buffer ? resolve(buffer) : reject();
+					if (buffer && buffer instanceof Buffer) resolve(buffer);
+					else reject();
 				});
 		});
 	});
@@ -254,7 +256,7 @@ async function handleFigureRequest(
 
 export default async function runPuppeteer(app: TestRunner) {
 	const entryFile = app.entryFile;
-	const browser = await launch({
+	const browser = await puppeteer.launch({
 		// product: app.firefox ? 'firefox' : 'chrome',
 		headless: true,
 		args: [

@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/diff",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "String diff tool",
 	"license": "Apache-2.0",
 	"browser": "amd/index.min.js",
@@ -10,5 +10,10 @@
 		"build": "node ../dist/build"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"homepage": "https://cxlio.github.io/cxl/diff"
+	"homepage": "https://cxlio.github.io/cxl/diff",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "diff"
+	}
 }

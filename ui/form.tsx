@@ -23,6 +23,7 @@ import {
 	role,
 } from '@cxl/template';
 import { Field } from './field.js';
+import { CloseIcon } from './icon.js';
 
 /**
  * Sliders allow users to make selections from a range of values.
@@ -694,3 +695,33 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
 export class TextArea extends InputBase {
 	value = '';
 }
+
+/**
+ * @beta
+ */
+@Augment(
+	'cxl-field-clear',
+	css({
+		$: {
+			opacity: 0.5,
+			cursor: 'pointer',
+		},
+		$hover: {
+			opacity: 1,
+		},
+	}),
+	$ => (
+		<Span
+			tabIndex={0}
+			$={el =>
+				onAction(el).tap(() => {
+					const input = ($.parentElement as any)?.input;
+					if (input) input.value = '';
+				})
+			}
+		>
+			<CloseIcon width={20} />
+		</Span>
+	)
+)
+export class FieldClear extends Component {}

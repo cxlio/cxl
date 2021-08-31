@@ -15,7 +15,7 @@ import { basename as pathBasename, dirname, resolve } from 'path';
 import { sh } from '@cxl/server';
 import { shell } from './builder.js';
 
-interface MinifyConfig {
+interface MinifyConfig extends Terser.MinifyOptions {
 	sourceMap?: { content?: string; url: string };
 }
 
@@ -96,9 +96,14 @@ export function getSourceMap(out: Output): Output | undefined {
 	if (path) return { path: pathBasename(path), source: readFileSync(path) };
 }
 
-export function minify(config: MinifyConfig = {}) {
+export const MinifyDefault: MinifyConfig = {
+	ecma: 2019,
+};
+
+export function minify(op?: MinifyConfig) {
 	return (source: Observable<Output>) =>
 		new Observable<Output>(subscriber => {
+			const config = { ...MinifyDefault, ...op };
 			const subscription = source.subscribe(async out => {
 				const destPath = pathBasename(
 					out.path.replace(/\.js$/, '.min.js')

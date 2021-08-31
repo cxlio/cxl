@@ -6,7 +6,7 @@ UI Router Components
 
 ## Project Details
 
--   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/ui-router/v/0.0.1)
+-   Branch Version: [0.0.2](https://npmjs.com/package/@cxl/ui-router/v/0.0.2)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/ui-router)
 -   Report Issues: [Github](https://github.com/cxlio/cxl/issues)

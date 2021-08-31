@@ -18,6 +18,10 @@ window.define =
 			module = injects;
 			injects = name;
 			name = new Error().fileName;
+		} else if (arguments.length === 1) {
+			module = name;
+			injects = [];
+			name = new Error().fileName;
 		}
 		const modules =
 			define.modules || (define.modules = window.require.modules || {});

@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/css",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Type Safe CSS",
 	"homepage": "https://cxlio.github.io/cxl/css",
 	"license": "GPL-3.0",
@@ -9,5 +9,10 @@
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/css && node ../tester --baselinePath=../../css/spec"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "css"
+	}
 }

@@ -14,7 +14,15 @@ export {
 export { concat } from '@cxl/rx';
 export { mkdirp, sh } from '@cxl/server';
 export { Output } from '@cxl/source';
-export { AMD, Package, pkg, readme, bundle, template } from './package.js';
+export {
+	AMD,
+	Package,
+	pkg,
+	readme,
+	bundle,
+	template,
+	getBranch,
+} from './package.js';
 export { buildCxl } from './cxl.js';
 export { Task, build, exec, shell } from './builder.js';
 

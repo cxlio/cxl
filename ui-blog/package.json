@@ -13,5 +13,10 @@
 	"devDependencies": {
 		"@cxl/ui": "~3.1.0",
 		"@cxl/blog": "~0.0.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "ui-blog"
 	}
 }

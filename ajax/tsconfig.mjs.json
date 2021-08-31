@@ -1,0 +1,15 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"outDir": "../dist/ajax/mjs"
+	},
+	"files": [
+		"index.ts"
+	],
+	"references": [
+		{
+			"path": "../rx/tsconfig.mjs.json"
+		}
+	]
+}

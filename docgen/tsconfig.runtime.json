@@ -7,36 +7,10 @@
 		"rootDir": "..",
 		"module": "amd"
 	},
-	"files": [
-		"../rx/index.ts",
-		"../ui/theme.tsx",
-		"../css/index.ts",
-		"../tsx/index.ts",
-		"../dom/index.ts",
-		"../component/index.ts",
-		"../template/index.ts",
-		"../router/index.ts",
-		"../ui/core.tsx",
-		"../ui/layout.tsx",
-		"../ui/dialog.tsx",
-		"../ui/navigation.tsx",
-		"../ui/input-base.tsx",
-		"../ui/checkbox.tsx",
-		"../ui-router/index.tsx",
-		"../ui/select.tsx",
-		"../ui/icon.tsx",
-		"../ui/field.tsx",
-		"../ui/button.tsx",
-		"../ui/appbar.tsx",
-		"../ui/item.tsx",
-		"../ui/tabs.tsx",
-		"../ui/badge.tsx",
-		"../ui/chip.tsx",
-		"../ui/svg.tsx",
-		"runtime.tsx"
-	],
+	"files": ["runtime.tsx"],
 	"references": [
 		{ "path": "../build/tsconfig.amd.json", "prepend": true },
-		{ "path": "tsconfig.json" }
+		{ "path": "tsconfig.json" },
+		{ "path": "../ui" }
 	]
 }

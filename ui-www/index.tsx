@@ -7,7 +7,6 @@ import {
 	StyleAttribute,
 	get,
 } from '@cxl/component';
-import { Svg, Path } from '@cxl/tsx-svg';
 import { dom } from '@cxl/tsx';
 import { be } from '@cxl/rx';
 import {
@@ -44,6 +43,7 @@ import {
 	T,
 	Hr as CoreHr,
 } from '@cxl/ui';
+import { Svg, Path } from '@cxl/ui/svg.js';
 import { baseColor, border, css, rgba, padding, pct } from '@cxl/css';
 import { RouterTab, RouterLink } from '@cxl/ui-router';
 import { email, required } from '@cxl/validation';

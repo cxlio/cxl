@@ -113,15 +113,6 @@ export default spec('css', s => {
 			a.equal(rgba(0, 0, 0, 0).toString(), 'rgba(0,0,0,0)');
 			a.equal(rgba(1, 2, 3).toString(), 'rgba(1,2,3,1)');
 		});
-		it.should('return a new object when the alpha method is called', a => {
-			const A = rgba(255, 255, 255);
-			const B = A.alpha(0.5);
-			a.ok(A !== B);
-			a.equal(A.r, B.r);
-			a.equal(A.g, B.g);
-			a.equal(A.b, B.b);
-			a.equal(B.a, 0.5);
-		});
 		it.should('enforce color bounds', a => {
 			const A = rgba(500, 600, 700, 5);
 			a.equal(A.r, 255);

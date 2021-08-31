@@ -359,7 +359,7 @@ export class Test {
 			else if (this.tests.length)
 				await Promise.all(this.tests.map(test => test.run()));
 		} catch (e) {
-			this.pushError(e);
+			this.pushError(e as any);
 		} finally {
 			if (this.domContainer && this.domContainer.parentNode)
 				this.domContainer.parentNode.removeChild(this.domContainer);

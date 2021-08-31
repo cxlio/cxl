@@ -448,7 +448,7 @@ export default spec('dts', a => {
 
 	test('class abstract', (a: TestApi) => {
 		const [A] = parse(`
-			abstract class A { abstract m1 = 'str'; }
+			abstract class A { abstract m1; }
 		`);
 
 		a.ok(A);
@@ -816,4 +816,54 @@ function map<T>() {	return operator<T>(); }
 		a.equal(A.parameters.length, 1);
 		a.equal(A.parameters[0].name, 'args');
 	});
+
+	a.test('function interface', (a: TestApi) => {
+		const [A] = parse(`interface ModeFactory<T> { (config: number): T; }`);
+		a.equal(A.name, 'ModeFactory');
+		a.equal(A.typeParameters?.length, 1);
+		a.assert(A.children);
+		const sig = A.children[0];
+		a.equal(A.children.length, 1);
+		a.equal(sig.name, '');
+		a.equal(sig.parameters?.[0]?.name, 'config');
+		a.equal(sig.type?.name, 'T');
+	});
+
+	a.test('interface new signature', (a: TestApi) => {
+		const [A] = parse(`interface A { new (config: number): string; }`);
+		a.equal(A.name, 'A');
+		a.assert(A.children);
+		const sig = A.children[0];
+		a.equal(A.children.length, 1);
+		a.equal(sig.name, '');
+		a.equal(sig.parameters?.[0]?.name, 'config');
+		a.equal(sig.type?.name, 'string');
+	});
+
+	a.test('Mapped type', (a: TestApi) => {
+		const [A] = parse(`type A<T> = { [P in keyof T]: T[P]; }`);
+		a.equal(A.name, 'A');
+		a.assert(A.type);
+		const sig = A.type;
+		a.equal(sig.name, '');
+	});
+
+	a.test('Intersection type', (a: TestApi) => {
+		const [A] = parse(
+			`type A<T> = { [P in keyof T]: T[P]; } & { name: string };`
+		);
+		a.equal(A.name, 'A');
+		a.assert(A.type);
+		const sig = A.type;
+		a.equal(sig.name, '');
+	});
+
+	/*a.testOnly('Namespace const declaration', (a: TestApi) => {
+		const [A] = parse(`export namespace A { const B:number; }`);
+		console.log(A);
+		a.equal(A.name, 'A');
+		a.assert(A.type);
+		const sig = A.type;
+		a.equal(sig.name, '');
+	});*/
 });

@@ -2,16 +2,21 @@
 	"name": "@cxl/dts",
 	"description": "Generate symbol information from typescript source code",
 	"license": "GPL-3.0-only",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/dts && node ../tester --node"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
 	"dependencies": {
-		"typescript": "^4.3.5",
+		"typescript": "^4.4.2",
 		"@cxl/rx": "~0.2.0",
 		"@cxl/server": "~0.0.2"
 	},
-	"homepage": "https://cxlio.github.io/cxl/dts"
+	"homepage": "https://cxlio.github.io/cxl/dts",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "dts"
+	}
 }

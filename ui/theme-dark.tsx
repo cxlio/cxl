@@ -16,6 +16,6 @@ Object.assign(theme.colors, {
 	link: rgba(83, 155, 245),
 	divider: rgba(0xff, 0xff, 0xff, 0.48),
 	get onSurface8() {
-		return this.onSurface.alpha(0.12);
+		return { ...this.onSurface, a: 0.12 };
 	},
 });

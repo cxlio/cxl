@@ -204,7 +204,11 @@ export function RouterTitle() {
 	return <AppbarTitle>{each(routeTitles, renderLink)}</AppbarTitle>;
 }
 
-@Augment('cxl-router-appbar-title', RouterTitle)
+@Augment(
+	'cxl-router-appbar-title',
+	css({ $: { display: 'contents' } }),
+	RouterTitle
+)
 export class RouterAppbarTitle extends Component {}
 
 function renderTemplate(tpl: HTMLTemplateElement, title?: string) {

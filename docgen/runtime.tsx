@@ -4,12 +4,17 @@ import '@cxl/ui/theme.js';
 import { Augment, Attribute, Component, get } from '@cxl/component';
 import { onAction, onChildrenMutation } from '@cxl/dom';
 import { border, css, padding } from '@cxl/css';
-import { be } from '@cxl/rx';
-import '@cxl/ui-router';
+import { be, merge } from '@cxl/rx';
 import { Span } from '@cxl/ui/core.js';
 import { Tabs, Tab } from '@cxl/ui/tabs.js';
 import { SelectBox, Option } from '@cxl/ui/select.js';
-import { onValue } from '@cxl/template/index.js';
+import { each, onValue } from '@cxl/template/index.js';
+import { AppbarSearch } from '@cxl/ui/appbar-search.js';
+import { C, Card } from '@cxl/ui/layout.js';
+import { RouterItem } from '@cxl/ui-router';
+import '@cxl/ui/navigation.js';
+import '@cxl/ui/badge.js';
+import '@cxl/ui/chip.js';
 
 import type { RuntimeConfig } from './render.js';
 
@@ -182,3 +187,71 @@ export class DocDemo extends Component {
 	@Attribute()
 	debug = false;
 }
+
+@Augment(
+	'doc-search',
+	css({
+		$: { position: 'relative' },
+		card: {
+			display: 'none',
+			position: 'absolute',
+			right: 0,
+			maxHeight: 200,
+			overflowY: 'auto',
+		},
+		card$focusWithin: { display: 'block' },
+	}),
+	$ => {
+		const results = be<Iterable<Element>>([]);
+		let router: HTMLElement | null;
+
+		const card = (
+			<Card
+				$={el => onAction(el).raf(() => $.blur())}
+				pad={16}
+				className="card"
+				color="surface"
+			>
+				{each(
+					results,
+					(r: any) => (
+						<RouterItem href={r.dataset.path}>
+							{r.dataset.title}
+						</RouterItem>
+					),
+					() => (
+						<C pad={16}>No Results Found</C>
+					)
+				)}
+			</Card>
+		) as Card;
+
+		function search(val: string) {
+			//card.style.display = val ? 'block' : 'none';
+			if (val) {
+				router =
+					router || (router = document.querySelector('cxl-router'));
+				if (!router) return;
+				const result = router.querySelectorAll(
+					`[data-title*="${val}"i]`
+				);
+				results.next(result);
+			} else results.next([]);
+		}
+
+		return (
+			<>
+				<AppbarSearch
+					$={el =>
+						merge(
+							//on(el, 'blur').tap(() => (card.style.display = '')),
+							get(el, 'value').raf(search)
+						)
+					}
+				/>
+				{card}
+			</>
+		);
+	}
+)
+export class DocSearch extends Component {}

@@ -8,34 +8,23 @@ import { on } from '@cxl/dom';
 
 const Cache = new Map<any, Property[]>();
 
-type PropertyType = 'events' | 'attribute' | 'a11y';
+export type PropertyFilter = (
+	prototype: any,
+	key: string,
+	desc: PropertyDescriptor
+) => boolean;
 
-interface Property {
+export type PropertyRenderer = (el: any, prop: Property) => Node;
+
+export interface Property {
 	name: string;
 	descriptor: PropertyDescriptor;
-	type: 'boolean' | 'string';
+	value: any;
 }
 
 const sortByName = sortBy('name');
-const sortByType = sortBy('type');
 
-function isIgnored(name: string) {
-	return (
-		name === 'style' ||
-		// name === 'innerText' ||
-		name === 'outerText' ||
-		name === 'contentEditable' ||
-		name === 'classList' ||
-		name === 'innerHTML' ||
-		name === 'outerHTML' ||
-		name === 'scrollTop' ||
-		name === 'scrollLeft' ||
-		name === 'elementTiming' ||
-		name === 'hidden'
-	);
-}
-
-function filterProperties<T>(proto: T, el: Element) {
+function filterProperties<T>(proto: T, el: Element, filter: PropertyFilter) {
 	const cached = Cache.get(proto);
 	if (cached) return cached;
 	const props = Object.getOwnPropertyDescriptors(proto);
@@ -43,44 +32,39 @@ function filterProperties<T>(proto: T, el: Element) {
 
 	for (const name in props) {
 		const descriptor = props[name];
-		if (
-			descriptor.writable !== false &&
-			descriptor.enumerable !== false &&
-			((descriptor.value !== undefined &&
-				typeof descriptor.value !== 'function') ||
-				descriptor.set)
-		) {
+		if (filter(proto, name, descriptor)) {
 			const value = (el as any)[name];
-			const type =
-				value === false || value === true ? 'boolean' : 'string';
-			result.push({ name, descriptor, type });
+			result.push({ name, descriptor, value });
 		}
 	}
-	Cache.set(proto, result.sort(sortByName).sort(sortByType));
+	Cache.set(proto, result.sort(sortByName));
 	return result;
 }
 
-export type PropertyRenderer = (prop: Property, value: any) => Node;
-export const PropertyRendererMap: Record<Property['type'], PropertyRenderer> = {
-	boolean({ name }, value) {
-		return (
-			<Checkbox name={name} value={value}>
-				{name}
-			</Checkbox>
-		);
-	},
+export function attributeFilter(
+	proto: any,
+	name: string,
+	descriptor: PropertyDescriptor
+): boolean {
+	return (
+		descriptor.writable !== false &&
+		descriptor.enumerable !== false &&
+		((descriptor.value !== undefined &&
+			typeof descriptor.value !== 'function') ||
+			!!descriptor.set) &&
+		!eventFilter(proto, name)
+	);
+}
 
-	string({ name }, value) {
-		return (
-			<Field className="input">
-				<Label>{name}</Label>
-				<Input name={name} value={value ?? ''} />
-			</Field>
-		);
-	},
-};
+export function eventFilter(_proto: any, name: string): boolean {
+	return name.startsWith('on');
+}
 
-function renderProperties(el: Element | undefined, propertyType: PropertyType) {
+function renderProperties(
+	el: any | undefined,
+	filter: PropertyFilter,
+	render: PropertyRenderer
+) {
 	if (!el)
 		return (
 			<T h6 center>
@@ -90,11 +74,9 @@ function renderProperties(el: Element | undefined, propertyType: PropertyType) {
 
 	const result = <C></C>;
 	let proto = el;
-	const win = el.ownerDocument.defaultView;
 
 	while (el && (proto = Object.getPrototypeOf(proto))) {
-		if (win && proto.constructor === win.HTMLElement) break;
-		const props = filterProperties(proto, el);
+		const props = filterProperties(proto, el, filter);
 		if (props.length === 0) continue;
 
 		result.appendChild(
@@ -102,29 +84,26 @@ function renderProperties(el: Element | undefined, propertyType: PropertyType) {
 				{proto.constructor.name}
 			</T>
 		);
-		props.forEach(prop => {
-			const { name, type } = prop;
-			if (isIgnored(name)) return;
-			if (
-				propertyType === 'events' &&
-				(name === 'on' || !name.startsWith('on'))
-			)
-				return;
-			if (propertyType === 'a11y' && !name.startsWith('aria')) return;
-
-			if (
-				(name !== 'on' && name.startsWith('on')) ||
-				name.startsWith('aria')
-			)
-				return;
-
-			const value = (el as any)[name];
-
-			result.appendChild(PropertyRendererMap[type](prop, value));
-		});
+		props.forEach(prop => result.appendChild(render(el, prop)));
 	}
 
 	return result;
+}
+
+export function defaultRender(_el: any, { name, value }: Property): Node {
+	if (value === true || value === false)
+		return (
+			<Checkbox name={name} value={value}>
+				{name}
+			</Checkbox>
+		);
+
+	return (
+		<Field className="input">
+			<Label>{name}</Label>
+			<Input name={name} value={value ?? ''} />
+		</Field>
+	);
 }
 
 @Augment<Inspector>(
@@ -148,8 +127,8 @@ function renderProperties(el: Element | undefined, propertyType: PropertyType) {
 					}
 				>
 					{render(
-						combineLatest(get($, 'value'), get($, 'type')),
-						([el, type]) => renderProperties(el, type)
+						combineLatest(get($, 'value'), get($, 'filter')),
+						([el, type]) => renderProperties(el, type, $.renderer)
 					)}
 				</C>
 			</>
@@ -158,11 +137,10 @@ function renderProperties(el: Element | undefined, propertyType: PropertyType) {
 )
 export class Inspector extends Component {
 	@Attribute()
-	value?: Element;
+	value?: any;
 
 	@Attribute()
-	docs?: string;
+	filter: PropertyFilter = attributeFilter;
 
-	@Attribute()
-	type: PropertyType = 'attribute';
+	renderer: PropertyRenderer = defaultRender;
 }

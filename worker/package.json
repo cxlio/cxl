@@ -11,5 +11,10 @@
 	"dependencies": {
 		"@cxl/rx": "~0.2.0"
 	},
-	"homepage": "https://cxlio.github.io/cxl/worker"
+	"homepage": "https://cxlio.github.io/cxl/worker",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "worker"
+	}
 }

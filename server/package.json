@@ -13,5 +13,10 @@
 		"@cxl/rx": "~0.2.0"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
-	"homepage": "https://cxlio.github.io/cxl/server"
+	"homepage": "https://cxlio.github.io/cxl/server",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "server"
+	}
 }

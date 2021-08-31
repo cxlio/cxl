@@ -1,0 +1,15 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"outDir": "../dist/validation/mjs"
+	},
+	"files": [
+		"index.tsx"
+	],
+	"references": [
+		{
+			"path": "../rx/tsconfig.mjs.json"
+		}
+	]
+}

@@ -189,7 +189,6 @@ export interface RGBA {
 	readonly r: number;
 	readonly g: number;
 	readonly b: number;
-	alpha(a: number): RGBA;
 	toString(): string;
 }
 
@@ -505,6 +504,10 @@ export function border(
 	return { borderTop, borderRight, borderBottom, borderLeft };
 }
 
+function rgbaToString(this: RGBA) {
+	return `rgba(${this.r},${this.g},${this.b},${this.a})`;
+}
+
 export function rgba(r: number, g: number, b: number, a = 1): RGBA {
 	r = r < 0 ? 0 : r > 255 ? 255 : r;
 	g = g < 0 ? 0 : g > 255 ? 255 : g;
@@ -515,12 +518,7 @@ export function rgba(r: number, g: number, b: number, a = 1): RGBA {
 		g,
 		b,
 		a,
-		alpha(a: number) {
-			return rgba(r, g, b, a);
-		},
-		toString() {
-			return `rgba(${r},${g},${b},${a})`;
-		},
+		toString: rgbaToString,
 	};
 }
 

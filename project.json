@@ -108,10 +108,6 @@
 				"files": ["tsx/*.ts"],
 				"tasks": "npm run build --prefix tsx"
 			},
-			"tsx-svg": {
-				"files": ["tsx-svg/*.ts"],
-				"tasks": "npm run build --prefix tsx-svg"
-			},
 			"program": {
 				"files": ["program/*"],
 				"tasks": "npm run build --prefix program"
@@ -143,6 +139,10 @@
 			"ui-ide": {
 				"files": ["ui-ide/*"],
 				"tasks": "npm run build --prefix ui-ide"
+			},
+			"cli": {
+				"files": ["cli/*"],
+				"tasks": "npm run build --prefix cli"
 			}
 		}
 	}

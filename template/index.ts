@@ -29,12 +29,6 @@ import { Component, attributeChanged, get } from '@cxl/component';
 
 export type ValidateFunction<T> = (val: T) => string | true;
 
-declare global {
-	interface HTMLElement {
-		ariaLabel: string | null;
-	}
-}
-
 export interface ElementWithValue<T> extends HTMLElement {
 	value: T;
 }

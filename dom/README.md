@@ -6,7 +6,7 @@ Reactive DOM wrapper
 
 ## Project Details
 
--   Branch Version: [0.0.1](https://npmjs.com/package/@cxl/dom/v/0.0.1)
+-   Branch Version: [0.0.2](https://npmjs.com/package/@cxl/dom/v/0.0.2)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/dom)
 -   Report Issues: [Github](https://github.com/cxlio/cxl/issues)

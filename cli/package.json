@@ -1,0 +1,21 @@
+{
+	"name": "@cxl/cli",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/cli",
+	"license": "GPL-3.0",
+	"description": "Command Line Tools",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/cli && node ../tester --node"
+	},
+	"dependencies": {
+		"@cxl/program": "~0.0.2",
+		"@cxl/build": "~0.1.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "cli"
+	}
+}

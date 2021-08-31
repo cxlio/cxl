@@ -1,6 +1,7 @@
 ///<amd-module name="@cxl/dom"/>
 import {
 	BehaviorSubject,
+	EMPTY,
 	Observable,
 	Subject,
 	Subscription,
@@ -91,13 +92,9 @@ export function onFontsReady(): Observable<void> {
 	return from((document as any).fonts.ready);
 }
 
+const shadowConfig: ShadowRootInit = { mode: 'open' };
 export function getShadow(el: Element) {
-	return (
-		el.shadowRoot ||
-		el.attachShadow({
-			mode: 'open',
-		})
-	);
+	return el.shadowRoot || el.attachShadow(shadowConfig);
 }
 
 export function setAttribute(el: Element, attr: string, val: any) {
@@ -195,6 +192,24 @@ export class AttributeObserver extends Subject<MutationEvent> {
 			value: attributeName,
 		});
 	}
+}
+
+export function observeChildren(el: Element) {
+	let children: NodeListOf<ChildNode>;
+	return merge(
+		defer(() => {
+			children = el.childNodes;
+			return children ? of(children) : EMPTY;
+		}),
+		onChildrenMutation(el),
+		onLoad().switchMap(() => {
+			if (el.childNodes !== children) {
+				children = el.childNodes;
+				return of(children);
+			}
+			return EMPTY;
+		})
+	);
 }
 
 export function onChildrenMutation(el: Element) {

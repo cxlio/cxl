@@ -39,6 +39,10 @@ const KindMap: Record<Kind, string> = {
 	[Kind.Tuple]: 'Tuple Type',
 	[Kind.ThisType]: 'this',
 	[Kind.Namespace]: 'Namespace',
+	[Kind.CallSignature]: 'Call Signature',
+	[Kind.ConstructSignature]: 'Construct Signature',
+	[Kind.MappedType]: 'Mapped Type',
+	[Kind.TypeIntersection]: 'Intersection Type',
 };
 
 const GroupTitle: Record<any, string> = {
@@ -56,6 +60,8 @@ const GroupTitle: Record<any, string> = {
 	[Kind.Component]: 'Components',
 	[Kind.Attribute]: 'Attributes',
 	[Kind.TypeAlias]: 'Type Alias',
+	[Kind.CallSignature]: 'Call Signature',
+	[Kind.ConstructSignature]: 'Construct Signature',
 };
 
 const content = {

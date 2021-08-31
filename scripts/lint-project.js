@@ -162,6 +162,11 @@ async function fixPackage({ projectPath, dir, rootPkg }) {
 	if (pkg.browser && pkg.dependencies) delete pkg.dependencies;
 	if (pkg.peerDependencies) delete pkg.peerDependencies;
 	if (pkg.browser) pkg.browser = browser;
+	if (!pkg.repository && rootPkg.repository)
+		pkg.repository = {
+			...rootPkg.repository,
+			directory: dir,
+		};
 
 	if (!pkg.scripts.test !== testScript) {
 		/*
@@ -256,7 +261,8 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }) {
 		rule(
 			pkg?.scripts?.test === testScript,
 			`Valid test script in package.json`
-		)
+		),
+		rule(!!pkg.repository, 'Package "repository" field must be set')
 	);
 
 	return {

@@ -114,7 +114,10 @@ function parseTsConfig(tsconfig: string) {
 			parseConfigHost
 		);
 	} catch (e) {
-		throw new Error(e.messageText);
+		if (e instanceof Error) throw e;
+		const msg =
+			(e as any)?.message || (e as any)?.messageText || 'Unknown Error';
+		throw new Error(msg);
 	}
 
 	if (!parsed) throw new Error(`Could not parse config file "${tsconfig}"`);

@@ -172,8 +172,14 @@ function onMonthChange($: CalendarMonth) {
 				)}
 				{each(onMonthChange($).map(getMonthDates), item => (
 					<CalendarDate
-						$={el => onAction(el).tap(() => onDateClick(el))}
-						selected={el => time.map(val => el.date?.time === val)}
+						$={el =>
+							merge(
+								onAction(el).tap(() => onDateClick(el)),
+								time.tap(
+									val => (el.selected = el.date?.time === val)
+								)
+							)
+						}
 						date={item}
 					/>
 				))}

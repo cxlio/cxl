@@ -5,6 +5,7 @@ const {
 	minify,
 	files,
 	concatFile,
+	tsBundle,
 } = require('../dist/build');
 
 buildCxl(
@@ -21,7 +22,7 @@ buildCxl(
 	{
 		target: 'package',
 		outputDir: '../dist/docgen',
-		tasks: [tsconfig('tsconfig.runtime.json')],
+		tasks: [tsBundle('tsconfig.runtime.json', 'runtime.bundle.js')],
 	},
 	{
 		target: 'package',

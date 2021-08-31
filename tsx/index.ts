@@ -55,10 +55,8 @@ export type NativeType<T> = {
 };
 
 export type AttributeType<T> = {
-	[K in keyof Omit<T, 'children'>]?:
-		| T[K]
-		| Observable<T[K]>
-		| Binding<T, T[K]>;
+	[K in keyof Omit<T, 'children'>]?: T[K] | Observable<T[K]>;
+	// | Binding<T, T[K]>;
 } & {
 	$?: Binding<T, any> | Observable<any>;
 	children?: Children;
@@ -108,12 +106,12 @@ function renderAttributes(host: Bindable, attributes: any) {
 				host,
 				attr === '$' ? value : value.tap(v => ((host as any)[attr] = v))
 			);
-		else if (typeof value === 'function')
+		else if (attr === '$' && typeof value === 'function')
 			bind(
 				host,
-				attr === '$'
-					? value(host)
-					: value(host).tap((v: any) => ((host as any)[attr] = v))
+				//attr === '$'
+				value(host)
+				//: value(host).tap((v: any) => ((host as any)[attr] = v))
 			);
 		else (host as any)[attr] = value;
 	}

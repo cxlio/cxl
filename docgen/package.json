@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/docgen",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Documentation generator for typescript",
 	"homepage": "https://cxlio.github.io/cxl/docgen",
 	"license": "GPL-3.0",
@@ -8,7 +8,7 @@
 		"cxl-docgen": "index.js"
 	},
 	"dependencies": {
-		"highlight.js": "^10.1.1",
+		"highlight.js": "^11.2.0",
 		"markdown-it": "^11.0.0",
 		"@cxl/server": "~0.0.2",
 		"@cxl/dts": "~0.0.1",
@@ -18,5 +18,10 @@
 		"build": "node build",
 		"test": "npm run build && cd ../dist/docgen && node ../tester --node"
 	},
-	"bugs": "https://github.com/cxlio/cxl/issues"
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "docgen"
+	}
 }

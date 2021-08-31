@@ -1,0 +1,10 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"outDir": "../dist/css/mjs"
+	},
+	"files": [
+		"index.ts"
+	]
+}

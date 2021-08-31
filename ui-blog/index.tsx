@@ -1,9 +1,15 @@
 ///<amd-module name="@cxl/ui-blog"/>
 import { Augment, Attribute, Component, Span, get } from '@cxl/component';
-import { css, padding, border } from '@cxl/css';
-import { Button, Chip, T } from '@cxl/ui';
-import { EMPTY, be } from '@cxl/rx';
-import { on, onAction, onChildrenMutation, onResize } from '@cxl/dom';
+import { baseColor, css, padding, border } from '@cxl/css';
+import { Button, Chip, Grid, T } from '@cxl/ui';
+import { EMPTY, be, combineLatest } from '@cxl/rx';
+import {
+	on,
+	onAction,
+	observeChildren,
+	onChildrenMutation,
+	onResize,
+} from '@cxl/dom';
 import { each } from '@cxl/template';
 import { dom } from '@cxl/tsx';
 
@@ -28,17 +34,57 @@ export interface BlogPosts {
 }
 
 function highlight(code: string) {
-	const hljs = (window as any).hljs as typeof import('highlight.js');
+	const hljs = (window as any).hljs as typeof import('highlight.js').default;
 	if (!hljs) return code;
-	hljs.configure({
-		tabReplace: '    ',
-	});
 	return hljs.highlightAuto(code, [
 		'html',
 		'typescript',
 		'javascript',
 		'css',
 	]);
+}
+
+@Augment<BlogFrame>(
+	'blog-frame',
+	css({
+		iframe: {
+			display: 'block',
+			borderWidth: 0,
+			width: '100%',
+			opacity: 0,
+			height: 0,
+		},
+	}),
+	host => {
+		const iframeEl = (<iframe />) as HTMLIFrameElement;
+		(iframeEl as any).loading = 'lazy';
+		iframeEl.className = 'iframe';
+
+		host.bind(
+			get(host, 'src').switchMap(content => {
+				iframeEl.srcdoc = content;
+				return on(iframeEl, 'load').switchMap(() => {
+					const body = iframeEl.contentDocument?.body;
+					return body
+						? onResize(body).raf(() => {
+								const height = iframeEl.contentDocument?.querySelector(
+									'html'
+								)?.scrollHeight;
+								if (height) {
+									iframeEl.style.opacity = '1';
+									iframeEl.style.height = height + 'px';
+								}
+						  })
+						: EMPTY;
+				});
+			})
+		);
+		return iframeEl;
+	}
+)
+export class BlogFrame extends Component {
+	@Attribute()
+	src = '';
 }
 
 @Augment<BlogDemo>(
@@ -90,7 +136,7 @@ function highlight(code: string) {
 		const view = get(host, 'view');
 
 		function init(parent: HTMLIFrameElement) {
-			return onChildrenMutation(host).switchMap(() => {
+			return observeChildren(host).switchMap(() => {
 				const content = host.childNodes[0]?.textContent?.trim() || '';
 				parent.srcdoc = `<!DOCTYPE html><style>body{padding:12px;margin:0;}</style>${content}`;
 				content$.next(content);
@@ -123,13 +169,12 @@ function highlight(code: string) {
 				>
 					View Source
 				</Button>
-				<Span
+				<BlogCode
 					className={view.map(v =>
 						v === 'source' ? 'source visible' : 'source'
 					)}
-				>
-					{content$.map(highlight)}
-				</Span>
+					innerHTML={content$.map(c => `<!--${c}-->`)}
+				/>
 			</>
 		);
 	}
@@ -147,23 +192,29 @@ export class BlogDemo extends Component {
 		$: {
 			display: 'block',
 			font: 'monospace',
+			fontSize: 16,
 			...padding(16),
 			whiteSpace: 'pre-wrap',
 			overflowY: 'auto',
 		},
 	}),
 	$ =>
-		onChildrenMutation($).tap(() => {
+		observeChildren($).raf(() => {
 			const first = $.firstChild;
-			if (first?.nodeType === document.COMMENT_NODE)
-				$.source = (first as any).data.trim();
+			if (first?.nodeType === document.COMMENT_NODE) {
+				const source = (first as any).data.trim();
+				const match = highlight(source);
+				if (typeof match === 'string') $.innerHTML = match;
+				else {
+					$.classList.add('hljs');
+					$.innerHTML = match.value;
+				}
+			}
 		}),
-	$ => <Span>{get($, 'source')}</Span>
+	() => <slot />
+	//$ => <Span innerHTML={get($, 'source').map(highlight)} />
 )
 export class BlogCode extends Component {
-	@Attribute()
-	source = '';
-
 	@Attribute()
 	type?: string;
 
@@ -200,6 +251,60 @@ export class BlogSummary extends Component {}
 	)
 )
 export class BlogTags extends Component {}
+
+@Augment<BlogPostList>(
+	'blog-post-list',
+	css({
+		$: {
+			variables: {
+				link: baseColor('onSurface'),
+			} as any,
+		},
+		title: {
+			marginBottom: 16,
+			font: 'h4',
+			display: 'block',
+			textDecoration: 'none',
+		},
+		date: {
+			font: 'subtitle2',
+		},
+		tags: {
+			textAlign: 'right',
+			flexGrow: 1,
+		},
+		summary: {
+			marginBottom: 16,
+		},
+	}),
+	$ => {
+		const posts = combineLatest(
+			get($, 'filter'),
+			get($, 'posts'),
+			get($, 'template')
+		)
+			.raf()
+			.map(([filter, posts]) => {
+				return filter ? posts.filter(filter) : posts;
+			});
+
+		return (
+			<Grid className="grid">
+				{each(posts, item => $.template(item))}
+			</Grid>
+		);
+	}
+)
+export class BlogPostList extends Component {
+	@Attribute()
+	filter?: (item: Post) => boolean;
+
+	@Attribute()
+	posts: Post[] = [];
+
+	@Attribute()
+	template: (item: Post) => Node = () => <></>;
+}
 
 /*component(
 	{

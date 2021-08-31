@@ -60,7 +60,7 @@ class Build {
 				this.config.tasks.map(task => this.runTask(task))
 			);
 		} catch (e) {
-			this.builder.log(e);
+			this.builder.log(e as any);
 			throw 'Build finished with errors';
 		}
 	}

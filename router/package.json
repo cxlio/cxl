@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/router",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Router library",
 	"license": "GPL-3.0",
 	"files": [
@@ -16,5 +16,10 @@
 	"homepage": "https://cxlio.github.io/cxl/router",
 	"devDependencies": {
 		"@cxl/debug": "~0.0.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "router"
 	}
 }

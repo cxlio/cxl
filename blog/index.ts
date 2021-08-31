@@ -4,11 +4,13 @@ import { observable } from '@cxl/rx';
 import { Output, Task } from '@cxl/build';
 
 import * as MarkdownIt from 'markdown-it';
-import * as hljs from 'highlight.js';
+//import * as hljs from 'highlight.js';
 
 export interface BlogConfig {
 	postsDir?: string | string[];
 	headerTemplate?: string;
+	highlight?: boolean;
+	includeContent?: boolean;
 }
 
 export interface BlogPosts {
@@ -51,7 +53,10 @@ const DefaultConfig = {
 };
 
 function Code(source: string, language?: string) {
-	return (
+	return `<blog-code language="${
+		language || ''
+	}"><!--${source}--></blog-code>`;
+	/*return (
 		'<pre><code class="hljs">' +
 		(language
 			? hljs.highlight(language, source)
@@ -63,7 +68,7 @@ function Code(source: string, language?: string) {
 			  ])
 		).value +
 		'</code></pre>'
-	);
+	);*/
 }
 
 const markdownMeta = /^(\w+):\s*(.+)\s*/gm;
@@ -122,7 +127,7 @@ function Markdown(url: string, source: string, stats: Stats) {
 	const { meta, content } = renderMarkdown(source);
 	const title =
 		source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
-	const summary = content.match(SUMMARY_REGEX)?.[1] || '';
+	const summary = meta.summary || content.match(SUMMARY_REGEX)?.[1] || '';
 
 	return {
 		id: getPostId(title),
@@ -229,7 +234,9 @@ async function build(config: BlogConfig): Promise<Output[]> {
 		});
 
 	const postsJson = {
-		posts: posts.map(p => Object.assign(p, { content: undefined })),
+		posts: config.includeContent
+			? posts
+			: posts.map(p => ({ ...p, content: undefined })),
 		tags: Array.from(tags).flat(),
 		types: Array.from(types),
 	};

@@ -54,7 +54,7 @@ export function Path(p: Path) {
 }
 
 export function Circle(p: Circle) {
-	const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+	const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 	if (p.className !== undefined) el.setAttribute('class', p.className);
 	if (p.style !== undefined) el.setAttribute('style', p.style);
 	el.setAttribute('cx', p.cx);

@@ -6,7 +6,7 @@ IDE Components
 
 ## Project Details
 
--   Branch Version: [0.0.2](https://npmjs.com/package/@cxl/ui-ide/v/0.0.2)
+-   Branch Version: [0.0.3](https://npmjs.com/package/@cxl/ui-ide/v/0.0.3)
 -   License: UNLICENSED
 -   Documentation: [Link](https://cxlio.github.io/cxl/ui-ide)
 -   Report Issues: [Github](https://github.com/cxlio/cxl/issues)

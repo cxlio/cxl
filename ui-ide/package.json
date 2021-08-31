@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/ui-ide",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"browser": "amd/index.min.js",
 	"bugs": "https://github.com/cxlio/cxl/issues",
 	"homepage": "https://cxlio.github.io/cxl/ui-ide",
@@ -13,5 +13,10 @@
 	"devDependencies": {
 		"@cxl/tsx": "~0.1.0",
 		"@cxl/ui": "~3.1.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "ui-ide"
 	}
 }

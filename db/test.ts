@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import { initializeApp, deleteApp, getApp } from 'firebase/app';
 import { spec, TestApi } from '@cxl/spec';
 import { merge } from '@cxl/rx';
 import { collection, db } from './index.js';
@@ -20,7 +20,7 @@ export default spec('db', suite => {
 		appId: '1:621527952271:web:17942cb9d5c9de81eb79fa',
 	};
 
-	firebase.initializeApp(config);
+	initializeApp(config);
 
 	test('db', a => {
 		const ref = db<Schema>('fb');
@@ -96,6 +96,6 @@ export default spec('db', suite => {
 	});
 
 	suite.afterAll(() => {
-		firebase.app().delete();
+		deleteApp(getApp());
 	});
 });

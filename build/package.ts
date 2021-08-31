@@ -76,13 +76,19 @@ export function docs(dirName: string, devMode = false) {
 	});
 }
 
-function getRepo(repo: string | { url: string }) {
+export async function getBranch(cwd: string): Promise<string> {
+	return (await sh('git rev-parse --abbrev-ref HEAD', { cwd }))
+		.toString()
+		.trim();
+}
+
+/*function getRepo(repo: string | { url: string }) {
 	const branch = execSync('git rev-parse --abbrev-ref HEAD')
 		.toString()
 		.trim();
 	const url = typeof repo === 'string' ? repo : repo.url;
 	return url.replace(/\$BRANCH/g, branch);
-}
+}*/
 
 function packageJson(p: any) {
 	return of({
@@ -113,7 +119,7 @@ function packageJson(p: any) {
 					homepage: p.homepage,
 					bugs: p.bugs,
 					bin: p.bin,
-					repository: p.repository && getRepo(p.repository),
+					repository: p.repository,
 					dependencies: p.dependencies,
 					peerDependencies: p.peerDependencies,
 					bundledDependencies: p.bundledDependencies,
@@ -183,15 +189,20 @@ export function pkg() {
 	return defer(() => {
 		const p = readPackage();
 		const licenseId = p.license;
-		// const isPublished = getPublishedVersion(p);
-		// if (isPublished) throw new Error(`Package version already published.`);
 
-		const output: Observable<Output>[] = [packageJson(p)];
+		return from(getPublishedVersion(p.name)).switchMap(version => {
+			if (version === p.version)
+				throw new Error(
+					`Package version ${p.version} already published.`
+				);
 
-		output.push(file('README.md', 'README.md'));
-		if (licenseId) output.push(license(licenseId));
+			const output: Observable<Output>[] = [packageJson(p)];
 
-		return merge(...output);
+			output.push(file('README.md', 'README.md'));
+			if (licenseId) output.push(license(licenseId));
+
+			return merge(...output);
+		});
 	});
 }
 

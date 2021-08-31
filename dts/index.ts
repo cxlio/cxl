@@ -62,6 +62,10 @@ export enum Kind {
 	Component = 35,
 	Attribute = 36,
 	Namespace = 37,
+	CallSignature = 38,
+	ConstructSignature = 39,
+	MappedType = 40,
+	TypeIntersection = 41,
 }
 
 const SyntaxKindMap: Record<number, Kind> = {
@@ -97,6 +101,10 @@ const SyntaxKindMap: Record<number, Kind> = {
 	[SK.TupleType]: Kind.Tuple,
 	[SK.ThisType]: Kind.ThisType,
 	[SK.ModuleDeclaration]: Kind.Namespace,
+	[SK.CallSignature]: Kind.CallSignature,
+	[SK.ConstructSignature]: Kind.ConstructSignature,
+	[SK.MappedType]: Kind.MappedType,
+	[SK.IntersectionType]: Kind.TypeIntersection,
 };
 
 export interface DocumentationContent {
@@ -115,6 +123,7 @@ export enum Flags {
 	// From ts.ModifierFlags
 	None = 0,
 	Export = 1,
+	Ambient = 2,
 	Public = 4,
 	Private = 8,
 	Protected = 16,
@@ -197,6 +206,52 @@ const parseConfigHost: ts.ParseConfigFileHost = {
 	},
 };
 
+function _printNode(node: Node, visited: Node[] = []): any {
+	const {
+		typeParameters,
+		type,
+		value,
+		parameters,
+		docs,
+		source,
+		id,
+		kind,
+		name,
+		children,
+		extendedBy,
+		flags,
+	} = node;
+	const flagText: string[] = [];
+	if (flags) for (const i in Flags) if (flags & +Flags[i]) flagText.push(i);
+
+	if (visited.includes(node))
+		return { name: `circular: ${name}`, flags: flagText, kind: Kind[kind] };
+	visited.push(node);
+
+	const sources = Array.isArray(source)
+		? source.map(s => s.name)
+		: source?.name || '?';
+
+	return {
+		id,
+		name,
+		kind: Kind[kind],
+		source: sources,
+		docs,
+		value,
+		flags: flagText,
+		type: type && _printNode(type, visited),
+		typeParameters: typeParameters?.map(n => _printNode(n, visited)),
+		parameters: parameters?.map(n => _printNode(n, visited)),
+		children: children?.map(n => _printNode(n, visited)),
+		extendedBy: extendedBy?.map(n => _printNode(n, visited)),
+	};
+}
+
+export function printNode(node: Node) {
+	console.log(JSON.stringify(_printNode(node), null, 2));
+}
+
 function createBaseType(name: string): Node {
 	return { name, kind: Kind.BaseType, flags: 0 };
 }
@@ -210,7 +265,7 @@ function parseTsConfig(tsconfig: string) {
 			parseConfigHost
 		);
 	} catch (e) {
-		throw new Error(e.messageText);
+		throw new Error((e as any).messageText);
 	}
 
 	if (!parsed) throw new Error(`Could not parse config file "${tsconfig}"`);
@@ -220,7 +275,7 @@ function parseTsConfig(tsconfig: string) {
 function getKind(node: ts.Node): Kind {
 	switch (node.kind) {
 		case SK.VariableDeclaration:
-			return node.parent.flags === NodeFlags.Const
+			return node.parent.flags & NodeFlags.Const
 				? Kind.Constant
 				: Kind.Variable;
 		case SK.TypeLiteral:
@@ -235,9 +290,10 @@ function getKind(node: ts.Node): Kind {
 
 function getNodeSource(node: ts.Node): Source {
 	const sourceFile = node.getSourceFile();
+	const root = config?.options.rootDir || process.cwd();
 	const result = sourceFile
 		? {
-				name: relative(process.cwd(), sourceFile.fileName),
+				name: relative(root, sourceFile.fileName),
 				index: node.pos,
 		  }
 		: undefined;
@@ -256,6 +312,7 @@ function getNodeName(node: ts.Node): string {
 	const anode = node as any;
 
 	if (anode.name) return anode.name.escapedText || anode.name.getText();
+	if (anode.moduleName) return anode.moduleName;
 
 	return '';
 }
@@ -397,6 +454,7 @@ function serializeDeclaration(node: ts.Declaration): Node {
 function serializeTypeParameter(node: ts.TypeParameterDeclaration) {
 	const result = serializeDeclaration(node);
 	if (node.default) result.value = node.default.getText();
+	if (node.constraint) result.children = [serialize(node.constraint)];
 	return result;
 }
 
@@ -555,7 +613,7 @@ function serializeType(type: ts.Type): Node {
 		return {
 			name: '',
 			flags: 0,
-			kind: Kind.TypeUnion,
+			kind: type.isUnion() ? Kind.TypeUnion : Kind.TypeIntersection,
 			children: type.types.map(serializeType),
 		};
 
@@ -635,7 +693,10 @@ function getCxlRole(node: ts.CallExpression): string {
 	return tsLocal.isStringLiteral(id) ? id.text : '';
 }
 
-function getCxlClassMeta(node: ts.ClassDeclaration, result: Node): boolean {
+function getCxlClassMeta(
+	node: ts.ClassDeclaration | ts.InterfaceDeclaration,
+	result: Node
+): boolean {
 	const augment = getCxlDecorator(node, 'Augment');
 	const args = (augment?.expression as ts.CallExpression)?.arguments;
 	const docs: Documentation = result.docs || {};
@@ -720,7 +781,7 @@ function serializeObject(
 	return result;
 }
 
-function serializeClass(node: ts.ClassDeclaration) {
+function serializeClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
 	const result = serializeDeclaration(node);
 	const symbol =
 		typeChecker.getSymbolAtLocation(node) ||
@@ -734,9 +795,9 @@ function serializeClass(node: ts.ClassDeclaration) {
 		if (
 			tsLocal.isInterfaceDeclaration(node) &&
 			symbol.flags & tsLocal.SymbolFlags.Class
-		)
+		) {
 			result.flags |= Flags.DeclarationMerge;
-		else {
+		} else {
 			const exportedSymbol = typeChecker.getExportSymbolOfSymbol(symbol);
 			exportedSymbol?.members?.forEach(
 				s =>
@@ -854,10 +915,36 @@ function serializeRestType(node: ts.RestTypeNode) {
 	return result;
 }
 
-function serializeModule(node: ts.ModuleDeclaration) {
-	if (node.modifiers?.find(m => m.kind === SK.DeclareKeyword)) return;
+function serializeMappedType(node: ts.MappedTypeNode) {
+	const result = createNode(node);
+	if (node.typeParameter)
+		result.typeParameters = [serialize(node.typeParameter)];
+	if (node.type) result.type = serialize(node.type);
+	return result;
+}
 
-	const symbol =
+function serializeModule(node: ts.ModuleDeclaration) {
+	//if (node.modifiers?.find(m => m.kind === SK.DeclareKeyword)) return;
+	const result = serializeDeclaration(node);
+	node.forEachChild(c => {
+		if (tsLocal.isModuleBlock(c))
+			for (const child of c.statements) visit(child, result);
+	});
+	if (!extraModules.includes(result)) {
+		const symbol =
+			typeChecker.getSymbolAtLocation(node) ||
+			(node.name && typeChecker.getSymbolAtLocation(node.name));
+		if (symbol) {
+			const symbolNode =
+				symbol.valueDeclaration || symbol.declarations?.[0];
+			const moduleName = (symbolNode as any).moduleName;
+			if (moduleName) result.name = moduleName;
+		}
+		result.flags = result.flags | Flags.Export;
+		extraModules.push(result);
+	}
+	return result;
+	/*const symbol =
 		typeChecker.getSymbolAtLocation(node) ||
 		(node.name && typeChecker.getSymbolAtLocation(node.name));
 
@@ -865,8 +952,10 @@ function serializeModule(node: ts.ModuleDeclaration) {
 		const symbolNode = symbol.valueDeclaration || symbol.declarations?.[0];
 		if (!symbolNode) return;
 		const result = serializeDeclaration(symbolNode);
-
+		console.log(symbolNode);
 		if (!extraModules.includes(result)) {
+			const moduleName = (symbolNode as any).moduleName;
+			if (moduleName) result.name = moduleName;
 			symbol.exports?.forEach(
 				s =>
 					s.declarations &&
@@ -874,8 +963,9 @@ function serializeModule(node: ts.ModuleDeclaration) {
 						result,
 						s.declarations.flatMap(d => {
 							const existing: Node = (d as any)[dtsNode];
-							return existing &&
-								result.children?.indexOf(existing) !== -1
+							return d.parent !== currentSourceFile ||
+								(existing &&
+									result.children?.indexOf(existing) !== -1)
 								? []
 								: serialize(d);
 						})
@@ -884,7 +974,7 @@ function serializeModule(node: ts.ModuleDeclaration) {
 
 			extraModules.push(result);
 		}
-	}
+	}*/
 }
 
 const Serializer: SerializerMap = {
@@ -896,6 +986,8 @@ const Serializer: SerializerMap = {
 	[SK.NeverKeyword]: () => NeverType,
 	[SK.NullKeyword]: () => NullType,
 	[SK.FunctionType]: serializeFunction,
+	[SK.CallSignature]: serializeFunction,
+	[SK.ConstructSignature]: serializeFunction,
 	[SK.UndefinedKeyword]: () => UndefinedType,
 
 	[SK.ArrayType]: serializeArray,
@@ -914,6 +1006,12 @@ const Serializer: SerializerMap = {
 
 	[SK.TypeQuery]: serializeTypeQuery,
 	[SK.IndexedAccessType]: serializeIndexedAccessTypeNode,
+	[SK.IntersectionType](node: ts.UnionTypeNode) {
+		return createNode(node, {
+			kind: Kind.TypeIntersection,
+			children: node.types.map(serialize),
+		});
+	},
 	[SK.UnionType](node: ts.UnionTypeNode) {
 		return createNode(node, {
 			kind: Kind.TypeUnion,
@@ -948,6 +1046,7 @@ const Serializer: SerializerMap = {
 	[SK.ShorthandPropertyAssignment]: serializeDeclarationWithType,
 
 	[SK.IndexSignature]: serializeIndexSignature,
+	[SK.MappedType]: serializeMappedType,
 };
 
 function setup(
@@ -1039,8 +1138,9 @@ function markExported(
 }
 
 function parseSourceFile(sourceFile: ts.SourceFile) {
+	const root = config?.options.rootDir || process.cwd();
 	const result = createNode(sourceFile, {
-		name: relative(process.cwd(), sourceFile.fileName),
+		name: relative(root, sourceFile.fileName),
 	});
 	const symbol = typeChecker.getSymbolAtLocation(sourceFile);
 
@@ -1107,13 +1207,7 @@ export function parse(
 	return sourceNode.children || [];
 }
 
-/**
- * Generate AST from a tsconfig file
- *
- * @param tsconfig Path to tsconfig.json file
- */
-export function build(tsconfig = resolve('tsconfig.json')): Output {
-	config = parseTsConfig(tsconfig);
+export function buildTsconfig(config: ts.ParsedCommandLine): Output {
 	setup(config.fileNames, config.options);
 
 	const result: Output = {
@@ -1133,4 +1227,23 @@ export function build(tsconfig = resolve('tsconfig.json')): Output {
 	result.modules.unshift(...extraModules);
 
 	return result;
+}
+
+export function buildConfig(json: any, basePath: string): Output {
+	config = tsLocal.parseJsonConfigFileContent(
+		json,
+		parseConfigHost,
+		basePath
+	);
+	return buildTsconfig(config);
+}
+
+/**
+ * Generate AST from a tsconfig file
+ *
+ * @param tsconfig Path to tsconfig.json file
+ */
+export function build(tsconfig = resolve('tsconfig.json')): Output {
+	config = parseTsConfig(tsconfig);
+	return buildTsconfig(config);
 }

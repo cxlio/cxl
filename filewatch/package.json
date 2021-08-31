@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/filewatch",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "File watcher library",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -11,5 +11,10 @@
 	"dependencies": {
 		"@cxl/rx": "~0.5.0"
 	},
-	"homepage": "https://cxlio.github.io/cxl/filewatch"
+	"homepage": "https://cxlio.github.io/cxl/filewatch",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "filewatch"
+	}
 }

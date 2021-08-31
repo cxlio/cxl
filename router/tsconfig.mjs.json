@@ -1,0 +1,16 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"outDir": "../dist/router/mjs"
+	},
+	"files": [
+		"index.ts",
+		"debug.ts"
+	],
+	"references": [
+		{
+			"path": "../debug/tsconfig.mjs.json"
+		}
+	]
+}

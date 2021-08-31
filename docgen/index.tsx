@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 import { promises as fs, existsSync } from 'fs';
-import { join } from 'path';
+import { dirname, join, resolve } from 'path';
 
 import { Application, mkdirp, readJson, sh } from '@cxl/server';
-import { Node, build } from '@cxl/dts';
+import { Node, build, buildConfig } from '@cxl/dts';
 
-import { render as renderJson } from './render-json';
+//import { render as renderJson } from './render-json';
 import type { Section } from './render';
 
 const RUNTIME_JS = __dirname + '/runtime.bundle.min.js';
 const STYLES_CSS = __dirname + '/styles.css';
+const DotGitRegex = /\.git$/;
 
 export interface File {
 	name: string;
@@ -22,6 +23,7 @@ export class DocGen extends Application {
 	name = '@cxl/docgen';
 	outputDir = './docs';
 	repository?: string;
+	repositoryLink?: string;
 
 	clean = false;
 	debug = false;
@@ -29,9 +31,11 @@ export class DocGen extends Application {
 	spa = true;
 	tsconfig = 'tsconfig.json';
 	packageJson = 'package.json';
+	packageRoot = '';
 	summary = false;
 	extra?: Section[];
 	scripts?: string[];
+	file?: string;
 
 	setup() {
 		this.parameters.register(
@@ -55,6 +59,11 @@ export class DocGen extends Application {
 			{
 				name: 'summary',
 				help: 'Render summary.json file',
+			},
+			{
+				name: 'file',
+				help: 'Parse a single file',
+				type: 'string',
 			},
 			{
 				name: 'tsconfig',
@@ -91,6 +100,7 @@ export class DocGen extends Application {
 	async run() {
 		const outputDir = this.outputDir;
 		const pkgRepo = (this.modulePackage = await readJson(this.packageJson));
+		this.packageRoot = dirname(resolve(this.packageJson));
 		await mkdirp(outputDir);
 		await mkdirp(outputDir + '/' + pkgRepo.version);
 
@@ -103,10 +113,30 @@ export class DocGen extends Application {
 			const repo = pkgRepo.repository;
 			this.repository = typeof repo === 'string' ? repo : repo.url;
 		}
+		if (this.repository) {
+			const repo = pkgRepo.repository;
+			const url = this.repository;
+			if (url?.indexOf('github.com') !== -1) {
+				this.repositoryLink =
+					url.replace(DotGitRegex, '') +
+					join('/blob/master', repo.directory || '');
+			}
+		}
 
-		const json = build(this.tsconfig);
+		const json = this.file
+			? buildConfig(
+					{
+						compilerOptions: {
+							allowJs: true,
+							rootDir: dirname(this.file),
+						},
+						files: [this.file],
+					},
+					process.cwd()
+			  )
+			: build(this.tsconfig);
 		const theme = await import('./render-html');
-		renderJson(this, json).map(f => this.writeFile(f));
+		// renderJson(this, json).map(f => this.writeFile(f));
 
 		if (this.summary) {
 			const summary = await import('./render-summary');

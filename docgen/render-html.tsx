@@ -13,7 +13,7 @@ import {
 	jsdocTitle,
 	translate,
 } from './localization';
-import { relative } from 'path';
+import { join, relative } from 'path';
 import hljs from 'highlight.js';
 import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import MarkdownIt from 'markdown-it';
@@ -84,6 +84,7 @@ function FunctionType(node: Node) {
 }
 
 function Property(node: Node) {
+	if (node.kind === Kind.IndexSignature) return IndexSignature(node);
 	return `${node.name}: ${Type(node.type)}`;
 }
 
@@ -91,7 +92,7 @@ function ObjectType(node: Node) {
 	return `{ ${node.children?.map(Property).join(', ') || ''} }`;
 }
 
-function renderType(type: Node) {
+export function renderType(type: Node): string {
 	switch (type.kind) {
 		case Kind.ClassType:
 			return ClassType(type);
@@ -106,6 +107,8 @@ function renderType(type: Node) {
 			return `${Type(type.children[0])}[${Type(type.children[1])}]`;
 		case Kind.TypeUnion:
 			return type.children?.map(Type).join(' | ') || '';
+		case Kind.TypeIntersection:
+			return type.children?.map(Type).join(' & ') || '';
 		case Kind.Tuple:
 			return `[${type.children?.map(Type).join(', ') || ''}]`;
 		case Kind.Array:
@@ -116,12 +119,20 @@ function renderType(type: Node) {
 		case Kind.Function:
 		case Kind.Method:
 			return FunctionType(type);
+		case Kind.MappedType:
+			return `{ [${renderType(type.typeParameters![0])}]: ${renderType(
+				type.type!
+			)} }`;
 		case Kind.ObjectType:
 			return ObjectType(type);
-		case Kind.BaseType:
 		case Kind.Literal:
-		case Kind.TypeParameter:
+			return escape(type.name);
+		case Kind.BaseType:
 			return type.name;
+		case Kind.TypeParameter:
+			return type.children
+				? `${type.name} in ${Type(type.children[0])}`
+				: type.name;
 		case Kind.ConstructorType:
 			return `new ${FunctionType(type)}`;
 		case Kind.Keyof:
@@ -200,7 +211,7 @@ function IndexSignature(node: Node) {
 /**
  * Return Node Signature
  */
-function Signature(node: Node): string {
+export function Signature(node: Node): string {
 	if (node.kind === Kind.Module) return escape(node.name);
 	if (node.kind === Kind.IndexSignature) return IndexSignature(node);
 
@@ -219,15 +230,14 @@ function Anchor(id: number) {
 }
 
 function getSourceLink(src: Source) {
-	const url = application.repository;
+	const url = application.repositoryLink;
 	if (url) {
-		if (url.indexOf('github.com') !== -1) {
-			const pos = src.sourceFile.getLineAndCharacterOfPosition(src.index);
-			return `${url.replace(/\.git$/, '/blob/master')}/${relative(
-				process.cwd(),
-				src.sourceFile.fileName
-			)}#L${pos.line}`;
-		}
+		const pos = src.sourceFile.getLineAndCharacterOfPosition(src.index);
+		const fileUrl = `${relative(
+			application.packageRoot,
+			src.sourceFile.fileName
+		)}#L${pos.line}`;
+		return `${url}/${fileUrl}`;
 	}
 
 	return `#`;
@@ -309,10 +319,10 @@ function Documentation(node: Node) {
 			if (doc.tag === 'param') return `<p>${doc.value}</p>`;
 			if (doc.tag === 'see') return DocSee(doc);
 
+			const value = escape(doc.value);
+
 			return `<p>${formatContent(
-				doc.tag
-					? `${jsdocTitle(doc.tag)}: ${doc.value}`
-					: `${doc.value}`
+				doc.tag ? `${jsdocTitle(doc.tag)}: ${value}` : `${value}`
 			)}</p>`;
 		})
 		.join('');
@@ -384,7 +394,7 @@ function Link(node: Node, content?: string): string {
 
 	const href = getHref(node);
 
-	if (application.spa && href[0] !== '#')
+	if (application?.spa && href[0] !== '#')
 		return `<cxl-a href="${href}">${name}</cxl-a>`;
 
 	return `<a href="${href}">${name}</a>`;
@@ -416,6 +426,7 @@ function ModuleTitle(node: Node) {
 		(node.kind === Kind.Namespace ? Chip('namespace') : '') +
 		(node.kind === Kind.Enum ? Chip('enum') : '') +
 		(docs && docs.role ? Chip(`role: ${docs.role}`) : '') +
+		(node.flags & Flags.DeclarationMerge ? Chip('declaration merge') : '') +
 		`</span>`;
 
 	return `<cxl-t h3>${chips}${Signature(node)}</cxl-t>`;
@@ -433,10 +444,14 @@ function ImportStatement(node: Node) {
 	const source = Array.isArray(node.source) ? node.source[0] : node.source;
 	if (!source) return '';
 	const importUrl = getImportUrl(source);
+	const isDeclaration =
+		importUrl.endsWith('.d') || node.flags & Flags.DeclarationMerge;
 
-	return `<cxl-t h5>Import</cxl-t>${Code(
-		`import { ${node.name} } from '${importUrl}';`
-	)}`;
+	return isDeclaration
+		? ''
+		: `<cxl-t h5>Import</cxl-t>${Code(
+				`import { ${node.name} } from '${importUrl}';`
+		  )}`;
 }
 
 function MemberIndexLink(node: Node) {
@@ -576,8 +591,11 @@ export function getHref(node: Node): string {
 
 function declarationFilter(node: Node) {
 	return (
-		node.flags & Flags.Export &&
-		!(node.kind === Kind.Interface && node.flags & Flags.DeclarationMerge)
+		node.flags & Flags.Export ||
+		node.flags & Flags.Ambient ||
+		node.flags &
+			Flags.DeclarationMerge /*&&
+		!(node.kind === Kind.Interface && node.flags & Flags.DeclarationMerge)*/
 	);
 }
 
@@ -602,7 +620,6 @@ function NodeIcon(node: Node) {
 function ModuleNavbar(node: Node) {
 	const moduleName = node.name.match(/index\.tsx?/) ? 'Index' : node.name;
 	const href = getHref(node);
-
 	return (
 		`${Item(`<i>${moduleName}</i>`, href)}` +
 		(node.children
@@ -634,7 +651,13 @@ function Extra(docs: Section[]) {
 				? `<cxl-c style="padding-bottom:8px" pad16><cxl-t subtitle2 button>${docs.title}</cxl-t></cxl-c>`
 				: '';
 			const items = docs.items
-				.map(i => Item(i.title, i.file, i.icon))
+				.map(i =>
+					Item(
+						i.title,
+						i.index ? 'index.html' : escapeFileName(i.file),
+						i.icon
+					)
+				)
 				.join('');
 			return `${title}${items}`;
 		})
@@ -724,11 +747,11 @@ function Header(module: Output) {
 	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}cxl-router-item>cxl-badge{margin-right:0} cxl-grid>cxl-c{overflow-wrap:break-word}.see-source{text-decoration:none;float:right;color:var(--cxl-onSurface87)}cxl-t[code][subtitle]{font-weight:700;margin-bottom:16px}</style>
 	<cxl-application permanent><title>${pkg.name}</title><cxl-appbar>
 	${Navbar(pkg, module)}
-	<cxl-router-appbar-title></cxl-router-appbar-title></cxl-appbar><cxl-page>`;
+	<cxl-router-appbar-title></cxl-router-appbar-title><doc-search></doc-search></cxl-appbar><cxl-page>`;
 }
 
 function escapeFileName(name: string, replaceExt = '.html') {
-	return name.replace(/\.[tj]sx?$/, replaceExt).replace(/\//g, '--');
+	return name.replace(/\.[tj]sx?$/, replaceExt).replace(/[./]/g, '--');
 }
 
 function getPageName(page: Node) {
@@ -739,7 +762,8 @@ function getPageName(page: Node) {
 			: result;
 	}
 
-	if (page.kind === Kind.Namespace) return `ns-${page.name}.html`;
+	if (page.kind === Kind.Namespace)
+		return `ns-${escapeFileName(page.name)}.html`;
 
 	const source = Array.isArray(page.source) ? page.source[0] : page.source;
 
@@ -762,12 +786,16 @@ function Page(p: Node) {
 function hasOwnPage(node: Node) {
 	return (
 		node.kind === Kind.Class ||
-		(node.kind === Kind.Interface &&
-			!(node.flags & Flags.DeclarationMerge)) ||
+		node.kind === Kind.Interface ||
+		/*(node.kind === Kind.Interface &&
+			!(node.flags & Flags.DeclarationMerge)) ||*/
 		node.kind === Kind.Module ||
 		node.kind === Kind.Enum ||
 		node.kind === Kind.Component ||
-		node.kind === Kind.Namespace
+		node.kind === Kind.Namespace ||
+		(node.kind === Kind.Function &&
+			node.flags === Flags.Ambient &&
+			node.children?.length)
 	);
 }
 
@@ -807,10 +835,11 @@ function Route(file: File) {
 function renderExtraFile({ file, index, title }: ExtraDocumentation) {
 	const source = readFileSync(file, 'utf8');
 	const content = file.endsWith('.md') ? Markdown(source) : source;
-
 	return {
 		title,
-		name: index ? 'index.html' : file,
+		name: index
+			? 'index.html'
+			: escapeFileName(relative(application.packageRoot, file)),
 		content,
 	};
 }
@@ -836,13 +865,12 @@ function initRuntimeConfig(app: DocGen) {
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
 	index = Object.values(output.index);
-	hljs.configure({ tabReplace: '    ' });
 	const userScripts = initRuntimeConfig(app);
-
+	const readmePath = join(application.packageRoot, 'README.md');
 	extraDocs =
 		app.extra ||
-		(existsSync('README.md')
-			? [{ items: [{ title: 'Home', file: 'README.md', index: true }] }]
+		(existsSync(readmePath)
+			? [{ items: [{ title: 'Home', file: readmePath, index: true }] }]
 			: []);
 
 	extraFiles = extraDocs.flatMap(section =>
@@ -852,7 +880,6 @@ export function render(app: DocGen, output: Output): File[] {
 	const result: File[] = output.modules.flatMap(Module);
 	const header = Header(output);
 	const footer = '</cxl-page></cxl-application>';
-
 	result.push(...extraFiles);
 
 	let content = '<cxl-router-outlet></cxl-router-outlet><cxl-router>';

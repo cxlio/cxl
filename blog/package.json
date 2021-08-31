@@ -11,5 +11,10 @@
 	},
 	"dependencies": {
 		"@cxl/build": "~0.1.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "blog"
 	}
 }

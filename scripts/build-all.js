@@ -30,7 +30,7 @@ async function build(dir) {
 	console.log(`Building ${pkg.name}`);
 
 	const start = Date.now();
-	await sh(cmd, { cwd: dir, stdio: 'ignore' });
+	await sh(cmd, { cwd: dir, stdio: ['ignore', 'ignore', 'pipe'] });
 	const buildTime = Date.now() - start;
 	const [tsconfig, testReport, mainScriptSize, npms] = await Promise.all([
 		readJson(`${dir}/tsconfig.json`),

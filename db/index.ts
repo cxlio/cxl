@@ -1,6 +1,19 @@
 import { Observable, ListEvent, observable, merge } from '@cxl/rx';
-import firebase from 'firebase/app';
-import 'firebase/database';
+import {
+	DataSnapshot,
+	Query,
+	getDatabase,
+	ref as fbRef,
+	onChildAdded,
+	onChildRemoved,
+	onValue,
+	push as fbPush,
+	remove as fbRemove,
+	set,
+	query,
+	orderByChild,
+	equalTo,
+} from 'firebase/database';
 
 export type UID = string;
 
@@ -9,20 +22,16 @@ export class Reference<T> extends Observable<T> {
 
 	constructor(dir: string, readonly key: string) {
 		super(subs => {
-			const ref$ = firebase.database().ref(this.path);
-			const onValue = (snap: firebase.database.DataSnapshot) =>
-				subs.next(snap.val());
-			ref$.on('value', onValue);
-			return () => {
-				ref$.off('value', onValue);
-			};
+			const ref$ = fbRef(getDatabase(), this.path);
+			const cb = (snap: DataSnapshot) => subs.next(snap.val());
+			return onValue(ref$, cb);
 		});
 		this.path = key ? `${dir}/${key}` : dir;
 	}
 
 	next(val: T) {
-		const ref$ = firebase.database().ref(this.path);
-		return ref$.set(val);
+		const ref$ = fbRef(getDatabase(), this.path);
+		return set(ref$, val);
 	}
 
 	ref<K extends keyof T>(key: K) {
@@ -32,38 +41,34 @@ export class Reference<T> extends Observable<T> {
 
 type Collection<T> = Reference<Record<string, T>>;
 type CollectionEvent<T> = ListEvent<Reference<T>, string>;
-type Snapshot = firebase.database.DataSnapshot;
+type Snapshot = DataSnapshot;
 
 function getRef(ref: Reference<any>) {
-	return firebase.database().ref(ref.path);
+	return fbRef(getDatabase(), ref.path);
 }
 
-function on(ref$: firebase.database.Query, ev: firebase.database.EventType) {
+function on(ref$: Query, onFn: typeof onValue) {
 	return observable<any>(subs => {
-		function handler(snap: firebase.database.DataSnapshot) {
+		function handler(snap: DataSnapshot) {
 			subs.next(snap);
 		}
-		ref$.on(ev, handler);
-		return () => ref$.off(ev, handler);
+		return onFn(ref$, handler);
 	});
 }
 
 function createCollection<T>(
 	path: string,
-	ref$: firebase.database.Query,
+	ref$: Query,
 	getItem: (snap: Snapshot, path: string) => Reference<T>
 ) {
 	return new Observable<CollectionEvent<T>>(subs => {
 		subs.next({ type: 'empty' });
-		function next(
-			type: 'insert' | 'remove',
-			snap: firebase.database.DataSnapshot
-		) {
+		function next(type: 'insert' | 'remove', snap: DataSnapshot) {
 			subs.next({ type, key: snap.key || '', item: getItem(snap, path) });
 		}
 		const inner = merge(
-			on(ref$, 'child_added').tap(next.bind(null, 'insert')),
-			on(ref$, 'child_removed').tap(next.bind(null, 'remove'))
+			on(ref$, onChildAdded).tap(next.bind(null, 'insert')),
+			on(ref$, onChildRemoved).tap(next.bind(null, 'remove'))
 		).subscribe();
 
 		return () => inner.unsubscribe();
@@ -73,10 +78,8 @@ function createCollection<T>(
 export function observe<T>(ref: Reference<T>) {
 	return new Observable<T>(subs => {
 		const ref$ = getRef(ref);
-		const onValue = (snap: firebase.database.DataSnapshot) =>
-			subs.next(snap.val());
-		ref$.on('value', onValue);
-		return () => ref$.off('value', onValue);
+		const cb = (snap: DataSnapshot) => subs.next(snap.val());
+		return onValue(ref$, cb);
 	});
 }
 
@@ -110,8 +113,8 @@ export function mapCollection<T, T2>(
  * Pushes a new value into the reference, and returns a new reference key
  */
 export async function push<T>(ref: Collection<T>, initial?: T) {
-	const ref$ = firebase.database().ref(ref.path);
-	const child = await ref$.push(initial);
+	const ref$ = fbRef(getDatabase(), ref.path);
+	const child = await fbPush(ref$, initial);
 	if (child.key === null) throw new Error('Invalid key');
 	return child.key;
 }
@@ -121,7 +124,7 @@ export function db<T>(path: string) {
 }
 
 export function remove(ref: Reference<any>) {
-	return getRef(ref).remove();
+	return fbRemove(getRef(ref));
 }
 
 type BaseTypes = string | number | boolean | null;
@@ -132,13 +135,13 @@ type AllowedProperties<T> = {
 export function where<T, K extends keyof AllowedProperties<T>>(
 	ref: Collection<T>,
 	field: K,
-	equalTo: AllowedProperties<T>[K]
+	equalToField: AllowedProperties<T>[K]
 ) {
-	const ref$ = firebase
-		.database()
-		.ref(ref.path)
-		.orderByChild(field.toString())
-		.equalTo(equalTo);
+	const ref$ = query(
+		fbRef(getDatabase(), ref.path),
+		orderByChild(field.toString()),
+		equalTo(equalToField)
+	);
 	return createCollection(
 		ref.path,
 		ref$,

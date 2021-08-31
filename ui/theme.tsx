@@ -153,14 +153,14 @@ Object.assign(theme.colors, {
 	primary: rgba(0x15, 0x65, 0xc0),
 	// 0.14 opacity will pass accessibility contrast requirements
 	get primaryLight() {
-		return this.primary.alpha(0.14);
+		return { ...this.primary, a: 0.14 };
 	},
 
 	secondary: rgba(0xf9, 0xaa, 0x33),
 	surface: rgba(0xff, 0xff, 0xff),
 	error: rgba(0xb0, 0x00, 0x20),
 	get errorLight() {
-		return this.error.alpha(0.14);
+		return { ...this.error, a: 0.14 };
 	},
 
 	onPrimary: rgba(0xff, 0xff, 0xff),
@@ -171,13 +171,13 @@ Object.assign(theme.colors, {
 	onSurface: rgba(0, 0, 0),
 
 	get onSurface8() {
-		return this.onSurface.alpha(0.08);
+		return { ...this.onSurface, a: 0.08 };
 	},
 	get onSurface12() {
-		return this.onSurface.alpha(0.12);
+		return { ...this.onSurface, a: 0.12 };
 	},
 	get onSurface87() {
-		return this.onSurface.alpha(0.87);
+		return { ...this.onSurface, a: 0.87 };
 	},
 	onError: rgba(0xff, 0xff, 0xff),
 
@@ -191,10 +191,10 @@ Object.assign(theme.colors, {
 		return this.primary;
 	},
 	get headerText() {
-		return this.onSurface.alpha(0.6);
+		return { ...this.onSurface, a: 0.6 };
 	},
 	get divider() {
-		return this.onSurface.alpha(0.16);
+		return { ...this.onSurface, a: 0.16 };
 	},
 });
 
@@ -258,7 +258,7 @@ export const ColorStyles = {
 	secondary: InverseSecondary,
 };
 
-export function delayTheme() {
+export function delayTheme(): void {
 	cancelAnimationFrame(loadingId);
 }
 

@@ -130,9 +130,9 @@ export function SizeAttribute(
 
 export type ColorValue = keyof typeof ColorStyles;
 
-export function ColorAttribute(defaultColor: ColorValue) {
+export function ColorAttribute(defaultColor?: ColorValue) {
 	return CssAttribute({
-		$: ColorStyles[defaultColor],
+		...(defaultColor && { $: ColorStyles[defaultColor] }),
 		'$color="surface"': ColorStyles.surface,
 		'$color="primary"': ColorStyles.primary,
 		'$color="secondary"': ColorStyles.secondary,

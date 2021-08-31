@@ -10,7 +10,7 @@ import {
 import { css, margin, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { InversePrimary, InverseSecondary } from './theme.js';
-import { persistWithParameter } from './core.js';
+import { ColorAttribute, ColorValue, persistWithParameter } from './core.js';
 
 const colStyles = ((r: any) => {
 	for (let i = 12; i > 0; i--)
@@ -137,9 +137,14 @@ export class C extends Component {
 	})
 	pad?: 8 | 16 | 24 | 32;
 
+	@ColorAttribute()
+	color?: ColorValue;
+
+	/** @deprecated */
 	@StyleAttribute()
 	primary = false;
 
+	/** @deprecated */
 	@StyleAttribute()
 	secondary = false;
 
