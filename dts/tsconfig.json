@@ -6,6 +6,6 @@
 		"types": ["node"],
 		"typeRoots": ["../node_modules/@types"]
 	},
-	"references": [{ "path": "../rx" }, { "path": "../server" }],
+	"references": [{ "path": "../rx" }],
 	"files": ["index.ts"]
 }

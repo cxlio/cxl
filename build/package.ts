@@ -10,6 +10,8 @@ import * as ts from 'typescript';
 
 type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0' | 'UNLICENSED';
 
+export type Dependencies = Record<string, string>;
+
 export interface Package {
 	name: string;
 	version: string;
@@ -23,11 +25,13 @@ export interface Package {
 	homepage: string;
 	private: boolean;
 	bugs: string;
-	repository: string;
-	dependencies: any;
-	peerDependencies: any;
-	bundledDependecies: any;
-	type: string;
+	repository: string | { type: 'git'; url: string; directory?: string };
+	dependencies?: Dependencies;
+	devDependencies?: Dependencies;
+	peerDependencies?: Dependencies;
+	bundledDependecies?: Dependencies;
+	type?: string;
+	scripts?: Record<string, string>;
 }
 
 const SCRIPTDIR = process.cwd();

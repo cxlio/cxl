@@ -1,10 +1,16 @@
-import { Parameter, parseParameters, program } from '@cxl/program';
+import {
+	Parameter,
+	parseParameters,
+	program,
+	sh as _sh,
+	readJson,
+} from '@cxl/program';
 import { Package, getBranch, readPackage } from '@cxl/build/package.js';
-import { sh as _sh } from '@cxl/server';
-import { mkdtemp, readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
-import * as os from 'os';
+import { readFile, writeFile } from 'fs/promises';
+//import { join } from 'path';
+//import * as os from 'os';
 import { SpawnOptions } from 'child_process';
+import { lint } from './lint';
 
 interface Script {
 	parameters: Parameter[];
@@ -27,20 +33,43 @@ type Changelog = Record<string, ChangelogCommit>;
 
 const LOG_REGEX = /(\w+) (feat|fix|docs|style|refactor|test|chore|revert)(?:\(([\w-]+)\))?: (.+)/;
 
-export default program('cli', ({ log }) => {
+export default program('cli', async ({ log }) => {
+	const rootPkg = await readJson('package.json');
+
 	function sh(cmd: string, o?: SpawnOptions) {
-		log(cmd);
+		log(cmd, o ? o : '');
 		return _sh(cmd, o);
 	}
 
 	async function testPackage(dir: string, _pkg: Package) {
-		const cwd = await mkdtemp(join(os.tmpdir(), 'cxl-'));
-		await sh(`cp -r dist/${dir}/* ${cwd}`);
+		// const cwd = await mkdtemp(join(os.tmpdir(), 'cxl-'));
+		// await sh(`cp -r dist/${dir}/* ${cwd}`);
+		const cwd = `dist/${dir}`;
 		await sh(`npm install --production`, { cwd });
-		await sh(`rm -rf ${cwd}`);
+		await sh(`npm test`, { cwd: dir });
+		await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
 	}
 
 	const scripts: Record<string, Script> = {
+		push: {
+			parameters: [],
+			async fn() {
+				const branch = await getBranch(process.cwd());
+				if (branch === 'master') throw 'Active branch cannot be master';
+				log(`Merging ${branch} into master`);
+				try {
+					await sh(`git diff-index --quiet HEAD`);
+				} catch (e) {
+					throw new Error('Not a clean repository');
+				}
+				await sh('npm run build');
+				await scripts.changelog.fn({});
+				await sh(
+					'git add changelog.json && git commit -m "chore: changelog"'
+				);
+				await sh(`git checkout master && git merge --squash ${branch}`);
+			},
+		},
 		changelog: {
 			parameters: [
 				{ name: 'branch', type: 'string' },
@@ -56,10 +85,7 @@ export default program('cli', ({ log }) => {
 				commit?: string;
 				branch?: string;
 			}) {
-				if (!commit) throw 'commit not specified';
-				/*commit =
-					commit ||
-					(await sh(`git rev-parse ${rev || 'master'}`)).trim();*/
+				commit = commit || (await sh(`git rev-parse master`)).trim();
 				const history = (
 					await sh(
 						`git log --oneline ${branch || ''} ${commit}..HEAD`
@@ -86,7 +112,7 @@ export default program('cli', ({ log }) => {
 					files.push({ project, type, message, commit });
 				});
 
-				if (dryrun) return console.log(entry);
+				if (dryrun) return;
 
 				const changelog = JSON.parse(
 					await readFile('changelog.json', 'utf8').catch(() => '{}')
@@ -97,28 +123,72 @@ export default program('cli', ({ log }) => {
 				await writeFile('changelog.json', JSON.stringify(changelog));
 			},
 		},
-		publish: {
+		lint: {
+			parameters: [{ name: 'dryrun', type: 'boolean' }],
+			async fn(args: { $?: string; dryrun?: boolean }) {
+				const mod = args.$;
+				const dry = args.dryrun;
+
+				if (!mod) throw 'Module not specified';
+
+				const lintResults = await lint([mod], rootPkg);
+				if (lintResults.errors.length) {
+					console.log(lintResults.errors);
+					if (!dry) {
+						log('Attempting fixes');
+						for (const fix of lintResults.fixes) await fix();
+					}
+					throw 'Lint errors found';
+				}
+			},
+		},
+		test: {
 			parameters: [],
 			async fn(args: { $?: string }) {
 				const mod = args.$;
 				if (!mod) throw 'Module not specified';
+				await sh(`npm run build package --prefix ${mod}`);
+				const pkg = readPackage(mod);
+				await testPackage(mod, pkg);
+			},
+		},
+		publish: {
+			parameters: [{ name: 'dryrun', type: 'boolean' }],
+			async fn(args: { $?: string; dryrun?: boolean }) {
+				const mod = args.$;
+				const dry = args.dryrun;
+
+				if (!mod) throw 'Module not specified';
 				const branch = await getBranch(mod);
-				if (branch !== 'master') throw 'Active branch is not master';
+				if (!dry && branch !== 'master')
+					throw 'Active branch is not master';
 
 				try {
 					await sh(`git diff origin master --quiet`);
 				} catch (e) {
-					throw 'Branch has not been merged with origin';
+					if (dry) throw 'Branch has not been merged with origin';
+					log('Branch has not been merged with origin');
 				}
 
 				const pkg = readPackage(mod);
 				log(`Building ${pkg.name} ${pkg.version}`);
-				await sh(`npm run build clean test package --prefix ${mod}`);
+				await sh(`npm run test --prefix ${mod}`);
+				await sh(`npm run build package --prefix ${mod}`);
 				//const report = require(`dist/${mod}/test-report.json`);
+				const lintResults = await lint([mod], rootPkg);
+				if (lintResults.errors.length) {
+					console.log(lintResults.errors);
+					if (!dry) for (const fix of lintResults.fixes) await fix();
+					throw 'Lint errors found';
+				}
 
 				await testPackage(mod, pkg);
-				await sh(`npm publish --access=public`, { cwd: `dist/${mod}` });
-				await sh(`npm version minor --prefix ${mod}`);
+				if (!dry) {
+					await sh(`npm publish --access=public`, {
+						cwd: `dist/${mod}`,
+					});
+					//await sh(`npm version minor --prefix ${mod}`);
+				}
 			},
 		},
 	};

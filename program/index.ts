@@ -1,5 +1,6 @@
-import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { readFile, stat, mkdir } from 'fs/promises';
+import { join, resolve } from 'path';
+import { SpawnOptions, spawn } from 'child_process';
 
 const codes = {
 	reset: [0, 0],
@@ -248,6 +249,39 @@ export function parseArgv(parameters: Parameter[]) {
 	return parseParameters(parameters, process.argv.slice(2).join(' '));
 }
 
+export async function parametersJsonFile(
+	parameters: Parameter[],
+	fileName: string
+) {
+	try {
+		const json = await readJson(fileName);
+		return parametersJson(parameters, json);
+	} catch (e) {
+		throw new Error(`Invalid configuration file "${fileName}"`);
+	}
+}
+
+export function parametersJson(parameters: Parameter[], json: any) {
+	const result: Record<string, any> = {};
+	parameters.forEach(p => {
+		const paramName = p.name;
+		if (paramName in json) {
+			const optionValue = json[paramName];
+			result[paramName] = optionValue;
+		}
+	});
+	return result;
+}
+
+/**
+ * Creates a directory recursively
+ */
+export function mkdirp(dir: string): Promise<any> {
+	return stat(dir).catch(() =>
+		mkdirp(resolve(dir, '..')).then(() => mkdir(dir))
+	);
+}
+
 /**
  * Read and parse a JSON file, ignores errors.
  * @param fileName Path of file to parse
@@ -264,6 +298,16 @@ export async function readJson<T = any>(
 
 export function log(prefix: string, ...msg: any[]) {
 	console.log(prefix, ...msg);
+}
+
+export function sh(cmd: string, options: SpawnOptions = {}) {
+	return new Promise<string>((resolve, reject) => {
+		const proc = spawn(cmd, [], { shell: true, ...options });
+		let output = '';
+		proc.stdout?.on('data', data => (output += data?.toString() || ''));
+		proc.stderr?.on('data', data => (output += data?.toString() || ''));
+		proc.on('close', code => (code ? reject(output) : resolve(output)));
+	});
 }
 
 export function program(

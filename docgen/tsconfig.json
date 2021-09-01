@@ -8,7 +8,7 @@
 		"typeRoots": ["../node_modules/@types"]
 	},
 	"references": [
-		{ "path": "../server" },
+		{ "path": "../program" },
 		{ "path": "../dts" },
 		{ "path": "../tsx" }
 	],

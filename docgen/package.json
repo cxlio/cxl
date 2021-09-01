@@ -10,9 +10,9 @@
 	"dependencies": {
 		"highlight.js": "^11.2.0",
 		"markdown-it": "^11.0.0",
-		"@cxl/server": "~0.0.2",
-		"@cxl/dts": "~0.0.1",
-		"@cxl/tsx": "~0.0.1"
+		"@cxl/dts": "~0.3.0",
+		"@cxl/tsx": "~0.2.0",
+		"@cxl/program": "~0.0.2"
 	},
 	"scripts": {
 		"build": "node build",

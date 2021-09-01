@@ -41,7 +41,7 @@ const parameters: Parameter[] = [
 	},
 ];
 
-program({}, async ({ log }) => {
+export default program({}, async ({ log }) => {
 	const args = parseArgv(parameters);
 	const config: TestRunner = {
 		entryFile: args.$ || './test.js',
@@ -75,4 +75,6 @@ program({}, async ({ log }) => {
 		process.exitCode = 1;
 		log('Tests failed.');
 	}
-})();
+});
+
+if (require.main?.filename === __filename) exports.default();
