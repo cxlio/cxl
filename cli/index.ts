@@ -34,7 +34,7 @@ export default program('cli', ({ log }) => {
 				if (branch !== 'master') throw 'Active branch is not master';
 
 				try {
-					await sh(`git diff origin master -quiet`);
+					await sh(`git diff origin master --quiet`);
 				} catch (e) {
 					throw 'Branch has not been merged with origin';
 				}
