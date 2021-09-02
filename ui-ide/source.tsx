@@ -48,6 +48,7 @@ const DefaultOptions: cm.EditorConfiguration = {
 	lineSeparator: '\n',
 	smartIndent: false,
 	indentWithTabs: true,
+	gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
 };
 
 /**
@@ -97,22 +98,6 @@ export class SourceEditor extends Component implements CursorFeature {
 
 	/** Path to codemirror import base path*/
 	cdn = 'codemirror';
-
-	addons = [
-		'search/searchcursor.js',
-		'fold/xml-fold.js',
-		'edit/matchbrackets.js',
-		'edit/matchtags.js',
-		'edit/closetag.js',
-		'edit/closebrackets.js',
-		'comment/comment.js',
-		'comment/continuecomment.js',
-		'fold/foldcode.js',
-		'fold/foldgutter.js',
-		'fold/brace-fold.js',
-		'selection/active-line.js',
-		'mode/overlay.js',
-	];
 
 	protected cm?: cm.Editor;
 

@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"outDir": "../dist/ui-ide"
 	},
-	"include": ["*.tsx"],
+	"include": ["*.tsx", "*.ts"],
 	"exclude": ["test.tsx"],
 	"references": [{ "path": "../tsx" }, { "path": "../ui" }]
 }
