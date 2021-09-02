@@ -63,11 +63,13 @@ export default program('cli', async ({ log }) => {
 					throw new Error('Not a clean repository');
 				}
 				await sh('npm run build');
+				await sh(`git checkout master && git merge --squash ${branch}`);
 				await scripts.changelog.fn({});
 				await sh(
 					'git add changelog.json && git commit -m "chore: changelog"'
 				);
-				await sh(`git checkout master && git merge --squash ${branch}`);
+				await sh(`git commit -m "chore: merge branch ${branch}"`);
+				await sh('git push origin master');
 			},
 		},
 		changelog: {
@@ -166,13 +168,13 @@ export default program('cli', async ({ log }) => {
 				try {
 					await sh(`git diff origin master --quiet`);
 				} catch (e) {
-					if (dry) throw 'Branch has not been merged with origin';
+					if (!dry) throw 'Branch has not been merged with origin';
 					log('Branch has not been merged with origin');
 				}
 
 				const pkg = readPackage(mod);
 				log(`Building ${pkg.name} ${pkg.version}`);
-				await sh(`npm run test --prefix ${mod}`);
+				// await sh(`npm run test --prefix ${mod}`);
 				await sh(`npm run build package --prefix ${mod}`);
 				//const report = require(`dist/${mod}/test-report.json`);
 				const lintResults = await lint([mod], rootPkg);
