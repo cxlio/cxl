@@ -11,7 +11,7 @@ import { onAction } from '@cxl/dom';
 import { navigationList, role } from '@cxl/template';
 import { css } from '@cxl/css';
 import { EMPTY } from '@cxl/rx';
-import { ResetSurface } from './theme.js';
+import { ColorStyles } from './theme.js';
 import { MenuIcon, IconButton } from './icon.js';
 import { Drawer } from './dialog.js';
 
@@ -39,7 +39,7 @@ import { Drawer } from './dialog.js';
 			marginLeft: -8,
 			marginRight: 16,
 		},
-		drawer: ResetSurface,
+		drawer: ColorStyles.surface,
 		'@large': {
 			toggler$permanent: { display: 'none' },
 		},

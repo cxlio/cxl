@@ -46,6 +46,17 @@ declare module '../css/index.js' {
 		code: CSSStyle;
 		monospace: CSSStyle;
 	}
+
+	interface Variables extends ColorTheme {}
+}
+
+export interface ColorTheme {
+	primary: string;
+	secondary: string;
+	surface: string;
+	onPrimary: string;
+	onSecondary: string;
+	onSurface: string;
 }
 
 Object.assign(theme.animation, {
@@ -213,49 +224,35 @@ Object.assign(theme, {
 	},
 });
 
-export const ResetSurface: any = {
-	variables: {
-		surface: baseColor('surface'),
-		onSurface: baseColor('onSurface'),
-		primary: baseColor('primary'),
-		onPrimary: baseColor('onPrimary'),
-		link: baseColor('onSurface'),
-		error: baseColor('error'),
-		onError: baseColor('onError'),
-		divider: baseColor('divider'),
-	},
+export const BaseColors: ColorTheme = {
+	surface: baseColor('surface'),
+	onSurface: baseColor('onSurface'),
+	primary: baseColor('primary'),
+	onPrimary: baseColor('onPrimary'),
+	secondary: baseColor('secondary'),
+	onSecondary: baseColor('onSecondary'),
 };
 
-export const InversePrimary: any = {
-	variables: {
-		surface: baseColor('primary'),
-		onSurface: baseColor('onPrimary'),
-		primary: baseColor('surface'),
-		onPrimary: baseColor('onSurface'),
-		link: baseColor('onPrimary'),
-		error: rgba(0xff, 0x6e, 0x40),
-		onError: rgba(0, 0, 0),
-		divider: rgba(0xff, 0xff, 0xff, 0.48),
-	},
+export const PrimaryColors: ColorTheme = {
+	...BaseColors,
+	surface: baseColor('primary'),
+	onSurface: baseColor('onPrimary'),
+	primary: baseColor('surface'),
+	onPrimary: baseColor('onSurface'),
 };
 
-export const InverseSecondary: any = {
-	variables: {
-		surface: baseColor('secondary'),
-		onSurface: baseColor('onSecondary'),
-		secondary: baseColor('surface'),
-		onSecondary: baseColor('onSurface'),
-		link: baseColor('onPrimary'),
-		error: rgba(0xff, 0x6e, 0x40),
-		onError: rgba(0, 0, 0),
-		divider: rgba(0xff, 0xff, 0xff, 0.48),
-	},
+export const SecondaryColors: ColorTheme = {
+	...BaseColors,
+	surface: baseColor('secondary'),
+	onSurface: baseColor('onSecondary'),
+	secondary: baseColor('surface'),
+	onSecondary: baseColor('onSurface'),
 };
 
 export const ColorStyles = {
-	surface: ResetSurface,
-	primary: InversePrimary,
-	secondary: InverseSecondary,
+	surface: { variables: BaseColors },
+	primary: { variables: PrimaryColors },
+	secondary: { variables: SecondaryColors },
 };
 
 export function delayTheme(): void {

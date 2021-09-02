@@ -13,6 +13,12 @@ import {
 	render,
 } from './index.js';
 
+declare module './index.js' {
+	interface Variables {
+		camelCase: string;
+	}
+}
+
 export default spec('css', s => {
 	s.test('style', it => {
 		it.should('return string representation of css style', a => {

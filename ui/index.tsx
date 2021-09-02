@@ -9,7 +9,6 @@ export {
 	ColorValue,
 	Hr,
 	Meta,
-	Progress,
 	RippleContainer,
 	Ripple,
 	Span,
@@ -42,3 +41,4 @@ export * from './carousel.js';
 export * from './datepicker.js';
 export * from './table.js';
 export * from './user.js';
+export * from './progress.js';

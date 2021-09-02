@@ -7,8 +7,7 @@ export type CSSStyle = {
 export type Color = keyof Colors | BaseColor | 'inherit' | 'transparent';
 export type Percentage = '50%' | '100%' | CustomPercentage;
 export type Length = number | Percentage | 'auto';
-export type Variables = Record<string, string | { toString(): string }>;
-export type VariableList = Colors & Variables;
+export type VariableList = Variables;
 export type FlexAlign =
 	| 'normal'
 	| 'stretch'
@@ -19,6 +18,9 @@ export type FlexAlign =
 	| 'flex-end'
 	| 'baseline';
 
+export interface Variables {
+	css: '';
+}
 export interface Colors {}
 
 export interface FontDefinition {
@@ -35,6 +37,7 @@ export interface StrictStyleDefinition {
 	alignSelf: FlexAlign;
 	animation: keyof Theme['animation'];
 	animationDuration: string;
+	backgroundImage: string;
 	backgroundColor: Color;
 	backgroundSize: 'cover' | 'contain';
 	backgroundPosition: 'center';
@@ -143,15 +146,17 @@ export interface BoxShadow {
 	color: Color;
 }
 
+export type StylesOnly = {
+	[key: string]: StyleDefinition;
+};
+
 export type Styles =
+	| StylesOnly
 	| {
-			[key: string]: StyleDefinition;
-	  }
-	| {
-			'@small'?: Styles;
-			'@medium'?: Styles;
-			'@large'?: Styles;
-			'@xlarge'?: Styles;
+			'@small'?: StylesOnly;
+			'@medium'?: StylesOnly;
+			'@large'?: StylesOnly;
+			'@xlarge'?: StylesOnly;
 	  };
 
 export type Breakpoint = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
@@ -227,13 +232,10 @@ const SNAKE_CSS: Record<string, string> = {
 	},
 	SNAKE_REGEX = /[A-Z]/g;
 
-export const theme: any = {
+export const theme: Theme = {
 	animation: {},
 	breakpoints: { small: 600, medium: 905, large: 1240, xlarge: 1440 },
-	variables: {
-		font: 'sans-serif',
-		fontSize: '16px',
-	},
+	variables: { css: '' },
 	typography: {
 		default: {
 			fontWeight: 400,
@@ -545,3 +547,12 @@ export function applyTheme(container = document.head) {
 	rootStyles.innerHTML = result + '}';
 	container.appendChild(rootStyles);
 }
+
+export function mask({ r, g, b, a }: RGBA) {
+	return `linear-gradient(rgba(${r},${g},${b},${a})`;
+}
+
+export const White = rgba(255, 255, 255, 1);
+export const White8 = mask(rgba(255, 255, 255, 0.08));
+export const White12 = mask(rgba(255, 255, 255, 0.12));
+export const White87 = mask(rgba(255, 255, 255, 0.12));

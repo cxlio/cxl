@@ -6,12 +6,18 @@ import {
 	Span,
 	StyleAttribute,
 } from '@cxl/component';
-import { css } from '@cxl/css';
+import { baseColor, css } from '@cxl/css';
 import { Focusable } from '@cxl/template';
 import { dom } from '@cxl/tsx';
 import { on, trigger } from '@cxl/dom';
 import { CloseIcon } from './icon.js';
-import { FocusHighlight, Size, SizeAttribute } from './core.js';
+import {
+	ColorAttribute,
+	ColorValue,
+	FocusHighlight,
+	Size,
+	SizeAttribute,
+} from './core.js';
 
 /**
  * Chips are compact elements that represent an input, attribute, or action.
@@ -25,8 +31,11 @@ import { FocusHighlight, Size, SizeAttribute } from './core.js';
 	Focusable,
 	css({
 		$: {
+			variables: {
+				surface: baseColor('onSurface12'),
+			},
 			font: 'subtitle2',
-			backgroundColor: 'onSurface12',
+			backgroundColor: 'surface',
 			display: 'inline-flex',
 			color: 'onSurface',
 			verticalAlign: 'middle',
@@ -90,10 +99,16 @@ export class Chip extends Component {
 	disabled = false;
 	@Attribute()
 	touched = false;
+
+	/** @deprecated */
 	@StyleAttribute()
 	primary = false;
+	/** @deprecated */
 	@StyleAttribute()
 	secondary = false;
+
+	@ColorAttribute()
+	color?: ColorValue;
 
 	@SizeAttribute(s => ({
 		fontSize: 14 + s * 2,

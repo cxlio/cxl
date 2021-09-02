@@ -8,7 +8,7 @@ import {
 	get,
 } from '@cxl/component';
 import { css } from '@cxl/css';
-import { ResetSurface } from './theme.js';
+import { BaseColors } from './theme.js';
 import { MenuIcon, IconButton } from './icon.js';
 import { Toggle } from './core.js';
 
@@ -35,7 +35,7 @@ import { Toggle } from './core.js';
 			paddingTop: 8,
 			paddingBottom: 8,
 			minWidth: 112,
-			...ResetSurface,
+			variables: BaseColors,
 		},
 		$dense: { paddingTop: 0, paddingBottom: 0 },
 	}),

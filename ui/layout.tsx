@@ -9,7 +9,7 @@ import {
 } from '@cxl/component';
 import { css, margin, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import { InversePrimary, InverseSecondary } from './theme.js';
+import { ColorStyles } from './theme.js';
 import { ColorAttribute, ColorValue, persistWithParameter } from './core.js';
 
 const colStyles = ((r: any) => {
@@ -78,16 +78,12 @@ const colStyles = ((r: any) => {
 		$surface: { backgroundColor: 'surface', color: 'onSurface' },
 		$error: { backgroundColor: 'error', color: 'onError' },
 		$primary: {
-			...InversePrimary,
+			...ColorStyles.primary,
 			color: 'onSurface',
 			backgroundColor: 'surface',
 		},
-		$primaryLight: {
-			backgroundColor: 'primaryLight',
-			color: 'onPrimaryLight',
-		},
 		$secondary: {
-			...InverseSecondary,
+			...ColorStyles.secondary,
 			color: 'onSurface',
 			backgroundColor: 'surface',
 		},

@@ -11,7 +11,7 @@ import {
 	onUpdate,
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
-import { EMPTY, merge, tap, operator } from '@cxl/rx';
+import { EMPTY, merge, operator } from '@cxl/rx';
 import {
 	Typography,
 	Styles,
@@ -22,8 +22,8 @@ import {
 	pct,
 } from '@cxl/css';
 import { Focusable, role } from '@cxl/template';
-import { getShadow, on, onAction, trigger } from '@cxl/dom';
-import { InversePrimary, ResetSurface, ColorStyles } from './theme.js';
+import { getShadow, on, onAction } from '@cxl/dom';
+import { ColorStyles } from './theme.js';
 import { Svg, Circle } from './svg.js';
 
 export { Circle, Svg, Path } from './svg.js';
@@ -241,46 +241,6 @@ export class Hr extends Component {
 }
 
 /**
- * Linear progress indicators display progress by animating an indicator along the length of a fixed, visible track.
- * @example
- * <cxl-progress></cxl-progress><br/>
- * <cxl-progress value="0.5"></cxl-progress>
- */
-@Augment<Progress>(
-	'cxl-progress',
-	css({
-		$: { backgroundColor: 'primaryLight', height: 4 },
-		indicator: {
-			display: 'block',
-			backgroundColor: 'primary',
-			height: 4,
-			transformOrigin: 'left',
-		},
-		indeterminate: { animation: 'wait' },
-	}),
-	host => (
-		<Span
-			className="indicator"
-			$={el =>
-				get(host, 'value').pipe(
-					tap(val => {
-						el.classList.toggle('indeterminate', val === Infinity);
-						if (val !== Infinity)
-							el.style.transform = 'scaleX(' + val + ')';
-						trigger(host, 'change');
-					})
-				)
-			}
-		/>
-	),
-	role('progressbar')
-)
-export class Progress extends Component {
-	@Attribute()
-	value = Infinity;
-}
-
-/**
  * Spinners are used to indicate that the app is performing an action that the user needs to wait on.
  *
  * @example
@@ -480,19 +440,6 @@ export class Meta extends Component {
 export class Application extends Component {
 	@StyleAttribute()
 	permanent = false;
-}
-
-@Augment(
-	'cxl-surface',
-	css({
-		$primary: InversePrimary,
-		$: ResetSurface,
-	}),
-	Slot
-)
-export class Surface extends Component {
-	@StyleAttribute()
-	primary = false;
 }
 
 @Augment(
