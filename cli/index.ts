@@ -67,9 +67,7 @@ export default program('cli', async ({ log }) => {
 				}
 				await sh(`git checkout master && git merge --squash ${branch}`);
 				await scripts.changelog.fn({});
-				await sh(
-					'git add changelog.json && git commit -m "chore: changelog"'
-				);
+				await sh(`git add changelog.json`);
 				await sh(`git commit -m "chore: merge branch ${branch}"`);
 				await sh('git push origin master');
 			},
