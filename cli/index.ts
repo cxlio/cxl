@@ -198,7 +198,7 @@ export default program('cli', async ({ log }) => {
 					});
 					await sh(`npm version minor --prefix ${mod}`);
 					await sh(
-						`git add ${mod}/package.json && git commit -m "chore: publish ${pkg.name} ${pkg.version}"`
+						`git add ${mod}/package.json && git commit -m "chore(${mod}): publish ${pkg.name} ${pkg.version}"`
 					);
 				}
 			},
