@@ -13,7 +13,8 @@
 		}
 	],
 	"include": [
-		"*.tsx"
+		"*.tsx",
+		"*.ts"
 	],
 	"exclude": [
 		"test.tsx"
