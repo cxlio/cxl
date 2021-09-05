@@ -52,6 +52,22 @@ export default program('cli', async ({ log }) => {
 		await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
 	}
 
+	async function checkBranchClean(branch: string) {
+		try {
+			await sh(`git diff-index --quiet ${branch}`);
+		} catch (e) {
+			throw new Error('Not a clean repository');
+		}
+	}
+
+	async function checkBranchUpToDate(branch = 'master') {
+		try {
+			await sh(`git diff origin ${branch} --quiet`);
+		} catch (e) {
+			log('Branch has not been merged with origin');
+		}
+	}
+
 	const scripts: Record<string, Script> = {
 		push: {
 			parameters: [],
@@ -60,11 +76,7 @@ export default program('cli', async ({ log }) => {
 				if (branch === 'master') throw 'Active branch cannot be master';
 				log(`Merging ${branch} into master`);
 				await sh('npm run build');
-				try {
-					await sh(`git diff-index --quiet HEAD`);
-				} catch (e) {
-					throw new Error('Not a clean repository');
-				}
+				await checkBranchClean(branch);
 				await sh(`git checkout master && git merge --squash ${branch}`);
 				await scripts.changelog.fn({});
 				await sh(`git add changelog.json`);
@@ -165,18 +177,10 @@ export default program('cli', async ({ log }) => {
 				if (!dry && branch !== 'master')
 					throw 'Active branch is not master';
 
-				try {
-					await sh(`git diff origin master --quiet`);
-				} catch (e) {
-					if (!dry) throw 'Branch has not been merged with origin';
-					log('Branch has not been merged with origin');
-				}
-
+				await sh(`npm run build docs --prefix ${mod}`);
+				await checkBranchClean(branch);
+				await checkBranchUpToDate(branch);
 				const pkg = readPackage(mod);
-				log(`Building ${pkg.name} ${pkg.version}`);
-				// await sh(`npm run test --prefix ${mod}`);
-				await sh(`npm run build package --prefix ${mod}`);
-				//const report = require(`dist/${mod}/test-report.json`);
 				const lintResults = await lint([mod], rootPkg);
 				if (lintResults.errors.length) {
 					console.log(lintResults.errors);
@@ -184,12 +188,18 @@ export default program('cli', async ({ log }) => {
 					throw 'Lint errors found';
 				}
 
+				log(`Building ${pkg.name} ${pkg.version}`);
+				await sh(`npm run build package --prefix ${mod}`);
+
 				await testPackage(mod, pkg);
 				if (!dry) {
 					await sh(`npm publish --access=public`, {
 						cwd: `dist/${mod}`,
 					});
-					//await sh(`npm version minor --prefix ${mod}`);
+					await sh(`npm version minor --prefix ${mod}`);
+					await sh(
+						`git add ${mod}/package.json && git commit -m "chore: publish ${pkg.name} ${pkg.version}"`
+					);
 				}
 			},
 		},
