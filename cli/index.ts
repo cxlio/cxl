@@ -6,11 +6,13 @@ import {
 	readJson,
 } from '@cxl/program';
 import { Package, getBranch, readPackage } from '@cxl/build/package.js';
-import { readFile, writeFile } from 'fs/promises';
+import { getPublishedVersion } from '@cxl/build/npm.js';
+import { readdir, readFile, writeFile } from 'fs/promises';
 //import { join } from 'path';
 //import * as os from 'os';
 import { SpawnOptions } from 'child_process';
 import { lint } from './lint';
+import { createFileSystem, projectFiles } from './create-project.js';
 
 interface Script {
 	parameters: Parameter[];
@@ -57,12 +59,12 @@ export default program('cli', async ({ log }) => {
 				const branch = await getBranch(process.cwd());
 				if (branch === 'master') throw 'Active branch cannot be master';
 				log(`Merging ${branch} into master`);
+				await sh('npm run build');
 				try {
 					await sh(`git diff-index --quiet HEAD`);
 				} catch (e) {
 					throw new Error('Not a clean repository');
 				}
-				await sh('npm run build');
 				await sh(`git checkout master && git merge --squash ${branch}`);
 				await scripts.changelog.fn({});
 				await sh(
@@ -190,6 +192,25 @@ export default program('cli', async ({ log }) => {
 						cwd: `dist/${mod}`,
 					});
 					//await sh(`npm version minor --prefix ${mod}`);
+				}
+			},
+		},
+
+		'create-project': {
+			parameters: [{ name: 'tsx', type: 'boolean' }],
+			async fn(config: { $: string; tsx?: boolean }) {
+				return createFileSystem(await projectFiles(config), log);
+			},
+		},
+
+		'check-all': {
+			parameters: [],
+			async fn() {
+				const all = await readdir('.');
+				for (const dir of all) {
+					const pkg = readPackage(dir);
+					if (pkg.version === (await getPublishedVersion(pkg.name)))
+						throw new Error('Package already publish');
 				}
 			},
 		},

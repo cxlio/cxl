@@ -3,15 +3,14 @@ import { StyleAttribute, Augment, get } from '@cxl/component';
 import { IconButton, SearchIcon } from './icon.js';
 import { ariaValue, syncAttribute, teleport } from '@cxl/template';
 import { on, onAction } from '@cxl/dom';
-import { css } from '@cxl/css';
+import { DisabledStyles, css } from './theme.js';
 import { merge } from '@cxl/rx';
 import { InputBase } from './input-base.js';
 import { Appbar, AppbarContextual } from './appbar.js';
-import { DisabledStyles, focusDelegate } from '@cxl/template';
 import { Field } from './field.js';
 import { Input } from './form.js';
 import { dom } from '@cxl/tsx';
-
+import { focusDelegate } from './core.js';
 /**
  * Search Input component for Appbar.
  *

@@ -8,7 +8,8 @@ import {
 	connect,
 	get,
 } from '@cxl/component';
-import { css, padding, pct } from '@cxl/css';
+import { padding, pct } from '@cxl/css';
+import { css } from './theme.js';
 import { dom } from '@cxl/tsx';
 import { insert, on, onAction, trigger } from '@cxl/dom';
 import { merge } from '@cxl/rx';

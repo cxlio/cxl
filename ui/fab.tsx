@@ -1,7 +1,6 @@
 import { Augment, Component, Slot, StyleAttribute } from '@cxl/component';
-import { css } from '@cxl/css';
-import { Focusable } from '@cxl/template';
-import { FocusHighlight, ripple } from './core.js';
+import { css } from '@cxl/ui/theme.js';
+import { Focusable, FocusHighlight, ripple } from './core.js';
 
 /**
  * A floating action button (FAB) represents the primary action of a screen.

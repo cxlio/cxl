@@ -44,9 +44,10 @@ import {
 	Hr as CoreHr,
 } from '@cxl/ui';
 import { Svg, Path } from '@cxl/ui/svg.js';
-import { baseColor, border, css, rgba, padding, pct } from '@cxl/css';
+import { border, rgba, padding, pct } from '@cxl/css';
 import { RouterTab, RouterLink } from '@cxl/ui-router';
 import { email, required } from '@cxl/validation';
+import { baseColor, css } from '@cxl/ui/theme.js';
 
 export type IconKey = keyof typeof Icons;
 

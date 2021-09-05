@@ -3,18 +3,14 @@ import { dom } from '@cxl/tsx';
 import { Attribute, Augment, Component, Span } from '@cxl/component';
 import { suite, triggerKeydown } from '@cxl/spec';
 import { animationFrame, trigger, on } from '@cxl/dom';
-import { theme } from '@cxl/css';
 import {
 	aria,
 	ariaValue,
 	ariaChecked,
-	breakpoint,
-	breakpointClass,
 	checkedBehavior,
 	focusable,
 	role,
 	each,
-	focusDelegate,
 	getAttribute,
 	navigationList,
 	staticTemplate,
@@ -663,75 +659,6 @@ export default suite('template', test => {
 
 			a.equal(A.tagName, 'P');
 			a.equal(A.textContent, a.id.toString());
-		});
-	});
-
-	test('focusDelegate', it => {
-		it.should('delegate focus to a different element', a => {
-			@Augment<FocusableHost>(`cxl-test2-${it.id}`)
-			class FocusableHost extends Component {
-				@Attribute()
-				disabled = false;
-				touched = false;
-			}
-
-			const A = (<FocusableHost />) as FocusableHost;
-			const B = (<input />) as HTMLInputElement;
-			const subs = focusDelegate(A, B).subscribe();
-
-			a.equal(B.disabled, false);
-			A.disabled = true;
-			a.equal(B.disabled, true);
-
-			subs.unsubscribe();
-		});
-	});
-
-	test('breakpoint', it => {
-		it.should('emit resize events if breakpoints', a => {
-			let expected = 'xsmall';
-			const done = a.async();
-			const el = (<div />) as HTMLDivElement;
-			a.dom.appendChild(el);
-			const subs = breakpoint(el).subscribe(bp => {
-				a.equal(bp, expected);
-				if (bp === 'xsmall') expected = 'small';
-				else if (bp === 'small') expected = 'medium';
-				else if (bp === 'medium') expected = 'large';
-				else if (bp === 'large') expected = 'xlarge';
-				else if (bp === 'xlarge') {
-					subs.unsubscribe();
-					return done();
-				}
-
-				el.style.width = `${theme.breakpoints[expected]}px`;
-			});
-			el.style.width = `10px`;
-		});
-	});
-
-	test('breakpointClass', it => {
-		it.should('set element class when element resizes', a => {
-			let expected = 'xsmall';
-			const done = a.async();
-			const el = (<div />) as HTMLDivElement;
-			a.dom.appendChild(el);
-			const subs = breakpointClass(el).subscribe(bp => {
-				a.equal(bp, expected);
-				a.equal(el.className, bp);
-
-				if (bp === 'xsmall') expected = 'small';
-				else if (bp === 'small') expected = 'medium';
-				else if (bp === 'medium') expected = 'large';
-				else if (bp === 'large') expected = 'xlarge';
-				else if (bp === 'xlarge') {
-					subs.unsubscribe();
-					return done();
-				}
-
-				el.style.width = `${theme.breakpoints[expected]}px`;
-			});
-			el.style.width = `10px`;
 		});
 	});
 });

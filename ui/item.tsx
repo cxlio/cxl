@@ -2,8 +2,8 @@
 import { dom } from '@cxl/tsx';
 import { Augment, Component, StyleAttribute } from '@cxl/component';
 import { onAction } from '@cxl/dom';
-import { StateStyles, focusable, triggerEvent } from '@cxl/template';
-import { css } from '@cxl/css';
+import { focusable, triggerEvent } from '@cxl/template';
+import { StateStyles, css } from './theme.js';
 import { ripple } from './core.js';
 
 @Augment<Item>(

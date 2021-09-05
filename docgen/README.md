@@ -6,7 +6,7 @@ Documentation generator for typescript
 
 ## Project Details
 
--   Branch Version: [0.0.2](https://npmjs.com/package/@cxl/docgen/v/0.0.2)
+-   Branch Version: [0.0.3](https://npmjs.com/package/@cxl/docgen/v/0.0.3)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/docgen)
 -   Report Issues: [Github](https://github.com/cxlio/cxl/issues)

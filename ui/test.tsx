@@ -1,6 +1,11 @@
 import { TestApi, spec, triggerKeydown } from '@cxl/spec';
 import { dom } from '@cxl/tsx';
-import { getRegisteredComponents, Component } from '@cxl/component';
+import {
+	Augment,
+	Attribute,
+	getRegisteredComponents,
+	Component,
+} from '@cxl/component';
 import { each } from '@cxl/template';
 import { be, of } from '@cxl/rx';
 import {
@@ -37,6 +42,8 @@ import {
 import carouselSpec from './spec/carousel.js';
 import datepickerSpec from './spec/datepicker.js';
 import tableSpec from './spec/table.js';
+import { breakpoint, breakpointClass, focusDelegate } from './core.js';
+import { theme } from './theme.js';
 
 const Measure: Record<string, any> = {
 	'CXL-APPBAR'(test: TestApi) {
@@ -1300,5 +1307,73 @@ export default spec('ui', a => {
 
 	a.test('cxl-switch', it => {
 		it.figure('Switch', '<cxl-switch checked></cxl-switch>');
+	});
+
+	a.test('breakpointClass', it => {
+		it.should('set element class when element resizes', a => {
+			let expected = 'xsmall';
+			const done = a.async();
+			const el = (<div />) as HTMLDivElement;
+			a.dom.appendChild(el);
+			const subs = breakpointClass(el).subscribe(bp => {
+				a.equal(bp, expected);
+				a.equal(el.className, bp);
+
+				if (bp === 'xsmall') expected = 'small';
+				else if (bp === 'small') expected = 'medium';
+				else if (bp === 'medium') expected = 'large';
+				else if (bp === 'large') expected = 'xlarge';
+				else if (bp === 'xlarge') {
+					subs.unsubscribe();
+					return done();
+				}
+
+				el.style.width = `${(theme.breakpoints as any)[expected]}px`;
+			});
+			el.style.width = `10px`;
+		});
+	});
+
+	a.test('breakpoint', it => {
+		it.should('emit resize events if breakpoints', a => {
+			let expected = 'xsmall';
+			const done = a.async();
+			const el = (<div />) as HTMLDivElement;
+			a.dom.appendChild(el);
+			const subs = breakpoint(el).subscribe(bp => {
+				a.equal(bp, expected);
+				if (bp === 'xsmall') expected = 'small';
+				else if (bp === 'small') expected = 'medium';
+				else if (bp === 'medium') expected = 'large';
+				else if (bp === 'large') expected = 'xlarge';
+				else if (bp === 'xlarge') {
+					subs.unsubscribe();
+					return done();
+				}
+
+				el.style.width = `${(theme.breakpoints as any)[expected]}px`;
+			});
+			el.style.width = `10px`;
+		});
+	});
+	a.test('focusDelegate', it => {
+		it.should('delegate focus to a different element', a => {
+			@Augment<FocusableHost>(`cxl-test2-${it.id}`)
+			class FocusableHost extends Component {
+				@Attribute()
+				disabled = false;
+				touched = false;
+			}
+
+			const A = (<FocusableHost />) as FocusableHost;
+			const B = (<input />) as HTMLInputElement;
+			const subs = focusDelegate(A, B).subscribe();
+
+			a.equal(B.disabled, false);
+			A.disabled = true;
+			a.equal(B.disabled, true);
+
+			subs.unsubscribe();
+		});
 	});
 });

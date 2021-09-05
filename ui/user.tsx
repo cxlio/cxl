@@ -1,7 +1,7 @@
 import { Attribute, Augment, Component, get } from '@cxl/component';
 import { T } from '@cxl/ui/core.js';
 import { Avatar } from '@cxl/ui/avatar.js';
-import { css } from '@cxl/css';
+import { css } from '@cxl/ui/theme.js';
 import { dom, expression } from '@cxl/tsx';
 
 export interface User {

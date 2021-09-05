@@ -1,6 +1,6 @@
 ///<amd-module name="@cxl/ui/badge.js"/>
 import { Augment, Component, StyleAttribute } from '@cxl/component';
-import { css } from '@cxl/css';
+import { css } from './theme.js';
 import { dom } from '@cxl/tsx';
 import { Size, SizeAttribute } from './core.js';
 

@@ -3,14 +3,12 @@ import {
 	applyTheme,
 	boxShadow,
 	pct,
-	css,
 	rgba,
-	style,
-	theme,
+	defaultTheme,
 	border,
 	padding,
 	margin,
-	render,
+	buildTheme,
 } from './index.js';
 
 declare module './index.js' {
@@ -18,6 +16,8 @@ declare module './index.js' {
 		camelCase: string;
 	}
 }
+
+const { css, style, render } = buildTheme(defaultTheme);
 
 export default spec('css', s => {
 	s.test('style', it => {
@@ -72,7 +72,7 @@ export default spec('css', s => {
 		});
 
 		it.should('render animation', a => {
-			theme.animation.test = { keyframes: '', value: 'value' };
+			defaultTheme.animation.test = { keyframes: '', value: 'value' };
 			a.equal(style({ animation: 'test' }), 'animation:value;');
 			a.equal(style({ animation: 'none' }), 'animation:none;');
 		});
@@ -178,7 +178,7 @@ export default spec('css', s => {
 		it.should('render and append style elements', a => {
 			const children: any[] = [];
 			const el = { appendChild: (a: any) => children.push(a) };
-			applyTheme(el as any);
+			applyTheme(defaultTheme, el as any);
 			a.equal(children.length, 1);
 		});
 	});

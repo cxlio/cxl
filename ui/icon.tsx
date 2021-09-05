@@ -1,8 +1,9 @@
 ///<amd-module name="@cxl/ui/icon.js"/>
 import { Augment, Attribute, Component, get } from '@cxl/component';
-import { css, pct } from '@cxl/css';
+import { pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { ButtonBase, Svg, Path } from './core.js';
+import { css } from './theme.js';
 
 export function ArrowBackIcon() {
 	return (

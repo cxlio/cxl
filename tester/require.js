@@ -11,7 +11,7 @@
 	function require(path) {
 		const mods = require.modules;
 		const xhr = new XMLHttpRequest();
-		xhr.open('POST', 'http://localhost', false);
+		xhr.open('POST', 'http://cxl-tester', false);
 		xhr.send(
 			JSON.stringify({
 				base: require.base,

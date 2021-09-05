@@ -2,7 +2,7 @@
 	"name": "@cxl/dts",
 	"description": "Generate symbol information from typescript source code",
 	"license": "GPL-3.0-only",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/dts && node ../tester --node"

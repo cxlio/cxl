@@ -36,10 +36,9 @@ import {
 import { AppbarTitle } from '@cxl/ui/appbar.js';
 import { Item } from '@cxl/ui/item.js';
 import { Tab } from '@cxl/ui/tabs.js';
-import type {} from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
-import { StateStyles, each, role, triggerEvent } from '@cxl/template';
-import { css } from '@cxl/css';
+import { each, role, triggerEvent } from '@cxl/template';
+import { StateStyles, css } from '@cxl/ui/theme.js';
 
 const router$ = new Reference<RouterState>();
 const strategy$ = new Reference<Strategy>();

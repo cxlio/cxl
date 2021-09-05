@@ -1,5 +1,6 @@
+///<amd-module name="@cxl/ui-ide/image-diff.js"/>
 import { Augment, Attribute, Component, get } from '@cxl/component';
-import { css } from '@cxl/css';
+import { css } from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
 import { merge } from '@cxl/rx';
 import '@cxl/template';

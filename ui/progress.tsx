@@ -1,10 +1,10 @@
 ///<amd-module name="@cxl/ui/progress.js"/>
 import { tap } from '@cxl/rx';
 import { Attribute, Augment, Component, Span, get } from '@cxl/component';
-import { css } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { trigger } from '@cxl/dom';
 import { role } from '@cxl/template';
+import { css } from './theme.js';
 
 /**
  * Linear progress indicators display progress by animating an indicator along the length of a fixed, visible track.

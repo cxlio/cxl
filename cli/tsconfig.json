@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"outDir": "../dist/cli"
 	},
-	"files": ["index.ts", "lint.ts"],
+	"include": ["*.ts"],
+	"exclude": ["test.ts"],
 	"references": [{ "path": "../program" }, { "path": "../build" }]
 }

@@ -1,6 +1,7 @@
+///<amd-module name="@cxl/ui-ide/regex.js"/>
 import { Augment, Attribute, Component, get } from '@cxl/component';
 import { Grid, Toolbar, Checkbox, Field, Label, TextArea } from '@cxl/ui';
-import { css } from '@cxl/css';
+import { css } from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
 import { on } from '@cxl/dom';
 import '@cxl/template';

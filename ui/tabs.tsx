@@ -10,9 +10,10 @@ import {
 	onAction,
 } from '@cxl/dom';
 import { role } from '@cxl/template';
-import { css, padding } from '@cxl/css';
+import { padding } from '@cxl/css';
 import { EMPTY, be, merge } from '@cxl/rx';
 import { Span, ripple } from './core.js';
+import { css } from './theme.js';
 
 /**
  * @example

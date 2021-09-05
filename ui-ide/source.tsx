@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui-ide/source.js"/>
 import {
 	Augment,
 	Attribute,
@@ -5,7 +6,6 @@ import {
 	get,
 	attributeChanged,
 } from '@cxl/component';
-// import { css } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import type * as cm from 'codemirror';
 import type * as _cm from 'codemirror/addon/fold/foldgutter.js';

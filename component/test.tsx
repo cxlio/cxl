@@ -9,6 +9,7 @@ import {
 	getRegisteredComponents,
 	update,
 	registerComponent,
+	attributeChanged,
 } from './index';
 import { dom } from '@cxl/tsx';
 import { be, observable, of, tap } from '@cxl/rx';
@@ -474,6 +475,27 @@ export default spec('component', a => {
 			const el = (<Test />) as Test;
 			a.dom.appendChild(el);
 			el.hello = 'hello';
+		});
+	});
+
+	a.test('attributeChanged', it => {
+		it.should('fire synchronously', a => {
+			const id = `cxl-test${a.id}`;
+			@Augment<Test>(id, $ =>
+				$.bind(
+					attributeChanged($, 'test').tap(() => {
+						throw 'Should not fire';
+					})
+				)
+			)
+			class Test extends Component {
+				@Attribute()
+				test = '';
+			}
+
+			const test = (<Test test={of('hello')} />) as Test;
+			a.dom.appendChild(test);
+			a.equal(test.test, 'hello');
 		});
 	});
 

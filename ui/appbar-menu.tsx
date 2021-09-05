@@ -3,7 +3,7 @@ import { dom } from '@cxl/tsx';
 import { Augment, Component } from '@cxl/component';
 import { each, registable, registableHost } from '@cxl/template';
 import { be } from '@cxl/rx';
-import { css } from '@cxl/css';
+import { css } from './theme.js';
 import { Tabs } from './tabs.js';
 import { Item } from './item.js';
 import { MenuToggle } from './menu.js';

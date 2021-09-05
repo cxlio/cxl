@@ -7,8 +7,7 @@ import {
 	StyleAttribute,
 	get,
 } from '@cxl/component';
-import { css } from '@cxl/css';
-import { BaseColors } from './theme.js';
+import { BaseColors, css } from './theme.js';
 import { MenuIcon, IconButton } from './icon.js';
 import { Toggle } from './core.js';
 

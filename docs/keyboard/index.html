@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+	<head><meta name="description" content="Documentation for @cxl/keyboard" /><script>window.docgen={"activeVersion":"0.0.1","userScripts":[],"versions":["0.0.1"]};</script><script src="runtime.bundle.min.js"></script></head>
+	<link rel="stylesheet" href="styles.css" />
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}cxl-router-item>cxl-badge{margin-right:0} cxl-grid>cxl-c{overflow-wrap:break-word}.see-source{text-decoration:none;float:right;color:var(--cxl-onSurface87)}cxl-t[code][subtitle]{font-weight:700;margin-bottom:16px}</style>
+	<cxl-application permanent><title>@cxl/keyboard</title><cxl-appbar>
+	<cxl-navbar permanent><cxl-c pad16><cxl-t h5 inline>@cxl/keyboard</cxl-t>&nbsp;&nbsp;<small>0.0.1</small>
+	</cxl-c>
+		<cxl-hr></cxl-hr>
+		<cxl-router-item href="index.html">Home</cxl-router-item><cxl-hr></cxl-hr>	
+		<cxl-router-item href="index--html"><i>Index</i></cxl-router-item><cxl-router-item href="index--Key.html"><cxl-badge>I</cxl-badge>Key</cxl-router-item><cxl-router-item href="index--html#s1"><cxl-badge>T</cxl-badge>KeyNameMap</cxl-router-item><cxl-router-item href="index--KeyboardLayout.html"><cxl-badge>I</cxl-badge>KeyboardLayout</cxl-router-item><cxl-router-item href="index--KeyboardOptions.html"><cxl-badge>I</cxl-badge>KeyboardOptions</cxl-router-item><cxl-router-item href="index--html#s20"><cxl-badge>K</cxl-badge>Pass</cxl-router-item><cxl-router-item href="index--html#s49"><cxl-badge>K</cxl-badge>TranslateKey</cxl-router-item><cxl-router-item href="index--html#s56"><cxl-badge>F</cxl-badge>getDefaultLayout</cxl-router-item><cxl-router-item href="index--html#s53"><cxl-badge>F</cxl-badge>handleKeyboard</cxl-router-item><cxl-router-item href="index--html#s61"><cxl-badge>F</cxl-badge>normalize</cxl-router-item><cxl-router-item href="index--html#s58"><cxl-badge>F</cxl-badge>parseKey</cxl-router-item>
+		</cxl-navbar>
+	<cxl-router-appbar-title></cxl-router-appbar-title><doc-search></doc-search></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="Key" data-path="index--Key.html"><cxl-t h3><span style="float:right"><cxl-chip size="small" primary>interface</cxl-chip> </span>Key</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Key</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/keyboard&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--Key.html#s4">altKey</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Key.html#s3">ctrlKey</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Key.html#s7">key</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Key.html#s6">metaKey</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--Key.html#s5">shiftKey</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s4"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L4">&lt;/&gt;</a><cxl-t code subtitle>altKey: boolean</cxl-t>
+		</cxl-c></cxl-card><a name="s3"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L3">&lt;/&gt;</a><cxl-t code subtitle>ctrlKey: boolean</cxl-t>
+		</cxl-c></cxl-card><a name="s7"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L7">&lt;/&gt;</a><cxl-t code subtitle>key: string</cxl-t>
+		</cxl-c></cxl-card><a name="s6"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L6">&lt;/&gt;</a><cxl-t code subtitle>metaKey: boolean</cxl-t>
+		</cxl-c></cxl-card><a name="s5"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L5">&lt;/&gt;</a><cxl-t code subtitle>shiftKey: boolean</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="KeyboardOptions" data-path="index--KeyboardOptions.html"><cxl-t h3><span style="float:right"><cxl-chip size="small" primary>interface</cxl-chip> </span>KeyboardOptions</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">KeyboardOptions</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/keyboard&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--KeyboardOptions.html#s14">delay</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--KeyboardOptions.html#s9">element</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--KeyboardOptions.html#s15">layout</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--KeyboardOptions.html#s10">onKey</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s14"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L13">&lt;/&gt;</a><cxl-t code subtitle>delay: number</cxl-t><p>default: 250</p>
+		</cxl-c></cxl-card><a name="s9"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L11">&lt;/&gt;</a><cxl-t code subtitle>element: HTMLElement</cxl-t>
+		</cxl-c></cxl-card><a name="s15"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L15">&lt;/&gt;</a><cxl-t code subtitle>layout: <cxl-a href="index--KeyboardLayout.html">KeyboardLayout</cxl-a></cxl-t><p>default: en-US</p>
+		</cxl-c></cxl-card><a name="s10"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L12">&lt;/&gt;</a><cxl-t code subtitle>onKey: (key: string, sequence: string[]) => boolean</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="KeyboardLayout" data-path="index--KeyboardLayout.html"><cxl-t h3><span style="float:right"><cxl-chip size="small" primary>interface</cxl-chip> </span>KeyboardLayout</cxl-t><cxl-t h4>API</cxl-t><cxl-t h5>Import</cxl-t><pre><code class="hljs"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">KeyboardLayout</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cxl/keyboard&#x27;</span>;</code></pre><cxl-t h5>Members</cxl-t><cxl-t h6>Properties
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--KeyboardLayout.html#s19">modKey</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--KeyboardLayout.html#s18">shiftMap</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--KeyboardLayout.html#s17">shiftedKeys</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Properties</cxl-t><a name="s19"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L22">&lt;/&gt;</a><cxl-t code subtitle>modKey: 'metaKey' | 'ctrlKey'</cxl-t>
+		</cxl-c></cxl-card><a name="s18"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L21">&lt;/&gt;</a><cxl-t code subtitle>shiftMap: Record&lt;string, string&gt;</cxl-t>
+		</cxl-c></cxl-card><a name="s17"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L20">&lt;/&gt;</a><cxl-t code subtitle>shiftedKeys: string[]</cxl-t>
+		</cxl-c></cxl-card></template><template  data-title="index.ts" data-path="index--html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Constants
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--html#s20">Pass</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--html#s49">TranslateKey</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Functions
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--html#s56">getDefaultLayout</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--html#s53">handleKeyboard</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--html#s61">normalize</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--html#s58">parseKey</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Interfaces
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--Key.html">Key</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--KeyboardLayout.html">KeyboardLayout</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--KeyboardOptions.html">KeyboardOptions</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Type Alias
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--html#s1">KeyNameMap</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Constants</cxl-t><a name="s20"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L26">&lt;/&gt;</a><cxl-t code subtitle>Pass: {  } = {}</cxl-t>
+		</cxl-c></cxl-card><a name="s49"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L67">&lt;/&gt;</a><cxl-t code subtitle>TranslateKey: Record&lt;string, string&gt;</cxl-t>
+		</cxl-c></cxl-card><cxl-t h5>Functions</cxl-t><a name="s56"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L142">&lt;/&gt;</a><cxl-t code subtitle>getDefaultLayout(): <cxl-a href="index--KeyboardLayout.html">KeyboardLayout</cxl-a></cxl-t>
+		</cxl-c></cxl-card><a name="s53"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L102">&lt;/&gt;</a><cxl-t code subtitle>handleKeyboard({
+	element,
+	onKey,
+	delay,
+	layout,
+}: <cxl-a href="index--KeyboardOptions.html">KeyboardOptions</cxl-a>): () => void</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>{
+	element,
+	onKey,
+	delay,
+	layout,
+}: <cxl-a href="index--KeyboardOptions.html">KeyboardOptions</cxl-a></cxl-t></li></ul>
+		</cxl-c></cxl-card><a name="s61"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L190">&lt;/&gt;</a><cxl-t code subtitle>normalize(key: string, layout: <cxl-a href="index--KeyboardLayout.html">KeyboardLayout</cxl-a>): string</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>key: string</cxl-t></li><li><cxl-t code inline>layout: <cxl-a href="index--KeyboardLayout.html">KeyboardLayout</cxl-a></cxl-t></li></ul>
+		</cxl-c></cxl-card><a name="s58"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L158">&lt;/&gt;</a><cxl-t code subtitle>parseKey(key: string, { modKey, shiftMap }: <cxl-a href="index--KeyboardLayout.html">KeyboardLayout</cxl-a>): <cxl-a href="index--Key.html">Key</cxl-a>[]</cxl-t><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>key: string</cxl-t></li><li><cxl-t code inline>{ modKey, shiftMap }: <cxl-a href="index--KeyboardLayout.html">KeyboardLayout</cxl-a></cxl-t></li></ul>
+		</cxl-c></cxl-card><cxl-t h5>Type Alias</cxl-t><a name="s1"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/keyboard/index.ts#L0">&lt;/&gt;</a><cxl-t code subtitle>KeyNameMap = <cxl-a href="index--html#s1">Record</cxl-a>&lt;number, string&gt;</cxl-t>
+		</cxl-c></cxl-card></template><template data-default="true" data-title="Home" data-path="index.html"><cxl-t h2>@cxl/keyboard</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fkeyboard"><img src="https://badge.fury.io/js/%40cxl%2Fkeyboard.svg" alt="npm version"></a></p>
+<p>Keybaard Handling Library</p>
+<cxl-t h3>Project Details</cxl-t><ul>
+<li>Branch Version: <a href="https://npmjs.com/package/@cxl/keyboard/v/0.0.1">0.0.1</a></li>
+<li>License: UNLICENSED</li>
+<li>Documentation: <a href="https://cxlio.github.io/cxl/keyboard">Link</a></li>
+<li>Report Issues: <a href="https://github.com/cxlio/cxl/issues">Github</a></li>
+</ul>
+<cxl-t h3>Installation</cxl-t><pre><code class="hljs">npm install <span class="hljs-meta">@cxl</span>/keyboard
+</code></pre></template></cxl-router></cxl-page></cxl-application>

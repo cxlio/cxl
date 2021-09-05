@@ -107,12 +107,7 @@ function renderAttributes(host: Bindable, attributes: any) {
 				attr === '$' ? value : value.tap(v => ((host as any)[attr] = v))
 			);
 		else if (attr === '$' && typeof value === 'function')
-			bind(
-				host,
-				//attr === '$'
-				value(host)
-				//: value(host).tap((v: any) => ((host as any)[attr] = v))
-			);
+			bind(host, value(host));
 		else (host as any)[attr] = value;
 	}
 }

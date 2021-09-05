@@ -1,6 +1,6 @@
 ///<amd-module name="@cxl/ui-blog"/>
 import { Augment, Attribute, Component, Span, get } from '@cxl/component';
-import { baseColor, css, padding, border } from '@cxl/css';
+import { padding, border } from '@cxl/css';
 import { Button, Chip, Grid, T } from '@cxl/ui';
 import { EMPTY, be, combineLatest } from '@cxl/rx';
 import {
@@ -12,6 +12,7 @@ import {
 } from '@cxl/dom';
 import { each } from '@cxl/template';
 import { dom } from '@cxl/tsx';
+import { baseColor, css } from '@cxl/ui/theme.js';
 
 export interface Post {
 	uuid: string;

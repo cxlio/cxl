@@ -9,10 +9,11 @@ import {
 } from '@cxl/component';
 import { onAction, onChildrenMutation } from '@cxl/dom';
 import { aria, portal, role } from '@cxl/template';
-import { css, padding } from '@cxl/css';
+import { padding } from '@cxl/css';
 import { merge } from '@cxl/rx';
 import { ColorAttribute, ColorValue, Span } from './core.js';
 import { ArrowBackIcon, IconButton } from './icon.js';
+import { css } from './theme.js';
 
 /**
  * The top app bar provides content and actions related to the current screen.

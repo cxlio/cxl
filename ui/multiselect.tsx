@@ -1,7 +1,7 @@
 import { Augment, Attribute, get } from '@cxl/component';
 import { dom, expression } from '@cxl/tsx';
 import { onAction } from '@cxl/dom';
-import { css } from '@cxl/css';
+import { css } from './theme.js';
 import { merge } from '@cxl/rx';
 import { Option, SelectMenu, SelectBase } from './select.js';
 import { navigationList, selectableHostMultiple } from '@cxl/template';

@@ -5,7 +5,6 @@ import {
 	findNextNodeBySelector,
 	on,
 	onAction,
-	onResize,
 	trigger,
 } from '@cxl/dom';
 import {
@@ -24,7 +23,6 @@ import {
 	map,
 } from '@cxl/rx';
 import type { Bindable } from '@cxl/tsx';
-import { Breakpoint, css, theme } from '@cxl/css';
 import { Component, attributeChanged, get } from '@cxl/component';
 
 export type ValidateFunction<T> = (val: T) => string | true;
@@ -501,7 +499,7 @@ export function navigationList(
 		.filter(el => !!el);
 }
 
-interface FocusableComponent extends Component {
+export interface FocusableComponent extends Component {
 	disabled: boolean;
 	touched: boolean;
 }
@@ -549,45 +547,6 @@ export function focusable<T extends FocusableComponent>(
 		focusableDisabled(host, element),
 		focusableEvents(host, element)
 	);
-}
-
-export const DisabledStyles = {
-	cursor: 'default',
-	filter: 'saturate(0)',
-	opacity: 0.38,
-	pointerEvents: 'none',
-};
-
-export const StateStyles = {
-	$focus: { outline: 0 },
-	$disabled: DisabledStyles,
-};
-
-const stateStyles = css(StateStyles);
-
-const disabledCss = css({ $disabled: DisabledStyles });
-
-interface DisableElement extends HTMLElement {
-	disabled: boolean;
-}
-
-export function focusDelegate<T extends FocusableComponent>(
-	host: T,
-	delegate: DisableElement
-) {
-	host.Shadow({ children: disabledCss });
-	return merge(
-		disabledAttribute(host).tap(val => (delegate.disabled = val)),
-		focusableEvents(host, delegate)
-	);
-}
-
-/**
- * Adds focusable functionality to input components.
- */
-export function Focusable(host: Bindable) {
-	host.bind(focusable(host as FocusableComponent));
-	return stateStyles();
 }
 
 export function registable<T extends Component, ControllerT>(
@@ -817,25 +776,6 @@ export function setClassName(el: HTMLElement) {
 			if (className) el.classList.add(className);
 		}
 	});
-}
-
-export function breakpoint(el: HTMLElement): Observable<Breakpoint> {
-	return onResize(el)
-		.raf()
-		.map(() => {
-			const breakpoints = theme.breakpoints;
-			const width = el.clientWidth;
-			let newClass: Breakpoint = 'xsmall';
-			for (const bp in breakpoints) {
-				if ((breakpoints as any)[bp] > width) return newClass;
-				newClass = bp as Breakpoint;
-			}
-			return newClass;
-		});
-}
-
-export function breakpointClass(el: HTMLElement) {
-	return breakpoint(el).pipe(setClassName(el));
 }
 
 interface FormElement<T> extends ElementWithValue<T> {

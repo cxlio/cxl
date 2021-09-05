@@ -8,7 +8,7 @@ import {
 	StyleAttribute,
 	get,
 } from '@cxl/component';
-import { css } from '@cxl/css';
+import { css } from '@cxl/ui/theme.js';
 import { be, merge } from '@cxl/rx';
 import { on, onAction, onKeypress } from '@cxl/dom';
 import {

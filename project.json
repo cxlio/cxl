@@ -7,6 +7,10 @@
 				"files": ["ajax/index.ts"],
 				"tasks": "cd ajax && npm run build"
 			},
+			"keyboard": {
+				"files": ["keyboard/*"],
+				"tasks": "cd keyboard && npm run build"
+			},
 			"blog": {
 				"files": ["blog/index.ts"],
 				"tasks": "cd blog && npm run build"

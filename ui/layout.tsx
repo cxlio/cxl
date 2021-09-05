@@ -7,9 +7,9 @@ import {
 	StyleAttribute,
 	update,
 } from '@cxl/component';
-import { css, margin, padding } from '@cxl/css';
+import { margin, padding } from '@cxl/css';
 import { dom } from '@cxl/tsx';
-import { ColorStyles } from './theme.js';
+import { ColorStyles, css } from './theme.js';
 import { ColorAttribute, ColorValue, persistWithParameter } from './core.js';
 
 const colStyles = ((r: any) => {

@@ -3,16 +3,12 @@ import { dom } from '@cxl/tsx';
 import { Augment, StyleAttribute, get } from '@cxl/component';
 import { Svg, Path } from './core.js';
 import { merge } from '@cxl/rx';
-import { FocusCircleStyle } from './core.js';
+import { Focusable, FocusCircleStyle } from './core.js';
 import { InputBase } from './input-base.js';
 import { onAction } from '@cxl/dom';
-import {
-	Focusable,
-	checkedBehavior,
-	role,
-	staticTemplate,
-} from '@cxl/template';
-import { css, padding } from '@cxl/css';
+import { checkedBehavior, role, staticTemplate } from '@cxl/template';
+import { padding } from '@cxl/css';
+import { css } from './theme.js';
 
 /**
  * Checkboxes allow the user to select one or more items from a set. Checkboxes can be used to turn an option on or off.

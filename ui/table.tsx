@@ -1,4 +1,4 @@
-import { border, css, padding, margin } from '@cxl/css';
+import { border, padding, margin } from '@cxl/css';
 import {
 	aria,
 	each,
@@ -21,7 +21,7 @@ import {
 import { dom } from '@cxl/tsx';
 import { EMPTY, defer, from, merge, observable } from '@cxl/rx';
 import { on, onAction, onChildrenMutation, trigger } from '@cxl/dom';
-import type {} from '@cxl/ui/theme.js';
+import { css } from '@cxl/ui/theme.js';
 import { IconButton } from '@cxl/ui/icon.js';
 import { Svg, Path, T, Toolbar } from '@cxl/ui/core.js';
 import { Checkbox } from '@cxl/ui/checkbox.js';

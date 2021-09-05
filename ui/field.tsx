@@ -9,8 +9,9 @@ import {
 import { InputBase } from './input-base.js';
 import { dom, expression } from '@cxl/tsx';
 import { on, setAttribute } from '@cxl/dom';
-import { css, boxShadow, padding } from '@cxl/css';
+import { boxShadow, padding } from '@cxl/css';
 import { EMPTY, be, observable, merge } from '@cxl/rx';
+import { css } from './theme.js';
 
 const FieldBase = [
 	css({

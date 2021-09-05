@@ -1,8 +1,8 @@
 import { Augment, Component } from '@cxl/component';
-import { css } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { dropTarget } from '@cxl/drag';
 import { trigger } from '@cxl/dom';
+import { css } from './theme.js';
 
 @Augment<DragContainer>(
 	'cxl-drop-container',

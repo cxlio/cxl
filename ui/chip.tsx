@@ -6,14 +6,14 @@ import {
 	Span,
 	StyleAttribute,
 } from '@cxl/component';
-import { baseColor, css } from '@cxl/css';
-import { Focusable } from '@cxl/template';
 import { dom } from '@cxl/tsx';
 import { on, trigger } from '@cxl/dom';
 import { CloseIcon } from './icon.js';
+import { baseColor, css } from './theme.js';
 import {
 	ColorAttribute,
 	ColorValue,
+	Focusable,
 	FocusHighlight,
 	Size,
 	SizeAttribute,

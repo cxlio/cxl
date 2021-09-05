@@ -9,7 +9,7 @@ import {
 } from '@cxl/component';
 import { onAction } from '@cxl/dom';
 import { navigationList, role } from '@cxl/template';
-import { css } from '@cxl/css';
+import { css } from './theme.js';
 import { EMPTY } from '@cxl/rx';
 import { ColorStyles } from './theme.js';
 import { MenuIcon, IconButton } from './icon.js';

@@ -1,5 +1,6 @@
+///<amd-module name="@cxl/ui-ide/inspector.js"/>
 import { Augment, Attribute, Component, get } from '@cxl/component';
-import { css } from '@cxl/css';
+import { css } from '@cxl/ui/theme.js';
 import { dom } from '@cxl/tsx';
 import { Checkbox, InputBase, Field, Input, Label, C, T } from '@cxl/ui';
 import { render, sortBy } from '@cxl/template';

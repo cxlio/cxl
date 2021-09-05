@@ -7,16 +7,21 @@ import {
 	Slot,
 	get,
 } from '@cxl/component';
-import { ButtonBase, FocusCircleStyle, Spinner, Span } from './core.js';
+import {
+	ButtonBase,
+	FocusCircleStyle,
+	Focusable,
+	Spinner,
+	Span,
+} from './core.js';
 import { dom } from '@cxl/tsx';
 import { aria, ariaValue, onValue, triggerEvent } from '@cxl/template';
 import { trigger, onKeypress, on, onAction } from '@cxl/dom';
-import { border, css, padding } from '@cxl/css';
+import { border, padding } from '@cxl/css';
 import { EMPTY, Observable, observable, defer, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
 import { InputBase } from './input-base.js';
 import {
-	Focusable,
 	checkedBehavior,
 	focusable,
 	registableHost,
@@ -24,6 +29,7 @@ import {
 } from '@cxl/template';
 import { Field } from './field.js';
 import { CloseIcon } from './icon.js';
+import { css } from './theme.js';
 
 /**
  * Sliders allow users to make selections from a range of values.

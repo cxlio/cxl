@@ -1,11 +1,12 @@
 import { Augment, Attribute, Component, Span, get } from '@cxl/component';
 import { registable, each, registableHost } from '@cxl/template';
-import { css, padding } from '@cxl/css';
+import { padding } from '@cxl/css';
 import { onAction, onChildrenMutation } from '@cxl/dom';
 import { dom } from '@cxl/tsx';
 import { Svg, Path } from '@cxl/ui/svg.js';
 import { EMPTY, concat, of, interval, defer } from '@cxl/rx';
 import { Button } from '@cxl/ui/button.js';
+import { css } from './theme.js';
 
 @Augment<Slide>(
 	'cxl-slide',

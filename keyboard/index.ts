@@ -1,17 +1,4 @@
-/**
- * Try to execute action in editor or workspace.
-export function action(name: string)
-{
-var
-	cmd = ide.commandParser.parse(name),
-	handler = ide.runParsedCommand.bind(ide, cmd)
-;
-	handler.action = name;
-
-	return handler;
-}
- */
-
+///<amd-module name="@cxl/keyboard"/>
 export type KeyNameMap = Record<number, string>;
 
 export interface Key {
@@ -27,15 +14,56 @@ export interface KeyboardOptions {
 	onKey: (key: string, sequence: string[]) => boolean;
 	/** @default 250 */
 	delay?: number;
+	/** @default en-US */
+	layout?: KeyboardLayout;
+}
+
+export interface KeyboardLayout {
+	shiftedKeys: string[];
+	shiftMap: Record<string, string>;
+	modKey: 'metaKey' | 'ctrlKey';
 }
 
 export const Pass = {};
 
-const PARSESHIFT = /shift\+/,
-	PARSECTRL = /ctrl\+/,
-	PARSEALT = /(?:alt|option)\+/,
-	PARSEMETA = /(?:meta|command)\+/,
-	PARSECH = /([^+]+)$/;
+const navigator =
+	typeof window !== 'undefined'
+		? window.navigator
+		: { language: 'en-US', platform: 'nodejs' };
+
+const IS_MAC = /Mac|iPod|iPhone|iPad/;
+const PARSE_KEY = /(shift|ctrl|control|alt|option|meta|command|cmd|mod|\w+)(\s*\+|\s)?/g;
+const SHIFT_MAP = {
+	'/': '?',
+	'.': '>',
+	',': '<',
+	"'": '"',
+	';': ':',
+	'[': '{',
+	']': '}',
+	'\\': '|',
+	'`': '~',
+	'=': '+',
+	'-': '_',
+	'1': '!',
+	'2': '@',
+	'3': '#',
+	'4': '$',
+	'5': '%',
+	'6': '^',
+	'7': '&',
+	'8': '*',
+	'9': '(',
+	'0': ')',
+};
+
+const KeyboardLayoutData: Record<string, KeyboardLayout> = {
+	'en-US': {
+		shiftedKeys: Object.values(SHIFT_MAP),
+		shiftMap: SHIFT_MAP,
+		modKey: IS_MAC.test(navigator.platform) ? 'metaKey' : 'ctrlKey',
+	},
+};
 
 export const TranslateKey: Record<string, string> = {
 	Shift: '',
@@ -49,7 +77,10 @@ export const TranslateKey: Record<string, string> = {
 	Escape: 'esc',
 };
 
-export function keyboardEventToString(ev: Key): string {
+function keyboardEventToString(
+	ev: Key,
+	{ shiftedKeys }: KeyboardLayout
+): string {
 	const key = ev.key;
 	if (
 		!key ||
@@ -64,7 +95,7 @@ export function keyboardEventToString(ev: Key): string {
 	let result;
 	if (ev.ctrlKey) result = 'ctrl';
 	if (ev.altKey) result = result ? result + '+alt' : 'alt';
-	if (ev.shiftKey && !(ev as any).noShift)
+	if (ev.shiftKey && !shiftedKeys.includes(ch))
 		result = result ? result + '+shift' : 'shift';
 	if (ev.metaKey) result = result ? result + '+meta' : 'meta';
 
@@ -75,13 +106,18 @@ export function handleKeyboard({
 	element,
 	onKey,
 	delay,
+	layout,
 }: KeyboardOptions): () => void {
 	const D = delay === undefined ? 250 : delay;
+	const locale = navigator.language;
 	let sequence: string[] = [];
 	let lastT = 0;
 
+	const newLayout =
+		layout || KeyboardLayoutData[locale] || KeyboardLayoutData['en-US'];
+
 	function handler(ev: KeyboardEvent) {
-		const k = keyboardEventToString(ev);
+		const k = keyboardEventToString(ev, newLayout);
 		let t = Date.now();
 		if (!k) return;
 
@@ -106,33 +142,59 @@ export function handleKeyboard({
 	return () => element.removeEventListener('keydown', handler);
 }
 
-export function parseKey(key: string, mod: 'ctrl+' | 'meta+' = 'ctrl+'): Key[] {
-	const sequence = key.replace(/mod\+/g, mod).split(' ');
-	let i = sequence.length,
-		k,
-		shortcut;
-	while (i--) {
-		shortcut = sequence[i];
-		k = PARSECH.exec(shortcut);
-
-		if (k)
-			(sequence as any)[i] = {
-				ctrlKey: PARSECTRL.test(shortcut),
-				altKey: PARSEALT.test(shortcut),
-				shiftKey: PARSESHIFT.test(shortcut),
-				metaKey: PARSEMETA.test(shortcut),
-				key: k[1],
-			};
-	}
-
-	return (sequence as any) as Key[];
+export function getDefaultLayout(): KeyboardLayout {
+	return (
+		KeyboardLayoutData[navigator?.language] || KeyboardLayoutData['en-US']
+	);
 }
 
-export function normalize(key: string): string {
-	const sequence = parseKey(key);
-	let i = sequence.length;
-	while (i--) (sequence as any)[i] = keyboardEventToString(sequence[i]);
+function newKey(): Key {
+	return {
+		ctrlKey: false,
+		shiftKey: false,
+		metaKey: false,
+		altKey: false,
+		key: '',
+	};
+}
 
+export function parseKey(
+	key: string,
+	{ modKey, shiftMap }: KeyboardLayout = getDefaultLayout()
+): Key[] {
+	const sequence: Key[] = [];
+	/*let k,
+		shortcut;*/
+	let match: RegExpExecArray | null;
+	let event = newKey();
+
+	while ((match = PARSE_KEY.exec(key.toLowerCase()))) {
+		const ch = match[1];
+		if (ch === 'shift') event.shiftKey = true;
+		else if (ch === 'ctrl' || ch === 'control') event.ctrlKey = true;
+		else if (ch === 'alt' || ch === 'option') event.altKey = true;
+		else if (ch === 'meta' || ch === 'cmd' || ch === 'command')
+			event.metaKey = true;
+		else if (ch === 'mod') event[modKey] = true;
+		else {
+			const shifted = shiftMap[ch];
+			if (shifted) event.shiftKey = false;
+			event.key = shifted || ch;
+		}
+
+		if (match[2] !== '+') {
+			sequence.push(event);
+			event = newKey();
+		}
+	}
+	return sequence;
+}
+
+export function normalize(key: string, layout = getDefaultLayout()): string {
+	const sequence = parseKey(key, layout);
+	let i = sequence.length;
+	while (i--)
+		(sequence as any)[i] = keyboardEventToString(sequence[i], layout);
 	return sequence.join(' ');
 }
 

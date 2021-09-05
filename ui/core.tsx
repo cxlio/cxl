@@ -10,20 +10,26 @@ import {
 	get,
 	onUpdate,
 } from '@cxl/component';
-import { dom } from '@cxl/tsx';
-import { EMPTY, merge, operator } from '@cxl/rx';
+import { Bindable, dom } from '@cxl/tsx';
+import { EMPTY, Observable, merge, operator } from '@cxl/rx';
 import {
+	Breakpoint,
 	Typography,
-	Styles,
 	StyleDefinition,
 	border,
-	css,
 	padding,
 	pct,
 } from '@cxl/css';
-import { Focusable, role } from '@cxl/template';
-import { getShadow, on, onAction } from '@cxl/dom';
-import { ColorStyles } from './theme.js';
+import {
+	FocusableComponent,
+	disabledAttribute,
+	focusable,
+	focusableEvents,
+	role,
+	setClassName,
+} from '@cxl/template';
+import { getShadow, on, onAction, onResize } from '@cxl/dom';
+import { ColorStyles, Styles, StateStyles, css, theme } from './theme.js';
 import { Svg, Circle } from './svg.js';
 
 export { Circle, Svg, Path } from './svg.js';
@@ -568,4 +574,49 @@ export class ButtonBase extends Component {
 		paddingLeft: 16 + s * 4,
 	}))
 	size: Size = 0;
+}
+
+export function focusDelegate<T extends FocusableComponent>(
+	host: T,
+	delegate: DisableElement
+) {
+	host.Shadow({ children: disabledCss });
+	return merge(
+		disabledAttribute(host).tap(val => (delegate.disabled = val)),
+		focusableEvents(host, delegate)
+	);
+}
+
+interface DisableElement extends HTMLElement {
+	disabled: boolean;
+}
+
+const stateStyles = css(StateStyles);
+const disabledCss = css({ $disabled: StateStyles.$disabled });
+
+/**
+ * Adds focusable functionality to input components.
+ */
+export function Focusable(host: Bindable) {
+	host.bind(focusable(host as FocusableComponent));
+	return stateStyles();
+}
+
+export function breakpoint(el: HTMLElement): Observable<Breakpoint> {
+	return onResize(el)
+		.raf()
+		.map(() => {
+			const breakpoints = theme.breakpoints;
+			const width = el.clientWidth;
+			let newClass: Breakpoint = 'xsmall';
+			for (const bp in breakpoints) {
+				if ((breakpoints as any)[bp] > width) return newClass;
+				newClass = bp as Breakpoint;
+			}
+			return newClass;
+		});
+}
+
+export function breakpointClass(el: HTMLElement) {
+	return breakpoint(el).pipe(setClassName(el));
 }

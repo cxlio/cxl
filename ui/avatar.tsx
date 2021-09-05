@@ -1,7 +1,7 @@
 ///<amd-module name="@cxl/ui/avatar.js"/>
 import { Augment, Attribute, Component, get } from '@cxl/component';
 import { role } from '@cxl/template';
-import { css } from '@cxl/css';
+import { css } from './theme.js';
 import { dom, expression } from '@cxl/tsx';
 import { Size, SizeAttribute } from './core.js';
 import { PersonIcon } from './icon.js';

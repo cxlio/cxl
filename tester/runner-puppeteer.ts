@@ -55,7 +55,7 @@ async function handleRequest(sources: Output[], req: HTTPRequest) {
 	if (req.method() !== 'POST') return req.continue();
 
 	const url = new URL(req.url());
-	if (url.hostname !== 'localhost') return req.continue();
+	if (url.hostname !== 'cxl-tester') return req.continue();
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
 	const paths = [resolve(base)];

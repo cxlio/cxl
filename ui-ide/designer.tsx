@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui-ide/designer.js"/>
 import {
 	Augment,
 	Attribute,
@@ -6,10 +7,11 @@ import {
 	get,
 } from '@cxl/component';
 import { on, onResize, empty } from '@cxl/dom';
-import { css, pct } from '@cxl/css';
+import { pct } from '@cxl/css';
 import { dom } from '@cxl/tsx';
 import { of, merge } from '@cxl/rx';
 import { triggerEvent } from '@cxl/template';
+import { css } from '@cxl/ui/theme.js';
 
 const DEBUG_HEAD = `<meta charset="utf-8">
 <script src="/cxl/dist/tester/require-browser.js"></script>
@@ -76,6 +78,7 @@ function sanitize(node: Node): Node | undefined {
 
 		const result = node.cloneNode();
 		(result as any).$$cxlSource = node;
+		(node as any).$$cxlNode = result;
 		return sanitizeChildren(node, result as Element);
 	}
 
@@ -124,7 +127,7 @@ function sanitize(node: Node): Node | undefined {
 				{select}
 			</div>
 		);
-		const tpl = (<template />) as HTMLTemplateElement;
+		const tpl = $.template;
 
 		$.bind(
 			on(el, 'load').switchMap(() => {
@@ -159,13 +162,16 @@ function sanitize(node: Node): Node | undefined {
 					),
 					on(container, 'click').tap(ev => {
 						const el = doc.elementFromPoint(ev.offsetX, ev.offsetY);
-						$.selected = select.value =
-							el && stage.contains(el) ? el : undefined;
+						$.selected = el && stage.contains(el) ? el : undefined;
 					})
 				);
 			})
 		);
-		$.bind(get($, 'selected').pipe(triggerEvent($, 'selected')));
+		$.bind(
+			get($, 'selected')
+				.tap(selected => (select.value = selected))
+				.pipe(triggerEvent($, 'selected'))
+		);
 
 		return container;
 	}
@@ -176,4 +182,6 @@ export class Designer extends Component {
 
 	@Attribute()
 	selected?: Element;
+
+	readonly template = (<template />) as HTMLTemplateElement;
 }
