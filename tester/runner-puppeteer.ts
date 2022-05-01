@@ -2,7 +2,7 @@ import { Browser, CoverageEntry, Page, HTTPRequest } from 'puppeteer';
 import * as puppeteer from 'puppeteer';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { dirname, resolve } from 'path';
-import type { Test } from '@cxl/spec';
+import type { FigureData, Test, Result } from '@cxl/spec';
 import type { TestRunner } from './index.js';
 import { PNG } from 'pngjs';
 
@@ -22,10 +22,11 @@ async function startTracing(page: Page) {
 	]);
 }
 
-function handleConsole(msg: any, app: TestRunner) {
+function handleConsole(msg: puppeteer.ConsoleMessage, app: TestRunner) {
 	const type = msg.type();
 	const { url, lineNumber } = msg.location();
-	app.log(`console ${type}: ${url}:${lineNumber}`);
+	const lineText = lineNumber !== undefined ? ` (${lineNumber})` : '';
+	app.log(`console ${type}: ${url}${lineText}`);
 	console.log(msg.text());
 }
 
@@ -171,26 +172,29 @@ function screenshot(page: Page, domId: string) {
 				.$eval(id, el => {
 					(el as any).style.zIndex = 10;
 				})
-				.then(() => page.$(`#${domId}`))
+				.then(() => page.$(id))
 				.then(el =>
 					el?.screenshot({
 						type: 'png',
 						encoding: 'binary',
 					})
 				)
-				.then(buffer => {
-					if (buffer && buffer instanceof Buffer) resolve(buffer);
-					else reject();
-				});
+				.then(
+					buffer => {
+						if (buffer && buffer instanceof Buffer) resolve(buffer);
+						else reject();
+					},
+					e => reject(e)
+				);
 		});
 	});
 }
 
 async function handleFigureRequest(
 	page: Page,
-	data: { name: string; domId: string; baseline?: string },
+	data: FigureData,
 	app: TestRunner
-) {
+): Promise<Result> {
 	const { name, domId } = data;
 	const baseline = (data.baseline = `${
 		app.baselinePath || 'spec'
@@ -199,11 +203,11 @@ async function handleFigureRequest(
 
 	await (figureReady ||
 		(figureReady = page
-			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 500 })
+			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 250 })
 			.catch(() => 1)));
 
 	page.mouse.move(350, -100);
-	await page.waitForTimeout(300);
+	//await page.waitForTimeout(300);
 	const [original, buffer] = await Promise.all([
 		readFile(baseline).catch(() => undefined),
 		screenshot(page, domId),
@@ -224,7 +228,7 @@ async function handleFigureRequest(
 			parsePNG(buffer),
 		]);
 		const len = originalData.length;
-		let diff = 0;
+		//let diff = 0;
 
 		if (len !== newData.length) {
 			return {
@@ -234,7 +238,14 @@ async function handleFigureRequest(
 			};
 		}
 		for (let i = 0; i < len; i++) {
-			if (originalData.readUInt8(i) !== newData.readUInt8(i)) diff++;
+			if (originalData.readUInt8(i) !== newData.readUInt8(i))
+				return {
+					success: false,
+					message: `Screenshot should match baseline`,
+					data,
+				};
+		}
+		/*diff++;
 		}
 		if (diff > 0)
 			return {
@@ -244,7 +255,7 @@ async function handleFigureRequest(
 					100
 				).toFixed(2)}%`,
 				data,
-			};
+			};*/
 	}
 
 	return {
@@ -276,8 +287,21 @@ export default async function runPuppeteer(app: TestRunner) {
 	if (app.startServer) await page.waitForTimeout(500);
 	if (app.browserUrl) await page.goto(app.browserUrl);
 
-	function cxlRunner(cmd: any) {
-		if (cmd.type === 'figure') return handleFigureRequest(page, cmd, app);
+	function cxlRunner(cmd: any): Promise<Result> | Result {
+		if (cmd.type === 'figure') {
+			try {
+				return handleFigureRequest(page, cmd, app);
+			} catch (e) {
+				return {
+					success: false,
+					message: String(e),
+				};
+			}
+		}
+		return {
+			success: false,
+			message: `Feature not supported: ${cmd.type}`,
+		};
 	}
 
 	page.on('console', msg => handleConsole(msg, app));

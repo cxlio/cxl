@@ -6,7 +6,7 @@ High-performance Web Components
 
 ## Project Details
 
--   Branch Version: [3.2.0](https://npmjs.com/package/@cxl/ui/v/3.2.0)
+-   Branch Version: [3.3.0](https://npmjs.com/package/@cxl/ui/v/3.3.0)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/ui)
 -   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
@@ -18,7 +18,6 @@ High-performance Web Components
 ## Features
 
 -   Lightweight and Fast.
--   Modular Architecture.
 -   No dependecies.
 -   Framework Agnostic.
 -   Flexible Theming.
@@ -49,3 +48,7 @@ This is all you need to get started. The default theme follows the [Material Des
 	</cxl-content>
 </cxl-application>
 ```
+
+### See More
+
+More demo content and examples available [here](https://cxlio.github.ui/cxl/ui-demo)</a>

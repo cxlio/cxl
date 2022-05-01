@@ -6,7 +6,8 @@
 	"references": [
 		{ "path": "../rx" },
 		{ "path": "../server" },
-		{ "path": "../source" }
+		{ "path": "../source" },
+		{ "path": "../amd" }
 	],
 	"files": [
 		"index.ts",

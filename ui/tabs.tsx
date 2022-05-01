@@ -2,10 +2,10 @@
 import { dom } from '@cxl/tsx';
 import { Augment, Attribute, Component, get } from '@cxl/component';
 import {
+	isHidden,
 	on,
 	onChildrenMutation,
 	trigger,
-	onFontsReady,
 	onResize,
 	onAction,
 } from '@cxl/dom';
@@ -16,12 +16,6 @@ import { Span, ripple } from './core.js';
 import { css } from './theme.js';
 
 /**
- * @example
-<cxl-tabs>
-	<cxl-tab selected>Tab 1</cxl-tab>
-	<cxl-tab href="#cxl-tabs">Tab 2</cxl-tab>
-	<cxl-tab>Tab 3</cxl-tab>
-</cxl-tabs>
  * @see Tabs
  */
 @Augment<Tab>(
@@ -31,23 +25,31 @@ import { css } from './theme.js';
 		$: {
 			flexShrink: 0,
 			flexGrow: 1,
-			...padding(16, 16, 12, 16),
+			...padding(4, 16, 0, 16),
 			backgroundColor: 'surface',
+			minHeight: 46,
 			font: 'button',
 			color: 'onSurface',
-			lineHeight: 18,
 			textDecoration: 'none',
-			textAlign: 'center',
-			display: 'block',
+			justifyContent: 'center',
+			display: 'inline-flex',
+			alignItems: 'center',
 			outline: 0,
+			cursor: 'pointer',
 			minWidth: 90,
+			// Needed for ripple in Safari
+			position: 'relative',
 		},
 		'@small': {
-			$: { display: 'inline-block' },
+			$: { display: 'inline-flex' },
 		},
 		$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
 		$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 	}),
+	$ =>
+		onResize($).tap(() => {
+			if (!isHidden($)) trigger($, 'tabs.resize');
+		}),
 	ripple,
 	_ => <slot />,
 	host =>
@@ -93,7 +95,6 @@ export class Tab extends Component {
 			display: 'block',
 			flexShrink: 0,
 			position: 'relative',
-			cursor: 'pointer',
 			overflowX: 'auto',
 		},
 		selected: {
@@ -121,7 +122,8 @@ export class Tab extends Component {
 			else if ((ev as any).detail instanceof Tab)
 				el.selected = (ev as any).detail;
 			ev.stopPropagation();
-			if (el.selected !== activeTab$.value) activeTab$.next(el.selected);
+			if (el.selected?.name && el.selected !== activeTab$.value)
+				activeTab$.next(el.selected);
 		}),
 	host => (
 		<Span
@@ -129,11 +131,11 @@ export class Tab extends Component {
 			$={el =>
 				merge(
 					onChildrenMutation(host),
-					onFontsReady(),
 					get(host, 'selected'),
-					on(window, 'resize'),
+					on(host, 'tabs.resize'),
 					onResize(el)
 				).raf(() => {
+					if (isHidden(host)) return;
 					const sel = host.selected;
 					if (!sel) return (el.style.transform = 'scaleX(0)');
 					const scaleX = sel.clientWidth / 100;
@@ -152,13 +154,20 @@ export class Tabs extends Component {
 const activeTab$ = be<Tab | undefined>(undefined);
 
 @Augment<TabPanel>('cxl-tab-panel', $ =>
-	activeTab$.tap(tab => {
-		if (tab && $.tabname && tab.name === $.tabname) {
+	activeTab$.raf(tab => {
+		if (tab && $.name && tab.name === $.name) {
 			$.style.display = 'contents';
-		} else $.style.display = 'none';
+			($ as any).visible = true;
+		} else {
+			$.style.display = 'none';
+			($ as any).visible = false;
+		}
 	})
 )
 export class TabPanel extends Component {
 	@Attribute()
-	tabname?: string;
+	readonly visible = false;
+
+	@Attribute()
+	name?: string;
 }

@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"allowJs": true,
 		"declaration": true,
-		"outFile": "../dist/build/amd.js",
+		"outFile": "../dist/build/amd-static.js",
 		"composite": true
 	},
 	"files": ["amd.js"]

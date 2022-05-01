@@ -356,7 +356,7 @@ export function insert(el: Element, content: ElementContent) {
 	el.appendChild(content);
 }
 
-export function fileReaderString(file: File) {
+export function fileReaderString(file: Blob) {
 	return new Observable<string>(subs => {
 		const fr = new FileReader();
 		fr.readAsBinaryString(file);
@@ -389,4 +389,22 @@ export function onMutation(
 		observer.observe(target, options);
 		return () => observer.disconnect();
 	});
+}
+
+export function onIntersection(target: Element) {
+	return new Observable<IntersectionObserverEntry>(subs => {
+		const observer = new IntersectionObserver(events => {
+			for (const ev of events) subs.next(ev);
+		});
+		observer.observe(target);
+		return () => observer.disconnect();
+	});
+}
+
+export function onVisible(target: Element) {
+	return onIntersection(target).map(ev => ev.isIntersecting);
+}
+
+export function isHidden(target: HTMLElement) {
+	return target.offsetParent === null;
 }

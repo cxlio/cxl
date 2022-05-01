@@ -1,4 +1,7 @@
+import { relative, resolve } from 'path';
+
 import type * as ts from 'typescript';
+
 const tsPath = require.resolve('typescript', {
 	paths: [process.cwd(), __dirname],
 });
@@ -13,15 +16,11 @@ const {
 const SK = tsLocal.SyntaxKind;
 const TF = tsLocal.TypeFlags;
 
-import { relative, resolve } from 'path';
-
 type SerializerMap = {
 	[K in ts.SyntaxKind]?: (node: any) => Node;
 };
 
 type Index = Record<number, Node>;
-
-export { ScriptTarget } from 'typescript';
 
 export enum Kind {
 	Unknown = 0,
@@ -66,6 +65,7 @@ export enum Kind {
 	ConstructSignature = 39,
 	MappedType = 40,
 	TypeIntersection = 41,
+	ReadonlyKeyword = 42,
 }
 
 const SyntaxKindMap: Record<number, Kind> = {
@@ -105,6 +105,7 @@ const SyntaxKindMap: Record<number, Kind> = {
 	[SK.ConstructSignature]: Kind.ConstructSignature,
 	[SK.MappedType]: Kind.MappedType,
 	[SK.IntersectionType]: Kind.TypeIntersection,
+	[SK.ReadonlyKeyword]: Kind.ReadonlyKeyword,
 };
 
 export interface DocumentationContent {
@@ -336,7 +337,6 @@ function isOwnFile(sourceFile: ts.SourceFile) {
 
 function getNodeFromDeclaration(node: ts.Node): Node {
 	let result = (node as any)[dtsNode];
-
 	if (!result) {
 		const sourceFile = node.getSourceFile();
 		const flags = program.isSourceFileDefaultLibrary(sourceFile)
@@ -848,7 +848,7 @@ function serializeReference(node: ts.TypeReferenceType) {
 	const type = typeChecker.getTypeFromTypeNode(node);
 	const symbol = type.aliasSymbol || type.symbol;
 	const decl =
-		symbol && (symbol.valueDeclaration || symbol.declarations?.[0]);
+		symbol && (symbol.declarations?.[0] || symbol.valueDeclaration);
 	const name = (tsLocal.isTypeReferenceNode(node)
 		? node.typeName
 		: node.expression
@@ -924,7 +924,6 @@ function serializeMappedType(node: ts.MappedTypeNode) {
 }
 
 function serializeModule(node: ts.ModuleDeclaration) {
-	//if (node.modifiers?.find(m => m.kind === SK.DeclareKeyword)) return;
 	const result = serializeDeclaration(node);
 	node.forEachChild(c => {
 		if (tsLocal.isModuleBlock(c))
@@ -935,6 +934,15 @@ function serializeModule(node: ts.ModuleDeclaration) {
 			typeChecker.getSymbolAtLocation(node) ||
 			(node.name && typeChecker.getSymbolAtLocation(node.name));
 		if (symbol) {
+			// If module already exists, merge declarations
+			if ((symbol as any).$$moduleResult) {
+				if (result.children)
+					(symbol as any).$$moduleResult.children.push(
+						...result.children
+					);
+				return result;
+			} else (symbol as any).$$moduleResult = result;
+
 			const symbolNode =
 				symbol.valueDeclaration || symbol.declarations?.[0];
 			const moduleName = (symbolNode as any).moduleName;
@@ -944,37 +952,6 @@ function serializeModule(node: ts.ModuleDeclaration) {
 		extraModules.push(result);
 	}
 	return result;
-	/*const symbol =
-		typeChecker.getSymbolAtLocation(node) ||
-		(node.name && typeChecker.getSymbolAtLocation(node.name));
-
-	if (symbol) {
-		const symbolNode = symbol.valueDeclaration || symbol.declarations?.[0];
-		if (!symbolNode) return;
-		const result = serializeDeclaration(symbolNode);
-		console.log(symbolNode);
-		if (!extraModules.includes(result)) {
-			const moduleName = (symbolNode as any).moduleName;
-			if (moduleName) result.name = moduleName;
-			symbol.exports?.forEach(
-				s =>
-					s.declarations &&
-					pushChildren(
-						result,
-						s.declarations.flatMap(d => {
-							const existing: Node = (d as any)[dtsNode];
-							return d.parent !== currentSourceFile ||
-								(existing &&
-									result.children?.indexOf(existing) !== -1)
-								? []
-								: serialize(d);
-						})
-					)
-			);
-
-			extraModules.push(result);
-		}
-	}*/
 }
 
 const Serializer: SerializerMap = {
@@ -1160,7 +1137,6 @@ function parseSourceFile(sourceFile: ts.SourceFile) {
 				)
 			);
 	}
-
 	sourceFile.forEachChild(c => visit(c, result));
 	return result;
 }
@@ -1204,7 +1180,7 @@ export function parse(
 	sourceFiles = [sourceFile];
 
 	const sourceNode = parseSourceFile(sourceFile);
-	return sourceNode.children || [];
+	return sourceNode.children || extraModules || [];
 }
 
 export function buildTsconfig(config: ts.ParsedCommandLine): Output {

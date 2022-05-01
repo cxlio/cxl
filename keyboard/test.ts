@@ -20,7 +20,18 @@ export default spec('keyboard', s => {
 
 		it.should('normalize shifted keys', a => {
 			a.equal(normalize('shift+5'), '%');
+			a.equal(normalize('shift+A'), 'shift+a');
 			a.equal(normalize('shift+ctrl+5'), 'ctrl+%');
+		});
+
+		it.should('handle non character keys', a => {
+			a.equal(normalize(':'), ':');
+			a.equal(normalize('/'), '/');
+			a.equal(normalize('.'), '.');
+			a.equal(normalize('?'), '?');
+			a.equal(normalize('shift+/'), '?');
+			a.equal(normalize('shift+?'), '?');
+			a.equal(normalize('ctrl+:'), 'ctrl+:');
 		});
 	});
 });

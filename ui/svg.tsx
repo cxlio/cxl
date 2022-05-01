@@ -1,4 +1,7 @@
 ///<amd-module name="@cxl/ui/svg.js"/>
+import { Attribute, Augment, Component, get } from '@cxl/component';
+import { getShadow } from '@cxl/dom';
+
 export type SVGChildren = Path;
 
 function renderChildren(el: SVGElement, children: any) {
@@ -31,6 +34,7 @@ export function Svg(p: {
 	height?: number;
 	alt?: string;
 	children?: Node | Node[];
+	src?: string;
 }) {
 	const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	el.style.fill = 'currentColor';
@@ -41,6 +45,7 @@ export function Svg(p: {
 	if (p.className !== undefined) el.setAttribute('class', p.className);
 	if (p.alt !== undefined) el.setAttribute('alt', p.alt);
 	if (p.children) renderChildren(el, p.children);
+	if (p.src) el.innerHTML = p.src;
 	return el;
 }
 
@@ -61,4 +66,22 @@ export function Circle(p: Circle) {
 	el.setAttribute('cy', p.cy);
 	el.setAttribute('r', p.r);
 	return el;
+}
+
+@Augment<SvgImage>('cxl-svg', $ => {
+	const shadow = getShadow($);
+	$.bind(
+		get($, 'src').tap(async src => {
+			if (!src) {
+				$.innerHTML = '';
+				return;
+			}
+			const content = await fetch(src).then(res => res.text());
+			shadow.innerHTML = `<style>:host{display:inline-flex;}</style>${content}`;
+		})
+	);
+})
+export class SvgImage extends Component {
+	@Attribute()
+	src?: string;
 }

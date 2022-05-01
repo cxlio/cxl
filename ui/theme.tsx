@@ -1,69 +1,11 @@
 ///<amd-module name="@cxl/ui/theme.js"/>
 import {
-	Animation as CssAnimation,
-	AnimationDefinition,
-	Colors as CssColors,
-	BaseColor,
-	CSSStyle,
 	Styles as CssStyles,
-	Theme,
-	Typography as CssTypography,
 	StyleDefinition,
-	applyTheme,
 	buildTheme,
 	rgba,
 	defaultTheme as cssTheme,
 } from '@cxl/css';
-
-export interface UiTheme extends Theme {
-	animation: Animation;
-	colors: Colors;
-	typography: Typography;
-	variables: Variables;
-}
-
-export interface Animation extends CssAnimation {
-	spinnerstroke: AnimationDefinition;
-}
-
-export interface Colors extends CssColors {
-	shadow: BaseColor;
-	primary: BaseColor;
-	primaryLight: BaseColor;
-	secondary: BaseColor;
-	surface: BaseColor;
-	error: BaseColor;
-	errorLight: BaseColor;
-	onPrimary: BaseColor;
-	onPrimaryLight: BaseColor;
-	onSecondary: BaseColor;
-	onSurface: BaseColor;
-	onSurface8: BaseColor;
-	onSurface12: BaseColor;
-	onSurface87: BaseColor;
-	onError: BaseColor;
-	background: BaseColor;
-	onBackground: BaseColor;
-	link: BaseColor;
-	headerText: BaseColor;
-	divider: BaseColor;
-}
-
-export interface Typography extends CssTypography {
-	caption: CSSStyle;
-	h1: CSSStyle;
-	h2: CSSStyle;
-	h3: CSSStyle;
-	h4: CSSStyle;
-	h5: CSSStyle;
-	h6: CSSStyle;
-	body2: CSSStyle;
-	subtitle: CSSStyle;
-	subtitle2: CSSStyle;
-	button: CSSStyle;
-	code: CSSStyle;
-	monospace: CSSStyle;
-}
 
 export interface ColorTheme {
 	primary: string;
@@ -74,18 +16,25 @@ export interface ColorTheme {
 	onSurface: string;
 }
 
-export interface Variables {
-	speed: string;
-	font: string;
-	fontSize: string;
-	fontMonospace: string;
-}
+export type BaseThemeAnimation = typeof baseTheme['animation'];
+export interface Animation extends BaseThemeAnimation {}
 
+export type UiTheme = typeof baseTheme & { animation: Animation };
 export type Styles = CssStyles<UiTheme>;
 
-export const theme: UiTheme = {
+export interface IconDef {
+	id: string;
+	icon: Node;
+}
+
+const baseTheme = {
 	...cssTheme,
 	animation: {
+		none: undefined,
+		flash: {
+			keyframes: `from, 50%, to { opacity: 1; } 25%,75% { opacity: 0; }`,
+			value: 'cxl-flash var(--cxl-speed) infinite ease-in',
+		},
 		spin: {
 			keyframes:
 				'0% { transform: rotate(0); } to { transform: rotate(360deg); }',
@@ -102,14 +51,23 @@ export const theme: UiTheme = {
 			value: 'cxl-expand var(--cxl-speed) 1 ease-in',
 		},
 		fadeIn: {
-			keyframes:
-				'0% { display: block; opacity: 0; } 100% { opacity: 1; }',
+			keyframes: '0% { opacity: 0; } 100% { opacity: 1; }',
 			value: 'cxl-fadeIn var(--cxl-speed) linear forwards',
 		},
 		fadeOut: {
 			keyframes:
 				'0% { opacity: 1 } 100% { visibility:hidden; opacity: 0; }',
 			value: 'cxl-fadeOut var(--cxl-speed) linear both',
+		},
+		fadeInUp: {
+			keyframes:
+				'0% { opacity: 0;transform: translate(0, 40%) } 100% { opacity: 1;transform: none }',
+			value: 'cxl-fadeInUp var(--cxl-speed) linear forwards',
+		},
+		slideInUp: {
+			keyframes:
+				'0% { transform: translate(0, 40%) } 100% { transform: none }',
+			value: 'cxl-slideInUp var(--cxl-speed) linear both',
 		},
 		wait: {
 			keyframes: `
@@ -147,7 +105,7 @@ export const theme: UiTheme = {
 	},
 	variables: {
 		// Animation speed
-		speed: '0.3s',
+		speed: '250ms',
 		font: 'Roboto, Helvetica, sans-serif',
 		fontSize: '16px',
 		fontMonospace: 'monospace',
@@ -193,51 +151,25 @@ export const theme: UiTheme = {
 	colors: {
 		shadow: rgba(0, 0, 0, 0.26),
 		primary: rgba(0x15, 0x65, 0xc0),
+		link: rgba(0x15, 0x65, 0xc0),
 		// 0.14 opacity will pass accessibility contrast requirements
-		get primaryLight() {
-			return { ...this.primary, a: 0.14 };
-		},
-
+		primaryLight: rgba(0x15, 0x65, 0xc0, 0.14),
 		secondary: rgba(0xf9, 0xaa, 0x33),
 		surface: rgba(0xff, 0xff, 0xff),
 		error: rgba(0xb0, 0x00, 0x20),
-		get errorLight() {
-			return { ...this.error, a: 0.14 };
-		},
-
+		errorLight: rgba(0xb0, 0x00, 0x20, 0.14),
 		onPrimary: rgba(0xff, 0xff, 0xff),
-		get onPrimaryLight() {
-			return this.primary;
-		},
+		onPrimaryLight: rgba(0x15, 0x65, 0xc0),
 		onSecondary: rgba(0, 0, 0),
 		onSurface: rgba(0, 0, 0),
-
-		get onSurface8() {
-			return { ...this.onSurface, a: 0.08 };
-		},
-		get onSurface12() {
-			return { ...this.onSurface, a: 0.12 };
-		},
-		get onSurface87() {
-			return { ...this.onSurface, a: 0.87 };
-		},
+		onSurface8: rgba(0, 0, 0, 0.08),
+		onSurface12: rgba(0, 0, 0, 0.12),
+		onSurface87: rgba(0, 0, 0, 0.87),
 		onError: rgba(0xff, 0xff, 0xff),
-
-		get background() {
-			return this.surface;
-		},
-		get onBackground() {
-			return this.onSurface;
-		},
-		get link() {
-			return this.primary;
-		},
-		get headerText() {
-			return { ...this.onSurface, a: 0.6 };
-		},
-		get divider() {
-			return { ...this.onSurface, a: 0.16 };
-		},
+		background: rgba(0xff, 0xff, 0xff),
+		onBackground: rgba(0, 0, 0),
+		headerText: rgba(0x0, 0x0, 0x0, 0.6),
+		divider: rgba(0x0, 0x0, 0x0, 0.16),
 	},
 	imports: [
 		'https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap',
@@ -245,6 +177,11 @@ export const theme: UiTheme = {
 
 	globalStyles: {
 		'@a': { color: 'link' },
+		// TODO Find a better way
+		'cxl-selection,::selection': {
+			backgroundColor: 'secondary',
+			color: 'onSecondary',
+		},
 		'*': {
 			boxSizing: 'border-box',
 			transition:
@@ -252,8 +189,8 @@ export const theme: UiTheme = {
 		} as any,
 	},
 };
-
-export const { baseColor, css } = buildTheme(theme);
+export const theme: UiTheme = baseTheme;
+export const { applyTheme, baseColor, css } = buildTheme(theme);
 
 export const BaseColors: ColorTheme = {
 	surface: baseColor('surface'),
@@ -280,7 +217,13 @@ export const SecondaryColors: ColorTheme = {
 	onSecondary: baseColor('onSurface'),
 };
 
-type ColorKey = 'surface' | 'primary' | 'secondary';
+export const ErrorColors: ColorTheme = {
+	...BaseColors,
+	surface: baseColor('error'),
+	onSurface: baseColor('onError'),
+};
+
+type ColorKey = 'surface' | 'primary' | 'secondary' | 'error' | 'inherit';
 
 export const ColorStyles: Record<ColorKey, StyleDefinition<UiTheme>> = {
 	surface: {
@@ -290,6 +233,8 @@ export const ColorStyles: Record<ColorKey, StyleDefinition<UiTheme>> = {
 	},
 	primary: { variables: PrimaryColors },
 	secondary: { variables: SecondaryColors },
+	error: { variables: ErrorColors },
+	inherit: { color: 'inherit', backgroundColor: 'inherit' },
 };
 
 export const DisabledStyles = {
@@ -299,13 +244,44 @@ export const DisabledStyles = {
 	pointerEvents: 'none',
 };
 
+export const FocusStyles = {
+	filter: 'invert(0.2) saturate(2) brightness(1.1)',
+};
+
+export const HoverStyles = {
+	filter: 'invert(0.15) saturate(1.5) brightness(1.1)',
+};
+
 export const StateStyles = {
 	$focus: { outline: 0 },
 	$disabled: DisabledStyles,
 };
 
+export function scrollbarStyles(prefix = '$') {
+	return {
+		[prefix + '::scrollbar']: { width: 8, height: 8 },
+		[prefix + '::scrollbar-track']: { backgroundColor: 'transparent' },
+		[prefix + '::scrollbar-thumb']: { backgroundColor: 'divider' },
+		[prefix + '::-webkit-scrollbar']: { width: 8, height: 8 },
+		[prefix + '::-webkit-scrollbar-track']: {
+			backgroundColor: 'transparent',
+		},
+		[prefix + '::-webkit-scrollbar-thumb']: { backgroundColor: 'divider' },
+	};
+}
+
 export function delayTheme(): void {
 	cancelAnimationFrame(loadingId);
 }
 
-const loadingId = requestAnimationFrame(() => applyTheme(theme));
+const loadingId = requestAnimationFrame(() => applyTheme());
+
+const icons: Record<string, IconDef> = {};
+
+export function registerIcon(icon: IconDef) {
+	icons[icon.id] = icon;
+}
+
+export function getIcon(id: string) {
+	return icons[id]?.icon.cloneNode(true);
+}

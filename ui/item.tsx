@@ -1,20 +1,19 @@
 ///<amd-module name="@cxl/ui/item.js"/>
-import { dom } from '@cxl/tsx';
-import { Augment, Component, StyleAttribute } from '@cxl/component';
+//import { dom } from '@cxl/tsx';
+import { Augment, Component, Slot, StyleAttribute } from '@cxl/component';
 import { onAction } from '@cxl/dom';
 import { focusable, triggerEvent } from '@cxl/template';
-import { StateStyles, css } from './theme.js';
+import { FocusStyles, HoverStyles, StateStyles, css } from './theme.js';
 import { ripple } from './core.js';
 
-@Augment<Item>(
-	'cxl-item',
-	ripple,
-	focusable,
+@Augment<ItemLayout>(
+	'cxl-item-layout',
 	css({
 		$: {
-			display: 'flex',
 			position: 'relative',
 			color: 'onSurface',
+			backgroundColor: 'surface',
+			display: 'flex',
 			font: 'default',
 			lineHeight: 24,
 			paddingRight: 16,
@@ -23,24 +22,34 @@ import { ripple } from './core.js';
 			paddingBottom: 8,
 			minHeight: 48,
 			alignItems: 'center',
-			backgroundColor: 'surface',
 			columnGap: 16,
 		},
 		$selected: {
 			backgroundColor: 'primaryLight',
 			color: 'onPrimaryLight',
 		},
+		$hover: HoverStyles,
+	}),
+	Slot
+)
+export class ItemLayout extends Component {
+	@StyleAttribute()
+	selected = false;
+}
+
+@Augment<Item>(
+	'cxl-item',
+	ripple,
+	focusable,
+	css({
+		$focusWithin: FocusStyles,
 		...StateStyles,
 	}),
-	host => onAction(host).pipe(triggerEvent(host, 'drawer.close')),
-	_ => <slot />
+	host => onAction(host).pipe(triggerEvent(host, 'drawer.close'))
 )
-export class Item extends Component {
+export class Item extends ItemLayout {
 	@StyleAttribute()
 	disabled = false;
 
 	touched = false;
-
-	@StyleAttribute()
-	selected = false;
 }

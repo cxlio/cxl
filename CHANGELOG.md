@@ -1,5 +1,23 @@
 # Changelog
 
+## 5/1/2022
+
+-   chore: release merge step [00a6fb9]
+-   chore: add package-lock [2324d91]
+-   chore: add package-lock [f15d00e]
+-   chore: add package-lock [203505d]
+-   chore: archive old projects [5ffb011]
+-   chore: updated docs [67da56c]
+-   fix: badge improvements [84dfad0]
+-   fix: safari tab ripple [97cd1cf]
+-   fix: safari selectbox positioning [42b7fa3]
+-   fix: svg width and height style [147af14]
+-   feat: readonly textarea [f84eb56]
+-   refactor: removed ui-ide [2e05071]
+-   chore: improved build [9ba3eb0]
+-   chore: update dependencies [89df2a3]
+-   chore: cleanup [6fe48b2]
+
 ## 8/26/2021
 
 -   chore: alpha release [c7a7238]

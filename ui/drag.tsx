@@ -1,11 +1,12 @@
+///<amd-module name="@cxl/ui/drag.js"/>
 import { Augment, Component } from '@cxl/component';
 import { dom } from '@cxl/tsx';
 import { dropTarget } from '@cxl/drag';
 import { trigger } from '@cxl/dom';
 import { css } from './theme.js';
 
-@Augment<DragContainer>(
-	'cxl-drop-container',
+@Augment<DropTarget>(
+	'cxl-drop-target',
 	css({
 		$: {
 			display: 'block',
@@ -32,7 +33,7 @@ import { css } from './theme.js';
 		</>
 	)
 )
-export class DragContainer extends Component {
+export class DropTarget extends Component {
 	$items: DataTransferItem[] = [];
 
 	get items(): DataTransferItem[] {

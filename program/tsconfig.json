@@ -4,5 +4,5 @@
 		"outDir": "../dist/program"
 	},
 	"files": ["index.ts"],
-	"references": [{ "path": "../rx" }]
+	"references": []
 }

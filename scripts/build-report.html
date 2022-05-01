@@ -48,7 +48,7 @@
 				return pkg.npms?.collected?.metadata?.version;
 			}
 
-			async function getTotalCoverage(dir, coverage) {
+			function getTotalCoverage(dir, coverage) {
 				const regex = new RegExp(`\/${dir}\/.+.\.ts`);
 				let total = 0;
 				let count = 0;

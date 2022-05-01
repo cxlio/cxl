@@ -1,6 +1,29 @@
-import { Kind } from '@cxl/dts';
+import { Flags, Kind } from '@cxl/dts';
 
-const KindMap: Record<Kind, string> = {
+export const FlagsMap: Record<Flags, string> = {
+	[Flags.None]: '',
+	[Flags.Export]: 'export',
+	[Flags.Ambient]: 'ambient',
+	[Flags.Public]: 'public',
+	[Flags.Private]: 'private',
+	[Flags.Protected]: 'protected',
+	[Flags.Static]: 'static',
+	[Flags.Readonly]: 'readonly',
+	[Flags.Abstract]: 'abstract',
+	[Flags.Async]: 'async',
+	[Flags.Default]: 'default',
+	[Flags.Deprecated]: 'deprecated',
+	// Custom Flags
+	[Flags.Overload]: 'overload',
+	[Flags.External]: 'external',
+	[Flags.DefaultLibrary]: 'default-library',
+	[Flags.DeclarationMerge]: 'declaration-merge',
+	[Flags.Rest]: 'rest',
+	[Flags.Optional]: 'optional',
+	[Flags.Internal]: 'internal',
+};
+
+export const KindMap: Record<Kind, string> = {
 	[Kind.Unknown]: 'Unknown',
 	[Kind.Constant]: 'Constant',
 	[Kind.Variable]: 'Variable',
@@ -43,9 +66,10 @@ const KindMap: Record<Kind, string> = {
 	[Kind.ConstructSignature]: 'Construct Signature',
 	[Kind.MappedType]: 'Mapped Type',
 	[Kind.TypeIntersection]: 'Intersection Type',
+	[Kind.ReadonlyKeyword]: 'Readonly Keyword',
 };
 
-const GroupTitle: Record<any, string> = {
+export const GroupTitle: Record<any, string> = {
 	[Kind.Constant]: 'Constants',
 	[Kind.Variable]: 'Variables',
 	[Kind.Interface]: 'Interfaces',

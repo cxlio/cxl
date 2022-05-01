@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/datepicker.js"/>
 import { InputBase } from '@cxl/ui/input-base.js';
 import { Augment, Attribute, StyleAttribute, get } from '@cxl/component';
 import { padding } from '@cxl/css';
@@ -192,7 +193,7 @@ class CalendarMonth extends InputBase {
 
 	focus() {
 		const shadow = this.shadowRoot;
-		if (!shadow) return;
+		if (this.disabled || !shadow) return;
 		const el: Button | null =
 			shadow.querySelector('[selected]') ||
 			shadow.querySelector('cxl-calendar-date');
@@ -250,7 +251,7 @@ class CalendarYear extends InputBase {
 
 	focus() {
 		const shadow = this.shadowRoot;
-		if (!shadow) return;
+		if (this.disabled || !shadow) return;
 		const el: Button | null =
 			shadow.querySelector('[primary]') ||
 			shadow.querySelector('cxl-button');
@@ -416,6 +417,7 @@ export class Datepicker extends InputBase {
 	value: Date | undefined = undefined;
 
 	focus() {
+		if (this.disabled) return;
 		(this.shadowRoot?.querySelector('.opened') as HTMLElement)?.focus();
 	}
 }
@@ -475,6 +477,14 @@ export class DatepickerToggle extends InputBase {
 	opened = false;
 }
 
+/**
+ * Datepicker Input
+ * @demo
+ * <cxl-field>
+ *   <cxl-label>Date</cxl-label>
+ *   <cxl-datepicker-input></cxl-datepicker-input>
+ * </cxl-field>
+ */
 @Augment<DatepickerInput>(
 	'cxl-datepicker-input',
 	css({

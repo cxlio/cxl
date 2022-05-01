@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { writeFile } from 'fs/promises';
-import { exec } from 'child_process';
+import { spawn, execSync } from 'child_process';
 import { Logger, Parameter, program, parseArgv } from '@cxl/program';
 
 import runNode from './runner-node.js';
@@ -41,6 +41,14 @@ const parameters: Parameter[] = [
 	},
 ];
 
+function startServer(cmd: string) {
+	const [bin, ...args] = cmd.split(' ');
+	const proc = spawn(bin, args);
+	proc.stdout?.on('data', data => console.log(data.toString()));
+	proc.stderr?.on('data', data => console.error(data.toString()));
+	return proc;
+}
+
 export default program({}, async ({ log }) => {
 	const args = parseArgv(parameters);
 	const config: TestRunner = {
@@ -54,15 +62,21 @@ export default program({}, async ({ log }) => {
 		...args,
 	};
 
-	const server = config.startServer && exec(args.startServer);
-	if (server) log(`"${args.startServer}" started`);
+	const server = config.startServer && startServer(config.startServer);
+	if (server) {
+		log(`"${args.startServer}" started. PID: ${server.pid}`);
+	}
 
 	const report = await (args.node ? runNode(config) : runPuppeteer(config));
 
 	try {
-		if (server) process.kill(server.pid);
+		if (server && !server.killed) {
+			log(`Attempting to kill ${server.pid} "${args.startServer}"`);
+			execSync(`kill -9 ${server.pid}`);
+			server.kill();
+		}
 	} catch (e) {
-		//
+		log(`Could not kill "${args.startServer}"`);
 	}
 
 	if (report) {

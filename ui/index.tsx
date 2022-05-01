@@ -1,5 +1,6 @@
 ///<amd-module name="@cxl/ui"/>
 export * from './appbar';
+export * from './autocomplete.js';
 export * from './badge';
 export { Button } from './button';
 export * from './checkbox.js';
@@ -12,12 +13,12 @@ export {
 	RippleContainer,
 	Ripple,
 	Span,
-	Spinner,
 	T,
 	Toggle,
 	Toolbar,
 	ripple,
 } from './core.js';
+export { Spinner } from './spinner.js';
 export { Field, Fieldset } from './field.js';
 export { theme } from './theme.js';
 export * from './menu.js';
@@ -42,3 +43,5 @@ export * from './datepicker.js';
 export * from './table.js';
 export * from './user.js';
 export * from './progress.js';
+export * from './animate.js';
+export * from './svg.js';

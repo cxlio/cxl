@@ -73,7 +73,7 @@ export abstract class Component extends HTMLElement {
 
 	Shadow = (p: { children: Children }) => {
 		renderChildren(this, p.children, getShadow(this));
-		return this;
+		return this as Component;
 	};
 
 	Slot = (p: { selector: string; name?: string }) => {
@@ -207,15 +207,18 @@ function attributes$(host: Component): Observable<AttributeEvent<any, any>> {
 	return (host as any).attributes$;
 }
 
-export function onUpdate<T extends Component>(host: T, fn: (node: T) => void) {
-	return concat(of(host), attributes$(host)).tap(() => fn(host));
+export function onUpdate<T extends Component>(host: T) {
+	return concat(
+		of(host),
+		attributes$(host).map(() => host)
+	);
 }
 
 /**
  * Fires when connected and on attribute change
  */
 export function update<T extends Component>(fn: (node: T) => void) {
-	return (host: T) => host.bind(onUpdate(host, fn));
+	return (host: T) => host.bind(onUpdate(host).tap(fn));
 }
 
 export function attributeChanged<T extends Component, K extends keyof T>(
@@ -312,7 +315,7 @@ export function Attribute(options?: Partial<AttributeOptions>): any {
 						attribute,
 						value,
 					});
-				}
+				} else if (descriptor) this[prop] = value;
 			},
 		};
 	};

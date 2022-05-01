@@ -6,7 +6,6 @@ import {
 	mkdirp,
 	program,
 	parseArgv,
-	parametersJsonFile,
 	readJson,
 	sh,
 } from '@cxl/program';
@@ -93,7 +92,7 @@ program({}, async ({ log }) => {
 	};
 
 	if (existsSync('docs.json'))
-		Object.assign(args, parametersJsonFile(Parameters, 'docs.json'));
+		Object.assign(args, await readJson('docs.json'));
 
 	async function writeFile(file: File) {
 		const name = file.name;

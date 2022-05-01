@@ -5,5 +5,9 @@
 	},
 	"include": ["*.ts"],
 	"exclude": ["test.ts"],
-	"references": [{ "path": "../program" }, { "path": "../build" }]
+	"references": [
+		{ "path": "../program" },
+		{ "path": "../build" },
+		{ "path": "../blog" }
+	]
 }

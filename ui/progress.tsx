@@ -15,7 +15,7 @@ import { css } from './theme.js';
 @Augment<Progress>(
 	'cxl-progress',
 	css({
-		$: { backgroundColor: 'primary', backgroundImage: '', height: 4 },
+		$: { /*backgroundColor: 'primary',*/ height: 4 },
 		indicator: {
 			display: 'block',
 			backgroundColor: 'primary',

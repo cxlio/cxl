@@ -56,6 +56,17 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 				\`/debuggerjs/dist/$\{
 					str.endsWith('.js') ? p1 : p1 + '/index.js'
 				}\`
+		).replace(
+			/^@j5g3\\/(.+)/,
+			(str, p1) =>
+				\`/j5g3/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
+		)
+		.replace(
+			/^@cxl\\/workspace\\.(.+)/,
+			(str, p1) =>
+				\`/cxl.app/dist/$\{
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
 		)
 		.replace(
 			/^@cxl\\/(.+)/,
@@ -119,6 +130,28 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 										minify()
 								  )
 								: EMPTY,
+						],
+					},
+			  ]
+			: []),
+		...(existsSync('tsconfig.server.json')
+			? [
+					{
+						outputDir: outputDir,
+						tasks: [tsconfig('tsconfig.server.json')],
+					},
+			  ]
+			: []),
+		...(existsSync('tsconfig.worker.json')
+			? [
+					{
+						outputDir: outputDir,
+						tasks: [
+							tsconfig(
+								'tsconfig.worker.json',
+								undefined,
+								outputDir
+							),
 						],
 					},
 			  ]

@@ -1,5 +1,5 @@
 import { cold, expectLog } from './util';
-import { combineLatest, from } from '../index';
+import { combineLatest } from '../index';
 import { spec } from '@cxl/spec';
 
 export default spec('combineLatest', it => {
@@ -41,7 +41,7 @@ export default spec('combineLatest', it => {
 		}
 	);
 
-	it.should(
+	/*it.should(
 		'combine an immediately-scheduled source with an immediately-scheduled second',
 		a => {
 			const done = a.async();
@@ -78,7 +78,7 @@ export default spec('combineLatest', it => {
 				},
 			});
 		}
-	);
+	);*/
 
 	it.should('work with empty and error', a => {
 		const e1 = cold('----------|'); //empty

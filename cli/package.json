@@ -10,8 +10,10 @@
 		"test": "npm run build && cd ../dist/cli && node ../tester --node"
 	},
 	"dependencies": {
-		"@cxl/program": "~0.0.2",
-		"@cxl/build": "~0.1.0"
+		"@cxl/program": "~0.0.3",
+		"@cxl/build": "~0.1.0",
+		"@cxl/blog": "~0.0.1",
+		"@cxl/www": "~0.0.1"
 	},
 	"repository": {
 		"type": "git",

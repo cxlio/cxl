@@ -57,10 +57,12 @@ export interface StrictStyleDefinition<T extends Theme> {
 	borderColor: Color<T>;
 	borderWidth: number;
 	borderRadius: Length;
-	borderStyle: 'solid' | 'none';
+	borderStyle: 'solid' | 'dashed' | 'dotted' | 'double' | 'none';
 	boxShadow: BoxShadow<T> | 'none';
+	fill: Color<T>;
 	elevation: 0 | 1 | 2 | 3 | 4 | 5;
 	fontSize: number | 'inherit';
+	fontStyle: 'italic';
 	translateX: Length;
 	translateY: Length;
 	translateZ: Length;
@@ -93,7 +95,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 	listStyleImage: string;
 	listStylePosition: 'inside' | 'outside';
 	listStyleType: 'none' | 'inherit' | 'initial' | 'unset';
-	width: Length;
+	width: Length | 'max-content' | 'min-content';
 	top: Length;
 	left: Length;
 	right: Length;
@@ -103,6 +105,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 	flexShrink: number;
 	flexBasis: Length;
 	flexDirection: string;
+	flexWrap: 'wrap';
 	justifyContent: string;
 	pointerEvents: string;
 	cursor: string;
@@ -125,6 +128,8 @@ export interface StrictStyleDefinition<T extends Theme> {
 	userSelect: string;
 	textAlign: string;
 	textDecoration: string;
+	textOverflow: 'ellipsis';
+	textTransform: 'uppercase' | 'none';
 	transition: 'unset';
 	height: Length;
 	minHeight: Length;
@@ -143,6 +148,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 		| 'baseline';
 	willChange: 'transform';
 	whiteSpace: 'nowrap' | 'pre-wrap';
+	wordBreak: 'break-all';
 	zIndex: number;
 }
 
@@ -183,7 +189,7 @@ export interface AnimationDefinition {
 }
 
 export interface Animation {
-	[name: string]: AnimationDefinition;
+	none: undefined;
 }
 
 export interface Theme {
@@ -192,7 +198,7 @@ export interface Theme {
 	typography: Typography;
 	variables: Variables;
 	breakpoints: Breakpoints;
-	globalStyles?: Styles<this>;
+	globalStyles?: Styles<any>;
 	imports?: string[];
 	unit: CSSUnit;
 }
@@ -205,7 +211,7 @@ export interface RGBA {
 	toString(): string;
 }
 
-export type CustomPercentage = { toString(): string };
+export type CustomPercentage = { __pct: true; toString(): string };
 
 const PSEUDO = {
 	focus: ':focus',
@@ -215,6 +221,14 @@ const PSEUDO = {
 	active: ':active',
 	firstChild: ':first-child',
 	lastChild: ':last-child',
+	'::scrollbar': '::-webkit-scrollbar',
+	'::scrollbar-track': '::-webkit-scrollbar-track',
+	'::scrollbar-thumb': '::-webkit-scrollbar-thumb',
+};
+const PSEUDO2 = {
+	'$::scrollbar': ':host::-webkit-scrollbar',
+	'$::scrollbar-track': ':host::-webkit-scrollbar-track',
+	'$::scrollbar-thumb': ':host::-webkit-scrollbar-thumb',
 };
 
 export function boxShadow<T extends Theme>(
@@ -227,8 +241,9 @@ export function boxShadow<T extends Theme>(
 	return { offsetX, offsetY, blurRadius, spread, color };
 }
 
-export function pct(n: number) {
+export function pct(n: number): CustomPercentage {
 	return {
+		__pct: true,
 		toString() {
 			return `${n}%`;
 		},
@@ -241,7 +256,7 @@ const SNAKE_CSS: Record<string, string> = {
 	SNAKE_REGEX = /[A-Z]/g;
 
 export const defaultTheme: Theme = {
-	animation: {},
+	animation: { none: undefined },
 	breakpoints: { small: 600, medium: 905, large: 1240, xlarge: 1440 },
 	variables: { css: '' },
 	typography: {
@@ -282,6 +297,7 @@ function parseRuleName(selector: string, name: string) {
 	if (name === '*') return `${selector},${selector} *`;
 	// Style <a> tags.
 	if (name === '@a') return `a`;
+	if (name in PSEUDO2) return (PSEUDO2 as any)[name];
 
 	const [className, ...states] = name.split('$');
 	const sel = states.length
@@ -289,8 +305,6 @@ function parseRuleName(selector: string, name: string) {
 		: '';
 	return `${selector}${sel}${className ? ` .${className}` : ''}`;
 }
-
-const rootStyles = document.createElement('STYLE');
 
 export function padding(
 	paddingTop: number | 'auto',
@@ -337,11 +351,23 @@ export function rgba(r: number, g: number, b: number, a = 1): RGBA {
 	};
 }
 
-export function applyTheme<T extends Theme>(
-	cssTheme: T,
-	container = document.head
-) {
-	const { variables, colors, imports } = cssTheme;
+export function mask({ r, g, b, a }: RGBA) {
+	return `linear-gradient(rgba(${r},${g},${b},${a})`;
+}
+
+export function renderVariables(variables: Variables) {
+	let result = '';
+	for (const i in variables)
+		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
+	return result;
+}
+
+export function renderGlobal(theme: {
+	variables?: Variables;
+	colors?: Colors;
+	imports?: string[];
+}) {
+	const { variables, colors, imports } = theme;
 
 	let result = '';
 	if (imports) imports.forEach(imp => (result += `@import url("${imp}");`));
@@ -353,15 +379,8 @@ export function applyTheme<T extends Theme>(
 		const value = (colors as any)[i];
 		result += `--cxl-${name}:${value};--cxl--${name}:${value};`;
 	}
-	for (const i in variables)
-		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
-
-	rootStyles.innerHTML = result + '}';
-	container.appendChild(rootStyles);
-}
-
-export function mask({ r, g, b, a }: RGBA) {
-	return `linear-gradient(rgba(${r},${g},${b},${a})`;
+	if (variables) result += renderVariables(variables);
+	return result;
 }
 
 export const White = rgba(255, 255, 255, 1);
@@ -370,6 +389,8 @@ export const White12 = mask(rgba(255, 255, 255, 0.12));
 export const White87 = mask(rgba(255, 255, 255, 0.12));
 
 export function buildTheme<T extends Theme>(theme: T) {
+	const rootStyles = document.createElement('style');
+
 	function toUnit(n: Length) {
 		return `${n}${typeof n === 'number' ? theme.unit : ''}`;
 	}
@@ -427,13 +448,18 @@ export function buildTheme<T extends Theme>(theme: T) {
 	}
 
 	const renderMap: StyleMap = {
-		animation(def: any, style: CSSStyle, _prop: any, value: string) {
+		animation(
+			def: any,
+			style: CSSStyle,
+			_prop: any,
+			value: keyof T['animation']
+		) {
 			if (value === 'none') {
 				style.animation = 'none';
 				return;
 			}
 
-			const animation = theme.animation[value];
+			const animation = (theme.animation as any)[value];
 
 			if (animation) {
 				style.animation = animation.value;
@@ -451,6 +477,7 @@ export function buildTheme<T extends Theme>(theme: T) {
 			)} ${toUnit(v.blurRadius)} ${toUnit(v.spread)} ${color(v.color)}`;
 		},
 		color: renderColor,
+		fill: renderColor,
 		elevation(_def, style, _prop, n: number) {
 			const x = toUnit(n);
 			style.zIndex = n.toString();
@@ -560,15 +587,19 @@ export function buildTheme<T extends Theme>(theme: T) {
 		return result;
 	}
 
+	function applyTheme(container = document.head) {
+		const result = renderGlobal(theme);
+		rootStyles.innerHTML = result + '}';
+		container.appendChild(rootStyles);
+	}
+
 	return {
 		baseColor(name: keyof T['colors']) {
 			return `var(--cxl--${toSnake(name as any)})`;
 		},
 		style,
 		render,
-		apply() {
-			applyTheme(theme);
-		},
+		applyTheme,
 		css(styles: Styles<T>, selector = ':host', global = false) {
 			let stylesheet: HTMLStyleElement;
 			return () => {

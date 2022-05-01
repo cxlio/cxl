@@ -117,6 +117,7 @@ export class AppbarSearch extends InputBase {
 	}
 
 	focus() {
+		if (this.disabled) return;
 		if (this.desktopInput?.offsetParent) this.desktopInput.focus();
 		else if (this.mobileIcon?.offsetParent) this.mobileIcon.focus();
 	}

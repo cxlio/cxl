@@ -14,7 +14,12 @@ import { MenuToggle } from './menu.js';
 @Augment<AppbarMenu>(
 	'cxl-appbar-menu',
 	css({
-		$: { display: 'block', flexShrink: 0 },
+		$: {
+			display: 'block',
+			flexShrink: 0,
+			// Firefox needs this to properly position active tab
+			position: 'relative',
+		},
 		tabs: { display: 'none', overflowX: 'hidden' },
 		'@medium': {
 			tabs: { display: 'block' },
@@ -34,7 +39,7 @@ import { MenuToggle } from './menu.js';
 				<Tabs className="tabs">
 					<slot />
 				</Tabs>
-				<MenuToggle className="menu" right>
+				<MenuToggle className="menu">
 					{each(elements$, item => (
 						<Item>{item.cloneNode(true)}</Item>
 					))}

@@ -11,15 +11,8 @@ import {
 	onUpdate,
 } from '@cxl/component';
 import { Bindable, dom } from '@cxl/tsx';
-import { EMPTY, Observable, merge, operator } from '@cxl/rx';
-import {
-	Breakpoint,
-	Typography,
-	StyleDefinition,
-	border,
-	padding,
-	pct,
-} from '@cxl/css';
+import { Observable, merge, operator, timer } from '@cxl/rx';
+import { Breakpoint, StyleDefinition, border, padding, pct } from '@cxl/css';
 import {
 	FocusableComponent,
 	disabledAttribute,
@@ -29,11 +22,18 @@ import {
 	setClassName,
 } from '@cxl/template';
 import { getShadow, on, onAction, onResize } from '@cxl/dom';
-import { ColorStyles, Styles, StateStyles, css, theme } from './theme.js';
-import { Svg, Circle } from './svg.js';
+import {
+	ColorStyles,
+	Styles,
+	StateStyles,
+	UiTheme,
+	css,
+	theme,
+} from './theme.js';
 
 export { Circle, Svg, Path } from './svg.js';
 export { Span } from '@cxl/component';
+export { css } from './theme.js';
 
 export const FocusHighlight = {
 	$focus: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
@@ -104,7 +104,6 @@ function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
 		ripple = document.createElement('cxl-ripple') as Ripple,
 		// Add to shadow root if present to avoid layout changes
 		parent = hostEl.shadowRoot || hostEl;
-
 	ripple.x = x === undefined ? rect.width / 2 : x - rect.left;
 	ripple.y = y === undefined ? rect.height / 2 : y - rect.top;
 	ripple.radius = radius;
@@ -113,8 +112,8 @@ function attachRipple<T extends HTMLElement>(hostEl: T, ev: MouseEvent) {
 
 export function ripple(element: any) {
 	return onAction(element).raf(ev => {
-		if (!element.disabled) attachRipple(element, ev as any);
-		ev.stopPropagation();
+		if (!element.disabled && element.parentNode)
+			attachRipple(element, ev as any);
 	});
 }
 
@@ -136,12 +135,31 @@ export function SizeAttribute(
 
 export type ColorValue = keyof typeof ColorStyles;
 
-export function ColorAttribute(defaultColor?: ColorValue) {
+export function ForegroundColorAttribute(defaultColor?: ColorValue) {
 	return CssAttribute({
-		...(defaultColor && { $: ColorStyles[defaultColor] }),
+		$: {
+			color: 'surface',
+			backgroundColor: 'transparent',
+			...(defaultColor && ColorStyles[defaultColor]),
+		},
 		'$color="surface"': ColorStyles.surface,
 		'$color="primary"': ColorStyles.primary,
 		'$color="secondary"': ColorStyles.secondary,
+		'$color="error"': ColorStyles.error,
+	});
+}
+
+export function ColorAttribute(defaultColor?: ColorValue) {
+	return CssAttribute({
+		$: {
+			color: 'onSurface',
+			backgroundColor: 'surface',
+			...(defaultColor && ColorStyles[defaultColor]),
+		},
+		'$color="surface"': ColorStyles.surface,
+		'$color="primary"': ColorStyles.primary,
+		'$color="secondary"': ColorStyles.secondary,
+		'$color="error"': ColorStyles.error,
 	});
 }
 
@@ -185,13 +203,14 @@ export function CssAttribute(styles: Styles) {
 		<Span
 			$={el =>
 				merge(
-					onUpdate(ctx, host => {
+					onUpdate(ctx).tap(host => {
 						const style = el.style;
 						style.left = host.x - host.radius + 'px';
 						style.top = host.y - host.radius + 'px';
 						style.width = style.height = host.radius * 2 + 'px';
 					}),
-					on(el, 'animationend').tap(() => ctx.remove())
+					on(el, 'animationend').raf(() => ctx.remove()),
+					timer(250).raf(() => ctx.remove())
 				)
 			}
 			className="ripple"
@@ -246,38 +265,6 @@ export class Hr extends Component {
 	pad?: 8 | 16 | 24 | 32;
 }
 
-/**
- * Spinners are used to indicate that the app is performing an action that the user needs to wait on.
- *
- * @example
- * <cxl-spinner></cxl-spinner>
- */
-@Augment(
-	'cxl-spinner',
-	css({
-		$: {
-			animation: 'spin',
-			display: 'inline-block',
-			width: 48,
-			height: 48,
-		},
-		circle: { animation: 'spinnerstroke' },
-		svg: { width: pct(100), height: pct(100) },
-	}),
-	_ => (
-		<Svg viewBox="0 0 100 100" className="svg">
-			<Circle
-				cx="50%"
-				cy="50%"
-				r="45"
-				style="stroke:var(--cxl-primary);fill:transparent;transition:stroke-dashoffset var(--cxl-speed);stroke-width:10%;transform-origin:center;stroke-dasharray:282.743px"
-				className="circle"
-			/>
-		</Svg>
-	)
-)
-export class Spinner extends Component {}
-
 @Augment(
 	'cxl-t',
 	css({
@@ -306,7 +293,7 @@ export class T extends Component {
 	@Attribute({
 		persistOperator: persistWithParameter(''),
 	})
-	font?: keyof Typography;
+	font?: keyof UiTheme['typography'];
 
 	@StyleAttribute()
 	h1 = false;
@@ -342,60 +329,23 @@ export class T extends Component {
 
 /**
  * Show or hide an element when clicked.
- * @example
- * <cxl-toggle>
- *   <cxl-button slot="trigger">Open</cxl-button>
- *   <cxl-menu>
- *     <cxl-item>Features</cxl-item>
- *     <cxl-item>Pricing</cxl-item>
- *     <cxl-item>Docs</cxl-item>
- *     <cxl-hr></cxl-hr>
- *     <cxl-item>Log In</cxl-item>
- *   </cxl-menu>
- * </cxl-toggle>
  */
-@Augment<Toggle>(
-	'cxl-toggle',
-	css({
-		$: { position: 'relative', display: 'inline-block' },
-		popup: {
-			scaleY: 0,
-			position: 'absolute',
-			animation: 'fadeOut',
-			transformOrigin: 'top',
-			top: 0,
-			zIndex: 1,
-		},
-		popup$right: { right: 0 },
-		popup$opened: { scaleY: 1, animation: 'fadeIn' },
-	}),
-	_ => (
-		<>
-			<slot name="trigger" />
-			<div className="popup">
-				<slot />
-			</div>
-		</>
-	),
-	el =>
-		merge(
-			get(el, 'opened')
-				.debounceTime()
-				.switchMap(() =>
-					el.opened
-						? on(window, 'click').tap(() => {
-								if (el.opened) el.opened = false;
-						  })
-						: EMPTY
-				),
-			onAction(el).tap(() => (el.opened = !el.opened))
-		)
+@Augment<Toggle>('cxl-toggle', $ =>
+	onAction($).tap(ev => {
+		let target = $.target as any;
+		ev.stopPropagation();
+		if (typeof target === 'string')
+			target = document.getElementById(target);
+		if (target) target.visible = !target.visible;
+		else {
+			const popups = $.querySelectorAll('cxl-popup') as any;
+			for (const popup of popups) popup.visible = !popup.visible;
+		}
+	})
 )
 export class Toggle extends Component {
-	@StyleAttribute()
-	opened = false;
-	@StyleAttribute()
-	right = false;
+	@Attribute()
+	target?: HTMLElement | string;
 }
 
 const MetaNodes = [
@@ -448,6 +398,13 @@ export class Application extends Component {
 	permanent = false;
 }
 
+/**
+ * @example
+ * <cxl-toolbar>
+ *   <cxl-button flat>Flat Button</cxl-button>
+ *   <cxl-button flat>Flat Button</cxl-button>
+ * </cxl-toolbar>
+ */
 @Augment(
 	'cxl-toolbar',
 	css({
@@ -522,9 +479,6 @@ export class Toolbar extends Component {}
 		$active: { elevation: 3 },
 		$active$disabled: { elevation: 1 },
 		$active$flat: { elevation: 0 },
-		'@large': {
-			$flat: { paddingLeft: 12, paddingRight: 12 },
-		},
 	}),
 	css(FocusHighlight),
 	ripple
@@ -565,15 +519,6 @@ export class ButtonBase extends Component {
 	 */
 	@StyleAttribute()
 	outline = false;
-
-	@SizeAttribute(s => ({
-		borderRadius: 2 + s * 2,
-		fontSize: 14 + s * 4,
-		lineHeight: 20 + s * 8,
-		paddingRight: 16 + s * 4,
-		paddingLeft: 16 + s * 4,
-	}))
-	size: Size = 0;
 }
 
 export function focusDelegate<T extends FocusableComponent>(
@@ -619,4 +564,22 @@ export function breakpoint(el: HTMLElement): Observable<Breakpoint> {
 
 export function breakpointClass(el: HTMLElement) {
 	return breakpoint(el).pipe(setClassName(el));
+}
+
+@Augment<A>('cxl-a', role('link'), host => {
+	const el = (
+		<a>
+			<slot />
+		</a>
+	) as HTMLAnchorElement;
+	el.style.color = 'inherit';
+	host.bind(get(host, 'href').tap(src => (el.href = src)));
+	return el;
+})
+export class A extends Component {
+	@Attribute()
+	target: '_blank' | '' = '';
+
+	@Attribute()
+	href = '';
 }

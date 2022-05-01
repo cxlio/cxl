@@ -18,7 +18,19 @@ declare global {
 				[P in keyof HTMLElementTagNameMap]: NativeType<
 					HTMLElementTagNameMap[P]
 				>;
-			}; /*&
+			};
+			/*interface IntrinsicClassAttributes<T> {
+				jsxAttributes?: AttributeType<T>;
+			}
+			/*export type IntrinsicClassAttributes<T> = {
+				[K in keyof Omit<T, 'children'>]?: T[K] | Observable<T[K]>;
+			} & {
+				$?: Binding<T, any> | Observable<any>;
+				children?: Children;
+			};
+
+			/*interface IntrinsicClassAttributes<T> extends AttributeType<T> {}*/
+			/*
 				{
 					[P in keyof SVGElementTagNameMap]: NativeType<
 						SVGElementTagNameMap[P]
@@ -56,7 +68,6 @@ export type NativeType<T> = {
 
 export type AttributeType<T> = {
 	[K in keyof Omit<T, 'children'>]?: T[K] | Observable<T[K]>;
-	// | Binding<T, T[K]>;
 } & {
 	$?: Binding<T, any> | Observable<any>;
 	children?: Children;

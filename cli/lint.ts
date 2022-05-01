@@ -382,20 +382,15 @@ async function fixTsconfigMjs({ projectPath, dir, pkg }: LintData) {
 	const tsconfig = (await readJson(`${projectPath}/tsconfig.mjs.json`)) || {};
 	const outDir = `../dist/${dir}/mjs`;
 
-	if (!tsconfig.extends) tsconfig.extends = '../tsconfig.json';
+	if (!tsconfig.extends || tsconfig.extends !== baseTsconfig.extends)
+		tsconfig.extends = baseTsconfig.extends;
 	if (!tsconfig.compilerOptions) tsconfig.compilerOptions = {};
 	if (tsconfig.compilerOptions.module !== 'ESNext')
 		tsconfig.compilerOptions.module = 'ESNext';
 	if (tsconfig.compilerOptions.outDir !== outDir)
 		tsconfig.compilerOptions.outDir = outDir;
 	tsconfig.files = baseTsconfig.files;
-
-	tsconfig.references = baseTsconfig.references?.map(
-		(ref: { path: string }) => {
-			const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
-			return { path: `${refName}/tsconfig.mjs.json` };
-		}
-	);
+	tsconfig.references = checkTsReferences(baseTsconfig, 'mjs');
 
 	await fs.writeFile(
 		`${projectPath}/tsconfig.mjs.json`,
@@ -410,7 +405,8 @@ async function fixTsconfigAmd({ projectPath, dir, pkg }: LintData) {
 	const tsconfig = (await readJson(`${projectPath}/tsconfig.amd.json`)) || {};
 	const outDir = `../dist/${dir}/amd`;
 
-	if (!tsconfig.extends) tsconfig.extends = '../tsconfig.json';
+	if (!tsconfig.extends || tsconfig.extends !== baseTsconfig.extends)
+		tsconfig.extends = baseTsconfig.extends;
 	if (!tsconfig.compilerOptions) tsconfig.compilerOptions = {};
 	if (tsconfig.compilerOptions.module !== 'amd')
 		tsconfig.compilerOptions.module = 'amd';
@@ -419,13 +415,7 @@ async function fixTsconfigAmd({ projectPath, dir, pkg }: LintData) {
 	tsconfig.files = baseTsconfig.files;
 	tsconfig.include = baseTsconfig.include;
 	tsconfig.exclude = baseTsconfig.exclude;
-
-	tsconfig.references = baseTsconfig.references?.map(
-		(ref: { path: string }) => {
-			const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
-			return { path: `${refName}/tsconfig.amd.json` };
-		}
-	);
+	tsconfig.references = checkTsReferences(baseTsconfig, 'amd');
 
 	await fs.writeFile(
 		`${projectPath}/tsconfig.amd.json`,
@@ -451,6 +441,10 @@ async function lintTsconfigEs6({ projectPath, pkg, dir }: LintData) {
 	);
 	const rules = [
 		rule(tsconfig, 'tsconfig.mjs.json should be present'),
+		rule(
+			tsconfig?.extends === baseTsconfig.extends,
+			'tsconfig.mjs.json extends should match tsconfig.json value'
+		),
 		rule(
 			tsconfig?.compilerOptions,
 			'tsconfig.mjs.json should have compilerOptions'
@@ -486,6 +480,13 @@ async function lintTsconfigEs6({ projectPath, pkg, dir }: LintData) {
 	};
 }
 
+function checkTsReferences(baseTsconfig: any, mod: string) {
+	return baseTsconfig.references?.map((ref: { path: string }) => {
+		const refName = ref.path.replace(/\/.tsconfig.json$/, '');
+		return { path: `${refName}/tsconfig.${mod}.json` };
+	});
+}
+
 async function lintTsconfigAmd({ projectPath, pkg, dir }: LintData) {
 	if (!pkg.browser)
 		return {
@@ -496,15 +497,14 @@ async function lintTsconfigAmd({ projectPath, pkg, dir }: LintData) {
 	const tsconfig = await readJson(`${projectPath}/tsconfig.amd.json`);
 	const baseTsconfig = await readJson(`${projectPath}/tsconfig.json`);
 	const references = tsconfig?.references;
-	const expectedReferences = baseTsconfig.references?.map(
-		(ref: { path: string }) => {
-			const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
-			return { path: `${refName}/tsconfig.amd.json` };
-		}
-	);
+	const expectedReferences = checkTsReferences(baseTsconfig, 'amd');
 
 	const rules = [
 		rule(tsconfig, 'tsconfig.amd.json should be present'),
+		rule(
+			tsconfig?.extends === baseTsconfig.extends,
+			'tsconfig.amd.json extends should match tsconfig.json value'
+		),
 		rule(
 			tsconfig?.compilerOptions,
 			'tsconfig.amd.json should have compilerOptions'

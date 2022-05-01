@@ -85,7 +85,8 @@ function FunctionType(node: Node) {
 
 function Property(node: Node) {
 	if (node.kind === Kind.IndexSignature) return IndexSignature(node);
-	return `${node.name}: ${Type(node.type)}`;
+	const name = node.kind === Kind.ConstructSignature ? 'new()' : node.name;
+	return `${name}: ${Type(node.type)}`;
 }
 
 function ObjectType(node: Node) {
@@ -183,8 +184,18 @@ function NodeChips({ flags }: Node) {
 		(flags & Flags.Private ? Chip('private') : '') +
 		(flags & Flags.Deprecated ? Chip('deprecated') : '') +
 		(flags & Flags.Readonly ? Chip('readonly') : '') +
-		(flags & Flags.Internal ? Chip('internal') : '')
+		(flags & Flags.Internal ? Chip('internal') : '') +
+		(flags & Flags.Default ? Chip('default') : '')
 	);
+}
+
+function getTypeColon(kind: Kind, name: string) {
+	if (kind === Kind.TypeAlias) return ' = ';
+	if (name) return ': ';
+	if (kind === Kind.CallSignature) return ' => ';
+	if (kind === Kind.ReadonlyKeyword) return 'readonly ';
+
+	return ' => ';
 }
 
 function SignatureType({ type, kind, name }: Node) {
@@ -195,7 +206,8 @@ function SignatureType({ type, kind, name }: Node) {
 		kind === Kind.Component
 	)
 		return ` ${Type(type)}`;
-	const typeColon = kind === Kind.TypeAlias ? ' = ' : name ? ': ' : ' => ';
+
+	const typeColon = getTypeColon(kind, name);
 	return `${typeColon}${Type(type)}`;
 }
 
@@ -208,20 +220,27 @@ function IndexSignature(node: Node) {
 	return `[${params}]: ${Type(node.type)}`;
 }
 
-/**
- * Return Node Signature
- */
-export function Signature(node: Node): string {
+export function SignatureText(node: Node): string {
 	if (node.kind === Kind.Module) return escape(node.name);
 	if (node.kind === Kind.IndexSignature) return IndexSignature(node);
 
 	const { value, parameters, typeParameters } = node;
 
-	return `${NodeChips(node)}${SignatureName(node)}${TypeArguments(
+	return `${SignatureName(node)}${TypeArguments(
 		typeParameters
 	)}${SignatureParameters(parameters)}${SignatureType(node)}${SignatureValue(
 		value
 	)}`;
+}
+
+/**
+ * Return Node Signature
+ */
+export function Signature(node: Node): string {
+	if (node.kind === Kind.Module || node.kind === Kind.IndexSignature)
+		return SignatureText(node);
+
+	return `${NodeChips(node)}${SignatureText(node)}`;
 }
 
 function Anchor(id: number) {
@@ -395,7 +414,7 @@ function Link(node: Node, content?: string): string {
 	const href = getHref(node);
 
 	if (application?.spa && href[0] !== '#')
-		return `<cxl-a href="${href}">${name}</cxl-a>`;
+		return `<cxl-router-a href="${href}">${name}</cxl-router-a>`;
 
 	return `<a href="${href}">${name}</a>`;
 }
@@ -475,6 +494,7 @@ interface Group {
 	kind: Kind;
 	index: string[];
 	body: string[];
+	unique: Record<string, boolean>;
 }
 
 function getMemberGroups(node: Node, indexOnly = false, sort = true) {
@@ -496,13 +516,17 @@ function getMemberGroups(node: Node, indexOnly = false, sort = true) {
 			result.push(
 				(group = resultMap[groupKind] = {
 					kind: groupKind,
+					unique: {},
 					index: [],
 					body: [],
 				})
 			);
 		}
 
-		if (!(c.flags & Flags.Overload)) group.index.push(MemberIndexLink(c));
+		if (!group.unique[c.name]) {
+			group.unique[c.name] = true;
+			group.index.push(MemberIndexLink(c));
+		}
 
 		if (!indexOnly && !hasOwnPage(c) && c.kind !== Kind.Export)
 			group.body.push(MemberCard(c));
@@ -619,6 +643,7 @@ function NodeIcon(node: Node) {
 
 function ModuleNavbar(node: Node) {
 	const moduleName = node.name.match(/index\.tsx?/) ? 'Index' : node.name;
+
 	const href = getHref(node);
 	return (
 		`${Item(`<i>${moduleName}</i>`, href)}` +
@@ -626,8 +651,12 @@ function ModuleNavbar(node: Node) {
 			?.sort(sortNode)
 			.map(c => {
 				if (declarationFilter(c) && !(c.flags & Flags.Overload)) {
+					const name =
+						!c.name && node.flags & Flags.Default
+							? '<i>default</i>'
+							: c.name;
 					const href = getHref(c);
-					return href ? Item(`${NodeIcon(c)}${c.name}`, href) : '';
+					return href ? Item(`${NodeIcon(c)}${name}`, href) : '';
 				} else return '';
 			})
 			.join('') || '')
@@ -762,15 +791,15 @@ function getPageName(page: Node) {
 			: result;
 	}
 
-	if (page.kind === Kind.Namespace)
-		return `ns-${escapeFileName(page.name)}.html`;
-
 	const source = Array.isArray(page.source) ? page.source[0] : page.source;
 
 	if (!source)
 		throw new Error(`Source not found for page node "${page.name}"`);
 
 	const prefix = escapeFileName(source.name, '--');
+
+	if (page.kind === Kind.Namespace)
+		return `ns-${prefix}-${escapeFileName(page.name)}.html`;
 
 	return `${prefix}${page.name}.html`;
 }
@@ -783,7 +812,7 @@ function Page(p: Node) {
 	};
 }
 
-function hasOwnPage(node: Node) {
+export function hasOwnPage(node: Node) {
 	return (
 		node.kind === Kind.Class ||
 		node.kind === Kind.Interface ||

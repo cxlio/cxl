@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/table.js"/>
 import { border, padding, margin } from '@cxl/css';
 import {
 	aria,
@@ -196,13 +197,11 @@ export class Th extends Component {
 		<cxl-th width="100px">Header 1</cxl-th>
 		<cxl-th>Header 2</cxl-th>
 		<cxl-th>Header 3</cxl-th>
-		<cxl-th>Header 4</cxl-th>
 	</cxl-tr>
 	<cxl-tr>
 		<cxl-td>Cell 1</cxl-td>
 		<cxl-td>Cell 2</cxl-td>
 		<cxl-td>Cell 3</cxl-td>
-		<cxl-td>Cell 4</cxl-td>
 	</cxl-tr>
 </cxl-table>
  * @see Tr Td
@@ -212,7 +211,7 @@ export class Th extends Component {
 	role('table'),
 	css({
 		$: {
-			display: 'block',
+			display: 'table',
 			width: '100%',
 			font: 'body2',
 			overflowX: 'auto',

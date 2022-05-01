@@ -2,5 +2,4 @@
 
 ## [0.0.1]
 
-- feat: better support for meta tags [fdcf52f]
-- feat: export markdown function [a148f02]
+-   feat: separate tags by post type [896e622]

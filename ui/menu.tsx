@@ -2,14 +2,16 @@
 import { dom } from '@cxl/tsx';
 import {
 	Augment,
-	Attribute,
 	Component,
 	StyleAttribute,
+	Attribute,
 	get,
 } from '@cxl/component';
+import { on } from '@cxl/dom';
 import { BaseColors, css } from './theme.js';
-import { MenuIcon, IconButton } from './icon.js';
+import { MoreVertIcon, IconButton } from './icon.js';
 import { Toggle } from './core.js';
+import { Popup, PopupPosition } from './dialog.js';
 
 /*
  * Menus display a list of choices on temporary surfaces.
@@ -34,6 +36,7 @@ import { Toggle } from './core.js';
 			paddingTop: 8,
 			paddingBottom: 8,
 			minWidth: 112,
+			width: 'max-content',
 			variables: BaseColors,
 		},
 		$dense: { paddingTop: 0, paddingBottom: 0 },
@@ -45,20 +48,42 @@ export class Menu extends Component {
 	dense = false;
 }
 
-/**
- *
- */
-@Augment<MenuToggle>('cxl-menu-toggle', $ => (
-	<Toggle right={get($, 'right')}>
-		<IconButton slot="trigger">
-			<MenuIcon />
-		</IconButton>
+@Augment<MenuPopup>(
+	'cxl-menu-popup',
+	css({
+		$: { animation: 'fadeIn' },
+		$out: { animation: 'fadeOut' },
+	}),
+	$ => on($, 'click').tap(ev => ev.stopPropagation()),
+	() => (
 		<Menu>
 			<slot />
 		</Menu>
-	</Toggle>
-))
-export class MenuToggle extends Component {
+	)
+)
+export class MenuPopup extends Component {}
+
+/**
+ *
+ */
+@Augment<MenuToggle>('cxl-menu-toggle', $ => {
+	const popup = (
+		<Popup
+			container="cxl-menu-popup"
+			proxy={$}
+			position={get($, 'position')}
+		/>
+	) as Popup;
+	$.target = popup;
+
+	return (
+		<IconButton>
+			<MoreVertIcon />
+			{popup}
+		</IconButton>
+	);
+})
+export class MenuToggle extends Toggle {
 	@Attribute()
-	right = false;
+	position: PopupPosition = 'auto';
 }

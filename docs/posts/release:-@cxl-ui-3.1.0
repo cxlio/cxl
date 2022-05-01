@@ -1,0 +1,30 @@
+<blog-title>Release: @cxl/ui 3.1.0</blog-title><blog-tags>release-notes</blog-tags><p>Style improvements, bug fixes and more.</p>
+<cxl-t h4>Fab Ripple Effect</cxl-t><blog-demo><!--<script src="https://cdn.jsdelivr.net/npm/@cxl/ui@3.1.0/index.bundle.min.js"></script>
+<cxl-fab>+</cxl-fab>
+--></blog-demo><cxl-t h4>Improved Avatar Component</cxl-t><cxl-t h5><em>size</em> Attribute</cxl-t><blog-demo><!--<script src="https://cdn.jsdelivr.net/npm/@cxl/ui@3.1.0/index.bundle.min.js"></script>
+<cxl-avatar size="-1"></cxl-avatar>
+<cxl-avatar size="0"></cxl-avatar>
+<cxl-avatar size="1"></cxl-avatar>
+<cxl-avatar size="2"></cxl-avatar>
+<cxl-avatar size="3"></cxl-avatar>
+<cxl-avatar size="4"></cxl-avatar>
+<cxl-avatar size="5"></cxl-avatar>
+--></blog-demo><cxl-t h5>Better Support For Avatar Images</cxl-t><blog-demo><!--<script src="https://cdn.jsdelivr.net/npm/@cxl/ui@3.1.0/index.bundle.min.js"></script>
+<cxl-avatar size="5" src=""></cxl-avatar>
+--></blog-demo><cxl-t h5>Button <em>size</em> Attribute</cxl-t><blog-demo><!--<script src="https://cdn.jsdelivr.net/npm/@cxl/ui@3.1.0/index.bundle.min.js"></script>
+<cxl-button size="-1">Size -1</cxl-button>
+<cxl-button size="0">Size 0</cxl-button>
+<cxl-button size="1">Size 1</cxl-button>
+<cxl-button size="2">Size 2</cxl-button>
+<cxl-button size="3">Size 3</cxl-button>
+<cxl-button size="4">Size 4</cxl-button>
+<cxl-button size="5">Size 5</cxl-button>
+--></blog-demo><cxl-t h5>Other</cxl-t><ul>
+<li>Dark Theme Styles</li>
+<li>Drawer Scrollbar Styling</li>
+<li>MenuToggle <em>right</em> Attribute</li>
+</ul>
+<cxl-t h5>Bug Fixes</cxl-t><ul>
+<li>fix: appbar contextual menu [8757817]</li>
+<li>fix: checkbox and switch initial state [e92ff3f]</li>
+</ul>

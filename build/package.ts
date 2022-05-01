@@ -105,7 +105,7 @@ function packageJson(p: any) {
 					description: p.description,
 					private: p.private,
 					license: p.license,
-					files: [
+					files: p.files || [
 						'*.js',
 						'*.d.ts',
 						'*.js.map',
@@ -220,7 +220,8 @@ function createBundle(
 	files: string[],
 	resolvedFiles: string[],
 	content: string[],
-	outFile: string
+	outFile: string,
+	config?: ts.CompilerOptions
 ): Output {
 	const options: ts.CompilerOptions = {
 		lib: ['lib.es2017.d.ts'],
@@ -235,6 +236,7 @@ function createBundle(
 		isolatedModules: true,
 		moduleResolution: ts.ModuleResolutionKind.NodeJs,
 		sourceMap: false,
+		...config,
 	};
 	const host = ts.createCompilerHost(options);
 	const oldGetSourceFile = host.getSourceFile;
@@ -274,14 +276,24 @@ export function AMD() {
 	);
 }
 
-export function bundle(files: Record<string, string>, outFile: string) {
+export function bundle(
+	files: Record<string, string>,
+	outFile: string,
+	config?: ts.CompilerOptions
+) {
 	return new Observable<Output>(subs => {
 		const moduleNames = Object.keys(files);
 		const resolvedFiles = Object.values(files);
 		Promise.all(resolvedFiles.map(f => promises.readFile(f, 'utf8')))
 			.then(content => {
 				subs.next(
-					createBundle(moduleNames, resolvedFiles, content, outFile)
+					createBundle(
+						moduleNames,
+						resolvedFiles,
+						content,
+						outFile,
+						config
+					)
 				);
 				subs.complete();
 			})
@@ -295,6 +307,10 @@ const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 <script>
 	require.replace = function (path) {
 		return path.replace(
+			/^@cxl\\/workspace\\.(.+)/,
+			(str, p1) =>
+				\`/cxl.app/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
+		).replace(
 			/^@cxl\\/(.+)/,
 			(str, p1) =>
 				\`/cxl/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
@@ -303,6 +319,7 @@ const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 	require('@cxl/ui');
 	require('@cxl/ui-router');
 	require('@cxl/ui-www');
+	require('@cxl/router/debug.js');
 </script>
 `;
 
@@ -316,14 +333,19 @@ const DefaultTemplateConfig = {
 	debugHeader: DEBUG_HEAD,
 };
 
+const HTML_COMMENT_REGEX = /<!--[^]+?-->/gm;
+
 export function template(
 	filename: string,
 	config: Partial<TemplateConfig> = {}
 ) {
 	return file(filename).switchMap(({ source }) => {
+		const prodSource = source
+			.toString('utf8')
+			.replace(HTML_COMMENT_REGEX, '');
 		const cfg = { ...DefaultTemplateConfig, ...config };
 		return from([
-			{ path: 'index.html', source: `${cfg.header}\n${source}` },
+			{ path: 'index.html', source: `${cfg.header}\n${prodSource}` },
 			{ path: 'debug.html', source: `${cfg.debugHeader}\n${source}` },
 		]);
 	});

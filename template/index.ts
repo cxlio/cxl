@@ -39,11 +39,11 @@ export function sortBy<T = any, K extends keyof T = any>(key: K) {
 	return (a: T, b: T) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0);
 }
 
-export function getSearchRegex(term: string) {
+export function getSearchRegex(term: string, flags = 'i') {
 	try {
-		return new RegExp(term, 'i');
+		return new RegExp(term, flags);
 	} catch (e) {
-		return new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+		return new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags);
 	}
 }
 
@@ -95,6 +95,17 @@ export function syncAttribute(A: Node, B: Node, attr: string) {
 
 interface NextObservable<T> extends Observable<T> {
 	next(val: T): void;
+}
+
+export function syncElement<T>(
+	el: ElementWithValue<T>,
+	read: Observable<T>,
+	write: (val: T) => void
+) {
+	return read.switchMap(initial => {
+		el.value = initial;
+		return sync(onValue(el), val => (el.value = val), read, write);
+	});
 }
 
 export function model<T>(el: ElementWithValue<T>, ref: NextObservable<T>) {
@@ -428,71 +439,95 @@ export function role<T extends Component>(roleName: string) {
 
 interface SelectableNode extends ParentNode, EventTarget {}
 
+function handleListArrowKeys(
+	host: SelectableNode,
+	el: Element | null,
+	selector: string,
+	ev: KeyboardEvent
+) {
+	const key = ev.key;
+	if (key === 'ArrowDown') {
+		if (el) el = findNextNodeBySelector(el, selector) || el;
+		else {
+			const first = host.firstElementChild;
+
+			if (first)
+				el = first.matches(selector)
+					? first
+					: findNextNodeBySelector(first, selector);
+		}
+		if (el) ev.preventDefault();
+	} else if (key === 'ArrowUp') {
+		if (el)
+			el =
+				findNextNodeBySelector(
+					el,
+					selector,
+					'previousElementSibling'
+				) || el;
+		else {
+			const first = host.lastElementChild;
+
+			if (first)
+				el = first.matches(selector)
+					? first
+					: findNextNodeBySelector(
+							first,
+							selector,
+							'previousElementSibling'
+					  );
+		}
+		if (el) ev.preventDefault();
+	} else return null;
+
+	return el;
+}
+
+export function navigationListUpDown(
+	host: SelectableNode,
+	selector: string,
+	startSelector: string,
+	input = host
+) {
+	return on(input, 'keydown')
+		.map(ev => {
+			const el = host.querySelector(startSelector);
+			return handleListArrowKeys(host, el, selector, ev);
+		})
+		.filter(el => !!el);
+}
+
 /**
  * Handles keyboard navigation, emits the next selected item.
  */
 export function navigationList(
 	host: SelectableNode,
 	selector: string,
-	startSelector: string
+	startSelector: string,
+	input = host
 ) {
-	return on(host, 'keydown')
+	return on(input, 'keydown')
 		.map(ev => {
 			let el = host.querySelector(startSelector);
 			const key = ev.key;
 
 			function findByFirstChar(item: Element) {
 				return (
-					item.matches(selector) &&
+					item.matches?.(selector) &&
 					item.textContent?.[0].toLowerCase() === key
 				);
 			}
 
-			switch (key) {
-				case 'ArrowDown':
-					if (el) el = findNextNodeBySelector(el, selector) || el;
-					else {
-						const first = host.firstElementChild;
+			const newEl = handleListArrowKeys(host, el, selector, ev);
+			if (newEl) return newEl;
 
-						if (first)
-							el = first.matches(selector)
-								? first
-								: findNextNodeBySelector(first, selector);
-					}
-					if (el) ev.preventDefault();
-
-					break;
-				case 'ArrowUp':
-					if (el)
-						el =
-							findNextNodeBySelector(
-								el,
-								selector,
-								'previousElementSibling'
-							) || el;
-					else {
-						const first = host.lastElementChild;
-
-						if (first)
-							el = first.matches(selector)
-								? first
-								: findNextNodeBySelector(
-										first,
-										selector,
-										'previousElementSibling'
-								  );
-					}
-					if (el) ev.preventDefault();
-					break;
-				default:
-					if (/^\w$/.test(key)) {
-						const first = host.firstElementChild;
-						el =
-							(el && findNextNode(el, findByFirstChar)) ||
-							(first && findNextNode(first, findByFirstChar)) ||
-							null;
-						ev.preventDefault();
-					}
+			if (/^\w$/.test(key)) {
+				const first = host.firstElementChild;
+				el =
+					(el && findNextNode(el, findByFirstChar)) ||
+					(first && findNextNode(first, findByFirstChar)) ||
+					null;
+				ev.preventDefault();
 			}
 			return el;
 		})
@@ -561,6 +596,17 @@ export function registable<T extends Component, ControllerT>(
 	});
 }
 
+export function debounceImmediate<A extends any[], R>(fn: (...a: A) => R) {
+	let to: any;
+	return async function (this: any, ...args: A) {
+		if (to) return;
+		to = true;
+		await Promise.resolve();
+		fn.apply(this, args);
+		to = false;
+	};
+}
+
 export function registableHost<ControllerT>(
 	host: EventTarget,
 	id: string,
@@ -572,11 +618,11 @@ export function registableHost<ControllerT>(
 				const detail = ev.detail;
 				const target = (detail.controller || ev.target) as ControllerT;
 				elements.add(target);
-				subs.next(elements);
 				ev.detail.unsubscribe = () => {
 					elements.delete(target);
 					subs.next(elements);
 				};
+				subs.next(elements);
 			}
 		}
 
@@ -628,9 +674,8 @@ export function selectableHostMultiple<TargetT extends SelectableTarget>(
 		function setOptions() {
 			const { value, options, selected } = host;
 
-			options.forEach(o => (o.multiple = true));
-
 			for (const o of options) {
+				o.multiple = true;
 				if (
 					(o.selected && !selected.has(o)) ||
 					(!o.selected && value.indexOf(o.value) !== -1)
@@ -640,10 +685,9 @@ export function selectableHostMultiple<TargetT extends SelectableTarget>(
 		}
 
 		const subscription = merge(
-			registableHost<TargetT>(host, 'selectable', host.options).tap(
-				setOptions
-			),
-			getAttribute(host, 'value').tap(onChange),
+			registableHost<TargetT>(host, 'selectable', host.options)
+				.raf(setOptions)
+				.switchMap(() => getAttribute(host, 'value').raf(onChange)),
 			on(host, 'selectable.action').tap(ev => {
 				if (ev.target && host.options?.has(ev.target as TargetT)) {
 					ev.stopImmediatePropagation();
@@ -794,4 +838,17 @@ export function validateValue<T>(
 		});
 		el.setCustomValidity(message === true ? '' : (message as any));
 	});
+}
+
+const ENTITIES_REGEX = /[&<>]/g,
+	ENTITIES_MAP = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+	};
+
+export function escapeHtml(str: string) {
+	return (
+		str && str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e] || '')
+	);
 }

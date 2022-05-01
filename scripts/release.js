@@ -1,15 +1,22 @@
 const fs = require('fs').promises;
 const { existsSync } = require('fs');
+const readline = require('readline');
+
 const { sh } = require('../dist/build');
 const { readJson } = require('../dist/server');
+
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout,
+});
 
 async function renderLog(project, logs) {
 	const path = project === 'cxl' ? '' : `${project}/`;
 	const outFile = `${path}CHANGELOG.md`;
-	console.log(outFile);
 	const pkg = await readJson(`${path}package.json`);
 
 	if (!pkg) return;
+	console.log(outFile);
 
 	const date = new Date().toLocaleDateString();
 	const title = `## ${pkg.version === '0.0.0' ? date : `[${pkg.version}]`}`;
@@ -21,6 +28,7 @@ async function renderLog(project, logs) {
 		`${title.replace(/\[/, '\\[')}[^]+(?:##|$)`,
 		'm'
 	);
+	console.log(logText);
 	let outText = changelog.replace(appendRegex, logText);
 	if (outText === changelog)
 		outText = changelog.replace(/(##)|$/, n => `${logText}\n\n${n || ''}`);
@@ -70,6 +78,19 @@ async function release() {
 			console.log(`Skipping ${project}`);
 			console.log(e);
 		}
+
+	await new Promise((resolve, reject) => {
+		rl.question(`Continue? [Yn] `, canContinue =>
+			canContinue === 'Y' ? resolve() : reject('Release aborted')
+		);
+	});
+
+	await sh(`git commit -m "chore: generated changelog" -a`);
+	await sh(`git checkout master`);
+	await sh(
+		`git merge --squash -m "chore: merge release ${branch}" ${branch}`
+	);
+	await sh(`git push origin master`);
 }
 
 release().catch(e => {

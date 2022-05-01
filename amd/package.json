@@ -1,0 +1,18 @@
+{
+	"name": "@cxl/amd",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/amd",
+	"description": "AMD Implementation",
+	"browser": "amd/index.min.js",
+	"license": "UNLICENSED",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/amd && node ../tester --baselinePath=../../amd/spec"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cxlio/cxl.git",
+		"directory": "amd"
+	}
+}

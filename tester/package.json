@@ -11,7 +11,7 @@
 		"test": "npm run build && cd ../dist/tester && node ../tester --node"
 	},
 	"dependencies": {
-		"puppeteer": "^10.2.0",
+		"puppeteer": "^13.5.1",
 		"source-map-support": "0.5.19",
 		"source-map": "^0.7.3",
 		"@cxl/rx": "~0.5.0",

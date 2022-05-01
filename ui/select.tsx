@@ -8,9 +8,8 @@ import {
 	StyleAttribute,
 	get,
 } from '@cxl/component';
-import { css } from '@cxl/ui/theme.js';
 import { be, merge } from '@cxl/rx';
-import { on, onAction, onKeypress } from '@cxl/dom';
+import { on, onAction, onKeypress, onResize } from '@cxl/dom';
 import {
 	role,
 	triggerEvent,
@@ -21,6 +20,7 @@ import {
 } from '@cxl/template';
 import { InputBase } from './input-base.js';
 import { Svg, Path } from './core.js';
+import { css } from '@cxl/ui/theme.js';
 
 const Undefined = {};
 
@@ -51,13 +51,14 @@ const Undefined = {};
 			lineHeight: 16,
 			borderStyle: 'solid',
 			color: 'transparent',
+			flexShrink: 0,
 		},
-		box$multiple: { display: 'inline-block' },
 		box$selected: {
 			borderColor: 'primary',
 			backgroundColor: 'primary',
 			color: 'onPrimary',
 		},
+		box$multiple: { display: 'inline-block' },
 		content: { flexGrow: 1 },
 		$focused: {
 			backgroundColor: 'primaryLight',
@@ -116,11 +117,11 @@ export class Option extends Component {
 	'cxl-select-menu',
 	css({
 		$: {
-			position: 'absolute',
+			position: 'fixed',
 			opacity: 0,
 			elevation: 0,
-			right: -16,
-			left: -16,
+			//marginRight: -16,
+			//marginLeft: -16,
 			overflowY: 'hidden',
 			transformOrigin: 'top',
 			pointerEvents: 'none',
@@ -185,15 +186,37 @@ export class SelectMenu extends Component {
 				<Path d="M7 10l5 5 5-5z" />
 			</Svg>
 		);
-	}
+	},
+	host => host.menu
 )
 export abstract class SelectBase extends InputBase {
 	@StyleAttribute()
 	opened = false;
 
 	readonly options = new Set<Option>();
+	readonly menu = (
+		<SelectMenu
+			className="menu"
+			$={el =>
+				merge(
+					onResize(this),
+					get(this, 'opened'),
+					get(this, 'selected')
+				).raf(() => {
+					this.positionMenu(el);
+					el.visible = this.opened;
+				})
+			}
+		>
+			<slot />
+		</SelectMenu>
+	);
 
+	abstract selected?: any;
+
+	protected abstract positionMenu(menu: SelectMenu): void;
 	protected abstract setSelected(option: Option): void;
+
 	abstract open(): void;
 	abstract close(): void;
 }
@@ -228,18 +251,6 @@ export abstract class SelectBase extends InputBase {
 			onAction(host).tap(() => !host.opened && host.open())
 		),
 	host => (
-		<SelectMenu
-			$={el =>
-				merge(get(host, 'opened'), get(host, 'selected')).raf(() =>
-					host.positionMenu(el)
-				)
-			}
-			visible={get(host, 'opened')}
-		>
-			<slot />
-		</SelectMenu>
-	),
-	host => (
 		<div className="placeholder">
 			{expression(host, host.selectedText$)}
 		</div>
@@ -255,11 +266,17 @@ export class SelectBox extends SelectBase {
 		const option = this.selected;
 		const rect = this.getBoundingClientRect();
 		const menuTopPadding = 13;
-		const maxTranslateY = rect.top;
+		const maxTranslateY = rect.top - menuTopPadding;
 
 		let height: number;
 		let scrollTop = 0;
-		let translateY = option ? option.offsetTop : 0;
+		// Browsers can return different values for the offsetParent property
+		// causing the alignment to fail.
+		let translateY = option
+			? option.offsetParent === this.menu
+				? option.offsetTop
+				: option.offsetTop - menu.offsetTop
+			: 0;
 
 		if (translateY > maxTranslateY) {
 			scrollTop = translateY - maxTranslateY;
@@ -273,9 +290,12 @@ export class SelectBox extends SelectBase {
 		else if (height < rect.height) height = rect.height;
 
 		const style = menu.style;
+		style.top = rect.top + 'px';
 		style.transform =
-			'translateY(' + (-translateY - menuTopPadding) + 'px)';
-		style.height = height + 'px';
+			'translate(-16px,' + (-translateY - menuTopPadding) + 'px)';
+		style.height = scrollTop === 0 ? '' : height + 'px';
+		//style.left = rect.left - 16 + 'px';
+		style.minWidth = rect.width + 32 + 'px';
 		menu.scrollTop = scrollTop;
 	}
 

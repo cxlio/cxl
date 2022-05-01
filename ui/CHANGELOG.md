@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.3.0]
+
+-   feat: bug fixes [47dcdfd]
+-   test: split screenshot tests [12cbe4f]
+-   feat: layout vertical padding [7a63b9a]
+-   feat: refactor theme [64ccc2e]
+-   feat: animate module [1216eb6]
+
 ## [3.1.0]
 
 - test: updated baseline [a7bb373]

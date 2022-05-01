@@ -3,6 +3,6 @@
 	"compilerOptions": {
 		"outDir": "../dist/ui"
 	},
-	"include": ["test.tsx", "spec/*.tsx"],
+	"include": ["test.tsx", "test-ui.tsx", "spec/*.tsx"],
 	"references": [{ "path": "." }, { "path": "../spec" }]
 }

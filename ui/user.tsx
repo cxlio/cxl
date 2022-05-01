@@ -1,8 +1,10 @@
+///<amd-module name="@cxl/ui/user.js"/>
 import { Attribute, Augment, Component, get } from '@cxl/component';
 import { T } from '@cxl/ui/core.js';
 import { Avatar } from '@cxl/ui/avatar.js';
 import { css } from '@cxl/ui/theme.js';
 import { dom, expression } from '@cxl/tsx';
+import { padding } from '@cxl/css';
 
 export interface User {
 	displayName?: string;
@@ -39,17 +41,25 @@ export class UserVerified extends Component {
 	verified = false;
 }
 
+@Augment<UserAvatar>('cxl-user-avatar', $ => (
+	<Avatar src={get($, 'user').map(u => u?.photoUrl || '')} />
+))
+export class UserAvatar extends Component {
+	@Attribute()
+	user?: User;
+}
+
 @Augment<UserNavbar>(
 	'cxl-user-navbar',
 	$ => (
 		<>
-			<Avatar src={get($, 'user').map(u => u?.photoUrl || '')} />
+			<UserAvatar user={get($, 'user')} />
 			{() => {
 				const el = (
 					<a className="name">
 						{expression(
 							$,
-							get($, 'user').map(u => u?.displayName)
+							get($, 'user').map(u => u?.displayName || 'Guest')
 						)}
 						<UserVerified
 							className="verified"
@@ -68,6 +78,7 @@ export class UserVerified extends Component {
 	css({
 		$: {
 			display: 'block',
+			...padding(32, 16, 24, 16),
 		},
 		name: {
 			display: 'block',
@@ -76,7 +87,7 @@ export class UserVerified extends Component {
 			color: 'onSurface',
 		},
 		verified: { marginLeft: 8 },
-		email: { font: 'subtitle2', marginTop: 8, marginBottom: 8 },
+		email: { font: 'subtitle2', marginTop: 8 },
 	})
 )
 export class UserNavbar extends Component {

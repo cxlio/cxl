@@ -15,7 +15,7 @@
 		xhr.send(
 			JSON.stringify({
 				base: require.base,
-				scriptPath: path,
+				scriptPath: require.replace ? require.replace(path) : path,
 			})
 		);
 

@@ -9,17 +9,9 @@ import {
 } from '@cxl/component';
 import { dom } from '@cxl/tsx';
 import { be } from '@cxl/rx';
-import {
-	registable,
-	registableHost,
-	render,
-	each,
-	validateValue,
-	role,
-} from '@cxl/template';
+import { registableHost, render, validateValue, role } from '@cxl/template';
 import { on, onAction } from '@cxl/dom';
 import {
-	Appbar,
 	Application,
 	Backdrop,
 	Button,
@@ -37,17 +29,14 @@ import {
 	TextArea,
 	SubmitButton,
 	Grid,
-	MenuToggle,
-	Item,
-	Tabs,
 	T,
 	Hr as CoreHr,
 } from '@cxl/ui';
 import { Svg, Path } from '@cxl/ui/svg.js';
 import { border, rgba, padding, pct } from '@cxl/css';
-import { RouterTab, RouterLink } from '@cxl/ui-router';
+import { RouterLink } from '@cxl/ui-router';
 import { email, required } from '@cxl/validation';
-import { baseColor, css } from '@cxl/ui/theme.js';
+import { css } from '@cxl/ui/theme.js';
 
 export type IconKey = keyof typeof Icons;
 
@@ -192,80 +181,6 @@ export class Image extends Component {
 
 	@Attribute()
 	alt?: string;
-}
-
-@Augment<AppbarMenu>(
-	'www-appbar-menu',
-	css({
-		$: { display: 'block', flexShrink: 0 },
-		tabs: { display: 'none', overflowX: 'hidden' },
-		'@medium': {
-			tabs: { display: 'block' },
-			menu: { display: 'none' },
-		},
-	}),
-	$ => {
-		const elements$ = be(new Set<AppbarItem>());
-		$.bind(
-			registableHost<AppbarItem>($, 'www.appbar-menu')
-				.raf()
-				.tap(els => elements$.next(els))
-		);
-
-		return (
-			<>
-				<Tabs className="tabs">
-					{each(elements$, item => (
-						<RouterTab href={item.href}>
-							{item.cloneNode(true)}
-						</RouterTab>
-					))}
-				</Tabs>
-				<MenuToggle className="menu" right>
-					{each(elements$, item => (
-						<RouterLink href={item.href}>
-							<Item>{item.cloneNode(true)}</Item>
-						</RouterLink>
-					))}
-				</MenuToggle>
-			</>
-		);
-	}
-)
-export class AppbarMenu extends Component {}
-
-@Augment('www-appbar-item', $ => registable($, 'www.appbar-menu'))
-export class AppbarItem extends Component {
-	@Attribute()
-	href = '';
-}
-
-@Augment<PageAppbar>(
-	'www-appbar',
-	css({
-		appbar: {
-			...padding(20, 8, 20, 8),
-			variables: {
-				surface: baseColor('surface'),
-				onSurface: baseColor('onSurface'),
-				primary: baseColor('primary'),
-				onPrimary: baseColor('onPrimary'),
-				link: baseColor('onSurface'),
-			} as any,
-		},
-		'@small': {
-			appbar: { ...padding(20, 32, 20, 32) },
-		},
-	}),
-	() => (
-		<Appbar sticky flat className="appbar" center>
-			<slot />
-		</Appbar>
-	)
-)
-export class PageAppbar extends Component {
-	@StyleAttribute()
-	flat = false;
 }
 
 @Augment<PageAppbarLogo>(

@@ -7,18 +7,13 @@ import {
 	Slot,
 	get,
 } from '@cxl/component';
-import {
-	ButtonBase,
-	FocusCircleStyle,
-	Focusable,
-	Spinner,
-	Span,
-} from './core.js';
+import { FocusCircleStyle, Focusable, Span } from './core.js';
+import { Button } from './button.js';
 import { dom } from '@cxl/tsx';
 import { aria, ariaValue, onValue, triggerEvent } from '@cxl/template';
 import { trigger, onKeypress, on, onAction } from '@cxl/dom';
 import { border, padding } from '@cxl/css';
-import { EMPTY, Observable, observable, defer, merge } from '@cxl/rx';
+import { EMPTY, observable, merge } from '@cxl/rx';
 import { dragInside } from '@cxl/drag';
 import { InputBase } from './input-base.js';
 import {
@@ -27,7 +22,7 @@ import {
 	registableHost,
 	role,
 } from '@cxl/template';
-import { Field } from './field.js';
+import { Field, fieldInput } from './field.js';
 import { CloseIcon } from './icon.js';
 import { css } from './theme.js';
 
@@ -65,6 +60,7 @@ import { css } from './theme.js';
 		focusCircle: { marginLeft: -4, marginTop: -8, left: 'auto' },
 		background: {
 			backgroundColor: 'primaryLight',
+			paddingRight: 12,
 			height: 2,
 		},
 		line: {
@@ -136,28 +132,15 @@ export class Slider extends InputBase {
 			width: 16,
 			height: 16,
 		},
-		icon$disabled: { display: 'inline-block' },
 	}),
-	_ => (
-		<>
-			<Spinner className="icon" />
-			<slot />
-		</>
-	),
+	_ => <slot />,
 	el => onAction(el).pipe(triggerEvent(el, 'form.submit'))
 )
-export class SubmitButton extends ButtonBase {
+export class SubmitButton extends Button {
 	primary = true;
-}
 
-function fieldInput<T extends Component>(host: T) {
-	return defer(() =>
-		host.parentNode instanceof Field
-			? (get(host.parentNode, 'input').filter(
-					inp => !!inp
-			  ) as Observable<InputBase>)
-			: EMPTY
-	);
+	@StyleAttribute()
+	submitting = false;
 }
 
 @Augment<Label>(
@@ -179,11 +162,6 @@ export class Label extends Component {}
 
 /**
  * @example
- * <cxl-field>
- *   <cxl-label>Field Label</cxl-label>
- *   <cxl-input value="Input Value"></cxl-input>
- *   <cxl-field-help>Helper Text</cxl-field-help>
- * </cxl-field>
  * <cxl-field>
  *   <cxl-label>Field Label</cxl-label>
  *   <cxl-input touched invalid value="Input Value"></cxl-input>
@@ -275,6 +253,18 @@ export class Form extends Component {
 
 		if (focus) return focus.focus();
 		trigger(this, 'submit');
+	}
+
+	getElementByName(name: string) {
+		for (const el of this.elements) if (el.name === name) return el;
+	}
+
+	setFormData(data: any) {
+		for (const key in data)
+			if (data.hasOwnProperty(key)) {
+				const el = this.getElementByName(key);
+				if (el) el.value = data[key];
+			}
 	}
 
 	getFormData() {
@@ -667,6 +657,22 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
 	return el;
 }
 
+export function readonlyAllowed(ev: KeyboardEvent) {
+	if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(ev.key))
+		return true;
+	if (ev.metaKey || ev.ctrlKey)
+		return ev.key === 'A' || ev.key === 'a' || ev.key === 'c';
+}
+
+export function readonlyContentEditable(
+	host: HTMLElement,
+	allowed = readonlyAllowed
+) {
+	return on(host, 'keydown').tap(ev => {
+		if (!allowed(ev)) ev.preventDefault();
+	});
+}
+
 /**
  * Text fields let users enter and edit text that spans in multiple lines.
  * @example
@@ -696,14 +702,27 @@ export function ContentEditable<T extends InputBase>(host: T, multi = false) {
 		},
 		$disabled: { pointerEvents: 'none' },
 	}),
-	$ => ContentEditable($, true)
+	$ => ContentEditable($, true),
+	$ =>
+		get($, 'readonly').switchMap(val =>
+			val ? readonlyContentEditable($) : EMPTY
+		)
 )
 export class TextArea extends InputBase {
+	@Attribute()
+	readonly = false;
+
 	value = '';
 }
 
 /**
  * @beta
+ * @demo
+ * <cxl-field>
+ *   <cxl-label>Search</cxl-label>
+ *   <cxl-input></cxl-input>
+ *   <cxl-field-clear></cxl-field-clear>
+ * </cxl-field>
  */
 @Augment(
 	'cxl-field-clear',

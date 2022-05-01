@@ -4,7 +4,7 @@ import { observable } from '@cxl/rx';
 import { Output, Task } from '@cxl/build';
 
 import * as MarkdownIt from 'markdown-it';
-//import * as hljs from 'highlight.js';
+import * as hljs from 'highlight.js';
 
 export interface BlogConfig {
 	postsDir?: string | string[];
@@ -15,7 +15,7 @@ export interface BlogConfig {
 
 export interface BlogPosts {
 	posts: Post[];
-	tags: string[];
+	tags: Record<string, string[]>;
 }
 
 export interface Meta {
@@ -56,11 +56,14 @@ function Code(source: string, language?: string) {
 	return `<blog-code language="${
 		language || ''
 	}"><!--${source}--></blog-code>`;
-	/*return (
+}
+
+function CodeHighlight(source: string, language?: string) {
+	return (
 		'<pre><code class="hljs">' +
 		(language
-			? hljs.highlight(language, source)
-			: hljs.highlightAuto(source, [
+			? (hljs as any).highlight(language, source)
+			: (hljs as any).highlightAuto(source, [
 					'html',
 					'typescript',
 					'javascript',
@@ -68,7 +71,7 @@ function Code(source: string, language?: string) {
 			  ])
 		).value +
 		'</code></pre>'
-	);*/
+	);
 }
 
 const markdownMeta = /^(\w+):\s*(.+)\s*/gm;
@@ -91,9 +94,10 @@ const FenceHandler: Record<string, (content: string, meta: any) => string> = {
 	},
 };
 
-export function renderMarkdown(source: string) {
+export function renderMarkdown(source: string, config?: BlogConfig) {
+	const highlight = config?.highlight ? CodeHighlight : Code;
 	const md = new MarkdownIt({
-		highlight: Code,
+		highlight,
 		html: true,
 	});
 	const rules = md.renderer.rules;
@@ -113,36 +117,16 @@ export function renderMarkdown(source: string) {
 		const tag = tokens[idx].tag;
 		return tag === 'h1' ? `</blog-title>` : `</cxl-t>`;
 	};
-	rules.code_block = (tokens, idx) => Code(tokens[idx].content);
+	rules.code_block = (tokens, idx) => highlight(tokens[idx].content);
 	rules.fence = (tokens, idx) => {
 		const token = tokens[idx];
 		const handler = FenceHandler[token.info];
-		return handler ? handler(token.content, meta) : Code(token.content);
+		return handler
+			? handler(token.content, meta)
+			: highlight(token.content);
 	};
 
 	return { meta, content: md.render(source) };
-}
-
-function Markdown(url: string, source: string, stats: Stats) {
-	const { meta, content } = renderMarkdown(source);
-	const title =
-		source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
-	const summary = meta.summary || content.match(SUMMARY_REGEX)?.[1] || '';
-
-	return {
-		id: getPostId(title),
-		title,
-		summary,
-		date: meta.date || stats.mtime.toISOString(),
-		version: meta.version,
-		uuid: meta.uuid || '',
-		mtime: stats.mtime.toISOString(),
-		author: meta.author || '',
-		type: meta.type || (meta.date ? 'post' : 'draft'),
-		tags: meta.tags || '',
-		href: meta.href,
-		content,
-	};
 }
 
 function parseMeta(content: string) {
@@ -189,17 +173,6 @@ function Html(_url: string, content: string, stat: Stats): Post {
 	};
 }
 
-async function getPostData(url: string): Promise<Post> {
-	const [source, stats] = await Promise.all([
-		readFile(url, 'utf8'),
-		stat(url),
-	]);
-
-	return url.endsWith('.md')
-		? Markdown(url, source, stats)
-		: Html(url, source, stats);
-}
-
 async function buildPosts(config: BlogConfig, posts: Post[]) {
 	const HEADER = config.headerTemplate
 		? await readFile(config.headerTemplate)
@@ -210,26 +183,62 @@ async function buildPosts(config: BlogConfig, posts: Post[]) {
 	}));
 }
 
-async function buildFromSource(postsDir: string) {
-	const files = (await readdir(postsDir)).filter(f => POST_REGEX.test(f));
-	return await Promise.all(files.map(f => getPostData(`${postsDir}/${f}`)));
-}
-
 async function build(config: BlogConfig): Promise<Output[]> {
+	function Markdown(url: string, source: string, stats: Stats) {
+		const { meta, content } = renderMarkdown(source, config);
+		const title =
+			source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
+		const summary = meta.summary || content.match(SUMMARY_REGEX)?.[1] || '';
+
+		return {
+			id: getPostId(title),
+			title,
+			summary,
+			date: meta.date || stats.mtime.toISOString(),
+			version: meta.version,
+			uuid: meta.uuid || '',
+			mtime: stats.mtime.toISOString(),
+			author: meta.author || '',
+			type: meta.type || (meta.date ? 'post' : 'draft'),
+			tags: meta.tags || '',
+			href: meta.href,
+			content,
+		};
+	}
+
+	async function getPostData(url: string): Promise<Post> {
+		const [source, stats] = await Promise.all([
+			readFile(url, 'utf8'),
+			stat(url),
+		]);
+
+		return url.endsWith('.md')
+			? Markdown(url, source, stats)
+			: Html(url, source, stats);
+	}
+	async function buildFromSource(postsDir: string) {
+		const files = (await readdir(postsDir)).filter(f => POST_REGEX.test(f));
+		return await Promise.all(
+			files.map(f => getPostData(`${postsDir}/${f}`))
+		);
+	}
+
 	const postsDir = config.postsDir || DefaultConfig.postsDir;
 	const posts = Array.isArray(postsDir)
 		? (await Promise.all(postsDir.map(buildFromSource))).flat()
 		: await buildFromSource(postsDir);
 
 	const postsFiles = await buildPosts(config, posts);
-	const tags = new Set();
-	const types = new Set();
+	const tags: Record<string, string[]> = {};
+	const types = new Set<string>();
 
 	posts
 		.sort((a, b) => (a.date > b.date ? -1 : 1))
 		.forEach(a => {
-			if (a.type === 'post' && a.tags)
-				for (const tag of a.tags.split(' ')) tags.add(tag);
+			const typeTags = tags[a.type] || (tags[a.type] = []);
+			if (a.tags)
+				for (const tag of a.tags.split(' '))
+					if (!typeTags.includes(tag)) typeTags.push(tag);
 			types.add(a.type);
 		});
 
@@ -237,7 +246,7 @@ async function build(config: BlogConfig): Promise<Output[]> {
 		posts: config.includeContent
 			? posts
 			: posts.map(p => ({ ...p, content: undefined })),
-		tags: Array.from(tags).flat(),
+		tags,
 		types: Array.from(types),
 	};
 

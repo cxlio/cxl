@@ -25,6 +25,7 @@
 			if (!mods[path]) throw new Error(`Module "${path}" not found.`);
 			return mods[path];
 		}
+		if (mods[path]) return mods[path];
 
 		const actualPath = /\.c?js$/.test(path) ? path : path + '.js';
 		let url = normalizePath(
@@ -48,10 +49,13 @@
 
 		const oldBase = require.base;
 		require.base = basename(url);
-		const module = appendScript(source);
-		require.base = oldBase;
-		mods[id] = module.exports;
-		return module.exports;
+		try {
+			const module = appendScript(source);
+			mods[id] = module.exports;
+			return module.exports;
+		} finally {
+			require.base = oldBase;
+		}
 	}
 	require.modules = {};
 	require.base = basename(location.pathname);

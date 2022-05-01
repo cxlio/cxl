@@ -1,5 +1,5 @@
 import { dirname, join, resolve } from 'path';
-import { existsSync, mkdirSync, utimesSync, writeFileSync } from 'fs';
+import { existsSync, utimesSync, writeFileSync } from 'fs';
 import { SpawnOptions, spawn, execSync } from 'child_process';
 
 import { Application, sh } from '@cxl/server';
@@ -30,7 +30,7 @@ class Build {
 		const outFile = resolve(this.outputDir, result.path);
 		const source = result.source;
 		const outputDir = dirname(outFile);
-		if (!existsSync(outputDir)) mkdirSync(outputDir);
+		if (!existsSync(outputDir)) execSync(`mkdir -p ${outputDir}`);
 		writeFileSync(outFile, source);
 		if (result.mtime) utimesSync(outFile, result.mtime, result.mtime);
 		return result;
@@ -109,9 +109,11 @@ export async function build(...targets: BuildConfiguration[]) {
 
 export function exec(cmd: string) {
 	return new Observable<void>(subs => {
-		builder.log(`sh ${cmd}`, sh(cmd)).then(
+		builder.log(`sh ${cmd}`, sh(cmd, { timeout: 10000 })).then(
 			() => subs.complete(),
-			e => subs.error(e)
+			e => {
+				subs.error(e);
+			}
 		);
 	});
 }

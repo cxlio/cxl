@@ -3,6 +3,10 @@
 	"typescript.tsconfig_pattern": "tsconfig(?:\\.test)?\\.json$",
 	"watch": {
 		"rules": {
+			"amd": {
+				"files": ["amd/index.ts"],
+				"tasks": "npm run build --prefix amd"
+			},
 			"ajax": {
 				"files": ["ajax/index.ts"],
 				"tasks": "cd ajax && npm run build"
@@ -64,7 +68,7 @@
 				"tasks": "cd store && npm run build"
 			},
 			"diff": {
-				"files": ["diff/src/*.js"],
+				"files": ["diff/*"],
 				"tasks": "npm run build --prefix diff"
 			},
 			"icons": {
@@ -144,9 +148,21 @@
 				"files": ["ui-ide/*"],
 				"tasks": "npm run build --prefix ui-ide"
 			},
+			"ui-demo": {
+				"files": ["ui-demo/*"],
+				"tasks": "npm run build --prefix ui-demo"
+			},
 			"cli": {
 				"files": ["cli/*"],
 				"tasks": "npm run build --prefix cli"
+			},
+			"worker": {
+				"files": ["worker/*"],
+				"tasks": "npm run build --prefix worker"
+			},
+			"www": {
+				"files": ["www/*"],
+				"tasks": "npm run build --prefix www"
 			}
 		}
 	}

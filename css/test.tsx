@@ -1,6 +1,5 @@
 import { spec } from '@cxl/spec';
 import {
-	applyTheme,
 	boxShadow,
 	pct,
 	rgba,
@@ -15,9 +14,12 @@ declare module './index.js' {
 	interface Variables {
 		camelCase: string;
 	}
+	interface Animation {
+		test: AnimationDefinition;
+	}
 }
 
-const { css, style, render } = buildTheme(defaultTheme);
+const { applyTheme, css, style, render } = buildTheme(defaultTheme);
 
 export default spec('css', s => {
 	s.test('style', it => {
@@ -172,13 +174,27 @@ export default spec('css', s => {
 				':host([invalid][touched]){color:rgba(0,0,0,1);}'
 			);
 		});
+		it.should('support scrollbar styles', a => {
+			a.equal(
+				render({
+					'$::scrollbar': { color: 'transparent' },
+				}),
+				':host::-webkit-scrollbar{color:transparent;}'
+			);
+			a.equal(
+				render({
+					'body::scrollbar': { color: 'transparent' },
+				}),
+				':host .body::scrollbar{color:transparent;}'
+			);
+		});
 	});
 
 	s.test('applyTheme', it => {
 		it.should('render and append style elements', a => {
 			const children: any[] = [];
 			const el = { appendChild: (a: any) => children.push(a) };
-			applyTheme(defaultTheme, el as any);
+			applyTheme(el as any);
 			a.equal(children.length, 1);
 		});
 	});

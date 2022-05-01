@@ -15,7 +15,7 @@ import { triggerEvent, registable } from '@cxl/template';
 		attributeChanged(host, 'invalid').pipe(triggerEvent(host, 'invalid')),
 		registable(host, 'form'),
 		get(host, 'value').tap(val =>
-			(host as any).internals?.setFormValue(val)
+			(host as any).internals?.setFormValue?.(val)
 		),
 		get(host, 'invalid').tap(val => {
 			if (val && !host.validationMessage)

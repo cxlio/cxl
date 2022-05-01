@@ -15,12 +15,13 @@
 		"test": "npm run build && cd ../dist/build && node ../tester --node"
 	},
 	"dependencies": {
-		"eslint": "^7.14.0",
-		"terser": "^5.5.1",
-		"typescript": "^4.4.2",
-		"@cxl/rx": "~0.2.0",
+		"eslint": "^8.11.0",
+		"terser": "^5.10.0",
+		"typescript": "^4.5.4",
+		"@cxl/rx": "~0.7.0",
 		"@cxl/server": "~0.0.2",
-		"@cxl/source": "~0.0.1"
+		"@cxl/source": "~0.0.2",
+		"@cxl/amd": "~0.0.1"
 	},
 	"bugs": "https://github.com/cxlio/cxl/issues",
 	"homepage": "https://cxlio.github.io/cxl/build",

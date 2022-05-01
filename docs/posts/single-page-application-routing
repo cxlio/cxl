@@ -1,0 +1,59 @@
+<blog-title>Single Page Application Routing</blog-title><blog-tags>spa routing</blog-tags><p>There are three main ways we can handle application routes, all of them have
+pros and cons, which one is best, depends on your usage. This post describes routing techniques for Single Page Applications.</p>
+<p>An experimental implemetation is available <a href="https://github.com/cxlio/cxl/tree/master/router">here</a>.</p>
+<cxl-t h4>Routing Strategies</cxl-t><cxl-t h5>Location Hash</cxl-t><blog-code language=""><!--https://debuggerjs.com/<b>#path/to/route</b>
+--></blog-code><cxl-t h6>Pros</cxl-t><ul>
+<li>You can easily detect a URL change by listening to the <em>onhashchange</em> event.</li>
+</ul>
+<cxl-t h6>Cons</cxl-t><ul>
+<li>Not very SEO friendly.</li>
+</ul>
+<cxl-t h5>Location Path</cxl-t><blog-code language=""><!--https://debuggerjs.com/<b>path/to/route</b>
+--></blog-code><cxl-t h6>Pros</cxl-t><ul>
+<li>SEO friendly</li>
+<li>Most popular approach for single page applications.</li>
+</ul>
+<cxl-t h6>Cons</cxl-t><ul>
+<li>Not easy to detect URL changes.</li>
+<li>Requires special server configuration.</li>
+</ul>
+<cxl-t h5>Location Search</cxl-t><blog-code language=""><!--https://debuggerjs.com/<b>?path/to/route</b>
+--></blog-code><cxl-t h6>Pros</cxl-t><ul>
+<li>Does not require special server configuration</li></li>
+</ul>
+<cxl-t h6>Cons</cxl-t><ul>
+<li>URL Changes are not easy to detect.</li>
+</ul>
+<cxl-t h4>History API</cxl-t><p><cxl-t h5>Navigation Events</cxl-t></p>
+<p><cxl-t h5>Popstate</cxl-t></p>
+<p>The <code>popstate</code> event</p>
+<p><cxl-t h4>PushState</cxl-t>
+<cxl-t h5>Detecting Push State Events</cxl-t>
+<blog-code
+	><!--
+let pushSubject: BehaviorSubject<any>;
+export function onHistoryChange() {
+	if (!pushSubject) {
+		pushSubject = be(history.state);
+		const old = history.pushState;
+		history.pushState = function (...args: any) {
+			const result = old.apply(this, args);
+			pushSubject.next(history.state);
+			return result;
+		};
+	}
+	return merge(
+		on(window, 'popstate').tap(() => history.state),
+		pushSubject
+	);
+}
+--></blog-code>
+<cxl-t h5>Persisting Route State</cxl-t>
+<cxl-t h5>Handling Url Hash</cxl-t></p>
+<p></p>
+<blog-code
+	><!--
+if (hash)
+	this.root.querySelector(`a[name="${hash}"]`)?.scrollIntoView();
+--></blog-code>
+<cxl-t h5>Determining Active Url</cxl-t>

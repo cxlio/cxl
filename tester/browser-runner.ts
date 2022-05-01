@@ -1,8 +1,9 @@
 import type { Result, Test } from '@cxl/spec';
 import type { TestResult } from './report';
 
-let output =
-	'<style>.thumb{vertical-align:middle;display:inline-block;overflow:hidden;width:320px;position:relative;vertical-align:top}</style>';
+let output = `<style>.thumb{vertical-align:middle;display:inline-block;overflow:hidden;width:320px;position:relative;vertical-align:top}
+	dl { display: flex; margin-top:8px;margin-bottom:8px; } dd { margin-left: 16px}
+	</style>`;
 let baselinePath: string;
 
 function group(testId: number, title: string) {
@@ -40,7 +41,7 @@ function printError(fail: Result) {
 }
 
 function printResult(result: Result) {
-	require('@cxl/ui-ide/image-diff.js');
+	require('@cxl/workspace.ui/image-diff.js');
 	output += result.success ? success() : failure();
 	const data = result.data;
 	if (data?.type === 'figure') {

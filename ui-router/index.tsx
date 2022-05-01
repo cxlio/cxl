@@ -229,13 +229,20 @@ function renderTemplate(tpl: HTMLTemplateElement, title?: string) {
 		host.bind(
 			merge(
 				get(host, 'focusable').tap(val => (el.tabIndex = val ? 0 : -1)),
-				combineLatest(strategy$, get(host, 'href')).tap(
-					([strategy, val]) =>
-						val !== undefined && (el.href = strategy.getHref(val))
+				combineLatest(
+					strategy$,
+					get(host, 'href'),
+					get(host, 'external')
+				).tap(
+					([strategy, val, ext]) =>
+						val !== undefined &&
+						(el.href = ext ? val : strategy.getHref(val))
 				),
 				onAction(el).tap(ev => {
 					ev.preventDefault();
-					if (host.href !== undefined) router.go(host.href);
+					if (host.href !== undefined)
+						if (host.external) location.assign(host.href);
+						else router.go(host.href);
 				})
 			)
 		);
@@ -256,6 +263,8 @@ export class RouterLink extends Component {
 	href?: string;
 	@Attribute()
 	focusable = false;
+	@Attribute()
+	external = false;
 }
 
 @Augment<RouterTab>(
@@ -284,8 +293,8 @@ export class RouterTab extends Component {
 	href = '';
 }
 
-@Augment<RouterLink>(
-	'cxl-a',
+@Augment<A>(
+	'cxl-router-a',
 	css({
 		$: { textDecoration: 'underline' },
 		$focusWithin: { outline: 'var(--cxl-primary) auto 1px;' },
@@ -319,8 +328,6 @@ export class A extends RouterLink {
 			outline: 0,
 			textDecoration: 'none',
 		},
-		$focusWithin: { filter: 'invert(0.2) saturate(2) brightness(1.1)' },
-		$hover: { filter: 'invert(0.15) saturate(1.5) brightness(1.1)' },
 		...StateStyles,
 	}),
 	host => onAction(host).pipe(triggerEvent(host, 'drawer.close')),

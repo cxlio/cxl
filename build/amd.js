@@ -1,18 +1,26 @@
-window.define =
-	window.define ||
-	function define(name, injects, module) {
-		function _require(path, resolve, reject) {
-			if (Array.isArray(path)) {
-				path = path[0];
-				return Promise.resolve()
-					.then(() => _require(path))
-					.then(resolve, reject);
-			} else {
-				const module = define.modules[path];
-				if (!module) throw new Error(`Module "${path}" not found`);
-				return module;
+(window => {
+	function _require(path, resolve, reject) {
+		if (Array.isArray(path)) {
+			path = path[0];
+			return Promise.resolve()
+				.then(() => _require(path))
+				.then(resolve, reject);
+		} else {
+			let mod = define.modules[path];
+			if (!mod) {
+				try {
+					mod = module.require(path);
+				} catch (e) {
+					throw new Error(`Module "${path}" not found`);
+				}
 			}
+			return mod;
 		}
+	}
+
+	window.define = window.define || define;
+
+	function define(name, injects, module) {
 		window.require = window.require || _require;
 		if (arguments.length === 2 && Array.isArray(name)) {
 			module = injects;
@@ -43,5 +51,6 @@ window.define =
 		if (name && window.module.exports !== moduleExports)
 			modules[name] = window.module.exports;
 		window.module = oldModule;
-	};
-window.define.amd = true;
+		define.amd = true;
+	}
+})(typeof self === 'undefined' ? global : self);

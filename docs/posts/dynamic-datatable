@@ -1,0 +1,61 @@
+<blog-title>Dynamic Datatable</blog-title><blog-tags>dynamic data-table</blog-tags><p>Data tables display information in a grid-like format of rows and columns. They organize information in a way that’s easy to scan so that users can look for patterns and develop insights from data.</p>
+<cxl-t h4>Dynamic DataTable</cxl-t><blog-demo><!--<script src="https://cdn.jsdelivr.net/npm/@cxl/ui@3.1.0/index.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@cxl/ui-table@0.1.0/amd/index.min.js"></script>
+<style>body { padding-bottom: 64px }</style>
+	<cxl-dataset id="table">
+		<cxl-table>
+			<cxl-tr>
+				<cxl-th>
+					<cxl-table-select-all></cxl-table-select-all>
+				</cxl-th>
+				<cxl-th sortable sort="asc" field="name">Name</cxl-th>
+				<cxl-th sortable field="tagName">Tag Name</cxl-th>
+				<cxl-th sortable field="role">Role</cxl-th>
+				<cxl-th>Kind</cxl-th>
+				<cxl-th>Flags</cxl-th>
+				<cxl-th>Link</cxl-th>
+			</cxl-tr>
+			<cxl-tbody id="tbody"></cxl-tbody>
+		</cxl-table>
+		<cxl-table-pagination></cxl-table-pagination>
+	</cxl-dataset>
+<script type="module">
+	async function render() {
+		const data = (
+			await fetch('https://cxlio.github.io/cxl/ui/summary.json').then(res => res.json())
+		).map(r => ({
+			name: r.name,
+			tagName: r.docs?.tagName || '',
+			role: r.docs?.role || '',
+			kind: r.kind,
+			flags: r.flags,
+		}));
+		const table = document.getElementById('table');
+		const tbody = document.getElementById('tbody');
+
+		function renderRow(row) {
+			const tr = document.createElement('cxl-tr-selectable');
+			tr.value = row;
+			tr.innerHTML = `
+				<cxl-td>${row.name}</cxl-td>
+				<cxl-td>${row.tagName}</cxl-td>
+				<cxl-td>${row.role}</cxl-td>
+				<cxl-td>${row.kind}</cxl-td>
+				<cxl-td>${row.flags}</cxl-td>
+				<cxl-td><a target="_top" href="../ui/?${row.href}">Docs</a></cxl-td>
+			`;
+			return tr;
+		}
+
+		table.addEventListener('change', ev => {
+			const data = table.value;
+			tbody.innerHTML = '';
+			for (const row of data) tbody.appendChild(renderRow(row));
+		});
+
+		table.source = data;
+	}
+
+	render();
+</script>
+--></blog-demo>

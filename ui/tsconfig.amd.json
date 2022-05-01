@@ -27,6 +27,11 @@
 			"path": "../drag/tsconfig.amd.json"
 		}
 	],
-	"include": ["*.tsx"],
-	"exclude": ["test.tsx"]
+	"include": [
+		"*.tsx"
+	],
+	"exclude": [
+		"test.tsx",
+		"test-ui.tsx"
+	]
 }

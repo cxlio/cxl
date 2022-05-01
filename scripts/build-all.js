@@ -69,6 +69,8 @@ module.exports = fs.readdir('.').then(async all => {
 	}
 	stats.totalTime = Date.now() - start;
 	await fs.writeFile('./dist/stats.json', JSON.stringify(stats), 'utf8');
+	await fs.writeFile('./docs/stats.json', JSON.stringify(stats), 'utf8');
+	await sh('node dist/cli/build-data');
 	await sh('cp scripts/build-report.html dist/index.html');
 	console.log(`Finished in ${stats.totalTime}ms`);
 });

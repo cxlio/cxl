@@ -80,11 +80,13 @@ export function matchStat(fromPath: string, toPath: string) {
 /**
  * Copy Directory
  */
-export function copyDir(fromPath: string, toPath: string) {
+export function copyDir(fromPath: string, toPath: string, glob = '*') {
 	return defer(() =>
-		from(sh(`rsync -au --delete ${fromPath}/* ${toPath}`)).mergeMap(
-			() => EMPTY
-		)
+		from(
+			sh(
+				`mkdir -p ${toPath} && rsync -au --delete ${fromPath}/${glob} ${toPath}`
+			)
+		).mergeMap(() => EMPTY)
 	);
 }
 

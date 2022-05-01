@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/carousel.js"/>
 import { Augment, Attribute, Component, Span, get } from '@cxl/component';
 import { registable, each, registableHost } from '@cxl/template';
 import { padding } from '@cxl/css';
@@ -47,6 +48,14 @@ const SlideAnimation = {
 	},
 };
 
+/**
+ * @demo
+ * <cxl-carousel delay="2000" type="continuous">
+ *   <cxl-slide><cxl-t h5>Slide 1</cxl-t></cxl-slide>
+ *   <cxl-slide><cxl-t h5>Slide 2</cxl-t></cxl-slide>
+ *   <cxl-slide><cxl-t h5>Slide 3</cxl-t></cxl-slide>
+ * </cxl-carousel>
+ */
 @Augment<Carousel>(
 	'cxl-carousel',
 	css({
@@ -113,18 +122,31 @@ export class Carousel extends Component {
 	slides = new Set<Slide>();
 }
 
+/**
+ * @demo
+ * <cxl-carousel>
+ *   <cxl-slide><cxl-t h5>Slide 1</cxl-t></cxl-slide>
+ *   <cxl-slide><cxl-t h5>Slide 2</cxl-t></cxl-slide>
+ *   <cxl-slide><cxl-t h5>Slide 3</cxl-t></cxl-slide>
+ *   <cxl-carousel-pagination></cxl-carousel-pagination>
+ * </cxl-carousel>
+ */
 @Augment(
 	'cxl-carousel-pagination',
 	css({
-		$: { display: 'block', textAlign: 'center', ...padding(8) },
-		circle$first: { marginLeft: 8 },
+		$: {
+			display: 'flex',
+			columnGap: 8,
+			justifyContent: 'center',
+			...padding(8),
+		},
 		circle: {
 			display: 'inline-block',
 			borderRadius: '100%',
 			backgroundColor: 'onSurface12',
 			width: 16,
 			height: 16,
-			marginLeft: 8,
+			cursor: 'pointer',
 		},
 		active: { backgroundColor: 'primary' },
 	}),
@@ -157,6 +179,15 @@ export class Carousel extends Component {
 )
 export class CarouselPagination extends Component {}
 
+/**
+ * @demo
+ * <cxl-carousel style="text-align:center;height: 60px">
+ *   <cxl-slide><cxl-t h5>Slide 1</cxl-t></cxl-slide>
+ *   <cxl-slide><cxl-t h5>Slide 2</cxl-t></cxl-slide>
+ *   <cxl-slide><cxl-t h5>Slide 3</cxl-t></cxl-slide>
+ *   <cxl-carousel-navigation></cxl-carousel-navigation>
+ * </cxl-carousel>
+ */
 @Augment(
 	'cxl-carousel-navigation',
 	css({

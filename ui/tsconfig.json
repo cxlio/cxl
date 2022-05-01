@@ -4,7 +4,7 @@
 		"outDir": "../dist/ui"
 	},
 	"include": ["*.tsx"],
-	"exclude": ["test.tsx"],
+	"exclude": ["test.tsx", "test-ui.tsx"],
 	"references": [
 		{ "path": "../rx" },
 		{ "path": "../tsx" },

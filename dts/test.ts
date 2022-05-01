@@ -6,10 +6,11 @@ import {
 	NumberType,
 	StringType,
 	VoidType,
-	ScriptTarget,
 	parse,
+	printNode,
 } from './index.js';
 import { TestApi, spec } from '@cxl/spec';
+import * as ts from 'typescript';
 
 export default spec('dts', a => {
 	const test = a.test.bind(a);
@@ -214,6 +215,35 @@ export default spec('dts', a => {
 		a.ok(kls.source);
 	});
 
+	a.test('interface - method overload', (a: TestApi) => {
+		const [A] = parse(`interface A {
+			m1(a: string): void;
+			m1(b: boolean): boolean;
+			m1(c: any): boolean | void;
+		}`);
+
+		a.assert(A.children);
+		a.equal(A.children.length, 3);
+		const [m1, m2, m3] = A.children;
+		printNode(m1);
+		printNode(m2);
+		printNode(m3);
+		a.equal(m1.name, 'm1');
+		a.equal(m1.type, VoidType);
+		a.assert(m1.parameters);
+		a.equal(m1.parameters[0].name, 'a');
+		a.ok(m1.flags & Flags.Overload);
+		a.equal(m2.name, 'm1');
+		a.equal(m2.type, BooleanType);
+		a.ok(m2.flags & Flags.Overload);
+		a.assert(m2.parameters);
+		a.equal(m2.parameters[0].name, 'b');
+		a.equal(m3.name, 'm1');
+		a.ok(m3.flags & Flags.Overload);
+		a.assert(m3.parameters);
+		a.equal(m3.parameters[0].name, 'c');
+	});
+
 	test('class - method overload', (a: TestApi) => {
 		const [A] = parse(`class A {
 			m1(a: string): void;
@@ -228,6 +258,7 @@ export default spec('dts', a => {
 		a.equal(m1.type, VoidType);
 		a.assert(m1.parameters);
 		a.equal(m1.parameters[0].name, 'a');
+		a.ok(m1.flags & Flags.Overload);
 		a.equal(m2.name, 'm1');
 		a.equal(m2.type, BooleanType);
 		a.assert(m2.parameters);
@@ -371,7 +402,7 @@ export default spec('dts', a => {
 			`
 			class A { m1 = 'str'; m2() { } get m3() { return undefined; } set m3(val) {} m4 = new Set<any>(); }
 		`,
-			{ target: ScriptTarget.ES2017 }
+			{ target: ts.ScriptTarget.ES2017 }
 		);
 
 		a.ok(A);
@@ -856,6 +887,29 @@ function map<T>() {	return operator<T>(); }
 		a.assert(A.type);
 		const sig = A.type;
 		a.equal(sig.name, '');
+	});
+
+	a.test('Duplicate symbols', (a: TestApi) => {
+		const [A, B] = parse(
+			`interface A {} declare var A: { prototype: A; new(): A }`
+		);
+		a.ok(A);
+		a.equal(B.type?.children?.[0].type?.type, A);
+		a.equal(B.type?.children?.[1].type?.type, A);
+	});
+
+	a.test('Merge namespace declarations', (a: TestApi) => {
+		const result = parse(
+			`declare namespace A { export type B = 1; }
+			 declare namespace A { export type C = string; }
+			 export = A`
+		);
+		a.ok(result);
+		const [A] = result;
+		a.equal(A.kind, Kind.Namespace);
+		a.equal(A.children?.length, 2);
+		a.equal(A.children?.[0]?.name, 'B');
+		a.equal(A.children?.[1]?.name, 'C');
 	});
 
 	/*a.testOnly('Namespace const declaration', (a: TestApi) => {

@@ -1,7 +1,7 @@
 ///<amd-module name="@cxl/router"/>
 const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 	PARAM_REGEX = /:([\w_$@]+)/g,
-	optionalParam = /\((.*?)\)/g,
+	optionalParam = /\/\((.*?)\)/g,
 	namedParam = /(\(\?)?:\w+/g,
 	splatParam = /\*\w+/g,
 	escapeRegExp = /[-{}[\]+?.,\\^$|#\s]/g;
@@ -55,10 +55,10 @@ function routeToRegExp(route: string): [RegExp, string[]] {
 			'^/?' +
 				route
 					.replace(escapeRegExp, '\\$&')
-					.replace(optionalParam, '(?:$1)?')
+					.replace(optionalParam, '\\/?(?:$1)?')
 					.replace(namedParam, function (match, optional) {
 						names.push(match.substr(1));
-						return optional ? match : '([^/?]+)';
+						return optional ? match : '([^/?]*)';
 					})
 					.replace(splatParam, '([^?]*?)') +
 				'(?:/$|\\?|$)'
@@ -185,7 +185,11 @@ export class RouteManager {
 	}
 
 	register(route: Route<any>) {
-		if (route.isDefault) this.defaultRoute = route;
+		if (route.isDefault) {
+			if (this.defaultRoute)
+				throw new Error('Default route already defined');
+			this.defaultRoute = route;
+		}
 		this.routes.unshift(route);
 	}
 }

@@ -2,6 +2,7 @@
 import {
 	Attribute,
 	StyleAttribute,
+	Slot,
 	Augment,
 	Component,
 	attributeChanged,
@@ -9,10 +10,10 @@ import {
 	get,
 } from '@cxl/component';
 import { padding, pct } from '@cxl/css';
-import { css } from './theme.js';
+import { css, scrollbarStyles } from './theme.js';
 import { dom } from '@cxl/tsx';
 import { insert, on, onAction, trigger } from '@cxl/dom';
-import { merge } from '@cxl/rx';
+import { EMPTY, merge, observable } from '@cxl/rx';
 import { T, Span } from './core.js';
 import { Button } from './button.js';
 import { role } from '@cxl/template';
@@ -35,10 +36,22 @@ import { role } from '@cxl/template';
 			elevation: 5,
 			overflowY: 'auto',
 		},
+		$center: {
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 	}),
+	$ =>
+		on($, 'keydown')
+			.log()
+			.tap(ev => ev.stopPropagation()),
 	() => <slot />
 )
-export class Backdrop extends Component {}
+export class Backdrop extends Component {
+	@StyleAttribute()
+	center = false;
+}
 
 /**
  * Dialogs inform users about a task and can contain critical information, require decisions, or involve multiple tasks.
@@ -46,7 +59,7 @@ export class Backdrop extends Component {}
  * <cxl-dialog>
 		<cxl-c pad16>
 		<cxl-t h5>Title</cxl-t>
-		<cxl-t>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi.</cxl-t>
+		<cxl-t>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend.</cxl-t>
 		</cxl-c>
 	</cxl-dialog>
  */
@@ -63,6 +76,7 @@ export class Backdrop extends Component {}
 			bottom: 0,
 			overflowY: 'auto',
 			color: 'onSurface',
+			textAlign: 'left',
 		},
 		'@small': {
 			content: {
@@ -83,7 +97,13 @@ export class Backdrop extends Component {}
 				<slot></slot>
 			</div>
 		</Backdrop>
-	)
+	),
+	$ =>
+		observable(() => {
+			requestAnimationFrame(() => {
+				($.querySelector('[autofocus]') as HTMLElement)?.focus();
+			});
+		})
 )
 export class Dialog extends Component {}
 
@@ -94,7 +114,7 @@ const DialogStyles = css({
 
 /**
  * @demo
- * <cxl-dialog-alert title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
+ * <cxl-dialog-alert tabindex="-1" title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit.">
 	</cxl-dialog-alert>
  */
 @Augment<DialogAlert>(
@@ -108,7 +128,11 @@ const DialogStyles = css({
 				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={el => onAction(el).tap(() => $.resolve())}>
+				<Button
+					autofocus
+					flat
+					$={el => onAction(el).tap(() => $.resolve())}
+				>
 					{get($, 'action')}
 				</Button>
 			</div>
@@ -134,7 +158,7 @@ export class DialogAlert extends Component {
 
 /**
  * @demo
- * <cxl-dialog-confirm title-text="Alert Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tincidunt luctus eleifend. Praesent accumsan sit amet justo sit amet cursus. Sed vel venenatis magna, ac fringilla mi. Cras ut augue ex. Sed non massa molestie, elementum odio vitae, maximus massa.">
+ * <cxl-dialog-confirm tabindex="-1" title-text="Confirmation Dialog" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit.">
 	</cxl-dialog-confirm>
  */
 
@@ -149,7 +173,11 @@ export class DialogAlert extends Component {
 				<T>{get($, 'message')}</T>
 			</div>
 			<div className="footer">
-				<Button flat $={el => onAction(el).tap(() => $.resolve(false))}>
+				<Button
+					autofocus
+					flat
+					$={el => onAction(el).tap(() => $.resolve(false))}
+				>
 					{get($, 'cancel-text')}
 				</Button>
 				<Button flat $={el => onAction(el).tap(() => $.resolve(true))}>
@@ -179,6 +207,18 @@ export class DialogConfirm extends Component {
 	});
 }
 
+@Augment<ToggleDrawer>('cxl-toggle-drawer', $ =>
+	onAction($).tap(() => {
+		if (!$.drawer) return;
+		const drawer = document.getElementById($.drawer) as Drawer;
+		if (drawer) drawer.visible = !drawer.visible;
+	})
+)
+export class ToggleDrawer extends Component {
+	@Attribute()
+	drawer?: string;
+}
+
 /**
  * Drawers are surfaces containing supplementary content that are anchored
  * to the left or right edge of the screen.
@@ -193,15 +233,7 @@ export class DialogConfirm extends Component {
 @Augment<Drawer>(
 	'cxl-drawer',
 	css({
-		'drawer::-webkit-scrollbar': {
-			width: 8,
-		},
-		'drawer::-webkit-scrollbar-track': {
-			backgroundColor: 'transparent',
-		},
-		'drawer::-webkit-scrollbar-thumb': {
-			backgroundColor: 'divider',
-		},
+		...scrollbarStyles('drawer'),
 		drawer: {
 			backgroundColor: 'surface',
 			position: 'absolute',
@@ -350,7 +382,7 @@ export class SnackbarContainer extends Component {
 	private notifyNext() {
 		const [next, resolve] = this.queue[0];
 
-		this.appendChild(next);
+		this.shadowRoot?.appendChild(next);
 
 		setTimeout(() => {
 			next.remove();
@@ -369,32 +401,90 @@ export class SnackbarContainer extends Component {
 	}
 }
 
-interface AlertOptions {
-	titleText?: string;
-	message: string;
-	actionText?: string;
+export type PopupPosition =
+	| 'right top'
+	| 'bottom top'
+	| 'right bottom'
+	| 'left top'
+	| 'left bottom'
+	| 'center top'
+	| 'center bottom'
+	| 'auto';
+
+@Augment<PopupContainer>(
+	'cxl-popup-container',
+	css({
+		$: { animation: 'fadeIn' },
+		$out: { animation: 'fadeOut' },
+	}),
+	Slot,
+	$ => on($, 'click').tap(ev => ev.stopPropagation())
+)
+export class PopupContainer extends Component {}
+
+@Augment<Popup>('cxl-popup', $ => {
+	const popup = document.createElement($.container);
+	let timeout: any;
+	$.style.display = 'none';
+
+	return get($, 'visible')
+		.raf()
+		.switchMap(visible => {
+			const proxy = $.proxy || $;
+			if (!$.parentElement) return EMPTY;
+			if (visible) {
+				for (const child of Array.from(proxy.childNodes))
+					popup.appendChild(child);
+				popup.removeAttribute('out');
+				dialogManager.openPopup({
+					element: popup,
+					close() {
+						$.visible = false;
+					},
+					relativeTo: $.parentElement,
+					position: $.position,
+					container: document.body,
+				});
+				return on(window, 'click').tap(() => ($.visible = false));
+			} else if (popup.parentNode) {
+				popup.setAttribute('out', '');
+				if (timeout) clearTimeout(timeout);
+				timeout = setTimeout(() => {
+					for (const child of Array.from(popup.childNodes))
+						proxy.appendChild(child);
+					popup.remove();
+				}, 500);
+			}
+			return EMPTY;
+		});
+})
+export class Popup extends Component {
+	@Attribute()
+	visible = false;
+	@Attribute()
+	position: PopupPosition = 'auto';
+	@Attribute()
+	container = 'cxl-popup-container';
+
+	proxy?: HTMLElement;
 }
 
 export function alert(
-	optionsOrMessage: string | AlertOptions,
+	optionsOrMessage: string | Partial<DialogAlert>,
 	container: Element = document.body
 ) {
-	const options: AlertOptions =
+	const options =
 		typeof optionsOrMessage === 'string'
 			? { message: optionsOrMessage }
 			: optionsOrMessage;
 
-	const modal = (
-		<DialogAlert
-			title-text={options.titleText || ''}
-			message={options.message}
-			action={options.actionText || DialogAlert.prototype.action}
-		/>
-	) as DialogAlert;
+	const modal = (<DialogAlert />) as DialogAlert;
+	Object.assign(modal, options);
 
-	container.appendChild(modal);
-
-	return modal.promise.then(() => modal.remove());
+	dialogManager.openModal({ modal, container });
+	return modal.promise.then(
+		val => (dialogManager.closeModal(modal, container), val)
+	);
 }
 
 /**
@@ -408,9 +498,11 @@ export function confirm(
 
 	const modal = (<DialogConfirm />) as DialogConfirm;
 	Object.assign(modal, options);
-	container.appendChild(modal);
 
-	return modal.promise.then(val => (modal.remove(), val));
+	dialogManager.openModal({ modal, container });
+	return modal.promise.then(
+		val => (dialogManager.closeModal(modal, container), val)
+	);
 }
 
 let snackbarContainer: SnackbarContainer;
@@ -436,3 +528,93 @@ export function notify(
 export function setSnackbarContainer(bar: SnackbarContainer) {
 	snackbarContainer = bar;
 }
+
+interface PositionOptions {
+	element: HTMLElement;
+	relativeTo: Element;
+	position: PopupPosition;
+	container: HTMLElement;
+}
+
+interface OpenPopupOptions extends PositionOptions {
+	close(): void;
+}
+
+export function positionElement({
+	element,
+	relativeTo,
+	position,
+	container,
+}: PositionOptions) {
+	const rect = relativeTo.getBoundingClientRect();
+	const maxWidth = container.offsetWidth;
+	const style = element.style;
+	style.position = 'absolute';
+	if (position === 'auto') {
+		const width10 = maxWidth / 10;
+		position =
+			maxWidth - rect.right < width10
+				? 'right bottom'
+				: maxWidth < width10
+				? 'left bottom'
+				: 'center bottom';
+	}
+	for (const pos of position.split(' ')) {
+		if (pos === 'right') {
+			style.left = `${rect.right - element.offsetWidth}px`;
+			style.transformOrigin = 'right top';
+		} else if (pos === 'bottom') style.top = `${rect.bottom}px`;
+		else if (pos === 'top') style.top = `${rect.top}px`;
+		else if (pos === 'left') {
+			style.left = `${rect.left}px`;
+			style.transformOrigin = 'left top';
+		} else if (pos === 'center') {
+			const width = element.offsetWidth;
+			let left = rect.left + rect.width / 2 - width / 2;
+			if (left + width > maxWidth) left = rect.right - width;
+			style.left = `${left}px`;
+			style.transformOrigin = 'top';
+		}
+	}
+}
+
+/*export function popup(host: HTMLElement, options: OpenPopupOptions) {
+	return (visible: boolean) => {
+		const { element } = options;
+
+		if (visible) {
+			for (const child of Array.from(host.childNodes))
+				element.appendChild(child);
+			dialogManager.openPopup(options);
+		} else {
+			options.element.remove();
+		}
+	};
+}*/
+
+export class DialogManager {
+	currentPopup?: OpenPopupOptions;
+
+	openModal({ modal, container }: { modal: Element; container?: Element }) {
+		container ||= document.body;
+
+		const opened = (container as any).$$cxlCurrentModal;
+		if (opened) this.closeModal(opened, container);
+		(container as any).$$cxlCurrentModal = opened;
+		container.appendChild(modal);
+	}
+	closeModal(modal?: Element, container: Element = document.body) {
+		modal = modal || (container as any).$$cxlCurrentModal;
+		if (modal) requestAnimationFrame(() => modal?.remove());
+		(container as any).$$cxlCurrentModal = undefined;
+	}
+	openPopup(options: OpenPopupOptions) {
+		if (this.currentPopup && options !== this.currentPopup)
+			this.currentPopup.close();
+		options.container.appendChild(options.element);
+		positionElement(options);
+		this.currentPopup = options;
+	}
+}
+
+export const dialogManager = new DialogManager();

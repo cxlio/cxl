@@ -16,6 +16,6 @@
 		"../drag/index.ts",
 		"*.tsx"
 	],
-	"exclude": ["test.tsx", "theme-dark.tsx"],
+	"exclude": ["test.tsx", "theme-dark.tsx", "test-ui.tsx"],
 	"references": [{ "path": "../build/tsconfig.amd.json", "prepend": true }]
 }

@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/drag"/>
 import { EMPTY, Observable, merge } from '@cxl/rx';
 import { on } from '@cxl/dom';
 
@@ -147,8 +148,9 @@ export function dragMove(element: HTMLElement, axis?: 'x' | 'y') {
 export function dropTarget<T extends HTMLElement>($: T) {
 	let count = 0;
 	return merge(
-		on($, 'dragenter').tap(() => {
+		on($, 'dragenter').tap(ev => {
 			if (++count === 1) $.setAttribute('dragover', '');
+			ev.stopPropagation();
 		}),
 		on($, 'dragleave').tap(() => {
 			if (--count === 0) $.removeAttribute('dragover');
@@ -156,6 +158,7 @@ export function dropTarget<T extends HTMLElement>($: T) {
 		on($, 'dragover').tap(ev => ev.preventDefault()),
 		on($, 'drop').tap(ev => {
 			ev.preventDefault();
+			ev.stopPropagation();
 			$.removeAttribute('dragover');
 			count = 0;
 		})

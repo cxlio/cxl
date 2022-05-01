@@ -5,12 +5,14 @@ import {
 	Attribute,
 	Component,
 	StyleAttribute,
+	Slot,
 	get,
 } from '@cxl/component';
 import { onAction } from '@cxl/dom';
 import { navigationList, role } from '@cxl/template';
-import { css } from './theme.js';
+import { padding } from '@cxl/css';
 import { EMPTY } from '@cxl/rx';
+import { css } from './theme.js';
 import { ColorStyles } from './theme.js';
 import { MenuIcon, IconButton } from './icon.js';
 import { Drawer } from './dialog.js';
@@ -53,6 +55,7 @@ import { Drawer } from './dialog.js';
 							host.drawer.visible = !host.drawer.visible;
 					})
 				}
+				ariaLabel="Navigation Toggle"
 				className="toggler"
 			>
 				<MenuIcon />
@@ -74,6 +77,20 @@ export class Navbar extends Component {
 	@Attribute()
 	drawer?: Drawer;
 }
+
+@Augment(
+	'cxl-navbar-subtitle',
+	css({
+		$: {
+			display: 'block',
+			font: 'button',
+			...padding(16, 16, 8, 16),
+			color: 'headerText',
+		},
+	}),
+	Slot
+)
+export class NavbarSubtitle extends Component {}
 
 /**
  * Lists are continuous, vertical indexes of text or images.

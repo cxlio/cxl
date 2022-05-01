@@ -89,8 +89,19 @@ const colStyles = ((r: any) => {
 		},
 		$flex: { display: 'flex' },
 		$vflex: { display: 'flex', flexDirection: 'column' },
-		$middle: { justifyContent: 'center' },
+		$vflex$middle: { justifyContent: 'center' },
+		$flex$middle: { alignItems: 'center' },
 		$center: { textAlign: 'center' },
+		'$gap="8"': { columnGap: 8 },
+		'$gap="16"': { columnGap: 16 },
+		'$gap="24"': { columnGap: 24 },
+		'$gap="32"': { columnGap: 32 },
+		'$gap="64"': { columnGap: 64 },
+		'$vflex$gap="8"': { rowGap: 8 },
+		'$vflex$gap="16"': { rowGap: 16 },
+		'$vflex$gap="24"': { rowGap: 24 },
+		'$vflex$gap="32"': { rowGap: 32 },
+		'$vflex$gap="64"': { rowGap: 64 },
 	}),
 	Slot
 )
@@ -106,6 +117,9 @@ export class C extends Component {
 
 	@StyleAttribute()
 	grow = false;
+
+	@StyleAttribute()
+	fill = false;
 
 	@Attribute({
 		persistOperator: persistWithParameter('xs'),
@@ -133,7 +147,7 @@ export class C extends Component {
 	})
 	pad?: 8 | 16 | 24 | 32;
 
-	@ColorAttribute()
+	@ColorAttribute('inherit')
 	color?: ColorValue;
 
 	/** @deprecated */
@@ -149,6 +163,9 @@ export class C extends Component {
 
 	@StyleAttribute()
 	middle = false;
+
+	@StyleAttribute()
+	gap?: 8 | 16 | 24 | 32 | 64;
 }
 
 /**
@@ -180,6 +197,8 @@ export class C extends Component {
 			},
 		},
 		$full: { width: 'auto' },
+		'$vpad="48"': { paddingTop: 48, paddingBottom: 48 },
+		'$vpad="96"': { paddingTop: 96, paddingBottom: 96 },
 	}),
 	_ => <slot />
 )
@@ -189,6 +208,9 @@ export class Layout extends Component {
 
 	@StyleAttribute()
 	full = false;
+
+	@StyleAttribute()
+	vpad?: 48 | 96;
 }
 
 @Augment(
@@ -233,7 +255,7 @@ export class Content extends Layout {}
 		'@large': { container: margin(32, 64, 32, 64) },
 		'@xlarge': {
 			container: {
-				width: 1200,
+				width: 1080,
 				marginLeft: 'auto',
 				marginRight: 'auto',
 			},
@@ -259,7 +281,7 @@ export class Page extends Component {}
  *     </cxl-c>
  *   </cxl-c>
  *   <cxl-c pad16>
- *     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+ *     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
  *   </cxl-c>
  * </cxl-card>
  */
@@ -322,4 +344,23 @@ export class Grid extends Component {
 
 	@Attribute()
 	coltemplate?: string;
+}
+
+/**
+ * Predefined Grid Layouts
+ */
+@Augment<GridLayout>(
+	'cxl-grid-layout',
+	css({
+		$: { display: 'grid', columnGap: 0, rowGap: 32 },
+		'@small': { $: { columnGap: 64 } },
+		'$type=two-column-left': { gridTemplateColumns: '2fr 1fr' },
+		'$type=two-column-right': { gridTemplateColumns: '1fr 2fr' },
+		'$type=two-column': { gridTemplateColumns: '1fr 1fr' },
+	}),
+	Slot
+)
+export class GridLayout extends Component {
+	@StyleAttribute()
+	type: 'two-column' | 'two-column-left' = 'two-column-left';
 }

@@ -220,7 +220,17 @@ export class Subject<T, ErrorT = any> extends Observable<T> {
 	error(e: ErrorT): void {
 		if (!this.isStopped) {
 			this.isStopped = true;
-			Array.from(this.observers).forEach(s => s.error(e));
+			let shouldThrow = false,
+				lastError;
+			for (const s of this.observers)
+				try {
+					s.error(e);
+				} catch (e) {
+					shouldThrow = true;
+					lastError = e;
+					/* noop */
+				}
+			if (shouldThrow) throw lastError;
 		}
 	}
 	complete(): void {
@@ -301,7 +311,11 @@ const Undefined = {};
  * A Reference is a behavior subject that does not require an initial value.
  */
 export class Reference<T> extends Subject<T> {
-	private $value: T | typeof Undefined = Undefined;
+	protected $value: T | typeof Undefined = Undefined;
+
+	get hasValue() {
+		return this.$value !== Undefined;
+	}
 
 	get value(): T {
 		if (this.$value === Undefined)
@@ -734,8 +748,8 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
  */
 export function catchError<T, O extends T | never>(
 	selector: (err: any, source: Observable<T>) => Observable<O> | void
-): Operator<T, O> {
-	return operator<T, O>((subscriber, source) => {
+): Operator<T, T> {
+	return operator<T, T>((subscriber, source) => {
 		let retrySubs: Subscription | undefined;
 		const observer = {
 			next: subscriber.next.bind(subscriber) as NextFunction<T>,
@@ -775,6 +789,10 @@ export function distinctUntilChanged<T>(): Operator<T, T> {
 			}
 		};
 	});
+}
+
+export function select<StateT, K extends keyof StateT>(key: K) {
+	return map<StateT, StateT[K]>(state => state[key]);
 }
 
 export function share<T>(): Operator<T, T> {
@@ -929,58 +947,29 @@ export function combineLatest<T extends Observable<any>[]>(
 	return observables.length === 0
 		? EMPTY
 		: new Observable<any>(subs => {
-				const buffer: any[][] = new Array(observables.length);
-				const subscriptions: Subscription[] = [];
-				let completed = 0;
-				let last: any[];
+				let len = observables.length;
+				const initialLen = len;
+				let emittedCount = 0;
+				let ready = false;
+				const emitted: boolean[] = new Array(len);
+				const last: any[] = new Array(len);
 
-				function flush() {
-					for (const bucket of buffer)
-						if (!bucket || bucket.length === 0) return;
-
-					last = buffer.map(b => b.shift());
-					subs.next(last);
-				}
-
-				observables.forEach((o, id) => {
-					const bucket: any[] = (buffer[id] = []);
-					subscriptions.push(
-						o.subscribe({
-							next(val: any) {
-								if (last) {
-									bucket.push(val);
-									buffer.forEach((b, i) => {
-										if (b.length) {
-											last[i] = b.shift();
-											subs.next(last.slice(0));
-										}
-									});
-								} else {
-									bucket.push(val);
-									flush();
-								}
-							},
-							error: subs.error.bind(subs),
-							complete() {
-								if (++completed === observables.length) {
-									let remaining = 0;
-									do {
-										remaining = 0;
-										buffer.forEach((b, i) => {
-											if (b.length) {
-												remaining += b.length;
-												last[i] = b.shift();
-												subs.next(last.slice(0));
-											}
-										});
-									} while (remaining);
-
-									subs.complete();
-								}
-							},
-						})
-					);
-				});
+				const subscriptions = observables.map((o, id) =>
+					o.subscribe({
+						next(val: any) {
+							last[id] = val;
+							if (!emitted[id]) {
+								emitted[id] = true;
+								if (++emittedCount >= initialLen) ready = true;
+							}
+							if (ready) subs.next(last.slice(0));
+						},
+						error: subs.error.bind(subs),
+						complete() {
+							if (--len <= 0) subs.complete();
+						},
+					})
+				);
 
 				return () => subscriptions.forEach(s => s.unsubscribe());
 		  });
@@ -1050,6 +1039,7 @@ export const operators: any = {
 	mergeMap,
 	publishLast,
 	reduce,
+	select,
 	share,
 	switchMap,
 	take,
@@ -1064,9 +1054,9 @@ for (const p in operators) {
 }
 
 export interface Observable<T> {
-	catchError<T2>(
+	catchError<T2 extends T | never>(
 		selector: (err: any, source: Observable<T>) => Observable<T2> | void
-	): Observable<T2>;
+	): Observable<T>;
 	debounceTime(
 		time?: number,
 		timer?: (delay: number) => Observable<void>
@@ -1082,6 +1072,7 @@ export interface Observable<T> {
 		reduceFn: (acc: T2, val: T, i: number) => T2,
 		seed: T2
 	): Observable<T2>;
+	select<K extends keyof T>(key: K): Observable<T[K]>;
 	share(): Observable<T>;
 	switchMap<T2>(project: (val: T) => Observable<T2>): Observable<T2>;
 	take(howMany: number): Observable<T>;

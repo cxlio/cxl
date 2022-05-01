@@ -51,6 +51,11 @@ export function buildDiagnostics(program: Program | BuilderProgram) {
 	];
 }
 
+function printDiagnosticChain(d: ts.DiagnosticMessageChain) {
+	console.error(d.messageText);
+	if (d.next) d.next.forEach(printDiagnosticChain);
+}
+
 export function printDiagnostics(diagnostics: Diagnostic[]) {
 	diagnostics.forEach(d => {
 		if (d.file) {
@@ -59,7 +64,9 @@ export function printDiagnostics(diagnostics: Diagnostic[]) {
 				d.start || 0
 			);
 			tscError(d, line + 1, character, d.messageText);
-		} else console.error(`${d.messageText}`);
+		} else if (typeof d.messageText === 'string')
+			console.error(d.messageText);
+		else printDiagnosticChain(d.messageText);
 	});
 
 	throw new Error('Typescript compilation failed');
@@ -81,13 +88,14 @@ function getBuilder(
 export function tsbuild(
 	tsconfig = 'tsconfig.json',
 	subs: Subscriber<Output>,
-	defaultOptions: BuildOptions = { module: ModuleKind.CommonJS }
+	defaultOptions: BuildOptions = { module: ModuleKind.CommonJS },
+	outDir?: string
 ) {
 	const { outputDir, builder } = getBuilder(tsconfig, defaultOptions);
 	let program: InvalidatedProject<any> | undefined;
 
 	function writeFile(name: string, source: string) {
-		name = relative(outputDir, name);
+		name = relative(outDir || outputDir, name);
 		subs.next({ path: name, source: Buffer.from(source) });
 	}
 
@@ -98,9 +106,13 @@ export function tsbuild(
 	}
 }
 
-export function tsconfig(tsconfig = 'tsconfig.json', options?: BuildOptions) {
+export function tsconfig(
+	tsconfig = 'tsconfig.json',
+	options?: BuildOptions,
+	outputDir?: string
+) {
 	return new Observable<Output>(subs => {
-		tsbuild(tsconfig, subs, options);
+		tsbuild(tsconfig, subs, options, outputDir);
 		subs.complete();
 	});
 }
@@ -146,7 +158,6 @@ function findImports(
 			(ts.isExportDeclaration(node) && !node.isTypeOnly)
 		) {
 			if (!node.moduleSpecifier) return;
-
 			const symbol = typeChecker.getSymbolAtLocation(
 				node.moduleSpecifier
 			);
@@ -166,10 +177,12 @@ function findImports(
 	return result;
 }
 
-function bundleFiles(config: ts.ParsedCommandLine) {
+function bundleFiles(config: ts.ParsedCommandLine, amd: boolean) {
 	const host = ts.createCompilerHost(config.options);
 	const program = ts.createProgram(config.fileNames, config.options, host);
-	const result = new Set<string>([__dirname + '/amd.js']);
+	//const result = new Set<string>([__dirname + '/amd.js']);
+	const result = new Set<string>([]);
+	if (amd) result.add(__dirname + '/amd.js');
 	program.getRootFileNames().forEach(file => {
 		const src = program.getSourceFile(file);
 		result.add(file);
@@ -180,11 +193,12 @@ function bundleFiles(config: ts.ParsedCommandLine) {
 
 export function bundle(
 	tsconfig = 'tsconfig.json',
-	outFile = 'index.bundle.js'
+	outFile = 'index.bundle.js',
+	amd = false
 ) {
 	return new Observable<Output>(subs => {
 		const config = parseTsConfig(tsconfig);
-		const { host, result } = bundleFiles(config);
+		const { host, result } = bundleFiles(config, amd);
 		config.options.module = ts.ModuleKind.AMD;
 		config.options.outFile = outFile;
 		config.options.rootDir = resolve('../..');

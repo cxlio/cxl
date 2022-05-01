@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/multiselect.js"/>
 import { Augment, Attribute, get } from '@cxl/component';
 import { dom, expression } from '@cxl/tsx';
 import { onAction } from '@cxl/dom';
@@ -21,18 +22,14 @@ import { navigationList, selectableHostMultiple } from '@cxl/template';
 @Augment<MultiSelect>(
 	'cxl-multiselect',
 	css({
-		menu: { left: -12, right: -12, top: 26, height: 0 },
+		menu: { height: 0 },
 		menu$opened: { height: 'auto' },
+		placeholder: {
+			overflowX: 'hidden',
+			whiteSpace: 'nowrap',
+			textOverflow: 'ellipsis',
+		},
 	}),
-	host => (
-		<SelectMenu
-			$={el => get(host, 'opened').raf(() => host.positionMenu(el))}
-			className="menu"
-			visible={get(host, 'opened')}
-		>
-			<slot />
-		</SelectMenu>
-	),
 	host =>
 		merge(
 			onAction(host).tap(() => {
@@ -77,14 +74,14 @@ export class MultiSelect extends SelectBase {
 	protected focusedOption?: Option;
 
 	protected positionMenu(menu: SelectMenu) {
-		let height: number;
 		const rect = this.getBoundingClientRect();
-		height = menu.scrollHeight;
 		const maxHeight = window.innerHeight - rect.bottom;
 
-		if (height > maxHeight) height = maxHeight;
 		const style = menu.style;
-		style.height = height + 'px';
+		style.top = rect.bottom + 8 + 'px';
+		style.left = rect.left - 12 + 'px';
+		style.width = rect.width + 24 + 'px';
+		style.maxHeight = maxHeight + 'px';
 	}
 
 	protected setSelected(option: Option) {

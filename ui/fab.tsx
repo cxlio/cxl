@@ -1,3 +1,4 @@
+///<amd-module name="@cxl/ui/fab.js"/>
 import { Augment, Component, Slot, StyleAttribute } from '@cxl/component';
 import { css } from '@cxl/ui/theme.js';
 import { Focusable, FocusHighlight, ripple } from './core.js';

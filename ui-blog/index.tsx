@@ -9,8 +9,9 @@ import {
 	observeChildren,
 	onChildrenMutation,
 	onResize,
+	onVisible,
 } from '@cxl/dom';
-import { each } from '@cxl/template';
+import { each, escapeHtml } from '@cxl/template';
 import { dom } from '@cxl/tsx';
 import { baseColor, css } from '@cxl/ui/theme.js';
 
@@ -31,12 +32,12 @@ export interface Post {
 
 export interface BlogPosts {
 	posts: Post[];
-	tags: string[];
+	tags: Record<string, string[]>;
 }
 
 function highlight(code: string) {
 	const hljs = (window as any).hljs as typeof import('highlight.js').default;
-	if (!hljs) return code;
+	if (!hljs) return escapeHtml(code);
 	return hljs.highlightAuto(code, [
 		'html',
 		'typescript',
@@ -135,12 +136,14 @@ export class BlogFrame extends Component {
 	host => {
 		const content$ = be('');
 		const view = get(host, 'view');
+		const sourceEl = document.createComment('');
 
 		function init(parent: HTMLIFrameElement) {
 			return observeChildren(host).switchMap(() => {
 				const content = host.childNodes[0]?.textContent?.trim() || '';
 				parent.srcdoc = `<!DOCTYPE html><style>body{padding:12px;margin:0;}</style>${content}`;
 				content$.next(content);
+				sourceEl.textContent = content;
 				return on(parent, 'load').switchMap(() => {
 					const body = parent.contentDocument?.body;
 					return body
@@ -174,8 +177,9 @@ export class BlogFrame extends Component {
 					className={view.map(v =>
 						v === 'source' ? 'source visible' : 'source'
 					)}
-					innerHTML={content$.map(c => `<!--${c}-->`)}
-				/>
+				>
+					{sourceEl}
+				</BlogCode>
 			</>
 		);
 	}
@@ -200,7 +204,8 @@ export class BlogDemo extends Component {
 		},
 	}),
 	$ =>
-		observeChildren($).raf(() => {
+		combineLatest(onVisible($), observeChildren($)).raf(([visible]) => {
+			if (!visible) return;
 			const first = $.firstChild;
 			if (first?.nodeType === document.COMMENT_NODE) {
 				const source = (first as any).data.trim();
@@ -213,7 +218,6 @@ export class BlogDemo extends Component {
 			}
 		}),
 	() => <slot />
-	//$ => <Span innerHTML={get($, 'source').map(highlight)} />
 )
 export class BlogCode extends Component {
 	@Attribute()
@@ -233,7 +237,7 @@ export class BlogSummary extends Component {}
 @Augment(
 	'blog-tags',
 	css({
-		$: { display: 'block', marginTop: 32, marginBottom: 32 },
+		$: { display: 'block', marginBottom: 32 },
 		tag: { marginRight: 8, marginBottom: 8 },
 	}),
 	$ => (

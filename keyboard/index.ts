@@ -16,6 +16,7 @@ export interface KeyboardOptions {
 	delay?: number;
 	/** @default en-US */
 	layout?: KeyboardLayout;
+	capture?: boolean;
 }
 
 export interface KeyboardLayout {
@@ -32,7 +33,7 @@ const navigator =
 		: { language: 'en-US', platform: 'nodejs' };
 
 const IS_MAC = /Mac|iPod|iPhone|iPad/;
-const PARSE_KEY = /(shift|ctrl|control|alt|option|meta|command|cmd|mod|\w+)(\s*\+|\s)?/g;
+const PARSE_KEY = /(shift|ctrl|control|alt|option|meta|command|cmd|mod|[^\s+]+)(\s*\+|\s)?/g;
 const SHIFT_MAP = {
 	'/': '?',
 	'.': '>',
@@ -107,6 +108,7 @@ export function handleKeyboard({
 	onKey,
 	delay,
 	layout,
+	capture,
 }: KeyboardOptions): () => void {
 	const D = delay === undefined ? 250 : delay;
 	const locale = navigator.language;
@@ -138,8 +140,8 @@ export function handleKeyboard({
 
 		lastT = t;
 	}
-	element.addEventListener('keydown', handler);
-	return () => element.removeEventListener('keydown', handler);
+	element.addEventListener('keydown', handler, { capture });
+	return () => element.removeEventListener('keydown', handler, { capture });
 }
 
 export function getDefaultLayout(): KeyboardLayout {
@@ -160,11 +162,9 @@ function newKey(): Key {
 
 export function parseKey(
 	key: string,
-	{ modKey, shiftMap }: KeyboardLayout = getDefaultLayout()
+	{ modKey, shiftedKeys, shiftMap }: KeyboardLayout = getDefaultLayout()
 ): Key[] {
 	const sequence: Key[] = [];
-	/*let k,
-		shortcut;*/
 	let match: RegExpExecArray | null;
 	let event = newKey();
 
@@ -177,9 +177,15 @@ export function parseKey(
 			event.metaKey = true;
 		else if (ch === 'mod') event[modKey] = true;
 		else {
-			const shifted = shiftMap[ch];
-			if (shifted) event.shiftKey = false;
-			event.key = shifted || ch;
+			event.key = ch;
+			if (event.shiftKey) {
+				if (shiftedKeys.includes(ch)) {
+					event.shiftKey = false;
+				} else {
+					const shifted = shiftMap[ch];
+					if (shifted) event.key = shifted;
+				}
+			}
 		}
 
 		if (match[2] !== '+') {
@@ -197,169 +203,3 @@ export function normalize(key: string, layout = getDefaultLayout()): string {
 		(sequence as any)[i] = keyboardEventToString(sequence[i], layout);
 	return sequence.join(' ');
 }
-
-/*export class KeyboardManager {
-	delay = 250;
-	t = 0;
-	sequence: string[] = [];
-	disabled = false;
-	// What to replace "mod" with, ctrl for win, meta for osx
-	MODREPLACE: 'ctrl+' | 'meta+' = 'ctrl+';
-
-	MAP: KeyNameMap = {
-		8: 'backspace',
-		9: 'tab',
-		13: 'enter',
-		17: 'ctrl',
-		18: 'alt',
-		20: 'capslock',
-		27: 'esc',
-		32: 'space',
-		33: 'pageup',
-		34: 'pagedown',
-		35: 'end',
-		36: 'home',
-		37: 'left',
-		38: 'up',
-		39: 'right',
-		40: 'down',
-		45: 'ins',
-		46: 'del',
-		91: 'meta',
-		93: 'meta',
-		224: 'meta',
-		106: '*',
-		107: 'plus',
-		109: '-',
-		110: '.',
-		111: '/',
-		186: ';',
-		187: '=',
-		188: ',',
-		189: '-',
-		190: '.',
-		191: '/',
-		192: '`',
-		219: '[',
-		220: '\\',
-		221: ']',
-		222: "'",
-	};
-
-	MODMAP: KeyNameMap = {
-		16: 'shift',
-		17: 'ctrl',
-		18: 'alt',
-		93: 'meta',
-		224: 'meta',
-	};
-
-	SHIFTMAP: KeyNameMap = {
-		192: '~',
-		222: '"',
-		221: '}',
-		220: '|',
-		219: '{',
-		191: '?',
-		190: '>',
-		189: '_',
-		188: '<',
-		187: 'plus',
-		186: ':',
-		48: ')',
-		49: '!',
-		50: '@',
-		51: '#',
-		52: '$',
-		53: '%',
-		54: '^',
-		55: '&',
-		56: '*',
-		57: '(',
-	};
-
-	constructor() {
-		const _MAP = this.MAP;
-
-		for (let i = 1; i < 20; ++i) _MAP[111 + i] = 'f' + i;
-
-		for (let i = 0; i <= 9; ++i) _MAP[i + 96] = i + '';
-
-		for (let i = 65; i < 91; ++i)
-			_MAP[i] = String.fromCharCode(i).toLowerCase();
-
-		// Make sure keydown is handled first, before the editor
-		window.addEventListener('keydown', this.onKeyDown.bind(this), true);
-
-		this.MODREPLACE = /Mac|iPod|iPhone|iPad/.test(navigator.platform)
-			? 'meta+'
-			: 'ctrl+';
-	}
-
-	onKeyDown(ev: KeyboardEvent) {
-		if (this.disabled) return;
-		const k = keyboardEventToString(ev);
-		let t = Date.now();
-		if (!k) return;
-
-		if (t - this.t < this.delay) this.sequence.push(k);
-		else this.sequence = [k];
-
-		const seq = this.sequence.slice(0);
-
-		do {
-			if (this.handleKey(seq.join(' ')) !== false) {
-				ev.stopPropagation();
-				ev.preventDefault();
-				t = 0;
-				break;
-			}
-			seq.shift();
-		} while (seq.length);
-
-		this.t = t;
-	}
-
-	/*_findKey(keymap: KeyMap, state: any, action: string)
-	{
-		state = state || keymap.getState();
-
-		for (var i in state)
-			if (state[i].action===action)
-				return i;
-	}
-
-	findKey(action: string, state: any)
-	{
-	var
-		keymap = ide.editor && ide.editor.keymap,
-		result
-	;
-		if (keymap)
-			result = this._findKey(keymap, state, action);
-
-		if (!result)
-			result = this._findKey(ide.keymap, state, action);
-
-		return result;
-	}*/
-
-/**
- * Handles Key. First checks if there is a keymap defined for the
- * current editor.
- */
-/*handleKey(key)
-	{
-	var
-		keymap = ide.editor && ide.editor.keymap,
-		state = keymap && keymap.state,
-		result = false
-	;
-		if (keymap)
-			result = keymap.handle(key);
-
-		if (result===false)
-			result = ide.keymap.handle(key, state);
-
-		return result=== Pass ? false : result;
-	}*/

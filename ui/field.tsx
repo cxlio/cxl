@@ -10,7 +10,7 @@ import { InputBase } from './input-base.js';
 import { dom, expression } from '@cxl/tsx';
 import { on, setAttribute } from '@cxl/dom';
 import { boxShadow, padding } from '@cxl/css';
-import { EMPTY, be, observable, merge } from '@cxl/rx';
+import { EMPTY, Observable, be, defer, observable, merge } from '@cxl/rx';
 import { css } from './theme.js';
 
 const FieldBase = [
@@ -23,6 +23,7 @@ const FieldBase = [
 		},
 		container: {
 			position: 'relative',
+			textAlign: 'left',
 			...padding(0, 12, 4, 12),
 		},
 		$invalid: { color: 'error' },
@@ -116,6 +117,16 @@ const FieldBase = [
 	),
 ];
 
+export function fieldInput<T extends Component>(host: T) {
+	return defer(() =>
+		host.parentNode instanceof Field
+			? (get(host.parentNode, 'input').filter(
+					inp => !!inp
+			  ) as Observable<InputBase>)
+			: EMPTY
+	);
+}
+
 @Augment(
 	'cxl-focus-line',
 	css({
@@ -147,6 +158,15 @@ export class FocusLine extends Component {
 	invalid = false;
 }
 
+/**
+ * Used to group several input components.
+ * @demo
+ * <cxl-fieldset>
+ *   <cxl-label>Fieldset Label</cxl-label>
+ *   <cxl-checkbox>Checkbox 1</cxl-checkbox>
+ *   <cxl-checkbox>Checkbox 2</cxl-checkbox>
+ * </cxl-fieldset>
+ */
 @Augment<Fieldset>(
 	'cxl-fieldset',
 	...FieldBase,

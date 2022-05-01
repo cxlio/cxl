@@ -44,8 +44,6 @@ export default program('cli', async ({ log }) => {
 	}
 
 	async function testPackage(dir: string, _pkg: Package) {
-		// const cwd = await mkdtemp(join(os.tmpdir(), 'cxl-'));
-		// await sh(`cp -r dist/${dir}/* ${cwd}`);
 		const cwd = `dist/${dir}`;
 		await sh(`npm install --production`, { cwd });
 		await sh(`npm test`, { cwd: dir });
@@ -56,6 +54,7 @@ export default program('cli', async ({ log }) => {
 		try {
 			await sh(`git diff-index --quiet ${branch}`);
 		} catch (e) {
+			console.error(e);
 			throw new Error('Not a clean repository');
 		}
 	}
@@ -178,7 +177,7 @@ export default program('cli', async ({ log }) => {
 					throw 'Active branch is not master';
 
 				await sh(`npm run build docs --prefix ${mod}`);
-				await checkBranchClean(branch);
+				//await checkBranchClean(branch);
 				await checkBranchUpToDate(branch);
 				const pkg = readPackage(mod);
 				const lintResults = await lint([mod], rootPkg);

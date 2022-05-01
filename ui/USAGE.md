@@ -1,7 +1,6 @@
 ## Features
 
 -   Lightweight and Fast.
--   Modular Architecture.
 -   No dependecies.
 -   Framework Agnostic.
 -   Flexible Theming.
@@ -32,3 +31,7 @@ This is all you need to get started. The default theme follows the [Material Des
 	</cxl-content>
 </cxl-application>
 ```
+
+### See More
+
+More demo content and examples available [here](https://cxlio.github.ui/cxl/ui-demo)</a>

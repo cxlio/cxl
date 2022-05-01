@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/diff",
+		"lib": ["ES2019", "webworker"],
+		"outFile": "../dist/diff/worker.js",
+		"module": "amd"
+	},
+	"files": ["index.ts", "worker.ts"],
+	"references": [{ "path": "../amd/tsconfig.amd.json", "prepend": true }]
+}

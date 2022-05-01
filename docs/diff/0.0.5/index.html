@@ -10,18 +10,18 @@
 		<cxl-router-item href="index--html"><i>Index</i></cxl-router-item><cxl-router-item href="index--html#s1"><cxl-badge>T</cxl-badge>Diff</cxl-router-item><cxl-router-item href="index--html#s35"><cxl-badge>F</cxl-badge>diff</cxl-router-item><cxl-router-item href="index--html#s38"><cxl-badge>F</cxl-badge>patch</cxl-router-item>
 		</cxl-navbar>
 	<cxl-router-appbar-title></cxl-router-appbar-title><doc-search></doc-search></cxl-appbar><cxl-page><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="index.ts" data-path="index--html"><cxl-t h3><span style="float:right"></span>index.ts</cxl-t><cxl-t h4>Members</cxl-t><cxl-t h6>Functions
-		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--html#s35">diff</cxl-a></cxl-c><cxl-c sm4 xl3> <cxl-a href="index--html#s38">patch</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Type Alias
-		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-a href="index--html#s1">Diff</cxl-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s35"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/diff/index.ts#L442">&lt;/&gt;</a><cxl-t code subtitle>diff(A: string, B: string): <cxl-a href="index--html#s1">Diff</cxl-a></cxl-t><p>This function takes a source string &lt;code>src&lt;/code>, and a destination
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-router-a href="index--html#s35">diff</cxl-router-a></cxl-c><cxl-c sm4 xl3> <cxl-router-a href="index--html#s38">patch</cxl-router-a></cxl-c></cxl-grid></cxl-c><cxl-t h6>Type Alias
+		</cxl-t><cxl-c pad16><cxl-grid><cxl-c sm4 xl3> <cxl-router-a href="index--html#s1">Diff</cxl-router-a></cxl-c></cxl-grid></cxl-c><cxl-t h5>Functions</cxl-t><a name="s35"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/diff/index.ts#L442">&lt;/&gt;</a><cxl-t code subtitle>diff(A: string, B: string): <cxl-router-a href="index--html#s1">Diff</cxl-router-a></cxl-t><p>This function takes a source string &lt;code>src&lt;/code>, and a destination
 string &lt;code>dest&lt;/code>. It returns a patch object that can be later used
 by &lt;code>ide.patch&lt;/code> to reconstruct the destination string.</p><p>The &lt;code>size&lt;/code> parameter determines the minimum length of a single
 patch string, the algorithm will optimize the result based on this number.</p><p>A patch object consists of an array of triplets, where the first item is the
 string to be inserted, the second, the characters to be skipped from the
 original string and the third the characters removed after inserting.</p><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>A: string</cxl-t></li><li><cxl-t code inline>B: string</cxl-t></li></ul>
 		</cxl-c></cxl-card><a name="s38"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
-		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/diff/index.ts#L477">&lt;/&gt;</a><cxl-t code subtitle>patch(A: string, diff: <cxl-a href="index--html#s1">Diff</cxl-a>): string</cxl-t><p>This function takes the original source string &lt;code>str&lt;/code> and the
+		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/diff/index.ts#L477">&lt;/&gt;</a><cxl-t code subtitle>patch(A: string, diff: <cxl-router-a href="index--html#s1">Diff</cxl-router-a>): string</cxl-t><p>This function takes the original source string &lt;code>str&lt;/code> and the
 result of a previous diff &lt;code>patch&lt;/code>. The result will be the
-destination string &lt;code>dest&lt;/code>.</p><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>A: string</cxl-t></li><li><cxl-t code inline>diff: <cxl-a href="index--html#s1">Diff</cxl-a></cxl-t></li></ul>
+destination string &lt;code>dest&lt;/code>.</p><cxl-t subtitle2>Parameters</cxl-t><ul><li><cxl-t code inline>A: string</cxl-t></li><li><cxl-t code inline>diff: <cxl-router-a href="index--html#s1">Diff</cxl-router-a></cxl-t></li></ul>
 		</cxl-c></cxl-card><cxl-t h5>Type Alias</cxl-t><a name="s1"></a><cxl-card style="margin-bottom: 16px"><cxl-c pad16>
 		<a class="see-source" title="See Source" href="https://github.com/cxlio/cxl/blob/master/diff/index.ts#L0">&lt;/&gt;</a><cxl-t code subtitle>Diff = any[]</cxl-t>
 		</cxl-c></cxl-card></template><template data-default="true" data-title="Home" data-path="index.html"><cxl-t h2>@cxl/diff</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fdiff"><img src="https://badge.fury.io/js/%40cxl%2Fdiff.svg" alt="npm version"></a></p>

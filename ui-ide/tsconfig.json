@@ -1,9 +1,0 @@
-{
-	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"outDir": "../dist/ui-ide"
-	},
-	"include": ["*.tsx", "*.ts"],
-	"exclude": ["test.tsx"],
-	"references": [{ "path": "../tsx" }, { "path": "../ui" }]
-}

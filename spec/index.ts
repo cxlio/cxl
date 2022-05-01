@@ -45,7 +45,8 @@ export interface FigureData {
 	name: string;
 	html: string;
 	baseline?: string;
-	match: number;
+	//match: number;
+	domId: string;
 }
 
 export interface Result {
@@ -78,7 +79,7 @@ export class TestApi {
 	 * Returns a connected dom element. Cleaned up after test completion.
 	 */
 	get dom() {
-		const el = this.$test.domContainer || document.createElement('DIV');
+		const el = this.$test.domContainer || document.createElement('div');
 		if (!this.$test.domContainer)
 			document.body.appendChild((this.$test.domContainer = el));
 
@@ -89,7 +90,7 @@ export class TestApi {
 		this.$test.onEvent('afterAll', fn);
 	}
 
-	ok(condition: any, message = 'Assertion failed') {
+	ok<T>(condition: T, message = 'Assertion failed') {
 		this.$test.push({ success: !!condition, message });
 	}
 
@@ -106,8 +107,14 @@ export class TestApi {
 	}
 
 	equalValues<T>(a: T, b: T, desc?: string) {
-		for (const i in b) {
-			this.equal(a[i], b[i], desc);
+		let valA: any = a;
+		let valB: any = b;
+
+		if (valA instanceof ArrayBuffer) valA = new Uint8Array(valA);
+		if (valB instanceof ArrayBuffer) valB = new Uint8Array(valB);
+
+		for (const i in valB) {
+			this.equal(valA[i], valB[i], desc);
 		}
 	}
 
@@ -250,7 +257,6 @@ export class TestApi {
 		if (typeof __cxlRunner !== 'undefined')
 			this.test(name, async a => {
 				const domId = (a.dom.id = `dom${a.id}`);
-
 				if (typeof html === 'string') a.dom.innerHTML = html;
 				else {
 					a.dom.appendChild(html);
@@ -264,7 +270,7 @@ export class TestApi {
 				style.width = '320px';
 				style.backgroundColor = 'white';
 
-				const data: any = {
+				const data: FigureData = {
 					type: 'figure',
 					name,
 					domId,
@@ -316,7 +322,13 @@ export class Test {
 		this.results.push(
 			e instanceof Error
 				? { success: false, message: e.message, stack: e.stack }
-				: { success: false, message: e }
+				: {
+						success: false,
+						message:
+							typeof e === 'string'
+								? e
+								: JSON.stringify(e, null, 2),
+				  }
 		);
 	}
 

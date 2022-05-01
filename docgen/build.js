@@ -22,7 +22,7 @@ buildCxl(
 	{
 		target: 'package',
 		outputDir: '../dist/docgen',
-		tasks: [tsBundle('tsconfig.runtime.json', 'runtime.bundle.js')],
+		tasks: [tsBundle('tsconfig.runtime.json', 'runtime.bundle.js', true)],
 	},
 	{
 		target: 'package',
