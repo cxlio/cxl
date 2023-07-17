@@ -1,8 +1,0 @@
-{
-	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"outDir": "../dist/ui-blog"
-	},
-	"files": ["test.ts"],
-	"references": [{ "path": "." }, { "path": "../spec" }]
-}

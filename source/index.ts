@@ -168,7 +168,7 @@ export class SourceMap {
 		end.source = resolve(this.dir, end.source);
 		end.line--;
 
-		return { start, end } as any;
+		return { start, end } as RangePosition;
 	}
 }
 
@@ -192,6 +192,10 @@ const ENTITIES_REGEX = /[&<>]/g,
 
 export function escapeHtml(str: string) {
 	return (
-		str && str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e] || '')
+		str &&
+		str.replace(
+			ENTITIES_REGEX,
+			e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP] || ''
+		)
 	);
 }

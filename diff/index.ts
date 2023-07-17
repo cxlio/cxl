@@ -1,4 +1,5 @@
 ///<amd-module name="@cxl/diff"/>
+/*eslint @typescript-eslint/no-explicit-any:off */
 export type Diff = any[];
 
 const DIFF_DELETE = -1,

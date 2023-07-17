@@ -6,11 +6,11 @@ export default spec('exhaustMap', it => {
 	it.should('map-and-flatten each item to an Observable', a => {
 		const e1 = cold('--1-----3--5-------|');
 		const e1subs = '^                  !';
-		const e2 = cold('x-x-x|              ', { x: 10 });
+		const e2 = cold('x-x-x|              ', { x: '10' });
 		const expected = replaceValues('--x-x-x-y-y-y------|', {
-			x: 10,
-			y: 30,
-			z: 50,
+			x: '10',
+			y: '30',
+			z: '50',
 		});
 
 		const result = e1.pipe(exhaustMap(x => e2.pipe(map(i => +i * +x))));

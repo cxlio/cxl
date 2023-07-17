@@ -21,7 +21,7 @@ export default spec('catchError', it => {
 		const e2 = cold('-1-2-3-|');
 		const expected = '--a--b---1-2-3-|';
 
-		const result = e1.pipe(catchError((_err: any) => e2));
+		const result = e1.pipe(catchError((_err: unknown) => e2));
 
 		expectLog(a, result, expected);
 	});
@@ -38,7 +38,7 @@ export default spec('catchError', it => {
 				}
 				return n;
 			})
-			.catchError((_err: any) => {
+			.catchError(_err => {
 				return of('X', 'Y', 'Z');
 			});
 		expectLog(a, result, expected);
@@ -111,13 +111,13 @@ export default spec('catchError', it => {
 
 			let retries = 0;
 			const result = e1.pipe(
-				map((n: any) => {
+				map(n => {
 					if (n === 'c') {
 						throw 'bad';
 					}
 					return n;
 				}),
-				catchError((_: any, caught: any) => {
+				catchError((_, caught) => {
 					if (retries++ === 2) {
 						throw 'done';
 					}
@@ -135,7 +135,7 @@ export default spec('catchError', it => {
 		const subs = '(^!)';
 		const expected = '(abc|)';
 
-		const result = e1.pipe(catchError((_: any) => of('a', 'b', 'c')));
+		const result = e1.pipe(catchError(_ => of('a', 'b', 'c')));
 
 		expectLog(a, result, expected);
 		a.equal(e1.subscriptions, subs);
@@ -146,7 +146,7 @@ export default spec('catchError', it => {
 		const subs = '^          !';
 		const expected = '--a--b--c--|';
 
-		const result = e1.pipe(catchError((_: any) => of('x', 'y', 'z')));
+		const result = e1.pipe(catchError(_ => of('x', 'y', 'z')));
 
 		expectLog(a, result, expected);
 		a.equal(e1.subscriptions, subs);

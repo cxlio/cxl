@@ -136,16 +136,16 @@ export default suite('dom', test => {
 		it.should('trigger custom events', a => {
 			const done = a.async();
 			const el = (<div />) as HTMLDivElement;
-			on(el, 'test')
+			on(el, 'click')
 				.first()
 				.subscribe(ev => {
-					a.equal(ev.type, 'test');
+					a.equal(ev.type, 'click');
 					a.equal(ev.target, el);
 					a.equal(ev.detail, a.id);
 					done();
 				});
 
-			trigger(el, 'test', a.id);
+			trigger(el, 'click', { detail: a.id });
 		});
 	});
 
@@ -183,7 +183,7 @@ export default suite('dom', test => {
 					a.equal(el.value, 'test');
 					done();
 				});
-			el.value = 'test';
+			el.setAttribute('value', 'test');
 			trigger(el, 'change');
 		});
 	});
@@ -301,8 +301,10 @@ export default suite('dom', test => {
 					<li>Four</li>
 				</ul>
 			) as HTMLElement;
-			const two = findNextNodeBySelector(el.children[0], '.three');
-			a.equal(two, el.children[2]);
+			const two = findNextNodeBySelector(el, el.children[0], '.three');
+			a.equal(two, null);
+			const four = findNextNodeBySelector(el, el.children[2], 'li');
+			a.equal(four, el.children[3]);
 		});
 	});
 });

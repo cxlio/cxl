@@ -18,13 +18,13 @@ export default suite('router', test => {
 		pathname: '',
 		hash: '',
 		search: '',
-	} as any;
+	} as Location;
 
 	test('Router#go - no parameters', a => {
 		const router = new Router();
 		router.route({
 			path: 'test',
-			render: () => <div>Hello World</div>,
+			render: () => (<div>Hello World</div>) as HTMLElement,
 		});
 
 		router.go('test');
@@ -38,27 +38,27 @@ export default suite('router', test => {
 		router.route({
 			id: 'test',
 			path: 'test/:title',
-			render: () => <div>Hello World</div>,
+			render: () => (<div>Hello World</div>) as HTMLElement,
 		});
 
 		router.go('test/hello');
 		a.equal(router.state?.route, router.routes.get('test'));
-		a.equal((router.state?.root as any).title, 'hello');
+		a.equal(router.state?.root.title, 'hello');
 
 		router.go('test/@title');
 		a.equal(router.state?.route, router.routes.get('test'));
-		a.equal((router.state?.root as any).title, '@title');
+		a.equal(router.state?.root.title, '@title');
 	});
 
 	test('Router#go - empty path', a => {
 		const router = new Router();
 		router.route({
 			path: 'test',
-			render: () => <div>Hello World</div>,
+			render: () => (<div>Hello World</div>) as HTMLElement,
 		});
 		router.route({
 			path: '',
-			render: () => <div>Hello World</div>,
+			render: () => (<div>Hello World</div>) as HTMLElement,
 		});
 
 		router.go('test');
@@ -69,7 +69,7 @@ export default suite('router', test => {
 
 	test('getElementRoute', a => {
 		const router = new Router();
-		const el = <div>Hello World</div>;
+		const el = (<div>Hello World</div>) as HTMLElement;
 		router.route({
 			path: 'test',
 			render: () => el,
@@ -92,11 +92,11 @@ export default suite('router', test => {
 		router.route({
 			id: 'home',
 			path: '/',
-			render: () => <a />,
+			render: () => (<a />) as HTMLElement,
 		});
 		router.route({
 			path: '/park',
-			render: () => <a />,
+			render: () => (<a />) as HTMLElement,
 		});
 
 		router.go('');
@@ -118,7 +118,7 @@ export default suite('router', test => {
 			router.route({
 				id: 'test',
 				path: '/park/:item/details',
-				render: () => <b />,
+				render: () => (<b />) as HTMLElement,
 			});
 
 			const path = router.getPath('test', { item: a.id.toString() });
@@ -132,19 +132,19 @@ export default suite('router', test => {
 			router.route({
 				id: 'home',
 				path: '/',
-				render: () => <a />,
+				render: () => (<a />) as HTMLElement,
 			});
 			router.route({
 				id: 'park',
 				parent: 'home',
 				path: '/park',
-				render: () => <b />,
+				render: () => (<b />) as HTMLElement,
 			});
 
 			router.route({
 				parent: 'park',
 				path: '/park/:item/details',
-				render: () => <b />,
+				render: () => (<b />) as HTMLElement,
 			});
 
 			router.go('/park');
@@ -168,7 +168,7 @@ export default suite('router', test => {
 			router.route({
 				id: 'park',
 				path: '/park/:parkid',
-				render: () => <b />,
+				render: () => (<b />) as HTMLElement,
 			});
 
 			router.go('/park/item2');
@@ -216,16 +216,20 @@ export default suite('router', test => {
 		it.should('update history state', a => {
 			const url = { path: 'path', hash: 'hash' };
 			let ran = false;
+			let $state: unknown;
 			const oldHistory = sys.history;
 
 			sys.history = {
-				pushState(state: any, _title: any, url: string) {
+				get state() {
+					return $state;
+				},
+				pushState(state, _title, url) {
 					a.equal(url, '?path#hash');
-					(sys.history as any).state = state;
+					$state = state;
 					if (ran) throw new Error('Should only run once');
 					ran = true;
 				},
-			} as any;
+			} as History;
 
 			QueryStrategy.serialize(url);
 			QueryStrategy.serialize(url);
@@ -235,7 +239,7 @@ export default suite('router', test => {
 		it.should('get state from history state if present', a => {
 			const url = { path: 'path', hash: 'hash' };
 			const oldHistory = sys.history;
-			sys.history = { state: { url } } as any;
+			sys.history = { state: { url } } as History;
 			const state = QueryStrategy.deserialize();
 			a.equalValues(state, url);
 			sys.history = oldHistory;
@@ -243,7 +247,7 @@ export default suite('router', test => {
 		it.should('get state from location', a => {
 			const url = { path: 'path', hash: 'hash' };
 			const oldLocation = sys.location;
-			sys.location = { search: '?path', hash: '#hash' } as any;
+			sys.location = { search: '?path', hash: '#hash' } as Location;
 			const state = QueryStrategy.deserialize();
 			a.equalValues(state, url);
 			sys.location = oldLocation;
@@ -258,16 +262,20 @@ export default suite('router', test => {
 		it.should('update history state', a => {
 			const url = { path: 'path', hash: 'hash' };
 			let ran = false;
+			let $state: unknown;
 			const oldHistory = sys.history;
 
 			sys.history = {
-				pushState(state: any, _title: any, url: string) {
+				get state() {
+					return $state;
+				},
+				pushState(state, _title, url) {
 					a.equal(url, 'path#hash');
-					(sys.history as any).state = state;
+					$state = state;
 					if (ran) throw new Error('Should only run once');
 					ran = true;
 				},
-			} as any;
+			} as History;
 
 			PathStrategy.serialize(url);
 			PathStrategy.serialize(url);
@@ -277,7 +285,7 @@ export default suite('router', test => {
 		it.should('get state from history state if present', a => {
 			const url = { path: 'path', hash: 'hash' };
 			const oldHistory = sys.history;
-			sys.history = { state: { url } } as any;
+			sys.history = { state: { url } } as History;
 			const state = PathStrategy.deserialize();
 			a.equalValues(state, url);
 			sys.history = oldHistory;
@@ -285,7 +293,7 @@ export default suite('router', test => {
 		it.should('get state from location', a => {
 			const url = { path: 'path', hash: 'hash' };
 			const oldLocation = sys.location;
-			sys.location = { pathname: 'path', hash: '#hash' } as any;
+			sys.location = { pathname: 'path', hash: '#hash' } as Location;
 			const state = PathStrategy.deserialize();
 			a.equalValues(state, url);
 			sys.location = oldLocation;

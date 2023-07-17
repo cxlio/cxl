@@ -1,4 +1,4 @@
-import { resolve, relative, join } from 'path';
+import { resolve, relative } from 'path';
 import * as ts from 'typescript';
 import {
 	BuilderProgram,
@@ -6,7 +6,6 @@ import {
 	Diagnostic,
 	ModuleKind,
 	ParsedCommandLine,
-	getLineAndCharacterOfPosition,
 	getParsedCommandLineOfConfigFile,
 	Program,
 	ExitStatus,
@@ -31,7 +30,13 @@ const parseConfigHost: ParseConfigFileHost = {
 	},
 };
 
-function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
+const diagnosticsHost: ts.FormatDiagnosticsHost = {
+	getCurrentDirectory: sys.getCurrentDirectory,
+	getNewLine: () => '\n',
+	getCanonicalFileName: n => n,
+};
+
+/*function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
 	if (typeof msg === 'string')
 		console.error(`[${d.file ? d.file.fileName : ''}:${line}] ${msg}`);
 	else {
@@ -41,33 +46,22 @@ function tscError(d: Diagnostic, line: number, _ch: number, msg: any) {
 			);
 		} while ((msg = msg.next && msg.next[0]));
 	}
-}
+}*/
 
 export function buildDiagnostics(program: Program | BuilderProgram) {
 	return [
 		...program.getConfigFileParsingDiagnostics(),
 		...program.getOptionsDiagnostics(),
 		...program.getGlobalDiagnostics(),
+		...program.getDeclarationDiagnostics(),
 	];
 }
 
-function printDiagnosticChain(d: ts.DiagnosticMessageChain) {
-	console.error(d.messageText);
-	if (d.next) d.next.forEach(printDiagnosticChain);
-}
-
-export function printDiagnostics(diagnostics: Diagnostic[]) {
-	diagnostics.forEach(d => {
-		if (d.file) {
-			const { line, character } = getLineAndCharacterOfPosition(
-				d.file,
-				d.start || 0
-			);
-			tscError(d, line + 1, character, d.messageText);
-		} else if (typeof d.messageText === 'string')
-			console.error(d.messageText);
-		else printDiagnosticChain(d.messageText);
-	});
+export function printDiagnostics(
+	diagnostics: Diagnostic[],
+	host = diagnosticsHost
+) {
+	console.error(ts.formatDiagnosticsWithColorAndContext(diagnostics, host));
 
 	throw new Error('Typescript compilation failed');
 }
@@ -76,11 +70,23 @@ function getBuilder(
 	tsconfig = 'tsconfig.json',
 	defaultOptions: BuildOptions = { module: ModuleKind.CommonJS }
 ) {
-	const tsconfigJson = require(join(process.cwd(), tsconfig));
-	const outputDir: string = tsconfigJson.compilerOptions?.outDir;
+	const host = createSolutionBuilderHost(sys);
+	const options = parseTsConfig(tsconfig);
+
+	if (options.errors?.length) {
+		printDiagnostics(options.errors);
+	}
+
+	const outputDir = options.options.outDir;
 	if (!outputDir) throw new Error(`No outDir field set in ${tsconfig}`);
 
-	const host = createSolutionBuilderHost(sys);
+	if (options.options.module === ts.ModuleKind.ESNext) {
+		const oldRead = host.readFile;
+		host.readFile = (...args) => {
+			const src = oldRead.apply(host, args);
+			return src?.replace(/^\/\/\/.+/, '');
+		};
+	}
 	const builder = createSolutionBuilder(host, [tsconfig], defaultOptions);
 	return { outputDir, builder };
 }
@@ -201,8 +207,8 @@ export function bundle(
 		const { host, result } = bundleFiles(config, amd);
 		config.options.module = ts.ModuleKind.AMD;
 		config.options.outFile = outFile;
-		config.options.rootDir = resolve('../..');
-		config.options.baseDir = process.cwd();
+		config.options.rootDir ||= resolve('../..');
+		config.options.baseDir ||= process.cwd();
 
 		const rootNames = Array.from(result);
 		const program = ts.createProgram(rootNames, config.options, host);
@@ -213,7 +219,7 @@ export function bundle(
 
 		const diagnostics = buildDiagnostics(program);
 		if (diagnostics.length) {
-			printDiagnostics(diagnostics);
+			printDiagnostics(diagnostics, host);
 			return subs.error('Failed to compile');
 		}
 		program

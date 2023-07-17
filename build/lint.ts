@@ -3,7 +3,7 @@ import { ESLint } from 'eslint';
 
 import { Observable } from '@cxl/rx';
 import { Output } from '@cxl/source';
-import { builder } from './builder.js';
+import { appLog } from './builder.js';
 
 function handleEslintResult(results: ESLint.LintResult[]) {
 	const result: Output[] = [];
@@ -13,7 +13,7 @@ function handleEslintResult(results: ESLint.LintResult[]) {
 		const errorCount = result.errorCount;
 		const file = relative(process.cwd(), result.filePath);
 
-		builder.log(`eslint ${file}`);
+		appLog(`eslint ${file}`);
 		if (errorCount) {
 			hasErrors = true;
 			result.messages.forEach(r =>
@@ -36,8 +36,8 @@ export function eslint(options?: any) {
 			// fix: true,
 			...options,
 		});
-		builder.log(`eslint ${ESLint.version}`);
-		builder.log(
+		appLog(`eslint ${ESLint.version}`);
+		appLog(
 			`eslint`,
 			linter
 				.lintFiles(['**/*.ts?(x)'])

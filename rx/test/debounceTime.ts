@@ -11,6 +11,9 @@ import {
 } from '../index';
 import { spec } from '@cxl/spec';
 
+declare const setTimeout: (fn: () => unknown, n?: number) => number;
+declare const clearTimeout: (n: number) => void;
+
 export default spec('debounceTime', it => {
 	it.should('debounce time asynchronously', async a => {
 		let fired = 0;
@@ -30,7 +33,7 @@ export default spec('debounceTime', it => {
 		const promise = merge(of(1), throwError(0))
 			.debounceTime(5)
 			.tap(() => fired++)
-			.catchError(e => ((fired = e), of(e)));
+			.catchError(e => of((fired = e as number)));
 		a.equal(fired, 0);
 		await promise;
 		a.equal(fired, 0);
@@ -49,7 +52,7 @@ export default spec('debounceTime', it => {
 		merge(of(), throwError(true))
 			.pipe(
 				debounceTime(0),
-				catchError(e => ((fired = e), of(e)))
+				catchError(e => of((fired = e as boolean)))
 			)
 			.subscribe();
 		a.equal(fired, true);

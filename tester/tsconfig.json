@@ -1,5 +1,5 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig.client.json",
 	"compilerOptions": {
 		"outDir": "../dist/tester",
 		"types": ["node"],
@@ -16,7 +16,6 @@
 	],
 	"references": [
 		{ "path": "../rx" },
-		{ "path": "../server" },
 		{ "path": "../spec" },
 		{ "path": "../source" },
 		{ "path": "../program" }

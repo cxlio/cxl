@@ -6,8 +6,7 @@ import {
 	NumberType,
 	StringType,
 	VoidType,
-	parse,
-	printNode,
+	parse
 } from './index.js';
 import { TestApi, spec } from '@cxl/spec';
 import * as ts from 'typescript';
@@ -94,6 +93,16 @@ export default spec('dts', a => {
 		a.equal(b.name, 'b');
 	});
 
+	a.test('function - deconstructed parameters', (a: TestApi) => {
+		const [fn] = parse('function fn({ A, B }: { A: number;B: string}) { }');
+		a.equal(fn.name, 'fn');
+		a.assert(fn.parameters);
+		a.equal(fn.parameters.length, 1);
+
+		const [A] = fn.parameters;
+		a.equal(A.name, '{ A, B }');
+	});
+
 	a.test('function - rest parameters', (a: TestApi) => {
 		const [fn] = parse('function fn(...p: string[]) { return "hello"; }');
 		a.equal(fn.name, 'fn');
@@ -124,7 +133,7 @@ export default spec('dts', a => {
 		const [fn] = parse(`function fn() { return () => true; }`);
 
 		a.assert(fn.type);
-		a.equal(fn.type.kind, Kind.Function);
+		a.equal(fn.type.kind, Kind.FunctionType);
 		a.assert(fn.type.type);
 		a.equal(fn.type.type, BooleanType);
 		a.equal(fn.type.name, '');
@@ -225,9 +234,6 @@ export default spec('dts', a => {
 		a.assert(A.children);
 		a.equal(A.children.length, 3);
 		const [m1, m2, m3] = A.children;
-		printNode(m1);
-		printNode(m2);
-		printNode(m3);
 		a.equal(m1.name, 'm1');
 		a.equal(m1.type, VoidType);
 		a.assert(m1.parameters);
@@ -508,7 +514,7 @@ export default spec('dts', a => {
 		a.ok(A.flags & Flags.Export);
 	});
 
-	test('JSOoc comments', (a: TestApi) => {
+	a.test('JSOoc comments', (a: TestApi) => {
 		const [A] = parse(`
 			/**
 			 * Function Description
@@ -530,7 +536,6 @@ export default spec('dts', a => {
 		a.equal(A.docs.content[2].tag, 'custom');
 		a.equal(A.docs.content[2].value, 'Custom Tag');
 		a.ok(A.flags & Flags.Deprecated);
-
 		a.assert(A.parameters);
 		const [p1, p2] = A.parameters;
 		a.assert(p1.docs);
@@ -621,7 +626,7 @@ export default spec('dts', a => {
 		a.equal(type.type, VoidType);
 	});
 
-	test('type alias - Record', (a: TestApi) => {
+	a.test('type alias - Record', (a: TestApi) => {
 		const [A] = parse(`type A = Record<keyof Map<any, any>, typeof Set>;`);
 		a.assert(A.type);
 		a.equal(A.kind, Kind.TypeAlias);
@@ -741,18 +746,21 @@ function map<T>() {	return operator<T>(); }
 		a.equal(map.type.typeParameters[0].type, map.typeParameters[0]);
 	});
 
-	test('Enum', (a: TestApi) => {
-		const [E] = parse('enum E { One, Two=3 }');
+	a.test('Enum', (a: TestApi) => {
+		const [E] = parse('enum E { Zero, One="1", Two=3 }');
 		a.assert(E.children);
-		a.equal(E.children.length, 2);
-		a.equal(E.children[0].name, 'One');
-		a.equal(E.children[0].kind, Kind.Property);
-		a.equal(E.children[1].name, 'Two');
-		a.equal(E.children[1].value, '3');
+		a.equal(E.children.length, 3);
+		a.equal(E.children[0].name, 'Zero');
+		a.equal(E.children[0].value, '0');
+		a.equal(E.children[1].name, 'One');
+		a.equal(E.children[1].value, '"1"');
 		a.equal(E.children[1].kind, Kind.Property);
+		a.equal(E.children[2].name, 'Two');
+		a.equal(E.children[2].value, '3');
+		a.equal(E.children[2].kind, Kind.Property);
 	});
 
-	test('object literal type', (a: TestApi) => {
+	a.test('object literal parameter type', (a: TestApi) => {
 		const [fn] = parse(`function fn(p: { children: Set<any> }) { }`);
 		a.assert(fn.parameters);
 		const [p] = fn.parameters;
@@ -762,17 +770,39 @@ function map<T>() {	return operator<T>(); }
 		const children = p.type.children[0];
 		a.equal(children.name, 'children');
 		a.assert(children.type);
+		a.equal(children.kind, Kind.Property);
 		a.equal(children.type.name, 'Set');
 	});
 
-	test('object literal infered type', (a: TestApi) => {
+	a.test('object literal type', (a: TestApi) => {
+		const [A] = parse(
+			`const A: { children?(): void; b?: { nested: boolean } } = {}`
+		);
+		a.assert(A.type);
+		a.assert(A.type.children);
+		a.equal(A.type.children.length, 2);
+		a.equal(A.type.kind, Kind.ObjectType);
+		const [children, b] = A.type.children;
+		a.equal(children.name, 'children');
+		a.assert(children.type);
+		a.equal(children.kind, Kind.Method);
+		a.equal(children.type.name, 'void');
+
+		a.equal(b.name, 'b');
+		a.assert(b.type?.children);
+		a.equal(b.type.children.length, 1);
+		a.equal(b.type.children[0].kind, Kind.Property);
+	});
+
+	a.test('object literal infered type', (a: TestApi) => {
 		const [fn] = parse(
-			`function fn(four: string) { return { one: 1, two: new Set(), three() {return true}, four }; }`
+			`function fn(four: string) { return { one: 1, two: new Set(), three() {return true}, four, five: { nested: true } }; }`
 		);
 		a.assert(fn.type);
 		a.equal(fn.type.kind, Kind.ObjectType);
 		a.assert(fn.type.children);
-		const [one, two, three, four] = fn.type.children;
+		a.equal(fn.type.children.length, 5);
+		const [one, two, three, four, five] = fn.type.children;
 		a.equal(one.name, 'one');
 		a.equal(two.name, 'two');
 		a.equal(one.type, NumberType);
@@ -783,6 +813,10 @@ function map<T>() {	return operator<T>(); }
 		a.equal(three.type, BooleanType);
 		a.equal(four.name, 'four');
 		a.equal(four.type, StringType);
+		a.equal(five.name, 'five');
+		a.assert(five.type?.children);
+		a.equal(five.type.children.length, 1);
+		a.equal(five.type.children[0].kind, Kind.Property);
 	});
 
 	test('index signature', (a: TestApi) => {
@@ -816,17 +850,25 @@ function map<T>() {	return operator<T>(); }
 		a.equal(A.children[1].name, 'm2');
 	});
 
-	test('@internal', (a: TestApi) => {
-		const [A, B] = parse(
-			`/* @internal */
-				export class B { }
-				// TODO test
-				export class C { 
-					/* @internal */ test?: number;
-				}`
+	a.test('@internal', (a: TestApi) => {
+		const [A, B, C, D] = parse(
+			`
+	export class A { }
+	/* @internal */	
+	export class B { }
+	export class C {
+		/* @internal */ test?: number;
+	}
+	/*@internal*/
+	export const D = "**/*";
+			`
 		);
-		a.ok(A.flags & Flags.Internal);
-		a.ok(!(B.flags & Flags.Internal));
+		a.ok(!(A.flags & Flags.Internal));
+		a.ok(B.flags & Flags.Internal);
+		a.ok(!(C.flags & Flags.Internal));
+		a.assert(C.children?.[0]);
+		a.ok(C.children[0].flags & Flags.Internal);
+		a.ok(D.flags & Flags.Internal);
 	});
 
 	a.test('method spread parameters', (a: TestApi) => {
@@ -912,12 +954,109 @@ function map<T>() {	return operator<T>(); }
 		a.equal(A.children?.[1]?.name, 'C');
 	});
 
-	/*a.testOnly('Namespace const declaration', (a: TestApi) => {
-		const [A] = parse(`export namespace A { const B:number; }`);
-		console.log(A);
-		a.equal(A.name, 'A');
+	a.test('namespace', (a: TestApi) => {
+		const [ns] = parse(`
+namespace ns {
+	const fn1 = function fn1() { };
+	export const fn2 = function fn2() { };
+}
+`);
+		a.equal(ns.name, 'ns');
+		a.assert(ns.children);
+		const [fn1, fn2] = ns.children;
+
+		a.test('non exported function', (a: TestApi) => {
+			a.ok(fn1);
+			a.equal(fn2.name, 'fn2');
+		});
+	});
+
+	a.test('Enum Accessor', (a: TestApi) => {
+		const [, C] = parse(`enum Kind { A, B } let C: Kind.A;`);
+		a.equal(C.name, 'C');
+		a.assert(C.type);
+		const sig = C.type;
+		a.equal(sig.name, 'Kind.A');
+	});
+
+	a.test('Interface with string literal names', (a: TestApi) => {
+		const [A] = parse(`interface A { "B": string }`);
+		a.assert(A.children);
+		const B = A.children[0];
+		a.equal(B.name, 'B');
+	});
+	a.test('ReturnType', (a: TestApi) => {
+		const [I, A] = parse(
+			`interface I { m1: A }; type A = ReturnType<typeof fn>; function fn() { return { test: true } as const; }`
+		);
+		a.assert(I.children);
+		const [m1] = I.children;
+		a.equal(m1.type?.type, A.type?.type);
+	});
+
+	a.test('EventAttribute', (a: TestApi) => {
+		const [I] = parse(
+			`class I { @EventAttribute() m1?: any }; function EventAttribute() { return (ctor: any)=> {} }`,
+			{ experimentalDecorators: true }
+		);
+		a.assert(I.children);
+		const [m1] = I.children;
+		a.equal(m1.kind, Kind.Event);
+		a.ok(m1.flags & Flags.Optional);
+	});
+
+	a.test('Resolved Type - TypeAlias', (a: TestApi) => {
+		const [, C] = parse(
+			`type B = keyof { a: string; b: string }; type C = B | 'c';`
+		);
+		a.assert(C.resolvedType);
+		a.equal(C.resolvedType.kind, Kind.TypeUnion);
+		a.equal(C.resolvedType.children?.length, 3);
+	});
+
+	a.test('Resolved Type', (a: TestApi) => {
+		const [, B, c] = parse(
+			`type A = {a:string;b:string;c:string}; type B = keyof A; let c:B='c';`
+		);
+		a.assert(B.type?.resolvedType);
+		a.equal(B.type.resolvedType.kind, Kind.TypeUnion);
+		a.equal(B.type.resolvedType.children?.length, 3);
+		a.equal(c.type?.type?.kind, Kind.TypeUnion);
+	});
+
+	a.test('Const destructuring', (a: TestApi) => {
+		const [A, B] = parse(
+			`export const { a, b } = { a: true; b: 'string' }, c = 10`
+		);
+		a.assert(A.children);
+		const [a1, b1] = A.children;
+		a.equal(a1.name, 'a');
+		a.equal(b1.name, 'b');
+		a.equal(B.name, 'c');
+	});
+
+	a.test('Type Types', (a: TestApi) => {
+		const [A] = parse(`const A = [-1,2,"3"] as const`);
+		a.assert(A.type?.type?.children);
+		const [m1, m2, m3] = A.type.type.children;
+		a.equal(m1.name, '-1');
+		a.equal(m2.name, '2');
+		a.equal(m3.name, '"3"');
+	});
+	a.test('String Literal Types', (a: TestApi) => {
+		const [A] = parse('type A = `${number} ${true|false}`');
 		a.assert(A.type);
-		const sig = A.type;
-		a.equal(sig.name, '');
+		a.equal(A.type.name, '`${number} ${true | false}`');
+		a.equal(A.type.kind, Kind.Literal);
+	});
+	/*a.testOnly('function result', (a: TestApi) => {
+		const [, , A] = parse(
+			`
+	function Augment(...args: any) { return (ctor: any)=> {} }
+	@Augment('cxl-test', $ => <><slot></slot><slot name="named" /></>)
+	class Test {}`,
+			{ jsx: 1, experimentalDecorators: true }
+		);
+		a.ok(A);
 	});*/
 });

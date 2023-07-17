@@ -1,27 +1,29 @@
 import { relative } from 'path';
-import { Kind, Output } from '@cxl/dts';
+import { Kind, Output, Node, Source } from '@cxl/dts';
 import type { DocGen, File } from './index.js';
 
-function serialize(key: string, value: any) {
+function serialize(key: string, value: unknown) {
 	const cwd = process.cwd();
 
 	if (key === 'source') {
-		const pos = value.sourceFile.getLineAndCharacterOfPosition(value.index);
+		const src = value as Source;
+		const pos = src.sourceFile.getLineAndCharacterOfPosition(src.index);
 		return {
-			fileName: relative(cwd, value.sourceFile.fileName),
+			fileName: relative(cwd, src.sourceFile.fileName),
 			line: pos.line,
 			ch: pos.character,
 		};
 	}
 
-	if (value && value.kind === Kind.Reference)
+	if (value && (value as Node).kind === Kind.Reference) {
+		const node = value as Node;
 		return {
-			id: value.type?.id,
-			name: value.name,
+			id: node.type?.id,
+			name: node.name,
 			kind: Kind.Reference,
-			typeParameters: value.typeParameters,
+			typeParameters: node.typeParameters,
 		};
-
+	}
 	return value;
 }
 

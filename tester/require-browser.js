@@ -12,12 +12,16 @@
 		return baseMatch ? normalizePath(baseMatch[1]) : '';
 	}
 	function normalizePath(basePath) {
-		const a = new URL(basePath, top.location.href);
+		let href = require.href || location.href;
+		if (href === 'about:srcdoc') href = top.location.href;
+		const a = new URL(basePath, href);
 		return a.href;
 	}
 
 	function require(path) {
 		const mods = require.modules;
+
+		if (mods[path]) return mods[path];
 
 		if (require.replace) path = require.replace(path, require.base);
 		// Handle packages
@@ -57,7 +61,7 @@
 			require.base = oldBase;
 		}
 	}
-	require.modules = {};
+	require.modules = (typeof define !== 'undefined' && define.modules) || {};
 	require.base = basename(location.pathname);
 
 	window.require = require;

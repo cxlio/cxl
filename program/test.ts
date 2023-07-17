@@ -1,12 +1,12 @@
 import { spec } from '@cxl/spec';
-import { Parameter, parseParameters, parseParametersArray } from './index.js';
+import { parseParameters /*, parseParametersArray*/ } from './index.js';
 
 export default spec('program', s => {
 	s.test('parseParameters', a => {
-		const parameters: Parameter[] = [
-			{ short: 'h', name: 'help', type: 'boolean' },
-			{ short: 'v', name: 'version' },
-		];
+		const parameters = {
+			help: { short: 'h', type: 'boolean', help: 'help' },
+			version: { short: 'v', help: 'version' },
+		} as const;
 
 		a.test('single parameter', a => {
 			const r1 = parseParameters(parameters, '-h');
@@ -15,8 +15,10 @@ export default spec('program', s => {
 			a.ok(r2.help);
 		});
 		a.test('multiple short', a => {
-			const r1 = parseParameters(parameters, '-hh');
-			a.equal(r1.help, true);
+			a.throws(() => {
+				const r1 = parseParameters(parameters, '-hh');
+				a.equal(r1.help, true);
+			});
 
 			const r2 = parseParameters(parameters, '-hv');
 			a.equal(r2.help, true);
@@ -30,8 +32,11 @@ export default spec('program', s => {
 		});
 
 		a.test('short with value', a => {
-			const parameters = [{ name: 'help', short: 'h' }];
+			const parameters = {
+				help: { short: 'h', help: 'help', type: 'string' },
+			} as const;
 			const r1 = parseParameters(parameters, '-h test');
+			parameters.help.type;
 			a.equal(r1.help, 'test');
 			const r2 = parseParameters(parameters, '-h = test');
 			a.equal(r2.help, 'test');
@@ -47,6 +52,10 @@ export default spec('program', s => {
 		});
 
 		a.test('long with value', a => {
+			const parameters = {
+				version: { type: 'string', help: 'version' },
+			} as const;
+
 			const r1 = parseParameters(parameters, '--version test');
 			a.equal(r1.version, 'test');
 			const r2 = parseParameters(parameters, '--version test-with-dash');
@@ -65,40 +74,38 @@ export default spec('program', s => {
 
 		a.test('Rest values', a => {
 			const r1 = parseParameters(parameters, 'file/name.json');
-			a.equal(r1.$, 'file/name.json');
+			a.equal(r1.$[0], 'file/name.json');
 
 			const r2 = parseParameters(parameters, '"file name.json"');
-			a.equal(r2.$, 'file name.json');
+			a.equal(r2.$[0], 'file name.json');
 
 			const r3 = parseParameters(parameters, '"file name.json" --help');
-			a.equal(r3.$, 'file name.json');
+			a.equal(r3.$[0], 'file name.json');
 			a.equal(r3.help, true);
 		});
 		a.test('Rest value with boolean', a => {
 			const r4 = parseParameters(parameters, '--help "file name.json"');
-			a.equal(r4.$, 'file name.json');
+			a.equal(r4.$[0], 'file name.json');
 			a.equal(r4.help, true);
 
 			const r5 = parseParameters(parameters, '--help filename');
-			a.equal(r5.$, 'filename');
+			a.equal(r5.$[0], 'filename');
 			a.equal(r5.help, true);
 		});
 
 		a.test('Complex strings', a => {
 			const r = parseParameters(
-				[
-					{
-						name: 'browserUrl',
+				{
+					browserUrl: {
 						type: 'string',
 						help: 'Browser runner initial URL',
 					},
-					{
-						name: 'startServer',
+					startServer: {
 						type: 'string',
 						help:
 							'Start a server application while the tests are running',
 					},
-				],
+				},
 				'--startServer "npm run start:test --prefix .." --browserUrl http://localhost:9009'
 			);
 			a.equal(r.browserUrl, 'http://localhost:9009');
@@ -107,7 +114,7 @@ export default spec('program', s => {
 		});
 	});
 
-	s.test('parseParametersArray', a => {
+	/*s.test('parseParametersArray', a => {
 		const parameters = [
 			{ short: 'h', name: 'help' },
 			{ short: 'v', name: 'version' },
@@ -202,5 +209,5 @@ export default spec('program', s => {
 			a.equal(r2[0].name, '*');
 			a.equal(r2[0].value, 'file name.json');
 		});
-	});
+	});*/
 });

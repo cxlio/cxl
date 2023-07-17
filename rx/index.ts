@@ -1,16 +1,24 @@
 ///<amd-module name="@cxl/rx"/>
-type ObservableError = any;
+
+declare const setTimeout: (fn: () => unknown, n?: number) => number;
+declare const clearTimeout: (n: number) => void;
+declare const setInterval: (fn: () => unknown, n?: number) => number;
+declare const clearInterval: (n: number) => void;
+
+type ObservableError = unknown;
 type NextFunction<T> = (val: T) => void;
 type ErrorFunction = (err: ObservableError) => void;
 type CompleteFunction = () => void;
 type UnsubscribeFunction = () => void;
 type SubscribeFunction<T> = (
 	subscription: Subscriber<T>
-) => UnsubscribeFunction | void;
+) => UnsubscribeFunction | void | Promise<void>;
 type Merge<T> = T extends Observable<infer U> ? U : never;
 type ObservableT<T> = T extends Observable<infer U> ? U : never;
 type PickObservable<T> = {
-	[P in keyof T]: T[P] extends Observable<any> ? ObservableT<T[P]> : never;
+	[P in keyof T]: T[P] extends Observable<unknown>
+		? ObservableT<T[P]>
+		: never;
 };
 
 export type Operator<T, T2 = T> = (observable: Observable<T>) => Observable<T2>;
@@ -50,7 +58,10 @@ export class Subscriber<T> {
 	) {
 		try {
 			if (fwd) fwd(this);
-			if (subscribe) this.onUnsubscribe = subscribe(this);
+			if (subscribe) {
+				const unsub = subscribe(this);
+				if (!(unsub instanceof Promise)) this.onUnsubscribe = unsub;
+			}
 			if (this.closed && this.onUnsubscribe) this.onUnsubscribe();
 		} catch (e) {
 			this.error(e);
@@ -130,22 +141,25 @@ export function pipe<T, A, B, C, D, E>(
 	d: Operator<C, D>,
 	e: Operator<D, E>
 ): Operator<T, E>;
-export function pipe(...operators: Operator<any>[]): Operator<any> {
-	return (source: Observable<any>) =>
+export function pipe(...operators: Operator<unknown>[]): Operator<unknown> {
+	return (source: Observable<unknown>) =>
 		operators.reduce((prev, fn) => fn(prev), source);
 }
 
 /**
  * A representation of any set of values over any amount of time.
  */
-export class Observable<T> {
+export class Observable<T, P = 'none'> {
 	[observableSymbol]() {
 		return this;
 	}
 
 	constructor(protected __subscribe: SubscribeFunction<T>) {}
 
-	then<E, R>(resolve: (val: T) => R, reject?: (e: E) => R): Promise<R> {
+	then<E, R>(
+		resolve: (val: P extends 'emit1' ? T : T | undefined) => R,
+		reject?: (e: E) => R
+	): Promise<R> {
 		return toPromise(this).then(resolve, reject);
 	}
 
@@ -173,8 +187,13 @@ export class Observable<T> {
 	/**
 	 * Used to stitch together functional operators into a chain.
 	 */
-	pipe(...extra: Operator<any, any>[]): Observable<any> {
-		return extra.reduce((prev, fn) => fn(prev), this as Observable<any>);
+	pipe(
+		...extra: [Operator<T, unknown>, ...Operator<unknown, unknown>[]]
+	): Observable<unknown> {
+		return extra.reduce(
+			(prev, fn) => fn(prev as Observable<T>),
+			this as Observable<unknown>
+		);
 	}
 
 	/**
@@ -193,7 +212,7 @@ export class Observable<T> {
  * A Subject is an Observable that allows values to be
  * multicasted to many Observers.
  */
-export class Subject<T, ErrorT = any> extends Observable<T> {
+export class Subject<T, ErrorT = unknown> extends Observable<T> {
 	protected observers = new Set<Subscriber<T>>();
 
 	protected onSubscribe(subscriber: Subscriber<T>): UnsubscribeFunction {
@@ -272,7 +291,7 @@ export class BehaviorSubject<T> extends Subject<T> {
  * It buffers a set number of values and will emit those values immediately to any
  * new subscribers in addition to emitting new values to existing subscribers.
  */
-export class ReplaySubject<T, ErrorT = any> extends Subject<T, ErrorT> {
+export class ReplaySubject<T, ErrorT = unknown> extends Subject<T, ErrorT> {
 	private buffer: T[] = [];
 	private hasError = false;
 	private lastError?: ErrorT;
@@ -320,7 +339,7 @@ export class Reference<T> extends Subject<T> {
 	get value(): T {
 		if (this.$value === Undefined)
 			throw new Error('Reference not initialized');
-		return this.$value as any;
+		return this.$value as T;
 	}
 
 	protected onSubscribe(subscription: Subscriber<T>) {
@@ -334,12 +353,15 @@ export class Reference<T> extends Subject<T> {
 	}
 }
 
+type ConcatResult<R extends Observable<unknown>[]> = R extends (infer U)[]
+	? Observable<Merge<U>>
+	: never;
 /**
  * Creates an output Observable which sequentially emits all values from given Observable and then moves on to the next.
  */
-export function concat<R extends Observable<any>[]>(
+export function concat<R extends Observable<unknown>[]>(
 	...observables: R
-): R extends (infer U)[] ? Observable<Merge<U>> : never {
+): ConcatResult<R> {
 	return new Observable(subscriber => {
 		let index = 0;
 		let lastSubscription: Subscription | undefined;
@@ -361,7 +383,7 @@ export function concat<R extends Observable<any>[]>(
 
 		onComplete();
 		return () => lastSubscription?.unsubscribe();
-	}) as any;
+	}) as ConcatResult<R>;
 }
 
 /**
@@ -374,8 +396,8 @@ export function defer<T>(fn: () => Subscribable<T>) {
 	});
 }
 
-export function isInterop<T>(obs: any): obs is InteropObservable<T> {
-	return !!obs[observableSymbol];
+export function isInterop<T>(obs: object): obs is InteropObservable<T> {
+	return observableSymbol in obs;
 }
 
 export function fromArray<T>(input: Array<T>): Observable<T> {
@@ -396,6 +418,10 @@ export function fromPromise<T>(input: Promise<T>): Observable<T> {
 	});
 }
 
+export function fromAsync<T>(input: () => Promise<T>): Observable<T> {
+	return defer(() => fromPromise(input()));
+}
+
 /**
  * Creates an Observable from an Array, an array-like object, a Promise, an iterable object, or an Observable-like object.
  */
@@ -403,7 +429,7 @@ export function from<T>(
 	input: Array<T> | Promise<T> | Observable<T> | InteropObservable<T>
 ): Observable<T> {
 	if (input instanceof Observable) return input;
-	if (isInterop(input)) return defer(input[observableSymbol]);
+	if (isInterop(input)) return defer<T>(input[observableSymbol]);
 	if (Array.isArray(input)) return fromArray(input);
 	return fromPromise(input);
 }
@@ -415,18 +441,42 @@ export function of<T>(...values: T[]): Observable<T> {
 	return fromArray(values);
 }
 
+function _toPromise<T, P>(observable: Observable<T, P>) {
+	return new Promise<P extends 'emit1' ? T : T | typeof Undefined>(
+		(resolve, reject) => {
+			let value: typeof Undefined | T = Undefined;
+			observable.subscribe({
+				next: (val: T) => (value = val),
+				error: (e: ObservableError) => reject(e),
+				complete: () =>
+					resolve(
+						value as P extends 'emit1' ? T : T | typeof Undefined
+					),
+			});
+		}
+	);
+}
+
 /**
  * Generates a promise from an observable, the promise will resolve when the observable completes.
  */
-export function toPromise<T>(observable: Observable<T>) {
-	return new Promise<T>((resolve, reject) => {
-		let value: T;
-		observable.subscribe({
-			next: (val: T) => (value = val),
-			error: (e: ObservableError) => reject(e),
-			complete: () => resolve(value),
-		});
-	});
+export function toPromise<T, P>(
+	observable: Observable<T, P>
+): Promise<P extends 'emit1' ? T : T | undefined> {
+	return _toPromise<T, P>(observable).then(
+		r =>
+			(r === Undefined ? undefined : r) as P extends 'emit1'
+				? T
+				: T | undefined
+	);
+}
+
+export class EmptyError extends Error {
+	message = 'No elements in sequence';
+}
+
+export async function firstValueFrom<T>(observable: Observable<T>) {
+	return _toPromise(observable.first()) as Promise<T>;
 }
 
 export function operatorNext<T, T2 = T>(
@@ -438,7 +488,7 @@ export function operatorNext<T, T2 = T>(
 			let subscription: Subscription;
 			subscriber.setTeardown(() => {
 				unsubscribe?.();
-				subscription.unsubscribe();
+				subscription?.unsubscribe();
 			});
 			source.subscribe(
 				{
@@ -507,17 +557,20 @@ export function reduce<T, T2>(
 	});
 }
 
-export function debounceFunction<A extends any[], R>(
-	fn: (...a: A) => R,
-	delay?: number
-) {
-	let to: any;
-	return function (this: any, ...args: A) {
+export function debounceFunction<F extends Function>(fn: F, delay?: number) {
+	/*eslint prefer-rest-params: off*/
+	/*eslint @typescript-eslint/ban-types: off*/
+	let to: number;
+	const result = function (this: unknown) {
 		if (to) clearTimeout(to);
 		to = setTimeout(() => {
-			fn.apply(this, args);
-		}, delay);
+			fn.apply(this, arguments);
+		}, delay) as unknown as number;
 	};
+
+	(result as unknown as { cancel(): void }).cancel = () => clearTimeout(to);
+
+	return result as unknown as F & { cancel(): void };
 }
 
 export function interval(period: number) {
@@ -719,12 +772,18 @@ export function takeWhile<T>(fn: (val: T) => boolean) {
 
 /**
  * Emits only the first value emitted by the source Observable.
+ * Delivers an EmptyError to the Observer's error callback if the Observable completes before any next notification was sent
  */
 export function first<T>() {
-	return operatorNext((subs: Subscriber<T>) => (val: T) => {
-		subs.next(val);
-		subs.complete();
-	});
+	return operator<T, T>(subs => ({
+		next(val: T) {
+			subs.next(val);
+			subs.complete();
+		},
+		complete() {
+			if (!subs.closed) subs.error(new EmptyError());
+		},
+	}));
 }
 
 /**
@@ -747,13 +806,13 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
  *
  */
 export function catchError<T, O extends T | never>(
-	selector: (err: any, source: Observable<T>) => Observable<O> | void
+	selector: (err: unknown, source: Observable<T>) => Observable<O> | void
 ): Operator<T, T> {
 	return operator<T, T>((subscriber, source) => {
 		let retrySubs: Subscription | undefined;
 		const observer = {
 			next: subscriber.next.bind(subscriber) as NextFunction<T>,
-			error(err: any) {
+			error(err: unknown) {
 				try {
 					if (subscriber.closed) return;
 					const result = selector(err, source);
@@ -855,13 +914,16 @@ export function publishLast<T>(): Operator<T, T> {
 	};
 }
 
+type MergeResult<R extends Observable<unknown>[]> = R extends (infer U)[]
+	? Observable<Merge<U>>
+	: never;
 /**
  * Creates an output Observable which concurrently emits all values from every given input Observable.
  */
-export function merge<R extends Observable<any>[]>(
+export function merge<R extends Observable<unknown>[]>(
 	...observables: R
-): R extends (infer U)[] ? Observable<Merge<U>> : never {
-	if (observables.length === 1) return observables[0] as any;
+): MergeResult<R> {
+	if (observables.length === 1) return observables[0] as MergeResult<R>;
 
 	return new Observable(subs => {
 		let refCount = observables.length;
@@ -880,19 +942,19 @@ export function merge<R extends Observable<any>[]>(
 				);
 
 		return () => subscriptions.forEach(s => s.unsubscribe());
-	}) as any;
+	}) as MergeResult<R>;
 }
 
 /**
  * Combines multiple Observables to create an Observable whose values are calculated from the values, in order, of each of its input Observables.
  */
-export function zip<T extends any[]>(
+export function zip<T extends Observable<unknown>[]>(
 	...observables: T
 ): Observable<PickObservable<T>> {
 	return observables.length === 0
 		? EMPTY
-		: new Observable<any>(subs => {
-				const buffer: any[][] = new Array(observables.length);
+		: (new Observable<unknown>(subs => {
+				const buffer: unknown[][] = new Array(observables.length);
 				const subscriptions: Subscription[] = [];
 				let completed = 0;
 
@@ -917,10 +979,10 @@ export function zip<T extends any[]>(
 				}
 
 				observables.forEach((o, id) => {
-					const bucket: any[] = (buffer[id] = []);
+					const bucket: unknown[] = (buffer[id] = []);
 					subscriptions.push(
 						o.subscribe({
-							next(val: any) {
+							next(val) {
 								bucket.push(val);
 								flush();
 							},
@@ -934,35 +996,36 @@ export function zip<T extends any[]>(
 				});
 
 				return () => subscriptions.forEach(s => s.unsubscribe());
-		  });
+		  }) as Observable<PickObservable<T>>);
 }
 
 /**
  * Combines multiple Observables to create an Observable whose values are calculated from the
  * latest values of each of its input Observables.
  */
-export function combineLatest<T extends Observable<any>[]>(
+export function combineLatest<T extends Observable<unknown>[]>(
 	...observables: T
 ): Observable<PickObservable<T>> {
 	return observables.length === 0
 		? EMPTY
-		: new Observable<any>(subs => {
+		: new Observable<PickObservable<T>>(subs => {
 				let len = observables.length;
 				const initialLen = len;
 				let emittedCount = 0;
 				let ready = false;
 				const emitted: boolean[] = new Array(len);
-				const last: any[] = new Array(len);
+				const last = new Array(len);
 
 				const subscriptions = observables.map((o, id) =>
 					o.subscribe({
-						next(val: any) {
+						next(val) {
 							last[id] = val;
 							if (!emitted[id]) {
 								emitted[id] = true;
 								if (++emittedCount >= initialLen) ready = true;
 							}
-							if (ready) subs.next(last.slice(0));
+							if (ready)
+								subs.next(last.slice(0) as PickObservable<T>);
 						},
 						error: subs.error.bind(subs),
 						complete() {
@@ -988,10 +1051,14 @@ export function finalize<T>(unsubscribe: () => void): Operator<T, T> {
 	}));
 }
 
+export function ignoreElements() {
+	return filter<never>(() => false);
+}
+
 /**
  * Creates an Observable that emits no items to the Observer and immediately emits an error notification.
  */
-export function throwError(error: any) {
+export function throwError(error: unknown) {
 	return new Observable<never>(subs => subs.error(error));
 }
 
@@ -1028,13 +1095,15 @@ export function ref<T>() {
 	return new Reference<T>();
 }
 
-export const operators: any = {
+export const operators = {
 	catchError,
 	debounceTime,
 	distinctUntilChanged,
+	exhaustMap,
 	filter,
 	finalize,
 	first,
+	ignoreElements,
 	map,
 	mergeMap,
 	publishLast,
@@ -1045,23 +1114,28 @@ export const operators: any = {
 	take,
 	takeWhile,
 	tap,
-};
+} as const;
 
 for (const p in operators) {
-	(Observable.prototype as any)[p] = function (...args: any) {
+	/*eslint @typescript-eslint/no-explicit-any: off */
+	Observable.prototype[p as keyof typeof operators] = function (
+		this: Observable<unknown>,
+		...args: unknown[]
+	) {
 		return this.pipe((operators as any)[p](...args));
-	};
+	} as any;
 }
 
 export interface Observable<T> {
 	catchError<T2 extends T | never>(
-		selector: (err: any, source: Observable<T>) => Observable<T2> | void
+		selector: (err: unknown, source: Observable<T>) => Observable<T2> | void
 	): Observable<T>;
 	debounceTime(
 		time?: number,
 		timer?: (delay: number) => Observable<void>
 	): Observable<T>;
 	distinctUntilChanged(): Observable<T>;
+	exhaustMap<T2>(project: (value: T) => Observable<T2>): Observable<T2>;
 	filter<T2 = T>(fn: (val: T) => boolean): Observable<T2>;
 	finalize(fn: () => void): Observable<T>;
 	first(): Observable<T>;
@@ -1078,6 +1152,7 @@ export interface Observable<T> {
 	take(howMany: number): Observable<T>;
 	takeWhile(fn: (val: T) => boolean): Observable<T>;
 	tap(tapFn: (val: T) => void): Observable<T>;
+	ignoreElements(): Observable<never>;
 }
 
 export interface InsertEvent<T, K> {

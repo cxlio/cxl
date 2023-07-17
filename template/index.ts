@@ -12,7 +12,7 @@ import {
 	ListEvent,
 	Observable,
 	Operator,
-	concat,
+	Subject,
 	defer,
 	merge,
 	observable,
@@ -20,22 +20,56 @@ import {
 	operator,
 	of,
 	tap,
-	map,
 } from '@cxl/rx';
 import type { Bindable } from '@cxl/tsx';
-import { Component, attributeChanged, get } from '@cxl/component';
+import {
+	AttributeEvent,
+	Component,
+	ComponentAttributeName,
+	attributeChanged,
+	get,
+} from '@cxl/component';
 
-export type ValidateFunction<T> = (val: T) => string | true;
+declare module '@cxl/dom' {
+	interface CustomEventMap {
+		'selectable.action': void;
+		'focusable.change': void;
+		registable: {
+			[K in keyof RegistableMap]: {
+				id: K;
+				controller?: RegistableMap[K];
+			};
+		}[keyof RegistableMap];
+	}
+}
 
 export interface ElementWithValue<T> extends HTMLElement {
 	value: T;
 }
 
-function isObservedAttribute(el: any, attr: any) {
-	return (el.constructor as any).observedAttributes?.includes(attr);
+export interface RegistableMap {
+	selectable: SelectableTarget;
 }
 
-export function sortBy<T = any, K extends keyof T = any>(key: K) {
+export interface RegistableDetail<K extends keyof RegistableMap> {
+	id: K;
+	controller?: RegistableMap[K];
+	unsubscribe?: () => void;
+}
+
+export interface RegistableEvent<T> {
+	type: 'connect' | 'disconnect';
+	target: T;
+	elements: Set<T>;
+}
+
+function isObservedAttribute<T extends Component>(el: T, attr: keyof T) {
+	return (el.constructor as typeof Component).observedAttributes?.includes(
+		attr as string
+	);
+}
+
+export function sortBy<T, K extends keyof T = keyof T>(key: K) {
 	return (a: T, b: T) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0);
 }
 
@@ -47,27 +81,22 @@ export function getSearchRegex(term: string, flags = 'i') {
 	}
 }
 
-export function getAttribute<T extends Node, K extends keyof T>(
-	el: T,
-	name: K
-) {
-	const attr$ = (el as any).attributes$;
+export function getAttribute<
+	T extends Node,
+	K extends ComponentAttributeName<T>
+>(el: T, name: K) {
+	const attr$ =
+		el instanceof Component &&
+		(el.attributes$ as Subject<AttributeEvent<T>>);
 	const observer =
 		attr$ && isObservedAttribute(el, name)
-			? attr$.filter((ev: any) => ev.attribute === name)
+			? attr$.filter(ev => ev.attribute === name)
 			: new AttributeObserver(el).filter(ev => ev.value === name);
-	return concat<Observable<T[K]>[]>(
-		defer(() => of(el[name])),
-		observer.map(() => el[name])
+
+	return merge<Observable<T[K]>[]>(
+		observer.map(() => el[name]),
+		defer(() => of(el[name]))
 	);
-}
-
-export function triggerEvent<R>(element: EventTarget, event: string) {
-	return tap<R>(trigger.bind(null, element, event));
-}
-
-export function stopEvent<T extends Event>() {
-	return tap<T>((ev: T) => ev.stopPropagation());
 }
 
 export function sync<T>(
@@ -83,13 +112,29 @@ export function sync<T>(
 	);
 }
 
-export function syncAttribute(A: Node, B: Node, attr: string) {
+export type CommonKeys<T, T2> = keyof {
+	[K in keyof T]: K extends ComponentAttributeName<T2> ? T[K] : never;
+};
+
+export type CommonProperties<T, T2> = {
+	[K in CommonKeys<T, T2>]: K extends ComponentAttributeName<T2>
+		? T[K] extends T2[K]
+			? T[K]
+			: never
+		: never;
+};
+
+export function syncAttribute<T extends Node, T2 extends Node>(
+	A: T,
+	B: T2,
+	attr: keyof CommonProperties<T, T2>
+) {
 	return sync(
-		getAttribute(A, attr as any),
-		val => ((A as any)[attr] = val),
-		getAttribute(B, attr as any),
-		val => ((B as any)[attr] = val),
-		(B as any)[attr]
+		getAttribute(A, attr),
+		val => (A[attr] = val),
+		getAttribute(B, attr as keyof T2) as unknown as Observable<T[keyof T]>,
+		val => (B[attr as keyof T2] = val as unknown as T2[keyof T2]),
+		B[attr as keyof T2] as unknown as T[keyof T]
 	);
 }
 
@@ -121,9 +166,10 @@ export function model<T>(el: ElementWithValue<T>, ref: NextObservable<T>) {
 }
 
 export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
-	return merge(on(el, 'input'), on(el, 'change'))
-		.map(ev => (ev.target as T).value)
-		.raf();
+	return merge(on(el, 'input'), on(el, 'change')).map(
+		ev => (ev.target as T).value
+	);
+	//.raf();
 }
 
 const LOG = tap(val => console.log(val));
@@ -141,25 +187,17 @@ Observable.prototype.log = function () {
 	return this.pipe(LOG);
 };
 
-Observable.prototype.raf = function (fn?: (val: any) => void) {
+Observable.prototype.raf = function (fn?: (val: unknown) => void) {
 	return this.pipe(raf(fn));
 };
 
-Observable.prototype.is = function (equalTo: any) {
+Observable.prototype.is = function (equalTo: unknown) {
 	return this.pipe(is(equalTo));
 };
 
-Observable.prototype.select = function (key: any) {
-	return this.pipe(select(key));
-};
-
-export function select<T, K extends keyof T>(key: K) {
-	return map((val: T) => val[key]);
-}
-
 export function is<T>(equalTo: T) {
-	return operatorNext<T, boolean>(subs => (val: T) =>
-		subs.next(val === equalTo)
+	return operatorNext<T, boolean>(
+		subs => (val: T) => subs.next(val === equalTo)
 	);
 }
 
@@ -212,12 +250,13 @@ export function portal(id: string) {
 }
 
 export function teleport(el: Node, portalName: string) {
-	return new Observable<void>(() => {
+	return new Observable<HTMLElement>(subs => {
 		requestAnimationFrame(() => {
 			const portal = portals.get(portalName);
 			if (!portal)
 				throw new Error(`Portal "${portalName}" does not exist`);
 			portal.appendChild(el);
+			subs.next(portal);
 		});
 		return () => el.parentElement?.removeChild(el);
 	});
@@ -281,23 +320,11 @@ export function list<T, K>(
 	};
 }
 
-export function loading(source: Observable<any>, renderFn: () => Node) {
-	return (host: Bindable) => {
-		const marker = new Marker();
-		host.bind(
-			observable(() => {
-				marker.insert(renderFn());
-			})
-		);
-		host.bind(source.tap(() => marker.empty()));
-	};
-}
-
 export function render<T>(
 	source: Observable<T>,
 	renderFn: (item: T) => Node,
 	loading?: () => Node,
-	error?: (e: any) => Node
+	error?: (e: unknown) => Node
 ) {
 	return (host: Bindable) => {
 		const marker = new Marker();
@@ -330,7 +357,7 @@ export function render<T>(
 
 export function each<T>(
 	source: Observable<Iterable<T>>,
-	renderFn: (item: T, index: number) => Node,
+	renderFn: (item: T, index: number, source: Iterable<T>) => Node | undefined,
 	empty?: () => Node
 ) {
 	const marker = new Marker();
@@ -341,8 +368,11 @@ export function each<T>(
 				marker.empty();
 				let len = 0;
 				for (const item of arr) {
-					marker.insert(renderFn(item, len));
-					len++;
+					const node = renderFn(item, len, arr);
+					if (node) {
+						marker.insert(node);
+						len++;
+					}
 				}
 				if (empty && len === 0) marker.insert(empty());
 			})
@@ -351,14 +381,6 @@ export function each<T>(
 		return marker.node;
 	};
 }
-
-/*export function Style(p: { children: Styles }) {
-	return renderCSS(p.children);
-}
-
-export function Static(p: { children: NativeChildren }): any {
-	return staticTemplate(() => dom(dom, undefined, p.children));
-}*/
 
 type AriaProperties = {
 	atomic: string;
@@ -403,6 +425,7 @@ type AriaProperties = {
 };
 
 type AriaProperty = keyof AriaProperties;
+export type AriaAttributeName = `aria-${AriaProperty}`;
 
 function attrInitial<T extends Component>(name: string, value: string) {
 	return (ctx: T) =>
@@ -437,63 +460,110 @@ export function role<T extends Component>(roleName: string) {
 	return attrInitial<T>('role', roleName);
 }
 
-interface SelectableNode extends ParentNode, EventTarget {}
+type SelectableNode = HTMLElement;
+//interface SelectableNode extends ParentNode, EventTarget {}
 
 function handleListArrowKeys(
-	host: SelectableNode,
-	el: Element | null,
-	selector: string,
+	{ getNext, getPrevious }: NavigationOptions,
+	//el: Element | null,
+	//selector: string,
 	ev: KeyboardEvent
 ) {
+	let el: Element | null;
 	const key = ev.key;
-	if (key === 'ArrowDown') {
-		if (el) el = findNextNodeBySelector(el, selector) || el;
-		else {
-			const first = host.firstElementChild;
-
-			if (first)
-				el = first.matches(selector)
-					? first
-					: findNextNodeBySelector(first, selector);
-		}
-		if (el) ev.preventDefault();
-	} else if (key === 'ArrowUp') {
-		if (el)
-			el =
-				findNextNodeBySelector(
-					el,
-					selector,
-					'previousElementSibling'
-				) || el;
-		else {
-			const first = host.lastElementChild;
-
-			if (first)
-				el = first.matches(selector)
-					? first
-					: findNextNodeBySelector(
-							first,
-							selector,
-							'previousElementSibling'
-					  );
-		}
-		if (el) ev.preventDefault();
+	if (key === 'ArrowDown' || key === 'ArrowRight') {
+		el = getNext();
+	} else if (key === 'ArrowUp' || key === 'ArrowLeft') {
+		el = getPrevious();
 	} else return null;
+	if (el) ev.preventDefault();
 
 	return el;
 }
 
+export interface NavigationOptions {
+	host: HTMLElement;
+	getNext(): Element | null;
+	getPrevious(): Element | null;
+}
+
+export interface NavigationMenuOptions extends NavigationOptions {
+	getFirst(): Element | null;
+	getLast(): Element | null;
+	escape?(): void;
+}
+
+function buildNavigationOptions(
+	host: SelectableNode,
+	selector: string,
+	startSelector = selector
+) {
+	let el = host.querySelector(startSelector);
+	return {
+		host,
+		getNext() {
+			if (el) el = findNextNodeBySelector(host, el, selector) || el;
+			else {
+				const first = host.querySelector(selector);
+
+				if (first)
+					el = first.matches(selector)
+						? first
+						: findNextNodeBySelector(host, first, selector);
+			}
+			return el;
+		},
+		getPrevious() {
+			if (el) el = findNextNodeBySelector(host, el, selector, -1) || el;
+			else {
+				const all = host.querySelectorAll(selector);
+				const first = all[all.length - 1];
+
+				if (first)
+					el = first.matches(selector)
+						? first
+						: findNextNodeBySelector(host, first, selector, -1);
+			}
+			return el;
+		},
+	};
+}
+
+export function navigationMenu(options: NavigationMenuOptions) {
+	return on(options.host, 'keydown')
+		.map(ev => {
+			/*if (ev.key === 'Tab') {
+				const el = ev.shiftKey
+					? options.getPrevious() || options.getLast()
+					: options.getNext() || options.getFirst();
+				if (el) return ev.preventDefault(), el;
+			} else*/ if (ev.key === 'Escape') {
+				options.escape?.();
+			} else if (ev.key === 'Home') {
+				return options.getFirst();
+			} else if (ev.key === 'End') {
+				return options.getLast();
+			} else return handleListArrowKeys(options, ev);
+		})
+		.filter(el => !!el);
+}
+
+/**
+ * Handles list keyboard navigation (up and down only), emits the next selected item.
+ */
 export function navigationListUpDown(
 	host: SelectableNode,
 	selector: string,
-	startSelector: string,
-	input = host
+	startSelector = selector,
+	input: EventTarget = host
 ) {
 	return on(input, 'keydown')
-		.map(ev => {
-			const el = host.querySelector(startSelector);
-			return handleListArrowKeys(host, el, selector, ev);
-		})
+		.map(ev =>
+			handleListArrowKeys(
+				buildNavigationOptions(host, selector, startSelector),
+				ev
+			)
+		)
 		.filter(el => !!el);
 }
 
@@ -504,8 +574,8 @@ export function navigationList(
 	host: SelectableNode,
 	selector: string,
 	startSelector: string,
-	input = host
-) {
+	input: HTMLElement | Window = host
+): Observable<HTMLElement> {
 	return on(input, 'keydown')
 		.map(ev => {
 			let el = host.querySelector(startSelector);
@@ -518,7 +588,10 @@ export function navigationList(
 				);
 			}
 
-			const newEl = handleListArrowKeys(host, el, selector, ev);
+			const newEl = handleListArrowKeys(
+				buildNavigationOptions(host, selector, startSelector),
+				ev
+			);
 			if (newEl) return newEl;
 
 			if (/^\w$/.test(key)) {
@@ -533,7 +606,6 @@ export function navigationList(
 		})
 		.filter(el => !!el);
 }
-
 export interface FocusableComponent extends Component {
 	disabled: boolean;
 	touched: boolean;
@@ -544,23 +616,21 @@ export function focusableEvents<T extends FocusableComponent>(
 	element: HTMLElement = host
 ) {
 	return merge(
-		on(element, 'focus').pipe(triggerEvent(host, 'focusable.focus')),
-		on(element, 'blur').tap(() => {
-			host.touched = true;
-			trigger(host, 'focusable.blur');
-		}),
-		attributeChanged(host, 'disabled').pipe(
-			triggerEvent(host, 'focusable.change')
+		on(element, 'blur').tap(() => (host.touched = true)),
+		attributeChanged(host, 'disabled').tap(() =>
+			trigger(host, 'focusable.change', {})
 		),
-		attributeChanged(host, 'touched').pipe(
-			triggerEvent(host, 'focusable.change')
+		attributeChanged(host, 'touched').tap(() =>
+			trigger(host, 'focusable.change', {})
 		)
 	);
 }
 
-export function disabledAttribute<T extends FocusableComponent>(host: T) {
+export function disabledAttribute(host: Component & { disabled: boolean }) {
 	return get(host, 'disabled').tap(value =>
-		host.setAttribute('aria-disabled', value ? 'true' : 'false')
+		value
+			? host.setAttribute('aria-disabled', 'true')
+			: host.removeAttribute('aria-disabled')
 	);
 }
 
@@ -584,110 +654,130 @@ export function focusable<T extends FocusableComponent>(
 	);
 }
 
-export function registable<T extends Component, ControllerT>(
-	host: T,
-	id: string,
-	controller?: ControllerT
+export function registable<K extends keyof RegistableMap>(
+	id: K,
+	host: RegistableMap[K]
+): Observable<never>;
+export function registable<K extends keyof RegistableMap>(
+	id: K,
+	host: HTMLElement,
+	controller: RegistableMap[K]
+): Observable<never>;
+export function registable<K extends keyof RegistableMap>(
+	id: K,
+	host: HTMLElement,
+	controller?: RegistableMap[K]
 ) {
 	return observable<never>(() => {
-		const detail: any = { controller };
-		trigger(host, id + '.register', detail);
+		const detail: RegistableDetail<K> = { id, controller };
+		trigger(host, 'registable', { detail, bubbles: true });
 		return () => detail.unsubscribe?.();
 	});
 }
 
-export function debounceImmediate<A extends any[], R>(fn: (...a: A) => R) {
-	let to: any;
-	return async function (this: any, ...args: A) {
+export function debounceImmediate<A extends unknown[], R>(fn: (...a: A) => R) {
+	let to: boolean;
+	return function (this: unknown, ...args: A) {
 		if (to) return;
 		to = true;
-		await Promise.resolve();
-		fn.apply(this, args);
-		to = false;
+		queueMicrotask(() => {
+			fn.apply(this, args);
+			to = false;
+		});
 	};
 }
 
-export function registableHost<ControllerT>(
+export function registableHost<K extends keyof RegistableMap>(
+	id: K,
 	host: EventTarget,
-	id: string,
-	elements = new Set<ControllerT>()
+	elements = new Set<RegistableMap[K]>()
 ) {
-	return observable<Set<ControllerT>>(subs => {
+	return observable<RegistableEvent<RegistableMap[K]>>(subs => {
 		function register(ev: CustomEvent) {
 			if (ev.target) {
 				const detail = ev.detail;
-				const target = (detail.controller || ev.target) as ControllerT;
+				const target = (detail.controller ||
+					ev.target) as RegistableMap[K];
 				elements.add(target);
 				ev.detail.unsubscribe = () => {
 					elements.delete(target);
-					subs.next(elements);
+					subs.next({ type: 'disconnect', target, elements });
 				};
-				subs.next(elements);
+				subs.next({ type: 'connect', target, elements });
 			}
 		}
 
-		const inner = on(host, id + '.register').subscribe(register);
+		const inner = on(host, 'registable')
+			.filter(ev => ev.detail.id === id)
+			.subscribe(register);
 		return () => inner.unsubscribe();
 	});
 }
 
-interface SelectableComponent extends Component {
+export interface SelectableTarget extends Component {
+	value: unknown;
 	selected: boolean;
+	view?: typeof Component;
 }
 
-interface SelectableTarget extends Node {
-	value: any;
-	selected: boolean;
-	multiple?: boolean;
-}
-
-interface SelectableHost<T> extends Element {
-	value?: any;
+interface SelectableBase<T> extends Element {
 	options: Set<T>;
+	optionView: typeof Component;
+}
+
+interface SelectableHost<T> extends SelectableBase<T> {
 	selected?: T;
 }
 
-interface SelectableMultiHost<T> extends Element {
-	value: any[];
-	options: Set<T>;
+interface SelectableMultiHost<T> extends SelectableBase<T> {
 	selected: Set<T>;
 }
 
 export function selectableHostMultiple<TargetT extends SelectableTarget>(
-	host: SelectableMultiHost<TargetT>
+	host: SelectableMultiHost<TargetT>,
+	getInput: Observable<HTMLElement & { value: unknown }>
 ) {
 	return new Observable<TargetT>(subscriber => {
+		let value: unknown[] | undefined;
 		function setSelected(option: TargetT) {
 			subscriber.next(option);
 		}
 
 		function onChange() {
-			const { value, options } = host;
+			const { options, selected } = host;
 
 			for (const o of options) {
-				if (value.indexOf(o.value) !== -1) {
-					if (!o.selected) setSelected(o);
-				} else o.selected = false;
-			}
-		}
-
-		function setOptions() {
-			const { value, options, selected } = host;
-
-			for (const o of options) {
-				o.multiple = true;
-				if (
-					(o.selected && !selected.has(o)) ||
-					(!o.selected && value.indexOf(o.value) !== -1)
-				)
-					setSelected(o);
+				if (o.hidden || !o.parentNode) continue;
+				if (value === undefined) {
+					if (o.selected && !selected.has(o)) setSelected(o);
+				} else if (value.indexOf(o.value) !== -1) {
+					if (!selected.has(o)) setSelected(o);
+				} else {
+					o.selected = false;
+					if (selected.has(o)) setSelected(o);
+				}
 			}
 		}
 
 		const subscription = merge(
-			registableHost<TargetT>(host, 'selectable', host.options)
-				.raf(setOptions)
-				.switchMap(() => getAttribute(host, 'value').raf(onChange)),
+			registableHost('selectable', host, host.options).tap(ev => {
+				if (ev.type === 'connect') {
+					const o = ev.target as TargetT;
+					o.view = host.optionView;
+					if (o.selected && !host.selected.has(o)) setSelected(o);
+				}
+			}),
+			getInput
+				.switchMap(input =>
+					getAttribute(input, 'value').tap(v => {
+						if (!Array.isArray(v))
+							return (input.value = Array.from(host.selected).map(
+								o => o.value
+							));
+						value = v as unknown[];
+					})
+				)
+				.tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
 				if (ev.target && host.options?.has(ev.target as TargetT)) {
 					ev.stopImmediatePropagation();
@@ -705,46 +795,47 @@ export function selectableHostMultiple<TargetT extends SelectableTarget>(
  * Handles element selection events. Emits everytime a new item is selected.
  */
 export function selectableHost<TargetT extends SelectableTarget>(
-	host: SelectableHost<TargetT>
+	host: SelectableHost<TargetT>,
+	input: Observable<HTMLElement & { value: unknown }>,
+	op?: { force: boolean }
 ) {
 	return new Observable<TargetT | undefined>(subscriber => {
+		let inputEl: HTMLElement & { value: unknown };
 		function setSelected(option: TargetT | undefined) {
-			subscriber.next(option);
+			if (option !== host.selected) subscriber.next(option);
 		}
 
 		function onChange() {
-			const { value, options, selected } = host;
+			const { options, selected } = host;
+			let first;
+			const value = inputEl?.value;
 
-			if (selected && selected.value === value) return;
+			if (!inputEl || (selected && selected.value === value)) return;
 
-			for (const o of options)
-				if (o.parentNode && o.value === value) return setSelected(o);
-				else o.selected = false;
-
-			setSelected(undefined);
-		}
-
-		function setOptions() {
-			const { value, options, selected } = host;
-
-			if (selected && options.has(selected)) return;
-
-			let first: TargetT | null = null;
 			for (const o of options) {
-				first = first || o;
-
-				if (value === o.value) return setSelected(o);
+				if (o.hidden || !o.parentNode) continue;
+				first ||= o;
+				if (o.value === value) return setSelected(o);
+				else o.selected = false;
 			}
 
-			if (value === undefined && !selected && first) setSelected(first);
-			else if (selected && !selected.parentNode) setSelected(undefined);
+			if (op?.force !== false && value === undefined && first)
+				setSelected(first);
+			else setSelected(undefined);
 		}
 
 		const subscription = merge(
-			registableHost<TargetT>(host, 'selectable', host.options)
-				.tap(setOptions)
-				.raf(setOptions),
-			getAttribute(host, 'value').tap(onChange),
+			input.switchMap(input => {
+				inputEl = input;
+				return getAttribute(input, 'value').tap(onChange);
+			}),
+			registableHost('selectable', host, host.options)
+				.tap(ev => {
+					if (ev.type === 'connect') ev.target.view = host.optionView;
+					onChange();
+				})
+				.debounceTime(0)
+				.tap(onChange),
 			on(host, 'selectable.action').tap(ev => {
 				if (ev.target && host.options?.has(ev.target as TargetT)) {
 					ev.stopImmediatePropagation();
@@ -758,20 +849,19 @@ export function selectableHost<TargetT extends SelectableTarget>(
 	});
 }
 
-export function selectable<T extends SelectableComponent>(host: T) {
+export function selectable<T extends SelectableTarget>(host: T) {
 	return merge(
-		registable(host, 'selectable'),
-		onAction(host).pipe(
-			triggerEvent(host, 'selectable.action'),
-			stopEvent()
+		registable('selectable', host),
+		onAction(host).tap(() =>
+			trigger(host, 'selectable.action', { bubbles: true })
 		),
 		get(host, 'selected').pipe(ariaValue(host, 'selected'))
 	);
 }
 
-interface CheckedComponent extends Component {
-	value: any;
-	checked: boolean;
+export interface CheckedComponent extends Component {
+	value: unknown;
+	checked: boolean | undefined;
 }
 
 export function checkedBehavior<T extends CheckedComponent>(host: T) {
@@ -787,15 +877,6 @@ export function checkedBehavior<T extends CheckedComponent>(host: T) {
 			.filter(() => false),
 		get(host, 'checked').pipe(ariaChecked(host))
 	);
-}
-
-export function stopChildrenEvents(target: EventTarget, event: string) {
-	return on(target, event).tap(ev => {
-		if (ev.target !== target) {
-			ev.stopPropagation();
-			ev.stopImmediatePropagation();
-		}
-	});
 }
 
 export function $onAction<T extends Element>(
@@ -822,24 +903,6 @@ export function setClassName(el: HTMLElement) {
 	});
 }
 
-interface FormElement<T> extends ElementWithValue<T> {
-	setCustomValidity(msg: string): void;
-}
-
-export function validateValue<T>(
-	el: FormElement<T>,
-	...validators: ValidateFunction<T>[]
-) {
-	return getAttribute(el, 'value').tap(value => {
-		let message: string | boolean = true;
-		validators.find(validateFn => {
-			message = validateFn(value);
-			return message !== true;
-		});
-		el.setCustomValidity(message === true ? '' : (message as any));
-	});
-}
-
 const ENTITIES_REGEX = /[&<>]/g,
 	ENTITIES_MAP = {
 		'&': '&amp;',
@@ -849,6 +912,10 @@ const ENTITIES_REGEX = /[&<>]/g,
 
 export function escapeHtml(str: string) {
 	return (
-		str && str.replace(ENTITIES_REGEX, e => (ENTITIES_MAP as any)[e] || '')
+		str &&
+		str.replace(
+			ENTITIES_REGEX,
+			e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP] || ''
+		)
 	);
 }

@@ -1,4 +1,4 @@
-abstract class VirtualNode {
+/*abstract class VirtualNode {
 	static readonly ELEMENT_NODE = 1;
 	static readonly TEXT_NODE = 3;
 	static readonly COMMENT_NODE = 8;
@@ -196,7 +196,7 @@ const TAG_MAP = {
 /*declare namspace NodeJS {
 	interface global { global: any };
 }*/
-
+/*
 const CUSTOM_ELEMENT_REGISTRY: Record<string, any> = {};
 
 Object.assign(global, {
@@ -236,3 +236,4 @@ Object.assign(global, {
 		}
 	}
 });
+*/

@@ -1,13 +1,23 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/dom"
 	},
-	"files": ["test.tsx"],
+	"files": [
+		"test.tsx"
+	],
 	"references": [
-		{ "path": "tsconfig.json" },
-		{ "path": "../tester" },
-		{ "path": "../spec" },
-		{ "path": "../tsx" }
+		{
+			"path": "tsconfig.json"
+		},
+		{
+			"path": "../tester"
+		},
+		{
+			"path": "../spec"
+		},
+		{
+			"path": "../tsx"
+		}
 	]
 }

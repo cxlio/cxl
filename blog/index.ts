@@ -1,10 +1,10 @@
-import { Stats } from 'fs';
+import type { Stats } from 'fs';
 import { readdir, readFile, stat } from 'fs/promises';
 import { observable } from '@cxl/rx';
 import { Output, Task } from '@cxl/build';
 
 import * as MarkdownIt from 'markdown-it';
-import * as hljs from 'highlight.js';
+import hljs from 'highlight.js';
 
 export interface BlogConfig {
 	postsDir?: string | string[];
@@ -22,6 +22,10 @@ export interface Meta {
 	uuid: string;
 	date: string;
 	author: string;
+	version?: string;
+	type?: string;
+	href?: string;
+	summary?: string;
 	tags?: string;
 }
 
@@ -62,8 +66,8 @@ function CodeHighlight(source: string, language?: string) {
 	return (
 		'<pre><code class="hljs">' +
 		(language
-			? (hljs as any).highlight(language, source)
-			: (hljs as any).highlightAuto(source, [
+			? hljs.highlight(language, source)
+			: hljs.highlightAuto(source, [
 					'html',
 					'typescript',
 					'javascript',
@@ -76,21 +80,27 @@ function CodeHighlight(source: string, language?: string) {
 
 const markdownMeta = /^(\w+):\s*(.+)\s*/gm;
 
-function getMetaValue(key: string, val: string) {
+function getMetaValue<K extends keyof Meta>(key: K, val: string): Meta[K] {
 	return key === 'date' ? new Date(val).toISOString() : val;
 }
 
-const FenceHandler: Record<string, (content: string, meta: any) => string> = {
-	meta(content: string, meta: any) {
+const FenceHandler: Record<
+	string,
+	(content: string, meta: Partial<Meta>) => string
+> = {
+	meta(content: string, meta: Partial<Meta>) {
 		let m: RegExpExecArray | null;
 		while ((m = markdownMeta.exec(content))) {
-			meta[m[1]] = getMetaValue(m[1], m[2]);
+			meta[m[1] as keyof Meta] = getMetaValue(m[1] as keyof Meta, m[2]);
 		}
 
 		return meta.tags ? `<blog-tags>${meta.tags}</blog-tags>` : '';
 	},
 	demo(content: string) {
-		return `<blog-demo><!--${content}--></blog-demo>`;
+		return `<cxl-blog-demo><!--${content}--></cxl-blog-demo>`;
+	},
+	example(content: string) {
+		return `<cxl-blog-example><!--${content}--></cxl-blog-example>`;
 	},
 };
 
@@ -101,16 +111,16 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 		html: true,
 	});
 	const rules = md.renderer.rules;
-	const map: any = {
+	const map = {
 		h1: 'h3',
 		h2: 'h4',
 		h3: 'h5',
 		h4: 'h6',
 	};
-	const meta: any = {};
+	const meta: Partial<Meta> = {};
 
 	rules.heading_open = (tokens, idx) => {
-		const tag = tokens[idx].tag;
+		const tag = tokens[idx].tag as keyof typeof map;
 		return tag === 'h1' ? `<blog-title>` : `<cxl-t ${map[tag]}>`;
 	};
 	rules.heading_close = (tokens, idx) => {
@@ -134,7 +144,7 @@ function parseMeta(content: string) {
 	if (!meta) return undefined;
 
 	const result: Record<string, string> = {};
-	let attrs: any;
+	let attrs;
 	while ((attrs = ATTR_REGEX.exec(meta))) {
 		const val =
 			attrs[1] === 'date' ? new Date(attrs[2]).toISOString() : attrs[2];

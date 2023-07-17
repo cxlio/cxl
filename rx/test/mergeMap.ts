@@ -2,7 +2,7 @@ import { cold, expectLog } from './util';
 import { defer, mergeMap, of, from } from '../index';
 import { spec } from '@cxl/spec';
 
-function arrayRepeat(value: any, times: number) {
+function arrayRepeat<T>(value: T, times: number) {
 	const results = [];
 	for (let i = 0; i < times; i++) {
 		results.push(value);
@@ -12,10 +12,10 @@ function arrayRepeat(value: any, times: number) {
 
 export default spec('mergeMap', it => {
 	it.should('map-and-flatten each item to an Observable', async a => {
-		const values = { x: 10, y: 30, z: 50 };
+		const values = { x: '10', y: '30', z: '50' };
 		const e1 = cold('--1-----3--5-------|', values);
 		const e1subs = '^                  !';
-		const e2 = cold('x-x-x|              ', { x: 10 });
+		const e2 = cold('x-x-x|              ', { x: '10' });
 		const expected = '--10-10-10-30-30503050-50---|';
 		const result = e1.pipe(mergeMap(x => e2.map(i => +i * +x)));
 
@@ -50,7 +50,7 @@ export default spec('mergeMap', it => {
 			.mergeMap(() => defer(() => of(3)))
 
 			.subscribe({
-				next(value: any) {
+				next(value) {
 					results.push(value);
 				},
 				complete() {

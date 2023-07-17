@@ -43,7 +43,7 @@ interface DocEntry {
 function getType(pkg: Package): ProductType {
 	if (pkg.bin) return 'app';
 	if (/\/ui.*/.test(pkg.name)) return 'kit';
-	if (pkg.keywords?.[0]) return pkg.keywords[0] as any;
+	//if (pkg.keywords?.[0]) return pkg.keywords[0];
 	return 'library';
 }
 
@@ -94,7 +94,7 @@ async function findComponents(
 						license: pkg.license,
 						package: pkg.name,
 						links: {
-							homepage: pkg.homepage,
+							homepage: `${pkg.homepage}/?${doc.href}`,
 						},
 						type: 'component',
 						description,
@@ -174,12 +174,12 @@ async function processTemplate(name: string): Promise<Product> {
 	const source = await fs.readFile(file, 'utf8');
 	const id = name.replace(/\.html$/, '');
 	const meta = MetaRegex.exec(source)?.[0];
-	const result: any = {};
+	const result: { title?: string; description?: string } = {};
 	let match: RegExpMatchArray | null;
 
 	if (meta)
 		while ((match = MetaLineRegex.exec(meta))) {
-			result[match[1]] = match[2];
+			result[match[1] as keyof typeof result] = match[2];
 		}
 
 	return {
@@ -193,7 +193,7 @@ async function processTemplate(name: string): Promise<Product> {
 	};
 }
 
-async function findTemplates(dir: string, result: Product[]) {
+export async function findTemplates(dir: string, result: Product[]) {
 	// Templates
 	const templates = await fs.readdir(dir);
 	const promises: Promise<Product>[] = [];
@@ -217,7 +217,7 @@ async function findProjects(dir: string) {
 		}
 	}
 
-	await findTemplates(TemplateDir, result);
+	//await findTemplates(TemplateDir, result);
 
 	return result;
 }

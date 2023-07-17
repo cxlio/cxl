@@ -1,12 +1,20 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/router"
 	},
 	"references": [
-		{ "path": "tsconfig.json" },
-		{ "path": "../spec" },
-		{ "path": "../tsx" }
+		{
+			"path": "tsconfig.json"
+		},
+		{
+			"path": "../spec"
+		},
+		{
+			"path": "../tsx"
+		}
 	],
-	"files": ["test.tsx"]
+	"files": [
+		"test.tsx"
+	]
 }

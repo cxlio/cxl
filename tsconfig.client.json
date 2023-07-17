@@ -1,0 +1,14 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"lib": ["dom", "ES2021", "dom.iterable"],
+		"allowJs": true,
+		"experimentalDecorators": true,
+		"jsx": "react",
+		"jsxFactory": "dom",
+		"jsxFragmentFactory": "dom",
+		"typeRoots": ["node_modules/@types"],
+		"types": []
+	},
+	"files": []
+}

@@ -4,11 +4,16 @@ import { join } from 'path';
 import { file } from './file.js';
 import { execSync } from 'child_process';
 import { Output } from '@cxl/source';
-import { sh } from '@cxl/server';
-import { getPublishedVersion } from './npm';
+import { sh } from '@cxl/program';
+import { exec } from './builder.js';
 import * as ts from 'typescript';
 
-type License = 'GPL-3.0' | 'GPL-3.0-only' | 'Apache-2.0' | 'UNLICENSED';
+type License =
+	| 'GPL-3.0'
+	| 'GPL-3.0-only'
+	| 'Apache-2.0'
+	| 'UNLICENSED'
+	| 'SEE LICENSE IN LICENSE.txt';
 
 export type Dependencies = Record<string, string>;
 
@@ -44,6 +49,7 @@ const LICENSE_MAP: Record<License, string> = {
 	'GPL-3.0': 'license-GPL-3.0.txt',
 	'GPL-3.0-only': 'license-GPL-3.0.txt',
 	'Apache-2.0': 'license-Apache-2.0.txt',
+	'SEE LICENSE IN LICENSE.txt': '',
 	UNLICENSED: '',
 };
 
@@ -72,7 +78,7 @@ export function docs(dirName: string, devMode = false) {
 		sh(
 			`node ${docgen} --clean ${
 				devMode ? '--debug' : ''
-			} -o ../docs/${dirName} --summary `
+			} -o ../docs/${dirName} --summary`
 		).then(
 			out => (console.log(out), subs.complete()),
 			e => subs.error(e)
@@ -108,13 +114,11 @@ function packageJson(p: any) {
 					files: p.files || [
 						'*.js',
 						'*.d.ts',
-						'*.js.map',
+						'*.css',
 						'amd/*.js',
 						'amd/*.d.ts',
-						'amd/*.js.map',
 						'es6/*.js',
 						'es6/*.d.ts',
-						'es6/*.js.map',
 						'LICENSE',
 						'*.md',
 					],
@@ -137,7 +141,8 @@ function packageJson(p: any) {
 }
 
 function license(id: License) {
-	if (id === 'UNLICENSED') return EMPTY;
+	if (id === 'UNLICENSED' || id === 'SEE LICENSE IN LICENSE.txt')
+		return EMPTY;
 	const licenseFile = LICENSE_MAP[id];
 	if (!licenseFile) throw new Error(`Invalid license: "${id}"`);
 
@@ -194,27 +199,28 @@ export function pkg() {
 		const p = readPackage();
 		const licenseId = p.license;
 
-		return from(getPublishedVersion(p.name)).switchMap(version => {
+		const output: Observable<Output>[] = [packageJson(p)];
+
+		output.push(file('README.md', 'README.md'));
+		if (licenseId) output.push(license(licenseId));
+
+		return merge(...output);
+		/*return from(getPublishedVersion(p.name)).switchMap(version => {
 			if (version === p.version)
 				throw new Error(
 					`Package version ${p.version} already published.`
 				);
 
-			const output: Observable<Output>[] = [packageJson(p)];
 
-			output.push(file('README.md', 'README.md'));
-			if (licenseId) output.push(license(licenseId));
-
-			return merge(...output);
-		});
+		});*/
 	});
 }
 
-export async function publish() {
+/*export async function publish() {
 	const p = readPackage();
 	const isPublished = await getPublishedVersion(p.name);
 	if (isPublished) throw new Error(`Package version already published.`);
-}
+}*/
 
 function createBundle(
 	files: string[],
@@ -301,24 +307,32 @@ export function bundle(
 	});
 }
 
-const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
-const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
-<script src="/cxl/dist/tester/require-browser.js"></script>
-<script>
+export const REQUIRE_REPLACE = `
 	require.replace = function (path) {
 		return path.replace(
 			/^@cxl\\/workspace\\.(.+)/,
 			(str, p1) =>
 				\`/cxl.app/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
 		).replace(
+			/^@cxl\\/(ui.*)/,
+			(str, p1) =>
+				\`/ui/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
+		).replace(
 			/^@cxl\\/(.+)/,
 			(str, p1) =>
 				\`/cxl/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
 		);
 	};
+`;
+
+const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
+const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
+<script src="/cxl/dist/tester/require-browser.js"></script>
+<script>
+	window.CXL_DEBUG = true;
+	${REQUIRE_REPLACE}
 	require('@cxl/ui');
 	require('@cxl/ui-router');
-	require('@cxl/ui-www');
 	require('@cxl/router/debug.js');
 </script>
 `;
@@ -349,4 +363,18 @@ export function template(
 			{ path: 'debug.html', source: `${cfg.debugHeader}\n${source}` },
 		]);
 	});
+}
+
+export interface PublishConfiguration {
+	s3Path: string;
+	environment: 'dev' | 'prod';
+}
+
+export function deployS3({ environment, s3Path }: PublishConfiguration) {
+	if (environment !== 'dev' && environment !== 'prod')
+		throw new Error(`Invalid environment ${environment}`);
+
+	return exec(
+		`aws s3 sync --dryrun --cache-control max-age=60 --content-encoding=utf8 --delete ../dist/debuggerjs.com s3://${s3Path}`
+	);
 }

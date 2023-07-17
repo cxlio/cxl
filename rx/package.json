@@ -3,12 +3,15 @@
 	"description": "Lightweight reactiveX implementation",
 	"version": "0.7.0",
 	"license": "Apache-2.0",
-	"browser": "amd/index.min.js",
+	"browser": "amd/index.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/rx && node ../tester --baselinePath=../../rx/spec"
 	},
 	"homepage": "https://cxlio.github.io/cxl/rx",
-	"repository": "https://github.com/cxlio/cxl/tree/master/rx",
+	"repository": {
+		"url": "https://github.com/cxlio/cxl/tree/master/rx",
+		"type": "git"
+	},
 	"bugs": "https://github.com/cxlio/cxl/issues"
 }

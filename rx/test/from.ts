@@ -1,4 +1,4 @@
-import { from, of, observableSymbol } from '../index';
+import { Subscriber, from, of, observableSymbol } from '../index';
 import { suite } from '@cxl/spec';
 
 export default suite('from', test => {
@@ -54,7 +54,7 @@ export default suite('from', test => {
 		const done = a.async();
 		const source = {
 			[observableSymbol]: () => ({
-				subscribe(subs: any) {
+				subscribe(subs: Subscriber<unknown>) {
 					subs.next(10);
 					subs.complete();
 					return {

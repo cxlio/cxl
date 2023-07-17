@@ -2,22 +2,15 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/docgen",
-		"lib": ["es2019"],
-		"types": ["node"],
-		"esModuleInterop": true,
-		"typeRoots": ["../node_modules/@types"]
+		"esModuleInterop": true
 	},
-	"references": [
-		{ "path": "../program" },
-		{ "path": "../dts" },
-		{ "path": "../tsx" }
-	],
+	"references": [{ "path": "../program" }, { "path": "../dts" }],
 	"files": [
-		"index.tsx",
-		"render.tsx",
-		"render-html.tsx",
+		"index.ts",
+		"render.ts",
+		"render-html.ts",
 		"render-json.ts",
 		"render-summary.ts",
-		"localization.tsx"
+		"localization.ts"
 	]
 }

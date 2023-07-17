@@ -1,12 +1,12 @@
-import { basename } from 'path';
+import { basename, join } from 'path';
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 import { EMPTY, concat, observable, mergeMap, of } from '@cxl/rx';
 import { Output } from '@cxl/source';
 
-import { BuildConfiguration, build } from './builder.js';
+import { BuildConfiguration, build, exec } from './builder.js';
 import { docs, pkg, readPackage, readme } from './package.js';
-import { file, minify } from './file.js';
+import { file, minifyDir, minify } from './file.js';
 import { eslint } from './lint.js';
 import { tsconfig } from './tsc.js';
 
@@ -18,6 +18,50 @@ export function minifyIf(filename: string) {
 	);
 }
 
+export function generateTestFile(
+	dirName: string,
+	pkgName: string,
+	testFile: string
+) {
+	return `<!DOCTYPE html>
+<title>${pkgName} Test Suite</title>
+<script type="module" src="/cxl/dist/tester/require-browser.js"></script>
+<script type="module">
+	require.replace = function (path) {
+		return path.replace(
+			/^@j5g3\\/(.+)/,
+			(str, p1) =>
+				\`/j5g3/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
+		)
+		.replace(
+			/^@cxl\\/workspace\\.(.+)/,
+			(str, p1) =>
+				\`/cxl.app/dist/$\{
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
+		)
+		.replace(
+			/^@cxl\\/(ui.*)/,
+			(str, p1) =>
+				\`/ui/dist/$\{
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
+		)
+		.replace(
+			/^@cxl\\/(.+)/,
+			(str, p1) =>
+				\`/cxl/dist/$\{
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
+		);
+	};
+	const browserRunner = require('/cxl/dist/tester/browser-runner.js').default;
+
+	const suite = require('${testFile}').default;
+	browserRunner.run([suite], '../../${dirName}/spec');
+</script>`;
+}
+
 export function buildCxl(...extra: BuildConfiguration[]) {
 	const packageJson = readPackage();
 	const cwd = process.cwd();
@@ -26,6 +70,8 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 	if (!outputDir) throw new Error('No outDir field set in tsconfig.json');
 
 	const dirName = basename(outputDir);
+	const tester = join(__dirname, '../tester');
+	const isBrowser = !!packageJson.browser;
 	return build(
 		{
 			target: 'clean',
@@ -46,44 +92,27 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 				file('test.html', 'test.html').catchError(() =>
 					of({
 						path: 'test.html',
-						source: Buffer.from(`<!DOCTYPE html>
-<script type="module" src="/cxl/dist/tester/require-browser.js"></script>
-<script type="module">
-	require.replace = function (path) {
-		return path.replace(
-			/^@cxl\\/dbg\\.(.+)/,
-			(str, p1) =>
-				\`/debuggerjs/dist/$\{
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}\`
-		).replace(
-			/^@j5g3\\/(.+)/,
-			(str, p1) =>
-				\`/j5g3/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
-		)
-		.replace(
-			/^@cxl\\/workspace\\.(.+)/,
-			(str, p1) =>
-				\`/cxl.app/dist/$\{
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}\`
-		)
-		.replace(
-			/^@cxl\\/(.+)/,
-			(str, p1) =>
-				\`/cxl/dist/$\{
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}\`
-		);
-	};
-	const browserRunner = require('/cxl/dist/tester/browser-runner.js').default;
-
-	const suite = require('./test.js').default;
-	browserRunner.run([suite], '../../${dirName}/spec');
-</script>`),
+						source: Buffer.from(
+							generateTestFile(
+								dirName,
+								packageJson.name,
+								'./test.js'
+							)
+						),
 					})
 				),
 				tsconfig('tsconfig.test.json'),
+			],
+		},
+		{
+			target: 'test',
+			outputDir,
+			tasks: [
+				exec(
+					`cd ${outputDir} && node ${tester} --baselinePath=../../${dirName}/spec${
+						isBrowser ? '' : ' --node'
+					}`
+				),
 			],
 		},
 		{
@@ -108,12 +137,13 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 						target: 'package',
 						outputDir: outputDir + '/amd',
 						tasks: [
-							tsconfig('tsconfig.amd.json'),
-							packageJson.browser
-								? file(`${outputDir}/amd/index.js`).pipe(
-										minify()
-								  )
-								: EMPTY,
+							concat(
+								tsconfig('tsconfig.amd.json'),
+								minifyDir(outputDir + '/amd', {
+									sourceMap: false,
+									changePath: false,
+								})
+							),
 						],
 					},
 			  ]
@@ -124,12 +154,13 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 						target: 'package',
 						outputDir: outputDir + '/mjs',
 						tasks: [
-							tsconfig('tsconfig.mjs.json'),
-							packageJson.browser
-								? file(`${outputDir}/mjs/index.js`).pipe(
-										minify()
-								  )
-								: EMPTY,
+							concat(
+								tsconfig('tsconfig.mjs.json'),
+								minifyDir(outputDir + '/mjs', {
+									sourceMap: false,
+									changePath: false,
+								})
+							),
 						],
 					},
 			  ]
@@ -173,15 +204,15 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			  ]
 			: []),
 		{
-			target: 'docs',
-			outputDir: '.',
-			tasks: [docs(dirName)],
-		},
-		{
 			target: 'docs-dev',
 			outputDir: '.',
 			tasks: [docs(dirName, true)],
 		},
-		...extra
+		...extra,
+		{
+			target: 'docs',
+			outputDir: '.',
+			tasks: [docs(dirName)],
+		}
 	);
 }

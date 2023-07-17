@@ -1,8 +1,11 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"module": "ESNext",
 		"outDir": "../dist/css/mjs"
 	},
-	"files": ["index.ts", "color.ts"]
+	"files": [
+		"index.ts",
+		"color.ts"
+	]
 }

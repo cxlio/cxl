@@ -35,7 +35,7 @@ import finalizeSuite from './test/finalize.js';
 import zipSuite from './test/zip.js';
 import shareSuite from './test/share.js';
 
-import { suite, spec } from '@cxl/spec';
+import { TestApi, suite, spec } from '@cxl/spec';
 
 declare function setInterval(fn: () => void, interval?: number): number;
 declare function clearInterval(intervalId: number): void;
@@ -92,7 +92,7 @@ export default suite('rx', [
 				//intentionally not using lambda to avoid typescript's this context capture
 				const o = {
 					myValue: 'foo',
-					next(x: any) {
+					next(x: number) {
 						a.equal(this.myValue, 'foo');
 						a.equal(x, 1);
 					},
@@ -108,7 +108,7 @@ export default suite('rx', [
 				//intentionally not using lambda to avoid typescript's this context capture
 				const o = {
 					myValue: 'foo',
-					error(err: any) {
+					error(err: unknown) {
 						a.equal(this.myValue, 'foo');
 						a.equal(err, 'bad');
 					},
@@ -134,13 +134,13 @@ export default suite('rx', [
 			}
 		);
 
-		test('should send errors thrown in the constructor down the error path', a => {
+		test('should send errors thrown in the constructor down the error path', (a: TestApi) => {
 			new Observable<number>(() => {
 				throw new Error('this should be handled');
 			}).subscribe({
 				error(err) {
 					a.ok(err);
-					a.ok(err instanceof Error);
+					a.assert(err instanceof Error);
 					a.equal(err.message, 'this should be handled');
 				},
 			});
@@ -362,7 +362,7 @@ export default suite('rx', [
 				});
 		});
 
-		test('should forward errors', a => {
+		test('should forward errors', (a: TestApi) => {
 			let errorCalled = false;
 
 			of('test')
@@ -375,7 +375,7 @@ export default suite('rx', [
 				.subscribe({
 					error(e) {
 						errorCalled = true;
-						a.ok(e);
+						a.assert(e instanceof Error);
 						a.equal(e.message, 'hi');
 					},
 					complete() {
@@ -490,15 +490,19 @@ export default suite('rx', [
 
 		test('subscribe', it => {
 			it.should('clean out unsubscribed subscribers', a => {
-				const subject = new Subject();
+				class DebugSubject extends Subject<unknown> {
+					observers = new Set<Subscriber<unknown>>();
+				}
+
+				const subject = new DebugSubject();
 				const sub1 = subject.subscribe();
 				const sub2 = subject.subscribe();
 
-				a.equal((subject as any).observers.size, 2);
+				a.equal(subject.observers.size, 2);
 				sub1.unsubscribe();
-				a.equal((subject as any).observers.size, 1);
+				a.equal(subject.observers.size, 1);
 				sub2.unsubscribe();
-				a.equal((subject as any).observers.size, 0);
+				a.equal(subject.observers.size, 0);
 			});
 
 			it.should(
@@ -725,10 +729,10 @@ export default suite('rx', [
 			it.should('not next after error', a => {
 				const error = new Error('wut?');
 				const subject = new Subject<string>();
-				const results: string[] = [];
+				const results: (string | Error)[] = [];
 				subject.subscribe({
 					next: x => results.push(x),
-					error: err => results.push(err),
+					error: err => results.push(err as Error),
 				});
 				subject.next('a');
 				subject.error(error);
@@ -882,10 +886,10 @@ export default suite('rx', [
 		);
 
 		it.should('call complete observer without any arguments', a => {
-			let argument: Array<any> | undefined;
+			let argument: unknown[] | undefined;
 
 			const observer = {
-				complete: (...args: Array<any>) => {
+				complete: (...args: unknown[]) => {
 					argument = args;
 				},
 			};
@@ -993,7 +997,7 @@ export default suite('rx', [
 				next: (x: number) => {
 					a.equal(x, expects[i++]);
 				},
-				error: (err: any) => {
+				error: err => {
 					a.equal(err, 'fooey');
 					done();
 				},
@@ -1027,7 +1031,8 @@ export default suite('rx', [
 
 	spec('operators', they => {
 		they.should('be defined in the prototype of Observable', a => {
-			for (const op in operators) a.ok((Observable.prototype as any)[op]);
+			for (const op in operators)
+				a.ok(Observable.prototype[op as keyof typeof operators]);
 		});
 
 		they.should('unsubscribe from source on complete', a => {

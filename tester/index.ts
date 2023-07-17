@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { writeFile } from 'fs/promises';
 import { spawn, execSync } from 'child_process';
-import { Logger, Parameter, program, parseArgv } from '@cxl/program';
+import { Logger, program, parseArgv } from '@cxl/program';
 
 import runNode from './runner-node.js';
 import runPuppeteer from './runner-puppeteer.js';
@@ -12,34 +12,31 @@ export interface TestRunner {
 	entryFile: string;
 	updateBaselines: boolean;
 	ignoreCoverage: boolean;
-	baselinePath: string;
-	browserUrl: string;
+	baselinePath?: string;
+	browserUrl?: string;
 	amd: boolean;
 	node: boolean;
 	firefox: boolean;
 	log: Logger;
-	inspect: boolean;
+	inspect?: boolean;
 	startServer?: string;
 }
 
-const parameters: Parameter[] = [
-	{ name: 'node', type: 'boolean', help: 'Run tests in node mode.' },
-	{
-		name: 'firefox',
+const parameters = {
+	node: { type: 'boolean', help: 'Run tests in node mode.' },
+	firefox: {
 		help: 'Run tests in firefox through puppeteer.',
 	},
-	// { name: 'entryFile', rest: true },
-	{ name: 'baselinePath', type: 'string', help: 'Baseline Path' },
-	{ name: 'updateBaselines' },
-	{ name: 'ignoreCoverage', help: 'Disable coverage report.' },
-	{ name: 'inspect', help: 'Enable node debugger' },
-	{ name: 'browserUrl', type: 'string', help: 'Browser runner initial URL' },
-	{
-		name: 'startServer',
+	baselinePath: { type: 'string', help: 'Baseline Path' },
+	updateBaselines: { help: 'Update baselines' },
+	ignoreCoverage: { help: 'Disable coverage report.' },
+	inspect: { help: 'Enable node debugger' },
+	browserUrl: { type: 'string', help: 'Browser runner initial URL' },
+	startServer: {
 		type: 'string',
 		help: 'Start a server application while the tests are running',
 	},
-];
+} as const;
 
 function startServer(cmd: string) {
 	const [bin, ...args] = cmd.split(' ');
@@ -52,7 +49,7 @@ function startServer(cmd: string) {
 export default program({}, async ({ log }) => {
 	const args = parseArgv(parameters);
 	const config: TestRunner = {
-		entryFile: args.$ || './test.js',
+		entryFile: args.$[0] || './test.js',
 		updateBaselines: false,
 		ignoreCoverage: false,
 		amd: false,

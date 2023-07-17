@@ -1,29 +1,149 @@
 ///<amd-module name="@cxl/docgen/runtime"/>
 import { dom } from '@cxl/tsx';
 import '@cxl/ui/theme.js';
-import { Augment, Attribute, Component, get } from '@cxl/component';
-import { onAction, onChildrenMutation } from '@cxl/dom';
-import { border, padding } from '@cxl/css';
-import { be, merge } from '@cxl/rx';
-import { Span } from '@cxl/ui/core.js';
-import { Tabs, Tab } from '@cxl/ui/tabs.js';
-import { SelectBox, Option } from '@cxl/ui/select.js';
-import { each, onValue } from '@cxl/template/index.js';
+import { Augment, Component, Span, get } from '@cxl/component';
+import { onChildrenMutation, onLoad, requestJson } from '@cxl/dom';
+import { padding } from '@cxl/css';
+import { be } from '@cxl/rx';
+import { SelectBox } from '@cxl/ui/select.js';
+import { Option } from '@cxl/ui/option.js';
+import { each, onValue, render } from '@cxl/template';
 import { AppbarSearch } from '@cxl/ui/appbar-search.js';
 import { C, Card } from '@cxl/ui/layout.js';
-import { RouterItem } from '@cxl/ui-router';
+import { A, RouterLink, routerState } from '@cxl/ui-router';
 import { css } from '@cxl/ui/theme.js';
-import '@cxl/ui/navigation.js';
-import '@cxl/ui/badge.js';
+import { BlogDemo } from '@cxl/ui/blog.js';
+import { Autocomplete } from '@cxl/ui/autocomplete.js';
+import { ToggleSwitch } from '@cxl/ui/toggle.js';
+import { IconButton } from '@cxl/ui/icon.js';
+import { breakpointKey } from '@cxl/ui/core.js';
+import '@cxl/ui/avatar.js';
 import '@cxl/ui/chip.js';
+import '@cxl/ui/application.js';
+import '@cxl/ui/navbar.js';
+import '@cxl/ui/theme-toggle.js';
+import '@cxl/ui/theme-dark.js';
 
-import type { RuntimeConfig } from './render.js';
+declare const hljs: typeof import('highlight.js').default;
+
+import type { RuntimeConfig, VersionJson } from './render.js';
 
 declare const docgen: RuntimeConfig;
 
 const UserScripts =
 	docgen.userScripts?.map(src => `<script src="${src}"></script>`).join('') ||
 	'';
+
+let activeTarget: Element | undefined;
+
+routerState.subscribe(state => {
+	const hash = state.url.hash;
+	const anchor = hash && state.current?.querySelector(`a[name="${hash}"]`);
+	if (anchor) {
+		const card = anchor.nextElementSibling;
+		activeTarget?.classList.remove('target');
+		if (card) {
+			activeTarget = card;
+			card.classList.add('target');
+		}
+	}
+});
+
+@Augment<DocGrid>(
+	'doc-grd',
+	css({
+		$: {
+			...padding(8, 16, 8, 16),
+			display: 'grid',
+			columnGap: 16,
+			rowGap: 12,
+		},
+		'@small': {
+			$: {
+				gridTemplateColumns: 'repeat(2, minmax(0px, 1fr))',
+			},
+		},
+		'@medium': {
+			$: {
+				gridTemplateColumns: 'repeat(3, minmax(0px, 1fr))',
+			},
+		},
+		'@large': {
+			$: {
+				gridTemplateColumns: 'repeat(4, minmax(0px, 1fr))',
+			},
+		},
+	}),
+	() => <slot />
+)
+export class DocGrid extends Component {}
+
+@Augment<DocCard>(
+	'doc-c',
+	css({
+		$: {
+			marginTop: 16,
+			display: 'block',
+			...padding(16),
+			elevation: 1,
+		},
+	}),
+	$ => {
+		const srclink = $.getAttribute('src');
+		const see =
+			srclink && docgen.repository
+				? ((
+						<a
+							title="See Source"
+							target="_blank"
+							href={`${docgen.repository}/${srclink}`}
+						>
+							{'</>'}
+						</a>
+				  ) as HTMLElement)
+				: undefined;
+		if (see) {
+			see.style.float = 'right';
+			see.style.textDecoration = 'none';
+		}
+		/*const id = $.getAttribute('a');
+		if (id) {
+			const anchor = <a name={`s${id}`} />;
+			$.parentNode?.insertBefore(anchor, $);
+		}*/
+		return (
+			<>
+				{see}
+				<slot />
+			</>
+		);
+	}
+)
+export class DocCard extends Component {}
+
+@Augment(
+	'doc-cd',
+	css({
+		$: { font: 'code', display: 'inline-block' },
+	}),
+	() => <slot />
+)
+export class DocCode extends Component {}
+
+@Augment(
+	'doc-ct',
+	css({
+		$: {
+			marginBottom: 24,
+			whiteSpace: 'pre-wrap',
+			font: 'code',
+			fontSize: 18,
+			display: 'block',
+		},
+	}),
+	() => <slot />
+)
+export class DocCardTitle extends Component {}
 
 @Augment('doc-example', host => (
 	<Span
@@ -43,13 +163,30 @@ export class DocExample extends Component {}
 		select: { verticalAlign: 'bottom' },
 	}),
 	$ => (
-		<SelectBox $={el => onValue(el).tap($.onValue)} className="select">
-			{docgen.versions?.map(v => (
-				<Option selected={docgen.activeVersion === v} value={v}>
-					{v}
-				</Option>
-			))}
-		</SelectBox>
+		<$.Shadow>
+			{docgen.versions &&
+				render(requestJson<VersionJson>(docgen.versions), json =>
+					json.all.length > 1 ? (
+						<SelectBox
+							$={el =>
+								onValue(el).tap(val => $.onValue(String(val)))
+							}
+							className="select"
+						>
+							{json.all.map(v => (
+								<Option
+									selected={docgen.activeVersion === v}
+									value={v}
+								>
+									{v}
+								</Option>
+							))}
+						</SelectBox>
+					) : (
+						<>{docgen.activeVersion}</>
+					)
+				)}
+		</$.Shadow>
 	)
 )
 export class DocVersionSelect extends Component {
@@ -58,198 +195,121 @@ export class DocVersionSelect extends Component {
 	}
 }
 
-@Augment<DocDemo>(
-	'doc-demo',
+@Augment<DocDemo>('doc-demo', $ => {
+	const demo = (<BlogDemo />) as BlogDemo;
+	demo.header =
+		UserScripts +
+		'<style>body{padding:16px 16px 0 16px;background:var(--cxl-background);color:var(--cxl-on-background)}</style>';
+
+	const src = new Text();
+	requestAnimationFrame(() => {
+		const language = $.language;
+		const styles = document.getElementById('styles.css')?.outerHTML;
+		src.textContent = $.childNodes[0].textContent || '';
+		demo.formatter = source =>
+			`${styles}<pre style="margin:0"><code style="min-height:176px;font:var(--cxl-font-code)" class="hljs">` +
+			(language
+				? hljs.highlight(source, { language })
+				: hljs.highlightAuto(source, [
+						'html',
+						'typescript',
+						'javascript',
+						'css',
+				  ])
+			).value +
+			'</code></pre>';
+		demo.appendChild(src);
+	});
+	return demo;
+})
+export class DocDemo extends Component {
+	language?: string;
+}
+
+@Augment(
+	'doc-more',
 	css({
-		$: {
-			display: 'block',
-		},
-		parent: {
-			display: 'none',
-			backgroundColor: 'onSurface12',
-		},
-		container: {
-			display: 'block',
-			borderStyle: 'none',
-			marginLeft: 'auto',
-			marginRight: 'auto',
-			backgroundColor: 'background',
-			width: '100%',
-			height: 160,
-			overflowX: 'hidden',
-			overflowY: 'hidden',
-		},
-		'@small': {
-			container: {
-				width: 320,
-				...border(16, 0, 0, 0),
-				borderColor: 'onSurface12',
-				borderStyle: 'solid',
-			},
-			desktop: {
-				width: '100%',
-				...border(0),
-			},
-		},
-		source: {
-			display: 'none',
-			font: 'monospace',
-			...padding(16),
-			whiteSpace: 'pre-wrap',
-			overflowY: 'auto',
-			minHeight: 160,
-		},
-		visible: { display: 'block' },
-		toolbar: {
-			textAlign: 'right',
-		},
+		$focusWithin: { outline: 'var(--cxl-primary) 1px dashed' },
+		$hover: { outline: 'var(--cxl-primary) 1px dashed' },
 	}),
-	host => {
-		const content$ = be('');
-		const view = get(host, 'view');
-		const iframeClass = be('container');
-
-		function init(parent: HTMLIFrameElement) {
-			const content = host.childNodes[0]?.textContent?.trim() || '';
-			parent.srcdoc = `<!DOCTYPE html><style>body{padding:12px;margin:0;}</style>${UserScripts}${content}`;
-			parent.onload = () => {
-				const observer = new ResizeObserver(() => {
-					const height = parent.contentDocument?.body.scrollHeight;
-					if (height && height > 160)
-						parent.style.height = height + 'px';
-				});
-				if (parent.contentDocument?.body)
-					observer.observe(parent.contentDocument.body);
-			};
-			content$.next(content);
-		}
-
-		function updateView(val: string) {
-			const isDesktop = val === 'desktop';
-			iframeClass.next(isDesktop ? 'container desktop' : 'container');
-		}
-
-		host.bind(get(host, 'view').tap(updateView));
-		const iframeEl = (<iframe title="Demo" />) as HTMLIFrameElement;
-		(iframeEl as any).loading = 'lazy';
-		init(iframeEl);
-		host.bind(onChildrenMutation(host).tap(() => init(iframeEl)));
-		host.bind(iframeClass.tap(val => (iframeEl.className = val)));
-
-		return (
-			<>
-				<Tabs>
-					<Tab
-						$={el =>
-							onAction(el).tap(() => (host.view = 'desktop'))
-						}
-						selected={view.is('desktop')}
-					>
-						Desktop
-					</Tab>
-					<Tab
-						$={el => onAction(el).tap(() => (host.view = 'mobile'))}
-						selected={view.is('mobile')}
-					>
-						Mobile
-					</Tab>
-					<Tab
-						$={el => onAction(el).tap(() => (host.view = 'source'))}
-						selected={view.is('source')}
-					>
-						Source
-					</Tab>
-				</Tabs>
-				<Span
-					className={view.map(v =>
-						v === 'source' ? 'parent' : 'parent visible'
-					)}
-				>
-					{iframeEl}
-				</Span>
-				<Span
-					className={view.map(v =>
-						v === 'source' ? 'source visible' : 'source'
-					)}
-				>
-					{content$}
-				</Span>
-			</>
+	() => {
+		const toggle = (
+			<ToggleSwitch>
+				<slot slot="on" />
+				<slot name="off" slot="off" />
+			</ToggleSwitch>
+		) as ToggleSwitch;
+		toggle.appendChild(
+			<IconButton
+				title={get(toggle, 'opened').map(v =>
+					v ? 'Collapse' : 'Expand'
+				)}
+				width={20}
+				icon={get(toggle, 'opened').map(v =>
+					v ? 'unfold_less' : 'unfold_more'
+				)}
+			/>
 		);
+		return toggle;
 	}
 )
-export class DocDemo extends Component {
-	@Attribute()
-	view: 'desktop' | 'mobile' | 'source' = 'desktop';
+export class DocMore extends Component {}
 
-	/**
-	 * Enable debug mode
-	 */
-	@Attribute()
-	debug = false;
-}
+@Augment('doc-a')
+export class DocLink extends A {}
 
 @Augment(
 	'doc-search',
 	css({
-		$: { position: 'relative' },
-		card: {
-			display: 'none',
-			position: 'absolute',
-			right: 0,
-			maxHeight: 200,
-			overflowY: 'auto',
+		$: { position: 'relative', marginLeft: 'auto' },
+		'@medium': {
+			$: { marginLeft: 0, flexGrow: 1 },
+			search: {
+				marginLeft: 0,
+				minWidth: 200,
+				width: '50%',
+			},
 		},
-		card$focusWithin: { display: 'block' },
 	}),
 	$ => {
 		const results = be<Iterable<Element>>([]);
 		let router: HTMLElement | null;
+		const search = (
+			<AppbarSearch className="search" dense />
+		) as AppbarSearch;
 
 		const card = (
-			<Card
-				$={el => onAction(el).raf(() => $.blur())}
-				pad={16}
-				className="card"
-				color="surface"
-			>
-				{each(
-					results,
-					(r: any) => (
-						<RouterItem href={r.dataset.path}>
-							{r.dataset.title}
-						</RouterItem>
-					),
-					() => (
-						<C pad={16}>No Results Found</C>
-					)
+			<Autocomplete
+				input={breakpointKey($).map(bp =>
+					bp === 'xsmall' ? search.mobileInput : search.desktopInput
 				)}
-			</Card>
+			>
+				{each(results, r => (
+					<RouterLink href={(r as HTMLElement).dataset.path}>
+						<Option value={(r as HTMLElement).dataset.title}>
+							{(r as HTMLElement).dataset.title}
+						</Option>
+					</RouterLink>
+				))}
+				<C slot="empty" pad={16}>
+					No Results Found
+				</C>
+			</Autocomplete>
 		) as Card;
+		card.style.maxHeight = '50%';
 
-		function search(val: string) {
-			//card.style.display = val ? 'block' : 'none';
-			if (val) {
-				router =
-					router || (router = document.querySelector('cxl-router'));
-				if (!router) return;
-				const result = router.querySelectorAll(
-					`[data-title*="${val}"i]`
-				);
-				results.next(result);
-			} else results.next([]);
+		function buildSearch() {
+			router ||= router = document.querySelector('cxl-router');
+			if (!router) return;
+			const result = router.querySelectorAll(`[data-title]`);
+			results.next(result);
 		}
+
+		$.bind(onLoad().tap(buildSearch));
 
 		return (
 			<>
-				<AppbarSearch
-					$={el =>
-						merge(
-							//on(el, 'blur').tap(() => (card.style.display = '')),
-							get(el, 'value').raf(search)
-						)
-					}
-				/>
+				{search}
 				{card}
 			</>
 		);

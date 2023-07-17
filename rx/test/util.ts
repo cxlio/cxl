@@ -1,4 +1,9 @@
-import { Observable, BehaviorSubject, Subject, toPromise } from '../index.js';
+import {
+	Observable,
+	BehaviorSubject,
+	Subject,
+	firstValueFrom,
+} from '../index.js';
 import { TestApi } from '@cxl/spec';
 
 interface Log {
@@ -45,7 +50,7 @@ function logOperator() {
 		events.push(ev);
 	}
 
-	return (source: Observable<string>) =>
+	return (source: Observable<unknown>) =>
 		new Observable<Log>(subscriber => {
 			const eofSub = eof$.subscribe(t => {
 				flush(t);
@@ -55,7 +60,7 @@ function logOperator() {
 			source.subscribe(
 				{
 					next(val) {
-						emit(val);
+						emit(String(val));
 					},
 					error() {
 						emit('#');
@@ -80,13 +85,17 @@ function logOperator() {
 		});
 }
 
-export function logEvents(observable: Observable<any>) {
-	const result = toPromise<Log>(observable.pipe(logOperator()));
+export function logEvents(observable: Observable<unknown>) {
+	const result = firstValueFrom(observable.pipe(logOperator()));
 	scheduler.run();
 	return result;
 }
 
-export function expectLog(a: TestApi, obs: Observable<any>, events: string) {
+export function expectLog(
+	a: TestApi,
+	obs: Observable<unknown>,
+	events: string
+) {
 	return logEvents(obs).then(result => {
 		a.equal(result.events, events);
 		return result;
@@ -112,7 +121,11 @@ class ColdObservable extends Observable<string> {
 		this.time = scheduler.value;
 	}
 
-	constructor(stream: string, values?: any, error?: any) {
+	constructor(
+		stream: string,
+		values?: Record<string, string>,
+		error?: unknown
+	) {
 		super(subs => {
 			this.log('^');
 			let emitUnsub = true;
@@ -153,10 +166,14 @@ class ColdObservable extends Observable<string> {
 	}
 }
 
-export function cold(stream: string, values?: any, error?: any) {
+export function cold(
+	stream: string,
+	values?: Record<string, string>,
+	error?: unknown
+) {
 	return new ColdObservable(stream, values, error);
 }
 
-export function replaceValues(src: string, values: Record<string, any>) {
+export function replaceValues(src: string, values: Record<string, string>) {
 	return src.replace(/./g, c => values[c] || c);
 }

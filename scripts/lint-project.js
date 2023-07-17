@@ -7,8 +7,7 @@ const cp = require('child_process');
 
 cp.execSync('npm run build --prefix build', 'utf8');
 
-const { readJson } = require('../dist/server');
-const { program } = require('../dist/server/program');
+const { program, readJson } = require('../dist/program');
 
 const BugsUrl = 'https://github.com/cxlio/cxl/issues';
 

@@ -1,12 +1,10 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"module": "amd",
 		"outDir": "../dist/component/amd"
 	},
-	"files": [
-		"index.ts"
-	],
+	"files": ["index.ts"],
 	"references": [
 		{
 			"path": "../rx/tsconfig.amd.json"

@@ -33,7 +33,8 @@ const navigator =
 		: { language: 'en-US', platform: 'nodejs' };
 
 const IS_MAC = /Mac|iPod|iPhone|iPad/;
-const PARSE_KEY = /(shift|ctrl|control|alt|option|meta|command|cmd|mod|[^\s+]+)(\s*\+|\s)?/g;
+const PARSE_KEY =
+	/(shift|ctrl|control|alt|option|meta|command|cmd|mod|[^\s+]+)(\s*\+|\s)?/g;
 const SHIFT_MAP = {
 	'/': '?',
 	'.': '>',
@@ -76,6 +77,7 @@ export const TranslateKey: Record<string, string> = {
 	ArrowLeft: 'left',
 	ArrowRight: 'right',
 	Escape: 'esc',
+	' ': 'space',
 };
 
 function keyboardEventToString(
@@ -200,6 +202,9 @@ export function normalize(key: string, layout = getDefaultLayout()): string {
 	const sequence = parseKey(key, layout);
 	let i = sequence.length;
 	while (i--)
-		(sequence as any)[i] = keyboardEventToString(sequence[i], layout);
+		(sequence as unknown as string[])[i] = keyboardEventToString(
+			sequence[i],
+			layout
+		);
 	return sequence.join(' ');
 }

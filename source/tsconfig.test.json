@@ -1,8 +1,17 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/source"
 	},
-	"files": ["test.ts"],
-	"references": [{ "path": "." }, { "path": "../tester" }]
+	"files": [
+		"test.ts"
+	],
+	"references": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../tester"
+		}
+	]
 }

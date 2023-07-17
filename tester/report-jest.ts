@@ -24,7 +24,7 @@ export interface RootResult {
 		end: epoch;
 	};
 	testFilePath: string;
-	coverage: any;
+	coverage: unknown;
 }
 
 /**

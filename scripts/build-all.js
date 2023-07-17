@@ -6,7 +6,7 @@ cp.execSync('npm run build --prefix build');
 
 const { sh } = require('../dist/build');
 const { checkNpms } = require('../dist/build/npm');
-const { readJson } = require('../dist/server');
+const { readJson } = require('../dist/program');
 const stats = {
 	packages: [],
 };
@@ -19,7 +19,7 @@ async function getScriptSize(dir, pkg) {
 }
 
 async function build(dir) {
-	const pkg = await readJson(path.join(dir, 'package.json'));
+	const pkg = await readJson(path.join(dir, 'package.json'), false);
 
 	if (!pkg) return;
 
@@ -68,8 +68,9 @@ module.exports = fs.readdir('.').then(async all => {
 		}
 	}
 	stats.totalTime = Date.now() - start;
-	await fs.writeFile('./dist/stats.json', JSON.stringify(stats), 'utf8');
-	await fs.writeFile('./docs/stats.json', JSON.stringify(stats), 'utf8');
+	const statsJson = JSON.stringify(stats);
+	await fs.writeFile('./dist/stats.json', statsJson, 'utf8');
+	await sh('mkdir -p docs');
 	await sh('node dist/cli/build-data');
 	await sh('cp scripts/build-report.html dist/index.html');
 	console.log(`Finished in ${stats.totalTime}ms`);

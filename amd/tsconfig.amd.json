@@ -1,10 +1,10 @@
 {
 	"compilerOptions": {
 		"target": "es2020",
-		"outFile": "../dist/amd/amd/index.js",
+		"outFile": "../dist/amd/index.js",
 		"module": "amd",
-		"outDir": "../dist/amd/amd"
+		"outDir": "../dist/amd"
 	},
 	"files": ["index.ts"],
-	"extends": "../tsconfig.json"
+	"extends": "./tsconfig.json"
 }

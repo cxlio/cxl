@@ -74,7 +74,7 @@ function onWatchChange(
 		err => {
 			if (err.code === 'ENOENT') {
 				const event = { path: basePath, type: EventType.Remove };
-				if (eventPath) subs.error({ code: DowngradeError, event });
+				if (eventPath) subs.error({ code: 'DOWNGRADE', event });
 				else subs.next(event);
 			} else subs.error(err);
 		}
@@ -85,7 +85,7 @@ function createWatcher(path: string, options: WatchOptions) {
 	return new Observable<FileEvent>(subs => {
 		const events: Record<string, NodeJS.Timeout> = {};
 
-		function onChange(_: any, eventFile: string | Buffer) {
+		function onChange(_: unknown, eventFile: string | Buffer) {
 			if (events[path]) clearTimeout(events[path]);
 			events[path] = setTimeout(() => {
 				onWatchChange(path, eventFile.toString(), subs);
@@ -103,14 +103,13 @@ function createWatcher(path: string, options: WatchOptions) {
 	});
 }
 
-const DowngradeError = {};
-const UpgradeError = {};
+type WatcherError = { code: 'DOWNGRADE' | 'UPGRADE'; event: FileEvent };
 
 function createPoller(path: string, options: WatchOptions) {
 	return poll(path, options.pollInterval).map(stat => {
 		if (stat) {
 			throw {
-				code: UpgradeError,
+				code: 'UPGRADE',
 				event: { path, type: EventType.Change, stat },
 			};
 		} else return { path, type: EventType.Remove };
@@ -118,17 +117,19 @@ function createPoller(path: string, options: WatchOptions) {
 }
 
 function catchWatchError(fullpath: string, options: WatchOptions) {
-	return function result(err: any): any {
-		const code = err?.code;
-		if (code === UpgradeError) {
+	return function result(err: unknown): Observable<FileEvent> {
+		const watcherError = err as WatcherError;
+		const code = watcherError?.code;
+
+		if (code === 'UPGRADE') {
 			return merge(
 				createWatcher(fullpath, options).catchError(result),
-				of(err.event)
+				of(watcherError.event)
 			);
-		} else if (code === DowngradeError) {
+		} else if (code === 'DOWNGRADE') {
 			return merge(
 				createPoller(fullpath, options).catchError(result),
-				of(err.event)
+				of(watcherError.event)
 			);
 		} else if (code === 'ENOENT') {
 			return createPoller(fullpath, options).catchError(result);

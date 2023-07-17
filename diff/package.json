@@ -3,7 +3,7 @@
 	"version": "0.0.5",
 	"description": "String diff tool",
 	"license": "Apache-2.0",
-	"browser": "amd/index.min.js",
+	"browser": "amd/index.js",
 	"main": "index.js",
 	"scripts": {
 		"test": "npm run build && cd ../dist/diff && node ../tester --baselinePath=../../diff/spec",

@@ -1,12 +1,12 @@
-import { dirname, join, resolve } from 'path';
+import { dirname, relative, resolve } from 'path';
 import { existsSync, utimesSync, writeFileSync } from 'fs';
 import { SpawnOptions, spawn, execSync } from 'child_process';
 
-import { Application, sh } from '@cxl/server';
+import { Logger, colors, sh, log, operation } from '@cxl/program';
 import { Observable } from '@cxl/rx';
 import { Output } from '@cxl/source';
 import { tscVersion } from './tsc.js';
-import { BASEDIR, Package, readPackage } from './package.js';
+import { BASEDIR, readPackage } from './package.js';
 
 export interface BuildConfiguration {
 	target?: string;
@@ -15,6 +15,9 @@ export interface BuildConfiguration {
 }
 export type Task = Observable<Output>;
 
+const AppName = colors.green('build');
+export const appLog = log.bind(null, AppName);
+
 function kb(bytes: number) {
 	return (bytes / 1000).toFixed(2) + 'kb';
 }
@@ -22,37 +25,28 @@ function kb(bytes: number) {
 class Build {
 	outputDir: string;
 
-	constructor(private builder: Builder, private config: BuildConfiguration) {
+	constructor(private log: Logger, private config: BuildConfiguration) {
 		this.outputDir = config.outputDir || '.';
 	}
 
-	private writeOutput(result: Output) {
-		const outFile = resolve(this.outputDir, result.path);
-		const source = result.source;
-		const outputDir = dirname(outFile);
-		if (!existsSync(outputDir)) execSync(`mkdir -p ${outputDir}`);
-		writeFileSync(outFile, source);
-		if (result.mtime) utimesSync(outFile, result.mtime, result.mtime);
-		return result;
-	}
+	private async runTask(task: Task) {
+		await task.tap(result => {
+			const outFile = resolve(this.outputDir, result.path);
+			const source = result.source;
+			const outputDir = dirname(outFile);
+			if (!existsSync(outputDir)) execSync(`mkdir -p ${outputDir}`);
+			writeFileSync(outFile, source);
+			if (result.mtime) utimesSync(outFile, result.mtime, result.mtime);
 
-	private runTask(task: Task) {
-		return this.builder.log(
-			(output: Output) =>
-				`${join(this.outputDir, output.path)} ${kb(
-					(output.source || '').length
-				)}`,
-			task.tap(result => this.writeOutput(result))
-		);
+			const printPath = relative(process.cwd(), outFile);
+			this.log(`${printPath} ${kb((result.source || '').length)}`);
+		});
 	}
 
 	async build() {
 		try {
-			const pkg = this.builder.modulePackage;
-			if (!pkg) throw new Error('Invalid package');
-
-			const target = this.config.target || `${pkg.name} ${pkg.version}`;
-			this.builder.log(`target ${target}`);
+			const target = this.config.target || '';
+			if (target) this.log(`target ${target}`);
 
 			execSync(`mkdir -p ${this.outputDir}`);
 
@@ -60,57 +54,71 @@ class Build {
 				this.config.tasks.map(task => this.runTask(task))
 			);
 		} catch (e) {
-			this.builder.log(e as any);
+			console.log('BUILD: ', e);
 			throw 'Build finished with errors';
 		}
 	}
 }
 
-export class Builder extends Application {
-	name = '@cxl/build';
-	baseDir?: string;
-	outputDir = '';
-	modulePackage?: Package;
-	hasErrors = false;
-
-	protected async run() {
-		this.modulePackage = readPackage();
-
-		if (BASEDIR !== process.cwd()) {
-			process.chdir(BASEDIR);
-			this.log(`chdir "${BASEDIR}"`);
-		}
-
-		this.log(`typescript ${tscVersion}`);
-	}
-
-	async build(config: BuildConfiguration): Promise<void> {
-		try {
-			if (config.target && !process.argv.includes(config.target)) return;
-			await new Build(this, config).build();
-		} catch (e) {
-			this.handleError(e);
-		}
-	}
-}
-
-export const builder = new Builder();
+/*async function buildTarget(config: BuildConfiguration) {
+	if (config.target && !process.argv.includes(config.target)) return;
+	await new Build(appLog, config).build();
+}*/
 
 export async function build(...targets: BuildConfiguration[]) {
 	if (!targets) throw new Error('Invalid configuration');
-	if (!builder.started) await builder.start();
 
-	return await targets.reduce(
-		(result, config) => result.then(() => builder.build(config)),
+	if (BASEDIR !== process.cwd()) {
+		process.chdir(BASEDIR);
+		appLog(`chdir "${BASEDIR}"`);
+	}
 
+	const pkg = readPackage();
+
+	appLog(`${pkg.name} ${pkg.version}`);
+	appLog(`typescript ${tscVersion}`);
+
+	const runTargets = [undefined, ...process.argv];
+
+	try {
+		for (const targetId of runTargets) {
+			for (const target of targets)
+				if (target.target === targetId)
+					await new Build(appLog, target).build();
+		}
+	} catch (e) {
+		console.error(e);
+		process.exit(1);
+	}
+
+	/*return await targets.reduce(
+		(result, config) =>
+			result
+				.then(() => buildTarget(config))
+				.catch(e => {
+					console.error(e);
+					process.exit(1);
+				}),
 		Promise.resolve()
-	);
+	);*/
+}
+
+function formatTime(time: bigint) {
+	const s = Number(time) / 1e9,
+		str = s.toFixed(4) + 's';
+	// Color code based on time,
+	return s > 0.1 ? (s > 0.5 ? colors.red(str) : colors.yellow(str)) : str;
 }
 
 export function exec(cmd: string) {
-	return new Observable<void>(subs => {
-		builder.log(`sh ${cmd}`, sh(cmd, { timeout: 10000 })).then(
-			() => subs.complete(),
+	return new Observable<never>(subs => {
+		appLog(`sh ${cmd}`);
+		operation(sh(cmd, {})).then(
+			result => {
+				appLog(`sh ${cmd}`, formatTime(result.time));
+				if (result.result) console.log(result.result);
+				subs.complete();
+			},
 			e => {
 				subs.error(e);
 			}

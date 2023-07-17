@@ -14,15 +14,32 @@ function groupEnd() {
 	output += '</dd></dl>';
 }
 
+const ENTITIES_REGEX = /[&<>]/g,
+	ENTITIES_MAP = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+	};
+
+export function escapeHtml(str: string) {
+	return (
+		str &&
+		str.replace(
+			ENTITIES_REGEX,
+			e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP] || ''
+		)
+	);
+}
+
 function error(msg: string | Error) {
-	output += '<li style="background-color:#ffcdd2">';
+	output += '<div style="background-color:#ffcdd2;padding:8px">';
 	if (msg instanceof Error) {
 		output += `
-			<p style="white-space:pre">${msg.message}</p>
-			<pre>${msg.stack}</pre>
+			<p style="white-space:pre">${escapeHtml(msg.message)}</p>
+			<pre>${escapeHtml(msg.stack || '')}</pre>
 		`;
-	} else output += `<p style="white-space:pre-wrap">${msg}</p>`;
-	output += '</li>';
+	} else output += `<p style="white-space:pre-wrap">${escapeHtml(msg)}</p>`;
+	output += '</div>';
 }
 
 function success(): string {
@@ -41,10 +58,10 @@ function printError(fail: Result) {
 }
 
 function printResult(result: Result) {
-	require('@cxl/workspace.ui/image-diff.js');
 	output += result.success ? success() : failure();
 	const data = result.data;
 	if (data?.type === 'figure') {
+		require('@cxl/workspace.ui/image-diff.js');
 		output += `<div class="thumb">${data.html}</div>
 		<cxl-image-diff src1="spec/${data.name}.png" src2="${baselinePath}/${data.name}.png"></cxl-image-diff>`;
 	}
@@ -111,7 +128,13 @@ async function onClick(suite: Test[], ev: Event) {
 	}
 }
 
-(window as any).__cxlRunner = (data: any) => {
+declare global {
+	interface Window {
+		__cxlRunner: (data: unknown) => void;
+	}
+}
+
+window.__cxlRunner = data => {
 	return {
 		success: true,
 		message: 'Screenshot should match baseline',

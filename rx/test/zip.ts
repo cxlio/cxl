@@ -92,9 +92,9 @@ export default spec('zip', it => {
 	});
 
 	it.should('work with two sources that eventually raise errors', a => {
-		const e1 = cold('--w-----#----', { w: 1 }, 'err1');
+		const e1 = cold('--w-----#----', { w: '1' }, 'err1');
 		const e1subs = '^       !';
-		const e2 = cold('-----z-----#-', { z: 2 }, 'err2');
+		const e2 = cold('-----z-----#-', { z: '2' }, 'err2');
 		const e2subs = '^       !';
 		const expected = '-----1,2--#';
 

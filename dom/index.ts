@@ -4,6 +4,7 @@ import {
 	EMPTY,
 	Observable,
 	Subject,
+	Subscriber,
 	Subscription,
 	be,
 	concat,
@@ -13,10 +14,19 @@ import {
 	merge,
 } from '@cxl/rx';
 
+declare global {
+	interface Node {
+		$$attributeObserver?: AttributeObserver;
+		$$childrenObserver?: ChildrenObserver;
+	}
+}
+
 export type ElementContent = string | Node | undefined;
 export type TemplateContent = string | Element | HTMLTemplateElement | NodeList;
 
-export function empty(el: Element) {
+export interface CustomEventMap {}
+
+export function empty(el: Element | DocumentFragment) {
 	let c: Node;
 	while ((c = el.childNodes[0])) el.removeChild(c);
 }
@@ -31,16 +41,21 @@ export function on<K extends keyof WindowEventMap>(
 	event: K,
 	options?: AddEventListenerOptions
 ): Observable<WindowEventMap[K]>;
-export function on<K extends keyof GlobalEventHandlersEventMap>(
+export function on<K extends keyof HTMLElementEventMap>(
 	element: EventTarget,
 	event: K,
 	options?: AddEventListenerOptions
-): Observable<GlobalEventHandlersEventMap[K]>;
-export function on(
+): Observable<HTMLElementEventMap[K]>;
+export function on<K extends keyof CustomEventMap>(
+	element: EventTarget | Window,
+	event: K,
+	options?: AddEventListenerOptions
+): Observable<CustomEvent<CustomEventMap[K]>>;
+/*export function on(
 	element: EventTarget | Window,
 	event: string,
 	options?: AddEventListenerOptions
-): Observable<CustomEvent>;
+): Observable<CustomEvent>;*/
 export function on(
 	element: EventTarget | Window,
 	event: string,
@@ -60,12 +75,13 @@ export function on(
 
 export function onKeypress(el: Element | Window, key?: string) {
 	return on(el, 'keydown').filter(
-		(ev: KeyboardEvent) => !key || ev.key.toLowerCase() === key
+		// ev.key can be undefined in chrome, when autofilling
+		(ev: KeyboardEvent) => !key || ev.key?.toLowerCase() === key
 	);
 }
 
 export function onAction(el: Element) {
-	return merge(on(el, 'click'), onKeypress(el, 'enter'));
+	return on(el, 'click');
 }
 
 export function onReady() {
@@ -88,8 +104,8 @@ export function onLoad() {
 	);
 }
 
-export function onFontsReady(): Observable<void> {
-	return from((document as any).fonts.ready);
+export function onFontsReady(): Observable<FontFaceSet> {
+	return from(document.fonts.ready);
 }
 
 const shadowConfig: ShadowRootInit = { mode: 'open' };
@@ -97,32 +113,51 @@ export function getShadow(el: Element) {
 	return el.shadowRoot || el.attachShadow(shadowConfig);
 }
 
-export function setAttribute(el: Element, attr: string, val: any) {
+export function setAttribute(el: Element, attr: string, val: unknown) {
 	if (val === false || val === null || val === undefined) val = null;
 	else if (val === true) val = '';
-	else val = val.toString();
 
 	if (val === null) el.removeAttribute(attr);
-	else el.setAttribute(attr, val);
+	else el.setAttribute(attr, String(val));
 
 	return val;
 }
 
-export function trigger(el: EventTarget, event: string, detail?: any) {
-	const ev = new CustomEvent(event, { detail: detail, bubbles: true });
+export function trigger<K extends keyof CustomEventMap>(
+	el: EventTarget,
+	event: K,
+	options: CustomEventInit<CustomEventMap[K]>
+): void;
+export function trigger<
+	K extends keyof HTMLElementEventMap | keyof WindowEventMap
+>(el: EventTarget, event: K, options?: CustomEventInit): void;
+export function trigger<T extends HTMLElement, K extends string>(
+	el: T,
+	event: K,
+	options: CustomEventInit<EventDetail<T, K>>
+): void;
+export function trigger(
+	el: EventTarget,
+	event: string,
+	options?: CustomEventInit
+) {
+	const ev = new CustomEvent(event, options);
 	el.dispatchEvent(ev);
 }
 
-export interface MutationEvent<T extends EventTarget = EventTarget> {
-	type: 'added' | 'removed' | 'attribute';
-	target: T;
-	value: any;
-}
+export type MutationEvent<T extends EventTarget = EventTarget> =
+	| {
+			type: 'added' | 'removed';
+			target: T;
+			value: Node;
+	  }
+	| {
+			type: 'attribute';
+			target: T;
+			value: unknown;
+	  };
 
 export class AttributeObserver extends Subject<MutationEvent> {
-	private $value: any;
-	private $checked: any;
-
 	observer?: MutationObserver;
 	bindings?: Subscription[];
 
@@ -132,43 +167,26 @@ export class AttributeObserver extends Subject<MutationEvent> {
 		);
 	}
 
-	$onEvent() {
-		const el = this.element as any;
-
-		if (el.value !== this.$value) {
-			this.$value = el.value;
-			this.trigger('value');
-		}
-
-		if (el.checked !== this.$checked) {
-			this.$checked = el.checked;
-			this.trigger('checked');
-		}
-	}
-
-	$initializeNative(element: Element) {
+	$initializeNative(element: Node) {
 		this.observer = new MutationObserver(this.$onMutation.bind(this));
 		this.observer.observe(element, { attributes: true });
-
-		this.bindings = [
-			on(element, 'change').subscribe(this.$onEvent.bind(this)),
-		];
 	}
 
 	constructor(public element: Node) {
 		super();
 
-		if ((element as any).$$attributeObserver)
-			return (element as any).$$attributeObserver;
+		if (element.$$attributeObserver) return element.$$attributeObserver;
 
 		this.element = element;
-		(element as any).$$attributeObserver = this;
+		element.$$attributeObserver = this;
 	}
 
-	protected onSubscribe(subscription: any) {
-		const el = this.element as any;
+	protected onSubscribe(
+		subscription: Subscriber<MutationEvent<EventTarget>>
+	) {
+		const el = this.element;
 		// Use mutation observer for native dom elements
-		if (!el.$view && !this.observer) this.$initializeNative(el);
+		if (!this.observer) this.$initializeNative(el);
 		const unsubscribe = super.onSubscribe(subscription);
 
 		return () => {
@@ -194,7 +212,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 	}
 }
 
-export function observeChildren(el: Element) {
+export function observeChildren(el: Element): Observable<void> {
 	let children: NodeListOf<ChildNode>;
 	return merge(
 		defer(() => {
@@ -209,7 +227,7 @@ export function observeChildren(el: Element) {
 			}
 			return EMPTY;
 		})
-	);
+	) as unknown as Observable<void>;
 }
 
 export function onChildrenMutation(el: Element) {
@@ -226,11 +244,10 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 	constructor(private element: Element) {
 		super();
 
-		if ((element as any).$$childrenObserver)
-			return (element as any).$$childrenObserver;
+		if (element.$$childrenObserver) return element.$$childrenObserver;
 
 		this.element = element;
-		(element as any).$$childrenObserver = this;
+		element.$$childrenObserver = this;
 	}
 
 	$handleEvent(ev: MutationRecord) {
@@ -241,13 +258,15 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 			this.next({ type: 'removed', target, value });
 	}
 
-	protected onSubscribe(subscription: any) {
+	protected onSubscribe(
+		subscription: Subscriber<MutationEvent<EventTarget>>
+	) {
 		const el = this.element;
 
 		if (!this.observer) {
-			this.observer = new MutationObserver(events =>
-				events.forEach(this.$handleEvent, this)
-			);
+			this.observer = new MutationObserver(events => {
+				events.forEach(this.$handleEvent, this);
+			});
 			this.observer.observe(el, { childList: true });
 		}
 
@@ -270,12 +289,12 @@ export function onHashChange() {
 	);
 }
 
-let pushSubject: BehaviorSubject<any>;
+let pushSubject: BehaviorSubject<unknown>;
 export function onHistoryChange() {
 	if (!pushSubject) {
 		pushSubject = be(history.state);
 		const old = history.pushState;
-		history.pushState = function (...args: any) {
+		history.pushState = function (...args) {
 			const result = old.apply(this, args);
 			if (history.state) history.state.lastAction = 'push';
 			pushSubject.next(history.state);
@@ -327,19 +346,17 @@ export function findNextNode<T extends ChildNode>(
 }
 
 export function findNextNodeBySelector(
+	host: Element,
 	el: Element,
 	selector: string,
-	direction:
-		| 'nextElementSibling'
-		| 'previousElementSibling' = 'nextElementSibling'
+	direction = 1
 ) {
-	let node = el[direction];
+	const all = Array.from(host.querySelectorAll(selector));
+	let i = all.indexOf(el);
+	if (i === -1) return null;
+	if (i + direction >= all.length) i = all.length - 1;
 
-	while (node) {
-		if (node.matches(selector)) return node;
-		node = node[direction];
-	}
-	return null;
+	return all[i + direction] || null;
 }
 
 export function onResize(el: Element) {
@@ -368,7 +385,7 @@ export function fileReaderString(file: Blob) {
 }
 
 export function onMutation(
-	target: Element,
+	target: Node,
 	options: MutationObserverInit = { attributes: true, childList: true }
 ) {
 	return new Observable<MutationEvent>(subs => {
@@ -408,3 +425,96 @@ export function onVisible(target: Element) {
 export function isHidden(target: HTMLElement) {
 	return target.offsetParent === null;
 }
+
+export function isFocusable(el: HTMLElement) {
+	return (
+		(el.tabIndex !== -1 || el.contentEditable === 'true') &&
+		!(el as HTMLInputElement).disabled
+	);
+	/*return true;
+	return el.shadowRoot?.children.length
+		? !!findFocusable(el.shadowRoot)
+		: false;*/
+}
+
+export function findFocusable(
+	host: Element | ShadowRoot
+): HTMLElement | undefined {
+	for (const child of host.children) {
+		if (child instanceof HTMLSlotElement) {
+			const assigned = child.assignedElements();
+			for (const item of assigned) {
+				const result = findFocusable(item);
+				if (result) return result;
+			}
+		} else if (child instanceof HTMLElement && isFocusable(child)) {
+			return child;
+		}
+		if (child.shadowRoot?.children.length) {
+			const result = findFocusable(child);
+			if (result) return result;
+		}
+		if (child.children.length) {
+			const result = findFocusable(child);
+			if (result) return result;
+		}
+	}
+}
+export function findLastFocusable(
+	host: Element | ShadowRoot
+): HTMLElement | undefined {
+	let i = host.children.length;
+	while (i--) {
+		const child = host.children[i];
+		if (child instanceof HTMLElement && isFocusable(child)) return child;
+		if (child.children.length) {
+			const result = findLastFocusable(child);
+			if (result) return result;
+		}
+	}
+}
+
+function _findFocusableAll(host: Element, result: HTMLElement[]) {
+	for (const child of host.children) {
+		if (child instanceof HTMLElement && isFocusable(child))
+			result.push(child);
+		if (child.children) _findFocusableAll(child, result);
+	}
+	return result;
+}
+
+export function findFocusableAll(host: Element) {
+	return _findFocusableAll(host, []);
+}
+
+function doRequest<T>(
+	options: RequestInfo,
+	parse?: (res: Response) => Promise<T>
+) {
+	return new Observable<T>(subs => {
+		fetch(options)
+			.then(parse)
+			.then(
+				res => {
+					subs.next(res);
+					subs.complete();
+				},
+				err => subs.error(err)
+			);
+	});
+}
+
+export function request(options: RequestInfo) {
+	return doRequest(options) as Observable<Response>;
+}
+
+export function requestJson<T = unknown>(options: RequestInfo): Observable<T> {
+	return doRequest<T>(options, res => res.json());
+}
+
+export type EventDetail<T, K extends string> = T[Extract<
+	keyof T,
+	`on${K}`
+>] extends ((e: CustomEvent<infer D>) => void) | undefined
+	? D
+	: never;

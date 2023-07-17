@@ -1,10 +1,7 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig.server.json",
 	"compilerOptions": {
-		"outDir": "../dist/dts",
-		"lib": ["es2019"],
-		"types": ["node"],
-		"typeRoots": ["../node_modules/@types"]
+		"outDir": "../dist/dts"
 	},
 	"references": [{ "path": "../rx" }],
 	"files": ["index.ts"]

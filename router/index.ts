@@ -8,8 +8,11 @@ const PARAM_QUERY_REGEX = /([^&=]+)=?([^&]*)/g,
 
 const routeSymbol = '@@cxlRoute';
 
-type RouteArguments = { [key: string]: any };
-type RouteElement = Node;
+type RouteArguments = { [key: string]: string };
+
+export interface RouteElement extends HTMLElement {
+	[routeSymbol]?: Route<RouteElement>;
+}
 
 interface RouteInstances {
 	[key: string]: RouteElement;
@@ -17,8 +20,8 @@ interface RouteInstances {
 
 export interface RouterState {
 	url: Url;
-	root: Node;
-	current: Node;
+	root: RouteElement;
+	current: RouteElement;
 	arguments?: RouteArguments;
 	route: Route<RouteElement>;
 }
@@ -30,7 +33,7 @@ export interface RouteDefinition<T extends RouteElement> {
 	parent?: string;
 	redirectTo?: string;
 	resolve?: (args: Partial<T>) => boolean;
-	render: (ctx?: any) => T;
+	render: () => T;
 }
 
 export interface Url {
@@ -157,8 +160,11 @@ export class Route<T extends RouteElement> {
 
 	createElement(args: Partial<T>) {
 		const el = this.definition.render();
-		(el as any)[routeSymbol] = this;
-		for (const a in args) el[a] = args[a] as any;
+		el[routeSymbol] = this as Route<RouteElement>;
+		for (const a in args)
+			if (args[a as keyof T] !== undefined)
+				el[a as keyof T] = args[a as keyof T] as T[keyof T];
+
 		return el;
 	}
 
@@ -173,8 +179,8 @@ export class Route<T extends RouteElement> {
 }
 
 export class RouteManager {
-	private routes: Route<any>[] = [];
-	defaultRoute?: Route<any>;
+	readonly routes: Route<RouteElement>[] = [];
+	defaultRoute?: Route<RouteElement>;
 
 	findRoute(path: string) {
 		return this.routes.find(r => r.path?.test(path)) || this.defaultRoute;
@@ -184,7 +190,7 @@ export class RouteManager {
 		return this.routes.find(r => r.id === id);
 	}
 
-	register(route: Route<any>) {
+	register(route: Route<RouteElement>) {
 		if (route.isDefault) {
 			if (this.defaultRoute)
 				throw new Error('Default route already defined');
@@ -199,7 +205,7 @@ const URL_REGEX = /([^#]*)(?:#(.+))?/;
 export function getElementRoute<T extends RouteElement>(
 	el: T
 ): Route<T> | undefined {
-	return (el as any)[routeSymbol];
+	return el[routeSymbol] as Route<T>;
 }
 
 export function parseUrl(url: string): Url {
@@ -261,7 +267,10 @@ export const HashStrategy: Strategy = {
 
 	serialize(url) {
 		const href = HashStrategy.getHref(url);
-		if (sys.location.hash !== href) sys.location.hash = href;
+		if (sys.location.hash !== href) {
+			sys.location.hash = href;
+			//sys.history.replaceState({ url }, '');
+		}
 	},
 
 	deserialize() {
@@ -281,20 +290,26 @@ export class Router {
 	instances: RouteInstances = {};
 	root?: RouteElement;
 
+	private lastGo?: Url | string;
+
 	constructor(private callbackFn?: (state: RouterState) => void) {}
 
-	private findRoute(id: string, args: RouteArguments) {
-		const route = this.instances[id];
+	private findRoute<T extends RouteElement>(id: string, args: Partial<T>) {
+		const route = this.instances[id] as T;
 		let i: string;
 
-		if (route) for (i in args) (route as any)[i] = args[i];
+		if (route)
+			for (i in args) {
+				const arg = args[i as keyof T] as T[keyof T];
+				if (arg !== undefined) route[i as keyof T] = arg;
+			}
 
 		return route;
 	}
 
 	private executeRoute<T extends RouteElement>(
 		route: Route<T>,
-		args: Partial<T>,
+		args: Partial<T>, //RouteArguments,
 		instances: RouteInstances
 	) {
 		const parentId = route.parent,
@@ -340,11 +355,12 @@ export class Router {
 	 */
 	route<T extends RouteElement>(def: RouteDefinition<T>) {
 		const route = new Route<T>(def);
-		this.routes.register(route);
+		this.routes.register(route as Route<RouteElement>);
 		return route;
 	}
 
 	go(url: Url | string): void {
+		this.lastGo = url;
 		const parsedUrl = typeof url === 'string' ? parseUrl(url) : url;
 		const path = parsedUrl.path;
 		const currentUrl = this.state?.url;
@@ -365,6 +381,9 @@ export class Router {
 			return this.go(replaceParameters(route.redirectTo, args));
 
 		const current = this.execute(route, args);
+
+		// Check if page was redirected
+		if (this.lastGo !== url) return;
 
 		if (!this.root)
 			throw new Error(`Route: "${path}" could not be created`);
@@ -391,11 +410,11 @@ export class Router {
 		if (!this.state?.url) return false;
 		const current = this.state.url;
 		return !!Object.values(this.instances).find(el => {
-			const routeDef: Route<any> = (el as any)[routeSymbol];
+			const routeDef = el[routeSymbol];
 			const currentArgs = this.state?.arguments;
 
 			if (
-				routeDef.path?.test(parsed.path) &&
+				routeDef?.path?.test(parsed.path) &&
 				(!parsed.hash || parsed.hash === current.hash)
 			) {
 				if (currentArgs) {

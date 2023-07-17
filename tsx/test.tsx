@@ -1,25 +1,24 @@
 import { TestApi, suite } from '@cxl/spec';
 import { Observable, be, of, merge } from '@cxl/rx';
 import dom from './index.js';
+import { Children, NativeChildren, AttributeType } from './index.js';
 
 class Span extends HTMLElement {
-	jsxAttributes!: {
-		$?: (self: Span) => void;
-		className?: any;
-		children?: any;
-	};
+	jsxAttributes!: AttributeType<Span>;
+	bindings: Observable<unknown>[] = [];
+
 	static create() {
-		const host = document.createElement('span') as any;
-		(host as any).bindings = [];
-		host.bind = (binding: any) => host.bindings.push(binding);
+		const host = document.createElement('span') as Span;
+		host.bindings = [];
+		host.bind = binding => host.bindings.push(binding);
 		return host;
 	}
-	bind() {
-		// Do Nothing
+	bind(_binding: Observable<unknown>) {
+		/** noop */
 	}
 }
 
-async function connect(el: any, callback: () => any) {
+async function connect(el: Span, callback: () => void | Promise<void>) {
 	const subscription = merge(...(el.bindings || [])).subscribe();
 	try {
 		await callback();
@@ -123,11 +122,11 @@ export default suite('component', test => {
 	});
 
 	test('Component Function', a => {
-		function TestApiChild({ children }: { children: any }) {
-			return <h1>{children}</h1>;
+		function TestApiChild({ children }: { children: Children }) {
+			return <Span>{children}</Span>;
 		}
 
-		function TestApi(p: { title: string; children: any }) {
+		function TestApi(p: { title: string; children: Children }) {
 			return (
 				<div title={p.title}>
 					<TestApiChild>{p.children}</TestApiChild>
@@ -146,27 +145,27 @@ export default suite('component', test => {
 		a.equal(el.childNodes.length, 1);
 
 		const child = el.childNodes[0] as HTMLElement;
-		a.equal(child.tagName, 'H1');
+		a.equal(child.tagName, 'SPAN');
 		const child2 = child.childNodes[0] as HTMLElement;
 		a.equal(child2.tagName, 'SPAN');
 		a.equal(child2.textContent, 'World');
 	});
 
 	test('Component - Function Binding', a => {
-		let el3: any;
-		function check(el2: any) {
+		let el3: Span | undefined;
+		function check(el2: Span) {
 			el3 = el2;
 			a.equal(el2.tagName, 'SPAN');
 			return of('hello');
 		}
-		const el = <Span $={check} />;
+		const el = (<Span $={check} />) as Span;
 		a.equal(el, el3);
 	});
 
 	test('Component - Bindings', a => {
 		const el = (
 			<Span $={el => of('blur').tap(ev => (el.title = ev))} />
-		) as any;
+		) as Span;
 
 		connect(el, () => {
 			a.equal(el.title, 'blur');
@@ -175,12 +174,12 @@ export default suite('component', test => {
 
 	test('Bindings - Children', a => {
 		function Div(props?: {
-			$?: (el: any) => Observable<any>;
-			children?: any;
+			$?: (el: Span) => Observable<unknown>;
+			children?: NativeChildren;
 		}) {
 			if (props) {
 				a.ok(props.$ || props.children);
-				const el = { title: '' };
+				const el = Span.create();
 				if (props.$)
 					props.$(el).subscribe(val => {
 						a.equal(val, 'blur');
@@ -202,14 +201,14 @@ export default suite('component', test => {
 		a.ok(child);
 	});
 
-	test('Bindings - Set Attribute', (a: TestApi) => {
+	test('Bindings - Set Attribute', async (a: TestApi) => {
 		const checked = be(true);
 		const el = (
 			<Span className={checked.map(val => (val ? 'minus' : 'check'))} />
-		) as HTMLDivElement;
+		) as Span;
 
 		a.ok(el);
-		connect(el, () => {
+		await connect(el, () => {
 			a.equal(el.className, 'minus');
 			checked.next(false);
 			a.equal(el.className, 'check');
@@ -225,10 +224,10 @@ export default suite('component', test => {
 				Hello {world}
 				{world}
 			</Span>
-		) as HTMLDivElement;
+		) as Span;
 		a.ok(el);
-		a.equal(el.childNodes.length, 3);
 		await connect(el, () => {
+			a.equal(el.childNodes.length, 3);
 			a.equal(el.innerText, 'Hello WorldWorld');
 			world.next('Universe');
 			a.equal(el.innerText, 'Hello UniverseUniverse');
@@ -247,8 +246,8 @@ export default suite('component', test => {
 			</>
 		);
 		a.ok(frag);
-		a.equal(frag.childNodes.length, 3);
-		await connect(frag.childNodes[2], () => {
+		await connect(frag.childNodes[2] as Span, () => {
+			a.equal(frag.childNodes.length, 3);
 			a.equal(frag.childNodes[2].textContent, 'hello');
 		});
 		val.next('world');
@@ -256,7 +255,7 @@ export default suite('component', test => {
 	});
 
 	test('Empty Attribute', a => {
-		const el = (<div draggable />) as any;
+		const el = (<div draggable />) as HTMLElement;
 		a.ok(el.draggable, 'Must set attribute to true');
 	});
 });

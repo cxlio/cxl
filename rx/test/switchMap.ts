@@ -6,8 +6,8 @@ export default spec('switchMap', it => {
 	it.should('map-and-flatten each item to an Observable', a => {
 		const e1 = cold('--1-----3--5-------|');
 		const e1subs = '^                  !';
-		const e2 = cold('x-x-x|              ', { x: 10 });
-		const values = { x: 10, y: 30, z: 50 };
+		const e2 = cold('x-x-x|              ', { x: '10' });
+		const values = { x: '10', y: '30', z: '50' };
 		const expected = replaceValues('--x-x-x-y-yz-z-z---|', values);
 		const result = e1.switchMap(x => e2.map(i => +i * +x));
 

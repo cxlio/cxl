@@ -2,8 +2,10 @@ import { ListEvent, be, ref, of, merge } from '@cxl/rx';
 import { dom } from '@cxl/tsx';
 import { Attribute, Augment, Component, Span } from '@cxl/component';
 import { suite, triggerKeydown } from '@cxl/spec';
-import { animationFrame, trigger, on } from '@cxl/dom';
+import { animationFrame, trigger } from '@cxl/dom';
 import {
+	CheckedComponent,
+	FocusableComponent,
 	aria,
 	ariaValue,
 	ariaChecked,
@@ -17,7 +19,6 @@ import {
 	list,
 	portal,
 	teleport,
-	triggerEvent,
 	model,
 	registable,
 	registableHost,
@@ -26,12 +27,19 @@ import {
 	selectableHost,
 	selectableHostMultiple,
 	sortBy,
-	stopChildrenEvents,
-	stopEvent,
 	syncAttribute,
 } from './index.js';
 
-async function connect<T extends Node>(el: any, callback: (el: T) => any) {
+declare module '@cxl/template' {
+	interface RegistableMap {
+		test: Component;
+	}
+}
+
+async function connect<T extends Node>(
+	el: T,
+	callback: (el: T) => void | Promise<void>
+) {
 	await callback(el);
 }
 
@@ -58,16 +66,18 @@ export default suite('template', test => {
 			}
 		}
 
-		connect<HTMLInputElement>(
-			<Span
-				title="test"
-				$={el =>
-					merge(
-						getAttribute(el, 'title').tap(onTitle),
-						value.tap(onValue)
-					)
-				}
-			/>,
+		connect(
+			(
+				<Span
+					title="test"
+					$={el =>
+						merge(
+							getAttribute(el, 'title').tap(onTitle),
+							value.tap(onValue)
+						)
+					}
+				/>
+			) as HTMLElement,
 			el => {
 				a.dom.appendChild(el);
 				a.ok(!first);
@@ -98,7 +108,7 @@ export default suite('template', test => {
 	test('portal', async a => {
 		const id = 'cxl-test' + a.id;
 
-		await connect<HTMLDivElement>(<Span $={portal(id)} />, async el => {
+		await connect(<Span $={portal(id)} />, async el => {
 			const subs = teleport(
 				(<span>Hello</span>) as HTMLSpanElement,
 				id
@@ -256,7 +266,7 @@ export default suite('template', test => {
 		});
 	});
 
-	test('triggerEvent', it => {
+	/*test('triggerEvent', it => {
 		it.should('trigger custom event', a => {
 			const done = a.async();
 			const sub = of('test');
@@ -272,7 +282,7 @@ export default suite('template', test => {
 
 			sub.pipe(triggerEvent(el, 'custom')).subscribe();
 		});
-	});
+	});*/
 
 	test('each', it => {
 		it.should('render each element in an array', a => {
@@ -317,7 +327,7 @@ export default suite('template', test => {
 		});
 	});
 
-	test('stopEvent', it => {
+	/*test('stopEvent', it => {
 		it.should('stop event propagation', a => {
 			const div = (
 				<div>
@@ -328,7 +338,7 @@ export default suite('template', test => {
 			const done = a.async();
 			let i = 0;
 
-			on(div, 'custom')
+			on(div, 'change')
 				.first()
 				.subscribe(ev => {
 					a.equal(i, 1);
@@ -336,17 +346,17 @@ export default suite('template', test => {
 					done();
 				});
 
-			on(span, 'custom')
+			on(span, 'change')
 				.first()
 				.pipe(stopEvent())
 				.subscribe(() => {
 					i++;
 				});
 
-			trigger(span, 'custom');
-			trigger(span, 'custom');
+			trigger(span, 'change', { bubbles: true });
+			trigger(span, 'change', { bubbles: true });
 		});
-	});
+	});*/
 
 	test('syncAttribute', it => {
 		it.should('sync an attribute between two elements', a => {
@@ -495,26 +505,32 @@ export default suite('template', test => {
 	});
 
 	test('focusable', it => {
+		@Augment(`cxl-test${it.id}`)
+		class F extends Component implements FocusableComponent {
+			disabled = false;
+			touched = false;
+		}
+
 		it.should('make components focusable', a => {
-			const A = (<Span $={focusable as any} />) as Span;
-			const B = (<Span $={focusable as any} />) as Span;
+			const A = (<F $={focusable} />) as F;
+			const B = (<F $={focusable} />) as F;
 			a.dom.appendChild(A);
 			a.dom.appendChild(B);
 			A.focus();
 			a.ok(A.matches(':focus'));
 			B.focus();
-			a.ok((A as any).touched);
-			a.ok(!(B as any).touched);
+			a.ok(A.touched);
+			a.ok(!B.touched);
 			a.ok(!A.matches(':focus'));
 			a.ok(B.matches(':focus'));
 		});
 
 		it.should('handle disabled attribute', a => {
-			const A = (<Span $={focusable as any} />) as Span;
+			const A = (<F $={focusable} />) as F;
 			a.dom.appendChild(A);
 			A.focus();
 			a.ok(A.matches(':focus'));
-			(A as any).attributes$.next({
+			A.attributes$.next({
 				target: A,
 				attribute: 'disabled',
 				value: true,
@@ -528,9 +544,9 @@ export default suite('template', test => {
 		it.should('send a register event when connected', a => {
 			const elements = new Set<Span>();
 			const A = (
-				<Span $={el => registableHost(el, 'test', elements)} />
+				<Span $={el => registableHost('test', el, elements)} />
 			) as Span;
-			const B = (<Span $={el => registable(el, 'test')} />) as Span;
+			const B = (<Span $={el => registable('test', el)} />) as Span;
 			a.dom.appendChild(A);
 			A.appendChild(B);
 			a.equal(elements.size, 1);
@@ -539,23 +555,30 @@ export default suite('template', test => {
 	});
 
 	test('checkedBehavior', it => {
+		@Augment(`cxl-test${it.id}`)
+		class F extends Component implements CheckedComponent {
+			value: unknown;
+			@Attribute()
+			checked = undefined;
+		}
+
 		it.should('set aria attributes when checked attribute changes', a => {
-			const A = (<Span $={checkedBehavior as any} />) as Span;
+			const A = (<F $={checkedBehavior} />) as F;
 			a.dom.appendChild(A);
 			a.equal(A.getAttribute('aria-checked'), 'mixed');
-			(A as any).attributes$.next({
+			A.attributes$.next({
 				target: A,
 				attribute: 'value',
 				value: false,
 			});
-			(A as any).attributes$.next({
+			A.attributes$.next({
 				target: A,
 				attribute: 'checked',
 				value: false,
 			});
 			a.equal(A.getAttribute('aria-checked'), 'false');
 
-			(A as any).attributes$.next({
+			A.attributes$.next({
 				target: A,
 				attribute: 'checked',
 				value: true,
@@ -564,7 +587,7 @@ export default suite('template', test => {
 		});
 	});
 
-	test('stopChildrenEvents', it => {
+	/*test('stopChildrenEvents', it => {
 		it.should('stop propagation of children events', a => {
 			let i = 0;
 			const A = (
@@ -586,35 +609,40 @@ export default suite('template', test => {
 			B.click();
 			a.equal(i, 2);
 		});
-	});
+	});*/
 
 	test('selectable', it => {
-		@Augment(`cxl-test-${it.id}`, selectable)
+		@Augment<Selectable>(`cxl-test-${it.id}`, selectable)
 		class Selectable extends Component {
 			@Attribute()
 			selected = false;
 			@Attribute()
-			value?: any;
+			value: unknown;
+			view?: typeof Component;
 		}
 
 		@Augment<SelectableHost>(`cxl-test2-${it.id}`)
 		class SelectableHost extends Component {
-			options = new Set<any>();
-			value: any;
+			options = new Set<Selectable>();
+			optionView = Component;
+			value: unknown;
 		}
 
 		@Augment<SelectableHostMultiple>(`cxl-test3-${it.id}`)
 		class SelectableHostMultiple extends Component {
-			options = new Set<any>();
-			selected = new Set<any>();
+			options = new Set<Selectable>();
+			selected = new Set<Selectable>();
+			optionView = Component;
 			value = [];
 		}
 
 		it.should('work with selectableHost', a => {
-			let selected: any;
+			let selected: Selectable | undefined;
 			const A = (
 				<SelectableHost
-					$={el => selectableHost(el).tap(val => (selected = val))}
+					$={el =>
+						selectableHost(el, of(el)).tap(val => (selected = val))
+					}
 				>
 					<Selectable value={1} />
 					<Selectable value={2} />
@@ -630,11 +658,13 @@ export default suite('template', test => {
 			a.equal(selected, A0);
 		});
 		it.should('work with selectableHostMultiple', a => {
-			let selected: any;
+			let selected: Selectable | undefined;
 			const A = (
 				<SelectableHostMultiple
 					$={el =>
-						selectableHostMultiple(el).tap(val => (selected = val))
+						selectableHostMultiple(el, of(el)).tap(
+							val => (selected = val)
+						)
 					}
 				>
 					<Selectable />

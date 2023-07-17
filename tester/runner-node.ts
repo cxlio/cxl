@@ -1,14 +1,14 @@
 import { resolve } from 'path';
 import * as inspector from 'inspector';
 
-import type { Test } from '@cxl/spec';
+import type { Test, Result } from '@cxl/spec';
 import type { TestRunner } from './index.js';
 
 import { Coverage, generateReport } from './report.js';
 
 function post(session: inspector.Session, msg: string, params = {}) {
 	return new Promise((resolve, reject) => {
-		session.post(msg, params, (err: any, result: any) =>
+		session.post(msg, params, (err, result) =>
 			err ? reject(err) : resolve(result)
 		);
 	});
@@ -16,15 +16,15 @@ function post(session: inspector.Session, msg: string, params = {}) {
 
 async function recordCoverage(
 	session: inspector.Session,
-	cb: () => Promise<any>
-) {
+	cb: () => Promise<Result[]>
+): Promise<Coverage> {
 	await post(session, 'Profiler.enable');
 	await post(session, 'Profiler.startPreciseCoverage', { detailed: true });
 	await cb();
-	const coverage: any = await post(session, 'Profiler.takePreciseCoverage');
+	const coverage = await post(session, 'Profiler.takePreciseCoverage');
 	await post(session, 'Profiler.stopPreciseCoverage');
 	await post(session, 'Profiler.disable');
-	return coverage.result as Coverage;
+	return (coverage as { result: Coverage }).result;
 }
 
 function runSuite(suitePath: string) {

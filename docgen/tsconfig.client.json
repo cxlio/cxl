@@ -1,12 +1,12 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig.client.json",
 	"compilerOptions": {
 		"outDir": "../dist/docgen"
 	},
+	"files": ["runtime.tsx"],
 	"references": [
-		{ "path": "../ui" },
-		{ "path": "../ui-router" },
-		{ "path": "tsconfig.json" }
-	],
-	"files": ["runtime.tsx"]
+		{ "path": "tsconfig.json" },
+		{ "path": "../../ui/ui" },
+		{ "path": "../../ui/ui-router" }
+	]
 }

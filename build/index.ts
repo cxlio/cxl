@@ -12,10 +12,11 @@ export {
 	zip,
 } from './file.js';
 export { concat } from '@cxl/rx';
-export { mkdirp, sh } from '@cxl/server';
+export { mkdirp, sh } from '@cxl/program';
 export { Output } from '@cxl/source';
 export {
 	AMD,
+	REQUIRE_REPLACE,
 	Package,
 	pkg,
 	readme,

@@ -64,22 +64,37 @@ const codes = {
 
 type Colors<T> = { [P in keyof T]: (str: string) => string };
 
-const styles: any = {};
-export const colors: Colors<typeof codes> = styles;
+export const colors: Colors<typeof codes> = Object.keys(codes).reduce(
+	(styles, key) => {
+		const val = codes[key as keyof typeof codes];
+		const open = '\u001b[' + val[0] + 'm';
+		const close = '\u001b[' + val[1] + 'm';
 
-Object.keys(codes).forEach(key => {
-	const val: any = (codes as any)[key];
-	const open = '\u001b[' + val[0] + 'm';
-	const close = '\u001b[' + val[1] + 'm';
+		styles[key as keyof typeof codes] = (str: string) => open + str + close;
+		return styles;
+	},
+	{} as Colors<typeof codes>
+);
 
-	(styles as any)[key] = (str: string) => open + str + close;
-});
+export type ProgramParameters = Parameters<typeof parseParameters>[0];
+
+type ParameterType<T extends Parameter> = T['type'] extends 'string'
+	? string
+	: T['type'] extends 'number'
+	? number
+	: boolean;
+
+export type ParametersResult<T extends Record<string, Parameter>> = {
+	[K in keyof T]?: T[K]['many'] extends true
+		? ParameterType<T[K]>[]
+		: ParameterType<T[K]>;
+} & { $: string[] };
 
 export interface Parameter {
-	name: string;
 	short?: string;
 	type?: 'string' | 'boolean' | 'number';
-	help?: string;
+	help: string;
+	many?: boolean;
 }
 
 export interface ProgramConfiguration {
@@ -90,10 +105,11 @@ export interface ProgramConfiguration {
 export interface Package {
 	name: string;
 	version: string;
+	repository?: string | { url: string; directory?: string };
 }
 
 export interface Logger {
-	(...msg: any): void;
+	(...msg: unknown[]): void;
 }
 
 export interface Program {
@@ -113,22 +129,26 @@ const ArgRegex = new RegExp(
 	'g'
 );
 
-export const DefaultParameters: Parameter[] = [
-	{
-		name: 'help',
+export type ParameterDefinition = {
+	short?: string;
+	type?: 'string' | 'boolean' | 'number';
+	help?: string;
+};
+
+export const DefaultParameters = {
+	help: {
 		short: 'h',
 	},
-	{
-		name: 'config',
+	config: {
 		help: 'Use JSON config file',
 		short: 'c',
 	},
-];
+} as const;
 
-interface Argument {
+/*interface Argument {
 	name: string;
 	value?: string;
-}
+}*/
 
 function unquote(value: string) {
 	return value.startsWith('"') && value.endsWith('"')
@@ -136,7 +156,7 @@ function unquote(value: string) {
 		: value;
 }
 
-function findParam(
+/*function findParam(
 	parameters: Parameter[],
 	shortcut: string,
 	pvalue?: string,
@@ -147,77 +167,126 @@ function findParam(
 	const value = pvalue && unquote(pvalue);
 
 	return { name: result.name, value };
+}*/
+
+function findParameter<T extends Record<string, Parameter>>(
+	parameters: T,
+	shortcut: string
+): [keyof T, Parameter] {
+	for (const key in parameters) {
+		if (parameters[key].short === shortcut) return [key, parameters[key]];
+	}
+
+	throw new Error(`Invalid parameter "${shortcut}"`);
 }
 
-function findParameter(
-	parameters: Parameter[],
-	shortcut: string,
-	prop: 'short' | 'name' = 'short'
-) {
-	const result = parameters.find(p => p[prop] === shortcut);
-	if (!result) throw new Error(`Invalid parameter "${shortcut}"`);
-	return result;
-}
-
-function parseValue(param: Parameter, value: string | undefined) {
-	if (param.type === 'boolean') return true;
+function parseValue<T extends Parameter>(
+	param: T,
+	value: string | undefined
+): ParameterType<T> {
 	if (param.type === 'number')
-		return value === undefined ? 0 : parseInt(value);
+		return (value === undefined ? 0 : parseInt(value)) as ParameterType<T>;
 	if (param.type === 'string')
-		return value === undefined ? '' : unquote(value);
+		return (value === undefined ? '' : unquote(value)) as ParameterType<T>;
 
-	return value === undefined ? true : unquote(value);
+	return true as ParameterType<T>; //(value !== undefined) as ParameterType<T>;
 }
 
-function setParam(result: any, param: Parameter, value?: string) {
-	const key = param.name;
+function setParam<T extends Record<string, Parameter>, K extends keyof T>(
+	result: ParametersResult<T>,
+	[key, param]: [K, Parameter | undefined],
+	value: string | undefined
+) {
+	if (!param) throw new Error(`Parameter "${String(key)}" not supported`);
+
 	const newValue = parseValue(param, value);
 	const lastValue = result[key];
 
-	if (param.type === 'boolean') {
-		if (value !== undefined)
-			setParam(result, { name: '$', type: 'string' }, value);
+	if (lastValue !== undefined && !param.many)
+		throw new Error(
+			`Parameter ${String(key)} does not support multiple values`
+		);
 
-		return (result[key] = newValue);
-	}
+	// handle rest parameter after boolean
+	if (value && (param.type === 'boolean' || param.type === undefined))
+		result.$.push(unquote(value));
 
-	if (lastValue === undefined) result[key] = newValue;
-	else if (Array.isArray(lastValue)) result[key].push(newValue);
-	else result[key] = [result[key], newValue];
+	if (lastValue === undefined)
+		result[key] = (param.many ? [newValue] : newValue) as typeof result[K];
+	else if (Array.isArray(lastValue)) (lastValue as boolean[]).push(newValue);
+	else if (param.many)
+		result[key] = [lastValue, newValue] as typeof result[K];
+	else throw new Error('Invalid parameter');
 }
 
-export function parseParameters(parameters: Parameter[], input: string) {
-	const result: any = {};
+export function parseParameters<T extends Record<string, Parameter>>(
+	parameters: T,
+	input: string
+): ParametersResult<T> {
+	const result = { $: [] as string[] } as ParametersResult<T>;
+
 	let m: RegExpExecArray | null;
 
+	ArgRegex.lastIndex = 0;
 	while ((m = ArgRegex.exec(input))) {
-		const [
-			,
-			multipleShort,
-			short,
-			shortValue,
-			long,
-			longValue,
-			restValue,
-		] = m;
+		const [, multipleShort, short, shortValue, long, longValue, restValue] =
+			m;
 		if (multipleShort)
 			multipleShort
 				.split('')
-				.forEach(p => setParam(result, findParameter(parameters, p)));
+				.forEach(p =>
+					setParam(result, findParameter(parameters, p), '')
+				);
 		else if (short)
 			setParam(result, findParameter(parameters, short), shortValue);
-		else if (long)
-			setParam(
-				result,
-				findParameter(parameters, long, 'name'),
-				longValue
-			);
-		else if (restValue) setParam(result, { name: '$' }, restValue);
+		else if (long) setParam(result, [long, parameters[long]], longValue);
+		else if (restValue) result.$.push(unquote(restValue));
+		else throw new Error('Invalid parameter');
 	}
-	return result;
+
+	return result as ParametersResult<T>;
 }
 
-export function parseParametersArray(parameters: Parameter[], input: string) {
+export function parametersParser<T extends Record<string, Parameter>, R>(
+	parameters: T,
+	cb: (parsed: ParametersResult<T>) => R
+) {
+	return (input: string) => cb(parseParameters(parameters, input));
+}
+
+type OperationFunction<T> = (() => Promise<T>) | Promise<T>;
+
+interface OperationResult<T> {
+	start: bigint;
+	time: bigint;
+	tasks: number;
+	result: T;
+}
+
+function hrtime(): bigint {
+	return process.hrtime.bigint();
+}
+
+export async function operation<T>(
+	fn: OperationFunction<T>
+): Promise<OperationResult<T>> {
+	let start = hrtime();
+	const result = typeof fn === 'function' ? fn() : fn;
+	let tasks = 0;
+
+	return result.then(item => {
+		const end = hrtime();
+		const result = {
+			start,
+			tasks: ++tasks,
+			time: end - start,
+			result: item,
+		};
+		start = end;
+		return result;
+	});
+}
+/*export function parseParametersArray(parameters: Parameter[], input: string) {
 	const result: Argument[] = [];
 	let m: RegExpExecArray | null;
 
@@ -243,13 +312,13 @@ export function parseParametersArray(parameters: Parameter[], input: string) {
 	}
 
 	return result;
-}
+}*/
 
-export function parseArgv(parameters: Parameter[]) {
+export function parseArgv<T extends Record<string, Parameter>>(parameters: T) {
 	return parseParameters(parameters, process.argv.slice(2).join(' '));
 }
 
-export async function parametersJsonFile(
+/*export async function parametersJsonFile(
 	parameters: Parameter[],
 	fileName: string
 ) {
@@ -261,23 +330,22 @@ export async function parametersJsonFile(
 	}
 }
 
-export function parametersJson(parameters: Parameter[], json: any) {
-	const result: Record<string, any> = {};
-	parameters.forEach(p => {
-		const paramName = p.name;
+export function parametersJson<T extends Record<string, Parameter>>(parameters: T, json: T): ParametersResult<T> {
+	const result: Partial<ParametersResult<T>> = {};
+	for (const paramName in parameters) {
 		if (paramName in json) {
-			const optionValue = json[paramName];
+			const optionValue = json[paramName as keyof T];
 			result[paramName] = optionValue;
 		}
-	});
+	}
 	return result;
-}
+}*/
 
 /**
  * Creates a directory recursively
  */
-export function mkdirp(dir: string): Promise<any> {
-	return stat(dir).catch(() =>
+export async function mkdirp(dir: string) {
+	await stat(dir).catch(() =>
 		mkdirp(resolve(dir, '..')).then(() => mkdir(dir))
 	);
 }
@@ -286,18 +354,20 @@ export function mkdirp(dir: string): Promise<any> {
  * Read and parse a JSON file, ignores errors.
  * @param fileName Path of file to parse
  */
-export async function readJson<T = any>(
-	fileName: string
-): Promise<T | undefined> {
+export async function readJson<T>(
+	fileName: string,
+	defaultValue?: T
+): Promise<T> {
 	try {
 		return JSON.parse(await readFile(fileName, 'utf8'));
 	} catch (e) {
-		return undefined;
+		if (defaultValue !== undefined) return defaultValue;
+		throw e;
 	}
 }
 
-export function log(prefix: string, ...msg: any[]) {
-	console.log(prefix, ...msg);
+export function log(prefix: string | (() => string), ...msg: unknown[]) {
+	console.log(typeof prefix === 'string' ? prefix : prefix(), ...msg);
 }
 
 export function sh(cmd: string, options: SpawnOptions = {}) {
@@ -306,7 +376,10 @@ export function sh(cmd: string, options: SpawnOptions = {}) {
 		let output = '';
 		proc.stdout?.on('data', data => (output += data?.toString() || ''));
 		proc.stderr?.on('data', data => (output += data?.toString() || ''));
-		proc.on('close', code => (code ? reject(output) : resolve(output)));
+		proc.on('exit', code => {
+			if (code !== 0) reject(output);
+			else resolve(output);
+		});
 	});
 }
 
@@ -318,17 +391,22 @@ export function program(
 
 	return async () => {
 		const basePath = require.main?.path || '';
-		const pkg = (await readJson<Package>(
-			join(basePath, 'package.json')
-		)) || { name: config.name || '', version: '' };
+		const pkg = await readJson<Package>(join(basePath, 'package.json'), {
+			name: config.name || '',
+			version: '',
+		});
 		const name = config.name || pkg.name;
 		const color = config.logColor || 'green';
 		const logPrefix = colors[color](name);
 
-		return startFn({
-			pkg,
-			name,
-			log: log.bind(log, logPrefix),
-		});
+		try {
+			return startFn({
+				pkg,
+				name,
+				log: log.bind(log, () => `${logPrefix} ${Date.now()}`),
+			});
+		} catch (e) {
+			console.error(e);
+		}
 	};
 }

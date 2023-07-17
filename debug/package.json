@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"description": "Debug utilities",
-	"browser": "amd/index.min.js",
+	"browser": "amd/index.js",
 	"scripts": {
 		"test": "npm run build && cd ../dist/debug && node ../tester --baselinePath=../../debug/spec",
 		"build": "node ../dist/build"

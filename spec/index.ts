@@ -1,30 +1,39 @@
 import { subject, toPromise } from '@cxl/rx';
 
-declare function __cxlRunner(msg: any): any;
+declare function __cxlRunner(msg: unknown): Result;
 
-export type Measurements = Record<string, any>;
+export type Measurements = Record<
+	string,
+	Record<string, Partial<CSSStyleDeclaration>>
+>;
 
 type EventType = 'afterAll' | 'afterEach' | 'beforeAll' | 'beforeEach';
-type TestEvent = { type: EventType; promises: Promise<any>[] };
+type TestEvent = { type: EventType; promises: Promise<unknown>[] };
 
-type TestFn<T = TestApi> = (test: T) => void | Promise<any>;
+type TestFn<T = TestApi> = (test: T) => void | Promise<unknown>;
 type SuiteFn<T = TestFn> = (
 	suiteFn: (name: string, testFn: T, only?: boolean) => void
 ) => void;
 
 type FunctionsOf<T> = {
-	[K in keyof T]: T[K] extends (...args: any) => any ? T[K] : never;
+	[K in keyof T]: T[K] extends (...args: unknown[]) => unknown ? T[K] : never;
 };
 
 type ParametersOf<T, K extends keyof T> = Parameters<FunctionsOf<T>[K]>;
 
+export interface JsonResult {
+	name: string;
+	results: Result[];
+	tests: JsonResult[];
+	only: JsonResult[];
+}
 interface Spy<EventT> {
 	lastEvent?: EventT;
 	destroy(): void;
 	then(
-		resolve: (ev: EventT) => void,
-		reject: (e: any) => void
-	): Promise<EventT>;
+		resolve: (ev: EventT | undefined) => void,
+		reject: (e: unknown) => void
+	): Promise<EventT | undefined>;
 }
 
 interface SpyFn<ParametersT, ResultT> {
@@ -53,7 +62,7 @@ export interface Result {
 	success: boolean;
 	message: string;
 	data?: FigureData;
-	stack?: any;
+	stack?: string;
 }
 
 interface TestConfig {
@@ -62,8 +71,10 @@ interface TestConfig {
 
 let lastTestId = 1;
 
-function inspect(val: any) {
+function inspect(val: unknown) {
 	if (typeof val === 'string') return '"' + val + '"';
+	if (typeof Element !== 'undefined' && val instanceof Element)
+		return val.outerHTML;
 
 	return val;
 }
@@ -74,6 +85,10 @@ export class TestApi {
 	}
 
 	constructor(private $test: Test) {}
+
+	log(object: unknown) {
+		console.log(JSON.stringify(object, null, 2));
+	}
 
 	/**
 	 * Returns a connected dom element. Cleaned up after test completion.
@@ -86,7 +101,7 @@ export class TestApi {
 		return el as HTMLElement;
 	}
 
-	afterAll(fn: () => Promise<any> | void) {
+	afterAll(fn: () => Promise<unknown> | void) {
 		this.$test.onEvent('afterAll', fn);
 	}
 
@@ -94,7 +109,10 @@ export class TestApi {
 		this.$test.push({ success: !!condition, message });
 	}
 
-	assert(condition: any, message = 'Assertion Failed'): asserts condition {
+	assert(
+		condition: unknown,
+		message = 'Assertion Failed'
+	): asserts condition {
 		if (!condition) throw new Error(message);
 		this.$test.push({ success: !!condition, message });
 	}
@@ -106,23 +124,27 @@ export class TestApi {
 		);
 	}
 
+	equalBuffer(a: ArrayBuffer, b: ArrayBuffer, desc?: string) {
+		const valA = a instanceof Uint8Array ? a : new Uint8Array(a);
+		const valB = b instanceof Uint8Array ? b : new Uint8Array(b);
+
+		for (const i in valB) this.equal(valA[i], valB[i], desc);
+	}
+
 	equalValues<T>(a: T, b: T, desc?: string) {
-		let valA: any = a;
-		let valB: any = b;
-
-		if (valA instanceof ArrayBuffer) valA = new Uint8Array(valA);
-		if (valB instanceof ArrayBuffer) valB = new Uint8Array(valB);
-
-		for (const i in valB) {
-			this.equal(valA[i], valB[i], desc);
-		}
+		if (a instanceof ArrayBuffer && b instanceof ArrayBuffer)
+			return this.equalBuffer(a, b, desc);
+		if (Array.isArray(a) && Array.isArray(b)) {
+			for (let i = 0; i < Math.max(a.length, b.length); i++)
+				this.equal(a[i], b[i]);
+		} else for (const i in b) this.equal(a[i], b[i], desc);
 	}
 
 	addSpec(test: Test) {
 		this.$test.addTest(test);
 	}
 
-	throws(fn: () => any) {
+	throws(fn: () => unknown) {
 		let success = false;
 		try {
 			fn();
@@ -170,8 +192,10 @@ export class TestApi {
 				const compare = measurements[selector];
 				for (const styleName in compare) {
 					this.equal(
-						(styles as any)[styleName],
-						compare[styleName],
+						styles[styleName as keyof CSSStyleDeclaration],
+						compare[
+							styleName
+						] as CSSStyleDeclaration[keyof CSSStyleDeclaration],
 						`"${styleName} should be "${compare[styleName]}"`
 					);
 				}
@@ -185,7 +209,7 @@ export class TestApi {
 	 */
 	testOnly(name: string, testFn: TestFn) {
 		const test = new Test(name, testFn);
-		this.$test.tests.push(test);
+		this.$test.addTest(test);
 		this.$test.only.push(test);
 	}
 
@@ -194,7 +218,7 @@ export class TestApi {
 	}
 
 	test(name: string, testFn: TestFn) {
-		this.$test.tests.push(new Test(name, testFn));
+		this.$test.addTest(new Test(name, testFn));
 	}
 
 	mock<T, K extends keyof FunctionsOf<T>>(object: T, method: K, fn: T[K]) {
@@ -235,12 +259,24 @@ export class TestApi {
 		return el;
 	}
 
+	waitForEvent(el: Element, name: string, trigger: () => void) {
+		return new Promise<void>(resolve => {
+			function handler() {
+				el.removeEventListener(name, handler);
+				resolve();
+			}
+			el.addEventListener(name, handler);
+			trigger();
+		});
+	}
+
 	testEvent<T extends HTMLElement>(
 		el: T,
 		name: string,
-		trigger: (el: T) => void
+		trigger: (el: T) => void,
+		testName = `on${name}`
 	) {
-		this.test(`on${name}`, a => {
+		this.test(testName, a => {
 			const resolve = a.async();
 			function handler(ev: Event) {
 				a.equal(ev.type, name, `"${name}" event fired`);
@@ -248,21 +284,22 @@ export class TestApi {
 				el.removeEventListener(name, handler);
 				resolve();
 			}
-			el.addEventListener('change', handler);
+			el.addEventListener(name, handler);
 			trigger(el);
 		});
 	}
 
-	figure(name: string, html: Node | string) {
+	async a11y(node: Element = this.dom) {
+		const mod = await import('./a11y');
+		await new Promise(resolve => setTimeout(resolve, 100));
+		const results = mod.testAccessibility(node);
+		for (const r of results) this.$test.push(r);
+	}
+
+	figure(name: string, html: Node | string, init?: (node: Node) => void) {
 		if (typeof __cxlRunner !== 'undefined')
 			this.test(name, async a => {
 				const domId = (a.dom.id = `dom${a.id}`);
-				if (typeof html === 'string') a.dom.innerHTML = html;
-				else {
-					a.dom.appendChild(html);
-					html = a.dom.innerHTML;
-				}
-
 				const style = a.dom.style;
 				style.position = 'absolute';
 				style.overflowX = 'hidden';
@@ -270,6 +307,13 @@ export class TestApi {
 				style.width = '320px';
 				style.backgroundColor = 'white';
 
+				if (typeof html === 'string') a.dom.innerHTML = html;
+				else {
+					a.dom.appendChild(html);
+					html = a.dom.innerHTML;
+				}
+
+				if (init) init(a.dom);
 				const data: FigureData = {
 					type: 'figure',
 					name,
@@ -278,17 +322,22 @@ export class TestApi {
 				};
 				const match = await __cxlRunner(data);
 				a.$test.push(match);
+				await a.a11y();
 			});
 		else {
 			console.warn('figure method not supported');
 			this.ok(true, 'figure method not supported');
 		}
 	}
+
+	setTimeout(val: number) {
+		this.$test.timeout = val;
+	}
 }
 
 export class Test {
 	name: string;
-	promise?: Promise<any>;
+	promise?: Promise<unknown>;
 	results: Result[] = [];
 	tests: Test[] = [];
 	only: Test[] = [];
@@ -304,7 +353,7 @@ export class Test {
 		else this.name = nameOrConfig.name;
 	}
 
-	onEvent(id: EventType, fn: () => Promise<any> | void) {
+	onEvent(id: EventType, fn: () => Promise<unknown> | void) {
 		this.events.subscribe(ev => {
 			if (ev.type === id) {
 				const result = fn();
@@ -318,7 +367,7 @@ export class Test {
 		this.results.push(result);
 	}
 
-	pushError(e: Error | string) {
+	pushError(e: unknown) {
 		this.results.push(
 			e instanceof Error
 				? { success: false, message: e.message, stack: e.stack }
@@ -332,10 +381,12 @@ export class Test {
 		);
 	}
 
-	doTimeout(promise: Promise<any>, time = this.timeout) {
+	doTimeout(promise: Promise<unknown>, time = this.timeout) {
 		return new Promise<void>((resolve, reject) => {
 			const timeoutId = setTimeout(() => {
-				reject(new Error('Async test timed out'));
+				reject(
+					new Error(`Async test timed out after ${this.timeout}ms`)
+				);
 			}, time);
 
 			promise.then(() => {
@@ -348,6 +399,7 @@ export class Test {
 
 	addTest(test: Test) {
 		this.tests.push(test);
+		test.timeout = this.timeout;
 	}
 
 	async emit(type: EventType) {
@@ -366,12 +418,13 @@ export class Test {
 			await promise;
 			if (promise && this.completed === false)
 				throw new Error('Never completed');
-			if (this.only.length)
+			if (this.only.length) {
 				await Promise.all(this.only.map(test => test.run()));
-			else if (this.tests.length)
+				throw new Error('"only" was used');
+			} else if (this.tests.length)
 				await Promise.all(this.tests.map(test => test.run()));
 		} catch (e) {
-			this.pushError(e as any);
+			this.pushError(e);
 		} finally {
 			if (this.domContainer && this.domContainer.parentNode)
 				this.domContainer.parentNode.removeChild(this.domContainer);
@@ -384,7 +437,7 @@ export class Test {
 		return this.results;
 	}
 
-	toJSON(): any {
+	toJSON(): JsonResult {
 		return {
 			name: this.name,
 			results: this.results,
@@ -396,28 +449,34 @@ export class Test {
 
 function spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
 	const sub = subject<SpyFn<ParametersOf<T, K>, T[K]>>();
-	const originalFn: T[K] = object[method];
+	const originalFn = object[method] as FunctionsOf<T>[K];
 	const spy: Spy<SpyFn<ParametersOf<T, K>, T[K]>> = {
 		destroy() {
 			object[method] = originalFn;
 			sub.complete();
 		},
-		then(resolve: any, reject: any) {
-			return toPromise(sub.first()).then(ev => {
-				resolve(ev);
-				return ev;
-			}, reject);
+		then(resolve, reject) {
+			return toPromise(sub.first()).then(
+				ev => {
+					resolve(ev);
+					return ev;
+				},
+				e => {
+					reject(e);
+					throw e;
+				}
+			);
 		},
 	};
 	let called = 0;
 
-	const spyFn: T[K] = function (this: any, ...args: any) {
+	const spyFn = function (this: T, ...args: Parameters<FunctionsOf<T>[K]>) {
 		called++;
-		const result = (originalFn as any).apply(this, args);
+		const result = originalFn.apply(this, args) as T[K];
 		sub.next((spy.lastEvent = { called, arguments: args, result }));
 		return result;
-	} as any;
-	object[method] = spyFn;
+	};
+	object[method] = spyFn as unknown as T[K];
 
 	return spy;
 }
@@ -432,11 +491,17 @@ function spyProp<T, K extends keyof T>(object: T, prop: K) {
 			sub.complete();
 			Object.defineProperty(object, prop, { configurable: true, value });
 		},
-		then(resolve: any, reject: any) {
-			return toPromise(sub.first()).then(ev => {
-				resolve(ev);
-				return ev;
-			}, reject);
+		then(resolve, reject) {
+			return toPromise(sub.first()).then(
+				ev => {
+					resolve(ev);
+					return ev;
+				},
+				e => {
+					reject(e);
+					throw e;
+				}
+			);
 		},
 	};
 
@@ -462,7 +527,7 @@ function spyProp<T, K extends keyof T>(object: T, prop: K) {
  */
 export function triggerKeydown(el: Element, key: string) {
 	const ev = new CustomEvent('keydown', { bubbles: true });
-	(ev as any).key = key;
+	(ev as unknown as { key: string }).key = key;
 	el.dispatchEvent(ev);
 	return ev;
 }
@@ -476,7 +541,7 @@ export function spec(name: string | TestConfig, fn: TestFn) {
  */
 export function suite(
 	nameOrConfig: string | TestConfig,
-	suiteFn: SuiteFn | any[]
+	suiteFn: SuiteFn | Test[]
 ) {
 	if (Array.isArray(suiteFn)) {
 		const result = new Test(nameOrConfig, () => {

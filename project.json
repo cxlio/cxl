@@ -109,7 +109,7 @@
 				"tasks": "npm run build --prefix source"
 			},
 			"tester": {
-				"files": ["tester/*.ts"],
+				"files": ["tester/*"],
 				"tasks": "npm run build --prefix tester"
 			},
 			"tsx": {
@@ -163,6 +163,10 @@
 			"www": {
 				"files": ["www/*"],
 				"tasks": "npm run build --prefix www"
+			},
+			"reflex": {
+				"files": ["reflex/*"],
+				"tasks": "npm run build --prefix reflex"
 			}
 		}
 	}

@@ -28,8 +28,8 @@ export async function createFileSystem(files: File[], log: Logger) {
 	);
 }
 
-export async function projectFiles({ tsx, $ }: { $: string; tsx?: boolean }) {
-	const name = $;
+export async function projectFiles({ tsx, $ }: { $: string[]; tsx?: boolean }) {
+	const name = $[0];
 	const rootPkg = JSON.parse(await readFile('package.json', 'utf8'));
 	const tsxVersion = tsx
 		? JSON.parse(

@@ -1,7 +1,11 @@
 ///<amd-module name="@cxl/css"/>
-export type StyleDefinition<T extends Theme = Theme> = Partial<
-	StrictStyleDefinition<T>
->;
+export type StyleDefinition<T extends Theme = Theme> = {
+	[K in keyof StrictStyleDefinition<T>]?:
+		| StrictStyleDefinition<T>[K]
+		| Variable<StrictStyleDefinition<T>[K]>;
+	//[K in keyof StrictStyleDefinition<T>]?: StrictStyleDefinition<T>[K];
+};
+
 export type BaseColor = RGBA;
 export type CSSStyle = {
 	[P in keyof CSSStyleDeclaration]?: string | number;
@@ -9,6 +13,7 @@ export type CSSStyle = {
 export type Color<T extends Theme> =
 	| keyof T['colors']
 	| BaseColor
+	| 'currentColor'
 	| 'inherit'
 	| 'transparent';
 export type Percentage = '50%' | '100%' | CustomPercentage;
@@ -27,6 +32,8 @@ export type FlexAlign =
 	| 'flex-start'
 	| 'flex-end'
 	| 'baseline';
+export type StyleKey<T extends Theme> = keyof StrictStyleDefinition<T>;
+type CSSStyleKey = Exclude<keyof CSSStyle, 'length' | 'parentRule'>;
 
 export interface Variables {}
 export interface Colors {}
@@ -46,6 +53,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 	animation: keyof T['animation'];
 	animationDuration: string;
 	backgroundImage: string;
+	backgroundClip: 'content-box';
 	backgroundColor: Color<T>;
 	backgroundSize: 'cover' | 'contain';
 	backgroundPosition: 'center';
@@ -59,18 +67,24 @@ export interface StrictStyleDefinition<T extends Theme> {
 	borderRadius: Length;
 	borderStyle: 'solid' | 'dashed' | 'dotted' | 'double' | 'none';
 	boxShadow: BoxShadow<T> | 'none';
+	boxSizing: 'border-box';
+	clipPath: string;
 	fill: Color<T>;
+	stroke: Color<T>;
 	elevation: 0 | 1 | 2 | 3 | 4 | 5;
 	fontSize: number | 'inherit';
 	fontStyle: 'italic';
+	touchAction: 'none' | 'pan-y' | 'pan-x';
 	translateX: Length;
 	translateY: Length;
-	translateZ: Length;
+	//translateZ: Length;
 	rowGap: Length;
 	columnGap: Length;
+	gridAutoColumns: string;
 	gridColumnEnd: string;
-	gridAutoFlow: 'column';
+	gridAutoFlow: 'column' | 'row';
 	gridTemplateColumns: string;
+	gridTemplateRows: string;
 	prepend: string;
 	rotate: number;
 	scaleX: number;
@@ -87,11 +101,13 @@ export interface StrictStyleDefinition<T extends Theme> {
 	marginBottom: number | 'auto';
 	opacity: number;
 	outline: number | string;
-	overflowY: string;
-	overflowX: string;
+	outlineOffset: number;
+	order: number;
+	overflowY: 'hidden' | 'visible' | 'auto';
+	overflowX: 'hidden' | 'visible' | 'auto';
 	transformOrigin: string;
 	overflowScrolling: string;
-	lineHeight: number;
+	lineHeight: number | 'unset';
 	listStyleImage: string;
 	listStylePosition: 'inside' | 'outside';
 	listStyleType: 'none' | 'inherit' | 'initial' | 'unset';
@@ -114,6 +130,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 		| 'inline'
 		| 'table'
 		| 'flex'
+		| 'inline-grid'
 		| 'grid'
 		| 'table-row'
 		| 'table-caption'
@@ -130,12 +147,13 @@ export interface StrictStyleDefinition<T extends Theme> {
 	textDecoration: string;
 	textOverflow: 'ellipsis';
 	textTransform: 'uppercase' | 'none';
-	transition: 'unset';
+	transition: string;
 	height: Length;
-	minHeight: Length;
-	minWidth: Length;
-	maxHeight: Length;
-	maxWidth: Length;
+	minHeight: Length | 'none';
+	minWidth: Length | 'none';
+	maxHeight: Length | 'none';
+	maxWidth: Length | 'none';
+	mixBlendMode: 'difference';
 	variables: Partial<VariableList<T>>;
 	verticalAlign:
 		| 'top'
@@ -147,7 +165,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 		| 'text-bottom'
 		| 'baseline';
 	willChange: 'transform';
-	whiteSpace: 'nowrap' | 'pre-wrap';
+	whiteSpace: 'nowrap' | 'pre-wrap' | 'pre';
 	wordBreak: 'break-all';
 	zIndex: number;
 }
@@ -164,7 +182,7 @@ export type StylesOnly<T extends Theme> = {
 	[key: string]: StyleDefinition<T>;
 };
 
-export type Styles<T extends Theme = Theme> =
+export type Styles<T extends Theme> =
 	| StylesOnly<T>
 	| {
 			'@small'?: StylesOnly<T>;
@@ -173,7 +191,7 @@ export type Styles<T extends Theme = Theme> =
 			'@xlarge'?: StylesOnly<T>;
 	  };
 
-export type Breakpoint = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+export type BreakpointKey = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
 export type CSSUnit = 'px' | 'em' | 'rem';
 
 export interface Breakpoints {
@@ -184,8 +202,8 @@ export interface Breakpoints {
 }
 
 export interface AnimationDefinition {
-	keyframes: string;
-	value: string;
+	keyframes: Keyframe[];
+	options?: KeyframeAnimationOptions;
 }
 
 export interface Animation {
@@ -195,11 +213,12 @@ export interface Animation {
 export interface Theme {
 	animation: Animation;
 	colors: Colors;
-	typography: Typography;
+	typography: {
+		default: CSSStyle;
+	};
 	variables: Variables;
 	breakpoints: Breakpoints;
-	globalStyles?: Styles<any>;
-	imports?: string[];
+	imports?: readonly string[];
 	unit: CSSUnit;
 }
 
@@ -216,6 +235,7 @@ export type CustomPercentage = { __pct: true; toString(): string };
 const PSEUDO = {
 	focus: ':focus',
 	focusWithin: ':focus-within',
+	focusVisible: ':focus-visible',
 	hover: ':hover',
 	empty: ':empty',
 	active: ':active',
@@ -251,7 +271,8 @@ export function pct(n: number): CustomPercentage {
 }
 
 const SNAKE_CSS: Record<string, string> = {
-		webkitOverflowScrolling: '-webkit-overflow-scrolling',
+		//webkitOverflowScrolling: '-webkit-overflow-scrolling',
+		webkitUserSelect: '-webkit-user-select',
 	},
 	SNAKE_REGEX = /[A-Z]/g;
 
@@ -273,12 +294,12 @@ export const defaultTheme: Theme = {
 	unit: 'px',
 };
 
-type StyleMap = {
-	[key: string]: (
-		def: StyleDefinition<Theme>,
+type StyleMap<T extends Theme> = {
+	[K in StyleKey<T>]: (
+		def: StyleDefinition<T>,
 		style: CSSStyle,
-		prop: any,
-		value: any
+		prop: K,
+		value: StrictStyleDefinition<T>[K]
 	) => void;
 };
 
@@ -297,13 +318,23 @@ function parseRuleName(selector: string, name: string) {
 	if (name === '*') return `${selector},${selector} *`;
 	// Style <a> tags.
 	if (name === '@a') return `a`;
-	if (name in PSEUDO2) return (PSEUDO2 as any)[name];
+	if (name in PSEUDO2) return PSEUDO2[name as keyof typeof PSEUDO2];
 
 	const [className, ...states] = name.split('$');
 	const sel = states.length
-		? '(' + states.map(s => (PSEUDO as any)[s] || `[${s}]`).join('') + ')'
+		? '(' +
+		  states
+				.map(s => PSEUDO[s as keyof typeof PSEUDO] || `[${s}]`)
+				.join('') +
+		  ')'
 		: '';
-	return `${selector}${sel}${className ? ` .${className}` : ''}`;
+	return `${selector}${sel}${
+		className
+			? className.startsWith(':')
+				? ` ${className}`
+				: ` .${className}`
+			: ''
+	}`;
 }
 
 export function padding(
@@ -358,29 +389,73 @@ export function mask({ r, g, b, a }: RGBA) {
 export function renderVariables(variables: Variables) {
 	let result = '';
 	for (const i in variables)
-		result += `--cxl-${toSnake(i)}:${(variables as any)[i]};`;
+		result += `--cxl-${toSnake(i)}:${
+			variables[i as keyof typeof variables]
+		};`;
 	return result;
 }
 
 export function renderGlobal(theme: {
 	variables?: Variables;
+	typography?: Typography;
 	colors?: Colors;
-	imports?: string[];
+	imports?: readonly string[];
+	globalCss?: string;
 }) {
-	const { variables, colors, imports } = theme;
+	const { variables, colors, imports, typography } = theme;
 
-	let result = '';
-	if (imports) imports.forEach(imp => (result += `@import url("${imp}");`));
+	// Imports must be at the top of the stylesheet
+	let result =
+		(imports?.map(imp => `@import url("${imp}");`).join('') || '') +
+		(theme.globalCss || '');
 
 	result += ':root{';
 
 	for (const i in colors) {
 		const name = toSnake(i);
-		const value = (colors as any)[i];
+		const value = colors[i as keyof typeof colors];
 		result += `--cxl-${name}:${value};--cxl--${name}:${value};`;
 	}
+
+	if (typography) {
+		const def = typography.default;
+
+		for (const i in typography) {
+			const name = toSnake(i);
+			const {
+				fontFamily,
+				fontSize,
+				fontWeight,
+				letterSpacing,
+				textTransform,
+			} = typography[i as keyof typeof typography];
+			const fontCss = `${fontWeight ?? def.fontWeight} ${
+				fontSize ?? def.fontSize
+			} ${fontFamily ?? def.fontFamily}`;
+
+			result +=
+				`--cxl-font-${name}:${fontCss};` +
+				(letterSpacing || def.letterSpacing
+					? `--cxl-font-${name}-spacing:${
+							letterSpacing || def.letterSpacing
+					  };`
+					: '') +
+				(textTransform
+					? `--cxl-font-${name}-transform:${textTransform};`
+					: '');
+		}
+	}
+
 	if (variables) result += renderVariables(variables);
 	return result;
+}
+
+export class Variable<T> {
+	constructor(public readonly name: string) {}
+	readonly __brand?: T;
+	toString() {
+		return `var(--cxl-${toSnake(this.name)})`;
+	}
 }
 
 export const White = rgba(255, 255, 255, 1);
@@ -391,7 +466,7 @@ export const White87 = mask(rgba(255, 255, 255, 0.12));
 export function buildTheme<T extends Theme>(theme: T) {
 	const rootStyles = document.createElement('style');
 
-	function toUnit(n: Length) {
+	function toUnit(n: Length | Variable<Length>) {
 		return `${n}${typeof n === 'number' ? theme.unit : ''}`;
 	}
 
@@ -401,29 +476,34 @@ export function buildTheme<T extends Theme>(theme: T) {
 			: val.toString();
 	}
 	function renderColor(
-		_def: StyleDefinition<Theme>,
+		_def: StyleDefinition<T>,
 		style: CSSStyle,
-		prop: any,
-		value: Color<Theme>
+		prop: StyleKey<T>,
+		value: Color<T>
 	) {
-		style[prop] = color(value);
+		style[prop as CSSStyleKey] = color(value);
 	}
 
-	function renderDefault(style: CSSStyle, prop: any, value: any) {
-		style[prop] = toUnit(value);
+	function renderDefault(style: CSSStyle, prop: StyleKey<T>, value: Length) {
+		style[prop as CSSStyleKey] = toUnit(value);
 	}
 
-	function renderTransform(v: StyleDefinition<Theme>, style: CSSStyle) {
-		style.transform =
+	function renderTransform(v: StyleDefinition<T>, style: CSSStyle) {
+		/*if (v.elevation !== undefined) {
+			const x = toUnit(v.elevation);
+			style.boxShadow =
+				v.elevation > 0
+					? `${x} ${x} ${toUnit(5 * v.elevation)} var(--cxl-shadow)`
+					: 'none';
+		}*/
+
+		const transform =
 			style.transform ||
 			(v.translateX !== undefined || v.translateY !== undefined
 				? `translate(${toUnit(v.translateX || 0)},${toUnit(
 						v.translateY || 0
 				  )})`
 				: '') +
-				(v.translateZ !== undefined
-					? `translateZ(${toUnit(v.translateZ)})`
-					: '') +
 				(v.scaleX !== undefined || v.scaleY !== undefined
 					? 'scale(' +
 					  (v.scaleX === undefined ? 1 : v.scaleX) +
@@ -432,106 +512,144 @@ export function buildTheme<T extends Theme>(theme: T) {
 					  ')'
 					: '') +
 				(v.rotate !== undefined ? 'rotate(' + v.rotate + 'deg)' : '');
+		if (transform && transform !== style.transform)
+			style.transform = transform;
 	}
 
 	function renderNumber(
-		_def: any,
+		_def: unknown,
 		style: CSSStyle,
-		prop: any,
+		prop: CSSStyleKey,
 		value: number
 	) {
 		style[prop] = value.toString();
 	}
 
-	function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
+	/*function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
 		for (const i in def) style[i] = def[i];
+	}*/
+
+	function renderKeyframes(keyframes: Keyframe[]) {
+		const frames = new KeyframeEffect(null, keyframes).getKeyframes();
+		return frames
+			.map((k, i) => {
+				const offset = `${k.computedOffset * 100}%`;
+				return `${offset}{${style({
+					...keyframes[i],
+					offset: undefined,
+				} as StyleDefinition)}}`;
+			})
+			.join('');
 	}
 
-	const renderMap: StyleMap = {
-		animation(
-			def: any,
-			style: CSSStyle,
-			_prop: any,
-			value: keyof T['animation']
-		) {
+	function renderAnimationValue(
+		key: string,
+		options?: KeyframeAnimationOptions
+	) {
+		if (!options) return `${key} var(--cxl-speed)`;
+		const { duration, fill, iterations, easing } = options;
+		return `${key} ${duration ? duration + 'ms' : 'var(--cxl-speed)'} ${
+			iterations === Infinity ? 'infinite' : iterations || ''
+		} ${easing || ''} ${fill || ''}`;
+	}
+
+	const renderMap: Partial<StyleMap<T>> = {
+		animation(def, style, _prop, value) {
 			if (value === 'none') {
 				style.animation = 'none';
 				return;
 			}
 
-			const animation = (theme.animation as any)[value];
+			const animation =
+				theme.animation[value as keyof typeof theme.animation];
 
 			if (animation) {
-				style.animation = animation.value;
+				const name = `cxl-${String(value)}`;
+				/*style.animation = `var(--cxl-animation-override,${
+					(animation as AnimationDefinition).value
+				})`;*/
+				style.animation = renderAnimationValue(
+					name,
+					(animation as AnimationDefinition).options
+				);
 				def.prepend =
 					(def.prepend || '') +
-					`@keyframes cxl-${value}{${animation.keyframes}}`;
+					`@keyframes ${name} {${renderKeyframes(
+						(animation as AnimationDefinition).keyframes
+					)}}`;
 			} else throw new Error('Animation not defined');
 		},
 		backgroundColor: renderColor,
 		borderColor: renderColor,
-		boxShadow(_def, style, _prop, v: BoxShadow<Theme>) {
+		boxShadow(_def, style, _prop, v) {
 			if (typeof v === 'string') return (style.boxShadow = v);
 			style.boxShadow = `${toUnit(v.offsetX)} ${toUnit(
 				v.offsetY
 			)} ${toUnit(v.blurRadius)} ${toUnit(v.spread)} ${color(v.color)}`;
 		},
+		userSelect(_def, style, _prop, v) {
+			style.webkitUserSelect = style.userSelect = v;
+		},
 		color: renderColor,
 		fill: renderColor,
+		stroke: renderColor,
 		elevation(_def, style, _prop, n: number) {
 			const x = toUnit(n);
 			style.zIndex = n.toString();
 			style.boxShadow =
 				n > 0 ? `${x} ${x} ${toUnit(5 * n)} var(--cxl-shadow)` : 'none';
 		},
-		font(
-			_def: StyleDefinition<Theme>,
-			style: CSSStyle,
-			_p: any,
-			value: keyof Typography
-		) {
-			const css = {
-				...theme.typography.default,
-				...theme.typography[value],
-			};
-			applyCSSStyle(style, css);
+		font(_def, style, _p, value) {
+			style.font =
+				'var(--cxl-font-' +
+				(value as string) +
+				', var(--cxl-font-default))';
+			style.letterSpacing =
+				'var(--cxl-font-' + (value as string) + '-spacing, normal)';
+			style.textTransform =
+				'var(--cxl-font-' + (value as string) + '-transform)';
 		},
 		flexGrow: renderNumber,
 		flexShrink: renderNumber,
 		opacity: renderNumber,
+		order: renderNumber,
 		translateX: renderTransform,
 		translateY: renderTransform,
-		translateZ: renderTransform,
+		//translateZ: renderTransform,
 		scaleX: renderTransform,
 		scaleY: renderTransform,
 		rotate: renderTransform,
-		variables(
-			_def: StyleDefinition<Theme>,
-			style: CSSStyle,
-			_p: any,
-			value: VariableList<Theme>
-		) {
+		variables(_def, style, _p, value) {
 			for (const i in value)
-				(style as any)[`--cxl-${toSnake(i)}`] = (value as any)[i];
+				style[`--cxl-${toSnake(i)}` as unknown as CSSStyleKey] =
+					value[i as keyof VariableList<T>];
 		},
 		zIndex: renderNumber,
 	};
-	function applyStyle(style: CSSStyle, def: StyleDefinition<Theme>) {
+
+	function applyStyle(style: CSSStyle, def: StyleDefinition<T>) {
 		for (const i in def) {
-			const fn = renderMap[i],
-				val = (def as any)[i];
-			if (fn) fn(def, style, i, val);
-			else renderDefault(style, i, val);
+			const fn = renderMap[i as keyof typeof def],
+				val = def[i as keyof typeof def];
+			if (fn)
+				(fn as (...args: unknown[]) => void)(
+					def,
+					style,
+					i as StyleKey<T>,
+					val
+				);
+			else if (val !== undefined)
+				renderDefault(style, i as StyleKey<T>, val as Length);
 		}
 	}
-	function renderMedia(media: number, style: Styles, selector: string) {
+	function renderMedia(media: number, style: Styles<T>, selector: string) {
 		return `@media(min-width:${toUnit(media)}){${render(style, selector)}}`;
 	}
 
 	function renderRule(
 		selector: string,
 		name: string,
-		styles: StyleDefinition | Styles
+		styles: StyleDefinition<T> | Styles<T>
 	) {
 		if (
 			name === '@small' ||
@@ -540,8 +658,10 @@ export function buildTheme<T extends Theme>(theme: T) {
 			name === '@large'
 		)
 			return renderMedia(
-				(theme.breakpoints as any)[name.slice(1)],
-				styles as Styles,
+				theme.breakpoints[
+					name.slice(1) as keyof typeof theme.breakpoints
+				],
+				styles as Styles<T>,
 				selector
 			);
 
@@ -558,13 +678,13 @@ export function buildTheme<T extends Theme>(theme: T) {
 
 		return result;
 	}
-	function render(styles: Styles, baseSelector = ':host') {
+	function render(styles: Styles<T>, baseSelector = ':host') {
 		let css = '';
 
 		for (const i in styles) {
-			const style = (styles as any)[i];
+			const style = styles[i as keyof Styles<T>];
+			if (!style) continue;
 			css += renderRule(baseSelector, i, style);
-
 			if (style.prepend) css = style.prepend + css;
 		}
 
@@ -572,46 +692,46 @@ export function buildTheme<T extends Theme>(theme: T) {
 	}
 
 	function createStyleElement<T extends Theme>(
-		styles: Styles,
-		selector = ':host',
-		global = false,
-		theme: T
+		styles: Styles<T>,
+		selector = ':host'
 	) {
 		const result = document.createElement('style');
-
-		result.textContent =
-			(!global && theme.globalStyles
-				? render(theme.globalStyles, selector)
-				: '') + render(styles, selector);
-
+		result.textContent = render(styles, selector);
 		return result;
 	}
 
 	function applyTheme(container = document.head) {
 		const result = renderGlobal(theme);
 		rootStyles.innerHTML = result + '}';
-		container.appendChild(rootStyles);
+		container.insertBefore(rootStyles, container.firstChild);
+	}
+
+	function variable<K extends keyof T['colors']>(
+		name: K
+	): Variable<T['colors'][K]>;
+	function variable<K extends keyof T['variables']>(
+		name: K
+	): Variable<T['variables'][K]>;
+	function variable(name: keyof T['colors'] | keyof T['variables']) {
+		return new Variable<unknown>(name as string);
 	}
 
 	return {
-		baseColor(name: keyof T['colors']) {
-			return `var(--cxl--${toSnake(name as any)})`;
-		},
-		style,
+		inline: style,
 		render,
 		applyTheme,
-		css(styles: Styles<T>, selector = ':host', global = false) {
+		rootStyles,
+		variable,
+		style(styles: Styles<T>, selector = ':host') {
 			let stylesheet: HTMLStyleElement;
 			return () => {
 				if (!stylesheet)
-					stylesheet = createStyleElement(
-						styles,
-						selector,
-						global,
-						theme
-					);
+					stylesheet = createStyleElement(styles, selector);
 				return stylesheet.cloneNode(true) as HTMLStyleElement;
 			};
+		},
+		baseColor(name: keyof T['colors']) {
+			return `var(--cxl--${toSnake(name as string)})`;
 		},
 	};
 }

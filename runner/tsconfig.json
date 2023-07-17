@@ -1,8 +1,8 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig.server.json",
 	"compilerOptions": {
 		"outDir": "../dist/runner"
 	},
 	"files": ["index.ts"],
-	"references": [ ]
+	"references": []
 }

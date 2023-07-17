@@ -3,8 +3,11 @@ import './index.js';
 
 export default spec('amd', s => {
 	window.fetch = () => {
-		return new Promise<any>(resolve => {
-			resolve({ status: 200, text: () => `define('test', [], ()=>{})` });
+		return new Promise(resolve => {
+			resolve({
+				status: 200,
+				text: async () => `define('test', [], ()=>{})`,
+			} as Response);
 		});
 	};
 
@@ -20,13 +23,13 @@ export default spec('amd', s => {
 			let i = 1;
 			define(`${base}-1`, ['exports'], ex => {
 				// Do Nothing
-				ex.test = i++;
+				(ex as Record<string, number>).test = i++;
 			});
 			define(`${base}-2`, [`${base}-1`], mod => {
-				a.equal(mod.test, 1);
+				a.equal((mod as Record<string, number>).test, 1);
 			});
 			define(`${base}-3`, [`${base}-1`], mod => {
-				a.equal(mod.test, 1);
+				a.equal((mod as Record<string, number>).test, 1);
 			});
 		});
 
@@ -38,7 +41,7 @@ export default spec('amd', s => {
 		});
 
 		it.should('define module without dependencies', a => {
-			(define as any).moduleName = a.id;
+			define.moduleName = String(a.id);
 			define(function () {
 				a.equal(arguments.length, 0);
 			});

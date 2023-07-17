@@ -88,7 +88,7 @@ async function release() {
 	await sh(`git commit -m "chore: generated changelog" -a`);
 	await sh(`git checkout master`);
 	await sh(
-		`git merge --squash -m "chore: merge release ${branch}" ${branch}`
+		`git merge --commit --squash -m "chore: merge release ${branch}" ${branch}`
 	);
 	await sh(`git push origin master`);
 }

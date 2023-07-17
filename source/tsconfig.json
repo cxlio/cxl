@@ -1,10 +1,7 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig.server.json",
 	"compilerOptions": {
-		"outDir": "../dist/source",
-		"lib": ["es2015"],
-		"types": ["node"],
-		"typeRoots": ["../node_modules/@types"]
+		"outDir": "../dist/source"
 	},
 	"files": ["index.ts"]
 }

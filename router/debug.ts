@@ -1,16 +1,12 @@
 import { log, override } from '@cxl/debug';
-import { Router, RouteManager, Route } from './index.js';
+import { Router, RouteElement, RouteManager, Route } from './index.js';
 
-override(
-	RouteManager.prototype,
-	'register',
-	function (this: RouteManager, route) {
-		const path = route.id;
-		const routes: Route<any>[] = (this as any).routes;
-		if (path && routes.find(r => r.id === path))
-			throw new Error(`Route with id "${path}" already registered`);
-	}
-);
+override(RouteManager.prototype, 'register', function (route) {
+	const path = route.id;
+	const routes: Route<RouteElement>[] = this.routes;
+	if (path && routes.find(r => r.id === path))
+		throw new Error(`Route with id "${path}" already registered`);
+});
 
 override(
 	Router.prototype,

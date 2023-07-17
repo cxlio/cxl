@@ -1,8 +1,0 @@
-{
-	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"outDir": "../dist/worker"
-	},
-	"files": ["test.ts"],
-	"references": [{ "path": "tsconfig.json" }, { "path": "../tester" }]
-}

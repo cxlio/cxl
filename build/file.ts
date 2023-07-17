@@ -1,6 +1,5 @@
 import * as Terser from 'terser';
 import {
-	EMPTY,
 	Observable,
 	defer,
 	from,
@@ -8,15 +7,26 @@ import {
 	pipe,
 	reduce,
 	tap,
+	of,
+	mergeMap,
+	filter,
 } from '@cxl/rx';
 import { Output } from '@cxl/source';
 import { promises as fs, readFileSync } from 'fs';
 import { basename as pathBasename, dirname, resolve } from 'path';
-import { sh } from '@cxl/server';
-import { shell } from './builder.js';
+import { exec, shell } from './builder.js';
 
 interface MinifyConfig extends Terser.MinifyOptions {
-	sourceMap?: { content?: string; url: string };
+	sourceMap?: false | { content?: string; url: string };
+	changePath?: boolean;
+}
+
+export function ls(dir: string) {
+	return new Observable<string>(async subs => {
+		const files = await fs.readdir(dir);
+		for (const path of files) subs.next(resolve(dir, path));
+		subs.complete();
+	});
 }
 
 export async function read(source: string): Promise<Output> {
@@ -25,6 +35,11 @@ export async function read(source: string): Promise<Output> {
 		path: source,
 		source: content,
 	};
+}
+
+export function filterPath(matchPath: string) {
+	matchPath = resolve(matchPath);
+	return filter((out: Output) => resolve(out.path).startsWith(matchPath));
 }
 
 export function file(source: string, out?: string) {
@@ -50,7 +65,7 @@ export function concatFile(outName: string, separator = '\n') {
 			(out, src) => `${out}${separator}${src.source}`,
 			''
 		),
-		map(source => ({ path: outName, source }))
+		map(source => ({ path: outName, source: Buffer.from(source) }))
 	);
 }
 
@@ -81,12 +96,8 @@ export function matchStat(fromPath: string, toPath: string) {
  * Copy Directory
  */
 export function copyDir(fromPath: string, toPath: string, glob = '*') {
-	return defer(() =>
-		from(
-			sh(
-				`mkdir -p ${toPath} && rsync -au --delete ${fromPath}/${glob} ${toPath}`
-			)
-		).mergeMap(() => EMPTY)
+	return exec(
+		`mkdir -p ${toPath} && rsync -au -i --delete ${fromPath}/${glob} ${toPath}`
 	);
 }
 
@@ -99,41 +110,59 @@ export function getSourceMap(out: Output): Output | undefined {
 }
 
 export const MinifyDefault: MinifyConfig = {
-	ecma: 2019,
+	ecma: 2020,
 };
 
 export function minify(op?: MinifyConfig) {
-	return (source: Observable<Output>) =>
-		new Observable<Output>(subscriber => {
-			const config = { ...MinifyDefault, ...op };
-			const subscription = source.subscribe(async out => {
-				const destPath = pathBasename(
-					out.path.replace(/\.js$/, '.min.js')
+	return mergeMap<Output, Output>(out => {
+		const config = { ...MinifyDefault, ...op };
+		// Bypass if not a JS file
+		if (!out.path.endsWith('.js')) return of(out);
+
+		const destPath =
+			op?.changePath === false
+				? out.path
+				: out.path.replace(/\.js$/, '.min.js');
+		if (config.sourceMap === undefined) {
+			const sourceMap = getSourceMap(out);
+			if (sourceMap)
+				config.sourceMap = {
+					content: sourceMap.source.toString(),
+					url: destPath + '.map',
+				};
+		}
+		const source = out.source.toString();
+		delete config.changePath;
+		return new Observable(async subscriber => {
+			try {
+				const { code, map } = await Terser.minify(
+					{ [out.path]: source },
+					config
 				);
-				if (!config.sourceMap) {
-					const sourceMap = getSourceMap(out);
-					if (sourceMap)
-						config.sourceMap = {
-							content: sourceMap.source.toString(),
-							url: destPath + '.map',
-						};
-				}
-				const source = out.source.toString();
-				const { code, map } = await Terser.minify(source, config);
 				if (!code) throw new Error('No code generated');
-
-				subscriber.next({ path: destPath, source: Buffer.from(code) });
-
+				subscriber.next({
+					path: destPath,
+					source: Buffer.from(code),
+				});
 				if (map && config.sourceMap)
 					subscriber.next({
 						path: config.sourceMap.url,
 						source: Buffer.from(map.toString()),
 					});
-				subscriber.complete();
-			});
-
-			return () => subscription.unsubscribe();
+			} catch (e) {
+				console.error(`Error minifying ${out.path}`);
+				throw e;
+			}
+			subscriber.complete();
 		});
+	});
+}
+
+export function minifyDir(dir: string, op?: MinifyConfig) {
+	return ls(dir)
+		.filter(path => path.endsWith('.js'))
+		.mergeMap(file)
+		.pipe(minify(op));
 }
 
 export function zip(src: string[], path: string): Observable<Output> {

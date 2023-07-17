@@ -52,6 +52,39 @@ async function respond(req: HTTPRequest, sources: Output[], url: string) {
 	});
 }
 
+function resolveImport(path: string) {
+	if (path === 'axe-core') return require.resolve('axe-core');
+	return path
+		.replace(
+			/^@j5g3\/(.+)/,
+			(str, p1) =>
+				`../../../j5g3/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`
+		)
+		.replace(
+			/^@cxl\/workspace\.(.+)/,
+			(str, p1) =>
+				`../../../cxl.app/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`
+		)
+		.replace(
+			/^@cxl\/(ui.*)/,
+			(str, p1) =>
+				`../../../ui/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`
+		)
+		.replace(
+			/^@cxl\/(.+)/,
+			(str, p1) =>
+				`../../../cxl/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`
+		);
+}
+
 async function handleRequest(sources: Output[], req: HTTPRequest) {
 	if (req.method() !== 'POST') return req.continue();
 
@@ -60,9 +93,14 @@ async function handleRequest(sources: Output[], req: HTTPRequest) {
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
 	const paths = [resolve(base)];
+	const resolvedUrl = resolveImport(scriptPath);
+	if (resolvedUrl !== scriptPath) {
+		return respond(req, sources, resolvedUrl);
+	}
 
 	try {
 		const url = require.resolve(scriptPath, { paths });
+		console.log(`import ${url}`);
 		await respond(req, sources, url);
 	} catch (e) {
 		console.error(base, scriptPath, e);
@@ -151,15 +189,15 @@ async function generateCoverage(
 	});
 }
 
-let figureReady: Promise<any>;
+let figureReady: Promise<void>;
 let screenshotQueue = Promise.resolve();
 
 function parsePNG(buffer: Buffer) {
-	return new Promise<Buffer>((resolve, reject) => {
+	return new Promise<PNG>((resolve, reject) => {
 		const png = new PNG();
 		png.parse(buffer, (e, self) => {
 			if (e) reject(e);
-			else resolve(self.data);
+			else resolve(self);
 		});
 	});
 }
@@ -170,15 +208,19 @@ function screenshot(page: Page, domId: string) {
 		screenshotQueue = screenshotQueue.then(() => {
 			return page
 				.$eval(id, el => {
-					(el as any).style.zIndex = 10;
+					(el as HTMLElement).style.zIndex = '10';
+					(
+						((el as HTMLElement).getRootNode() as Document)
+							?.activeElement as HTMLElement
+					)?.blur?.();
 				})
 				.then(() => page.$(id))
-				.then(el =>
-					el?.screenshot({
+				.then(el => {
+					return el?.screenshot({
 						type: 'png',
 						encoding: 'binary',
-					})
-				)
+					});
+				})
 				.then(
 					buffer => {
 						if (buffer && buffer instanceof Buffer) resolve(buffer);
@@ -201,13 +243,16 @@ async function handleFigureRequest(
 	}/${name}.png`);
 	const filename = `spec/${name}.png`;
 
+	await page.waitForFunction(() => document.fonts?.ready);
 	await (figureReady ||
 		(figureReady = page
 			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 250 })
-			.catch(() => 1)));
+			.then(
+				() => void 0,
+				() => void 0
+			)));
 
 	page.mouse.move(350, -100);
-	//await page.waitForTimeout(300);
 	const [original, buffer] = await Promise.all([
 		readFile(baseline).catch(() => undefined),
 		screenshot(page, domId),
@@ -223,17 +268,18 @@ async function handleFigureRequest(
 			.catch(() => false)
 			.then(() => writeFile(baseline, buffer));
 	} else if (original && buffer && app.baselinePath) {
-		const [originalData, newData] = await Promise.all([
+		const [oPng, newPng] = await Promise.all([
 			parsePNG(original),
 			parsePNG(buffer),
 		]);
+		const originalData = oPng.data;
+		const newData = newPng.data;
 		const len = originalData.length;
-		//let diff = 0;
 
 		if (len !== newData.length) {
 			return {
 				success: false,
-				message: 'Screenshot should match baseline: Different Size',
+				message: `Screenshot should match baseline: Different Size (${oPng.width}x${oPng.height} vs ${newPng.width}x${newPng.height})`,
 				data,
 			};
 		}
@@ -245,17 +291,6 @@ async function handleFigureRequest(
 					data,
 				};
 		}
-		/*diff++;
-		}
-		if (diff > 0)
-			return {
-				success: false,
-				message: `Screenshot should match baseline: Different by ${(
-					(diff / len) *
-					100
-				).toFixed(2)}%`,
-				data,
-			};*/
 	}
 
 	return {
@@ -287,7 +322,7 @@ export default async function runPuppeteer(app: TestRunner) {
 	if (app.startServer) await page.waitForTimeout(500);
 	if (app.browserUrl) await page.goto(app.browserUrl);
 
-	function cxlRunner(cmd: any): Promise<Result> | Result {
+	function cxlRunner(cmd: FigureData): Promise<Result> | Result {
 		if (cmd.type === 'figure') {
 			try {
 				return handleFigureRequest(page, cmd, app);

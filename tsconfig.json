@@ -2,22 +2,20 @@
 	"compilerOptions": {
 		"incremental": true,
 		"strict": true,
-		"target": "es2019",
+		"target": "es2020",
 		"module": "commonjs",
-		"allowJs": true,
+		"lib": ["ES2021"],
 		"experimentalDecorators": true,
-		"sourceMap": true,
+		"sourceMap": false,
 		"moduleResolution": "Node",
 		"removeComments": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"composite": true,
 		"skipLibCheck": true,
-		"jsx": "react",
-		"jsxFactory": "dom",
-		"jsxFragmentFactory": "dom",
-		"typeRoots": ["node_modules/@types"],
+		"typeRoots": [],
 		"paths": {
+			"@cxl/ui*": ["../ui/ui*"],
 			"@cxl/*": ["./*"]
 		}
 	},

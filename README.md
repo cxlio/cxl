@@ -17,7 +17,6 @@ Collection of Libraries and Tools
 | @cxl/drag            | [0.1.0](https://npmjs.com/package/@cxl/drag/v/0.1.0) | Apache-2.0 | Drag and Drop library | [Docs](https://cxlio.github.io/cxl/drag/0.1.0) |
 | @cxl/dts             | [0.4.0](https://npmjs.com/package/@cxl/dts/v/0.4.0) ([latest:0.3.0](https://npmjs.com/package/@cxl/dts/v/0.3.0)) | GPL-3.0-only | Generate symbol information from typescript source code | [Docs](https://cxlio.github.io/cxl/dts/0.4.0) |
 | @cxl/filewatch       | [0.5.0](https://npmjs.com/package/@cxl/filewatch/v/0.5.0) ([latest:0.4.0](https://npmjs.com/package/@cxl/filewatch/v/0.4.0)) | Apache-2.0 | File watcher library | [Docs](https://cxlio.github.io/cxl/filewatch/0.5.0) |
-| @cxl/i18n            | [0.0.1](https://npmjs.com/package/@cxl/i18n/v/0.0.1) | GPL-3.0    | Internationalization tools | [Docs](https://cxlio.github.io/cxl/i18n/0.0.1) |
 | @cxl/keyboard        | [0.1.0](https://npmjs.com/package/@cxl/keyboard/v/0.1.0) ([latest:0.0.2](https://npmjs.com/package/@cxl/keyboard/v/0.0.2)) | UNLICENSED | Keybaard Handling Library | [Docs](https://cxlio.github.io/cxl/keyboard/0.1.0) |
 | @cxl/program         | [0.0.3](https://npmjs.com/package/@cxl/program/v/0.0.3) ([latest:0.0.2](https://npmjs.com/package/@cxl/program/v/0.0.2)) | GPL-3.0    | CLI Utilities | [Docs](https://cxlio.github.io/cxl/program/0.0.3) |
 | @cxl/router          | [0.3.0](https://npmjs.com/package/@cxl/router/v/0.3.0) ([latest:0.2.0](https://npmjs.com/package/@cxl/router/v/0.2.0)) | GPL-3.0    | Router library | [Docs](https://cxlio.github.io/cxl/router/0.3.0) |
@@ -28,9 +27,3 @@ Collection of Libraries and Tools
 | @cxl/template        | [1.0.0](https://npmjs.com/package/@cxl/template/v/1.0.0) | GPL-3.0    | Reactive template library | [Docs](https://cxlio.github.io/cxl/template/1.0.0) |
 | @cxl/tester          | [0.0.1](https://npmjs.com/package/@cxl/tester/v/0.0.1) | GPL-3.0    | Test runner tool | [Docs](https://cxlio.github.io/cxl/tester/0.0.1) |
 | @cxl/tsx             | [0.3.0](https://npmjs.com/package/@cxl/tsx/v/0.3.0) ([latest:0.2.0](https://npmjs.com/package/@cxl/tsx/v/0.2.0)) | GPL-3.0    | TSX library | [Docs](https://cxlio.github.io/cxl/tsx/0.3.0) |
-| @cxl/ui              | [3.3.0](https://npmjs.com/package/@cxl/ui/v/3.3.0) ([latest:3.2.0](https://npmjs.com/package/@cxl/ui/v/3.2.0)) | GPL-3.0    | High-performance Web Components | [Docs](https://cxlio.github.io/cxl/ui/3.3.0) |
-| @cxl/ui-blog         | [0.0.1](https://npmjs.com/package/@cxl/ui-blog/v/0.0.1) | GPL-3.0    | Blog UI Components | [Docs](https://cxlio.github.io/cxl/ui-blog/0.0.1) |
-| @cxl/ui-router       | [0.0.2](https://npmjs.com/package/@cxl/ui-router/v/0.0.2) ([latest:0.0.1](https://npmjs.com/package/@cxl/ui-router/v/0.0.1)) | GPL-3.0    | UI Router Components | [Docs](https://cxlio.github.io/cxl/ui-router/0.0.2) |
-| @cxl/ui-www          | [0.0.1](https://npmjs.com/package/@cxl/ui-www/v/0.0.1) | GPL-3.0    | Website Utility Components | [Docs](https://cxlio.github.io/cxl/ui-www/0.0.1) |
-| @cxl/validation      | [0.0.1](https://npmjs.com/package/@cxl/validation/v/0.0.1) | Apache-2.0 | Input validation library | [Docs](https://cxlio.github.io/cxl/validation/0.0.1) |
-| @cxl/worker          | [0.0.1](https://npmjs.com/package/@cxl/worker/v/0.0.1) | GPL-3.0    | Web Worker library | [Docs](https://cxlio.github.io/cxl/worker/0.0.1) |

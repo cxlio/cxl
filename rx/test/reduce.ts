@@ -5,10 +5,10 @@ import { spec } from '@cxl/spec';
 export default spec('reduce', a => {
 	a.should('reduce', async a => {
 		const values = {
-			a: 1,
-			b: 3,
-			c: 5,
-			x: 9,
+			a: '1',
+			b: '3',
+			c: '5',
+			x: '9',
 		};
 		const e1 = cold('--a--b--c--|', values);
 		const e1subs = '^          !';

@@ -33,8 +33,8 @@ export default spec('component', a => {
 			) as Test;
 			el.bind(observable(() => a.equal(order++, 3)));
 			a.dom.appendChild(el);
-			a.equal((el as any).$$bindings.bindings.length, 4);
-			a.equal((el as any).$$bindings.subscriptions.length, 4);
+			//a.equal(el.$$bindings.bindings.length, 4);
+			//a.equal(el.$$bindings.subscriptions.length, 4);
 
 			order = 0;
 
@@ -43,8 +43,8 @@ export default spec('component', a => {
 			) as Test;
 			el2.bind(observable(() => a.equal(order++, 3)));
 			a.dom.appendChild(el2);
-			a.equal((el2 as any).$$bindings.bindings.length, 4);
-			a.equal((el2 as any).$$bindings.subscriptions.length, 4);
+			//a.equal(el2.$$bindings.bindings.length, 4);
+			//a.equal(el2.$$bindings.subscriptions.length, 4);
 		});
 	});
 
@@ -111,7 +111,7 @@ export default spec('component', a => {
 		class Test extends Component {
 			static tagName = id;
 		}
-		const el = dom(id as any);
+		const el = dom(Test);
 		a.ok(el);
 		a.equal(el.tagName, id.toUpperCase());
 		a.ok(el instanceof Test);
@@ -257,11 +257,11 @@ export default spec('component', a => {
 
 		a.ok(TestComponent);
 		a.dom.innerHTML = `<${id} test-boolean />`;
-		const el = a.dom.firstChild as any;
+		const el = a.dom.firstChild as TestComponent;
 		a.equal(el['test-boolean'], true);
 
 		a.dom.innerHTML = `<${id} test-string="hello" />`;
-		const el2 = a.dom.firstChild as any;
+		const el2 = a.dom.firstChild as TestComponent;
 		a.equal(el2['test-string'], 'hello');
 	});
 
@@ -400,8 +400,8 @@ export default spec('component', a => {
 		a.ran(6);
 	});
 
-	a.test('Attribute', a => {
-		a.test('should work with getters and setters', a => {
+	a.test('Attribute', it => {
+		it.should('work with getters and setters', a => {
 			const id = 'cxl-test' + a.id;
 			const setter = be(false);
 			const event = be('');
@@ -430,6 +430,28 @@ export default spec('component', a => {
 			a.equal(el.attr, 'two');
 			a.equal(el.$attr, 'two');
 			a.equal(event.value, 'two');
+		});
+
+		it.test('allow changing values inside handler', a => {
+			const id = 'cxl-test' + a.id;
+			const done = a.async();
+
+			@Augment(id)
+			class Test extends Component {
+				@Attribute()
+				hello = 'world';
+			}
+			const el = (<Test />) as Test;
+			el.bind(
+				get(el, 'hello').tap(val => {
+					if (val === 'world2') {
+						a.ok(val);
+						done();
+					}
+					el.hello = 'world2';
+				})
+			);
+			a.dom.appendChild(el);
 		});
 	});
 

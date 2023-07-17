@@ -1,8 +1,11 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"module": "amd",
 		"outDir": "../dist/css/amd"
 	},
-	"files": ["index.ts", "color.ts"]
+	"files": [
+		"index.ts",
+		"color.ts"
+	]
 }

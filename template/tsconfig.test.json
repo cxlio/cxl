@@ -1,12 +1,20 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/template"
 	},
-	"files": ["test.tsx"],
+	"files": [
+		"test.tsx"
+	],
 	"references": [
-		{ "path": "." },
-		{ "path": "../tsx" },
-		{ "path": "../tester" }
+		{
+			"path": "."
+		},
+		{
+			"path": "../tsx"
+		},
+		{
+			"path": "../tester"
+		}
 	]
 }

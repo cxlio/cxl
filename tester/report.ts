@@ -1,7 +1,8 @@
 import { readFileSync } from 'fs';
 import { relative } from 'path';
-import type { Test, FigureData } from '@cxl/spec';
 import { SourceMap, getSourceMap, positionToIndex } from '@cxl/source';
+
+import type { JsonResult, FigureData } from '@cxl/spec';
 
 export interface TestResult {
 	success: boolean;
@@ -84,7 +85,10 @@ function translateRanges(
 	functions: FunctionCoverage[]
 ): TestCoverage[] {
 	const source = readFileSync(url, 'utf8');
-	const sourcesMap: any = {};
+	const sourcesMap: Record<
+		string,
+		{ source?: string; ranges: CoverageRange[] }
+	> = {};
 
 	functions.forEach(cov => {
 		cov.ranges.forEach(range => {
@@ -163,7 +167,7 @@ async function generateCoverageReport(coverage: Coverage) {
 	return calculateCoverage(filtered);
 }
 
-function renderTestReport(test: Test): TestReport {
+function renderTestReport(test: JsonResult): TestReport {
 	let failureCount = 0;
 
 	const results: TestResult[] = test.results.map(r => {
@@ -197,7 +201,7 @@ function renderTestReport(test: Test): TestReport {
 }
 
 export async function generateReport(
-	suite: Test,
+	suite: JsonResult,
 	v8Coverage?: Coverage
 ): Promise<Report> {
 	const testReport = renderTestReport(suite);

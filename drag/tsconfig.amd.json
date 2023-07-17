@@ -1,12 +1,18 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"module": "amd",
 		"outDir": "../dist/drag/amd"
 	},
 	"references": [
-		{ "path": "../rx/tsconfig.amd.json" },
-		{ "path": "../dom/tsconfig.amd.json" }
+		{
+			"path": "../rx/tsconfig.amd.json"
+		},
+		{
+			"path": "../dom/tsconfig.amd.json"
+		}
 	],
-	"files": ["index.ts"]
+	"files": [
+		"index.ts"
+	]
 }
