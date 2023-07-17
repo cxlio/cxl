@@ -56,7 +56,7 @@ export default program('cli', async ({ log }) => {
 		}
 	}
 
-	async function publishProject(mod: string, dry: boolean) {
+	async function publishProject(mod: string, dry: boolean, force: boolean) {
 		const pkg = readPackage(mod);
 		const lintResults = await lint([mod], rootPkg);
 		if (lintResults.errors.length) {
@@ -68,7 +68,7 @@ export default program('cli', async ({ log }) => {
 		if (!dry) {
 			log(`Building ${pkg.name} ${pkg.version}`);
 			await sh(`npm run build package docs --prefix ${mod}`);
-			await checkBranchClean('publish');
+			if (!force) await checkBranchClean('publish');
 		}
 
 		await testPackage(mod, pkg);
@@ -96,7 +96,7 @@ export default program('cli', async ({ log }) => {
 			await sh(`git add changelog.json`);
 			await sh(`git commit -m "chore: merge branch ${branch}"`);
 			await sh('git push origin master');
-			await sh(`git push -d origin ${branch} && git branch -d ${branch}`);
+			await sh(`git push -d origin ${branch} && git branch -D ${branch}`);
 		}),
 		changelog: parametersParser(
 			{
@@ -177,27 +177,30 @@ export default program('cli', async ({ log }) => {
 		publish: parametersParser(
 			{
 				dryrun: { type: 'boolean', help: 'Do not make changes' },
+				force: { type: 'boolean', help: 'Ignore branch protection' },
 			},
 			async args => {
 				const dry = args.dryrun;
+				const force = args.force;
 				const branch = await getBranch(process.cwd());
 				if (!dry && branch !== 'master')
 					throw 'Active branch is not master';
 
-				await checkBranchUpToDate();
-				//await checkBranchClean('master');
+				if (!force) await checkBranchUpToDate();
 
 				try {
 					if (!dry) await sh('git checkout -b publish');
 					for (const mod of args.$)
-						if (mod) publishProject(mod, !!dry);
+						if (mod) await publishProject(mod, !!dry, !!force);
 					if (!dry) {
 						await sh(`node scripts/build-readme.js`);
 						await sh(`git commit -m "chore: update readme" -a`);
 						await sh(
 							'git checkout master && git merge --squash publish'
 						);
-						await sh(`git push origin master`);
+						await sh(
+							`git commit --no-edit -n && git push origin master`
+						);
 					}
 				} catch (e) {
 					console.error(e);
