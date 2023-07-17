@@ -5,7 +5,7 @@
 	"homepage": "https://cxlio.github.io/cxl/keyboard",
 	"browser": "amd/index.js",
 	"license": "UNLICENSED",
-	"description": "Keybaard Handling Library",
+	"description": "Keyboard Handling Library",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/keyboard && node ../tester --baselinePath=../../keyboard/spec"

@@ -2,7 +2,7 @@
 	
 [![npm version](https://badge.fury.io/js/%40cxl%2Fkeyboard.svg)](https://badge.fury.io/js/%40cxl%2Fkeyboard)
 
-Keybaard Handling Library
+Keyboard Handling Library
 
 ## Project Details
 

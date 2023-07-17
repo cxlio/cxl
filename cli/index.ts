@@ -57,8 +57,6 @@ export default program('cli', async ({ log }) => {
 	}
 
 	async function publishProject(mod: string, dry: boolean) {
-		await sh(`npm run build docs --prefix ${mod}`);
-		await checkBranchUpToDate();
 		const pkg = readPackage(mod);
 		const lintResults = await lint([mod], rootPkg);
 		if (lintResults.errors.length) {
@@ -67,10 +65,14 @@ export default program('cli', async ({ log }) => {
 			throw 'Lint errors found';
 		}
 
-		log(`Building ${pkg.name} ${pkg.version}`);
-		await sh(`npm run build package --prefix ${mod}`);
+		if (!dry) {
+			log(`Building ${pkg.name} ${pkg.version}`);
+			await sh(`npm run build package docs --prefix ${mod}`);
+			await checkBranchClean('publish');
+		}
 
 		await testPackage(mod, pkg);
+
 		if (!dry) {
 			await sh(`npm publish --access=public`, {
 				cwd: `dist/${mod}`,
@@ -94,6 +96,7 @@ export default program('cli', async ({ log }) => {
 			await sh(`git add changelog.json`);
 			await sh(`git commit -m "chore: merge branch ${branch}"`);
 			await sh('git push origin master');
+			await sh(`git push -d origin ${branch} && git branch -d ${branch}`);
 		}),
 		changelog: parametersParser(
 			{
@@ -181,15 +184,27 @@ export default program('cli', async ({ log }) => {
 				if (!dry && branch !== 'master')
 					throw 'Active branch is not master';
 
-				await checkBranchClean('master');
+				await checkBranchUpToDate();
+				//await checkBranchClean('master');
 
-				for (const mod of args.$) if (mod) publishProject(mod, !!dry);
-				if (!dry) {
-					await sh(`node scripts/build-readme.js`);
-					await sh(
-						`git commit -m "chore: publish ${args.$} packages to npm."`
-					);
-					await sh(`git push origin master`);
+				try {
+					if (!dry) await sh('git checkout -b publish');
+					for (const mod of args.$)
+						if (mod) publishProject(mod, !!dry);
+					if (!dry) {
+						await sh(`node scripts/build-readme.js`);
+						await sh(`git commit -m "chore: update readme" -a`);
+						await sh(
+							'git checkout master && git merge --squash publish'
+						);
+						await sh(`git push origin master`);
+					}
+				} catch (e) {
+					console.error(e);
+					log(`Publish failed. Aborting.`);
+				} finally {
+					if (!dry)
+						await sh(`git checkout master; git branch -D publish`);
 				}
 			}
 		),
