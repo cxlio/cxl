@@ -963,7 +963,6 @@ function serializeDeclarationWithType(node: ts.Declaration): Node {
 
 function pushChildren(parent: Node, children: Node[]) {
 	children.forEach(n => {
-		if (n.parent && n.parent !== parent) console.log(parent.name, n.name);
 		return (
 			!n.parent &&
 			Object.defineProperty(n, 'parent', {
