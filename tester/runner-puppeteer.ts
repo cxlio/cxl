@@ -100,7 +100,6 @@ async function handleRequest(sources: Output[], req: HTTPRequest) {
 
 	try {
 		const url = require.resolve(scriptPath, { paths });
-		console.log(`import ${url}`);
 		await respond(req, sources, url);
 	} catch (e) {
 		console.error(base, scriptPath, e);
