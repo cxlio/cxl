@@ -771,9 +771,9 @@ function ModuleNavbar(node: Node) {
 function Item(title: string, href: string, icon?: string) {
 	if (!href) throw new Error(`No href for "${title}"`);
 
-	const result = `<cxl-router-item href="${href}">${
+	const result = `<doc-it href="${href}">${
 		icon ? `<cxl-icon icon="${icon}"></cxl-icon>` : ''
-	}${title}</cxl-router-item>`;
+	}${title}</doc-it>`;
 
 	return result;
 }
@@ -879,7 +879,7 @@ function Header(module: Output, scripts: File[]) {
 
 	return `<!DOCTYPE html>
 	<head><meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}cxl-router-item>cxl-badge{margin-right:0} cxl-grid>cxl-c,cxl-router-a,doc-a{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]{margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0}</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]{margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0}</style>
 	<cxl-application permanent><title>${title} API Reference</title><cxl-appbar center>
 	${Navbar(pkg, module)}
 	<doc-search></doc-search>

@@ -10,7 +10,7 @@ import { Option } from '@cxl/ui/option.js';
 import { each, onValue, render } from '@cxl/template';
 import { AppbarSearch } from '@cxl/ui/appbar-search.js';
 import { C, Card } from '@cxl/ui/layout.js';
-import { A, RouterLink, routerState } from '@cxl/ui-router';
+import { A, RouterLink, RouterItem, routerState } from '@cxl/ui-router';
 import { css } from '@cxl/ui/theme.js';
 import { BlogDemo } from '@cxl/ui/blog.js';
 import { Autocomplete } from '@cxl/ui/autocomplete.js';
@@ -48,6 +48,9 @@ routerState.subscribe(state => {
 		}
 	}
 });
+
+@Augment<DocItem>('doc-it')
+export class DocItem extends RouterItem {}
 
 @Augment<DocGrid>(
 	'doc-grd',
