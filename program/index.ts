@@ -145,29 +145,11 @@ export const DefaultParameters = {
 	},
 } as const;
 
-/*interface Argument {
-	name: string;
-	value?: string;
-}*/
-
 function unquote(value: string) {
 	return value.startsWith('"') && value.endsWith('"')
 		? value.slice(1, value.length - 1)
 		: value;
 }
-
-/*function findParam(
-	parameters: Parameter[],
-	shortcut: string,
-	pvalue?: string,
-	prop: 'short' | 'name' = 'short'
-) {
-	const result = parameters.find(p => p[prop] === shortcut);
-	if (!result) throw new Error(`Invalid parameter "${shortcut}"`);
-	const value = pvalue && unquote(pvalue);
-
-	return { name: result.name, value };
-}*/
 
 function findParameter<T extends Record<string, Parameter>>(
 	parameters: T,
