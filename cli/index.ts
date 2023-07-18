@@ -33,8 +33,11 @@ export default program('cli', async ({ log }) => {
 	async function testPackage(dir: string, _pkg: Package) {
 		const cwd = `dist/${dir}`;
 		await sh(`npm install --production`, { cwd });
-		await sh(`npm test`, { cwd: dir });
-		await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
+		try {
+			await sh(`npm test`, { cwd: dir });
+		} finally {
+			await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
+		}
 	}
 
 	async function checkBranchClean(branch: string) {
