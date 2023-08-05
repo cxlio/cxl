@@ -1,13 +1,13 @@
 ///<amd-module name="@cxl/docgen/runtime"/>
 import { dom } from '@cxl/tsx';
 import '@cxl/ui/theme.js';
-import { Augment, Component, Span, get } from '@cxl/component';
-import { onChildrenMutation, onLoad, requestJson } from '@cxl/dom';
+import { Augment, Attribute, Component, Span, get } from '@cxl/component';
+import { onChildrenMutation, onLoad, onValue, requestJson } from '@cxl/dom';
 import { padding } from '@cxl/css';
 import { be } from '@cxl/rx';
 import { SelectBox } from '@cxl/ui/select.js';
 import { Option } from '@cxl/ui/option.js';
-import { each, onValue, render } from '@cxl/template';
+import { each, render } from '@cxl/template';
 import { AppbarSearch } from '@cxl/ui/appbar-search.js';
 import { C, Card } from '@cxl/ui/layout.js';
 import { A, RouterLink, RouterItem, routerState } from '@cxl/ui-router';
@@ -23,6 +23,7 @@ import '@cxl/ui/application.js';
 import '@cxl/ui/navbar.js';
 import '@cxl/ui/theme-toggle.js';
 import '@cxl/ui/theme-dark.js';
+import '@cxl/ui/hr.js';
 
 declare const hljs: typeof import('highlight.js').default;
 
@@ -163,7 +164,7 @@ export class DocExample extends Component {}
 @Augment<DocVersionSelect>(
 	'doc-version-select',
 	css({
-		select: { verticalAlign: 'bottom' },
+		$: { display: 'inline-block' },
 	}),
 	$ => (
 		<$.Shadow>
@@ -174,15 +175,11 @@ export class DocExample extends Component {}
 							$={el =>
 								onValue(el).tap(val => $.onValue(String(val)))
 							}
+							value={docgen.activeVersion}
 							className="select"
 						>
 							{json.all.map(v => (
-								<Option
-									selected={docgen.activeVersion === v}
-									value={v}
-								>
-									{v}
-								</Option>
+								<Option value={v}>{v}</Option>
 							))}
 						</SelectBox>
 					) : (
@@ -194,8 +191,46 @@ export class DocExample extends Component {}
 )
 export class DocVersionSelect extends Component {
 	onValue(version: string) {
-		if (version !== docgen.activeVersion) window.location.href = version;
+		if (version !== docgen.activeVersion)
+			window.location.href = `../${version}/`;
 	}
+}
+
+const hljsLanguages = ['html', 'typescript', 'javascript', 'css', 'ts'];
+
+@Augment<DocHighlight>(
+	'doc-hl',
+	css({
+		$: { display: 'block' },
+		hljs: { whiteSpace: 'pre-wrap', font: 'code', ...padding(16) },
+	}),
+	() => <link rel="stylesheet" href="styles.css" />,
+	host => {
+		const srcContainer = (<div className="hljs" />) as HTMLElement;
+		srcContainer.style.tabSize = '4';
+		host.bind(
+			onLoad().tap(() => {
+				const lang = host.l;
+				let src = host.childNodes[0]?.textContent?.trim() || '';
+				try {
+					if (src)
+						src = (
+							lang && hljsLanguages.includes(lang.toLowerCase())
+								? hljs.highlight(src, { language: lang })
+								: hljs.highlightAuto(src, hljsLanguages)
+						).value;
+				} catch (e) {
+					/* Ignore */
+				}
+				srcContainer.innerHTML = src;
+			})
+		);
+		return srcContainer;
+	}
+)
+export class DocHighlight extends Component {
+	@Attribute()
+	l?: string;
 }
 
 @Augment<DocDemo>('doc-demo', $ => {

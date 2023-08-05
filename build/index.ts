@@ -17,13 +17,14 @@ export { Output } from '@cxl/source';
 export {
 	AMD,
 	REQUIRE_REPLACE,
-	Package,
 	pkg,
 	readme,
 	bundle,
 	template,
-	getBranch,
+	docgen,
+	docgenTask,
 } from './package.js';
+export { Package } from './npm.js';
 export { buildCxl } from './cxl.js';
 export { Task, build, exec, shell } from './builder.js';
 

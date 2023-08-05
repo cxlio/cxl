@@ -1,8 +1,7 @@
 import * as fs from 'fs/promises';
 import { Package } from '../build';
-import { checkNpms } from '../build/npm.js';
+import { getPackageInfo } from '../build/npm.js';
 import { basename } from 'path';
-import { renderMarkdown } from '../blog';
 
 export type ProductType =
 	| 'component'
@@ -120,8 +119,8 @@ async function processPackage(dir: string, name: string, result: Product[]) {
 			await fs.readFile(`${path}/package.json`, 'utf8')
 		);
 		if (!pkg.private) {
-			const npms = await checkNpms(pkg.name);
-			const published = npms?.collected?.metadata;
+			const npms = await getPackageInfo(pkg.name);
+			const published = npms;
 			if (!published)
 				return console.log(
 					`Ignoring unpublished package ${pkg.name} ${pkg.version}`
@@ -134,7 +133,7 @@ async function processPackage(dir: string, name: string, result: Product[]) {
 				version: published.version,
 				description: pkg.description,
 				license: published.license,
-				links: published.links,
+				//links: published.links,
 				browserScript: pkg.browser,
 				keywords,
 				search: `${pkg.name} ${pkg.description} ${keywords.join(' ')}`,
@@ -153,9 +152,6 @@ async function processPackage(dir: string, name: string, result: Product[]) {
 							src
 						)
 					);
-
-			if (published.readme)
-				published.readmeHtml = renderMarkdown(published.readme).content;
 
 			await findComponents(dir, name, pkg, result);
 		} else console.log(`Ignoring private project ${path}`);
@@ -216,8 +212,6 @@ async function findProjects(dir: string) {
 			await processPackage(dir, name, result);
 		}
 	}
-
-	//await findTemplates(TemplateDir, result);
 
 	return result;
 }

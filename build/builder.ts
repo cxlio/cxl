@@ -90,17 +90,6 @@ export async function build(...targets: BuildConfiguration[]) {
 		console.error(e);
 		process.exit(1);
 	}
-
-	/*return await targets.reduce(
-		(result, config) =>
-			result
-				.then(() => buildTarget(config))
-				.catch(e => {
-					console.error(e);
-					process.exit(1);
-				}),
-		Promise.resolve()
-	);*/
 }
 
 function formatTime(time: bigint) {
@@ -153,4 +142,19 @@ export function shell(cmd: string, options: SpawnOptions = {}) {
 			}
 		});
 	});
+}
+
+export function run(
+	cmd: string,
+	params: Record<string, string | number | boolean | undefined>,
+	options?: SpawnOptions
+) {
+	const args = [cmd];
+	for (const p in params) {
+		const val = params[p];
+		if (val === false || val === undefined) continue;
+		args.push(typeof val === 'boolean' ? `--${p}` : `--${p} "${val}"`);
+	}
+	console.log(args.join(' '));
+	return sh(args.join(' '), options);
 }

@@ -70,6 +70,8 @@ export const KindMap: Record<Kind, string> = {
 	[Kind.UnknownType]: 'unknown',
 	[Kind.Event]: 'Event',
 	[Kind.Spread]: 'Spread',
+	[Kind.ImportType]: 'Import Type',
+	[Kind.Symbol]: 'Symbol',
 };
 
 export const GroupTitle: Record<number, string> = {
@@ -90,6 +92,9 @@ export const GroupTitle: Record<number, string> = {
 	[Kind.CallSignature]: 'Call Signature',
 	[Kind.ConstructSignature]: 'Construct Signature',
 	[Kind.Event]: 'Events',
+	[Kind.IndexSignature]: 'Index Signature',
+	[Kind.Export]: 'Exports',
+	[Kind.Namespace]: 'Namespaces',
 };
 
 const content = {
@@ -105,6 +110,7 @@ const content = {
 
 const jsdocMap: Record<string, string> = {
 	see: 'Related',
+	usageNotes: 'Usage Notes',
 };
 
 export function groupTitle(kind: Kind) {

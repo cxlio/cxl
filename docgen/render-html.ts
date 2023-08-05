@@ -5,6 +5,7 @@ import {
 	Flags,
 	Source,
 	DocumentationContent,
+	printNode as _printNode,
 } from '@cxl/dts';
 import type { DocGen, File } from './index.js';
 import {
@@ -15,7 +16,6 @@ import {
 } from './localization';
 import type { Package } from '@cxl/program';
 import { join, relative } from 'path';
-import hljs from 'highlight.js';
 import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import MarkdownIt from 'markdown-it';
 import {
@@ -34,10 +34,12 @@ interface Group {
 }
 
 let application: DocGen;
-let index: Node[];
+//let index: Record<string, Node | undefined>;
 let extraDocs: Section[];
 let extraFiles: File[];
 let docgenConfig: RuntimeConfig;
+let modules: Node[];
+let allSymbols: Node[];
 
 const RUNTIME_JS = __dirname + '/runtime.bundle.min.js';
 const STYLES_CSS = __dirname + '/styles.css';
@@ -181,6 +183,8 @@ export function renderType(type: Node): string {
 			return Link(type);
 		case Kind.ReadonlyKeyword:
 			return `readonly ${Type(type.type)}`;
+		case Kind.Symbol:
+			return 'Symbol';
 		case Kind.UnknownType:
 			return 'unknown';
 	}
@@ -291,52 +295,40 @@ export function Anchor(id: number | undefined, content: string) {
 
 function getSourceLink(src: Source) {
 	const url = application.repositoryLink;
-	if (url) {
+	if (url && !src.sourceFile.isDeclarationFile) {
 		const pos = src.sourceFile.getLineAndCharacterOfPosition(src.index);
-		const fileUrl = `${relative(
-			application.packageRoot,
-			src.sourceFile.fileName
-		)}#L${pos.line + 1}`;
-		return fileUrl; //`${url}/${fileUrl}`;
+		const fileUrl = `${
+			/*application.rootDir
+				? join(application.rootDir, src.sourceFile.fileName)
+				: */ relative(application.packageRoot, src.name /*sourceFile.fileName*/)
+		}#L${pos.line + 1}`;
+		return fileUrl;
 	}
 	return '';
 }
 
-/*
-function getSource(source: Source) {
-	return `<a class="see-source" title="See Source" href="${getSourceLink(
-		source
-	)}">&lt;/&gt;</a>`;
-}
-
-function SourceLink({ source }: Node) {
-	return source && application.repository
-		? Array.isArray(source)
-			? source.map(getSource).join('')
-			: getSource(source)
-		: '';
-}*/
+//const languages = ['html', 'typescript', 'javascript', 'css'];
 
 function Code(source: string, language?: string) {
 	if (language === 'demo') return Demo({ value: source });
 
-	return (
-		'<pre><code class="hljs">' +
-		(language
-			? hljs.highlight(source, { language })
-			: hljs.highlightAuto(source, [
-					'html',
-					'typescript',
-					'javascript',
-					'css',
-			  ])
-		).value +
-		'</code></pre>'
-	);
+	//try {
+	/*const formatted = (
+			language && languages.includes(language.toLowerCase())
+				? hljs.highlight(source, { language })
+				: hljs.highlightAuto(source, languages)
+		).value;*/
+	return `<doc-hl${
+		language ? ` l="language"` : ''
+	}><!--${source}--></doc-hl>`;
+	/*} catch (e) {
+		console.error(e);
+		return '';
+	}*/
 }
 
 function Demo(doc: DocumentationContent): string {
-	const { title, value } = parseExample(doc.value);
+	const { title, value } = parseExample(getDocValue(doc.value));
 
 	return `<cxl-t h6>${title || translate('Demo')}</cxl-t><doc-demo${
 		application.debug ? ' debug' : ''
@@ -347,22 +339,72 @@ function Example(doc: DocumentationContent) {
 	return Demo(doc);
 }
 
+function findSymbolByName(name: string) {
+	const [symbolName, _method] = name.split('#');
+	return allSymbols.find(s => s.name === symbolName);
+}
+
+function ExternalLink(url: string, title: string) {
+	return `<a href="${getExternalLink(url)}">${title}</a>`;
+}
+
 function DocSee(doc: DocumentationContent) {
-	const names = doc.value.split(' ');
-	return (
-		`<p>${jsdocTitle('see')}: ` +
-		names
-			.map(name => {
-				const symbol = index.find(n => n.name === name);
-				return symbol ? Link(symbol) : name;
-			})
-			.join(', ') +
-		'</p>'
-	);
+	const value = doc.value;
+
+	if (Array.isArray(value)) return getDocValue(value);
+
+	/*const linkTag = linkRegex.exec(value);
+
+	if (linkTag) {
+		const [, name, title] = linkTag;
+		const symbol = findSymbolByName(name);
+
+		return `<p>${jsdocTitle('see')}: ${
+			symbol ? Link(symbol, title) : ExternalLink(name, title)
+		}</p>`;
+	}*/
+
+	const symbol = findSymbolByName(value);
+
+	return `<p>${jsdocTitle('see')}: ${
+		symbol
+			? Link(symbol)
+			: application.markdown
+			? Markdown(value, true)
+			: escape(value)
+	}</p>`;
 }
 
 function formatContent(text: string) {
-	return text.replace(/\r?\n\r?\n/g, '</p><p>');
+	return escape(text).replace(/\r?\n\r?\n/g, '</p><p>');
+}
+
+//const linkRegex = /\{@link\s+(.+?)[|\s]\s*(.+?)\s*\}/;
+const linkRegex = /^\s*(.+?)[|\s]\s*(.+?)\s*$/;
+
+function getDocValue(content: DocumentationContent['value']) {
+	if (typeof content === 'string') return content;
+
+	return content
+		.map(doc => {
+			if (doc.tag === 'link') {
+				const linkTag = linkRegex.exec(doc.value);
+				if (linkTag) {
+					console.log(linkTag);
+					const [, name, title] = linkTag;
+					const symbol = findSymbolByName(name);
+
+					return `<p>${jsdocTitle('see')}: ${
+						symbol ? Link(symbol, title) : ExternalLink(name, title)
+					}</p>`;
+				}
+
+				const symbol = findSymbolByName(doc.value);
+				return symbol ? Link(symbol) : escape(doc.value);
+			}
+			return doc.value;
+		})
+		.join(' ');
 }
 
 function Documentation(node: Node) {
@@ -379,11 +421,17 @@ function Documentation(node: Node) {
 			if (doc.tag === 'param') return `<p>${doc.value}</p>`;
 			if (doc.tag === 'see') return DocSee(doc);
 
-			const value = escape(doc.value);
+			const value = getDocValue(doc.value);
 
-			return `<p>${formatContent(
-				doc.tag ? `${jsdocTitle(doc.tag)}: ${value}` : `${value}`
-			)}</p>`;
+			return doc.tag
+				? `<p>${jsdocTitle(doc.tag)}: ${
+						application.markdown
+							? Markdown(value, !value.includes('\n'))
+							: formatContent(value)
+				  }</p>`
+				: application.markdown
+				? Markdown(value)
+				: `<p>${escape(value)}</p>`;
 		})
 		.join('');
 }
@@ -437,6 +485,10 @@ function ExtendedBy(extendedBy?: Node[]) {
 		: '';
 }
 
+function isReferenceNode(node: Node) {
+	return node.kind === Kind.Reference || node.kind === Kind.ImportType;
+}
+
 function Link(node: Node, content?: string, parentHref?: string): string {
 	const name =
 		content ||
@@ -445,11 +497,15 @@ function Link(node: Node, content?: string, parentHref?: string): string {
 			: node.flags & Flags.Default
 			? '<i>default</i>'
 			: '(Unknown)');
-	if (node.type) {
-		if (node.kind === Kind.Reference) node = node.type;
-		else if (node.kind === Kind.Export) return Link(node.type);
-	}
 
+	if (node.type && isReferenceNode(node)) node = node.type;
+	/*if (node.type) {
+		if (node.kind === Kind.Reference) node = node.type;
+		else if (node.type.kind === Kind.Reference && node.type.type)
+			node = node.type.type;
+	}*/
+
+	//if (!node.id && !hasOwnPage(node)) return name;
 	if (!node.id) return name;
 
 	const href = getHref(node, parentHref);
@@ -540,7 +596,11 @@ function ImportStatement(node: Node) {
 function MemberIndexLink(node: Node, _parentHref: string) {
 	const chips = node.flags & Flags.Static ? `${Chip('static')} ` : '';
 	const link = Link(node, undefined, '');
-	return chips ? `<c>${chips}${link}</c>` : link;
+	return chips
+		? `<c>${chips}${link}</c>`
+		: link.startsWith('<')
+		? link
+		: `<c>${link}</c>`;
 }
 
 function MemberGroupIndex({ kind, index }: Group) {
@@ -574,7 +634,7 @@ function pushToGroup(
 	indexOnly: boolean,
 	parentHref: string
 ) {
-	const groupKind = (c.kind === Kind.Export && c.type?.type?.kind) || c.kind;
+	const groupKind = c.kind === Kind.ImportType ? Kind.Export : c.kind;
 
 	let group = resultMap[groupKind];
 
@@ -614,7 +674,6 @@ function getMemberGroups(node: Node, indexOnly = false, sort = true) {
 			!declarationFilter(c)
 		)
 			return;
-		if (c.flags & Flags.Internal) return;
 
 		// Handle Object or Array destructuring
 		if (
@@ -662,11 +721,16 @@ function Members(node: Node) {
 	const type = node.type;
 	const groups = getMemberGroups(node);
 
-	const inherited = type ? MemberInherited(type) : '';
+	if (
+		groups.length &&
+		(node.kind === Kind.Module || node.kind === Kind.Namespace) &&
+		!modules.includes(node)
+	)
+		modules.push(node);
 
+	const inherited = type ? MemberInherited(type) : '';
 	return groups.length || inherited
-		? (node.kind !== Kind.Module ? `<cxl-t h5>Members</cxl-t>` : '') +
-				groups.map(MemberGroupIndex).join('') +
+		? groups.map(MemberGroupIndex).join('') +
 				inherited +
 				groups.map(MemberBodyGroup).join('')
 		: '';
@@ -684,7 +748,9 @@ function ModuleBody(json: Node) {
 export function getHref(node: Node, parentHref?: string): string {
 	if (
 		node.type &&
-		(node.kind === Kind.Reference || node.kind === Kind.Export)
+		(node.kind === Kind.Reference ||
+			node.kind === Kind.Export ||
+			node.kind === Kind.ImportType)
 	)
 		return getHref(node.type);
 	if (hasOwnPage(node)) return getPageName(node);
@@ -712,6 +778,8 @@ const IconMap: Record<number, string> = {
 	[Kind.Interface]: 'I',
 	[Kind.TypeAlias]: 'T',
 	[Kind.Component]: 'C',
+	[Kind.Enum]: 'E',
+	[Kind.Namespace]: 'N',
 };
 
 function NodeIcon(node: Node) {
@@ -817,14 +885,14 @@ function Versions() {
 	return `<doc-version-select></doc-version-select>`;
 }
 
-function Navbar(pkg: Package, out: Output) {
-	return `<cxl-navbar permanent><cxl-c pad="16"><cxl-t font="h5" inline>${
+function Navbar(pkg: Package) {
+	return `<cxl-navbar permanent><cxl-flex middle pad="16"><cxl-t style="flex-grow:1" font="h5" inline>${
 		application.packageName || pkg.name
-	}</cxl-t>&nbsp;&nbsp;${Versions()}
-	</cxl-c>
+	}</cxl-t>${Versions()}
+	</cxl-flex>
 		<cxl-hr></cxl-hr>
 		${extraDocs.length ? NavbarExtra() : ''}	
-		${out.modules.sort(sortNode).map(ModuleNavbar).join('')}
+		${modules.sort(sortNode).map(ModuleNavbar).join('')}
 		</cxl-navbar>`;
 }
 
@@ -844,22 +912,9 @@ function getConfigScript(versions = 'version.json') {
 }
 
 function getRuntimeScripts(scripts: File[]) {
-	return application.debug
-		? `<script src="../../dist/tester/require-browser.js"></script>
-	<script>
-	require.replace = function (path) {
-		return path.replace(
-			/^@cxl\\/(.+)/,
-			(str, p1) =>
-				\`../../../cxl/dist/\${
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}\`
-		);
-	};
-	require('../../dist/ui/index.js');require('../../dist/docgen/runtime.js')</script>`
-		: `<script src="runtime.bundle.min.js"></script>${scripts.map(
-				src => `<script src="${src.name}"></script>`
-		  )}`;
+	return `<script src="runtime.bundle.min.js"></script>${scripts.map(
+		src => `<script src="${src.name}"></script>`
+	)}`;
 }
 
 function getUserScripts(scripts = application.demoScripts, prefix = 'us') {
@@ -872,23 +927,23 @@ function getUserScripts(scripts = application.demoScripts, prefix = 'us') {
 	);
 }
 
-function Header(module: Output, scripts: File[]) {
+function Header(scripts: File[]) {
 	const pkg = application.modulePackage;
 	const SCRIPTS = getRuntimeScripts(scripts);
 	const title = application.packageName || pkg.name;
 
 	return `<!DOCTYPE html>
 	<head><meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]{margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0}</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]:not([inline]){margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0}</style>
 	<cxl-application permanent><title>${title} API Reference</title><cxl-appbar center>
-	${Navbar(pkg, module)}
+	${Navbar(pkg)}
 	<doc-search></doc-search>
 	<cxl-theme-toggle-icon title="Dark theme toggle" theme="@cxl/ui/theme-dark.js" persistkey="cxl.ui-demo.theme"></cxl-theme-toggle-icon>
 	</cxl-appbar><cxl-page center><link id="styles.css" rel="stylesheet" href="styles.css" /><script src="highlight.js"></script>`;
 }
 
 function escapeFileName(name: string, replaceExt = '.html') {
-	return name.replace(/\.[tj]sx?$/, replaceExt).replace(/[./]/g, '--');
+	return name.replace(/\.[tj]sx?$/, replaceExt).replace(/[./"]/g, '--');
 }
 
 function getPageName(page: Node) {
@@ -947,33 +1002,47 @@ function Module(module: Node) {
 	return result ? result.concat(Page(module)) : [Page(module)];
 }
 
-function Markdown(content: string) {
+function getExternalLink(url: string) {
+	return application.baseHref
+		? new URL(url, application.baseHref).toString()
+		: url;
+}
+
+function Markdown(content: string, inline = false) {
 	const md = new MarkdownIt({
 		highlight: Code,
+		html: true,
 	});
-	const rules = md.renderer.rules;
-	const map = {
-		h1: 'h2',
-		h2: 'h3',
-		h3: 'h4',
-		h4: 'h5',
-		h5: 'h6',
+	const oldLink = md.normalizeLink;
+	md.normalizeLink = (url: string) => {
+		return application.baseHref
+			? getExternalLink(url)
+			: oldLink.call(md, url);
 	};
 
+	const rules = md.renderer.rules;
+	const map = {
+		h1: 'h4',
+		h2: 'h5',
+		h3: 'h6',
+		h4: 'h6',
+		h5: 'h6',
+	};
 	rules.heading_open = (tokens, idx) =>
 		`<cxl-t ${map[tokens[idx].tag as keyof typeof map]}>`;
 	rules.heading_close = () => `</cxl-t>`;
 	rules.code_block = (tokens, idx) => Code(tokens[idx].content);
+	rules.fence = (tokens, idx) => Code(tokens[idx].content);
 
-	return md.render(content);
+	return inline ? md.renderInline(content) : md.render(content);
 }
 
 function Route(file: File) {
 	return `<template ${
 		file.name === 'index.html' ? 'data-default="true"' : ''
-	} data-title="${file.title || file.node?.name || file.name}" data-path="${
-		file.name
-	}">${file.content}</template>`;
+	} data-title="${escape(
+		file.title || file.node?.name || file.name
+	)}" data-path="${file.name}">${file.content}</template>`;
 }
 
 function renderExtraFile({ file, index, title }: ExtraDocumentation) {
@@ -992,16 +1061,10 @@ function initRuntimeConfig(app: DocGen) {
 	const pkg = app.modulePackage;
 	const userScripts = getUserScripts();
 
-	/*const otherVersions = findOtherVersions(
-		application.outputDir,
-		pkg?.version
-	);*/
-
 	docgenConfig = {
 		activeVersion: pkg?.version || '',
 		userScripts: userScripts.map(f => f.name),
 		versions: pkg?.version && 'version.json',
-		//pkg ? [pkg.version, ...otherVersions] : otherVersions,
 		repository: application.repositoryLink,
 	};
 
@@ -1014,7 +1077,11 @@ function versionPrefix(version: string, file: File) {
 
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
-	index = Object.values(output.index);
+
+	if (!app.rootDir && output.config.options.rootDir)
+		app.rootDir = output.config.options.rootDir;
+	//index = output.index;
+	allSymbols = Object.values(output.index);
 	const scripts = getUserScripts(application.scripts || [], 's');
 	const userScripts = initRuntimeConfig(app);
 	const readmePath = join(application.packageRoot, 'README.md');
@@ -1025,12 +1092,12 @@ export function render(app: DocGen, output: Output): File[] {
 			? [{ items: [{ title: 'Home', file: readmePath, index: true }] }]
 			: []);
 
+	modules = [];
 	extraFiles = extraDocs.flatMap(section =>
 		section.items.map(renderExtraFile)
 	);
 
 	const result: File[] = output.modules.flatMap(Module);
-	const header = Header(output, scripts);
 	const footer = '</cxl-page></cxl-application>';
 	const config = getConfigScript();
 	result.push(...extraFiles);
@@ -1042,6 +1109,8 @@ export function render(app: DocGen, output: Output): File[] {
 			content += Route(doc);
 		} else doc.content = config + header + doc.content + footer;
 	});
+
+	const header = Header(scripts);
 
 	if (app.spa) {
 		const staticFiles = [

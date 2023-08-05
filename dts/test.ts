@@ -6,10 +6,23 @@ import {
 	NumberType,
 	StringType,
 	VoidType,
-	parse
+	parse as _parse,
+	printNode as _printNode,
 } from './index.js';
 import { TestApi, spec } from '@cxl/spec';
 import * as ts from 'typescript';
+
+function parse(source: string, compilerOptions?: ts.CompilerOptions) {
+	return _parse({
+		source,
+		compilerOptions,
+		exportsOnly: false,
+	});
+}
+
+function parseExports(source: string, compilerOptions?: ts.CompilerOptions) {
+	return _parse({ source, compilerOptions });
+}
 
 export default spec('dts', a => {
 	const test = a.test.bind(a);
@@ -139,115 +152,12 @@ export default spec('dts', a => {
 		a.equal(fn.type.name, '');
 	});
 
-	a.test('type declaration - type parameters', a => {
-		const [type] = parse('export type Operator<T, T2 = T> = Map<T, T2>');
-
-		a.ok(type.id);
-		a.equal(type.name, 'Operator');
-		a.equal(type.kind, Kind.TypeAlias);
-		a.ok(type.typeParameters);
-
-		if (type.typeParameters) {
-			const [T, T2] = type.typeParameters;
-
-			a.equal(type.typeParameters.length, 2);
-			a.equal(T.name, 'T');
-			a.equal(T.kind, Kind.TypeParameter);
-			a.equal(T2.name, 'T2');
-			a.equal(T2.value, 'T');
-		}
-	});
-
-	test('type declaration - union type', (a: TestApi) => {
-		const [type] = parse(
-			'export type Operator = boolean | string | number'
-		);
-
-		a.ok(type.id);
-		a.equal(type.name, 'Operator');
-		a.equal(type.kind, Kind.TypeAlias);
-
-		a.assert(type.type);
-		a.assert(type.type.children);
-
-		a.equal(type.type.children.length, 3);
-		const [t1, t2, t3] = type.type.children;
-		a.equal(t1, BooleanType);
-		a.equal(t2, StringType);
-		a.equal(t3, NumberType);
-	});
-
-	test('interface - empty', (a: TestApi) => {
-		const [kls] = parse('interface TestApi { }');
-
-		a.ok(kls);
-		a.equal(kls.name, 'TestApi');
-		a.equal(kls.kind, Kind.Interface);
-		a.ok(kls.source);
-	});
-
-	test('interface - multiple properties', (a: TestApi) => {
-		const [kls] = parse(
-			`interface TestApi { m1: string; m2: number, m3: boolean }`
-		);
-
-		a.ok(kls);
-		a.equal(kls.name, 'TestApi');
-		a.equal(kls.kind, Kind.Interface);
-		a.assert(kls.children);
-		a.equal(kls.children.length, 3);
-	});
-
-	test('interface - multiple inheritance', (a: TestApi) => {
-		const [A, B, C] = parse(`
-			interface A { }
-			interface B { }
-			interface C extends A, B {}
-		`);
-
-		a.ok(A);
-		a.equal(A.name, 'A');
-		a.equal(A.kind, Kind.Interface);
-		a.ok(B);
-		a.equal(B.name, 'B');
-		a.equal(B.kind, Kind.Interface);
-		a.ok(C);
-		a.equal(C.name, 'C');
-		a.equal(C.kind, Kind.Interface);
-	});
-
 	test('class declaration - empty class', (a: TestApi) => {
 		const [kls] = parse('class TestApi { }');
 
 		a.ok(kls);
 		a.equal(kls.name, 'TestApi');
 		a.ok(kls.source);
-	});
-
-	a.test('interface - method overload', (a: TestApi) => {
-		const [A] = parse(`interface A {
-			m1(a: string): void;
-			m1(b: boolean): boolean;
-			m1(c: any): boolean | void;
-		}`);
-
-		a.assert(A.children);
-		a.equal(A.children.length, 3);
-		const [m1, m2, m3] = A.children;
-		a.equal(m1.name, 'm1');
-		a.equal(m1.type, VoidType);
-		a.assert(m1.parameters);
-		a.equal(m1.parameters[0].name, 'a');
-		a.ok(m1.flags & Flags.Overload);
-		a.equal(m2.name, 'm1');
-		a.equal(m2.type, BooleanType);
-		a.ok(m2.flags & Flags.Overload);
-		a.assert(m2.parameters);
-		a.equal(m2.parameters[0].name, 'b');
-		a.equal(m3.name, 'm1');
-		a.ok(m3.flags & Flags.Overload);
-		a.assert(m3.parameters);
-		a.equal(m3.parameters[0].name, 'c');
 	});
 
 	test('class - method overload', (a: TestApi) => {
@@ -501,12 +411,8 @@ export default spec('dts', a => {
 		a.equal(m1.name, 'm1');
 	});
 
-	test('export clause', (a: TestApi) => {
-		const [A, B] = parse(`
-			const A = 'test';
-			export { A };
-		`);
-
+	a.test('export clause', (a: TestApi) => {
+		const [A, B] = parseExports(`const A = 'test'; export { A };`);
 		a.ok(!B);
 		a.ok(A);
 		a.assert(A.type);
@@ -605,40 +511,139 @@ export default spec('dts', a => {
 		a.equal(see.value, 'A');
 	});
 
-	test('type alias - function', (a: TestApi) => {
-		const [A] = parse(`type A<T> = (val: T) => void;`);
-		a.assert(A.type);
-		const type = A.type;
-		a.equal(type.kind, Kind.FunctionType);
-		a.assert(type.parameters);
-		a.equal(type.parameters.length, 1);
-		a.equal(type.type, VoidType);
+	a.test('@link reference', (a: TestApi) => {
+		const [fn] = parse(`
+/**
+ * Link {@link ABC} inline.
+ */
+export interface A {}
+export interface ABC {};
+		`);
+		a.assert(fn.docs?.content?.[0].value);
+		const val = fn.docs.content[0].value;
+		a.assert(Array.isArray(val));
+		a.equal(val.length, 3);
+		a.equal(val[1].tag, 'link');
+		a.equal(val[1].value, 'ABC');
 	});
 
-	test('type alias - exported', (a: TestApi) => {
-		const [A] = parse(`export type A<T> = (val: T) => void;`);
-		a.assert(A.type);
-		a.equal(A.kind, Kind.TypeAlias);
-		const type = A.type;
-		a.equal(type.kind, Kind.FunctionType);
-		a.assert(type.parameters);
-		a.equal(type.parameters.length, 1);
-		a.equal(type.type, VoidType);
-	});
+	a.test('type alias', a => {
+		const [B, type, E, I, A, C, D, F, G, H] = parse(`
+			export type B<T> = (val: T) => void;	
+			export type Operator = boolean | string | number;
+			export type E = 'a' | 'b' | 'c';
+			export type Operator2<T, T2 = T> = Map<T, T2>	
+			type A<T> = (val: T) => void;
+			type C = Record<keyof Map<any, any>, typeof Set>;
+			type D = 'a' | 'b' | 'c';
+			type F<T> = { [P in keyof T]: T[P]; }
+			type G<T> = { [P in keyof T]: T[P]; } & { name: string };
+			type H = \`\${number} \${true|false}\`	
+		`);
 
-	a.test('type alias - Record', (a: TestApi) => {
-		const [A] = parse(`type A = Record<keyof Map<any, any>, typeof Set>;`);
-		a.assert(A.type);
-		a.equal(A.kind, Kind.TypeAlias);
-		const type = A.type;
-		a.equal(type.kind, Kind.Reference);
-		a.equal(type.name, 'Record');
-		a.assert(type.typeParameters);
-		const [p1, p2] = type.typeParameters;
-		a.equal(p1.kind, Kind.Keyof);
-		a.assert(p1.type);
-		a.equal(p1.type.name, 'Map');
-		a.equal(p2.name, 'Set');
+		a.test('function', (a: TestApi) => {
+			a.assert(A.type);
+			const type = A.type;
+			a.equal(type.kind, Kind.FunctionType);
+			a.assert(type.parameters);
+			a.equal(type.parameters.length, 1);
+			a.equal(type.type, VoidType);
+		});
+
+		a.test('exported', (a: TestApi) => {
+			a.assert(B.type);
+			a.equal(B.kind, Kind.TypeAlias);
+			const type = B.type;
+			a.equal(type.kind, Kind.FunctionType);
+			a.assert(type.parameters);
+			a.equal(type.parameters.length, 1);
+			a.equal(type.type, VoidType);
+		});
+
+		a.test('export literal union', (a: TestApi) => {
+			a.equal(E.kind, Kind.TypeAlias);
+			a.assert(E.type?.children);
+			a.equal(E.type.children.length, 3);
+			a.equal(E.type.children[0].name, `'a'`);
+			a.equal(E.type.children[1].name, `'b'`);
+			a.equal(E.type.children[2].name, `'c'`);
+		});
+
+		a.test('type parameters', a => {
+			const type = I;
+			a.ok(type.id);
+			a.equal(type.name, 'Operator2');
+			a.equal(type.kind, Kind.TypeAlias);
+			a.ok(type.typeParameters);
+
+			if (type.typeParameters) {
+				const [T, T2] = type.typeParameters;
+
+				a.equal(type.typeParameters.length, 2);
+				a.equal(T.name, 'T');
+				a.equal(T.kind, Kind.TypeParameter);
+				a.equal(T2.name, 'T2');
+				a.equal(T2.value, 'T');
+			}
+		});
+
+		a.test('Record', (a: TestApi) => {
+			a.assert(C.type);
+			a.equal(C.kind, Kind.TypeAlias);
+			const type = C.type;
+			a.equal(type.kind, Kind.Reference);
+			a.equal(type.name, 'Record');
+			a.assert(type.typeParameters);
+			const [p1, p2] = type.typeParameters;
+			a.equal(p1.kind, Kind.Keyof);
+			a.assert(p1.type);
+			a.equal(p1.type.name, 'Map');
+			a.equal(p2.name, 'Set');
+		});
+
+		a.test('type declaration - union type', (a: TestApi) => {
+			a.ok(type.id);
+			a.equal(type.name, 'Operator');
+			a.equal(type.kind, Kind.TypeAlias);
+
+			a.assert(type.type);
+			a.assert(type.type.children);
+
+			a.equal(type.type.children.length, 3);
+			const [t1, t2, t3] = type.type.children;
+			a.equal(t1, BooleanType);
+			a.equal(t2, StringType);
+			a.equal(t3, NumberType);
+		});
+
+		a.test('literal union', (a: TestApi) => {
+			a.equal(D.kind, Kind.TypeAlias);
+			a.assert(D.type?.children);
+			a.equal(D.type.children.length, 3);
+			a.equal(D.type.children[0].name, `'a'`);
+			a.equal(D.type.children[1].name, `'b'`);
+			a.equal(D.type.children[2].name, `'c'`);
+		});
+
+		a.test('Mapped type', (a: TestApi) => {
+			a.equal(F.name, 'F');
+			a.assert(F.type);
+			const sig = F.type;
+			a.equal(sig.name, '');
+		});
+
+		a.test('Intersection type', (a: TestApi) => {
+			a.equal(G.name, 'G');
+			a.assert(G.type);
+			const sig = G.type;
+			a.equal(sig.name, '');
+		});
+
+		a.test('String Literal Types', (a: TestApi) => {
+			a.assert(H.type);
+			a.equal(H.type.name, '`${number} ${true | false}`');
+			a.equal(H.type.kind, Kind.Literal);
+		});
 	});
 
 	test('constructor type', (a: TestApi) => {
@@ -729,8 +734,8 @@ function op<T>() { return new Operator<T>(); }
 		a.equal(map.type.typeParameters[0].type, map.typeParameters[0]);
 	});
 
-	test('Type Reference - Type Alias', (a: TestApi) => {
-		const [Operator, operator, map] = parse(`
+	a.test('Type Reference - Type Alias', (a: TestApi) => {
+		const [operator, Operator, map] = parse(`
 type Operator<T> = Set<T>;
 export function operator<T>(): Operator<T> { return new Set<T> }
 function map<T>() {	return operator<T>(); }
@@ -819,35 +824,15 @@ function map<T>() {	return operator<T>(); }
 		a.equal(five.type.children[0].kind, Kind.Property);
 	});
 
-	test('index signature', (a: TestApi) => {
-		const [A] = parse(`interface A { [key: string]: boolean; }`);
-		a.assert(A.children);
-		const key = A.children[0];
-		a.equal(key.type, BooleanType);
-		a.assert(key.parameters);
-		a.equal(key.parameters[0].name, 'key');
-		a.equal(key.parameters[0].type, StringType);
-	});
-
-	test('export', (a: TestApi) => {
-		const [A, B] = parse(`function B() { } export { Set as A, B }`);
+	a.test('export', (a: TestApi) => {
+		const [A, B] = parseExports(
+			`const C=1; function B() { } export { C as A, B }`
+		);
 		a.equal(A.name, 'A');
 		a.equal(B.name, 'B');
 		a.assert(A.type);
-		a.equal(A.type.name, 'Set');
-		a.equal(A.kind, Kind.Export);
-	});
-
-	test('interface extends class', (a: TestApi) => {
-		const [A, B] = parse(
-			`export class A<T> { m1?: boolean; } export interface A<T> { m2: string; }`
-		);
-		a.ok(A);
-		a.ok(B);
-		a.assert(A.children);
-		a.equal(A.children.length, 2);
-		a.equal(A.children[0].name, 'm1');
-		a.equal(A.children[1].name, 'm2');
+		a.equal(A.type.name, '1');
+		a.equal(A.kind, Kind.Constant);
 	});
 
 	a.test('@internal', (a: TestApi) => {
@@ -890,47 +875,6 @@ function map<T>() {	return operator<T>(); }
 		a.equal(A.parameters[0].name, 'args');
 	});
 
-	a.test('function interface', (a: TestApi) => {
-		const [A] = parse(`interface ModeFactory<T> { (config: number): T; }`);
-		a.equal(A.name, 'ModeFactory');
-		a.equal(A.typeParameters?.length, 1);
-		a.assert(A.children);
-		const sig = A.children[0];
-		a.equal(A.children.length, 1);
-		a.equal(sig.name, '');
-		a.equal(sig.parameters?.[0]?.name, 'config');
-		a.equal(sig.type?.name, 'T');
-	});
-
-	a.test('interface new signature', (a: TestApi) => {
-		const [A] = parse(`interface A { new (config: number): string; }`);
-		a.equal(A.name, 'A');
-		a.assert(A.children);
-		const sig = A.children[0];
-		a.equal(A.children.length, 1);
-		a.equal(sig.name, '');
-		a.equal(sig.parameters?.[0]?.name, 'config');
-		a.equal(sig.type?.name, 'string');
-	});
-
-	a.test('Mapped type', (a: TestApi) => {
-		const [A] = parse(`type A<T> = { [P in keyof T]: T[P]; }`);
-		a.equal(A.name, 'A');
-		a.assert(A.type);
-		const sig = A.type;
-		a.equal(sig.name, '');
-	});
-
-	a.test('Intersection type', (a: TestApi) => {
-		const [A] = parse(
-			`type A<T> = { [P in keyof T]: T[P]; } & { name: string };`
-		);
-		a.equal(A.name, 'A');
-		a.assert(A.type);
-		const sig = A.type;
-		a.equal(sig.name, '');
-	});
-
 	a.test('Duplicate symbols', (a: TestApi) => {
 		const [A, B] = parse(
 			`interface A {} declare var A: { prototype: A; new(): A }`
@@ -943,8 +887,7 @@ function map<T>() {	return operator<T>(); }
 	a.test('Merge namespace declarations', (a: TestApi) => {
 		const result = parse(
 			`declare namespace A { export type B = 1; }
-			 declare namespace A { export type C = string; }
-			 export = A`
+			 declare namespace A { export type C = string; }`
 		);
 		a.ok(result);
 		const [A] = result;
@@ -956,19 +899,33 @@ function map<T>() {	return operator<T>(); }
 
 	a.test('namespace', (a: TestApi) => {
 		const [ns] = parse(`
-namespace ns {
+export namespace ns {
 	const fn1 = function fn1() { };
 	export const fn2 = function fn2() { };
 }
 `);
 		a.equal(ns.name, 'ns');
 		a.assert(ns.children);
-		const [fn1, fn2] = ns.children;
+		const [fn2] = ns.children;
 
 		a.test('non exported function', (a: TestApi) => {
-			a.ok(fn1);
 			a.equal(fn2.name, 'fn2');
 		});
+	});
+
+	a.test('namespace - nested', (a: TestApi) => {
+		const [ns3, ns2, ns] = parse(`
+declare module "ns" {
+	namespace ns2 {
+		namespace ns3 {
+			const A: boolean;
+		}
+	}
+}
+`);
+		a.equal(ns.name, '"ns"');
+		a.equal(ns2.name, '"ns".ns2');
+		a.equal(ns3.name, '"ns".ns2.ns3');
 	});
 
 	a.test('Enum Accessor', (a: TestApi) => {
@@ -976,15 +933,121 @@ namespace ns {
 		a.equal(C.name, 'C');
 		a.assert(C.type);
 		const sig = C.type;
+		a.equal(sig.kind, Kind.Reference);
 		a.equal(sig.name, 'Kind.A');
+		a.assert(sig.type);
+		a.equal(sig.type.kind, Kind.Property);
 	});
 
-	a.test('Interface with string literal names', (a: TestApi) => {
-		const [A] = parse(`interface A { "B": string }`);
-		a.assert(A.children);
-		const B = A.children[0];
-		a.equal(B.name, 'B');
+	a.test('interface', (a: TestApi) => {
+		const [A, B, C, D, E, F, G, H] = parse(`
+			interface A { "a1": string; "b-2": string; }
+			interface B { }
+			interface C { m1: string; m2: number, m3: boolean }
+			interface D extends A, B {}
+			interface E {
+				m1(a: string): void;
+				m1(b: boolean): boolean;
+				m1(c: any): boolean | void;
+			}
+			interface ModeFactory<T> { (config: number): T; }
+			interface G { new (config: number): string; }
+			interface H { [key: string]: boolean; }
+		`);
+
+		a.test('Interface with string literal names', (a: TestApi) => {
+			a.assert(A.children);
+			const [a1, b2] = A.children;
+			a.equal(a1.name, '"a1"');
+			a.equal(b2.name, '"b-2"');
+		});
+		a.test('empty', (a: TestApi) => {
+			a.ok(B);
+			a.equal(B.name, 'B');
+			a.equal(B.kind, Kind.Interface);
+			a.ok(B.source);
+		});
+
+		a.test('multiple properties', (a: TestApi) => {
+			a.equal(C.name, 'C');
+			a.equal(C.kind, Kind.Interface);
+			a.assert(C.children);
+			a.equal(C.children.length, 3);
+		});
+
+		a.test('multiple inheritance', (a: TestApi) => {
+			a.equal(D.name, 'D');
+			a.equal(D.kind, Kind.Interface);
+			a.assert(D.type);
+			a.equal(D.type.kind, Kind.ClassType);
+			a.assert(D.type.children);
+			a.equal(D.type.children.length, 2);
+			a.equal(D.type.children[0].name, 'A');
+			a.equal(D.type.children[1].name, 'B');
+		});
+
+		a.test('method overload', (a: TestApi) => {
+			a.assert(E.children);
+			a.equal(E.children.length, 3);
+			const [m1, m2, m3] = E.children;
+			a.equal(m1.name, 'm1');
+			a.equal(m1.type, VoidType);
+			a.assert(m1.parameters);
+			a.equal(m1.parameters[0].name, 'a');
+			a.ok(m1.flags & Flags.Overload);
+			a.equal(m2.name, 'm1');
+			a.equal(m2.type, BooleanType);
+			a.ok(m2.flags & Flags.Overload);
+			a.assert(m2.parameters);
+			a.equal(m2.parameters[0].name, 'b');
+			a.equal(m3.name, 'm1');
+			a.ok(m3.flags & Flags.Overload);
+			a.assert(m3.parameters);
+			a.equal(m3.parameters[0].name, 'c');
+		});
+		a.test('function interface', (a: TestApi) => {
+			a.equal(F.name, 'ModeFactory');
+			a.equal(F.typeParameters?.length, 1);
+			a.assert(F.children);
+			const sig = F.children[0];
+			a.equal(F.children.length, 1);
+			a.equal(sig.name, '');
+			a.equal(sig.parameters?.[0]?.name, 'config');
+			a.equal(sig.type?.name, 'T');
+		});
+
+		a.test('new signature', (a: TestApi) => {
+			a.equal(G.name, 'G');
+			a.assert(G.children);
+			const sig = G.children[0];
+			a.equal(G.children.length, 1);
+			a.equal(sig.name, '');
+			a.equal(sig.parameters?.[0]?.name, 'config');
+			a.equal(sig.type?.name, 'string');
+		});
+		a.test('index signature', (a: TestApi) => {
+			a.assert(H.children);
+			const key = H.children[0];
+			a.equal(key.kind, Kind.IndexSignature);
+			a.equal(key.type, BooleanType);
+			a.equal(key.name, '__index');
+			a.assert(key.parameters);
+			a.equal(key.parameters[0].name, 'key');
+			a.equal(key.parameters[0].type, StringType);
+		});
 	});
+	a.test('interface extends class', (a: TestApi) => {
+		const [A, B] = parse(
+			`export class A<T> { m1?: boolean; } export interface A<T> { m2: string; }`
+		);
+		a.ok(A);
+		a.ok(B);
+		a.assert(A.children);
+		a.equal(A.children.length, 2);
+		a.equal(A.children[0].name, 'm1');
+		a.equal(A.children[1].name, 'm2');
+	});
+
 	a.test('ReturnType', (a: TestApi) => {
 		const [I, A] = parse(
 			`interface I { m1: A }; type A = ReturnType<typeof fn>; function fn() { return { test: true } as const; }`
@@ -1026,7 +1089,7 @@ namespace ns {
 
 	a.test('Const destructuring', (a: TestApi) => {
 		const [A, B] = parse(
-			`export const { a, b } = { a: true; b: 'string' }, c = 10`
+			`const { a, b } = { a: true, b: 'string' }, c = 10`
 		);
 		a.assert(A.children);
 		const [a1, b1] = A.children;
@@ -1036,27 +1099,90 @@ namespace ns {
 	});
 
 	a.test('Type Types', (a: TestApi) => {
-		const [A] = parse(`const A = [-1,2,"3"] as const`);
+		const [A] = parse(
+			`const A = [-1,2,"3",true,Symbol('symbol')] as const`
+		);
 		a.assert(A.type?.type?.children);
-		const [m1, m2, m3] = A.type.type.children;
+		const [m1, m2, m3, m4, m5] = A.type.type.children;
 		a.equal(m1.name, '-1');
 		a.equal(m2.name, '2');
 		a.equal(m3.name, '"3"');
+		a.equal(m4.name, 'true');
+		a.equal(m5.kind, Kind.Symbol);
 	});
-	a.test('String Literal Types', (a: TestApi) => {
-		const [A] = parse('type A = `${number} ${true|false}`');
-		a.assert(A.type);
-		a.equal(A.type.name, '`${number} ${true | false}`');
-		a.equal(A.type.kind, Kind.Literal);
+
+	a.test('markdown', (a: TestApi) => {
+		const [A] = parse(`
+/**
+ * Regular Comment
+ * @usageNotes
+ * Text
+ * \`\`\`
+ *   import {NgIf} from '@angular/common';
+ *   @Component({
+ *       moreCode();
+ *       line2();
+ *   })
+ * \`\`\`
+ */
+ function A() {}
+ `);
+		a.assert(A.docs);
+		a.assert(A.docs.content);
+		a.equal(A.docs.content.length, 1);
 	});
-	/*a.testOnly('function result', (a: TestApi) => {
-		const [, , A] = parse(
+
+	a.test('markdown', (a: TestApi) => {
+		const [A] = parse(`
+/**
+ * Regular Comment
+ * @example
+ * \`\`\`
+ * import {NgIf} from '@angular/common';
+ * @Component
+ *   ({ })
+ *   respect whitespace
+ * @Inline tag
+ * \`\`\`
+ */
+ function A() {}
+ `);
+		a.assert(A.docs);
+		a.assert(A.docs.content);
+		a.equal(A.docs.content.length, 2);
+		a.equal(A.docs.content[1].tag, 'example');
+	});
+
+	a.test('export', (a: TestApi) => {
+		const [A, B, C, D] = parseExports(
 			`
-	function Augment(...args: any) { return (ctor: any)=> {} }
-	@Augment('cxl-test', $ => <><slot></slot><slot name="named" /></>)
-	class Test {}`,
-			{ jsx: 1, experimentalDecorators: true }
+			export const A = await import("url"); export type B = typeof import("url")
+			export * as C from "url"
+			import * as D from "url"; export { D }
+		`,
+			{ types: ['node'] }
 		);
-		a.ok(A);
-	});*/
+
+		a.test('import type', (a: TestApi) => {
+			a.equal(A.kind, Kind.Constant);
+			a.equal(A.type?.kind, Kind.ImportType);
+			a.equal(A.type?.name, '"url"');
+
+			a.assert(B.type);
+			a.equal(B.type.kind, Kind.ImportType);
+			a.equal(B.type.name, '"url"');
+		});
+
+		a.test('export * as x', (a: TestApi) => {
+			a.assert(C.type);
+			a.equal(C.type.kind, Kind.ImportType);
+			a.equal(C.type.name, '"url"');
+		});
+
+		a.test('export import type', (a: TestApi) => {
+			a.assert(D.type);
+			a.equal(D.type.kind, Kind.ImportType);
+			a.equal(D.type.name, '"url"');
+		});
+	});
 });

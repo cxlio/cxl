@@ -25,10 +25,11 @@ export interface VersionJson {
 	all: string[];
 }
 
-const ENTITIES_REGEX = /[&<]/g;
+const ENTITIES_REGEX = /[&<"]/g;
 const ENTITIES_MAP = {
 	'&': '&amp;',
 	'<': '&lt;',
+	'"': '&quot;',
 };
 
 export function escape(str: string) {

@@ -1,43 +1,13 @@
-import { Observable, defer, merge, of, from, EMPTY } from '@cxl/rx';
+import { Observable, defer, merge, of, from, fromAsync, EMPTY } from '@cxl/rx';
 import { existsSync, readFileSync, promises } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { file } from './file.js';
 import { execSync } from 'child_process';
 import { Output } from '@cxl/source';
 import { sh } from '@cxl/program';
-import { exec } from './builder.js';
+import { exec, run } from './builder.js';
+import { License, Package, readPackage as readNpmPackage } from './npm.js';
 import * as ts from 'typescript';
-
-type License =
-	| 'GPL-3.0'
-	| 'GPL-3.0-only'
-	| 'Apache-2.0'
-	| 'UNLICENSED'
-	| 'SEE LICENSE IN LICENSE.txt';
-
-export type Dependencies = Record<string, string>;
-
-export interface Package {
-	name: string;
-	version: string;
-	description: string;
-	license: License;
-	files: string[];
-	main: string;
-	bin?: string;
-	keywords?: string[];
-	browser?: string;
-	homepage: string;
-	private: boolean;
-	bugs: string;
-	repository: string | { type: 'git'; url: string; directory?: string };
-	dependencies?: Dependencies;
-	devDependencies?: Dependencies;
-	peerDependencies?: Dependencies;
-	bundledDependecies?: Dependencies;
-	type?: string;
-	scripts?: Record<string, string>;
-}
 
 const SCRIPTDIR = process.cwd();
 
@@ -53,20 +23,17 @@ const LICENSE_MAP: Record<License, string> = {
 	UNLICENSED: '',
 };
 
-let PACKAGE: Package;
-
 function verifyFields(fields: string[], pkg: any) {
 	for (const f of fields)
 		if (!pkg[f]) throw new Error(`Field "${f}" missing in package.json`);
 }
 
-export function readPackage(base: string = BASEDIR) {
-	if (PACKAGE) return PACKAGE;
+export function readPackage(base: string = BASEDIR): Package {
 	const pkg = base + '/package.json';
 
 	if (!existsSync(pkg)) throw new Error('package.json not found');
 
-	PACKAGE = JSON.parse(readFileSync(pkg, 'utf8'));
+	const PACKAGE = JSON.parse(readFileSync(pkg, 'utf8'));
 	verifyFields(['name', 'version', 'description'], PACKAGE);
 	if (!PACKAGE.private) verifyFields(['license'], PACKAGE);
 	return PACKAGE;
@@ -86,19 +53,122 @@ export function docs(dirName: string, devMode = false) {
 	});
 }
 
-export async function getBranch(cwd: string): Promise<string> {
-	return (await sh('git rev-parse --abbrev-ref HEAD', { cwd }))
-		.toString()
-		.trim();
+export interface DocgenOptions {
+	file: string | string[];
+	name: string;
+	npm?: string;
+	setup?: string;
+	repo?: string;
+	repodir?: string;
+	typeRoots?: string;
+	sitemapBase?: string;
+	scripts?: string;
+	packageJson?: string;
+	docsJson?: string;
+	cwd?: string;
+	forceInstall?: boolean;
+	markdown?: boolean;
+	baseHref?: string;
+	tag: string;
+	outDir: string;
+	tmpDir: string;
+	rootDir?: string;
+	customJsDocTags?: string[];
 }
 
-/*function getRepo(repo: string | { url: string }) {
-	const branch = execSync('git rev-parse --abbrev-ref HEAD')
-		.toString()
-		.trim();
-	const url = typeof repo === 'string' ? repo : repo.url;
-	return url.replace(/\$BRANCH/g, branch);
-}*/
+export async function docgen(options: DocgenOptions) {
+	const {
+		name,
+		tag,
+		repo,
+		file,
+		setup,
+		npm,
+		tmpDir,
+		typeRoots,
+		scripts,
+		sitemapBase,
+		packageJson,
+		docsJson,
+		forceInstall,
+		baseHref,
+		rootDir,
+		customJsDocTags,
+	} = options;
+	const repodir = options.repodir || `${name.replace('/', '--')}-${tag}`;
+	const dir = join(tmpDir, repodir, npm ? `/node_modules/${npm}` : ``);
+	const cwd = join(dir, options.cwd || '');
+	const outDir = resolve(options.outDir);
+	const files = Array.isArray(file)
+		? file.map(f => `--file ${f}`).join(' ')
+		: `--tsconfig ${file}`;
+	const pkg = join(cwd, packageJson || 'package.json');
+	const install = repo
+		? `git clone ${repo} --branch=${tag} --depth=1 ${repodir};
+cd ${repodir} ${setup ? `&& ${setup}` : ''}`
+		: `mkdir -p ${repodir} && npm install --prefix ./${repodir} ${npm}@${tag}`;
+	const DOCGEN = join(__dirname, '../docgen');
+
+	if (forceInstall)
+		await sh(`mkdir -p ${tmpDir} && cd ${tmpDir} && ${install}`);
+	else
+		await sh(`if [ ! -d "${dir}" ]; then
+		mkdir -p ${tmpDir} && cd ${tmpDir}
+		${install}
+	fi`);
+
+	const { description, version } = await readNpmPackage(pkg);
+	const sitemap = `${sitemapBase}/${name}/${version}/sitemap.xml`;
+	const outputDir = join(outDir, name);
+
+	await run(
+		`node ${DOCGEN} ${files} ${
+			customJsDocTags
+				?.map(tag => `--customJsDocTags "${tag}"`)
+				.join(' ') || ''
+		}`,
+		{
+			packageJson,
+			docsJson,
+			scripts,
+			outputDir,
+			sitemap: sitemapBase ? `${sitemapBase}/${name}` : '',
+			summary: true,
+			typeRoots,
+			packageName: options.name,
+			repository: repo
+				? `${repo.replace(/.git$/, '')}/blob/${tag}`
+				: undefined,
+			markdown: true,
+			baseHref,
+			rootDir,
+		},
+		{ cwd }
+	);
+
+	return { name, version, description, sitemap };
+}
+
+export function docgenTask(
+	packages: DocgenOptions[],
+	commonOptions?: DocgenOptions
+) {
+	return fromAsync(async () => {
+		const output = [];
+		for (const p of packages)
+			output.push(
+				await docgen({
+					...commonOptions,
+					...p,
+				})
+			);
+
+		return {
+			path: 'docgen.json',
+			source: Buffer.from(JSON.stringify(output)),
+		};
+	});
+}
 
 function packageJson(p: any) {
 	return of({
@@ -203,24 +273,9 @@ export function pkg() {
 
 		output.push(file('README.md', 'README.md'));
 		if (licenseId) output.push(license(licenseId));
-
 		return merge(...output);
-		/*return from(getPublishedVersion(p.name)).switchMap(version => {
-			if (version === p.version)
-				throw new Error(
-					`Package version ${p.version} already published.`
-				);
-
-
-		});*/
 	});
 }
-
-/*export async function publish() {
-	const p = readPackage();
-	const isPublished = await getPublishedVersion(p.name);
-	if (isPublished) throw new Error(`Package version already published.`);
-}*/
 
 function createBundle(
 	files: string[],
