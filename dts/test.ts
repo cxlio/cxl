@@ -1112,7 +1112,7 @@ declare module "ns" {
 	});
 
 	a.test('markdown', (a: TestApi) => {
-		const [A] = parse(`
+		const [A, B] = parseExports(`
 /**
  * Regular Comment
  * @usageNotes
@@ -1125,15 +1125,8 @@ declare module "ns" {
  *   })
  * \`\`\`
  */
- function A() {}
- `);
-		a.assert(A.docs);
-		a.assert(A.docs.content);
-		a.equal(A.docs.content.length, 1);
-	});
-
-	a.test('markdown', (a: TestApi) => {
-		const [A] = parse(`
+export function A() {}
+ 
 /**
  * Regular Comment
  * @example
@@ -1145,12 +1138,19 @@ declare module "ns" {
  * @Inline tag
  * \`\`\`
  */
- function A() {}
+export function B() {}
  `);
-		a.assert(A.docs);
-		a.assert(A.docs.content);
-		a.equal(A.docs.content.length, 2);
-		a.equal(A.docs.content[1].tag, 'example');
+		a.test('merge invalid jsdoc tags', (a: TestApi) => {
+			a.assert(A.docs);
+			a.assert(A.docs.content);
+			a.equal(A.docs.content.length, 1);
+		});
+		a.test('merge tags inside code blocks', (a: TestApi) => {
+			a.assert(B.docs);
+			a.assert(B.docs.content);
+			a.equal(B.docs.content.length, 2);
+			a.equal(B.docs.content[1].tag, 'example');
+		});
 	});
 
 	a.test('export', (a: TestApi) => {

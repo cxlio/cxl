@@ -344,42 +344,30 @@ function findSymbolByName(name: string) {
 	return allSymbols.find(s => s.name === symbolName);
 }
 
-function ExternalLink(url: string, title: string) {
-	return `<a href="${getExternalLink(url)}">${title}</a>`;
+function ExternalLink(url: string, title?: string) {
+	return `<a href="${getExternalLink(url)}">${escape(title || url)}</a>`;
 }
 
 function DocSee(doc: DocumentationContent) {
 	const value = doc.value;
 
-	if (Array.isArray(value)) return getDocValue(value);
-
-	/*const linkTag = linkRegex.exec(value);
-
-	if (linkTag) {
-		const [, name, title] = linkTag;
-		const symbol = findSymbolByName(name);
-
-		return `<p>${jsdocTitle('see')}: ${
-			symbol ? Link(symbol, title) : ExternalLink(name, title)
-		}</p>`;
-	}*/
-
-	const symbol = findSymbolByName(value);
-
-	return `<p>${jsdocTitle('see')}: ${
-		symbol
+	let output = Array.isArray(value) && getDocValue(value);
+	if (!output && typeof value === 'string') {
+		const symbol = findSymbolByName(value);
+		output = symbol
 			? Link(symbol)
 			: application.markdown
 			? Markdown(value, true)
-			: escape(value)
-	}</p>`;
+			: escape(value);
+	}
+
+	return `<p>${jsdocTitle('see')}: ${output}</p>`;
 }
 
 function formatContent(text: string) {
 	return escape(text).replace(/\r?\n\r?\n/g, '</p><p>');
 }
 
-//const linkRegex = /\{@link\s+(.+?)[|\s]\s*(.+?)\s*\}/;
 const linkRegex = /^\s*(.+?)[|\s]\s*(.+?)\s*$/;
 
 function getDocValue(content: DocumentationContent['value']) {
@@ -389,18 +377,11 @@ function getDocValue(content: DocumentationContent['value']) {
 		.map(doc => {
 			if (doc.tag === 'link') {
 				const linkTag = linkRegex.exec(doc.value);
-				if (linkTag) {
-					console.log(linkTag);
-					const [, name, title] = linkTag;
-					const symbol = findSymbolByName(name);
+				const name = linkTag?.[1] || doc.value;
+				const title = linkTag?.[2];
+				const symbol = findSymbolByName(name);
 
-					return `<p>${jsdocTitle('see')}: ${
-						symbol ? Link(symbol, title) : ExternalLink(name, title)
-					}</p>`;
-				}
-
-				const symbol = findSymbolByName(doc.value);
-				return symbol ? Link(symbol) : escape(doc.value);
+				return symbol ? Link(symbol, title) : ExternalLink(name, title);
 			}
 			return doc.value;
 		})
@@ -673,6 +654,9 @@ function getMemberGroups(node: Node, indexOnly = false, sort = true) {
 			(node.kind === Kind.Module || node.kind === Kind.Namespace) &&
 			!declarationFilter(c)
 		)
+			return;
+
+		if (c.type?.kind === Kind.ImportType && !c.type.type?.children?.length)
 			return;
 
 		// Handle Object or Array destructuring

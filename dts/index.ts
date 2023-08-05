@@ -35,6 +35,7 @@ type Index = Record<number, Node>;
 
 export interface BuildOptions {
 	customJsDocTags?: string[];
+	packageRoot?: string;
 	rootDir: string | undefined;
 	exportsOnly: boolean;
 }
@@ -391,8 +392,7 @@ function getKind(node: ts.Node): Kind {
 }
 
 function getNodeSource(node: ts.Node): Source {
-	const root =
-		currentOptions.rootDir || config?.options?.rootDir || process.cwd();
+	const root = currentOptions.packageRoot || process.cwd();
 	const sourceFile = node.getSourceFile();
 	const result = sourceFile
 		? {
@@ -572,47 +572,58 @@ function processJsDoc(content: string) {
 	return result.length ? result : content;*/
 }
 
-function parseJsDocComment(
-	comment: ts.JSDoc['comment'],
-	content: DocumentationContent[]
-) {
+function parseJsDocComment(comment: ts.JSDoc['comment']) {
 	if (!comment) return;
-	if (typeof comment === 'string')
-		content.push({ value: processJsDoc(comment) });
-	else {
-		content.push({
-			value: comment.map(n =>
-				n.kind === SK.JSDocLink
-					? {
-							tag: 'link',
-							value: `${n.name?.getText() || ''}${
-								n.text ? `${n.name ? ' ' : ''}${n.text}` : ''
-							}`,
-					  }
-					: { value: processJsDoc(n.text) }
-			),
-		});
-	}
+	if (typeof comment === 'string') return processJsDoc(comment);
+
+	return comment.map(n =>
+		n.kind === SK.JSDocLink
+			? {
+					tag: 'link',
+					value: `${n.name?.getText() || ''}${
+						n.text ? `${n.name ? ' ' : ''}${n.text}` : ''
+					}`,
+			  }
+			: { value: processJsDoc(n.text) }
+	);
+}
+
+const jsDocRemoveStar = /^\s*\*\s/gm;
+
+function getJsDocText(doc: ts.JSDocTag | ts.JSDocComment): string {
+	const text = doc.getText().replace(jsDocRemoveStar, '');
+	return text;
+	/*const tag = 'tagName' in doc ? `@${doc.tagName.getText()}` : '';
+	const whiteSpace = /^([ \t]*)(?:([\n\r]+)(?:\s*\*+)?(\s*))?/.exec(
+		doc.getText().slice(tag.length)
+	);
+
+	const text =
+		('comment' in doc
+			? typeof doc.comment !== 'string'
+				? doc.comment?.map(getJsDocText).join(' ')
+				: doc.comment
+			: 'text' in doc
+			? doc.text
+			: '') || '';
+
+	return tag
+		? `\n${tag}${
+				whiteSpace ? whiteSpace[1] + (whiteSpace[2] || '') : ' '
+		  }${text}`
+		: text;*/
 }
 
 function mergeJsDocComment(content: DocumentationContent[], doc: ts.JSDocTag) {
 	// Get whitespace after tag
-	const tag = `@${doc.tagName.getText()}`;
-	const whiteSpace = /^([ \t]*)(?:([\n\r]+)(?:\s*\*+)?(\s*))?/.exec(
-		doc.getText().slice(tag.length)
-	);
-	const newContent = `\n${tag}${
-		whiteSpace
-			? whiteSpace[1] + (whiteSpace[2] || '') //+ (whiteSpace[3] || '')
-			: ' '
-	}${tsLocal.getTextOfJSDocComment(doc.comment)}`;
+	const newContent = `\n${getJsDocText(doc)}`;
 
 	if (content.length > 0) {
 		const old = content[content.length - 1].value || '';
 		if (typeof old === 'string')
 			content[content.length - 1].value = old + newContent;
 		else old.push({ value: newContent });
-	}
+	} else content.push({ value: newContent });
 }
 
 function getNodeDocs(node: ts.Node, result: Node) {
@@ -620,24 +631,19 @@ function getNodeDocs(node: ts.Node, result: Node) {
 	const content: DocumentationContent[] = [];
 	const docs: Documentation = { content };
 
-	jsDoc?.forEach(
-		doc => doc.comment && parseJsDocComment(doc.comment, content)
-	);
-
+	jsDoc?.forEach(doc => {
+		const value = parseJsDocComment(doc.comment);
+		if (value) content.push({ value });
+	});
 	tsLocal.getJSDocTags(node).forEach(doc => {
 		const tag =
 			doc.tagName.escapedText === 'description'
 				? undefined
 				: (doc.tagName.escapedText as string);
-		const name = (doc as ts.JSDocSeeTag).name?.getText();
-		let value = doc.comment
-			? parseJsDocComment(doc.comment, content)
-			: name;
-		if (tag === 'see') debugger;
 
 		// Invalid tag, append to previous content
 		if (
-			value &&
+			doc.comment &&
 			tag &&
 			!currentOptions?.customJsDocTags?.includes(tag) &&
 			tag !== tag.toLowerCase() &&
@@ -646,6 +652,9 @@ function getNodeDocs(node: ts.Node, result: Node) {
 			mergeJsDocComment(content, doc);
 			return;
 		}
+		const name = (doc as ts.JSDocSeeTag).name?.getText();
+		let value = doc.comment ? parseJsDocComment(doc.comment) : name;
+
 		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
 		if (tag === 'see' && doc.comment === '*') value = name;
 		if (tag === 'beta') docs.beta = true;
@@ -653,7 +662,7 @@ function getNodeDocs(node: ts.Node, result: Node) {
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
 			content.push({
 				tag,
-				value: tsLocal.getTextOfJSDocComment(value) || '',
+				value, //: tsLocal.getTextOfJSDocComment(value) || '',
 			});
 	});
 
@@ -783,17 +792,24 @@ function serializeIndexedAccessType(type: ts.IndexedAccessType): Node {
 	};
 }
 
-function getSymbolDeclaration(symbol: ts.Symbol): ts.Declaration {
-	const result = symbol.valueDeclaration || symbol.declarations?.[0];
-	if (!result)
+function getSymbolDeclaration(symbol: ts.Symbol) {
+	return symbol.valueDeclaration || symbol.declarations?.[0];
+	/*if (!result)
 		throw new Error(
 			`No symbol declaration found for "${symbol.escapedName}"`
 		);
-	return result;
+	return result;*/
 }
 
 function serializeSymbol(symbol: ts.Symbol): Node {
-	const node = serialize(getSymbolDeclaration(symbol));
+	const tsNode = getSymbolDeclaration(symbol);
+	const node = tsNode
+		? serialize(tsNode)
+		: {
+				name: symbol.name,
+				kind: Kind.Unknown,
+				flags: 0,
+		  };
 	if (node.kind !== Kind.Namespace) node.name = symbol.name;
 	return node;
 }
