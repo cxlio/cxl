@@ -1,9 +1,17 @@
 import { spec } from '@cxl/spec';
 import { SignatureText } from './render-html.js';
-import { Kind, Node, parse /*, printNode*/ } from '@cxl/dts';
+import { Kind, Node, parse as _parse } from '@cxl/dts';
 
 export function node(p: Partial<Node>): Node {
 	return { name: 'A', kind: Kind.Unknown, flags: 0, ...p };
+}
+
+function parse(options: { source: string; fileName?: string }) {
+	return _parse({
+		...options,
+		exportsOnly: false,
+		cxlExtensions: true,
+	});
 }
 
 export default spec('docgen', s => {
@@ -21,7 +29,7 @@ export default spec('docgen', s => {
 			});
 
 			it.test('render function result', a => {
-				const [A, B, C] = parse({
+				const [, , C] = parse({
 					source: `
 	abstract class Component extends Array { }
 	const registeredComponents: Record<string, typeof Component> = {};
@@ -30,7 +38,6 @@ export default spec('docgen', s => {
 	}
 				`,
 				});
-				console.log(A, B, C);
 				const R = SignatureText(C);
 				a.equal(
 					R,
