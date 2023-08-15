@@ -262,6 +262,24 @@ export class Subject<T, ErrorT = unknown> extends Observable<T> {
 }
 
 /**
+ * A subject that guarantees all subscribers receive the same values in the order they were emitted.
+ */
+export class OrderedSubject<T> extends Subject<T> {
+	private queue: T[] = [];
+	private emitting = false;
+
+	next(a: T) {
+		if (this.emitting) this.queue.push(a);
+		else {
+			this.emitting = true;
+			super.next(a);
+			this.emitting = false;
+			if (this.queue.length) this.next(this.queue.pop() as T);
+		}
+	}
+}
+
+/**
  * A variant of Subject that requires an initial value and emits its current value whenever it is subscribed to.
  * @see be
  */
