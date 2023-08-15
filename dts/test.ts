@@ -17,6 +17,7 @@ function parse(source: string, compilerOptions?: ts.CompilerOptions) {
 		source,
 		compilerOptions,
 		exportsOnly: false,
+		cxlExtensions: true,
 	});
 }
 
@@ -152,267 +153,218 @@ export default spec('dts', a => {
 		a.equal(fn.type.name, '');
 	});
 
-	test('class declaration - empty class', (a: TestApi) => {
-		const [kls] = parse('class TestApi { }');
-
-		a.ok(kls);
-		a.equal(kls.name, 'TestApi');
-		a.ok(kls.source);
-	});
-
-	test('class - method overload', (a: TestApi) => {
-		const [A] = parse(`class A {
-			m1(a: string): void;
-			m1(b: boolean): boolean;
-			m1(c: any) { if (c===true) return true; }
-		}`);
-
-		a.assert(A.children);
-		a.equal(A.children.length, 3);
-		const [m1, m2, m3] = A.children;
-		a.equal(m1.name, 'm1');
-		a.equal(m1.type, VoidType);
-		a.assert(m1.parameters);
-		a.equal(m1.parameters[0].name, 'a');
-		a.ok(m1.flags & Flags.Overload);
-		a.equal(m2.name, 'm1');
-		a.equal(m2.type, BooleanType);
-		a.assert(m2.parameters);
-		a.equal(m2.parameters[0].name, 'b');
-		a.equal(m3.name, 'm1');
-		a.assert(m3.parameters);
-		a.equal(m3.parameters[0].name, 'c');
-	});
-
-	test('class declaration', (a: TestApi) => {
-		const [kls] = parse(`class TestApi<T> extends Set<T> {
-			member: T;
-		}`);
-
-		a.ok(kls);
-		a.equal(kls.name, 'TestApi');
-		a.equal(kls.kind, Kind.Class);
-		a.assert(kls.typeParameters);
-		const [T] = kls.typeParameters;
-		a.equal(T.name, 'T');
-		a.equal(T.kind, Kind.TypeParameter);
-		a.ok(!T.type);
-		a.assert(kls.children);
-		a.equal(kls.children.length, 1);
-		const member = kls.children[0];
-		a.equal(member.name, 'member');
-		a.assert(member.type);
-		a.equal(member.type.kind, Kind.Reference);
-		a.equal(member.type.type, T);
-		a.assert(kls.type);
-		a.assert(kls.type.children);
-		a.equal(kls.type.children.length, 1);
-		a.equal(kls.type.children[0].name, 'Set');
-		/*const Tm = kls.children[1];
-		a.equal(Tm.name, 'T');
-		a.equal(Tm.kind, Kind.TypeParameter);*/
-	});
-
-	test('class constructor', (a: TestApi) => {
-		const [kls] = parse(
-			`class Kls { constructor(public t: string, s: boolean) { } }`
-		);
-		a.assert(kls.children);
-		a.equal(kls.children.length, 2);
-		const [ctor, t] = kls.children;
-		a.equal(ctor.name, 'constructor');
-		a.assert(ctor.parameters);
-		a.equal(ctor.parameters.length, 2);
-		a.equal(ctor.kind, Kind.Constructor);
-		a.equal(t.name, 't');
-		a.equal(t.type, StringType);
-		a.ok(t.flags & Flags.Public);
-		a.equal(t.kind, Kind.Property);
-	});
-
-	test('class implements interface', (a: TestApi) => {
-		const [A, B, C] = parse(`
-			interface A { }
-			interface B { }
-			class C implements A, B {}
-		`);
-
-		a.ok(A);
-		a.equal(A.name, 'A');
-		a.equal(A.kind, Kind.Interface);
-		a.ok(B);
-		a.equal(B.name, 'B');
-		a.equal(B.kind, Kind.Interface);
-		a.ok(C);
-		a.equal(C.name, 'C');
-		a.equal(C.kind, Kind.Class);
-
-		a.assert(C.type);
-		a.assert(C.type.children);
-		a.equal(C.type.kind, Kind.ClassType);
-		a.equal(C.type.children.length, 2);
-
-		const [AType, BType] = C.type.children;
-		a.equal(AType.type, A);
-		a.equal(AType.name, 'A');
-		a.equal(BType.type, B);
-		a.equal(BType.name, 'B');
-	});
-
-	test('class decorators - cxl Augment', (a: TestApi) => {
-		const [role, A, B] = parse(
+	a.test('class', a => {
+		const [A, B, C, D, , , E, , , F, G, H, I, J1, J, , K, L, M] = parse(
 			`
+			class A { }
+			class B {
+				m1(a: string): void;
+				m1(b: boolean): boolean;
+				m1(c: any) { if (c===true) return true; }
+			}
+			class C<T> extends Set<T> { member: T; }
+			class D { constructor(public t: string, s: boolean) { } }
+			
+			interface E1 { }
+			interface E2 { }
+			class E implements A, B {}
+			
 			function role(str: string) { }
 			function Augment(a) { return ctor => { }; }
 			@Augment(role('roleName'))
-			class B { static tagName = 'cxl-test'; }`,
-			{ experimentalDecorators: true }
-		);
-		a.ok(role);
-		a.ok(A);
-		a.equal(B.kind, Kind.Component);
-		a.assert(B.docs);
-		a.equal(B.docs.role, 'roleName');
-		a.equal(B.docs.tagName, 'cxl-test');
-	});
-
-	test('class extends class and implements interface', (a: TestApi) => {
-		const [A, B, C] = parse(`
-			interface A { }
-			class B { }
-			class C extends B implements A {}
-		`);
-
-		a.ok(A);
-		a.equal(A.name, 'A');
-		a.equal(A.kind, Kind.Interface);
-		a.ok(B);
-		a.equal(B.name, 'B');
-		a.equal(B.kind, Kind.Class);
-		a.ok(C);
-		a.equal(C.name, 'C');
-		a.equal(C.kind, Kind.Class);
-	});
-
-	test('class access modifier', (a: TestApi) => {
-		const [A] = parse(`
-			class A { static s1; public readonly m1 = 'str'; private m2 = 10; protected m3 = false; }
-		`);
-
-		a.ok(A);
-		a.equal(A.name, 'A');
-		a.equal(A.kind, Kind.Class);
-		a.assert(A.children);
-		a.equal(A.children.length, 4);
-
-		const [s1, m1, m2, m3] = A.children;
-		a.ok(s1.flags & Flags.Static);
-		a.ok(m1.flags & Flags.Public);
-		a.ok(m1.flags & Flags.Readonly);
-		a.ok(m2.flags & Flags.Private);
-		a.ok(m3.flags & Flags.Protected);
-	});
-
-	test('class members', (a: TestApi) => {
-		const [A] = parse(
-			`
-			class A { m1 = 'str'; m2() { } get m3() { return undefined; } set m3(val) {} m4 = new Set<any>(); }
-		`,
-			{ target: ts.ScriptTarget.ES2017 }
-		);
-
-		a.ok(A);
-		a.equal(A.name, 'A');
-		a.equal(A.kind, Kind.Class);
-		a.assert(A.children);
-		a.equal(A.children.length, 5);
-
-		const [m1, m2, m3, m4, m5] = A.children;
-		a.ok(m1.flags & Flags.Public);
-		a.ok(m2.flags & Flags.Public);
-		a.ok(m3.flags & Flags.Public);
-		a.ok(m4.flags & Flags.Public);
-		a.assert(m5.type);
-		a.equal(m5.type.name, 'Set');
-		a.assert(m5.type.typeParameters);
-		a.equal(m5.type.typeParameters.length, 1);
-		a.equal(m5.type.typeParameters[0], AnyType);
-		a.assert(m5.type.type);
-		a.equal(m5.type.type.name, 'Set');
-		a.equal(m5.type.type.flags, Flags.DefaultLibrary);
-	});
-
-	test('class method', (a: TestApi) => {
-		const [Alias, A] = parse(`
-			type Alias = Set<any>;
-			class A { m1(): Alias { return new Set<any>(); } }
-		`);
-
-		a.assert(A.children);
-		const m1 = A.children[0];
-		a.assert(m1.type);
-		a.equal(m1.type.kind, Kind.Reference);
-		a.equal(m1.type.type, Alias);
-	});
-
-	test('class - computed property name', (a: TestApi) => {
-		const [name, A] = parse(`
-			const name = 'm1';
-			class A { [name]() { return true; } }
-		`);
-
-		a.equal(name.value, "'m1'");
-		a.assert(A.children);
-		a.equal(A.children[0].name, '[name]');
-	});
-
-	test('class methods', (a: TestApi) => {
-		const [A] = parse(`
-			abstract class A {
+			class F { static tagName = 'cxl-test'; }
+			
+			class G extends A implements E1 {}
+			class H { static s1; public readonly m1 = 'str'; private m2 = 10; protected m3 = false; }	
+			class I { m1 = 'str'; m2() { } get m3() { return undefined; } set m3(val) {} m4 = new Set<any>(); }
+			
+			type J1 = Set<any>;
+			class J { m1(): J1 { return new Set<any>(); } }
+			
+			const K1 = 'm1';
+			class K { [K1]() { return true; } }
+			
+			abstract class L {
 				m1() { return 'hello'; }
 				static m2(): boolean { return false; }
 				abstract m3(): number;
 				constructor() {}
 			}
-		`);
+			
+			abstract class M { abstract m1; }
+		`,
+			{ experimentalDecorators: true }
+		);
 
-		a.ok(A);
-		a.assert(A.children);
-		a.equal(A.children.length, 4);
+		a.test('empty class', (a: TestApi) => {
+			a.ok(A);
+			a.equal(A.name, 'A');
+			a.ok(A.source);
+		});
 
-		const [m1, m2, m3, m4] = A.children;
-		a.ok(m1.flags & Flags.Public);
-		a.equal(m1.name, 'm1');
-		a.equal(m1.type, StringType);
-		a.ok(m2.flags & Flags.Public);
-		a.ok(m2.flags & Flags.Static);
-		a.equal(m2.type, BooleanType);
-		a.ok(m3.flags & Flags.Public);
-		a.ok(m3.flags & Flags.Abstract);
-		a.equal(m3.type, NumberType);
-		a.equal(m4.kind, Kind.Constructor);
-	});
+		a.test('method overload', (a: TestApi) => {
+			a.assert(B.children);
+			a.equal(B.children.length, 3);
+			const [m1, m2, m3] = B.children;
+			a.equal(m1.name, 'm1');
+			a.equal(m1.type, VoidType);
+			a.assert(m1.parameters);
+			a.equal(m1.parameters[0].name, 'a');
+			a.ok(m1.flags & Flags.Overload);
+			a.equal(m2.name, 'm1');
+			a.equal(m2.type, BooleanType);
+			a.assert(m2.parameters);
+			a.equal(m2.parameters[0].name, 'b');
+			a.equal(m3.name, 'm1');
+			a.assert(m3.parameters);
+			a.equal(m3.parameters[0].name, 'c');
+		});
 
-	test('class abstract', (a: TestApi) => {
-		const [A] = parse(`
-			abstract class A { abstract m1; }
-		`);
+		a.test('declaration', (a: TestApi) => {
+			a.ok(C);
+			a.equal(C.name, 'C');
+			a.equal(C.kind, Kind.Class);
+			a.assert(C.typeParameters);
+			const [T] = C.typeParameters;
+			a.equal(T.name, 'T');
+			a.equal(T.kind, Kind.TypeParameter);
+			a.ok(!T.type);
+			a.assert(C.children);
+			a.equal(C.children.length, 1);
+			const member = C.children[0];
+			a.equal(member.name, 'member');
+			a.assert(member.type);
+			a.equal(member.type.kind, Kind.Reference);
+			a.equal(member.type.type, T);
+			a.assert(C.type);
+			a.assert(C.type.children);
+			a.equal(C.type.children.length, 1);
+			a.equal(C.type.children[0].name, 'Set');
+		});
 
-		a.ok(A);
-		a.equal(A.name, 'A');
-		a.equal(A.kind, Kind.Class);
-		a.ok(A.flags & Flags.Abstract);
-		a.assert(A.children);
-		a.equal(A.children.length, 1);
+		a.test('constructor', (a: TestApi) => {
+			a.assert(D.children);
+			a.equal(D.children.length, 2);
+			const [ctor, t] = D.children;
+			a.equal(ctor.name, 'constructor');
+			a.assert(ctor.parameters);
+			a.equal(ctor.parameters.length, 2);
+			a.equal(ctor.kind, Kind.Constructor);
+			a.equal(t.name, 't');
+			a.equal(t.type, StringType);
+			a.ok(t.flags & Flags.Public);
+			a.equal(t.kind, Kind.Property);
+		});
 
-		const [m1] = A.children;
-		a.ok(m1.flags & Flags.Abstract);
-		a.ok(m1.flags & Flags.Public);
-		a.equal(m1.name, 'm1');
+		a.test('implements interface', (a: TestApi) => {
+			a.equal(E.name, 'E');
+			a.equal(E.kind, Kind.Class);
+			a.assert(E.type?.children);
+			a.equal(E.type.kind, Kind.ClassType);
+			a.equal(E.type.children.length, 2);
+
+			const [AType, BType] = E.type.children;
+			a.equal(AType.type, A);
+			a.equal(AType.name, 'A');
+			a.equal(BType.type, B);
+			a.equal(BType.name, 'B');
+		});
+
+		a.test('cxl Augment', (a: TestApi) => {
+			a.equal(F.kind, Kind.Component);
+			a.assert(F.docs);
+			a.equal(F.docs.role, 'roleName');
+			a.equal(F.docs.tagName, 'cxl-test');
+		});
+
+		a.test('extends class and implements interface', (a: TestApi) => {
+			a.equal(G.name, 'G');
+			a.equal(G.kind, Kind.Class);
+		});
+
+		a.test('access modifier', (a: TestApi) => {
+			a.equal(H.name, 'H');
+			a.equal(H.kind, Kind.Class);
+			a.assert(H.children);
+			a.equal(H.children.length, 4);
+
+			const [s1, m1, m2, m3] = H.children;
+			a.ok(s1.flags & Flags.Static);
+			a.ok(m1.flags & Flags.Public);
+			a.ok(m1.flags & Flags.Readonly);
+			a.ok(m2.flags & Flags.Private);
+			a.ok(m3.flags & Flags.Protected);
+		});
+
+		a.test('members', (a: TestApi) => {
+			a.equal(I.name, 'I');
+			a.equal(I.kind, Kind.Class);
+			a.assert(I.children);
+			a.equal(I.children.length, 5);
+
+			const [m1, m2, m3, m4, m5] = I.children;
+			a.ok(m1.flags & Flags.Public);
+			a.ok(m2.flags & Flags.Public);
+			a.ok(m3.flags & Flags.Public);
+			a.ok(m4.flags & Flags.Public);
+			a.assert(m5.type);
+			a.equal(m5.type.name, 'Set');
+			a.assert(m5.type.typeParameters);
+			a.equal(m5.type.typeParameters.length, 1);
+			a.equal(m5.type.typeParameters[0], AnyType);
+			a.assert(m5.type.type);
+			a.equal(m5.type.type.name, 'Set');
+			a.equal(m5.type.type.flags, Flags.DefaultLibrary);
+		});
+
+		a.test('method', (a: TestApi) => {
+			a.assert(J.children);
+			const m1 = J.children[0];
+			a.assert(m1.type);
+			a.equal(m1.type.kind, Kind.Reference);
+			a.equal(m1.type.type, J1);
+		});
+
+		a.test('computed property name', (a: TestApi) => {
+			a.assert(K.children);
+			a.equal(K.children[0].name, '[K1]');
+		});
+
+		a.test('methods', (a: TestApi) => {
+			a.assert(L.children);
+			a.equal(L.children.length, 4);
+
+			const [m1, m2, m3, m4] = L.children;
+			a.ok(m1.flags & Flags.Public);
+			a.equal(m1.name, 'm1');
+			a.equal(m1.type, StringType);
+			a.ok(m2.flags & Flags.Public);
+			a.ok(m2.flags & Flags.Static);
+			a.equal(m2.type, BooleanType);
+			a.ok(m3.flags & Flags.Public);
+			a.ok(m3.flags & Flags.Abstract);
+			a.equal(m3.type, NumberType);
+			a.equal(m4.kind, Kind.Constructor);
+		});
+
+		a.test('abstract', (a: TestApi) => {
+			a.equal(M.name, 'M');
+			a.equal(M.kind, Kind.Class);
+			a.ok(M.flags & Flags.Abstract);
+			a.assert(M.children);
+			a.equal(M.children.length, 1);
+
+			const [m1] = M.children;
+			a.ok(m1.flags & Flags.Abstract);
+			a.ok(m1.flags & Flags.Public);
+			a.equal(m1.name, 'm1');
+		});
 	});
 
 	a.test('export clause', (a: TestApi) => {
-		const [A, B] = parseExports(`const A = 'test'; export { A };`);
+		const [A, B] = parseExports(
+			`const A = 'test'; const B = false; export { A };`
+		);
 		a.ok(!B);
 		a.ok(A);
 		a.assert(A.type);
@@ -735,7 +687,7 @@ function op<T>() { return new Operator<T>(); }
 	});
 
 	a.test('Type Reference - Type Alias', (a: TestApi) => {
-		const [operator, Operator, map] = parse(`
+		const [Operator, operator, map] = parse(`
 type Operator<T> = Set<T>;
 export function operator<T>(): Operator<T> { return new Set<T> }
 function map<T>() {	return operator<T>(); }
@@ -824,17 +776,6 @@ function map<T>() {	return operator<T>(); }
 		a.equal(five.type.children[0].kind, Kind.Property);
 	});
 
-	a.test('export', (a: TestApi) => {
-		const [A, B] = parseExports(
-			`const C=1; function B() { } export { C as A, B }`
-		);
-		a.equal(A.name, 'A');
-		a.equal(B.name, 'B');
-		a.assert(A.type);
-		a.equal(A.type.name, '1');
-		a.equal(A.kind, Kind.Constant);
-	});
-
 	a.test('@internal', (a: TestApi) => {
 		const [A, B, C, D] = parse(
 			`
@@ -889,7 +830,6 @@ function map<T>() {	return operator<T>(); }
 			`declare namespace A { export type B = 1; }
 			 declare namespace A { export type C = string; }`
 		);
-		a.ok(result);
 		const [A] = result;
 		a.equal(A.kind, Kind.Namespace);
 		a.equal(A.children?.length, 2);
@@ -898,14 +838,21 @@ function map<T>() {	return operator<T>(); }
 	});
 
 	a.test('namespace', (a: TestApi) => {
-		const [ns] = parse(`
+		const [ns, ns1] = parseExports(`
 export namespace ns {
 	const fn1 = function fn1() { };
+	namespace ns1 {
+		const f = false;
+		
+		export namespace ns2 { const f2 = true; }
+	}
 	export const fn2 = function fn2() { };
 }
 `);
 		a.equal(ns.name, 'ns');
+		a.ok(ns.flags & Flags.Export);
 		a.assert(ns.children);
+		a.ok(!ns1);
 		const [fn2] = ns.children;
 
 		a.test('non exported function', (a: TestApi) => {
@@ -1040,8 +987,8 @@ declare module "ns" {
 		const [A, B] = parse(
 			`export class A<T> { m1?: boolean; } export interface A<T> { m2: string; }`
 		);
-		a.ok(A);
-		a.ok(B);
+		a.equal(A.kind, Kind.Class);
+		a.equal(B.kind, Kind.Interface);
 		a.assert(A.children);
 		a.equal(A.children.length, 2);
 		a.equal(A.children[0].name, 'm1');
@@ -1154,11 +1101,12 @@ export function B() {}
 	});
 
 	a.test('export', (a: TestApi) => {
-		const [A, B, C, D] = parseExports(
+		const [A, B, C, D, E, E2] = parseExports(
 			`
 			export const A = await import("url"); export type B = typeof import("url")
 			export * as C from "url"
 			import * as D from "url"; export { D }
+			const e1=1; function E2() { } export { e1 as E, E2 }	
 		`,
 			{ types: ['node'] }
 		);
@@ -1183,6 +1131,13 @@ export function B() {}
 			a.assert(D.type);
 			a.equal(D.type.kind, Kind.ImportType);
 			a.equal(D.type.name, '"url"');
+		});
+		a.test('export', (a: TestApi) => {
+			a.equal(E.name, 'E');
+			a.equal(E2.name, 'E2');
+			a.assert(E.type);
+			a.equal(E.type.name, '1');
+			a.equal(E.kind, Kind.Constant);
 		});
 	});
 });

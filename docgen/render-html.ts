@@ -86,7 +86,7 @@ function ClassType(node: Node) {
 	});
 	return `<cxl-t h6 inline>${
 		(extendStr.length ? `extends ${extendStr.join(', ')}` : '') +
-		(implementStr.length ? `implements ${implementStr.join(', ')}` : '')
+		(implementStr.length ? ` implements ${implementStr.join(', ')}` : '')
 	}</cxl-t>`;
 }
 
@@ -203,7 +203,16 @@ function SignatureValue(val?: string) {
 }
 
 function Parameter(p: Node) {
-	const name = `${p.flags & Flags.Rest ? '...' : ''}${p.name}${
+	const modifiers =
+		p.flags & Flags.Public
+			? 'public '
+			: p.flags & Flags.Private
+			? 'private'
+			: p.flags & Flags.Protected
+			? 'protected '
+			: '';
+
+	const name = `${modifiers}${p.flags & Flags.Rest ? '...' : ''}${p.name}${
 		p.flags & Flags.Optional ? '?' : ''
 	}`;
 	return `${name}: ${Type(p.type)}${p.value ? ` = ${p.value}` : ''}`;
@@ -297,42 +306,33 @@ function getSourceLink(src: Source) {
 	const url = application.repositoryLink;
 	if (url && !src.sourceFile.isDeclarationFile) {
 		const pos = src.sourceFile.getLineAndCharacterOfPosition(src.index);
-		const fileUrl = `${
-			/*application.rootDir
-				? join(application.rootDir, src.sourceFile.fileName)
-				: */ relative(application.packageRoot, src.name /*sourceFile.fileName*/)
-		}#L${pos.line + 1}`;
+		const fileUrl = `${relative(application.packageRoot, src.name)}#L${
+			pos.line + 1
+		}`;
 		return fileUrl;
 	}
 	return '';
 }
 
-//const languages = ['html', 'typescript', 'javascript', 'css'];
-
 function Code(source: string, language?: string) {
 	if (language === 'demo') return Demo({ value: source });
 
-	//try {
-	/*const formatted = (
-			language && languages.includes(language.toLowerCase())
-				? hljs.highlight(source, { language })
-				: hljs.highlightAuto(source, languages)
-		).value;*/
 	return `<doc-hl${
 		language ? ` l="language"` : ''
 	}><!--${source}--></doc-hl>`;
-	/*} catch (e) {
-		console.error(e);
-		return '';
-	}*/
 }
 
 function Demo(doc: DocumentationContent): string {
 	const { title, value } = parseExample(getDocValue(doc.value));
+	const demo = application.cxlExtensions
+		? `<doc-demo${
+				application.debug ? ' debug' : ''
+		  }><!--${value}--></doc-demo>`
+		: Markdown(value);
 
-	return `<cxl-t h6>${title || translate('Demo')}</cxl-t><doc-demo${
-		application.debug ? ' debug' : ''
-	}><!--${value}--></doc-demo>`;
+	return `<cxl-t h6>${
+		title || translate('Example')
+	}</cxl-t>${demo}<br/><br/>`;
 }
 
 function Example(doc: DocumentationContent) {
@@ -365,25 +365,27 @@ function DocSee(doc: DocumentationContent) {
 }
 
 function formatContent(text: string) {
-	return escape(text).replace(/\r?\n\r?\n/g, '</p><p>');
+	return text.replace(/\r?\n\r?\n/g, '</p><p>');
 }
 
-const linkRegex = /^\s*(.+?)[|\s]\s*(.+?)\s*$/;
+const linkRegex = /^\s*([^|]+?)\s*(?:[|\s]\s*(.+))?\s*$/;
+
+function DocLink(value: string) {
+	const linkTag = linkRegex.exec(value);
+	const name = linkTag?.[1] || value;
+	const title = linkTag?.[2];
+	const symbol = findSymbolByName(name);
+
+	return symbol ? Link(symbol, title) : ExternalLink(name, title);
+}
 
 function getDocValue(content: DocumentationContent['value']) {
 	if (typeof content === 'string') return content;
 
 	return content
 		.map(doc => {
-			if (doc.tag === 'link') {
-				const linkTag = linkRegex.exec(doc.value);
-				const name = linkTag?.[1] || doc.value;
-				const title = linkTag?.[2];
-				const symbol = findSymbolByName(name);
-
-				return symbol ? Link(symbol, title) : ExternalLink(name, title);
-			}
-			return doc.value;
+			if (doc.tag === 'link') return DocLink(doc.value);
+			return escape(doc.value);
 		})
 		.join(' ');
 }
@@ -397,22 +399,22 @@ function Documentation(node: Node) {
 		.map(doc => {
 			if (doc.tag === 'demo') return Demo(doc);
 			if (doc.tag === 'example') return Example(doc);
-			if (doc.tag === 'return')
-				return `<cxl-t h5>Returns</cxl-t><p>${doc.value}</p>`;
-			if (doc.tag === 'param') return `<p>${doc.value}</p>`;
 			if (doc.tag === 'see') return DocSee(doc);
+			if (typeof doc.value === 'string' && doc.tag === 'link')
+				return DocLink(doc.value);
 
 			const value = getDocValue(doc.value);
+			const text = application.markdown
+				? Markdown(value, !value.includes('\n'))
+				: formatContent(value);
+
+			if (doc.tag === 'return')
+				return `<cxl-t h6>Returns</cxl-t><p>${text}</p>`;
+			if (doc.tag === 'param') return `<p>${text}</p>`;
 
 			return doc.tag
-				? `<p>${jsdocTitle(doc.tag)}: ${
-						application.markdown
-							? Markdown(value, !value.includes('\n'))
-							: formatContent(value)
-				  }</p>`
-				: application.markdown
-				? Markdown(value)
-				: `<p>${escape(value)}</p>`;
+				? `<p>${jsdocTitle(doc.tag)}: ${text}</p>`
+				: `<p>${text}</p>`;
 		})
 		.join('');
 }
@@ -470,7 +472,7 @@ function isReferenceNode(node: Node) {
 	return node.kind === Kind.Reference || node.kind === Kind.ImportType;
 }
 
-function Link(node: Node, content?: string, parentHref?: string): string {
+function Link(node: Node, content?: string, parent?: Node): string {
 	const name =
 		content ||
 		(node.name
@@ -480,16 +482,10 @@ function Link(node: Node, content?: string, parentHref?: string): string {
 			: '(Unknown)');
 
 	if (node.type && isReferenceNode(node)) node = node.type;
-	/*if (node.type) {
-		if (node.kind === Kind.Reference) node = node.type;
-		else if (node.type.kind === Kind.Reference && node.type.type)
-			node = node.type.type;
-	}*/
 
-	//if (!node.id && !hasOwnPage(node)) return name;
 	if (!node.id) return name;
 
-	const href = getHref(node, parentHref);
+	const href = getHref(node, parent);
 
 	if (application?.spa && href[0] !== '#')
 		return `<doc-a href="${href}">${name}</doc-a>`;
@@ -574,9 +570,9 @@ function ImportStatement(node: Node) {
 		  )}`;
 }*/
 
-function MemberIndexLink(node: Node, _parentHref: string) {
+function MemberIndexLink(node: Node, parent?: Node) {
 	const chips = node.flags & Flags.Static ? `${Chip('static')} ` : '';
-	const link = Link(node, undefined, '');
+	const link = Link(node, undefined, parent);
 	return chips
 		? `<c>${chips}${link}</c>`
 		: link.startsWith('<')
@@ -595,25 +591,24 @@ function MemberBodyGroup({ body, kind }: Group) {
 		: `<cxl-t h5>${groupTitle(kind)}</cxl-t>${body.join('')}`;
 }
 
-function getEnumMembers(children: Node[], parentHref: string) {
+function getEnumMembers(node: Node, children: Node[]) {
+	children = children.filter(c => !(c.flags & Flags.Internal));
 	return [
 		{
 			kind: Kind.Property,
 			unique: {},
-			index: children
-				.sort(sortNode)
-				.map(n => MemberIndexLink(n, parentHref)),
+			index: children.sort(sortNode).map(c => MemberIndexLink(c, node)),
 			body: children.sort(sortByValue).map(MemberCard),
 		},
 	];
 }
 
 function pushToGroup(
+	parent: Node,
 	c: Node,
 	resultMap: Record<number, Group>,
 	result: Group[],
-	indexOnly: boolean,
-	parentHref: string
+	indexOnly: boolean
 ) {
 	const groupKind = c.kind === Kind.ImportType ? Kind.Export : c.kind;
 
@@ -633,7 +628,8 @@ function pushToGroup(
 
 	if (group.unique[c.name] !== true) {
 		group.unique[c.name] = true;
-		group.index.push(MemberIndexLink(c, parentHref));
+		// Assign parent only if not indexOnly
+		group.index.push(MemberIndexLink(c, indexOnly ? undefined : parent));
 	}
 
 	if (!indexOnly && !hasOwnPage(c) && c.kind !== Kind.Export)
@@ -645,14 +641,14 @@ function getMemberGroups(node: Node, indexOnly = false, sort = true) {
 	const resultMap: Record<number, Group> = {};
 	const result: Group[] = [];
 	if (!children) return result;
-	const parentHref = getHref(node);
 
-	if (node.kind === Kind.Enum) return getEnumMembers(children, parentHref);
+	if (node.kind === Kind.Enum) return getEnumMembers(node, children);
 
 	children.sort(sortNode).forEach(c => {
 		if (
-			(node.kind === Kind.Module || node.kind === Kind.Namespace) &&
-			!declarationFilter(c)
+			((node.kind === Kind.Module || node.kind === Kind.Namespace) &&
+				!declarationFilter(c)) ||
+			c.flags & Flags.Internal
 		)
 			return;
 
@@ -665,8 +661,8 @@ function getMemberGroups(node: Node, indexOnly = false, sort = true) {
 			c.children
 		) {
 			for (const child of c.children)
-				pushToGroup(child, resultMap, result, indexOnly, parentHref);
-		} else pushToGroup(c, resultMap, result, indexOnly, parentHref);
+				pushToGroup(c, child, resultMap, result, indexOnly);
+		} else pushToGroup(node, c, resultMap, result, indexOnly);
 	});
 
 	return sort
@@ -729,7 +725,7 @@ function ModuleBody(json: Node) {
 	);
 }
 
-export function getHref(node: Node, parentHref?: string): string {
+export function getHref(node: Node, parent?: Node): string {
 	if (
 		node.type &&
 		(node.kind === Kind.Reference ||
@@ -739,7 +735,11 @@ export function getHref(node: Node, parentHref?: string): string {
 		return getHref(node.type);
 	if (hasOwnPage(node)) return getPageName(node);
 
-	parentHref ??= node.parent ? getHref(node.parent) : '';
+	if (node.parent && node.name === 'disabled') debugger;
+	const parentHref =
+		node.parent && (!parent || node.parent.name !== parent.name)
+			? getHref(node.parent)
+			: '';
 
 	return parentHref + (node.id ? '#s' + node.id.toString() : '');
 }
@@ -749,8 +749,7 @@ function declarationFilter(node: Node) {
 		!(node.flags & Flags.Internal) &&
 		(node.flags & Flags.Export ||
 			node.flags & Flags.Ambient ||
-			node.flags & Flags.DeclarationMerge) /*&&
-		!(node.kind === Kind.Interface && node.flags & Flags.DeclarationMerge)*/
+			node.flags & Flags.DeclarationMerge)
 	);
 }
 
@@ -774,10 +773,11 @@ function NodeIcon(node: Node) {
 	return `<cxl-avatar size="-1" text="${icon}"></cxl-avatar>`;
 }
 
-function NavbarItem(c: Node, parentHref?: string) {
+function NavbarItem(c: Node) {
+	//, parentHref?: string) {
 	const name =
 		!c.name && c.flags & Flags.Default ? '<i>default</i>' : escape(c.name);
-	const href = getHref(c, parentHref);
+	const href = getHref(c);
 	return href ? Item(`${NodeIcon(c)}${name}`, href) : '';
 }
 
@@ -789,7 +789,7 @@ function ModuleNavbar(node: Node) {
 	) {
 		return '';
 	}
-	const moduleName = node.name.match(/index\.tsx?/) ? 'Index' : node.name;
+	const moduleName = node.name.match(/^index\.tsx?/) ? 'Index' : node.name;
 
 	const href = getHref(node);
 	return (
@@ -798,21 +798,21 @@ function ModuleNavbar(node: Node) {
 			? node.children
 					.sort(sortNode)
 					.map(c => {
-						if (
+						/*if (
 							(c.kind === Kind.Constant ||
 								c.kind === Kind.Variable) &&
 							c.children
 						) {
 							return c.children
-								.map(c2 => NavbarItem(c2, href))
+								.map(c2 => NavbarItem(c2))
 								.join('');
-						}
+						}*/
 						if (
 							declarationFilter(c) &&
 							hasOwnPage(c) &&
 							!(c.flags & Flags.Overload)
 						) {
-							return NavbarItem(c, href);
+							return NavbarItem(c);
 						} else return '';
 					})
 					.join('')
@@ -870,9 +870,9 @@ function Versions() {
 }
 
 function Navbar(pkg: Package) {
-	return `<cxl-navbar permanent><cxl-flex middle pad="16"><cxl-t style="flex-grow:1" font="h5" inline>${
+	return `<cxl-navbar permanent><cxl-flex middle pad="16"><div class="navbar-title">${
 		application.packageName || pkg.name
-	}</cxl-t>${Versions()}
+	}</div>${Versions()}
 	</cxl-flex>
 		<cxl-hr></cxl-hr>
 		${extraDocs.length ? NavbarExtra() : ''}	
@@ -918,7 +918,7 @@ function Header(scripts: File[]) {
 
 	return `<!DOCTYPE html>
 	<head><meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]:not([inline]){margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0}</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]:not([inline]){margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0} .navbar-title{font-size: 18px;font-weight:500;flex-grow:1}</style>
 	<cxl-application permanent><title>${title} API Reference</title><cxl-appbar center>
 	${Navbar(pkg)}
 	<doc-search></doc-search>
@@ -992,7 +992,10 @@ function getExternalLink(url: string) {
 		: url;
 }
 
-function Markdown(content: string, inline = false) {
+const AllowedHtmlTags = /^<\/?(?:doc-a|a|code)[\s>]/;
+const IsLink = /^<\/?(?:doc-a|a)[\s>]/;
+
+function Markdown(content: string, inline = false, allowAllHtml = false) {
 	const md = new MarkdownIt({
 		highlight: Code,
 		html: true,
@@ -1017,6 +1020,19 @@ function Markdown(content: string, inline = false) {
 	rules.heading_close = () => `</cxl-t>`;
 	rules.code_block = (tokens, idx) => Code(tokens[idx].content);
 	rules.fence = (tokens, idx) => Code(tokens[idx].content);
+	rules.code_inline = (tokens, idx) => {
+		const value = tokens[idx].content;
+		const isLink = IsLink.test(value);
+		return `<code>${isLink ? value : escape(value)}</code>`;
+	};
+	rules.html_block = (tokens, idx) => {
+		const html = tokens[idx].content;
+		return allowAllHtml ? html : escape(html);
+	};
+	rules.html_inline = (tokens, idx) => {
+		const html = tokens[idx].content;
+		return allowAllHtml || AllowedHtmlTags.test(html) ? html : escape(html);
+	};
 
 	return inline ? md.renderInline(content) : md.render(content);
 }
@@ -1031,7 +1047,9 @@ function Route(file: File) {
 
 function renderExtraFile({ file, index, title }: ExtraDocumentation) {
 	const source = readFileSync(file, 'utf8');
-	const content = file.endsWith('.md') ? Markdown(source) : source;
+	const content = file.endsWith('.md')
+		? Markdown(source, false, true)
+		: source;
 	return {
 		title,
 		name: index
@@ -1061,7 +1079,6 @@ function versionPrefix(version: string, file: File) {
 
 export function render(app: DocGen, output: Output): File[] {
 	application = app;
-
 	if (!app.rootDir && output.config.options.rootDir)
 		app.rootDir = output.config.options.rootDir;
 	//index = output.index;

@@ -42,11 +42,11 @@ export function readPackage(base: string = BASEDIR): Package {
 export function docs(dirName: string, devMode = false) {
 	const docgen = join(__dirname, '../docgen');
 	return new Observable<any>(subs => {
-		sh(
-			`node ${docgen} --clean ${
-				devMode ? '--debug' : ''
-			} -o ../docs/${dirName} --summary`
-		).then(
+		const cmd = `node ${docgen} --clean ${
+			devMode ? '--debug' : ''
+		} -o ../docs/${dirName} --summary --cxlExtensions`;
+		console.log(cmd);
+		sh(cmd).then(
 			out => (console.log(out), subs.complete()),
 			e => subs.error(e)
 		);
@@ -70,10 +70,14 @@ export interface DocgenOptions {
 	markdown?: boolean;
 	baseHref?: string;
 	tag: string;
-	outDir: string;
-	tmpDir: string;
+	outDir?: string;
+	tmpDir?: string;
 	rootDir?: string;
 	customJsDocTags?: string[];
+	exports?: string[];
+	summary?: boolean;
+	followReferences?: boolean;
+	cxlExtensions?: boolean;
 }
 
 export async function docgen(options: DocgenOptions) {
@@ -94,11 +98,15 @@ export async function docgen(options: DocgenOptions) {
 		baseHref,
 		rootDir,
 		customJsDocTags,
+		exports,
+		summary,
+		followReferences,
+		cxlExtensions,
 	} = options;
 	const repodir = options.repodir || `${name.replace('/', '--')}-${tag}`;
-	const dir = join(tmpDir, repodir, npm ? `/node_modules/${npm}` : ``);
+	const dir = join(tmpDir || '', repodir, npm ? `/node_modules/${npm}` : ``);
 	const cwd = join(dir, options.cwd || '');
-	const outDir = resolve(options.outDir);
+	const outDir = resolve(options.outDir || 'docs');
 	const files = Array.isArray(file)
 		? file.map(f => `--file ${f}`).join(' ')
 		: `--tsconfig ${file}`;
@@ -122,26 +130,26 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 	const outputDir = join(outDir, name);
 
 	await run(
-		`node ${DOCGEN} ${files} ${
-			customJsDocTags
-				?.map(tag => `--customJsDocTags "${tag}"`)
-				.join(' ') || ''
-		}`,
+		`node ${DOCGEN} ${files}`,
 		{
 			packageJson,
 			docsJson,
 			scripts,
 			outputDir,
 			sitemap: sitemapBase ? `${sitemapBase}/${name}` : '',
-			summary: true,
+			summary: summary ?? true,
 			typeRoots,
-			packageName: options.name,
-			repository: repo
+			packageName: name,
+			repository: repo?.startsWith('https')
 				? `${repo.replace(/.git$/, '')}/blob/${tag}`
 				: undefined,
 			markdown: true,
 			baseHref,
+			customJsDocTags,
 			rootDir,
+			exports,
+			followReferences,
+			cxlExtensions,
 		},
 		{ cwd }
 	);
@@ -151,7 +159,7 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 
 export function docgenTask(
 	packages: DocgenOptions[],
-	commonOptions?: DocgenOptions
+	commonOptions?: Partial<DocgenOptions>
 ) {
 	return fromAsync(async () => {
 		const output = [];

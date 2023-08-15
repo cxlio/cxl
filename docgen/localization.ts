@@ -111,6 +111,7 @@ const content = {
 const jsdocMap: Record<string, string> = {
 	see: 'Related',
 	usageNotes: 'Usage Notes',
+	returns: 'Returns',
 };
 
 export function groupTitle(kind: Kind) {

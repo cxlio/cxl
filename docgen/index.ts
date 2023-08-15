@@ -9,7 +9,7 @@ import {
 	readJson,
 	sh,
 } from '@cxl/program';
-import { Node, build, buildConfig } from '@cxl/dts';
+import { BuildOptions, Node, build, buildConfig } from '@cxl/dts';
 
 import type { Section } from './render';
 
@@ -44,6 +44,7 @@ const Parameters = {
 	},
 	summary: {
 		help: 'Render summary.json file',
+		type: 'boolean',
 	},
 	sitemap: {
 		help: 'Generate sitemap with the value as base url',
@@ -78,6 +79,19 @@ const Parameters = {
 		type: 'string',
 		many: true,
 	},
+	cxlExtensions: {
+		help: 'Enable Coaxial UI extensions',
+		type: 'boolean',
+	},
+	exports: {
+		help: 'Treat symbol as exported',
+		type: 'string',
+		many: true,
+	},
+	followReferences: {
+		help: 'Include documentation from project references symbols',
+		type: 'boolean',
+	},
 } as const;
 
 export interface DocGen {
@@ -104,6 +118,9 @@ export interface DocGen {
 	baseHref?: string;
 	rootDir?: string;
 	customJsDocTags?: string[];
+	cxlExtensions?: boolean;
+	followReferences?: boolean;
+	exports?: string[];
 }
 
 program({}, async ({ log }) => {
@@ -136,7 +153,7 @@ program({}, async ({ log }) => {
 	const outputDir = args.outputDir;
 	const pkgRepo = await readJson<Package>(args.packageJson);
 
-	args.packageRoot = dirname(resolve(args.packageJson));
+	args.packageRoot ??= dirname(resolve(args.packageJson));
 	await mkdirp(outputDir);
 	await mkdirp(outputDir + '/' + pkgRepo.version);
 
@@ -150,10 +167,13 @@ program({}, async ({ log }) => {
 		args.repository = typeof repo === 'string' ? repo : repo.url;
 	}
 
-	const dtsOptions = {
+	const dtsOptions: BuildOptions = {
 		rootDir: args.rootDir,
 		exportsOnly: true,
 		customJsDocTags: args.customJsDocTags,
+		cxlExtensions: args.cxlExtensions || false,
+		forceExports: args.exports,
+		followReferences: args.followReferences,
 	};
 	const json = args.file?.length
 		? buildConfig(

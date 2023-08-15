@@ -60,11 +60,6 @@ class Build {
 	}
 }
 
-/*async function buildTarget(config: BuildConfiguration) {
-	if (config.target && !process.argv.includes(config.target)) return;
-	await new Build(appLog, config).build();
-}*/
-
 export async function build(...targets: BuildConfiguration[]) {
 	if (!targets) throw new Error('Invalid configuration');
 
@@ -79,7 +74,6 @@ export async function build(...targets: BuildConfiguration[]) {
 	appLog(`typescript ${tscVersion}`);
 
 	const runTargets = [undefined, ...process.argv];
-
 	try {
 		for (const targetId of runTargets) {
 			for (const target of targets)
@@ -146,14 +140,17 @@ export function shell(cmd: string, options: SpawnOptions = {}) {
 
 export function run(
 	cmd: string,
-	params: Record<string, string | number | boolean | undefined>,
+	params: Record<string, string | number | boolean | string[] | undefined>,
 	options?: SpawnOptions
 ) {
 	const args = [cmd];
 	for (const p in params) {
 		const val = params[p];
 		if (val === false || val === undefined) continue;
-		args.push(typeof val === 'boolean' ? `--${p}` : `--${p} "${val}"`);
+		if (Array.isArray(val)) {
+			val.forEach(v => args.push(`--${p} "${v}"`));
+		} else
+			args.push(typeof val === 'boolean' ? `--${p}` : `--${p} "${val}"`);
 	}
 	console.log(args.join(' '));
 	return sh(args.join(' '), options);

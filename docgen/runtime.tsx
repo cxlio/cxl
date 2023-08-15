@@ -36,17 +36,22 @@ const UserScripts =
 	'';
 
 let activeTarget: Element | undefined;
+let lastHash: string;
 
 routerState.subscribe(state => {
 	const hash = state.url.hash;
 	const anchor = hash && state.current?.querySelector(`a[name="${hash}"]`);
 	if (anchor) {
+		lastHash = state.url.hash;
 		const card = anchor.nextElementSibling;
 		activeTarget?.classList.remove('target');
 		if (card) {
 			activeTarget = card;
 			card.classList.add('target');
 		}
+	} else if (lastHash) {
+		lastHash = '';
+		document.querySelector('cxl-page')?.scrollTo(0, 0);
 	}
 });
 
