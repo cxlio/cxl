@@ -120,9 +120,9 @@ export interface Program {
 
 const StringValue = `"(?:[^"\\\\]|\\\\.)*"`;
 const MultipleShort = `-(\\w\\w+)`;
-const ArgValue = `\\s*(?:=\\s*|\\s+)(${StringValue}|[^-][^\\s]*)`;
-const SingleShortValue = `-(\\w)(?:${ArgValue})?`;
-const Long = `--(\\w+)(?:${ArgValue})?`;
+const ArgValue = `\\s*=?\\s*(${StringValue}|[^-][^\\s]*)?`;
+const SingleShortValue = `-(\\w)${ArgValue}`;
+const Long = `--(\\w+)${ArgValue}`;
 
 const ArgRegex = new RegExp(
 	`\\s*(?:${MultipleShort}|${SingleShortValue}|${Long}|(${StringValue}|[^\\s]+))`,
@@ -145,29 +145,11 @@ export const DefaultParameters = {
 	},
 } as const;
 
-/*interface Argument {
-	name: string;
-	value?: string;
-}*/
-
 function unquote(value: string) {
 	return value.startsWith('"') && value.endsWith('"')
 		? value.slice(1, value.length - 1)
 		: value;
 }
-
-/*function findParam(
-	parameters: Parameter[],
-	shortcut: string,
-	pvalue?: string,
-	prop: 'short' | 'name' = 'short'
-) {
-	const result = parameters.find(p => p[prop] === shortcut);
-	if (!result) throw new Error(`Invalid parameter "${shortcut}"`);
-	const value = pvalue && unquote(pvalue);
-
-	return { name: result.name, value };
-}*/
 
 function findParameter<T extends Record<string, Parameter>>(
 	parameters: T,
@@ -286,60 +268,10 @@ export async function operation<T>(
 		return result;
 	});
 }
-/*export function parseParametersArray(parameters: Parameter[], input: string) {
-	const result: Argument[] = [];
-	let m: RegExpExecArray | null;
-
-	while ((m = ArgRegex.exec(input))) {
-		const [
-			,
-			multipleShort,
-			short,
-			shortValue,
-			long,
-			longValue,
-			restValue,
-		] = m;
-		if (multipleShort)
-			result.push(
-				...multipleShort.split('').map(p => findParam(parameters, p))
-			);
-		else if (short) result.push(findParam(parameters, short, shortValue));
-		else if (long)
-			result.push(findParam(parameters, long, longValue, 'name'));
-		else if (restValue)
-			result.push({ name: '*', value: unquote(restValue) });
-	}
-
-	return result;
-}*/
 
 export function parseArgv<T extends Record<string, Parameter>>(parameters: T) {
 	return parseParameters(parameters, process.argv.slice(2).join(' '));
 }
-
-/*export async function parametersJsonFile(
-	parameters: Parameter[],
-	fileName: string
-) {
-	try {
-		const json = await readJson(fileName);
-		return parametersJson(parameters, json);
-	} catch (e) {
-		throw new Error(`Invalid configuration file "${fileName}"`);
-	}
-}
-
-export function parametersJson<T extends Record<string, Parameter>>(parameters: T, json: T): ParametersResult<T> {
-	const result: Partial<ParametersResult<T>> = {};
-	for (const paramName in parameters) {
-		if (paramName in json) {
-			const optionValue = json[paramName as keyof T];
-			result[paramName] = optionValue;
-		}
-	}
-	return result;
-}*/
 
 /**
  * Creates a directory recursively

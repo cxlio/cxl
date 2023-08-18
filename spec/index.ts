@@ -208,9 +208,9 @@ export class TestApi {
 	 * you want to run in that test file.
 	 */
 	testOnly(name: string, testFn: TestFn) {
-		const test = new Test(name, testFn);
+		const test = new Test(name, testFn, this.$test);
 		this.$test.addTest(test);
-		this.$test.only.push(test);
+		this.$test.setOnly(test);
 	}
 
 	should(name: string, testFn: TestFn) {
@@ -218,7 +218,7 @@ export class TestApi {
 	}
 
 	test(name: string, testFn: TestFn) {
-		this.$test.addTest(new Test(name, testFn));
+		this.$test.addTest(new Test(name, testFn, this.$test));
 	}
 
 	mock<T, K extends keyof FunctionsOf<T>>(object: T, method: K, fn: T[K]) {
@@ -348,7 +348,11 @@ export class Test {
 
 	readonly id = lastTestId++;
 
-	constructor(nameOrConfig: string | TestConfig, public testFn: TestFn) {
+	constructor(
+		nameOrConfig: string | TestConfig,
+		public testFn: TestFn,
+		public parent?: Test
+	) {
 		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
 		else this.name = nameOrConfig.name;
 	}
@@ -395,6 +399,10 @@ export class Test {
 				resolve();
 			}, reject);
 		});
+	}
+
+	setOnly(test: Test) {
+		if (!this.only.includes(test)) this.only.push(test);
 	}
 
 	addTest(test: Test) {

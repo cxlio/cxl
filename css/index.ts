@@ -249,6 +249,9 @@ const PSEUDO2 = {
 	'$::scrollbar': ':host::-webkit-scrollbar',
 	'$::scrollbar-track': ':host::-webkit-scrollbar-track',
 	'$::scrollbar-thumb': ':host::-webkit-scrollbar-thumb',
+	'$::-webkit-scrollbar': ':host::-webkit-scrollbar',
+	'$::-webkit-scrollbar-track': ':host::-webkit-scrollbar-track',
+	'$::-webkit-scrollbar-thumb': ':host::-webkit-scrollbar-thumb',
 };
 
 export function boxShadow<T extends Theme>(

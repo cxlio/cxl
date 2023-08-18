@@ -2,7 +2,7 @@ import * as path from 'path';
 import { promises as fs } from 'fs';
 import * as cp from 'child_process';
 import { program, readJson } from '@cxl/program';
-import { Package } from '@cxl/build/package.js';
+import { Package } from '@cxl/build/npm.js';
 
 interface LintData {
 	projectPath: string;

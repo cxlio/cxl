@@ -5,7 +5,6 @@ const cp = require('child_process');
 cp.execSync('npm run build --prefix build');
 
 const { sh } = require('../dist/build');
-const { checkNpms } = require('../dist/build/npm');
 const { readJson } = require('../dist/program');
 const stats = {
 	packages: [],
@@ -32,11 +31,10 @@ async function build(dir) {
 	const start = Date.now();
 	await sh(cmd, { cwd: dir, stdio: ['ignore', 'ignore', 'pipe'] });
 	const buildTime = Date.now() - start;
-	const [tsconfig, testReport, mainScriptSize, npms] = await Promise.all([
+	const [tsconfig, testReport, mainScriptSize] = await Promise.all([
 		readJson(`${dir}/tsconfig.json`),
 		readJson(path.join('dist', dir, 'test-report.json')),
 		getScriptSize(dir, pkg),
-		checkNpms(pkg.name),
 	]);
 
 	stats.packages.push({
@@ -46,7 +44,6 @@ async function build(dir) {
 		tsconfig,
 		testReport,
 		buildTime,
-		npms,
 		stats: {
 			mainScriptSize,
 		},
@@ -71,7 +68,7 @@ module.exports = fs.readdir('.').then(async all => {
 	const statsJson = JSON.stringify(stats);
 	await fs.writeFile('./dist/stats.json', statsJson, 'utf8');
 	await sh('mkdir -p docs');
-	await sh('node dist/cli/build-data');
+	//await sh('node dist/cli/build-data');
 	await sh('cp scripts/build-report.html dist/index.html');
 	console.log(`Finished in ${stats.totalTime}ms`);
 });

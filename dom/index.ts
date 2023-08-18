@@ -12,6 +12,8 @@ import {
 	from,
 	of,
 	merge,
+	tap,
+	operator,
 } from '@cxl/rx';
 
 declare global {
@@ -418,6 +420,16 @@ export function onIntersection(target: Element) {
 	});
 }
 
+export interface ElementWithValue<T> extends HTMLElement {
+	value: T;
+}
+
+export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
+	return merge(on(el, 'input'), on(el, 'change')).map(
+		ev => (ev.target as T).value
+	);
+}
+
 export function onVisible(target: Element) {
 	return onIntersection(target).map(ev => ev.isIntersecting);
 }
@@ -510,6 +522,60 @@ export function request(options: RequestInfo) {
 
 export function requestJson<T = unknown>(options: RequestInfo): Observable<T> {
 	return doRequest<T>(options, res => res.json());
+}
+
+export function setClassName(el: HTMLElement) {
+	let className: string;
+	return tap<string>(newClass => {
+		if (className !== newClass) {
+			el.classList.remove(className);
+			className = newClass;
+			if (className) el.classList.add(className);
+		}
+	});
+}
+export function debounceImmediate<A extends unknown[], R>(fn: (...a: A) => R) {
+	let to: boolean;
+	return function (this: unknown, ...args: A) {
+		if (to) return;
+		to = true;
+		queueMicrotask(() => {
+			fn.apply(this, args);
+			to = false;
+		});
+	};
+}
+
+/**
+ * debounce using requestAnimationFrame
+ */
+export function raf<T>(fn?: (val: T) => void) {
+	return operator<T>(subscriber => {
+		let to: number,
+			completed = false;
+
+		return {
+			next(val: T) {
+				if (to) cancelAnimationFrame(to);
+				to = requestAnimationFrame(() => {
+					if (fn) fn(val);
+					subscriber.next(val);
+					to = 0;
+					if (completed) subscriber.complete();
+				});
+			},
+			error(e) {
+				subscriber.error(e);
+			},
+			complete() {
+				if (to) completed = true;
+				else subscriber.complete();
+			},
+			unsubscribe() {
+				if (to) cancelAnimationFrame(to);
+			},
+		};
+	});
 }
 
 export type EventDetail<T, K extends string> = T[Extract<

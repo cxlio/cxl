@@ -22,33 +22,6 @@ declare global {
 			interface IntrinsicClassAttributes<T> {
 				$?: Binding<T, unknown> | Observable<unknown>;
 			}
-			//type IntrinsicClassAttributes<T> = AttributeType<T>;
-			//{
-			//	jsxAttributes?: AttributeType<T>;
-			//}
-			/*export interface IntrinsicClassAttributes {
-				className?: string;
-			} /* & {
-				$?: Binding<T, any> | Observable<any>;
-				children?: Children;
-			};
-
-			/*interface IntrinsicClassAttributes<T> extends AttributeType<T> {}*/
-			/*
-				{
-					[P in keyof SVGElementTagNameMap]: NativeType<
-						SVGElementTagNameMap[P]
-					>;
-				};
-			/*	type IntrinsicClassAttributes<T> = {
-				[K in keyof Omit<T, 'children'>]?:
-					| T[K]
-					| Observable<T[K]>
-					| Binding<T, T[K]>;
-			} & {
-				$?: Binding<T, any> | Observable<any>;
-				children?: Children;
-			};*/
 		}
 	}
 }
@@ -98,19 +71,6 @@ export function expression(host: Bindable, binding: Observable<unknown>) {
 	);
 	return result;
 }
-
-/*function renderNodeChildren(
-	host: Node,
-	children: Children,
-	appendTo: Node = host
-) {
-	if (children === undefined || children === null) return;
-
-	if (Array.isArray(children))
-		for (const child of children) renderNodeChildren(host, child, appendTo);
-	else if (children instanceof Node) appendTo.appendChild(children);
-	else appendTo.appendChild(document.createTextNode(children as string));
-}*/
 
 export function renderChildren(
 	host: Bindable | Node,
@@ -167,10 +127,6 @@ function renderNative<T extends Node>(
 interface ComponentConstructor<T extends Bindable> {
 	create(): T;
 }
-
-/*function isSvg(tag: string) {
-	return tag === 'svg' || tag === 'path';
-}*/
 
 function isConstructorType(el: unknown): el is ComponentConstructor<Bindable> {
 	return !!(el as ComponentConstructor<Bindable>).create;

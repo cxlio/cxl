@@ -1,16 +1,26 @@
 import { spec } from '@cxl/spec';
 import { SignatureText } from './render-html.js';
-import { Kind, Node, parse /*, printNode*/ } from '@cxl/dts';
+import { Kind, Node, parse as _parse } from '@cxl/dts';
 
 export function node(p: Partial<Node>): Node {
 	return { name: 'A', kind: Kind.Unknown, flags: 0, ...p };
+}
+
+function parse(options: { source: string; fileName?: string }) {
+	return _parse({
+		...options,
+		exportsOnly: false,
+		cxlExtensions: true,
+	});
 }
 
 export default spec('docgen', s => {
 	s.test('render-html', it => {
 		it.test('MappedType', it => {
 			it.should('render type alias', a => {
-				const [A] = parse(`type A<T> = { [P in keyof T]: T[P]; }`);
+				const [A] = parse({
+					source: `type A<T> = { [P in keyof T]: T[P]; }`,
+				});
 				const R = SignatureText(A);
 				a.equal(
 					R,
@@ -19,14 +29,15 @@ export default spec('docgen', s => {
 			});
 
 			it.test('render function result', a => {
-				const [A, B, C] = parse(`
+				const [, , C] = parse({
+					source: `
 	abstract class Component extends Array { }
 	const registeredComponents: Record<string, typeof Component> = {};
 	export function getRegisteredComponents() {
 		return { ...registeredComponents };
 	}
-				`);
-				console.log(A, B, C);
+				`,
+				});
 				const R = SignatureText(C);
 				a.equal(
 					R,
@@ -37,9 +48,9 @@ export default spec('docgen', s => {
 
 		it.test('UnionType', it => {
 			it.should('render function type', a => {
-				const [A] = parse(
-					`function A(): { type: 'A' | 'B' } { return { type: 'A' } }`
-				);
+				const [A] = parse({
+					source: `function A(): { type: 'A' | 'B' } { return { type: 'A' } }`,
+				});
 				const R = SignatureText(A);
 				a.equal(R, `A(): { type: 'A' | 'B' }`);
 			});
@@ -56,9 +67,9 @@ export default spec('docgen', s => {
 
 		it.test('TypeAlias', it => {
 			it.should('render union', a => {
-				const [A] = parse(
-					`type A<T> = { [P in keyof T]: T[P]; } & { name: string };`
-				);
+				const [A] = parse({
+					source: `type A<T> = { [P in keyof T]: T[P]; } & { name: string };`,
+				});
 				const R = SignatureText(A);
 				a.equal(
 					R,
@@ -67,14 +78,13 @@ export default spec('docgen', s => {
 			});
 
 			it.should('render extends', a => {
-				const [A] = parse(
-					`
+				const [A] = parse({
+					fileName: 'extends.ts',
+					source: `
 					type A<T extends Component> = keyof T;
 					interface Component { }
 				`,
-					undefined,
-					'extends.ts'
-				);
+				});
 				const R = SignatureText(A);
 				a.equal(
 					R,

@@ -4,6 +4,7 @@ import { getShadow, observeChildren, setAttribute } from '@cxl/dom';
 import {
 	Observable,
 	Operator,
+	OrderedSubject,
 	Subject,
 	Subscription,
 	concat,
@@ -77,7 +78,7 @@ export abstract class Component extends HTMLElement {
 	protected jsxAttributes!: AttributeType<this>;
 
 	readonly render?: (node: HTMLElement) => void = this.render;
-	readonly attributes$ = new Subject<unknown>();
+	readonly attributes$ = new OrderedSubject<unknown>();
 
 	Shadow = (p: { children: Children }) => {
 		renderChildren(this, p.children, getShadow(this));

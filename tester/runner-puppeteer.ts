@@ -53,7 +53,6 @@ async function respond(req: HTTPRequest, sources: Output[], url: string) {
 }
 
 function resolveImport(path: string) {
-	if (path === 'axe-core') return require.resolve('axe-core');
 	return path
 		.replace(
 			/^@j5g3\/(.+)/,
@@ -100,7 +99,6 @@ async function handleRequest(sources: Output[], req: HTTPRequest) {
 
 	try {
 		const url = require.resolve(scriptPath, { paths });
-		console.log(`import ${url}`);
 		await respond(req, sources, url);
 	} catch (e) {
 		console.error(base, scriptPath, e);

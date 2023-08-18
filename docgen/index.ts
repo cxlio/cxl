@@ -9,11 +9,9 @@ import {
 	readJson,
 	sh,
 } from '@cxl/program';
-import { Node, build, buildConfig } from '@cxl/dts';
+import { BuildOptions, Node, build, buildConfig } from '@cxl/dts';
 
 import type { Section } from './render';
-
-const DotGitRegex = /\.git$/;
 
 export interface File {
 	name: string;
@@ -46,6 +44,7 @@ const Parameters = {
 	},
 	summary: {
 		help: 'Render summary.json file',
+		type: 'boolean',
 	},
 	sitemap: {
 		help: 'Generate sitemap with the value as base url',
@@ -60,12 +59,40 @@ const Parameters = {
 		help: 'Location of tsconfig file to use. Defaults to ./tsconfig.json',
 		type: 'string',
 	},
-	//extra: { type: 'string', many: true, help: 'Extra documentation files' },
-	spa: { help: 'Enable single page application mode' },
-	debug: { help: 'Enable debug mode' },
+	markdown: {
+		help: 'Enable markdown for symbol descriptions',
+		type: 'boolean',
+	},
 	typeRoots: { help: 'Type Roots', type: 'string', many: true },
-
+	docsJson: { help: 'Use docs.json file', type: 'string' },
+	baseHref: { help: 'Base href for markdown links', type: 'string' },
 	exclude: { help: 'Exclude modules', many: true, type: 'string' },
+	rootDir: {
+		help: 'Override root directory for typescript project file names',
+		type: 'string',
+	},
+	customJsDocTags: {
+		help: 'Declare custom jsdoc tags',
+		type: 'string',
+		many: true,
+	},
+	cxlExtensions: {
+		help: 'Enable Coaxial UI extensions',
+		type: 'boolean',
+	},
+	exports: {
+		help: 'Treat symbol as exported',
+		type: 'string',
+		many: true,
+	},
+	followReferences: {
+		help: 'Include documentation from project references symbols',
+		type: 'boolean',
+	},
+	headHtml: {
+		help: 'File name used to add content to the <head> element of the generated page',
+		type: 'string',
+	},
 } as const;
 
 export interface DocGen {
@@ -87,6 +114,15 @@ export interface DocGen {
 	demoScripts?: string[];
 	file?: string[];
 	exclude?: string[];
+	docsJson?: string;
+	markdown?: boolean;
+	baseHref?: string;
+	rootDir?: string;
+	customJsDocTags?: string[];
+	cxlExtensions?: boolean;
+	followReferences?: boolean;
+	exports?: string[];
+	headHtml?: string;
 }
 
 program({}, async ({ log }) => {
@@ -102,8 +138,8 @@ program({}, async ({ log }) => {
 		...parseArgv(Parameters),
 	};
 
-	if (existsSync('docs.json'))
-		Object.assign(args, await readJson('docs.json'));
+	if (args.docsJson || existsSync('docs.json'))
+		Object.assign(args, await readJson(args.docsJson || 'docs.json'));
 
 	async function writeFile(file: File) {
 		const name = file.name;
@@ -119,7 +155,7 @@ program({}, async ({ log }) => {
 	const outputDir = args.outputDir;
 	const pkgRepo = await readJson<Package>(args.packageJson);
 
-	args.packageRoot = dirname(resolve(args.packageJson));
+	args.packageRoot ??= dirname(resolve(args.packageJson));
 	await mkdirp(outputDir);
 	await mkdirp(outputDir + '/' + pkgRepo.version);
 
@@ -133,41 +169,38 @@ program({}, async ({ log }) => {
 		args.repository = typeof repo === 'string' ? repo : repo.url;
 	}
 
-	let repositoryLink;
-	if (args.repository) {
-		const repo = pkgRepo.repository;
-		const url = args.repository;
-		if (url?.indexOf('github.com') !== -1) {
-			repositoryLink =
-				url.replace(DotGitRegex, '') +
-				join(
-					`/blob/v${pkgRepo.version}`,
-					repo && typeof repo !== 'string' ? repo.directory || '' : ''
-				);
-		}
-	}
-
+	const dtsOptions: BuildOptions = {
+		rootDir: args.rootDir,
+		exportsOnly: true,
+		customJsDocTags: args.customJsDocTags,
+		cxlExtensions: args.cxlExtensions || false,
+		forceExports: args.exports,
+		followReferences: args.followReferences,
+	};
 	const json = args.file?.length
 		? buildConfig(
 				{
 					compilerOptions: {
 						allowJs: true,
 						rootDir: dirname(args.file[0]),
+						sourceMap: false,
 						typeRoots: args.typeRoots || [],
 						noEmit: true,
 						lib: ['es2021'],
 					},
 					files: args.file,
 				},
-				process.cwd()
+				process.cwd(),
+				dtsOptions
 		  )
-		: build(args.tsconfig);
+		: build(args.tsconfig, dtsOptions);
+	log(`Typescript ${json.env.typescript}`);
 	const theme = await import('./render-html');
 
 	const docgenConfig: DocGen = {
 		...args,
 		modulePackage: pkgRepo,
-		repositoryLink,
+		repositoryLink: args.repository,
 	};
 
 	if (args.summary) {

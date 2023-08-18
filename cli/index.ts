@@ -1,6 +1,11 @@
 import { parametersParser, program, sh as _sh, readJson } from '@cxl/program';
-import { Package, getBranch, readPackage } from '@cxl/build/package.js';
-import { getPublishedVersion } from '@cxl/build/npm.js';
+import { readPackage } from '@cxl/build/package.js';
+import { Package, getLatestVersion } from '@cxl/build/npm.js';
+import {
+	getBranch,
+	checkBranchUpToDate,
+	checkBranchClean,
+} from '@cxl/build/git.js';
 import { readdir, readFile, writeFile } from 'fs/promises';
 import { SpawnOptions } from 'child_process';
 import { lint } from './lint';
@@ -33,26 +38,10 @@ export default program('cli', async ({ log }) => {
 	async function testPackage(dir: string, _pkg: Package) {
 		const cwd = `dist/${dir}`;
 		await sh(`npm install --production`, { cwd });
-		await sh(`npm test`, { cwd: dir });
-		await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
-	}
-
-	async function checkBranchClean(branch: string) {
 		try {
-			await sh(
-				`git status > /dev/null; git diff-index --quiet ${branch}`
-			);
-		} catch (e) {
-			console.error(e);
-			throw new Error('Not a clean repository');
-		}
-	}
-
-	async function checkBranchUpToDate(branch = 'master') {
-		try {
-			await sh(`git diff origin ${branch} --quiet`);
-		} catch (e) {
-			log('Branch has not been merged with origin');
+			await sh(`npm test`, { cwd });
+		} finally {
+			await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
 		}
 	}
 
@@ -77,11 +66,12 @@ export default program('cli', async ({ log }) => {
 			await sh(`npm publish --access=public`, {
 				cwd: `dist/${mod}`,
 			});
-			await sh(`npm version minor --prefix ${mod}`);
+			/*await sh(`npm version minor --prefix ${mod}`);
 			await sh(
 				`git add ${mod}/package.json && git commit -m "chore(${mod}): publish ${pkg.name} ${pkg.version}"`
-			);
+			);*/
 		}
+		return pkg;
 	}
 
 	const scripts = {
@@ -183,6 +173,10 @@ export default program('cli', async ({ log }) => {
 				const dry = args.dryrun;
 				const force = args.force;
 				const branch = await getBranch(process.cwd());
+				const project = args.$?.[0];
+
+				if (!project || args.$.length > 1)
+					throw 'Only one project can be published at a time';
 				if (!dry && branch !== 'master')
 					throw 'Active branch is not master';
 
@@ -190,8 +184,7 @@ export default program('cli', async ({ log }) => {
 
 				try {
 					if (!dry) await sh('git checkout -b publish');
-					for (const mod of args.$)
-						if (mod) await publishProject(mod, !!dry, !!force);
+					const pkg = await publishProject(project, !!dry, !!force);
 					if (!dry) {
 						await sh(`node scripts/build-readme.js`);
 						await sh(`git commit -m "chore: update readme" -a`);
@@ -201,6 +194,9 @@ export default program('cli', async ({ log }) => {
 						await sh(
 							`git commit --no-edit -n && git push origin master`
 						);
+						// Create Release Tag
+						const tag = `${project}/${pkg.version}`;
+						await sh(`git tag ${tag} && git push origin ${tag}`);
 					}
 				} catch (e) {
 					console.error(e);
@@ -225,7 +221,7 @@ export default program('cli', async ({ log }) => {
 			const all = await readdir('.');
 			for (const dir of all) {
 				const pkg = readPackage(dir);
-				if (pkg.version === (await getPublishedVersion(pkg.name)))
+				if (pkg.version === (await getLatestVersion(pkg.name)))
 					throw new Error('Package already published');
 			}
 		}),

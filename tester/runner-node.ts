@@ -49,6 +49,7 @@ export default async function runNode(app: TestRunner) {
 
 	let result!: Test;
 
+	//process.setSourceMapsEnabled(true);
 	require('source-map-support').install();
 
 	if (app.ignoreCoverage) {
@@ -59,6 +60,10 @@ export default async function runNode(app: TestRunner) {
 			const suite = (result = require(suitePath).default as Test);
 			return suite.run();
 		});
+		if (process.argv.includes('--inspect')) {
+			console.log('Press any key to continue');
+			await new Promise(res => process.stdin.once('data', res));
+		}
 		return generateReport(result, coverage);
 	}
 }

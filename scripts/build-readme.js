@@ -82,13 +82,6 @@ async function renderPackage(dir) {
 	const version = latestVersion
 		? `[${latestVersion}](${npmLink(pkg.name, latestVersion)})`
 		: `${pkg.version}`;
-	/*+
-		(latestVersion && latestVersion !== pkg.version
-			? ` ([latest:${latestVersion}](${npmLink(
-					pkg.name,
-					latestVersion
-			  )}))`
-			: '');*/
 
 	return `| ${pkg.name.padEnd(20)} | ${version} | ${pkg.license.padEnd(
 		10
