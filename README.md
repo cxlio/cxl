@@ -18,7 +18,7 @@ Collection of Libraries and Tools
 | @cxl/dts             | [0.4.0](https://npmjs.com/package/@cxl/dts/v/0.4.0) | GPL-3.0-only | Generate symbol information from typescript source code | [Docs](https://cxlio.github.io/cxl/dts/0.4.0) |
 | @cxl/filewatch       | [0.4.0](https://npmjs.com/package/@cxl/filewatch/v/0.4.0) | Apache-2.0 | File watcher library | [Docs](https://cxlio.github.io/cxl/filewatch/0.5.0) |
 | @cxl/keyboard        | [0.0.2](https://npmjs.com/package/@cxl/keyboard/v/0.0.2) | UNLICENSED | Keyboard Handling Library | [Docs](https://cxlio.github.io/cxl/keyboard/0.1.0) |
-| @cxl/program         | [0.0.2](https://npmjs.com/package/@cxl/program/v/0.0.2) | GPL-3.0    | CLI Utilities | [Docs](https://cxlio.github.io/cxl/program/0.0.3) |
+| @cxl/program         | [0.0.3](https://npmjs.com/package/@cxl/program/v/0.0.3) | GPL-3.0    | CLI Utilities | [Docs](https://cxlio.github.io/cxl/program/0.0.3) |
 | @cxl/router          | [0.2.0](https://npmjs.com/package/@cxl/router/v/0.2.0) | GPL-3.0    | Router library | [Docs](https://cxlio.github.io/cxl/router/0.3.0) |
 | @cxl/runner          | 0.0.1 | GPL-3.0    | Helper tool to run server applications | [Docs](https://cxlio.github.io/cxl/runner/0.0.1) |
 | @cxl/rx              | [0.7.0](https://npmjs.com/package/@cxl/rx/v/0.7.0) | Apache-2.0 | Lightweight reactiveX implementation | [Docs](https://cxlio.github.io/cxl/rx/0.8.0) |
