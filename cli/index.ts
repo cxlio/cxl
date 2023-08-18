@@ -39,7 +39,7 @@ export default program('cli', async ({ log }) => {
 		const cwd = `dist/${dir}`;
 		await sh(`npm install --production`, { cwd });
 		try {
-			await sh(`npm test`, { cwd });
+			await sh(`npm test`, { cwd: dir });
 		} finally {
 			await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
 		}
