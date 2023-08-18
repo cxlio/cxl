@@ -4,6 +4,6 @@
 		"outDir": "../dist/dts",
 		"types": ["node"]
 	},
-	"references": [{ "path": "../rx" }],
+	"references": [],
 	"files": ["index.ts"]
 }
