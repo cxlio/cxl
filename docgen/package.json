@@ -10,7 +10,7 @@
 	"dependencies": {
 		"markdown-it": "^12.3.2",
 		"@cxl/dts": "~0.4.0",
-		"@cxl/program": "~0.0.2"
+		"@cxl/program": "~0.0.3"
 	},
 	"scripts": {
 		"build": "node build",
