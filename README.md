@@ -15,7 +15,7 @@ Collection of Libraries and Tools
 | @cxl/docgen          | [0.0.2](https://npmjs.com/package/@cxl/docgen/v/0.0.2) | GPL-3.0    | Documentation generator for typescript | [Docs](https://cxlio.github.io/cxl/docgen/0.0.3) |
 | @cxl/dom             | [0.0.1](https://npmjs.com/package/@cxl/dom/v/0.0.1) | GPL-3.0    | Reactive DOM wrapper | [Docs](https://cxlio.github.io/cxl/dom/0.0.2) |
 | @cxl/drag            | 0.1.0 | Apache-2.0 | Drag and Drop library | [Docs](https://cxlio.github.io/cxl/drag/0.1.0) |
-| @cxl/dts             | [0.3.0](https://npmjs.com/package/@cxl/dts/v/0.3.0) | GPL-3.0-only | Generate symbol information from typescript source code | [Docs](https://cxlio.github.io/cxl/dts/0.4.0) |
+| @cxl/dts             | [0.4.0](https://npmjs.com/package/@cxl/dts/v/0.4.0) | GPL-3.0-only | Generate symbol information from typescript source code | [Docs](https://cxlio.github.io/cxl/dts/0.4.0) |
 | @cxl/filewatch       | [0.4.0](https://npmjs.com/package/@cxl/filewatch/v/0.4.0) | Apache-2.0 | File watcher library | [Docs](https://cxlio.github.io/cxl/filewatch/0.5.0) |
 | @cxl/keyboard        | [0.0.2](https://npmjs.com/package/@cxl/keyboard/v/0.0.2) | UNLICENSED | Keyboard Handling Library | [Docs](https://cxlio.github.io/cxl/keyboard/0.1.0) |
 | @cxl/program         | [0.0.2](https://npmjs.com/package/@cxl/program/v/0.0.2) | GPL-3.0    | CLI Utilities | [Docs](https://cxlio.github.io/cxl/program/0.0.3) |
