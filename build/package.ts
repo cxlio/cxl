@@ -78,6 +78,7 @@ export interface DocgenOptions {
 	summary?: boolean;
 	followReferences?: boolean;
 	cxlExtensions?: boolean;
+	headHtml?: string;
 }
 
 export async function docgen(options: DocgenOptions) {
@@ -102,6 +103,7 @@ export async function docgen(options: DocgenOptions) {
 		summary,
 		followReferences,
 		cxlExtensions,
+		headHtml,
 	} = options;
 	const repodir = options.repodir || `${name.replace('/', '--')}-${tag}`;
 	const dir = join(tmpDir || '', repodir, npm ? `/node_modules/${npm}` : ``);
@@ -150,6 +152,7 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 			exports,
 			followReferences,
 			cxlExtensions,
+			headHtml,
 		},
 		{ cwd }
 	);

@@ -887,7 +887,7 @@ declare module "ns" {
 	});
 
 	a.test('interface', (a: TestApi) => {
-		const [A, B, C, D, E, F, G, H] = parse(`
+		const [A, B, C, D, E, F, G, H, I, J, J1] = parse(`
 			interface A { "a1": string; "b-2": string; }
 			interface B { }
 			interface C { m1: string; m2: number, m3: boolean }
@@ -900,6 +900,8 @@ declare module "ns" {
 			interface ModeFactory<T> { (config: number): T; }
 			interface G { new (config: number): string; }
 			interface H { [key: string]: boolean; }
+			interface I { m1: string } interface I { m2: boolean }
+			interface J { a: J1; } type J1 = number;
 		`);
 
 		a.test('Interface with string literal names', (a: TestApi) => {
@@ -982,6 +984,22 @@ declare module "ns" {
 			a.equal(key.parameters[0].name, 'key');
 			a.equal(key.parameters[0].type, StringType);
 		});
+
+		a.test('merged declaration', (a: TestApi) => {
+			a.assert(I.children);
+			a.equal(I.children.length, 2);
+			const [m1, m2] = I.children;
+			a.equal(m1.name, 'm1');
+			a.equal(m2.name, 'm2');
+		});
+
+		a.test('Type Alias reference', (a: TestApi) => {
+			a.assert(J.children);
+			a.equal(J.children.length, 1);
+			const [m1] = J.children;
+			a.equal(m1.name, 'a');
+			a.equal(m1.type?.type, J1);
+		});
 	});
 	a.test('interface extends class', (a: TestApi) => {
 		const [A, B] = parse(
@@ -1015,23 +1033,24 @@ declare module "ns" {
 		a.ok(m1.flags & Flags.Optional);
 	});
 
-	a.test('Resolved Type - TypeAlias', (a: TestApi) => {
-		const [, C] = parse(
-			`type B = keyof { a: string; b: string }; type C = B | 'c';`
+	a.test('Resolved Type', a => {
+		const [, B, C, , D] = parse(
+			`
+			type A = {a:string;b:string;c:string}; type B = keyof A; let C:B='c';
+			type D1 = keyof { a: string; b: string }; type D = D1 | 'c';`
 		);
-		a.assert(C.resolvedType);
-		a.equal(C.resolvedType.kind, Kind.TypeUnion);
-		a.equal(C.resolvedType.children?.length, 3);
-	});
+		a.test('TypeAlias', (a: TestApi) => {
+			a.assert(D.resolvedType);
+			a.equal(D.resolvedType.kind, Kind.TypeUnion);
+			a.equal(D.resolvedType.children?.length, 3);
+		});
 
-	a.test('Resolved Type', (a: TestApi) => {
-		const [, B, c] = parse(
-			`type A = {a:string;b:string;c:string}; type B = keyof A; let c:B='c';`
-		);
-		a.assert(B.type?.resolvedType);
-		a.equal(B.type.resolvedType.kind, Kind.TypeUnion);
-		a.equal(B.type.resolvedType.children?.length, 3);
-		a.equal(c.type?.type?.kind, Kind.TypeUnion);
+		a.test('Resolved Type', (a: TestApi) => {
+			a.assert(B.type?.resolvedType);
+			a.equal(B.type.resolvedType.kind, Kind.TypeUnion);
+			a.equal(B.type.resolvedType.children?.length, 3);
+			a.equal(C.type?.type?.kind, B.kind);
+		});
 	});
 
 	a.test('Const destructuring', (a: TestApi) => {

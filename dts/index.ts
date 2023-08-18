@@ -454,9 +454,10 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 	const result: Partial<Node> = node[dtsNode] || {};
 
 	result.source = result.source || getNodeSource(node);
-	result.kind = extra?.kind || result.kind || getKind(node);
+	result.kind = extra?.kind ?? result.kind ?? getKind(node);
 	result.name ||= extra?.name || getNodeName(node);
-	result.flags = result.flags || 0;
+	result.flags ??= getFlags(node);
+
 	const docs = getNodeDocs(node, result as Node);
 	if (docs) result.docs = docs;
 
@@ -465,27 +466,27 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 	return (node[dtsNode] = result as Node);
 }
 
-function isOwnFile(sourceFile: ts.SourceFile) {
-	return sourceFile && sourceFiles.includes(sourceFile);
-}
+//function isOwnFile(sourceFile: ts.SourceFile) {
+//	return sourceFile && sourceFiles.includes(sourceFile);
+//}
 
 function getNodeFromDeclaration(symbol: ts.Symbol, node: ts.Node): Node {
-	let result = node[dtsNode];
+	const result = node[dtsNode];
 	if (!result) {
 		const sourceFile = node.getSourceFile();
-		const flags = program.isSourceFileDefaultLibrary(sourceFile)
-			? Flags.DefaultLibrary
-			: program.isSourceFileFromExternalLibrary(sourceFile)
-			? Flags.External
-			: 0;
-
-		if (!flags && sourceFile.isDeclarationFile && symbol) {
+		if (
+			!program.isSourceFileDefaultLibrary(sourceFile) &&
+			!program.isSourceFileFromExternalLibrary(sourceFile) &&
+			sourceFile.isDeclarationFile &&
+			symbol
+		) {
 			const externalNode =
 				exportIndex[typeChecker.getFullyQualifiedName(symbol)];
 			if (externalNode?.source) return externalNode;
 		}
 
-		node[dtsNode] = result =
+		return createNode(node);
+		/*node[dtsNode] = result =
 			flags === 0 && isOwnFile(sourceFile)
 				? {
 						id: createNodeId(node),
@@ -493,18 +494,20 @@ function getNodeFromDeclaration(symbol: ts.Symbol, node: ts.Node): Node {
 						name: '',
 						kind: Kind.Unknown,
 				  }
-				: createNode(node, { flags: flags });
+				: createNode(node, { flags: flags });*/
 	}
 
 	return result;
 }
 
-function isClassMember(node: Node) {
+function isClassMember(node: ts.Node) {
 	return (
-		node.kind === Kind.Property ||
-		node.kind === Kind.Method ||
-		node.kind === Kind.Getter ||
-		node.kind === Kind.Setter
+		node.kind === SK.PropertyDeclaration ||
+		node.kind === SK.MethodDeclaration ||
+		node.kind === SK.GetAccessor ||
+		node.kind === SK.SetAccessor ||
+		node.kind === SK.PropertySignature ||
+		node.kind === SK.MethodSignature
 	);
 }
 
@@ -536,7 +539,7 @@ function hasInternalAnnotation(node: ts.Node, text: string) {
 	return (node.$$internal = false);
 }
 
-function getFlags(node: ts.Node, flags: ts.ModifierFlags) {
+function getDeclarationFlags(node: ts.Declaration, flags: ts.ModifierFlags) {
 	const tsFlags = tsLocal.ModifierFlags;
 	const isDecl = node.getSourceFile()?.isDeclarationFile;
 	let result = 0;
@@ -554,13 +557,31 @@ function getFlags(node: ts.Node, flags: ts.ModifierFlags) {
 	if (flags & tsFlags.Default) result |= Flags.Default;
 	if (flags & tsFlags.Deprecated) result |= Flags.Deprecated;
 
-	const sourceFile = tsLocal.isSourceFile(node) ? node : node.getSourceFile();
+	return result;
+}
 
-	if (sourceFile && hasInternalAnnotation(node, sourceFile.getFullText()))
-		result |= Flags.Internal;
+function getFlags(node: ts.Node) {
+	let result = 0;
 
 	if ((node as ts.PropertyDeclaration).questionToken)
 		result |= Flags.Optional;
+
+	const sourceFile = tsLocal.isSourceFile(node) ? node : node.getSourceFile();
+
+	if (sourceFile) {
+		if (hasInternalAnnotation(node, sourceFile.getFullText()))
+			result |= Flags.Internal;
+		if (program.isSourceFileDefaultLibrary(sourceFile))
+			result |= Flags.DefaultLibrary;
+		if (program.isSourceFileFromExternalLibrary(sourceFile))
+			result |= Flags.External;
+	}
+
+	if (
+		isClassMember(node) &&
+		!(result & (ModifierFlags.Private | ModifierFlags.Protected))
+	)
+		result |= ModifierFlags.Public;
 
 	return result;
 }
@@ -643,7 +664,6 @@ function getNodeDocs(node: ts.Node, result: Node) {
 
 	jsDoc?.forEach(doc => {
 		const value = parseJsDocComment(doc.comment);
-		//if (Array.isArray(value)) content.push(...value);
 		if (value) content.push({ value });
 	});
 	tsLocal.getJSDocTags(node).forEach(doc => {
@@ -673,7 +693,7 @@ function getNodeDocs(node: ts.Node, result: Node) {
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
 			content.push({
 				tag,
-				value, //: tsLocal.getTextOfJSDocComment(value) || '',
+				value,
 			});
 	});
 
@@ -684,17 +704,13 @@ function serializeDeclaration(node: ts.Declaration): Node {
 	const result = createNode(node);
 	if (!result.id) {
 		result.id = createNodeId(node, result);
-		node[dtsNode] = result;
 	}
-	result.flags |= getFlags(node, tsLocal.getCombinedModifierFlags(node));
+	result.flags |= getDeclarationFlags(
+		node,
+		tsLocal.getCombinedModifierFlags(node)
+	);
 
 	const id = result.id;
-
-	if (
-		isClassMember(result) &&
-		!(result.flags & (ModifierFlags.Private | ModifierFlags.Protected))
-	)
-		result.flags = result.flags | ModifierFlags.Public;
 
 	const typeParameters = (node as ts.ClassLikeDeclaration).typeParameters;
 	if (typeParameters) result.typeParameters = typeParameters.map(serialize);
@@ -770,7 +786,6 @@ function getSymbolReference(
 	return {
 		name,
 		flags: 0,
-		//source: getNodeSource(node),
 		kind: Kind.Reference,
 		type: getNodeFromDeclaration(symbol, node),
 		typeParameters:
@@ -804,12 +819,7 @@ function serializeIndexedAccessType(type: ts.IndexedAccessType): Node {
 }
 
 function getSymbolDeclaration(symbol?: ts.Symbol) {
-	return symbol && (symbol.valueDeclaration || symbol.declarations?.[0]);
-	/*if (!result)
-		throw new Error(
-			`No symbol declaration found for "${symbol.escapedName}"`
-		);
-	return result;*/
+	return symbol && (symbol.declarations?.[0] || symbol.valueDeclaration);
 }
 
 function serializeSymbol(symbol: ts.Symbol): Node {
@@ -1098,8 +1108,7 @@ function pushChildren(parent: Node, nodes: Node[]) {
 				enumerable: false,
 			});
 			parent.children.push(n);
-		} else
-			console.log(`Node ${n.name} already has parent ${n.parent.name}`);
+		}
 	}
 }
 
@@ -1145,12 +1154,24 @@ function serializeClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
 		typeChecker.getSymbolAtLocation(node) ||
 		(node.name && typeChecker.getSymbolAtLocation(node.name));
 
-	const result =
-		(node.kind === SK.InterfaceDeclaration &&
-			symbol &&
-			!(symbol.flags & tsLocal.SymbolFlags.Class) &&
-			findExport(symbol)) ||
-		serializeDeclaration(node);
+	let result: Node | undefined;
+
+	if (
+		node.kind === SK.InterfaceDeclaration &&
+		symbol &&
+		!(symbol.flags & tsLocal.SymbolFlags.Class)
+	) {
+		result = findExport(symbol);
+
+		if (!result && symbol.declarations) {
+			const decl = symbol.declarations.find(decl => decl[dtsNode]);
+			// Ensure interface node is initialized
+			if (decl) result = serializeDeclaration(decl);
+		}
+	}
+
+	if (!result) result = serializeDeclaration(node);
+
 	if (
 		node.members &&
 		(!result.children || node.kind === SK.InterfaceDeclaration)
@@ -1180,23 +1201,6 @@ function serializeClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
 						result.children.map(s => ({ ...s }))
 					);
 			}
-		} else {
-			/*const exportedSymbol = typeChecker.getExportSymbolOfSymbol(symbol);
-			exportedSymbol?.members?.forEach(
-				s =>
-					!(s.flags & tsLocal.SymbolFlags.TypeParameter) &&
-					s.declarations &&
-					pushChildren(
-						result,
-						s.declarations.flatMap(d => {
-							const existing = d[dtsNode];
-							return existing &&
-								result.children?.indexOf(existing) !== -1
-								? []
-								: serialize(d);
-						})
-					)
-			);*/
 		}
 	}
 
@@ -1214,29 +1218,47 @@ function serializeClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
 			pushChildren(type, heritage.types.map(serialize))
 		);
 
-		type.children?.forEach(c => {
-			if (c.kind === Kind.Reference && c.type)
-				(c.type.extendedBy || (c.type.extendedBy = [])).push({
-					name: result.name,
-					type: result,
-					kind: Kind.Reference,
-					flags: 0,
-				});
-		});
+		if (type.children)
+			for (const c of type.children) {
+				if (c.kind === Kind.Reference && c.type)
+					(c.type.extendedBy || (c.type.extendedBy = [])).push({
+						name: result.name,
+						type: result,
+						kind: Kind.Reference,
+						flags: 0,
+					});
+			}
 	}
 
 	return result;
 }
 
+function getTypeDeclaration(type: ts.Type, symbol: ts.Symbol) {
+	const OF = tsLocal.ObjectFlags;
+	const kind =
+		(type as ts.ObjectType).objectFlags & OF.Interface
+			? SK.InterfaceDeclaration
+			: undefined;
+	const decl = kind
+		? symbol.declarations?.find(d => d.kind === kind)
+		: symbol.declarations?.[0] || symbol.valueDeclaration;
+	return decl;
+}
+
 function serializeReference(node: ts.TypeReferenceType) {
 	const typeObj = typeChecker.getTypeFromTypeNode(node);
-	const symbol = typeObj.aliasSymbol || typeObj.symbol;
-	const decl = getSymbolDeclaration(symbol);
 
-	const type = decl
-		? getNodeFromDeclaration(symbol, decl)
-		: serializeType(typeObj);
+	let symbol: ts.Symbol | undefined = typeObj.aliasSymbol || typeObj.symbol;
+	if (!symbol && tsLocal.isTypeReferenceNode(node))
+		symbol = typeChecker.getSymbolAtLocation(node.typeName);
 
+	const decl = symbol && getTypeDeclaration(typeObj, symbol);
+	const type =
+		decl && symbol
+			? getNodeFromDeclaration(symbol, decl)
+			: node.flags & tsLocal.NodeFlags.Synthesized
+			? undefined
+			: serializeType(typeObj);
 	const name = getNodeName(
 		tsLocal.isTypeReferenceNode(node) ? node.typeName : node.expression
 	);
@@ -1349,13 +1371,13 @@ function normalizeSourceFileName(name: string) {
 }
 
 function normalizeModuleName(symbol: ts.Symbol) {
-	let parent: ts.Symbol | undefined = symbol,
-		result = [
-			symbol.valueDeclaration?.kind === SK.SourceFile &&
-			symbol.name.startsWith('"')
-				? `"${normalizeSourceFileName(symbol.name.slice(1, -1))}"`
-				: symbol.name,
-		];
+	let parent: ts.Symbol | undefined = symbol;
+	const result = [
+		symbol.valueDeclaration?.kind === SK.SourceFile &&
+		symbol.name.startsWith('"')
+			? `"${normalizeSourceFileName(symbol.name.slice(1, -1))}"`
+			: symbol.name,
+	];
 
 	while ((parent = (parent as unknown as { parent?: ts.Symbol }).parent)) {
 		if (parent.valueDeclaration?.kind !== SK.SourceFile)

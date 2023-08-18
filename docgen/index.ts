@@ -63,9 +63,6 @@ const Parameters = {
 		help: 'Enable markdown for symbol descriptions',
 		type: 'boolean',
 	},
-	//extra: { type: 'string', many: true, help: 'Extra documentation files' },
-	spa: { help: 'Enable single page application mode' },
-	debug: { help: 'Enable debug mode' },
 	typeRoots: { help: 'Type Roots', type: 'string', many: true },
 	docsJson: { help: 'Use docs.json file', type: 'string' },
 	baseHref: { help: 'Base href for markdown links', type: 'string' },
@@ -91,6 +88,10 @@ const Parameters = {
 	followReferences: {
 		help: 'Include documentation from project references symbols',
 		type: 'boolean',
+	},
+	headHtml: {
+		help: 'File name used to add content to the <head> element of the generated page',
+		type: 'string',
 	},
 } as const;
 
@@ -121,6 +122,7 @@ export interface DocGen {
 	cxlExtensions?: boolean;
 	followReferences?: boolean;
 	exports?: string[];
+	headHtml?: string;
 }
 
 program({}, async ({ log }) => {

@@ -68,7 +68,7 @@ module.exports = fs.readdir('.').then(async all => {
 	const statsJson = JSON.stringify(stats);
 	await fs.writeFile('./dist/stats.json', statsJson, 'utf8');
 	await sh('mkdir -p docs');
-	await sh('node dist/cli/build-data');
+	//await sh('node dist/cli/build-data');
 	await sh('cp scripts/build-report.html dist/index.html');
 	console.log(`Finished in ${stats.totalTime}ms`);
 });

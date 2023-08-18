@@ -735,7 +735,6 @@ export function getHref(node: Node, parent?: Node): string {
 		return getHref(node.type);
 	if (hasOwnPage(node)) return getPageName(node);
 
-	if (node.parent && node.name === 'disabled') debugger;
 	const parentHref =
 		node.parent && (!parent || node.parent.name !== parent.name)
 			? getHref(node.parent)
@@ -915,9 +914,12 @@ function Header(scripts: File[]) {
 	const pkg = application.modulePackage;
 	const SCRIPTS = getRuntimeScripts(scripts);
 	const title = application.packageName || pkg.name;
+	const customHeadHtml = application.headHtml
+		? readFileSync(application.headHtml, 'utf8')
+		: '';
 
 	return `<!DOCTYPE html>
-	<head><meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
+	<head>${customHeadHtml}<meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
 	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]:not([inline]){margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0} .navbar-title{font-size: 18px;font-weight:500;flex-grow:1}</style>
 	<cxl-application permanent><title>${title} API Reference</title><cxl-appbar center>
 	${Navbar(pkg)}
