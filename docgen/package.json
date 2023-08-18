@@ -8,10 +8,8 @@
 		"cxl-docgen": "index.js"
 	},
 	"dependencies": {
-		"highlight.js": "^11.7.0",
 		"markdown-it": "^12.3.2",
-		"@cxl/dts": "~0.3.0",
-		"@cxl/tsx": "~0.2.0",
+		"@cxl/dts": "~0.4.0",
 		"@cxl/program": "~0.0.2"
 	},
 	"scripts": {
