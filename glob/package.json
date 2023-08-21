@@ -1,0 +1,13 @@
+{
+	"name": "@cxl/glob",
+	"version": "0.0.1",
+	"bugs": "https://github.com/cxlio/cxl/issues",
+	"homepage": "https://cxlio.github.io/cxl/glob",
+	"description": "A glob library",
+	"license": "GPL3.0",
+	"scripts": {
+		"build": "node ../dist/build",
+		"test": "npm run build && cd ../dist/glob && node ../tester"
+	},
+	"dependencies": {}
+}
