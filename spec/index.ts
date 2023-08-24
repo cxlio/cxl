@@ -125,6 +125,11 @@ export class TestApi {
 	}
 
 	equalBuffer(a: ArrayBuffer, b: ArrayBuffer, desc?: string) {
+		this.equal(
+			a.byteLength,
+			b.byteLength,
+			`Expected buffer size of ${b.byteLength} but got ${a.byteLength} instead`
+		);
 		const valA = a instanceof Uint8Array ? a : new Uint8Array(a);
 		const valB = b instanceof Uint8Array ? b : new Uint8Array(b);
 
@@ -135,6 +140,11 @@ export class TestApi {
 		if (a instanceof ArrayBuffer && b instanceof ArrayBuffer)
 			return this.equalBuffer(a, b, desc);
 		if (Array.isArray(a) && Array.isArray(b)) {
+			this.equal(
+				a.length,
+				b.length,
+				`Expected array length of (${b.length}) but got ${a.length}`
+			);
 			for (let i = 0; i < Math.max(a.length, b.length); i++)
 				this.equal(a[i], b[i]);
 		} else for (const i in b) this.equal(a[i], b[i], desc);

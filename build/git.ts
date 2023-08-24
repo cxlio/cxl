@@ -1,9 +1,7 @@
 import { sh } from '@cxl/program';
 
 export async function getBranch(cwd: string): Promise<string> {
-	return (await sh('git rev-parse --abbrev-ref HEAD', { cwd }))
-		.toString()
-		.trim();
+	return (await sh('git rev-parse --abbrev-ref HEAD', { cwd })).trim();
 }
 
 export async function checkBranchClean(branch: string) {

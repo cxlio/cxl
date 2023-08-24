@@ -53,6 +53,10 @@
 				"files": ["drag/index.ts"],
 				"tasks": "npm run build --prefix drag"
 			},
+			"glob": {
+				"files": ["glob/index.ts"],
+				"tasks": "npm run build --prefix glob"
+			},
 			"rx": {
 				"files": ["rx/index.ts", "rx/tsconfig.json", "rx/test.html"],
 				"tasks": "cd rx && npm run build"

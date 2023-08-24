@@ -105,7 +105,9 @@ export async function docgen(options: DocgenOptions) {
 		cxlExtensions,
 		headHtml,
 	} = options;
-	const repodir = options.repodir || `${name.replace('/', '--')}-${tag}`;
+	const repodir =
+		options.repodir ||
+		`${name.replace('/', '--')}-${tag.replace('/', '--')}`;
 	const dir = join(tmpDir || '', repodir, npm ? `/node_modules/${npm}` : ``);
 	const cwd = join(dir, options.cwd || '');
 	const outDir = resolve(options.outDir || 'docs');
@@ -120,7 +122,9 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 	const DOCGEN = join(__dirname, '../docgen');
 
 	if (forceInstall)
-		await sh(`mkdir -p ${tmpDir} && cd ${tmpDir} && ${install}`);
+		await sh(
+			`mkdir -p ${tmpDir} && cd ${tmpDir} && rm -rf ${repodir} && ${install}`
+		);
 	else
 		await sh(`if [ ! -d "${dir}" ]; then
 		mkdir -p ${tmpDir} && cd ${tmpDir}
@@ -143,7 +147,9 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 			typeRoots,
 			packageName: name,
 			repository: repo?.startsWith('https')
-				? `${repo.replace(/.git$/, '')}/blob/${tag}`
+				? `${repo.replace(/.git$/, '')}/blob/${tag}${
+						options.cwd ? `/${options.cwd}` : ''
+				  }`
 				: undefined,
 			markdown: true,
 			baseHref,
