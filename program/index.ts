@@ -73,7 +73,7 @@ export const colors: Colors<typeof codes> = Object.keys(codes).reduce(
 		styles[key as keyof typeof codes] = (str: string) => open + str + close;
 		return styles;
 	},
-	{} as Colors<typeof codes>
+	{} as Colors<typeof codes>,
 );
 
 export type ProgramParameters = Parameters<typeof parseParameters>[0];
@@ -126,7 +126,7 @@ const Long = `--(\\w+)${ArgValue}`;
 
 const ArgRegex = new RegExp(
 	`\\s*(?:${MultipleShort}|${SingleShortValue}|${Long}|(${StringValue}|[^\\s]+))`,
-	'g'
+	'g',
 );
 
 export type ParameterDefinition = {
@@ -153,7 +153,7 @@ function unquote(value: string) {
 
 function findParameter<T extends Record<string, Parameter>>(
 	parameters: T,
-	shortcut: string
+	shortcut: string,
 ): [keyof T, Parameter] {
 	for (const key in parameters) {
 		if (parameters[key].short === shortcut) return [key, parameters[key]];
@@ -164,7 +164,7 @@ function findParameter<T extends Record<string, Parameter>>(
 
 function parseValue<T extends Parameter>(
 	param: T,
-	value: string | undefined
+	value: string | undefined,
 ): ParameterType<T> {
 	if (param.type === 'number')
 		return (value === undefined ? 0 : parseInt(value)) as ParameterType<T>;
@@ -177,7 +177,7 @@ function parseValue<T extends Parameter>(
 function setParam<T extends Record<string, Parameter>, K extends keyof T>(
 	result: ParametersResult<T>,
 	[key, param]: [K, Parameter | undefined],
-	value: string | undefined
+	value: string | undefined,
 ) {
 	if (!param) throw new Error(`Parameter "${String(key)}" not supported`);
 
@@ -186,7 +186,7 @@ function setParam<T extends Record<string, Parameter>, K extends keyof T>(
 
 	if (lastValue !== undefined && !param.many)
 		throw new Error(
-			`Parameter ${String(key)} does not support multiple values`
+			`Parameter ${String(key)} does not support multiple values`,
 		);
 
 	// handle rest parameter after boolean
@@ -194,16 +194,18 @@ function setParam<T extends Record<string, Parameter>, K extends keyof T>(
 		result.$.push(unquote(value));
 
 	if (lastValue === undefined)
-		result[key] = (param.many ? [newValue] : newValue) as typeof result[K];
+		result[key] = (
+			param.many ? [newValue] : newValue
+		) as (typeof result)[K];
 	else if (Array.isArray(lastValue)) (lastValue as boolean[]).push(newValue);
 	else if (param.many)
-		result[key] = [lastValue, newValue] as typeof result[K];
+		result[key] = [lastValue, newValue] as (typeof result)[K];
 	else throw new Error('Invalid parameter');
 }
 
 export function parseParameters<T extends Record<string, Parameter>>(
 	parameters: T,
-	input: string
+	input: string,
 ): ParametersResult<T> {
 	const result = { $: [] as string[] } as ParametersResult<T>;
 
@@ -217,7 +219,7 @@ export function parseParameters<T extends Record<string, Parameter>>(
 			multipleShort
 				.split('')
 				.forEach(p =>
-					setParam(result, findParameter(parameters, p), '')
+					setParam(result, findParameter(parameters, p), ''),
 				);
 		else if (short)
 			setParam(result, findParameter(parameters, short), shortValue);
@@ -231,7 +233,7 @@ export function parseParameters<T extends Record<string, Parameter>>(
 
 export function parametersParser<T extends Record<string, Parameter>, R>(
 	parameters: T,
-	cb: (parsed: ParametersResult<T>) => R
+	cb: (parsed: ParametersResult<T>) => R,
 ) {
 	return (input: string) => cb(parseParameters(parameters, input));
 }
@@ -250,7 +252,7 @@ function hrtime(): bigint {
 }
 
 export async function operation<T>(
-	fn: OperationFunction<T>
+	fn: OperationFunction<T>,
 ): Promise<OperationResult<T>> {
 	let start = hrtime();
 	const result = typeof fn === 'function' ? fn() : fn;
@@ -278,7 +280,7 @@ export function parseArgv<T extends Record<string, Parameter>>(parameters: T) {
  */
 export async function mkdirp(dir: string) {
 	await stat(dir).catch(() =>
-		mkdirp(resolve(dir, '..')).then(() => mkdir(dir))
+		mkdirp(resolve(dir, '..')).then(() => mkdir(dir)),
 	);
 }
 
@@ -288,7 +290,7 @@ export async function mkdirp(dir: string) {
  */
 export async function readJson<T>(
 	fileName: string,
-	defaultValue?: T
+	defaultValue?: T,
 ): Promise<T> {
 	try {
 		return JSON.parse(await readFile(fileName, 'utf8'));
@@ -317,12 +319,12 @@ export function sh(cmd: string, options: SpawnOptions = {}) {
 
 export function program(
 	name: string | ProgramConfiguration,
-	startFn: (p: Program) => void | Promise<void>
+	startFn: (p: Program) => void | Promise<void>,
 ) {
 	const config = typeof name === 'string' ? { name } : name;
 
 	return async () => {
-		const basePath = require.main?.path || '';
+		const basePath = require.main?.path || __dirname;
 		const pkg = await readJson<Package>(join(basePath, 'package.json'), {
 			name: config.name || '',
 			version: '',
@@ -335,7 +337,7 @@ export function program(
 			return startFn({
 				pkg,
 				name,
-				log: log.bind(log, () => `${logPrefix} ${Date.now()}`),
+				log: log.bind(log, () => logPrefix),
 			});
 		} catch (e) {
 			console.error(e);

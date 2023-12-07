@@ -41,7 +41,7 @@ interface AmdFunctions {
 	function normalize(path: string, basePath: string) {
 		return new URL(
 			basePath + '/' + (path.endsWith('.js') ? path : `${path}.js`),
-			'https://localhost'
+			'https://localhost',
 		).pathname.slice(1);
 	}
 
@@ -62,14 +62,14 @@ interface AmdFunctions {
 		path: string | string[],
 		resolve?: (mod: unknown) => void,
 		reject?: (err: unknown) => void,
-		basePath?: string
+		basePath?: string,
 	) {
 		let actualPath = Array.isArray(path) ? path[0] : path;
 		let mod = modules[actualPath];
 
 		if (!mod) {
 			if (__require) {
-				/*typeof window.require !== 'undefined' && window.module.require) */ try {
+				try {
 					mod = __require(actualPath);
 				} catch (e) {
 					// Ignore Error, try async
@@ -91,7 +91,7 @@ interface AmdFunctions {
 	function defineAsync(
 		name: string,
 		injects: string[],
-		module: ModuleFunction
+		module: ModuleFunction,
 	): Promise<unknown> | unknown {
 		let isAsync = false;
 		const moduleExports = {};
@@ -126,7 +126,7 @@ interface AmdFunctions {
 	function defineNormalized(
 		name: string,
 		injects: string[],
-		module: ModuleFunction
+		module: ModuleFunction,
 	) {
 		if (!modules[name])
 			modulePromise[name] = defineAsync(name, injects, module);
@@ -138,12 +138,12 @@ interface AmdFunctions {
 	function _define(
 		name: string,
 		injects: string[],
-		module: ModuleFunction
+		module: ModuleFunction,
 	): void;
 	function _define(
 		name: string | string[] | ModuleFunction,
 		injects?: string[] | ModuleFunction,
-		module?: ModuleFunction
+		module?: ModuleFunction,
 	) {
 		if (Array.isArray(name) && injects && !Array.isArray(injects)) {
 			defineNormalized(define.moduleName, name, injects);

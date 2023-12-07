@@ -19,7 +19,7 @@ import {
 
 type RenderFunction<T> = (node: T) => void;
 type Augmentation<T extends Component> = (
-	host: T
+	host: T,
 ) => Node | Comment | Observable<unknown> | void;
 type ComponentConstructor = {
 	tagName: string;
@@ -56,7 +56,7 @@ export class Bindings {
 	connect() {
 		if (!this.subscriptions && this.bindings)
 			this.subscriptions = this.bindings.map(s =>
-				s.subscribe(subscriber)
+				s.subscribe(subscriber),
 			);
 	}
 	disconnect() {
@@ -77,7 +77,7 @@ export abstract class Component extends HTMLElement {
 	private $$prebind?: Observable<unknown>[];
 	protected jsxAttributes!: AttributeType<this>;
 
-	readonly render?: (node: HTMLElement) => void = this.render;
+	readonly render?: (node: HTMLElement) => void; // = this.render;
 	readonly attributes$ = new OrderedSubject<unknown>();
 
 	Shadow = (p: { children: Children }) => {
@@ -95,7 +95,7 @@ export abstract class Component extends HTMLElement {
 			observeChildren(this).tap(() => {
 				for (const node of this.children)
 					if (node.matches(selector)) node.slot = name;
-			})
+			}),
 		);
 
 		return el;
@@ -129,7 +129,7 @@ export abstract class Component extends HTMLElement {
 	protected attributeChangedCallback(
 		name: keyof this,
 		oldValue: string | null,
-		value: string | null
+		value: string | null,
 	) {
 		if (oldValue !== value) {
 			const thisValue: boolean | string = this[name] as unknown as
@@ -152,7 +152,7 @@ export abstract class Component extends HTMLElement {
 
 export function pushRender<T extends Component>(
 	proto: T,
-	renderFn: RenderFunction<T>
+	renderFn: RenderFunction<T>,
 ) {
 	const oldRender = proto.render;
 	(proto.render as (node: T) => void) = function (el: T) {
@@ -163,7 +163,7 @@ export function pushRender<T extends Component>(
 
 export function appendShadow<T extends Component>(
 	host: T,
-	child: Node | Observable<unknown>
+	child: Node | Observable<unknown>,
 ) {
 	if (child instanceof Node) {
 		const shadow = getShadow(host);
@@ -173,7 +173,7 @@ export function appendShadow<T extends Component>(
 
 export function augment<T extends Component>(
 	constructor: typeof Component,
-	decorators: Augmentation<T>[]
+	decorators: Augmentation<T>[],
 ) {
 	pushRender<T>(constructor.prototype as T, node => {
 		for (const d of decorators) {
@@ -207,8 +207,9 @@ export function Augment<T extends Component>(
 			tagName = ctor.tagName;
 		}
 
-		if (tagName) registerComponent(tagName, ctor);
 		augment(ctor as typeof Component, newAugs);
+		// Next line needs to be last to prevent early component upgrade
+		if (tagName) registerComponent(tagName, ctor);
 	};
 }
 
@@ -219,7 +220,7 @@ export function connect<T extends Component>(bindFn: (node: T) => void) {
 export function onUpdate<T extends Component>(host: T) {
 	return concat(
 		of(host),
-		host.attributes$.map(() => host)
+		host.attributes$.map(() => host),
 	);
 }
 
@@ -232,21 +233,21 @@ export function update<T extends Component>(fn: (node: T) => void) {
 
 export function attributeChanged<
 	T extends Component,
-	K extends ComponentAttributeName<T>
+	K extends ComponentAttributeName<T>,
 >(element: T, attribute: K) {
 	return (element.attributes$ as Subject<AttributeEvent<T>>).pipe(
 		filter(ev => ev.attribute === attribute),
-		map(ev => ev.value)
+		map(ev => ev.value),
 	) as Observable<T[K]>;
 }
 
 export function get<T extends Component, K extends ComponentAttributeName<T>>(
 	element: T,
-	attribute: K
+	attribute: K,
 ): Observable<T[K]> {
 	return merge(
 		attributeChanged(element, attribute),
-		defer(() => of(element[attribute]))
+		defer(() => of(element[attribute])),
 	);
 }
 
@@ -257,7 +258,7 @@ interface AttributeOptions<T extends Component> {
 	/// Render function to be called on component initialization
 	render?: RenderFunction<T>;
 	/// Parse attribute string
-	parse?(val: unknown): unknown;
+	parse?(val: unknown, component: T): unknown;
 }
 
 function getObservedAttributes(target: typeof Component) {
@@ -272,7 +273,7 @@ function getObservedAttributes(target: typeof Component) {
 const attributeOperator = tap<AttributeEvent<Component>>(
 	({ value, target, attribute }) => {
 		setAttribute(target, attribute, value);
-	}
+	},
 );
 
 export function Attribute(options?: AttributeOptions<Component>) {
@@ -280,7 +281,7 @@ export function Attribute(options?: AttributeOptions<Component>) {
 	return <T extends Component>(
 		target: T,
 		attribute: ComponentAttributeName<T>,
-		descriptor?: PropertyDescriptor
+		descriptor?: PropertyDescriptor,
 	): any => {
 		const ctor = target.constructor as typeof Component;
 		const prop = ('$$' + String(attribute)) as keyof T;
@@ -299,17 +300,17 @@ export function Attribute(options?: AttributeOptions<Component>) {
 								attribute,
 								target: node,
 								value: node[attribute],
-							})
+							}),
 						),
 						(node.attributes$ as Subject<AttributeEvent<T>>).pipe(
-							filter(ev => ev.attribute === attribute)
-						)
+							filter(ev => ev.attribute === attribute),
+						),
 					).pipe(
 						(options.persistOperator ||
 							(attributeOperator as unknown)) as Operator<
 							AttributeEvent<T>
-						>
-					)
+						>,
+					),
 				);
 			});
 
@@ -324,7 +325,7 @@ export function Attribute(options?: AttributeOptions<Component>) {
 			set(this: T, value: T[ComponentAttributeName<T>]) {
 				if (this[prop] !== value) {
 					const newValue = options?.parse
-						? (options.parse(value) as T[keyof T])
+						? (options.parse(value, this) as T[keyof T])
 						: value;
 					this[prop] = newValue;
 					// Can be undefined if setting prototype value
@@ -350,7 +351,7 @@ export function EventAttribute() {
 	return <T extends Component>(
 		target: T,
 		attribute: keyof T,
-		descriptor?: PropertyDescriptor
+		descriptor?: PropertyDescriptor,
 	): any =>
 		Attribute({
 			render(el) {
@@ -358,7 +359,7 @@ export function EventAttribute() {
 					if (ev.target === el)
 						(
 							(el as T)[attribute] as unknown as (
-								a: Event
+								a: Event,
 							) => void
 						)?.call(el, ev);
 				});

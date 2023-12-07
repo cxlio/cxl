@@ -1,6 +1,6 @@
 {
 	"core": {
-		"filesExclude": ["./docs/"]
+		"filesExclude": ["./docs"]
 	},
 	"typescript.tsconfig_pattern": "tsconfig(?:\\.test)?\\.json$",
 	"watch": {
@@ -169,6 +169,10 @@
 			"www": {
 				"files": ["www/*"],
 				"tasks": "npm run build --prefix www"
+			},
+			"compiler": {
+				"files": ["compiler/*"],
+				"tasks": "npm run build --prefix compiler"
 			},
 			"reflex": {
 				"files": ["reflex/*"],

@@ -96,13 +96,17 @@ const FenceHandler: Record<
 
 		return meta.tags ? `<blog-tags>${meta.tags}</blog-tags>` : '';
 	},
-	demo(content: string) {
-		return `<cxl-blog-demo><!--${content}--></cxl-blog-demo>`;
-	},
 	example(content: string) {
-		return `<cxl-blog-example><!--${content}--></cxl-blog-example>`;
+		return `<blog-example><!--${content}--></blog-example>`;
 	},
 };
+
+function cxlDemo(info: string, content: string) {
+	const [, libraries] = info.split(':');
+	return `<blog-demo${
+		libraries ? ` libraries="${libraries}"` : ''
+	}><!--${content}--></blog-demo>`;
+}
 
 export function renderMarkdown(source: string, config?: BlogConfig) {
 	const highlight = config?.highlight ? CodeHighlight : Code;
@@ -130,11 +134,27 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 	rules.code_block = (tokens, idx) => highlight(tokens[idx].content);
 	rules.fence = (tokens, idx) => {
 		const token = tokens[idx];
+		const info = token.info;
+		if (info.startsWith('demo')) return cxlDemo(info, token.content);
+
 		const handler = FenceHandler[token.info];
 		return handler
 			? handler(token.content, meta)
 			: highlight(token.content);
 	};
+
+	rules.table_open = () => '<cxl-table>';
+	rules.table_close = () => '</cxl-table>';
+	//rules.thead_open = () => '<cxl-tr>';
+	//rules.thead_close = () => '</cxl-tr>';
+	rules.tr_open = () => '<cxl-tr>';
+	rules.tr_close = () => '</cxl-tr>';
+	rules.th_open = () => '<cxl-th>';
+	rules.th_close = () => '</cxl-th>';
+	rules.td_open = () => '<cxl-td>';
+	rules.td_close = () => '</cxl-td>';
+	rules.tbody_open = () => '<cxl-tbody>';
+	rules.tbody_close = () => '</cxl-tbody>';
 
 	return { meta, content: md.render(source) };
 }
@@ -188,7 +208,7 @@ async function buildPosts(config: BlogConfig, posts: Post[]) {
 		? await readFile(config.headerTemplate)
 		: '';
 	return posts.map(p => ({
-		path: p.id,
+		path: `${p.id}.html`,
 		source: Buffer.from(`${HEADER}${p.content}`),
 	}));
 }
@@ -229,7 +249,7 @@ async function build(config: BlogConfig): Promise<Output[]> {
 	async function buildFromSource(postsDir: string) {
 		const files = (await readdir(postsDir)).filter(f => POST_REGEX.test(f));
 		return await Promise.all(
-			files.map(f => getPostData(`${postsDir}/${f}`))
+			files.map(f => getPostData(`${postsDir}/${f}`)),
 		);
 	}
 

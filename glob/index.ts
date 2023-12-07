@@ -113,7 +113,7 @@ function globToRegexString(glob: string): string {
 
 					if (negate)
 						return `^(?:(?!${globToRegexString(
-							glob.slice(i + 1)
+							glob.slice(i + 1),
 						)}).*)$`;
 				}
 				break;
@@ -174,7 +174,7 @@ function globToRegexString(glob: string): string {
 				reStr += '\\]';
 				isStartOfPath = false;
 				break;
-			case '{':
+			case '{': {
 				// If no commas treat as literal
 				let found = false;
 				for (let a = i + 1; a < len && glob[a] !== '}'; a++)
@@ -192,6 +192,7 @@ function globToRegexString(glob: string): string {
 					isStartOfPath = false;
 				}
 				break;
+			}
 			case '}':
 				if (inGroup) {
 					inGroup--;

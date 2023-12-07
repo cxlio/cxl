@@ -12,7 +12,7 @@ type TestEvent = { type: EventType; promises: Promise<unknown>[] };
 
 type TestFn<T = TestApi> = (test: T) => void | Promise<unknown>;
 type SuiteFn<T = TestFn> = (
-	suiteFn: (name: string, testFn: T, only?: boolean) => void
+	suiteFn: (name: string, testFn: T, only?: boolean) => void,
 ) => void;
 
 type FunctionsOf<T> = {
@@ -32,7 +32,7 @@ interface Spy<EventT> {
 	destroy(): void;
 	then(
 		resolve: (ev: EventT | undefined) => void,
-		reject: (e: unknown) => void
+		reject: (e: unknown) => void,
 	): Promise<EventT | undefined>;
 }
 
@@ -87,7 +87,8 @@ export class TestApi {
 	constructor(private $test: Test) {}
 
 	log(object: unknown) {
-		console.log(JSON.stringify(object, null, 2));
+		//console.log(JSON.stringify(object, null, 2));
+		console.log(object);
 	}
 
 	/**
@@ -111,7 +112,7 @@ export class TestApi {
 
 	assert(
 		condition: unknown,
-		message = 'Assertion Failed'
+		message = 'Assertion Failed',
 	): asserts condition {
 		if (!condition) throw new Error(message);
 		this.$test.push({ success: !!condition, message });
@@ -120,7 +121,9 @@ export class TestApi {
 	equal<T>(a: T, b: T, desc?: string) {
 		return this.ok(
 			a === b,
-			`${desc ? desc + ': ' : ''}${inspect(a)} should equal ${inspect(b)}`
+			`${desc ? desc + ': ' : ''}${inspect(a)} should equal ${inspect(
+				b,
+			)}`,
 		);
 	}
 
@@ -128,7 +131,7 @@ export class TestApi {
 		this.equal(
 			a.byteLength,
 			b.byteLength,
-			`Expected buffer size of ${b.byteLength} but got ${a.byteLength} instead`
+			`Expected buffer size of ${b.byteLength} but got ${a.byteLength} instead`,
 		);
 		const valA = a instanceof Uint8Array ? a : new Uint8Array(a);
 		const valB = b instanceof Uint8Array ? b : new Uint8Array(b);
@@ -143,23 +146,27 @@ export class TestApi {
 			this.equal(
 				a.length,
 				b.length,
-				`Expected array length of (${b.length}) but got ${a.length}`
+				`Expected array length of (${b.length}) but got ${a.length}`,
 			);
 			for (let i = 0; i < Math.max(a.length, b.length); i++)
 				this.equal(a[i], b[i]);
-		} else for (const i in b) this.equal(a[i], b[i], desc);
+		} else if (!a || !b) this.equal(a, b);
+		else if (typeof a === 'string' || typeof b === 'number') {
+			this.equal(a, b, desc);
+		} else for (const i in b) this.equalValues(a[i], b[i], desc);
 	}
 
 	addSpec(test: Test) {
 		this.$test.addTest(test);
 	}
 
-	throws(fn: () => unknown) {
+	throws(fn: () => unknown, matchError?: unknown) {
 		let success = false;
 		try {
 			fn();
 		} catch (e) {
 			success = true;
+			if (matchError) this.equalValues(e, matchError);
 		}
 		return this.ok(success, `Expected function to throw`);
 	}
@@ -168,7 +175,7 @@ export class TestApi {
 		const results = this.$test.results;
 		return this.ok(
 			n === results.length,
-			`Expected ${n} assertions, instead got ${results.length}`
+			`Expected ${n} assertions, instead got ${results.length}`,
 		);
 	}
 
@@ -179,7 +186,7 @@ export class TestApi {
 			throw new Error('async() called multiple times');
 
 		this.$test.promise = this.$test.doTimeout(
-			new Promise<void>(resolve => (result = resolve))
+			new Promise<void>(resolve => (result = resolve)),
 		);
 		return () => {
 			if (called)
@@ -194,7 +201,7 @@ export class TestApi {
 			const elements = this.dom.querySelectorAll(selector);
 			if (elements.length === 0)
 				throw new Error(
-					`Measurement failed. Could not find elements matching "${selector}".`
+					`Measurement failed. Could not find elements matching "${selector}".`,
 				);
 
 			elements.forEach(el => {
@@ -206,7 +213,7 @@ export class TestApi {
 						compare[
 							styleName
 						] as CSSStyleDeclaration[keyof CSSStyleDeclaration],
-						`"${styleName} should be "${compare[styleName]}"`
+						`"${styleName} should be "${compare[styleName]}"`,
 					);
 				}
 			});
@@ -260,7 +267,7 @@ export class TestApi {
 
 	/** Returns a connected element */
 	element<K extends keyof HTMLElementTagNameMap>(
-		tagName: K
+		tagName: K,
 	): HTMLElementTagNameMap[K];
 	element(tagName: string): HTMLElement;
 	element(tagName: string) {
@@ -284,7 +291,7 @@ export class TestApi {
 		el: T,
 		name: string,
 		trigger: (el: T) => void,
-		testName = `on${name}`
+		testName = `on${name}`,
 	) {
 		this.test(testName, a => {
 			const resolve = a.async();
@@ -361,7 +368,7 @@ export class Test {
 	constructor(
 		nameOrConfig: string | TestConfig,
 		public testFn: TestFn,
-		public parent?: Test
+		public parent?: Test,
 	) {
 		if (typeof nameOrConfig === 'string') this.name = nameOrConfig;
 		else this.name = nameOrConfig.name;
@@ -391,7 +398,7 @@ export class Test {
 							typeof e === 'string'
 								? e
 								: JSON.stringify(e, null, 2),
-				  }
+				  },
 		);
 	}
 
@@ -399,7 +406,7 @@ export class Test {
 		return new Promise<void>((resolve, reject) => {
 			const timeoutId = setTimeout(() => {
 				reject(
-					new Error(`Async test timed out after ${this.timeout}ms`)
+					new Error(`Async test timed out after ${this.timeout}ms`),
 				);
 			}, time);
 
@@ -482,7 +489,7 @@ function spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
 				e => {
 					reject(e);
 					throw e;
-				}
+				},
 			);
 		},
 	};
@@ -518,7 +525,7 @@ function spyProp<T, K extends keyof T>(object: T, prop: K) {
 				e => {
 					reject(e);
 					throw e;
-				}
+				},
 			);
 		},
 	};
@@ -559,7 +566,7 @@ export function spec(name: string | TestConfig, fn: TestFn) {
  */
 export function suite(
 	nameOrConfig: string | TestConfig,
-	suiteFn: SuiteFn | Test[]
+	suiteFn: SuiteFn | Test[],
 ) {
 	if (Array.isArray(suiteFn)) {
 		const result = new Test(nameOrConfig, () => {

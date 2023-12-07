@@ -11,7 +11,7 @@ type ErrorFunction = (err: ObservableError) => void;
 type CompleteFunction = () => void;
 type UnsubscribeFunction = () => void;
 type SubscribeFunction<T> = (
-	subscription: Subscriber<T>
+	subscription: Subscriber<T>,
 ) => UnsubscribeFunction | void | Promise<void>;
 type Merge<T> = T extends Observable<infer U> ? U : never;
 type ObservableT<T> = T extends Observable<infer U> ? U : never;
@@ -47,14 +47,14 @@ export interface Subscription {
 }
 
 export class Subscriber<T> {
-	private onUnsubscribe: UnsubscribeFunction | void;
+	private onUnsubscribe: UnsubscribeFunction | void = undefined;
 	private teardown?: () => void;
 	closed = false;
 
 	constructor(
 		private observer: Observer<T>,
 		subscribe?: SubscribeFunction<T>,
-		fwd?: (subscriber: Subscription) => void
+		fwd?: (subscriber: Subscription) => void,
 	) {
 		try {
 			if (fwd) fwd(this);
@@ -121,25 +121,25 @@ export class Subscriber<T> {
  */
 export function pipe<T, A, B>(
 	a: Operator<T, A>,
-	b: Operator<A, B>
+	b: Operator<A, B>,
 ): Operator<T, B>;
 export function pipe<T, A, B, C>(
 	a: Operator<T, A>,
 	b: Operator<A, B>,
-	c: Operator<B, C>
+	c: Operator<B, C>,
 ): Operator<T, C>;
 export function pipe<T, A, B, C, D>(
 	a: Operator<T, A>,
 	b: Operator<A, B>,
 	c: Operator<B, C>,
-	d: Operator<C, D>
+	d: Operator<C, D>,
 ): Operator<T, D>;
 export function pipe<T, A, B, C, D, E>(
 	a: Operator<T, A>,
 	b: Operator<A, B>,
 	c: Operator<B, C>,
 	d: Operator<C, D>,
-	e: Operator<D, E>
+	e: Operator<D, E>,
 ): Operator<T, E>;
 export function pipe(...operators: Operator<unknown>[]): Operator<unknown> {
 	return (source: Observable<unknown>) =>
@@ -158,7 +158,7 @@ export class Observable<T, P = 'none'> {
 
 	then<E, R>(
 		resolve: (val: P extends 'emit1' ? T : T | undefined) => R,
-		reject?: (e: E) => R
+		reject?: (e: E) => R,
 	): Promise<R> {
 		return toPromise(this).then(resolve, reject);
 	}
@@ -168,20 +168,20 @@ export class Observable<T, P = 'none'> {
 	pipe<A, B, C>(
 		a: Operator<T, A>,
 		b: Operator<A, B>,
-		c: Operator<B, C>
+		c: Operator<B, C>,
 	): Observable<C>;
 	pipe<A, B, C, D>(
 		a: Operator<T, A>,
 		b: Operator<A, B>,
 		c: Operator<B, C>,
-		d: Operator<C, D>
+		d: Operator<C, D>,
 	): Observable<D>;
 	pipe<A, B, C, D, E>(
 		a: Operator<T, A>,
 		b: Operator<A, B>,
 		c: Operator<B, C>,
 		d: Operator<C, D>,
-		e: Operator<D, E>
+		e: Operator<D, E>,
 	): Observable<E>;
 
 	/**
@@ -192,7 +192,7 @@ export class Observable<T, P = 'none'> {
 	): Observable<unknown> {
 		return extra.reduce(
 			(prev, fn) => fn(prev as Observable<T>),
-			this as Observable<unknown>
+			this as Observable<unknown>,
 		);
 	}
 
@@ -201,7 +201,7 @@ export class Observable<T, P = 'none'> {
 	 */
 	subscribe(
 		next?: NextObserver<T>,
-		fwd?: (subs: Subscription) => void
+		fwd?: (subs: Subscription) => void,
 	): Subscription {
 		const observer = !next || typeof next === 'function' ? { next } : next;
 		return new Subscriber<T>(observer, this.__subscribe, fwd);
@@ -274,7 +274,7 @@ export class OrderedSubject<T> extends Subject<T> {
 			this.emitting = true;
 			super.next(a);
 			this.emitting = false;
-			if (this.queue.length) this.next(this.queue.pop() as T);
+			if (this.queue.length) this.next(this.queue.shift() as T);
 		}
 	}
 }
@@ -394,7 +394,7 @@ export function concat<R extends Observable<unknown>[]>(
 						error: subscriber.error.bind(subscriber),
 						complete: onComplete,
 					},
-					subscription => (lastSubscription = subscription)
+					subscription => (lastSubscription = subscription),
 				);
 			} else subscriber.complete();
 		}
@@ -444,7 +444,7 @@ export function fromAsync<T>(input: () => Promise<T>): Observable<T> {
  * Creates an Observable from an Array, an array-like object, a Promise, an iterable object, or an Observable-like object.
  */
 export function from<T>(
-	input: Array<T> | Promise<T> | Observable<T> | InteropObservable<T>
+	input: Array<T> | Promise<T> | Observable<T> | InteropObservable<T>,
 ): Observable<T> {
 	if (input instanceof Observable) return input;
 	if (isInterop(input)) return defer<T>(input[observableSymbol]);
@@ -468,10 +468,10 @@ function _toPromise<T, P>(observable: Observable<T, P>) {
 				error: (e: ObservableError) => reject(e),
 				complete: () =>
 					resolve(
-						value as P extends 'emit1' ? T : T | typeof Undefined
+						value as P extends 'emit1' ? T : T | typeof Undefined,
 					),
 			});
-		}
+		},
 	);
 }
 
@@ -479,13 +479,13 @@ function _toPromise<T, P>(observable: Observable<T, P>) {
  * Generates a promise from an observable, the promise will resolve when the observable completes.
  */
 export function toPromise<T, P>(
-	observable: Observable<T, P>
+	observable: Observable<T, P>,
 ): Promise<P extends 'emit1' ? T : T | undefined> {
 	return _toPromise<T, P>(observable).then(
 		r =>
 			(r === Undefined ? undefined : r) as P extends 'emit1'
 				? T
-				: T | undefined
+				: T | undefined,
 	);
 }
 
@@ -499,7 +499,7 @@ export async function firstValueFrom<T>(observable: Observable<T>) {
 
 export function operatorNext<T, T2 = T>(
 	fn: (subs: Subscriber<T2>) => NextFunction<T>,
-	unsubscribe?: () => void
+	unsubscribe?: () => void,
 ) {
 	return (source: Observable<T>) =>
 		new Observable<T2>(subscriber => {
@@ -514,7 +514,7 @@ export function operatorNext<T, T2 = T>(
 					error: subscriber.error.bind(subscriber),
 					complete: subscriber.complete.bind(subscriber),
 				},
-				inner => (subscription = inner)
+				inner => (subscription = inner),
 			);
 		});
 }
@@ -522,11 +522,11 @@ export function operatorNext<T, T2 = T>(
 export function operator<T, T2 = T>(
 	fn: (
 		subs: Subscriber<T2>,
-		source: Observable<T>
+		source: Observable<T>,
 	) => Observer<T> & {
 		next: NextFunction<T>;
 		unsubscribe?: UnsubscribeFunction;
-	}
+	},
 ): Operator<T, T2> {
 	return (source: Observable<T>) =>
 		new Observable<T2>(subscriber => {
@@ -558,7 +558,7 @@ export function map<T, T2>(mapFn: (val: T) => T2) {
  */
 export function reduce<T, T2>(
 	reduceFn: (acc: T2, val: T, i: number) => T2,
-	seed: T2
+	seed: T2,
 ) {
 	return operator<T, T2>(subscriber => {
 		let acc = seed;
@@ -659,7 +659,7 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 								error: subscriber.error.bind(subscriber),
 								complete: cleanUp,
 							},
-							subscription => (lastSubscription = subscription)
+							subscription => (lastSubscription = subscription),
 						);
 					},
 					error: subscriber.error.bind(subscriber),
@@ -672,7 +672,7 @@ export function switchMap<T, T2>(project: (val: T) => Observable<T2>) {
 					subscriber.setTeardown(() => {
 						cleanUp();
 						sourceSubs.unsubscribe();
-					})
+					}),
 			);
 		});
 }
@@ -713,7 +713,7 @@ export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
 										cleanUp();
 									}
 								},
-							})
+							}),
 						);
 					},
 					error: subscriber.error.bind(subscriber),
@@ -724,7 +724,7 @@ export function mergeMap<T, T2>(project: (val: T) => Observable<T2>) {
 							cleanUp();
 						}
 					},
-				})
+				}),
 			);
 			return cleanUp;
 		});
@@ -824,7 +824,7 @@ export function tap<T>(fn: (val: T) => void): Operator<T, T> {
  *
  */
 export function catchError<T, O extends T | never>(
-	selector: (err: unknown, source: Observable<T>) => Observable<O> | void
+	selector: (err: unknown, source: Observable<T>) => Observable<O> | void,
 ): Operator<T, T> {
 	return operator<T, T>((subscriber, source) => {
 		let retrySubs: Subscription | undefined;
@@ -956,7 +956,7 @@ export function merge<R extends Observable<unknown>[]>(
 							if (refCount-- === 1) subs.complete();
 						},
 					},
-					subscription => subscriptions.push(subscription)
+					subscription => subscriptions.push(subscription),
 				);
 
 		return () => subscriptions.forEach(s => s.unsubscribe());
@@ -1009,7 +1009,7 @@ export function zip<T extends Observable<unknown>[]>(
 								completed++;
 								flush();
 							},
-						})
+						}),
 					);
 				});
 
@@ -1049,7 +1049,7 @@ export function combineLatest<T extends Observable<unknown>[]>(
 						complete() {
 							if (--len <= 0) subs.complete();
 						},
-					})
+					}),
 				);
 
 				return () => subscriptions.forEach(s => s.unsubscribe());
@@ -1146,11 +1146,14 @@ for (const p in operators) {
 
 export interface Observable<T> {
 	catchError<T2 extends T | never>(
-		selector: (err: unknown, source: Observable<T>) => Observable<T2> | void
+		selector: (
+			err: unknown,
+			source: Observable<T>,
+		) => Observable<T2> | void,
 	): Observable<T>;
 	debounceTime(
 		time?: number,
-		timer?: (delay: number) => Observable<void>
+		timer?: (delay: number) => Observable<void>,
 	): Observable<T>;
 	distinctUntilChanged(): Observable<T>;
 	exhaustMap<T2>(project: (value: T) => Observable<T2>): Observable<T2>;
@@ -1162,7 +1165,7 @@ export interface Observable<T> {
 	publishLast(): Observable<T>;
 	reduce<T2>(
 		reduceFn: (acc: T2, val: T, i: number) => T2,
-		seed: T2
+		seed: T2,
 	): Observable<T2>;
 	select<K extends keyof T>(key: K): Observable<T[K]>;
 	share(): Observable<T>;

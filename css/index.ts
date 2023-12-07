@@ -3,7 +3,6 @@ export type StyleDefinition<T extends Theme = Theme> = {
 	[K in keyof StrictStyleDefinition<T>]?:
 		| StrictStyleDefinition<T>[K]
 		| Variable<StrictStyleDefinition<T>[K]>;
-	//[K in keyof StrictStyleDefinition<T>]?: StrictStyleDefinition<T>[K];
 };
 
 export type BaseColor = RGBA;
@@ -189,9 +188,16 @@ export type Styles<T extends Theme> =
 			'@medium'?: StylesOnly<T>;
 			'@large'?: StylesOnly<T>;
 			'@xlarge'?: StylesOnly<T>;
+			'@xxlarge'?: StylesOnly<T>;
 	  };
 
-export type BreakpointKey = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+export type BreakpointKey =
+	| 'xsmall'
+	| 'small'
+	| 'medium'
+	| 'large'
+	| 'xlarge'
+	| 'xxlarge';
 export type CSSUnit = 'px' | 'em' | 'rem';
 
 export interface Breakpoints {
@@ -199,6 +205,7 @@ export interface Breakpoints {
 	large: number;
 	medium: number;
 	xlarge: number;
+	xxlarge: number;
 }
 
 export interface AnimationDefinition {
@@ -259,7 +266,7 @@ export function boxShadow<T extends Theme>(
 	offsetY: number,
 	blurRadius: number,
 	spread: number,
-	color: Color<T>
+	color: Color<T>,
 ) {
 	return { offsetX, offsetY, blurRadius, spread, color };
 }
@@ -274,14 +281,19 @@ export function pct(n: number): CustomPercentage {
 }
 
 const SNAKE_CSS: Record<string, string> = {
-		//webkitOverflowScrolling: '-webkit-overflow-scrolling',
 		webkitUserSelect: '-webkit-user-select',
 	},
 	SNAKE_REGEX = /[A-Z]/g;
 
 export const defaultTheme: Theme = {
 	animation: { none: undefined },
-	breakpoints: { small: 600, medium: 905, large: 1240, xlarge: 1440 },
+	breakpoints: {
+		small: 600,
+		medium: 905,
+		large: 1240,
+		xlarge: 1920,
+		xxlarge: 2560,
+	},
 	variables: { css: '' },
 	typography: {
 		default: {
@@ -302,7 +314,7 @@ type StyleMap<T extends Theme> = {
 		def: StyleDefinition<T>,
 		style: CSSStyle,
 		prop: K,
-		value: StrictStyleDefinition<T>[K]
+		value: StrictStyleDefinition<T>[K],
 	) => void;
 };
 
@@ -311,7 +323,7 @@ function toSnake(name: string) {
 		SNAKE_CSS[name] ||
 		(SNAKE_CSS[name] = name.replace(
 			SNAKE_REGEX,
-			m => '-' + m.toLowerCase()
+			m => '-' + m.toLowerCase(),
 		))
 	);
 }
@@ -344,7 +356,7 @@ export function padding(
 	paddingTop: number | 'auto',
 	paddingRight = paddingTop,
 	paddingBottom = paddingTop,
-	paddingLeft = paddingTop
+	paddingLeft = paddingTop,
 ) {
 	return { paddingTop, paddingRight, paddingBottom, paddingLeft };
 }
@@ -353,7 +365,7 @@ export function margin(
 	marginTop: number | 'auto',
 	marginRight = marginTop,
 	marginBottom = marginTop,
-	marginLeft = marginTop
+	marginLeft = marginTop,
 ) {
 	return { marginTop, marginRight, marginBottom, marginLeft };
 }
@@ -362,7 +374,7 @@ export function border(
 	borderTop: number | 'auto',
 	borderRight = borderTop,
 	borderBottom = borderTop,
-	borderLeft = borderTop
+	borderLeft = borderTop,
 ) {
 	return { borderTop, borderRight, borderBottom, borderLeft };
 }
@@ -431,10 +443,13 @@ export function renderGlobal(theme: {
 				fontWeight,
 				letterSpacing,
 				textTransform,
+				lineHeight,
 			} = typography[i as keyof typeof typography];
 			const fontCss = `${fontWeight ?? def.fontWeight} ${
 				fontSize ?? def.fontSize
-			} ${fontFamily ?? def.fontFamily}`;
+			}${lineHeight ? `/${lineHeight}` : ''} ${
+				fontFamily ?? def.fontFamily
+			}`;
 
 			result +=
 				`--cxl-font-${name}:${fontCss};` +
@@ -482,7 +497,7 @@ export function buildTheme<T extends Theme>(theme: T) {
 		_def: StyleDefinition<T>,
 		style: CSSStyle,
 		prop: StyleKey<T>,
-		value: Color<T>
+		value: Color<T>,
 	) {
 		style[prop as CSSStyleKey] = color(value);
 	}
@@ -492,19 +507,11 @@ export function buildTheme<T extends Theme>(theme: T) {
 	}
 
 	function renderTransform(v: StyleDefinition<T>, style: CSSStyle) {
-		/*if (v.elevation !== undefined) {
-			const x = toUnit(v.elevation);
-			style.boxShadow =
-				v.elevation > 0
-					? `${x} ${x} ${toUnit(5 * v.elevation)} var(--cxl-shadow)`
-					: 'none';
-		}*/
-
 		const transform =
 			style.transform ||
 			(v.translateX !== undefined || v.translateY !== undefined
 				? `translate(${toUnit(v.translateX || 0)},${toUnit(
-						v.translateY || 0
+						v.translateY || 0,
 				  )})`
 				: '') +
 				(v.scaleX !== undefined || v.scaleY !== undefined
@@ -523,14 +530,10 @@ export function buildTheme<T extends Theme>(theme: T) {
 		_def: unknown,
 		style: CSSStyle,
 		prop: CSSStyleKey,
-		value: number
+		value: number,
 	) {
 		style[prop] = value.toString();
 	}
-
-	/*function applyCSSStyle(style: CSSStyle, def: CSSStyle) {
-		for (const i in def) style[i] = def[i];
-	}*/
 
 	function renderKeyframes(keyframes: Keyframe[]) {
 		const frames = new KeyframeEffect(null, keyframes).getKeyframes();
@@ -547,7 +550,7 @@ export function buildTheme<T extends Theme>(theme: T) {
 
 	function renderAnimationValue(
 		key: string,
-		options?: KeyframeAnimationOptions
+		options?: KeyframeAnimationOptions,
 	) {
 		if (!options) return `${key} var(--cxl-speed)`;
 		const { duration, fill, iterations, easing } = options;
@@ -568,26 +571,27 @@ export function buildTheme<T extends Theme>(theme: T) {
 
 			if (animation) {
 				const name = `cxl-${String(value)}`;
-				/*style.animation = `var(--cxl-animation-override,${
-					(animation as AnimationDefinition).value
-				})`;*/
 				style.animation = renderAnimationValue(
 					name,
-					(animation as AnimationDefinition).options
+					(animation as AnimationDefinition).options,
 				);
 				def.prepend =
 					(def.prepend || '') +
 					`@keyframes ${name} {${renderKeyframes(
-						(animation as AnimationDefinition).keyframes
+						(animation as AnimationDefinition).keyframes,
 					)}}`;
 			} else throw new Error('Animation not defined');
 		},
 		backgroundColor: renderColor,
 		borderColor: renderColor,
+		borderTop: (_d, s, _p, val) => (s.borderTopWidth = toUnit(val)),
+		borderLeft: (_d, s, _p, val) => (s.borderLeftWidth = toUnit(val)),
+		borderBottom: (_d, s, _p, val) => (s.borderBottomWidth = toUnit(val)),
+		borderRight: (_d, s, _p, val) => (s.borderRightWidth = toUnit(val)),
 		boxShadow(_def, style, _prop, v) {
 			if (typeof v === 'string') return (style.boxShadow = v);
 			style.boxShadow = `${toUnit(v.offsetX)} ${toUnit(
-				v.offsetY
+				v.offsetY,
 			)} ${toUnit(v.blurRadius)} ${toUnit(v.spread)} ${color(v.color)}`;
 		},
 		userSelect(_def, style, _prop, v) {
@@ -618,7 +622,6 @@ export function buildTheme<T extends Theme>(theme: T) {
 		order: renderNumber,
 		translateX: renderTransform,
 		translateY: renderTransform,
-		//translateZ: renderTransform,
 		scaleX: renderTransform,
 		scaleY: renderTransform,
 		rotate: renderTransform,
@@ -639,7 +642,7 @@ export function buildTheme<T extends Theme>(theme: T) {
 					def,
 					style,
 					i as StyleKey<T>,
-					val
+					val,
 				);
 			else if (val !== undefined)
 				renderDefault(style, i as StyleKey<T>, val as Length);
@@ -652,11 +655,12 @@ export function buildTheme<T extends Theme>(theme: T) {
 	function renderRule(
 		selector: string,
 		name: string,
-		styles: StyleDefinition<T> | Styles<T>
+		styles: StyleDefinition<T> | Styles<T>,
 	) {
 		if (
 			name === '@small' ||
 			name === '@xlarge' ||
+			name === '@xxlarge' ||
 			name === '@medium' ||
 			name === '@large'
 		)
@@ -665,11 +669,11 @@ export function buildTheme<T extends Theme>(theme: T) {
 					name.slice(1) as keyof typeof theme.breakpoints
 				],
 				styles as Styles<T>,
-				selector
+				selector,
 			);
 
 		return `${parseRuleName(selector, name)}{${style(
-			styles as StyleDefinition
+			styles as StyleDefinition,
 		)}}`;
 	}
 	function style(def: StyleDefinition) {
@@ -696,7 +700,7 @@ export function buildTheme<T extends Theme>(theme: T) {
 
 	function createStyleElement<T extends Theme>(
 		styles: Styles<T>,
-		selector = ':host'
+		selector = ':host',
 	) {
 		const result = document.createElement('style');
 		result.textContent = render(styles, selector);
@@ -705,15 +709,15 @@ export function buildTheme<T extends Theme>(theme: T) {
 
 	function applyTheme(container = document.head) {
 		const result = renderGlobal(theme);
-		rootStyles.innerHTML = result + '}';
+		rootStyles.textContent = result + '}';
 		container.insertBefore(rootStyles, container.firstChild);
 	}
 
 	function variable<K extends keyof T['colors']>(
-		name: K
+		name: K,
 	): Variable<T['colors'][K]>;
 	function variable<K extends keyof T['variables']>(
-		name: K
+		name: K,
 	): Variable<T['variables'][K]>;
 	function variable(name: keyof T['colors'] | keyof T['variables']) {
 		return new Variable<unknown>(name as string);

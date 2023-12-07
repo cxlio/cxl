@@ -24,6 +24,8 @@ import '@cxl/ui/navbar.js';
 import '@cxl/ui/theme-toggle.js';
 import '@cxl/ui/theme-dark.js';
 import '@cxl/ui/hr.js';
+import '@cxl/ui/typography.js';
+import '@cxl/ui/table.js';
 
 declare const hljs: typeof import('highlight.js').default;
 
@@ -83,7 +85,7 @@ export class DocItem extends RouterItem {}
 			},
 		},
 	}),
-	() => <slot />
+	() => <slot />,
 )
 export class DocGrid extends Component {}
 
@@ -126,18 +128,18 @@ export class DocGrid extends Component {}
 				<slot />
 			</>
 		);
-	}
+	},
 )
 export class DocCard extends Component {}
 
-@Augment(
+/*@Augment(
 	'doc-cd',
 	css({
 		$: { font: 'code', display: 'inline-block' },
 	}),
-	() => <slot />
+	() => <slot />,
 )
-export class DocCode extends Component {}
+export class DocCode extends Component {}*/
 
 @Augment(
 	'doc-ct',
@@ -150,7 +152,7 @@ export class DocCode extends Component {}
 			display: 'block',
 		},
 	}),
-	() => <slot />
+	() => <slot />,
 )
 export class DocCardTitle extends Component {}
 
@@ -189,10 +191,10 @@ export class DocExample extends Component {}
 						</SelectBox>
 					) : (
 						<>{docgen.activeVersion}</>
-					)
+					),
 				)}
 		</$.Shadow>
-	)
+	),
 )
 export class DocVersionSelect extends Component {
 	onValue(version: string) {
@@ -206,7 +208,7 @@ const hljsLanguages = ['html', 'typescript', 'javascript', 'css', 'ts'];
 @Augment<DocHighlight>(
 	'doc-hl',
 	css({
-		$: { display: 'block' },
+		$: { display: 'block', marginTop: 32, marginBottom: 32 },
 		hljs: { whiteSpace: 'pre-wrap', font: 'code', ...padding(16) },
 	}),
 	() => <link rel="stylesheet" href="styles.css" />,
@@ -228,10 +230,10 @@ const hljsLanguages = ['html', 'typescript', 'javascript', 'css', 'ts'];
 					/* Ignore */
 				}
 				srcContainer.innerHTML = src;
-			})
+			}),
 		);
 		return srcContainer;
-	}
+	},
 )
 export class DocHighlight extends Component {
 	@Attribute()
@@ -242,7 +244,7 @@ export class DocHighlight extends Component {
 	const demo = (<BlogDemo />) as BlogDemo;
 	demo.header =
 		UserScripts +
-		'<style>body{padding:16px 16px 0 16px;background:var(--cxl-background);color:var(--cxl-on-background)}</style>';
+		'<style>body{padding:16px;background:var(--cxl-background);color:var(--cxl-on-background)}</style>';
 
 	const src = new Text();
 	requestAnimationFrame(() => {
@@ -285,16 +287,16 @@ export class DocDemo extends Component {
 		toggle.appendChild(
 			<IconButton
 				title={get(toggle, 'opened').map(v =>
-					v ? 'Collapse' : 'Expand'
+					v ? 'Collapse' : 'Expand',
 				)}
 				width={20}
 				icon={get(toggle, 'opened').map(v =>
-					v ? 'unfold_less' : 'unfold_more'
+					v ? 'unfold_less' : 'unfold_more',
 				)}
-			/>
+			/>,
 		);
 		return toggle;
-	}
+	},
 )
 export class DocMore extends Component {}
 
@@ -324,7 +326,7 @@ export class DocLink extends A {}
 		const card = (
 			<Autocomplete
 				input={breakpointKey($).map(bp =>
-					bp === 'xsmall' ? search.mobileInput : search.desktopInput
+					bp === 'xsmall' ? search.mobileInput : search.desktopInput,
 				)}
 			>
 				{each(results, r => (
@@ -356,6 +358,6 @@ export class DocLink extends A {}
 				{card}
 			</>
 		);
-	}
+	},
 )
 export class DocSearch extends Component {}

@@ -19,6 +19,13 @@ export default spec('glob', s => {
 				regex.source
 			})`
 		);
+		/*const negated = globToRegex(`!(${glob})`);
+		a.ok(
+			negated.test(term),
+			`"${term}" should match glob ${JSON.stringify(`!(${glob})`)} (${
+				negated.source
+			})`
+		);*/
 	}
 
 	function match(list: string[], glob: string) {

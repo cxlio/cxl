@@ -4,7 +4,7 @@ import { readFile, writeFile, mkdir } from 'fs/promises';
 import { dirname, resolve } from 'path';
 import type { FigureData, Test, Result } from '@cxl/spec';
 import type { TestRunner } from './index.js';
-import { PNG } from 'pngjs';
+import type { PNG } from 'pngjs';
 
 import { TestCoverage, generateReport } from './report.js';
 
@@ -59,28 +59,35 @@ function resolveImport(path: string) {
 			(str, p1) =>
 				`../../../j5g3/dist/${
 					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`
+				}`,
 		)
 		.replace(
 			/^@cxl\/workspace\.(.+)/,
 			(str, p1) =>
 				`../../../cxl.app/dist/${
 					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`
+				}`,
+		)
+		.replace(
+			/^@cxl\/gbc\.(.*)/,
+			(str, p1) =>
+				`../../../gbc/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`,
 		)
 		.replace(
 			/^@cxl\/(ui.*)/,
 			(str, p1) =>
 				`../../../ui/dist/${
 					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`
+				}`,
 		)
 		.replace(
 			/^@cxl\/(.+)/,
 			(str, p1) =>
 				`../../../cxl/dist/${
 					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`
+				}`,
 		);
 }
 
@@ -169,7 +176,7 @@ function generateRanges(entry: CoverageEntry) {
 
 async function generateCoverage(
 	page: Page,
-	sources: Output[]
+	sources: Output[],
 ): Promise<TestCoverage[]> {
 	const coverage = await page.coverage.stopJSCoverage();
 	return coverage.map(entry => {
@@ -190,7 +197,8 @@ async function generateCoverage(
 let figureReady: Promise<void>;
 let screenshotQueue = Promise.resolve();
 
-function parsePNG(buffer: Buffer) {
+async function parsePNG(buffer: Buffer) {
+	const PNG = (await import('pngjs')).PNG;
 	return new Promise<PNG>((resolve, reject) => {
 		const png = new PNG();
 		png.parse(buffer, (e, self) => {
@@ -224,7 +232,7 @@ function screenshot(page: Page, domId: string) {
 						if (buffer && buffer instanceof Buffer) resolve(buffer);
 						else reject();
 					},
-					e => reject(e)
+					e => reject(e),
 				);
 		});
 	});
@@ -233,7 +241,7 @@ function screenshot(page: Page, domId: string) {
 async function handleFigureRequest(
 	page: Page,
 	data: FigureData,
-	app: TestRunner
+	app: TestRunner,
 ): Promise<Result> {
 	const { name, domId } = data;
 	const baseline = (data.baseline = `${
@@ -247,7 +255,7 @@ async function handleFigureRequest(
 			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 250 })
 			.then(
 				() => void 0,
-				() => void 0
+				() => void 0,
 			)));
 
 	page.mouse.move(350, -100);

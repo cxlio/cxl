@@ -41,17 +41,17 @@ export function setContent(el: Element, content: ElementContent) {
 export function on<K extends keyof WindowEventMap>(
 	element: Window,
 	event: K,
-	options?: AddEventListenerOptions
+	options?: AddEventListenerOptions,
 ): Observable<WindowEventMap[K]>;
 export function on<K extends keyof HTMLElementEventMap>(
 	element: EventTarget,
 	event: K,
-	options?: AddEventListenerOptions
+	options?: AddEventListenerOptions,
 ): Observable<HTMLElementEventMap[K]>;
 export function on<K extends keyof CustomEventMap>(
 	element: EventTarget | Window,
 	event: K,
-	options?: AddEventListenerOptions
+	options?: AddEventListenerOptions,
 ): Observable<CustomEvent<CustomEventMap[K]>>;
 /*export function on(
 	element: EventTarget | Window,
@@ -61,7 +61,7 @@ export function on<K extends keyof CustomEventMap>(
 export function on(
 	element: EventTarget | Window,
 	event: string,
-	options?: AddEventListenerOptions
+	options?: AddEventListenerOptions,
 ): Observable<Event> {
 	return new Observable<Event>(subscriber => {
 		const handler = subscriber.next.bind(subscriber);
@@ -70,7 +70,7 @@ export function on(
 			element,
 			event,
 			handler,
-			options
+			options,
 		);
 	});
 }
@@ -78,7 +78,7 @@ export function on(
 export function onKeypress(el: Element | Window, key?: string) {
 	return on(el, 'keydown').filter(
 		// ev.key can be undefined in chrome, when autofilling
-		(ev: KeyboardEvent) => !key || ev.key?.toLowerCase() === key
+		(ev: KeyboardEvent) => !key || ev.key?.toLowerCase() === key,
 	);
 }
 
@@ -92,7 +92,7 @@ export function onReady() {
 			? of(true)
 			: on(window, 'DOMContentLoaded')
 					.first()
-					.map(() => true)
+					.map(() => true),
 	);
 }
 
@@ -102,7 +102,7 @@ export function onLoad() {
 			? of(true)
 			: on(window, 'load')
 					.first()
-					.map(() => true)
+					.map(() => true),
 	);
 }
 
@@ -128,20 +128,20 @@ export function setAttribute(el: Element, attr: string, val: unknown) {
 export function trigger<K extends keyof CustomEventMap>(
 	el: EventTarget,
 	event: K,
-	options: CustomEventInit<CustomEventMap[K]>
+	options: CustomEventInit<CustomEventMap[K]>,
 ): void;
 export function trigger<
-	K extends keyof HTMLElementEventMap | keyof WindowEventMap
+	K extends keyof HTMLElementEventMap | keyof WindowEventMap,
 >(el: EventTarget, event: K, options?: CustomEventInit): void;
 export function trigger<T extends HTMLElement, K extends string>(
 	el: T,
 	event: K,
-	options: CustomEventInit<EventDetail<T, K>>
+	options: CustomEventInit<EventDetail<T, K>>,
 ): void;
 export function trigger(
 	el: EventTarget,
 	event: string,
-	options?: CustomEventInit
+	options?: CustomEventInit,
 ) {
 	const ev = new CustomEvent(event, options);
 	el.dispatchEvent(ev);
@@ -165,7 +165,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 
 	$onMutation(events: MutationRecord[]) {
 		events.forEach(
-			ev => ev.attributeName && this.trigger(ev.attributeName)
+			ev => ev.attributeName && this.trigger(ev.attributeName),
 		);
 	}
 
@@ -184,7 +184,7 @@ export class AttributeObserver extends Subject<MutationEvent> {
 	}
 
 	protected onSubscribe(
-		subscription: Subscriber<MutationEvent<EventTarget>>
+		subscription: Subscriber<MutationEvent<EventTarget>>,
 	) {
 		const el = this.element;
 		// Use mutation observer for native dom elements
@@ -228,7 +228,7 @@ export function observeChildren(el: Element): Observable<void> {
 				return of(children);
 			}
 			return EMPTY;
-		})
+		}),
 	) as unknown as Observable<void>;
 }
 
@@ -261,7 +261,7 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 	}
 
 	protected onSubscribe(
-		subscription: Subscriber<MutationEvent<EventTarget>>
+		subscription: Subscriber<MutationEvent<EventTarget>>,
 	) {
 		const el = this.element;
 
@@ -287,7 +287,7 @@ export class ChildrenObserver extends Subject<MutationEvent> {
 export function onHashChange() {
 	return concat(
 		of(location.hash.slice(1)),
-		on(window, 'hashchange').map(() => location.hash.slice(1))
+		on(window, 'hashchange').map(() => location.hash.slice(1)),
 	);
 }
 
@@ -308,7 +308,7 @@ export function onHistoryChange() {
 			if (history.state) history.state.lastAction = 'pop';
 			return history.state;
 		}),
-		pushSubject
+		pushSubject,
 	);
 }
 
@@ -337,7 +337,7 @@ export const animationFrame = new Observable<number>(subs => {
 export function findNextNode<T extends ChildNode>(
 	el: T,
 	fn: (el: T) => boolean,
-	direction: 'nextSibling' | 'previousSibling' = 'nextSibling'
+	direction: 'nextSibling' | 'previousSibling' = 'nextSibling',
 ) {
 	let node = el[direction] as T;
 
@@ -351,7 +351,7 @@ export function findNextNodeBySelector(
 	host: Element,
 	el: Element,
 	selector: string,
-	direction = 1
+	direction = 1,
 ) {
 	const all = Array.from(host.querySelectorAll(selector));
 	let i = all.indexOf(el);
@@ -388,7 +388,7 @@ export function fileReaderString(file: Blob) {
 
 export function onMutation(
 	target: Node,
-	options: MutationObserverInit = { attributes: true, childList: true }
+	options: MutationObserverInit = { attributes: true, childList: true },
 ) {
 	return new Observable<MutationEvent>(subs => {
 		const observer = new MutationObserver(events =>
@@ -403,7 +403,7 @@ export function onMutation(
 						target,
 						value: ev.attributeName,
 					});
-			})
+			}),
 		);
 		observer.observe(target, options);
 		return () => observer.disconnect();
@@ -426,7 +426,7 @@ export interface ElementWithValue<T> extends HTMLElement {
 
 export function onValue<T extends ElementWithValue<R>, R = T['value']>(el: T) {
 	return merge(on(el, 'input'), on(el, 'change')).map(
-		ev => (ev.target as T).value
+		ev => (ev.target as T).value,
 	);
 }
 
@@ -443,14 +443,10 @@ export function isFocusable(el: HTMLElement) {
 		(el.tabIndex !== -1 || el.contentEditable === 'true') &&
 		!(el as HTMLInputElement).disabled
 	);
-	/*return true;
-	return el.shadowRoot?.children.length
-		? !!findFocusable(el.shadowRoot)
-		: false;*/
 }
 
 export function findFocusable(
-	host: Element | ShadowRoot
+	host: Element | ShadowRoot,
 ): HTMLElement | undefined {
 	for (const child of host.children) {
 		if (child instanceof HTMLSlotElement) {
@@ -473,7 +469,7 @@ export function findFocusable(
 	}
 }
 export function findLastFocusable(
-	host: Element | ShadowRoot
+	host: Element | ShadowRoot,
 ): HTMLElement | undefined {
 	let i = host.children.length;
 	while (i--) {
@@ -501,7 +497,7 @@ export function findFocusableAll(host: Element) {
 
 function doRequest<T>(
 	options: RequestInfo,
-	parse?: (res: Response) => Promise<T>
+	parse?: (res: Response) => Promise<T>,
 ) {
 	return new Observable<T>(subs => {
 		fetch(options)
@@ -511,7 +507,7 @@ function doRequest<T>(
 					subs.next(res);
 					subs.complete();
 				},
-				err => subs.error(err)
+				err => subs.error(err),
 			);
 	});
 }
@@ -546,6 +542,17 @@ export function debounceImmediate<A extends unknown[], R>(fn: (...a: A) => R) {
 	};
 }
 
+export function debounceRaf<A extends unknown[], R>(fn: (...a: A) => R) {
+	let to: number;
+	return function (this: unknown, ...args: A) {
+		if (to) cancelAnimationFrame(to);
+		to = requestAnimationFrame(() => {
+			fn.apply(this, args);
+			to = 0;
+		});
+	};
+}
+
 /**
  * debounce using requestAnimationFrame
  */
@@ -576,6 +583,16 @@ export function raf<T>(fn?: (val: T) => void) {
 			},
 		};
 	});
+}
+
+export function nodeSort(a: Node, b: Node) {
+	return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_PRECEDING
+		? 1
+		: -1;
+}
+
+export function sortNodes<T extends Node>(nodes: T[]) {
+	return nodes.sort(nodeSort);
 }
 
 export type EventDetail<T, K extends string> = T[Extract<

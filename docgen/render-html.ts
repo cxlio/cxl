@@ -34,7 +34,6 @@ interface Group {
 }
 
 let application: DocGen;
-//let index: Record<string, Node | undefined>;
 let extraDocs: Section[];
 let extraFiles: File[];
 let docgenConfig: RuntimeConfig;
@@ -53,7 +52,7 @@ function TypeArguments(types?: Node[]): string {
 							Type(t) +
 							(t.kind !== Kind.Reference && t.type
 								? ` extends ${Type(t.type)}`
-								: '')
+								: ''),
 					)
 					.join(', ') +
 				'&gt;'
@@ -65,7 +64,7 @@ function ConditionalType(node: Node) {
 
 	const [check, extend, trueVal, falseVal] = node.children;
 	return `${Type(check)} extends ${Type(extend)} ? ${Type(trueVal)} : ${Type(
-		falseVal
+		falseVal,
 	)}`;
 }
 
@@ -93,7 +92,7 @@ function ClassType(node: Node) {
 function FunctionType(node: Node) {
 	const { parameters, typeParameters, type } = node;
 	return `${SignatureName(node)}${TypeArguments(
-		typeParameters
+		typeParameters,
 	)}${SignatureParameters(parameters)} => ${Type(type)}`;
 }
 
@@ -117,7 +116,7 @@ function MappedType(type: Node) {
 	if (!type.children?.length || !type.type) return '?';
 	const [K, T] = type.children;
 	return `{ [${renderType(K)} in ${renderType(T)}]: ${renderType(
-		type.type
+		type.type,
 	)} }`;
 }
 
@@ -172,7 +171,7 @@ export function renderType(type: Node): string {
 		case Kind.Keyof:
 			return type.resolvedType
 				? `<doc-more><x slot="off"> keyof ${Type(type.type)}</x> ${Type(
-						type.resolvedType
+						type.resolvedType,
 				  )}</doc-more>`
 				: `keyof ${Type(type.type)}`;
 		case Kind.Typeof:
@@ -282,9 +281,9 @@ export function SignatureText(node: Node): string {
 	const { value, parameters, typeParameters } = node;
 
 	return `${SignatureName(node)}${TypeArguments(
-		typeParameters
+		typeParameters,
 	)}${SignatureParameters(parameters)}${SignatureType(node)}${SignatureValue(
-		value
+		value,
 	)}`;
 }
 
@@ -318,7 +317,7 @@ function Code(source: string, language?: string) {
 	if (language === 'demo') return Demo({ value: source });
 
 	return `<doc-hl${
-		language ? ` l="language"` : ''
+		language ? ` l="${language}"` : ''
 	}><!--${source}--></doc-hl>`;
 }
 
@@ -438,9 +437,9 @@ function MemberBody(c: Node) {
 			c.parameters
 				.map(
 					p =>
-						`<li><doc-cd>${Parameter(
-							p
-						)}</doc-cd>${ParameterDocumentation(p)}</li>`
+						`<li><code>${Parameter(
+							p,
+						)}</code>${ParameterDocumentation(p)}</li>`,
 				)
 				.join('') +
 			'</ul>';
@@ -454,14 +453,14 @@ function MemberCard(c: Node) {
 		getSourceLink(Array.isArray(c.source) ? c.source[0] : c.source);
 	return Anchor(
 		c.id,
-		`<doc-c${src ? ` src="${src}"` : ''}>${MemberBody(c)}</doc-c>`
+		`<doc-c${src ? ` src="${src}"` : ''}>${MemberBody(c)}</doc-c>`,
 	);
 }
 
 function ExtendedBy(extendedBy?: Node[]) {
 	return extendedBy
 		? `<cxl-t inline font="subtitle2">${translate(
-				'Extended By'
+				'Extended By',
 		  )}:</cxl-t> ${extendedBy
 				.map(ref => (ref.name ? `${Link(ref)}` : ''))
 				.join(', ')}`
@@ -608,7 +607,7 @@ function pushToGroup(
 	c: Node,
 	resultMap: Record<number, Group>,
 	result: Group[],
-	indexOnly: boolean
+	indexOnly: boolean,
 ) {
 	const groupKind = c.kind === Kind.ImportType ? Kind.Export : c.kind;
 
@@ -622,7 +621,7 @@ function pushToGroup(
 					unique: {},
 					index: [],
 					body: [],
-				})
+				}),
 		);
 	}
 
@@ -667,7 +666,7 @@ function getMemberGroups(node: Node, indexOnly = false, sort = true) {
 
 	return sort
 		? result.sort((a, b) =>
-				kindToString(a.kind) > kindToString(b.kind) ? 1 : -1
+				kindToString(a.kind) > kindToString(b.kind) ? 1 : -1,
 		  )
 		: result;
 }
@@ -686,7 +685,7 @@ function MemberInherited(type: Node): string {
 						.join('');
 					if (result)
 						result = `<cxl-t h5>Inherited from ${Link(
-							c
+							c,
 						)}</cxl-t>${result}`;
 					if (c.type.type) result += MemberInherited(c.type.type);
 				}
@@ -789,7 +788,6 @@ function ModuleNavbar(node: Node) {
 		return '';
 	}
 	const moduleName = node.name.match(/^index\.tsx?/) ? 'Index' : node.name;
-
 	const href = getHref(node);
 	return (
 		`${Item(`<i>${moduleName}</i>`, href)}` +
@@ -840,8 +838,8 @@ function Extra(docs: Section[]) {
 					Item(
 						i.title,
 						i.index ? 'index.html' : escapeFileName(i.file),
-						i.icon
-					)
+						i.icon,
+					),
 				)
 				.join('');
 			return `${title}${items}`;
@@ -857,7 +855,8 @@ function findOtherVersions(outDir: string, currentVersion: string) {
 	try {
 		return readdirSync(outDir).filter(
 			d =>
-				d !== currentVersion && statSync(`${outDir}/${d}`).isDirectory()
+				d !== currentVersion &&
+				statSync(`${outDir}/${d}`).isDirectory(),
 		);
 	} catch (e) {
 		return [];
@@ -896,7 +895,7 @@ function getConfigScript(versions = 'version.json') {
 
 function getRuntimeScripts(scripts: File[]) {
 	return `<script src="runtime.bundle.min.js"></script>${scripts.map(
-		src => `<script src="${src.name}"></script>`
+		src => `<script src="${src.name}"></script>`,
 	)}`;
 }
 
@@ -920,7 +919,8 @@ function Header(scripts: File[]) {
 
 	return `<!DOCTYPE html>
 	<head>${customHeadHtml}<meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
-	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]:not([inline]){margin:48px 0}code,.hljs{font:var(--cxl-font-code)}pre{margin:32px 0 32px 0} .navbar-title{font-size: 18px;font-weight:500;flex-grow:1}</style>
+	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]:not([inline]){margin:40px 0}code,.hljs{font:var(--cxl-font-code);font-size:0.875em}pre{margin:32px 0 32px 0} .navbar-title{font-size: 18px;font-weight:500;flex-grow:1}p,ul{line-height:1.6}</style>
+
 	<cxl-application permanent><title>${title} API Reference</title><cxl-appbar center>
 	${Navbar(pkg)}
 	<doc-search></doc-search>
@@ -1021,7 +1021,7 @@ function Markdown(content: string, inline = false, allowAllHtml = false) {
 		`<cxl-t ${map[tokens[idx].tag as keyof typeof map]}>`;
 	rules.heading_close = () => `</cxl-t>`;
 	rules.code_block = (tokens, idx) => Code(tokens[idx].content);
-	rules.fence = (tokens, idx) => Code(tokens[idx].content);
+	rules.fence = (tokens, idx) => Code(tokens[idx].content, tokens[idx].info);
 	rules.code_inline = (tokens, idx) => {
 		const value = tokens[idx].content;
 		const isLink = IsLink.test(value);
@@ -1043,7 +1043,7 @@ function Route(file: File) {
 	return `<template ${
 		file.name === 'index.html' ? 'data-default="true"' : ''
 	} data-title="${escape(
-		file.title || file.node?.name || file.name
+		file.title || file.node?.name || file.name,
 	)}" data-path="${file.name}">${file.content}</template>`;
 }
 
@@ -1097,7 +1097,7 @@ export function render(app: DocGen, output: Output): File[] {
 
 	modules = [];
 	extraFiles = extraDocs.flatMap(section =>
-		section.items.map(renderExtraFile)
+		section.items.map(renderExtraFile),
 	);
 
 	const result: File[] = output.modules.flatMap(Module);
@@ -1144,7 +1144,7 @@ export function render(app: DocGen, output: Output): File[] {
 							doc =>
 								`<url><loc>${base}/${
 									version ? `${version}/` : ''
-								}?${doc.name}</loc></url>`
+								}?${doc.name}</loc></url>`,
 						)
 						.join('') +
 					'</urlset>',
@@ -1156,7 +1156,7 @@ export function render(app: DocGen, output: Output): File[] {
 			return [
 				{
 					name: 'index.html',
-					content: `<meta http-equiv="Refresh" content="0; url='${version}/'" />`,
+					content: `<script>location='${version}/'+location.search</script>`,
 				},
 				{
 					name: 'version.json',

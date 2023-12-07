@@ -3,7 +3,7 @@
 	"description": "Lightweight reactiveX implementation",
 	"version": "0.8.0",
 	"license": "Apache-2.0",
-	"browser": "amd/index.js",
+	"browser": "./amd/index.js",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/rx && node ../tester --baselinePath=../../rx/spec"

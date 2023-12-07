@@ -48,7 +48,7 @@ export function docs(dirName: string, devMode = false) {
 		console.log(cmd);
 		sh(cmd).then(
 			out => (console.log(out), subs.complete()),
-			e => subs.error(e)
+			e => subs.error(e),
 		);
 	});
 }
@@ -123,7 +123,7 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 
 	if (forceInstall)
 		await sh(
-			`mkdir -p ${tmpDir} && cd ${tmpDir} && rm -rf ${repodir} && ${install}`
+			`mkdir -p ${tmpDir} && cd ${tmpDir} && rm -rf ${repodir} && ${install}`,
 		);
 	else
 		await sh(`if [ ! -d "${dir}" ]; then
@@ -160,7 +160,7 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 			cxlExtensions,
 			headHtml,
 		},
-		{ cwd }
+		{ cwd },
 	);
 
 	return { name, version, description, sitemap };
@@ -168,7 +168,7 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 
 export function docgenTask(
 	packages: DocgenOptions[],
-	commonOptions?: Partial<DocgenOptions>
+	commonOptions?: Partial<DocgenOptions>,
 ) {
 	return fromAsync(async () => {
 		const output = [];
@@ -177,7 +177,7 @@ export function docgenTask(
 				await docgen({
 					...commonOptions,
 					...p,
-				})
+				}),
 			);
 
 		return {
@@ -209,7 +209,8 @@ function packageJson(p: any) {
 						'LICENSE',
 						'*.md',
 					],
-					main: 'index.js',
+					main: p.main || 'index.js',
+					exports: p.exports,
 					browser: p.browser,
 					homepage: p.homepage,
 					bugs: p.bugs,
@@ -221,8 +222,8 @@ function packageJson(p: any) {
 					type: p.type,
 				},
 				null,
-				2
-			)
+				2,
+			),
 		),
 	});
 }
@@ -299,7 +300,7 @@ function createBundle(
 	resolvedFiles: string[],
 	content: string[],
 	outFile: string,
-	config?: ts.CompilerOptions
+	config?: ts.CompilerOptions,
 ): Output {
 	const options: ts.CompilerOptions = {
 		lib: ['lib.es2017.d.ts'],
@@ -326,7 +327,7 @@ function createBundle(
 			const sf = ts.createSourceFile(
 				resolvedFiles[i],
 				content[i],
-				target
+				target,
 			);
 			sf.moduleName = files[i];
 			sourceFiles.push(sf);
@@ -350,14 +351,14 @@ export function AMD() {
 		of({
 			path: 'amd.js',
 			source: readFileSync(__dirname + '/amd.js'),
-		})
+		}),
 	);
 }
 
 export function bundle(
 	files: Record<string, string>,
 	outFile: string,
-	config?: ts.CompilerOptions
+	config?: ts.CompilerOptions,
 ) {
 	return new Observable<Output>(subs => {
 		const moduleNames = Object.keys(files);
@@ -370,8 +371,8 @@ export function bundle(
 						resolvedFiles,
 						content,
 						outFile,
-						config
-					)
+						config,
+					),
 				);
 				subs.complete();
 			})
@@ -423,7 +424,7 @@ const HTML_COMMENT_REGEX = /<!--[^]+?-->/gm;
 
 export function template(
 	filename: string,
-	config: Partial<TemplateConfig> = {}
+	config: Partial<TemplateConfig> = {},
 ) {
 	return file(filename).switchMap(({ source }) => {
 		const prodSource = source
@@ -447,6 +448,6 @@ export function deployS3({ environment, s3Path }: PublishConfiguration) {
 		throw new Error(`Invalid environment ${environment}`);
 
 	return exec(
-		`aws s3 sync --dryrun --cache-control max-age=60 --content-encoding=utf8 --delete ../dist/debuggerjs.com s3://${s3Path}`
+		`aws s3 sync --dryrun --cache-control max-age=60 --content-encoding=utf8 --delete ../dist/debuggerjs.com s3://${s3Path}`,
 	);
 }

@@ -67,7 +67,7 @@ export function expression(host: Bindable, binding: Observable<unknown>) {
 	const result = document.createTextNode('');
 	bind(
 		host,
-		binding.tap(val => (result.textContent = val as string))
+		binding.tap(val => (result.textContent = val as string)),
 	);
 	return result;
 }
@@ -75,7 +75,7 @@ export function expression(host: Bindable, binding: Observable<unknown>) {
 export function renderChildren(
 	host: Bindable | Node,
 	children: Children,
-	appendTo: Node = host
+	appendTo: Node = host,
 ) {
 	if (children === undefined || children === null) return;
 
@@ -104,7 +104,7 @@ function renderAttributes<T extends Bindable>(host: T, attributes: Partial<T>) {
 function renderElement<T extends Bindable>(
 	element: T,
 	attributes?: Partial<T>,
-	children?: Children
+	children?: Children,
 ) {
 	if (attributes) renderAttributes(element, attributes);
 	if (children) renderChildren(element, children);
@@ -114,7 +114,7 @@ function renderElement<T extends Bindable>(
 function renderNative<T extends Node>(
 	element: T,
 	attributes: Partial<T> | undefined,
-	children: Children
+	children: Children,
 ) {
 	for (const attr in attributes) {
 		//if (attr === '$') attributes[attr](element);
@@ -159,21 +159,21 @@ export function dom(
 		return renderNative(
 			document.createDocumentFragment(),
 			undefined,
-			children
+			children,
 		);
 
 	if (isConstructorType(elementType))
 		return renderElement(
 			elementType.create(),
 			attributes as Partial<Bindable>,
-			children
+			children,
 		);
 
 	if (typeof elementType === 'string')
 		return renderNative(
 			document.createElement(elementType),
 			attributes as Partial<Bindable>,
-			children
+			children,
 		);
 
 	if (children) {

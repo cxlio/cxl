@@ -3,6 +3,7 @@ import type { TestResult } from './report';
 
 let output = `<style>.thumb{vertical-align:middle;display:inline-block;overflow:hidden;width:320px;position:relative;vertical-align:top}
 	dl { display: flex; margin-top:8px;margin-bottom:8px; } dd { margin-left: 16px}
+	body {font-family:monospace;font-size:16px;tab-size:4}
 	</style>`;
 let baselinePath: string;
 
@@ -26,7 +27,7 @@ export function escapeHtml(str: string) {
 		str &&
 		str.replace(
 			ENTITIES_REGEX,
-			e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP] || ''
+			e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP] || '',
 		)
 	);
 }
@@ -90,7 +91,7 @@ function renderTestReport(test: Test) {
 
 	group(
 		test.id,
-		`${test.name}${failureCount > 0 ? ` (${failureCount} failures)` : ''}`
+		`${test.name}${failureCount > 0 ? ` (${failureCount} failures)` : ''}`,
 	);
 
 	results.forEach(r => {

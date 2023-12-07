@@ -14,14 +14,14 @@ export function minifyIf(filename: string) {
 	return mergeMap((out: Output) =>
 		out.path === filename
 			? concat(of(out), file(out.path).pipe(minify()))
-			: of(out)
+			: of(out),
 	);
 }
 
 export function generateTestFile(
 	dirName: string,
 	pkgName: string,
-	testFile: string
+	testFile: string,
 ) {
 	return `<!DOCTYPE html>
 <title>${pkgName} Test Suite</title>
@@ -37,6 +37,13 @@ export function generateTestFile(
 			/^@cxl\\/workspace\\.(.+)/,
 			(str, p1) =>
 				\`/cxl.app/dist/$\{
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}\`
+		)
+		.replace(
+			/^@cxl\\/gbc\.(.*)/,
+			(str, p1) =>
+				\`/gbc/dist/$\{
 					str.endsWith('.js') ? p1 : p1 + '/index.js'
 				}\`
 		)
@@ -96,10 +103,10 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 							generateTestFile(
 								dirName,
 								packageJson.name,
-								'./test.js'
-							)
+								'./test.js',
+							),
 						),
-					})
+					}),
 				),
 				tsconfig('tsconfig.test.json'),
 			],
@@ -111,7 +118,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 				exec(
 					`cd ${outputDir} && node ${tester} --baselinePath=../../${dirName}/spec${
 						isBrowser ? '' : ' --node'
-					}`
+					}`,
 				),
 			],
 		},
@@ -142,7 +149,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 								minifyDir(outputDir + '/amd', {
 									sourceMap: false,
 									changePath: false,
-								})
+								}),
 							),
 						],
 					},
@@ -159,7 +166,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 								minifyDir(outputDir + '/mjs', {
 									sourceMap: false,
 									changePath: false,
-								})
+								}),
 							),
 						],
 					},
@@ -181,7 +188,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 							tsconfig(
 								'tsconfig.worker.json',
 								undefined,
-								outputDir
+								outputDir,
 							),
 						],
 					},
@@ -196,8 +203,8 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 							concat(
 								tsconfig('tsconfig.bundle.json'),
 								file(`${outputDir}/index.bundle.js`).pipe(
-									minify()
-								)
+									minify(),
+								),
 							),
 						],
 					},
@@ -213,6 +220,6 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			target: 'docs',
 			outputDir: '.',
 			tasks: [docs(dirName)],
-		}
+		},
 	);
 }

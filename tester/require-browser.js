@@ -18,6 +18,16 @@
 		return a.href;
 	}
 
+	function _import(url, moduleName) {
+		return fetch(url)
+			.then(res => (res.status === 200 ? res.text() : ''))
+			.then(__src => {
+				const mods = require.modules;
+				mods[moduleName] = __src ? appendScript(__src).exports : {};
+				return mods[moduleName];
+			});
+	}
+
 	function require(path) {
 		const mods = require.modules;
 
@@ -26,14 +36,15 @@
 		if (require.replace) path = require.replace(path, require.base);
 		// Handle packages
 		if (path[0] !== '.' && path[0] !== '/') {
-			if (!mods[path]) throw new Error(`Module "${path}" not found.`);
+			if (!mods[path]) return _import(path);
+			//throw new Error(`Module "${path}" not found.`);
 			return mods[path];
 		}
 		if (mods[path]) return mods[path];
 
 		const actualPath = /\.c?js$/.test(path) ? path : path + '.js';
 		let url = normalizePath(
-			path[0] === '/' ? actualPath : require.base + actualPath
+			path[0] === '/' ? actualPath : require.base + actualPath,
 		);
 		if (mods[url]) return mods[url];
 

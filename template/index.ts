@@ -41,8 +41,8 @@ export function teleport(el: Node, portalName: string) {
 	});
 }
 
-class Marker {
-	private children: Node[] = [];
+export class Marker {
+	children: Node[] = [];
 	node = document.createComment('marker');
 
 	insert(content: Node, nextNode: Node = this.node) {
@@ -71,7 +71,7 @@ class Marker {
 
 export function list<T, K>(
 	source: Observable<ListEvent<T, K>>,
-	renderFn: (item: T) => Node
+	renderFn: (item: T) => Node,
 ) {
 	return (host: Bindable) => {
 		const marker = new Marker();
@@ -84,7 +84,7 @@ export function list<T, K>(
 						ev.key,
 						node instanceof DocumentFragment
 							? Array.from(node.childNodes)
-							: node
+							: node,
 					);
 					marker.insert(node);
 				} else if (ev.type === 'remove') {
@@ -93,7 +93,7 @@ export function list<T, K>(
 						node.forEach(n => marker.remove(n));
 					else if (node) marker.remove(node);
 				} else if (ev.type === 'empty') marker.empty();
-			})
+			}),
 		);
 		return marker.node;
 	};
@@ -103,7 +103,7 @@ export function render<T>(
 	source: Observable<T>,
 	renderFn: (item: T) => Node,
 	loading?: () => Node,
-	error?: (e: unknown) => Node
+	error?: (e: unknown) => Node,
 ) {
 	return (host: Bindable) => {
 		const marker = new Marker();
@@ -111,7 +111,7 @@ export function render<T>(
 			host.bind(
 				observable(() => {
 					marker.insert(loading());
-				})
+				}),
 			);
 
 		host.bind(
@@ -127,7 +127,7 @@ export function render<T>(
 						return EMPTY;
 					}
 					throw e;
-				})
+				}),
 		);
 
 		return marker.node;
@@ -137,7 +137,7 @@ export function render<T>(
 export function each<T>(
 	source: Observable<Iterable<T>>,
 	renderFn: (item: T, index: number, source: Iterable<T>) => Node | undefined,
-	empty?: () => Node
+	empty?: () => Node,
 ) {
 	const marker = new Marker();
 
@@ -154,7 +154,7 @@ export function each<T>(
 					}
 				}
 				if (empty && len === 0) marker.insert(empty());
-			})
+			}),
 		);
 
 		return marker.node;
@@ -162,7 +162,7 @@ export function each<T>(
 }
 
 export function $onAction<T extends Element>(
-	cb: (ev: KeyboardEvent | MouseEvent) => void
+	cb: (ev: KeyboardEvent | MouseEvent) => void,
 ) {
 	return (el: T) => onAction(el).tap(cb);
 }
@@ -188,7 +188,7 @@ export function escapeHtml(str: string) {
 		str &&
 		str.replace(
 			ENTITIES_REGEX,
-			e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP] || ''
+			e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP] || '',
 		)
 	);
 }
