@@ -139,7 +139,8 @@ export interface StrictStyleDefinition<T extends Theme> {
 		| 'none'
 		| 'initial'
 		| 'inline-flex'
-		| 'inline-block';
+		| 'inline-block'
+		| 'inherit';
 	position: 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 	userSelect: string;
 	textAlign: string;
