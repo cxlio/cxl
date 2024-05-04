@@ -203,7 +203,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 							concat(
 								tsconfig('tsconfig.bundle.json'),
 								file(`${outputDir}/index.bundle.js`).pipe(
-									minify(),
+									minify({ changePath: false }),
 								),
 							),
 						],

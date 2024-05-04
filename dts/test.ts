@@ -92,7 +92,7 @@ export default spec('dts', a => {
 
 	a.test('function - parameters', (a: TestApi) => {
 		const [fn] = parse(
-			'function fn(_a: boolean, b="test") { return true; }'
+			'function fn(_a: boolean, b="test") { return true; }',
 		);
 		a.equal(fn.name, 'fn');
 		a.assert(fn.parameters);
@@ -193,7 +193,7 @@ export default spec('dts', a => {
 			
 			abstract class M { abstract m1; }
 		`,
-			{ experimentalDecorators: true }
+			{ experimentalDecorators: true },
 		);
 
 		a.test('empty class', (a: TestApi) => {
@@ -363,7 +363,7 @@ export default spec('dts', a => {
 
 	a.test('export clause', (a: TestApi) => {
 		const [A, B] = parseExports(
-			`const A = 'test'; const B = false; export { A };`
+			`const A = 'test'; const B = false; export { A };`,
 		);
 		a.ok(!B);
 		a.ok(A);
@@ -733,7 +733,7 @@ function map<T>() {	return operator<T>(); }
 
 	a.test('object literal type', (a: TestApi) => {
 		const [A] = parse(
-			`const A: { children?(): void; b?: { nested: boolean } } = {}`
+			`const A: { children?(): void; b?: { nested: boolean } } = {}`,
 		);
 		a.assert(A.type);
 		a.assert(A.type.children);
@@ -753,7 +753,7 @@ function map<T>() {	return operator<T>(); }
 
 	a.test('object literal infered type', (a: TestApi) => {
 		const [fn] = parse(
-			`function fn(four: string) { return { one: 1, two: new Set(), three() {return true}, four, five: { nested: true } }; }`
+			`function fn(four: string) { return { one: 1, two: new Set(), three() {return true}, four, five: { nested: true } }; }`,
 		);
 		a.assert(fn.type);
 		a.equal(fn.type.kind, Kind.ObjectType);
@@ -787,7 +787,7 @@ function map<T>() {	return operator<T>(); }
 	}
 	/*@internal*/
 	export const D = "**/*";
-			`
+			`,
 		);
 		a.ok(!(A.flags & Flags.Internal));
 		a.ok(B.flags & Flags.Internal);
@@ -818,7 +818,7 @@ function map<T>() {	return operator<T>(); }
 
 	a.test('Duplicate symbols', (a: TestApi) => {
 		const [A, B] = parse(
-			`interface A {} declare var A: { prototype: A; new(): A }`
+			`interface A {} declare var A: { prototype: A; new(): A }`,
 		);
 		a.ok(A);
 		a.equal(B.type?.children?.[0].type?.type, A);
@@ -828,7 +828,7 @@ function map<T>() {	return operator<T>(); }
 	a.test('Merge namespace declarations', (a: TestApi) => {
 		const result = parse(
 			`declare namespace A { export type B = 1; }
-			 declare namespace A { export type C = string; }`
+			 declare namespace A { export type C = string; }`,
 		);
 		const [A] = result;
 		a.equal(A.kind, Kind.Namespace);
@@ -1003,7 +1003,7 @@ declare module "ns" {
 	});
 	a.test('interface extends class', (a: TestApi) => {
 		const [A, B] = parse(
-			`export class A<T> { m1?: boolean; } export interface A<T> { m2: string; }`
+			`export class A<T> { m1?: boolean; } export interface A<T> { m2: string; }`,
 		);
 		a.equal(A.kind, Kind.Class);
 		a.equal(B.kind, Kind.Interface);
@@ -1015,7 +1015,7 @@ declare module "ns" {
 
 	a.test('ReturnType', (a: TestApi) => {
 		const [I, A] = parse(
-			`interface I { m1: A }; type A = ReturnType<typeof fn>; function fn() { return { test: true } as const; }`
+			`interface I { m1: A }; type A = ReturnType<typeof fn>; function fn() { return { test: true } as const; }`,
 		);
 		a.assert(I.children);
 		const [m1] = I.children;
@@ -1025,7 +1025,7 @@ declare module "ns" {
 	a.test('EventAttribute', (a: TestApi) => {
 		const [I] = parse(
 			`class I { @EventAttribute() m1?: any }; function EventAttribute() { return (ctor: any)=> {} }`,
-			{ experimentalDecorators: true }
+			{ experimentalDecorators: true },
 		);
 		a.assert(I.children);
 		const [m1] = I.children;
@@ -1034,10 +1034,12 @@ declare module "ns" {
 	});
 
 	a.test('Resolved Type', a => {
-		const [, B, C, , D] = parse(
+		const [, B, C, , D, E] = parse(
 			`
 			type A = {a:string;b:string;c:string}; type B = keyof A; let C:B='c';
-			type D1 = keyof { a: string; b: string }; type D = D1 | 'c';`
+			type D1 = keyof { a: string; b: string }; type D = D1 | 'c';
+			let E: D;
+		`,
 		);
 		a.test('TypeAlias', (a: TestApi) => {
 			a.assert(D.resolvedType);
@@ -1051,11 +1053,15 @@ declare module "ns" {
 			a.equal(B.type.resolvedType.children?.length, 3);
 			a.equal(C.type?.type?.kind, B.kind);
 		});
+		a.test('Variable Type', (a: TestApi) => {
+			a.assert(E.type?.resolvedType);
+			a.equal(E.type.resolvedType.children?.length, 3);
+		});
 	});
 
 	a.test('Const destructuring', (a: TestApi) => {
 		const [A, B] = parse(
-			`const { a, b } = { a: true, b: 'string' }, c = 10`
+			`const { a, b } = { a: true, b: 'string' }, c = 10`,
 		);
 		a.assert(A.children);
 		const [a1, b1] = A.children;
@@ -1066,7 +1072,7 @@ declare module "ns" {
 
 	a.test('Type Types', (a: TestApi) => {
 		const [A] = parse(
-			`const A = [-1,2,"3",true,Symbol('symbol')] as const`
+			`const A = [-1,2,"3",true,Symbol('symbol')] as const`,
 		);
 		a.assert(A.type?.type?.children);
 		const [m1, m2, m3, m4, m5] = A.type.type.children;
@@ -1127,7 +1133,7 @@ export function B() {}
 			import * as D from "url"; export { D }
 			const e1=1; function E2() { } export { e1 as E, E2 }	
 		`,
-			{ types: ['node'] }
+			{ types: ['node'] },
 		);
 
 		a.test('import type', (a: TestApi) => {

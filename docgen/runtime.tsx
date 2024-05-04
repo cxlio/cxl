@@ -1,13 +1,13 @@
 ///<amd-module name="@cxl/docgen/runtime"/>
-import { dom } from '@cxl/tsx';
+import { dom } from '@cxl/ui/tsx';
 import '@cxl/ui/theme.js';
-import { Augment, Attribute, Component, Span, get } from '@cxl/component';
-import { onChildrenMutation, onLoad, onValue, requestJson } from '@cxl/dom';
-import { padding } from '@cxl/css';
-import { be } from '@cxl/rx';
+import { Augment, Attribute, Component, Span, get } from '@cxl/ui/component';
+import { onChildrenMutation, onLoad, onValue, requestJson } from '@cxl/ui/dom';
+import { padding } from '@cxl/ui/css';
+import { be } from '@cxl/ui/rx';
 import { SelectBox } from '@cxl/ui/select.js';
 import { Option } from '@cxl/ui/option.js';
-import { each, render } from '@cxl/template';
+import { each, render } from '@cxl/ui/template';
 import { AppbarSearch } from '@cxl/ui/appbar-search.js';
 import { C, Card } from '@cxl/ui/layout.js';
 import { A, RouterLink, RouterItem, routerState } from '@cxl/ui-router';
@@ -132,15 +132,6 @@ export class DocGrid extends Component {}
 )
 export class DocCard extends Component {}
 
-/*@Augment(
-	'doc-cd',
-	css({
-		$: { font: 'code', display: 'inline-block' },
-	}),
-	() => <slot />,
-)
-export class DocCode extends Component {}*/
-
 @Augment(
 	'doc-ct',
 	css({
@@ -244,7 +235,7 @@ export class DocHighlight extends Component {
 	const demo = (<BlogDemo />) as BlogDemo;
 	demo.header =
 		UserScripts +
-		'<style>body{padding:16px;background:var(--cxl-background);color:var(--cxl-on-background)}</style>';
+		'<style>body{padding:16px;background:var(--cxl-background);min-height:128px;color:var(--cxl-on-background)}</style>';
 
 	const src = new Text();
 	requestAnimationFrame(() => {

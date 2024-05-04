@@ -44,7 +44,7 @@ export function docs(dirName: string, devMode = false) {
 	return new Observable<any>(subs => {
 		const cmd = `node ${docgen} --clean ${
 			devMode ? '--debug' : ''
-		} -o ../docs/${dirName} --summary --cxlExtensions`;
+		} -o ../docs/${dirName} --summary --markdown --cxlExtensions`;
 		console.log(cmd);
 		sh(cmd).then(
 			out => (console.log(out), subs.complete()),
@@ -134,6 +134,7 @@ cd ${repodir} ${setup ? `&& ${setup}` : ''}`
 	const { description, version } = await readNpmPackage(pkg);
 	const sitemap = `${sitemapBase}/${name}/${version}/sitemap.xml`;
 	const outputDir = join(outDir, name);
+	console.log(cwd);
 
 	await run(
 		`node ${DOCGEN} ${files}`,

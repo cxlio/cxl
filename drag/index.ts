@@ -38,16 +38,6 @@ function findTouch(ev: TouchEvent, touchId: number) {
 		if (touch.identifier === touchId) return touch;
 }
 
-function onTouchEnd(touchId: number) {
-	return on(window, 'touchend').map(ev => findTouch(ev, touchId));
-}
-
-function onTouchMove(touchId: number) {
-	return on(window, 'touchmove', { passive: true }).map(ev =>
-		findTouch(ev, touchId),
-	);
-}
-
 function toEvent(type: 'start' | 'end' | 'move', ev: MouseEvent | Touch) {
 	(ev as unknown as CustomDragEvent).dragType = type;
 	return ev as unknown as CustomDragEvent;
@@ -74,46 +64,11 @@ function DragState() {
 
 const dragState = DragState();
 
-export function onTouchDrag({ element }: DragOptions) {
-	return on(element, 'touchstart').switchMap(ev => {
-		const touchId = getTouchId(ev);
-
-		if (touchId === undefined) return EMPTY;
-
-		ev.stopPropagation();
-
-		const style = element.style;
-		const { userSelect, transition, touchAction } = style;
-		style.userSelect = style.transition = 'none';
-		if (!touchAction) style.touchAction = 'none';
-
-		return new Observable<CustomDragEvent>(subscriber => {
-			const touch = findTouch(ev, touchId);
-			if (touch) subscriber.next(toEvent('start', touch));
-
-			const subscription = merge(
-				onTouchMove(touchId).tap(
-					ev => ev && subscriber.next(toEvent('move', ev)),
-				),
-				onTouchEnd(touchId).tap(ev => {
-					style.userSelect = userSelect;
-					style.transition = transition;
-					style.touchAction = touchAction;
-					if (ev) subscriber.next(toEvent('end', ev));
-					subscriber.complete();
-				}),
-			).subscribe();
-
-			return () => subscription.unsubscribe();
-		});
-	});
-}
-
 export function onTouchSwipe({
 	element,
 }: DragOptions): Observable<TouchGesture> {
 	let startTime: number, startX: number, startY: number;
-	return onTouchDrag({ element }).switchMap(ev => {
+	return touchEvents(element).switchMap(ev => {
 		if (ev.dragType === 'start') {
 			startX = ev.clientX;
 			startY = ev.clientY;
@@ -135,54 +90,143 @@ export function onTouchSwipe({
 	});
 }
 
-export function onMouseDrag({ element, target, delay }: DragOptions) {
-	let ready = false,
-		timeout = 0;
-	delay ??= 60;
-	const targetEl = target || element;
-	return on(element, 'mousedown').switchMap(ev => {
-		if (!ev.currentTarget) return EMPTY;
-
+function abstractDrag(
+	onEvent: (el: HTMLElement) => Observable<CustomDragEvent>,
+) {
+	return ({ element, target, delay }: DragOptions) => {
+		let ready = false,
+			timeout = 0;
+		delay ??= 60;
+		const targetEl = target || element;
 		const style = element.style;
-		style.userSelect = 'none';
-		const { userSelect, transition } = style;
-
-		ready = false;
-		ev.stopPropagation();
+		let { userSelect, transition } = style;
 
 		return new Observable<CustomDragEvent>(subscriber => {
-			timeout = setTimeout(() => {
-				style.transition = 'none';
-				ready = true;
-				subscriber.next(toEvent('start', ev));
-			}, delay) as unknown as number;
+			function endDrag(event: CustomDragEvent, drop = true) {
+				if (ready) {
+					ready = false;
+					style.transition = transition;
+					style.userSelect = userSelect;
+
+					subscriber.next(event);
+					delete dragState.elements.mouse;
+					dragState.next();
+					if (drop)
+						dragState.dropping.next({
+							element: targetEl,
+							event,
+						});
+				} else clearTimeout(timeout);
+				//subscriber.complete();
+			}
+
 			const subscription = merge(
-				on(window, 'mousemove').tap(ev => {
-					if (ready) {
-						const event = toEvent('move', ev);
-						subscriber.next(event);
-						dragState.elements.mouse = { element: targetEl, event };
-						dragState.next();
+				onEvent(element).tap(event => {
+					if (event.dragType === 'start') {
+						userSelect = style.userSelect;
+						transition = style.transition;
+
+						style.userSelect = 'none';
+						ready = false;
+
+						timeout = setTimeout(() => {
+							style.transition = 'none';
+							ready = true;
+							subscriber.next(event);
+						}, delay) as unknown as number;
+					} else if (event.dragType === 'move') {
+						if (ready) {
+							subscriber.next(event);
+							dragState.elements.mouse = {
+								element: targetEl,
+								event,
+							};
+							dragState.next();
+						}
+					} else {
+						// Allow click prevention to fire
+						setTimeout(() => endDrag(event));
 					}
 				}),
-				on(window, 'mouseup').tap(ev => {
-					if (ready) {
-						style.transition = transition;
-						const event = toEvent('end', ev);
-						subscriber.next(event);
-						delete dragState.elements.mouse;
-						dragState.next();
-						dragState.dropping.next({ element: targetEl, event });
-					} else clearTimeout(timeout);
-					style.userSelect = userSelect;
-					subscriber.complete();
+				on(element, 'click', { capture: true }).tap(ev => {
+					if (ready) ev.stopImmediatePropagation();
+				}),
+				on(window, 'keydown').tap(ev => {
+					if (ready && ev.key === 'Escape') {
+						ev.preventDefault();
+						endDrag(
+							{
+								dragType: 'end',
+								target: targetEl,
+								clientX: 0,
+								clientY: 0,
+							},
+							true,
+						);
+					}
 				}),
 			).subscribe();
 
 			return () => subscription.unsubscribe();
 		});
+	};
+}
+
+export function mouseEvents(element: HTMLElement) {
+	return on(element, 'mousedown').switchMap(ev => {
+		if (!ev.currentTarget) return EMPTY;
+		ev.preventDefault();
+		ev.stopPropagation();
+
+		return new Observable<CustomDragEvent>(sub => {
+			sub.next(toEvent('start', ev));
+			const subs = merge(
+				on(window, 'mousemove').tap(ev =>
+					sub.next(toEvent('move', ev)),
+				),
+				on(window, 'mouseup').tap(ev => {
+					subs.unsubscribe();
+					sub.next(toEvent('end', ev));
+				}),
+			).subscribe();
+			return () => subs.unsubscribe();
+		});
 	});
 }
+
+export function touchEvents(element: HTMLElement) {
+	return on(element, 'touchstart').switchMap(ev => {
+		const touchId = getTouchId(ev);
+		if (touchId === undefined) return EMPTY;
+
+		const touch = findTouch(ev, touchId);
+		if (!touch) return EMPTY;
+
+		ev.stopPropagation();
+		//ev.preventDefault();
+		if (!element.style.touchAction) element.style.touchAction = 'none';
+
+		return new Observable<CustomDragEvent>(sub => {
+			sub.next(toEvent('start', touch));
+			const inner = merge(
+				on(window, 'touchmove', { passive: true }).tap(ev => {
+					const touch = findTouch(ev, touchId);
+					if (touch) sub.next(toEvent('move', touch));
+				}),
+				on(window, 'touchend').tap(ev => {
+					const touch = findTouch(ev, touchId);
+					inner.unsubscribe();
+					if (touch) sub.next(toEvent('end', touch));
+				}),
+			).subscribe();
+
+			return () => inner.unsubscribe();
+		});
+	});
+}
+
+export const onMouseDrag = abstractDrag(mouseEvents);
+export const onTouchDrag = abstractDrag(touchEvents);
 
 export function onDrag(options: DragOptions) {
 	return merge(onTouchDrag(options), onMouseDrag(options));
@@ -269,7 +313,15 @@ function getStart(el: HTMLElement, event: DragLikeEvent) {
 	};
 }
 
-export function onDragMove({ element, target, axis }: DragMoveOptions) {
+export interface DragMoveEvent {
+	event: CustomDragEvent;
+	x: number;
+	y: number;
+	sx: number;
+	sy: number;
+}
+
+export function mapDragMove({ element, target, axis }: DragMoveOptions) {
 	let start:
 		| {
 				width: number;
@@ -281,10 +333,7 @@ export function onDragMove({ element, target, axis }: DragMoveOptions) {
 		  }
 		| undefined;
 	const targetEl = target || element;
-	return onDrag({
-		element,
-		target,
-	}).switchMap(event => {
+	return (event: CustomDragEvent) => {
 		if (event.dragType === 'start') start = getStart(targetEl, event);
 		else if (event.dragType === 'end') {
 			targetEl.style.transform = ``;
@@ -298,15 +347,23 @@ export function onDragMove({ element, target, axis }: DragMoveOptions) {
 			return of({ event, x, y, sx: start.sx, sy: start.sy });
 		}
 		return EMPTY;
-	});
+	};
 }
 
-export function dragMove(o: DragMoveOptions) {
-	return onDragMove(o).tap(({ x, y }) => {
+export function dragMoveApply(o: DragMoveOptions) {
+	return ({ x, y }: DragMoveEvent) => {
 		(o.target || o.element).style.transform = `translate(${x * 100}%, ${
 			y * 100
 		}%)`;
-	});
+	};
+}
+
+export function onDragMove(options: DragMoveOptions) {
+	return onDrag(options).switchMap(mapDragMove(options));
+}
+
+export function dragMove(o: DragMoveOptions) {
+	return onDragMove(o).tap(dragMoveApply(o));
 }
 
 export interface DragPositionInfo {
@@ -320,20 +377,6 @@ export function getDragPosition(element: HTMLElement, ev: DragLikeEvent) {
 		dragPositionX: ev.clientX - box.left > box.width / 2 ? 'right' : 'left',
 	};
 }
-
-/*export function dragPosition<T extends DragLikeEvent>({
-	element,
-}: {
-	element: HTMLElement;
-}) {
-	return map<T, T & DragPositionInfo>(ev => {
-		const box = element.getBoundingClientRect();
-		if (box.top < ev.clientY && box.bottom > ev.clientY)
-			(ev as unknown as DragPositionInfo).dragPositionY =
-				ev.clientY - box.top > box.height / 2 ? 'bottom' : 'top';
-		return ev as T & DragPositionInfo;
-	});
-}*/
 
 export function dragNative({ axis, element, target }: DragMoveOptions) {
 	element.draggable = true;

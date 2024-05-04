@@ -32,7 +32,6 @@ export type ComponentAttributeName<T> = keyof T;
 export interface AttributeEvent<T> {
 	target: T;
 	attribute: ComponentAttributeName<T>;
-	value: T[ComponentAttributeName<T>];
 }
 
 const registeredComponents: Record<string, typeof Component> = {};
@@ -237,7 +236,7 @@ export function attributeChanged<
 >(element: T, attribute: K) {
 	return (element.attributes$ as Subject<AttributeEvent<T>>).pipe(
 		filter(ev => ev.attribute === attribute),
-		map(ev => ev.value),
+		map(() => element[attribute]),
 	) as Observable<T[K]>;
 }
 
@@ -271,8 +270,8 @@ function getObservedAttributes(target: typeof Component) {
 }
 
 const attributeOperator = tap<AttributeEvent<Component>>(
-	({ value, target, attribute }) => {
-		setAttribute(target, attribute, value);
+	({ target, attribute }) => {
+		setAttribute(target, attribute, target[attribute]);
 	},
 );
 

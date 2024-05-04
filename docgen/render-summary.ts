@@ -31,6 +31,7 @@ function sortByName(a: Summary, b: Summary) {
 }
 
 function renderType(node: Node): string | Summary {
+	if (node.name === 'VimPlugin') console.log(node);
 	if (node.kind === Kind.Reference && node.type) node = node.type;
 	if (
 		node.kind !== Kind.ObjectType &&

@@ -486,15 +486,6 @@ function getNodeFromDeclaration(symbol: ts.Symbol, node: ts.Node): Node {
 		}
 
 		return createNode(node);
-		/*node[dtsNode] = result =
-			flags === 0 && isOwnFile(sourceFile)
-				? {
-						id: createNodeId(node),
-						flags,
-						name: '',
-						kind: Kind.Unknown,
-				  }
-				: createNode(node, { flags: flags });*/
 	}
 
 	return result;
@@ -612,14 +603,6 @@ function getResolvedType(type: ts.Type) {
 const comments = /<!--(.*?)-->/g;
 function processJsDoc(content: string) {
 	return content.replace(comments, '');
-	/*const result = [];
-	let m, lastIndex=0;
-	while (m=linkRegex.exec(content)) {
-		result.push({ value: content.slice(lastIndex, m.index)}, { tag: 'link', value: m[2] })
-		
-		lastIndex = m.index+m[0].length
-	}
-	return result.length ? result : content;*/
 }
 
 function parseJsDocComment(comment: ts.JSDoc['comment']) {
@@ -631,8 +614,6 @@ function parseJsDocComment(comment: ts.JSDoc['comment']) {
 			? {
 					tag: 'link',
 					value: `${n.name?.getText() || ''}${n.text}`,
-					//n.text ? `${n.name ? ' ' : ''}${n.text}` : ''
-					//}`,
 			  }
 			: { value: processJsDoc(n.text) },
 	);
@@ -1263,11 +1244,14 @@ function serializeReference(node: ts.TypeReferenceType) {
 	const name = getNodeName(
 		tsLocal.isTypeReferenceNode(node) ? node.typeName : node.expression,
 	);
+	if (type && !type.name) type.name = name;
+	const resolvedType = type && getResolvedType(typeObj);
 
 	return createNode(node, {
 		name,
 		kind: Kind.Reference,
 		type,
+		resolvedType,
 		typeParameters: node.typeArguments?.map(serialize),
 	});
 }
@@ -1565,21 +1549,6 @@ function setup(
 		host,
 	});
 	typeChecker = program.getTypeChecker();
-
-	/*const diagnostics = [
-		...program.getConfigFileParsingDiagnostics(),
-		...program.getSemanticDiagnostics(),
-		...program.getSyntacticDiagnostics(),
-		...program.getDeclarationDiagnostics(),
-		...program.getOptionsDiagnostics(),
-	];
-	if (diagnostics.length)
-		console.error(
-			tsLocal.formatDiagnosticsWithColorAndContext(
-				diagnostics,
-				parseConfigHost
-			)
-		);*/
 }
 
 /**

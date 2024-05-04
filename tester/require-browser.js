@@ -23,8 +23,14 @@
 			.then(res => (res.status === 200 ? res.text() : ''))
 			.then(__src => {
 				const mods = require.modules;
-				mods[moduleName] = __src ? appendScript(__src).exports : {};
-				return mods[moduleName];
+				const oldBase = require.base;
+				require.base = basename(url);
+				try {
+					mods[moduleName] = __src ? appendScript(__src).exports : {};
+					return mods[moduleName];
+				} finally {
+					require.base = oldBase;
+				}
 			});
 	}
 
@@ -36,8 +42,10 @@
 		if (require.replace) path = require.replace(path, require.base);
 		// Handle packages
 		if (path[0] !== '.' && path[0] !== '/') {
-			if (!mods[path]) return _import(path);
-			//throw new Error(`Module "${path}" not found.`);
+			if (!mods[path]) {
+				const url = new URL(path, require.base);
+				return _import(url.href);
+			}
 			return mods[path];
 		}
 		if (mods[path]) return mods[path];

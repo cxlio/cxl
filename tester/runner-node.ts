@@ -50,7 +50,6 @@ export default async function runNode(app: TestRunner) {
 	let result!: Test;
 
 	//process.setSourceMapsEnabled(true);
-	require('source-map-support').install();
 
 	if (app.ignoreCoverage) {
 		const suite = await runSuite(suitePath);

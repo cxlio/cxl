@@ -50,7 +50,7 @@
 				"tasks": "cd dts && npm run build"
 			},
 			"drag": {
-				"files": ["drag/index.ts"],
+				"files": ["drag/*"],
 				"tasks": "npm run build --prefix drag"
 			},
 			"glob": {

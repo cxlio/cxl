@@ -146,6 +146,8 @@ export function pipe(...operators: Operator<unknown>[]): Operator<unknown> {
 		operators.reduce((prev, fn) => fn(prev), source);
 }
 
+/*eslint @typescript-eslint/no-unsafe-declaration-merging:off */
+
 /**
  * A representation of any set of values over any amount of time.
  */
@@ -575,20 +577,22 @@ export function reduce<T, T2>(
 	});
 }
 
-export function debounceFunction<F extends Function>(fn: F, delay?: number) {
+export function debounceFunction<F extends (...args: any) => any>(
+	fn: F,
+	delay?: number,
+) {
 	/*eslint prefer-rest-params: off*/
-	/*eslint @typescript-eslint/ban-types: off*/
 	let to: number;
 	const result = function (this: unknown) {
 		if (to) clearTimeout(to);
 		to = setTimeout(() => {
-			fn.apply(this, arguments);
+			fn.apply(this, arguments as unknown as unknown[]);
 		}, delay) as unknown as number;
 	};
 
 	(result as unknown as { cancel(): void }).cancel = () => clearTimeout(to);
 
-	return result as unknown as F & { cancel(): void };
+	return result as ((...args: Parameters<F>) => void) & { cancel(): void };
 }
 
 export function interval(period: number) {

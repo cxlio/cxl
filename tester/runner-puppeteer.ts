@@ -93,7 +93,6 @@ function resolveImport(path: string) {
 
 async function handleRequest(sources: Output[], req: HTTPRequest) {
 	if (req.method() !== 'POST') return req.continue();
-
 	const url = new URL(req.url());
 	if (url.hostname !== 'cxl-tester') return req.continue();
 

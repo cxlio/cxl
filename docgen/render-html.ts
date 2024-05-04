@@ -671,11 +671,24 @@ function getMemberGroups(node: Node, indexOnly = false, sort = true) {
 		: result;
 }
 
+function isExcluded({ source }: Node) {
+	const exclude = application.exclude;
+	if (!exclude) return false;
+	if (source) {
+		const found = Array.isArray(source)
+			? source.find(s => exclude.includes(s.name))
+			: exclude.includes(source.name);
+		if (found) return true;
+	}
+
+	return false;
+}
+
 function MemberInherited(type: Node): string {
 	return (
 		type.children
 			?.map(c => {
-				if (!c.type) return '';
+				if (!c.type || isExcluded(c.type)) return '';
 				let result = '';
 				const kind = c.type.kind;
 
@@ -684,9 +697,9 @@ function MemberInherited(type: Node): string {
 						.map(MemberGroupIndex)
 						.join('');
 					if (result)
-						result = `<cxl-t h5>Inherited from ${Link(
-							c,
-						)}</cxl-t>${result}`;
+						result = `<cxl-t h5>${translate(
+							'Inherited from',
+						)} ${Link(c)}</cxl-t>${result}`;
 					if (c.type.type) result += MemberInherited(c.type.type);
 				}
 
@@ -1035,6 +1048,19 @@ function Markdown(content: string, inline = false, allowAllHtml = false) {
 		const html = tokens[idx].content;
 		return allowAllHtml || AllowedHtmlTags.test(html) ? html : escape(html);
 	};
+
+	rules.table_open = () => '<cxl-table>';
+	rules.table_close = () => '</cxl-table>';
+	//rules.thead_open = () => '<cxl-tr>';
+	//rules.thead_close = () => '</cxl-tr>';
+	rules.tr_open = () => '<cxl-tr>';
+	rules.tr_close = () => '</cxl-tr>';
+	rules.th_open = () => '<cxl-th>';
+	rules.th_close = () => '</cxl-th>';
+	rules.td_open = () => '<cxl-td>';
+	rules.td_close = () => '</cxl-td>';
+	rules.tbody_open = () => '<cxl-tbody>';
+	rules.tbody_close = () => '</cxl-tbody>';
 
 	return inline ? md.renderInline(content) : md.render(content);
 }

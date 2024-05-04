@@ -146,7 +146,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 	textAlign: string;
 	textDecoration: string;
 	textOverflow: 'ellipsis';
-	textTransform: 'uppercase' | 'none';
+	textTransform: 'uppercase' | 'capitalize' | 'none';
 	transition: string;
 	height: Length;
 	minHeight: Length | 'none';

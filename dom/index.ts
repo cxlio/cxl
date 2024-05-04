@@ -147,6 +147,12 @@ export function trigger(
 	el.dispatchEvent(ev);
 }
 
+export type AttributeMutationEvent<T extends EventTarget> = {
+	type: 'attribute';
+	target: T;
+	value: unknown;
+};
+
 export type MutationEvent<T extends EventTarget = EventTarget> =
 	| {
 			type: 'added' | 'removed';
@@ -154,12 +160,14 @@ export type MutationEvent<T extends EventTarget = EventTarget> =
 			value: Node;
 	  }
 	| {
-			type: 'attribute';
+			type: 'characterData';
 			target: T;
-			value: unknown;
-	  };
+	  }
+	| AttributeMutationEvent<T>;
 
-export class AttributeObserver extends Subject<MutationEvent> {
+export class AttributeObserver extends Subject<
+	AttributeMutationEvent<EventTarget>
+> {
 	observer?: MutationObserver;
 	bindings?: Subscription[];
 
@@ -397,7 +405,12 @@ export function onMutation(
 					subs.next({ type: 'added', target, value });
 				for (const value of ev.removedNodes)
 					subs.next({ type: 'removed', target, value });
-				if (ev.attributeName)
+				if (ev.type === 'characterData')
+					subs.next({
+						type: 'characterData',
+						target,
+					});
+				else if (ev.attributeName)
 					subs.next({
 						type: 'attribute',
 						target,

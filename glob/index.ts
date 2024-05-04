@@ -91,7 +91,6 @@ function globToRegexString(glob: string): string {
 				break;
 			case '\\':
 				if (la === '\\') reStr += '\\\\';
-				//reStr += `\\\\?\\${la}`;
 				else reStr += `\\${la}`;
 				i++;
 				isStartOfPath = false;

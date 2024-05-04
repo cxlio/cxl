@@ -98,6 +98,7 @@ interface AmdFunctions {
 		const args: unknown[] = [];
 
 		function resolve(newargs: unknown[]) {
+			const hasModule = !!window.module;
 			const mod = (window.module = {
 				exports: moduleExports,
 			});
@@ -105,6 +106,7 @@ interface AmdFunctions {
 			const resultMod = (modules[name] =
 				result || mod.exports || moduleExports);
 			delete modulePromise[name];
+			if (hasModule) delete window.module;
 			return resultMod;
 		}
 		function findModule(modname: string) {

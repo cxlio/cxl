@@ -21,76 +21,99 @@ export interface File {
 }
 
 const Parameters = {
-	repository: { type: 'string', help: 'Source code repository' },
-	clean: { help: 'Remove all files from output directory' },
-	outputDir: { short: 'o', type: 'string', help: 'Output directory' },
+	repository: {
+		type: 'string',
+		help: 'URL of the source code repository (e.g., GitHub repository URL)',
+	},
+	clean: {
+		help: 'Removes all existing files from the output directory before generating documentation.',
+	},
+	outputDir: {
+		short: 'o',
+		type: 'string',
+		help: 'Specifies the output directory where the generated documentation will be saved.',
+	},
 	scripts: {
 		type: 'string',
 		many: true,
-		help: 'Extra scripts to include in the documentation html output',
+		help: 'List of additional scripts (paths) to include in the generated documentation HTML.',
 	},
 	demoScripts: {
 		type: 'string',
 		many: true,
-		help: 'Scripts to include in the documentation demo output',
+		help: 'List of scripts (paths) to include in the generated documentation demo output.',
 	},
 	packageJson: {
-		help: 'Location of package.json. Defaults to ./package.json',
+		help: 'Path to the package.json file. Defaults to "./package.json" if not specified.',
 		type: 'string',
 	},
 	packageName: {
-		help: 'Documentation title. Defaults to package.json name.',
+		help: 'Sets the title of the generated documentation. Defaults to the name property in package.json.',
 		type: 'string',
 	},
 	summary: {
-		help: 'Render summary.json file',
+		help: 'Enables generation of a "summary.json" file.',
 		type: 'boolean',
 	},
 	sitemap: {
-		help: 'Generate sitemap with the value as base url',
+		help: 'Generates a sitemap for the documentation using the provided value as the base URL.',
 		type: 'string',
 	},
 	file: {
-		help: 'Parse a single file',
+		help: 'Allows parsing of a single file instead of an entire project.',
 		type: 'string',
 		many: true,
 	},
 	tsconfig: {
-		help: 'Location of tsconfig file to use. Defaults to ./tsconfig.json',
+		help: 'Path to the tsconfig.json file used for TypeScript compilation. Defaults to "./tsconfig.json" if not specified.',
 		type: 'string',
 	},
 	markdown: {
-		help: 'Enable markdown for symbol descriptions',
+		help: 'Enables rendering of markdown syntax within symbol descriptions.',
 		type: 'boolean',
 	},
-	typeRoots: { help: 'Type Roots', type: 'string', many: true },
-	docsJson: { help: 'Use docs.json file', type: 'string' },
-	baseHref: { help: 'Base href for markdown links', type: 'string' },
-	exclude: { help: 'Exclude modules', many: true, type: 'string' },
+	typeRoots: {
+		help: 'Specify additional type root directories (paths) for TypeScript projects (can be used multiple times).',
+		type: 'string',
+		many: true,
+	},
+	docsJson: {
+		help: 'Path to a custom "docs.json" file for configuring documentation generation.',
+		type: 'string',
+	},
+	baseHref: {
+		help: 'Sets the base URL for markdown links within the generated documentation.',
+		type: 'string',
+	},
+	exclude: {
+		help: 'List of modules (paths) to exclude from documentation generation (can be used multiple times).',
+		type: 'string',
+		many: true,
+	},
 	rootDir: {
-		help: 'Override root directory for typescript project file names',
+		help: 'Overrides the default root directory used for resolving TypeScript project file names.',
 		type: 'string',
 	},
 	customJsDocTags: {
-		help: 'Declare custom jsdoc tags',
+		help: 'Allows declaration of custom jsdoc tags for documentation (can be used multiple times).',
 		type: 'string',
 		many: true,
 	},
 	cxlExtensions: {
-		help: 'Enable Coaxial UI extensions',
+		help: 'Enables support for Coaxial UI extensions within the generated documentation.',
 		type: 'boolean',
 	},
 	exports: {
-		help: 'Treat symbol as exported',
+		help: 'Treats specific symbols (paths) as exported even if not explicitly marked.',
 		type: 'string',
 		many: true,
 	},
 	followReferences: {
-		help: 'Include documentation from project references symbols',
+		help: 'Includes documentation from symbols referenced in project references.',
 		type: 'boolean',
 	},
 	headHtml: {
-		help: 'File name used to add content to the <head> element of the generated page',
+		help: 'Path to a file containing custom HTML to be added to the `<head>` element of the generated page.',
 		type: 'string',
 	},
 } as const;
@@ -191,7 +214,7 @@ program({}, async ({ log }) => {
 					files: args.file,
 				},
 				process.cwd(),
-				dtsOptions
+				dtsOptions,
 		  )
 		: build(args.tsconfig, dtsOptions);
 	log(`Typescript ${json.env.typescript}`);
@@ -210,7 +233,7 @@ program({}, async ({ log }) => {
 
 	try {
 		await Promise.all(
-			theme.render(docgenConfig, json).map(f => writeFile(f))
+			theme.render(docgenConfig, json).map(f => writeFile(f)),
 		);
 	} catch (e) {
 		console.error(e);

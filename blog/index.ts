@@ -96,16 +96,13 @@ const FenceHandler: Record<
 
 		return meta.tags ? `<blog-tags>${meta.tags}</blog-tags>` : '';
 	},
-	example(content: string) {
-		return `<blog-example><!--${content}--></blog-example>`;
-	},
 };
 
-function cxlDemo(info: string, content: string) {
+function cxlDemo(info: string, content: string, type = 'demo') {
 	const [, libraries] = info.split(':');
-	return `<blog-demo${
+	return `<blog-${type}${
 		libraries ? ` libraries="${libraries}"` : ''
-	}><!--${content}--></blog-demo>`;
+	}><!--${content}--></blog-${type}>`;
 }
 
 export function renderMarkdown(source: string, config?: BlogConfig) {
@@ -125,17 +122,19 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 
 	rules.heading_open = (tokens, idx) => {
 		const tag = tokens[idx].tag as keyof typeof map;
-		return tag === 'h1' ? `<blog-title>` : `<cxl-t ${map[tag]}>`;
+		return tag === 'h1' ? `<blog-title>` : `<${tag}>`;
 	};
 	rules.heading_close = (tokens, idx) => {
 		const tag = tokens[idx].tag;
-		return tag === 'h1' ? `</blog-title>` : `</cxl-t>`;
+		return tag === 'h1' ? `</blog-title>` : `</${tag}>`;
 	};
 	rules.code_block = (tokens, idx) => highlight(tokens[idx].content);
 	rules.fence = (tokens, idx) => {
 		const token = tokens[idx];
 		const info = token.info;
 		if (info.startsWith('demo')) return cxlDemo(info, token.content);
+		if (info.startsWith('example'))
+			return cxlDemo(info, token.content, 'example');
 
 		const handler = FenceHandler[token.info];
 		return handler
