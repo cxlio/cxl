@@ -13,7 +13,7 @@
 	}
 	function normalizePath(basePath) {
 		let href = require.href || location.href;
-		if (href === 'about:srcdoc') href = top.location.href;
+		if (href === 'about:srcdoc') href = 'http://localhost'; //top.location.href;
 		const a = new URL(basePath, href);
 		return a.href;
 	}

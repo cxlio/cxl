@@ -114,7 +114,8 @@ export abstract class Component extends HTMLElement {
 	protected connectedCallback() {
 		const render = this.render;
 		if (render) {
-			(this.render as undefined) = undefined;
+			(this.render as ((node: HTMLElement) => void) | undefined) =
+				undefined;
 			render(this);
 			if (this.$$prebind) this.$$prebind.forEach(b => this.bind(b));
 		}

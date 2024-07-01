@@ -198,6 +198,7 @@ export function bundle(
 		config.options.outFile = outFile;
 		config.options.rootDir ||= resolve('../..');
 		config.options.baseDir ||= process.cwd();
+		if (amd) config.options.allowJs = true;
 
 		const rootNames = Array.from(result);
 		const program = ts.createProgram(rootNames, config.options, host);

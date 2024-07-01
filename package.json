@@ -4,14 +4,14 @@
 	"version": "0.0.0",
 	"homepage": "https://cxlio.github.io/cxl",
 	"devDependencies": {
-		"@types/codemirror": "^5.60.2",
+		"@types/codemirror": "^5.60.15",
 		"@types/eslint": "^7.2.0",
 		"@types/markdown-it": "^12.2.3",
-		"@types/node": "^18.15.0",
+		"@types/node": "^20.14.9",
 		"@types/pngjs": "^3.4.2",
 		"@typescript-eslint/eslint-plugin": "^6.19.0",
 		"@typescript-eslint/parser": "^6.19.0",
-		"codemirror": "^5.62.2",
+		"codemirror": "^5.65.16",
 		"eslint": "^8.56.0",
 		"highlight.js": "^11.7.0",
 		"markdown-it": "^12.3.2",
@@ -19,7 +19,7 @@
 		"puppeteer": "~13.5.1",
 		"source-map": "^0.7.3",
 		"terser": "^5.16.1",
-		"typescript": "^4.9.5"
+		"typescript": "^5.5.3"
 	},
 	"scripts": {
 		"build": "node scripts/build-all.js && node scripts/build-readme",

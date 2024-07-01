@@ -27,6 +27,7 @@ export interface Meta {
 	href?: string;
 	summary?: string;
 	tags?: string;
+	tweet?: string;
 }
 
 export interface Post {
@@ -94,7 +95,7 @@ const FenceHandler: Record<
 			meta[m[1] as keyof Meta] = getMetaValue(m[1] as keyof Meta, m[2]);
 		}
 
-		return meta.tags ? `<blog-tags>${meta.tags}</blog-tags>` : '';
+		return meta.tags ? `<cxl-blog-tags>${meta.tags}</cxl-blog-tags>` : '';
 	},
 };
 
@@ -186,6 +187,7 @@ function Html(_url: string, content: string, stat: Stats): Post {
 		meta.summary ||
 		content.match(SUMMARY_REGEX)?.[1] ||
 		'';
+	const type = meta.type || 'post';
 	return {
 		id: getPostId(title),
 		title,
@@ -195,7 +197,7 @@ function Html(_url: string, content: string, stat: Stats): Post {
 		uuid: meta.uuid || '',
 		mtime: stat.mtime.toISOString(),
 		author: meta.author || '',
-		type: meta.type || 'post',
+		type,
 		tags,
 		href: meta.href,
 		content,
@@ -206,10 +208,24 @@ async function buildPosts(config: BlogConfig, posts: Post[]) {
 	const HEADER = config.headerTemplate
 		? await readFile(config.headerTemplate)
 		: '';
-	return posts.map(p => ({
-		path: `${p.id}.html`,
-		source: Buffer.from(`${HEADER}${p.content}`),
-	}));
+	return posts.flatMap(p => {
+		const source = Buffer.from(`${HEADER}${p.content}`);
+		return p.uuid
+			? [
+					{
+						path: `${p.id}.html`,
+						source,
+					},
+					{
+						path: `${p.uuid}.html`,
+						source,
+					},
+			  ]
+			: {
+					path: `${p.id}.html`,
+					source,
+			  };
+	});
 }
 
 async function build(config: BlogConfig): Promise<Output[]> {
@@ -268,6 +284,10 @@ async function build(config: BlogConfig): Promise<Output[]> {
 			if (a.tags)
 				for (const tag of a.tags.split(' '))
 					if (!typeTags.includes(tag)) typeTags.push(tag);
+
+			if (a.type === 'post' && !a.uuid)
+				throw new Error(`Post "${a.title}" does not contain a uuid`);
+
 			types.add(a.type);
 		});
 

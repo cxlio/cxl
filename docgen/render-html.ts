@@ -937,7 +937,7 @@ function Header(scripts: File[]) {
 	<cxl-application permanent><title>${title} API Reference</title><cxl-appbar center>
 	${Navbar(pkg)}
 	<doc-search></doc-search>
-	<cxl-theme-toggle-icon title="Dark theme toggle" theme="@cxl/ui/theme-dark.js" persistkey="cxl.ui-demo.theme"></cxl-theme-toggle-icon>
+	<cxl-theme-toggle-icon title="Dark theme toggle" darktheme="@cxl/ui/theme-dark.js" persistkey="cxl.ui-demo.theme"></cxl-theme-toggle-icon>
 	</cxl-appbar><cxl-page center><link id="styles.css" rel="stylesheet" href="styles.css" /><script src="highlight.js"></script>`;
 }
 

@@ -303,6 +303,7 @@ export default spec('dts', a => {
 			a.equal(I.children.length, 5);
 
 			const [m1, m2, m3, m4, m5] = I.children;
+			console.log(m1);
 			a.ok(m1.flags & Flags.Public);
 			a.ok(m2.flags & Flags.Public);
 			a.ok(m3.flags & Flags.Public);

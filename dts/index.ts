@@ -6,8 +6,7 @@ const tsPath = require.resolve('typescript', {
 	paths: ['.', __dirname],
 });
 const tsLocal = require(tsPath) as typeof import('typescript');
-const { ModifierFlags, getParsedCommandLineOfConfigFile, NodeFlags, sys } =
-	tsLocal;
+const { getParsedCommandLineOfConfigFile, NodeFlags, sys } = tsLocal;
 
 const SK = tsLocal.SyntaxKind;
 const TF = tsLocal.TypeFlags;
@@ -23,6 +22,7 @@ declare module 'typescript' {
 
 	interface Symbol {
 		$$moduleResult?: dtsNode;
+		$$fqn?: string;
 	}
 }
 
@@ -480,8 +480,8 @@ function getNodeFromDeclaration(symbol: ts.Symbol, node: ts.Node): Node {
 			sourceFile.isDeclarationFile &&
 			symbol
 		) {
-			const externalNode =
-				exportIndex[typeChecker.getFullyQualifiedName(symbol)];
+			const fqn = getSymbolFullyQualifiedName(symbol);
+			const externalNode = exportIndex[fqn];
 			if (externalNode?.source) return externalNode;
 		}
 
@@ -548,6 +548,9 @@ function getDeclarationFlags(node: ts.Declaration, flags: ts.ModifierFlags) {
 	if (flags & tsFlags.Default) result |= Flags.Default;
 	if (flags & tsFlags.Deprecated) result |= Flags.Deprecated;
 
+	if (isClassMember(node) && !(result & (Flags.Private | Flags.Protected)))
+		result |= Flags.Public;
+
 	return result;
 }
 
@@ -568,11 +571,11 @@ function getFlags(node: ts.Node) {
 			result |= Flags.External;
 	}
 
-	if (
+	/*if (
 		isClassMember(node) &&
 		!(result & (ModifierFlags.Private | ModifierFlags.Protected))
 	)
-		result |= ModifierFlags.Public;
+		result |= ModifierFlags.Public;*/
 
 	return result;
 }
@@ -1113,6 +1116,10 @@ function findSymbolOriginalFileNode(symbol: ts.Symbol) {
 	return sf ? moduleMap[sf] : undefined;
 }
 
+function getSymbolFullyQualifiedName(symbol: ts.Symbol) {
+	return (symbol.$$fqn ??= typeChecker.getFullyQualifiedName(symbol));
+}
+
 function findExport(symbol?: ts.Symbol) {
 	if (!symbol) return;
 
@@ -1126,8 +1133,7 @@ function findExport(symbol?: ts.Symbol) {
 		}
 	}
 
-	const existing =
-		symbol && exportIndex[typeChecker.getFullyQualifiedName(symbol)];
+	const existing = symbol && exportIndex[getSymbolFullyQualifiedName(symbol)];
 	return existing?.source ? existing : undefined;
 }
 
@@ -1245,7 +1251,10 @@ function serializeReference(node: ts.TypeReferenceType) {
 		tsLocal.isTypeReferenceNode(node) ? node.typeName : node.expression,
 	);
 	if (type && !type.name) type.name = name;
-	const resolvedType = type && getResolvedType(typeObj);
+	const resolvedType =
+		type && decl && tsLocal.isTypeAliasDeclaration(decl)
+			? getResolvedType(typeObj)
+			: undefined;
 
 	return createNode(node, {
 		name,
@@ -1500,7 +1509,6 @@ const Serializer: SerializerMap = {
 
 	[SK.PropertySignature]: serializeDeclarationWithType,
 	[SK.Constructor]: serializeConstructor,
-	[SK.PropertySignature]: serializeDeclarationWithType,
 	[SK.Parameter]: serializeDeclarationWithType,
 	[SK.PropertyDeclaration]: serializeDeclarationWithType,
 	[SK.MethodDeclaration]: serializeFunction,
@@ -1633,12 +1641,13 @@ function collectExports(symbol: ts.Symbol) {
 			node?.[dtsNode]?.source &&
 			!(node[dtsNode].flags & Flags.Internal)
 		) {
-			exportIndex[typeChecker.getFullyQualifiedName(s)] = node[dtsNode];
+			exportIndex[getSymbolFullyQualifiedName(s)] = node[dtsNode];
 		}
 	});
 }
 
 function parseSourceFile(sourceFile: ts.SourceFile) {
+	if (moduleMap[sourceFile.fileName]) return moduleMap[sourceFile.fileName];
 	const result = createNode(sourceFile);
 
 	moduleMap[sourceFile.fileName] = result;

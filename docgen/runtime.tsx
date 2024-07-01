@@ -1,6 +1,5 @@
 ///<amd-module name="@cxl/docgen/runtime"/>
 import { dom } from '@cxl/ui/tsx';
-import '@cxl/ui/theme.js';
 import { Augment, Attribute, Component, Span, get } from '@cxl/ui/component';
 import { onChildrenMutation, onLoad, onValue, requestJson } from '@cxl/ui/dom';
 import { padding } from '@cxl/ui/css';
@@ -15,8 +14,8 @@ import { css } from '@cxl/ui/theme.js';
 import { BlogDemo } from '@cxl/ui/blog.js';
 import { Autocomplete } from '@cxl/ui/autocomplete.js';
 import { ToggleSwitch } from '@cxl/ui/toggle.js';
-import { IconButton } from '@cxl/ui/icon.js';
-import { breakpointKey } from '@cxl/ui/core.js';
+import { IconButton } from '@cxl/ui/icon-button.js';
+import { breakpoint } from '@cxl/ui/core.js';
 import '@cxl/ui/avatar.js';
 import '@cxl/ui/chip.js';
 import '@cxl/ui/application.js';
@@ -316,7 +315,7 @@ export class DocLink extends A {}
 
 		const card = (
 			<Autocomplete
-				input={breakpointKey($).map(bp =>
+				input={breakpoint($).map(bp =>
 					bp === 'xsmall' ? search.mobileInput : search.desktopInput,
 				)}
 			>
