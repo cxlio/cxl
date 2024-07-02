@@ -18,6 +18,7 @@ const tsPath = require.resolve('typescript', {
 });
 const ts = require(tsPath) as typeof import('typescript');
 const sys = ts.sys;
+const AMD = require('fs').readFileSync(__dirname + '/amd.js');
 
 const parseConfigHost: ParseConfigFileHost = {
 	useCaseSensitiveFileNames: true,
@@ -78,7 +79,7 @@ function getBuilder(
 		};
 	}
 	const builder = ts.createSolutionBuilder(host, [tsconfig], defaultOptions);
-	return { outputDir, builder };
+	return { outputDir, builder, options };
 }
 
 export function tsbuild(
@@ -87,11 +88,18 @@ export function tsbuild(
 	defaultOptions: BuildOptions = { module: ts.ModuleKind.CommonJS },
 	outDir?: string,
 ) {
-	const { outputDir, builder } = getBuilder(tsconfig, defaultOptions);
+	const { options, outputDir, builder } = getBuilder(
+		tsconfig,
+		defaultOptions,
+	);
 	let program: InvalidatedProject<any> | undefined;
 
 	function writeFile(name: string, source: string) {
 		name = relative(outDir || outputDir, name);
+		const refs = options.projectReferences?.[0];
+		if (refs?.path.endsWith('/cxl/amd/tsconfig.amd.json') && refs.prepend) {
+			source = AMD + source;
+		}
 		subs.next({ path: name, source: Buffer.from(source) });
 	}
 

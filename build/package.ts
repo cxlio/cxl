@@ -381,6 +381,27 @@ export function bundle(
 	});
 }
 
+export function bundleAmd(files: Record<string, string>, outFile: string) {
+	return new Observable<Output>(subs => {
+		const result: string[] = [];
+		const moduleNames = Object.keys(files);
+		const resolvedFiles = Object.values(files);
+		Promise.all(resolvedFiles.map(f => promises.readFile(f, 'utf8'))).then(
+			content => {
+				moduleNames.forEach((mod, i) => {
+					result.push(
+						`define("${mod}", ["require", "exports"], function (require, exports) {\n${content[i]}\n})`,
+					);
+				});
+				subs.next({
+					path: outFile,
+					source: Buffer.from(result.join('\n')),
+				});
+			},
+		);
+	});
+}
+
 export const REQUIRE_REPLACE = `
 	require.replace = function (path) {
 		return path.replace(

@@ -20,6 +20,7 @@ export {
 	pkg,
 	readme,
 	bundle,
+	bundleAmd,
 	template,
 	docgen,
 	docgenTask,

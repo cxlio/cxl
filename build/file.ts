@@ -59,6 +59,10 @@ export function basename(replace?: string) {
 	);
 }
 
+/*export function prepend(src: string) {
+	return tap(out => out.source = Buffer.from(src + out.source.toString('utf8'))); 
+}*/
+
 export function concatFile(outName: string, separator = '\n') {
 	return pipe(
 		reduce<Output, string>(
