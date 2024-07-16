@@ -1,6 +1,13 @@
 ///<amd-module name="@cxl/glob"/>
 
-function globToRegexString(glob: string): string {
+interface Options {
+	/**
+	 * Perform a basename-only match.
+	 */
+	matchBase?: boolean;
+}
+
+function globToRegexString(glob: string, { matchBase }: Options = {}): string {
 	const len = glob.length;
 	let reStr = '';
 	let inGroup = 0;
@@ -273,14 +280,17 @@ function globToRegexString(glob: string): string {
 		}
 	}
 
-	return `^${reStr}/?$`;
+	return `${matchBase ? '' : '^'}${reStr}/?$`;
 }
 
-export function globToRegex(glob: string | readonly string[]) {
+export function globToRegex(
+	glob: string | readonly string[],
+	options?: Options,
+) {
 	const reStr =
 		typeof glob === 'string'
-			? globToRegexString(glob)
-			: `(?:${glob.map(globToRegexString).join('|')})`;
+			? globToRegexString(glob, options)
+			: `(?:${glob.map(g => globToRegexString(g, options)).join('|')})`;
 
 	try {
 		return new RegExp(reStr);
