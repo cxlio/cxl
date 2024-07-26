@@ -181,7 +181,7 @@ async function generateCoverage(
 	return coverage.map(entry => {
 		const sourceFile = sources.find(src => entry.text.includes(src.source));
 		return {
-			url: sourceFile?.path || entry.url,
+			url: sourceFile?.path ? resolve(sourceFile?.path) : entry.url,
 			functions: [
 				{
 					functionName: '',
