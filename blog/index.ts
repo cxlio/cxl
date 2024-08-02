@@ -31,7 +31,7 @@ export interface Meta {
 }
 
 export interface Post {
-	uuid: string;
+	uuid?: string;
 	id: string;
 	title: string;
 	date: string;
@@ -174,7 +174,11 @@ function parseMeta(content: string) {
 }
 
 function getPostId(title: string) {
-	return title.replace(/[ /]/g, '-').toLowerCase();
+	return title
+		.replace(/^[^\w]+/g, '')
+		.replace(/[^\w]+$/g, '')
+		.replace(/[^\w]+/g, '-')
+		.toLowerCase();
 }
 
 function Html(_url: string, content: string, stat: Stats): Post {
@@ -188,6 +192,7 @@ function Html(_url: string, content: string, stat: Stats): Post {
 		content.match(SUMMARY_REGEX)?.[1] ||
 		'';
 	const type = meta.type || 'post';
+
 	return {
 		id: getPostId(title),
 		title,
@@ -228,12 +233,21 @@ async function buildPosts(config: BlogConfig, posts: Post[]) {
 	});
 }
 
+const uuids: string[] = [];
+
 async function build(config: BlogConfig): Promise<Output[]> {
 	function Markdown(url: string, source: string, stats: Stats) {
 		const { meta, content } = renderMarkdown(source, config);
 		const title =
 			source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
 		const summary = meta.summary || content.match(SUMMARY_REGEX)?.[1] || '';
+		const uuid = meta.uuid;
+
+		if (meta.type === 'post') {
+			if (!uuid) throw `Invalid UUID: ${title}`;
+			if (uuids.includes(uuid)) throw `UUID Collision: ${title}`;
+			uuids.push(uuid);
+		}
 
 		return {
 			id: getPostId(title),
@@ -241,7 +255,7 @@ async function build(config: BlogConfig): Promise<Output[]> {
 			summary,
 			date: meta.date || stats.mtime.toISOString(),
 			version: meta.version,
-			uuid: meta.uuid || '',
+			uuid,
 			mtime: stats.mtime.toISOString(),
 			author: meta.author || '',
 			type: meta.type || (meta.date ? 'post' : 'draft'),
