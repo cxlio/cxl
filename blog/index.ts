@@ -27,7 +27,7 @@ export interface Meta {
 	href?: string;
 	summary?: string;
 	tags?: string;
-	tweet?: string;
+	threadId?: string;
 }
 
 export interface Post {
@@ -156,7 +156,13 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 	rules.tbody_open = () => '<cxl-tbody>';
 	rules.tbody_close = () => '</cxl-tbody>';
 
-	return { meta, content: md.render(source) };
+	const content =
+		md.render(source) +
+		(meta.threadId
+			? `<blog-social threadid="${meta.threadId}"></blog-social>`
+			: '');
+
+	return { meta, content };
 }
 
 function parseMeta(content: string) {

@@ -12,7 +12,7 @@ export {
 	zip,
 } from './file.js';
 export { concat } from '@cxl/rx';
-export { mkdirp, sh } from '@cxl/program';
+export { mkdirp, sh, readJson } from '@cxl/program';
 export { Output } from '@cxl/source';
 export {
 	AMD,

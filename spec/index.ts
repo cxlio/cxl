@@ -287,22 +287,30 @@ export class TestApi {
 		});
 	}
 
-	testEvent<T extends HTMLElement>(
-		el: T,
-		name: string,
-		trigger: (el: T) => void,
-		testName = `on${name}`,
-	) {
-		this.test(testName, a => {
+	testEvent<T extends HTMLElement>({
+		element,
+		eventName,
+		trigger,
+		unsubscribe,
+		testName,
+	}: {
+		element: T;
+		eventName: string;
+		trigger: (el: T) => void;
+		unsubscribe?: boolean;
+		testName?: string;
+	}) {
+		this.test(testName || `on${eventName}`, a => {
 			const resolve = a.async();
 			function handler(ev: Event) {
-				a.equal(ev.type, name, `"${name}" event fired`);
-				a.equal(ev.target, el);
-				el.removeEventListener(name, handler);
+				a.equal(ev.type, eventName, `"${eventName}" event fired`);
+				a.equal(ev.target, element);
+				if (unsubscribe)
+					element.removeEventListener(eventName, handler);
 				resolve();
 			}
-			el.addEventListener(name, handler);
-			trigger(el);
+			element.addEventListener(eventName, handler);
+			trigger(element);
 		});
 	}
 
