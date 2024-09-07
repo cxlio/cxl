@@ -4,7 +4,7 @@
 	"description": "Testing Library",
 	"license": "Apache-2.0",
 	"dependencies": {
-		"@cxl/rx": "~0.2.0"
+		"@cxl/rx": "~0.8.0"
 	},
 	"scripts": {
 		"build": "node ../dist/build",
