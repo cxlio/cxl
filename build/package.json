@@ -15,10 +15,10 @@
 		"test": "npm run build && cd ../dist/build && node ../tester --node"
 	},
 	"dependencies": {
-		"eslint": "^8.11.0",
+		"eslint": "^8.56.0",
 		"terser": "^5.16.1",
-		"typescript": "^4.6.4",
-		"@cxl/rx": "~0.7.0",
+		"typescript": "^5.5.3",
+		"@cxl/rx": "~0.8.0",
 		"@cxl/source": "~0.0.2",
 		"@cxl/amd": "~0.0.1",
 		"@cxl/program": "~0.0.3"
