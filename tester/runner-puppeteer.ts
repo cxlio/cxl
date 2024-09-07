@@ -1,7 +1,7 @@
 import { Browser, CoverageEntry, Page, HTTPRequest } from 'puppeteer';
 import * as puppeteer from 'puppeteer';
 import { readFile, writeFile, mkdir } from 'fs/promises';
-import { dirname, resolve } from 'path';
+import { dirname, resolve, join } from 'path';
 import type { FigureData, Test, Result } from '@cxl/spec';
 import type { TestRunner } from './index.js';
 import type { PNG } from 'pngjs';
@@ -31,7 +31,7 @@ function handleConsole(msg: puppeteer.ConsoleMessage, app: TestRunner) {
 }
 
 async function openPage(browser: Browser) {
-	const context = await browser.createIncognitoBrowserContext();
+	const context = await browser.createBrowserContext();
 	return await context.newPage();
 }
 
@@ -126,6 +126,54 @@ async function amdRunner(page: Page, sources: Output[]) {
 		})
 		suite.run().then(() => suite);
 	`) as Promise<Test>);
+}
+
+async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
+	const entry = sources[0].path;
+	app.log(`Running in mjs mode`);
+	await page.setRequestInterception(true);
+	page.on('request', async (req: HTTPRequest) => {
+		try {
+			const url = new URL(req.url());
+			if (req.method() === 'GET' && url.hostname === 'cxl-tester') {
+				const pathname = url.pathname.startsWith('/@cxl/')
+					? `../../node_modules/${url.pathname.slice(1)}/mjs/index.js`
+					: join(process.cwd(), url.pathname);
+
+				const body =
+					url.pathname === '/'
+						? ''
+						: await readFile(pathname, 'utf8');
+
+				req.respond({
+					status: 200,
+					contentType: pathname.endsWith('.js')
+						? 'application/javascript'
+						: 'text/plain',
+					body,
+				});
+			}
+		} catch (e) {
+			app.log(`Error handling request ${req.method()} ${req.url()}`);
+		}
+	});
+	await page.goto('https://cxl-tester');
+	await page.addScriptTag({
+		type: 'importmap',
+		content: `{
+    "imports": {
+		"@cxl/": "https://cxl-tester/@cxl/"
+    }
+  }`,
+	});
+
+	return page.evaluate(
+		`(async entry => {
+		const r = (await import(entry)).default;
+		await r.run();
+		return r.toJSON();
+	})('${entry}')`,
+	) as Promise<Test>;
 }
 
 async function cjsRunner(page: Page, sources: Output[], app: TestRunner) {
@@ -324,7 +372,7 @@ export default async function runPuppeteer(app: TestRunner) {
 
 	const page = await openPage(browser);
 
-	if (app.startServer) await page.waitForTimeout(500);
+	//if (app.startServer) await page.waitForTimeout(500);
 	if (app.browserUrl) await page.goto(app.browserUrl);
 
 	function cxlRunner(cmd: FigureData): Promise<Result> | Result {
@@ -356,6 +404,8 @@ export default async function runPuppeteer(app: TestRunner) {
 
 	const suite = app.amd
 		? await amdRunner(page, sources)
+		: app.mjs
+		? await mjsRunner(page, sources, app)
 		: await cjsRunner(page, sources, app);
 	if (!suite) throw new Error('Invalid suite');
 

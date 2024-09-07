@@ -1,6 +1,6 @@
 {
 	"name": "@cxl/tester",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"bin": {
 		"cxl-tester": "index.js"
 	},
@@ -11,7 +11,7 @@
 		"test": "npm run build && cd ../dist/tester && node ../tester --node"
 	},
 	"dependencies": {
-		"puppeteer": "~13.5.1",
+		"puppeteer": "^23.3.0",
 		"source-map": "^0.7.3",
 		"pngjs": "^6.0.0",
 		"@cxl/rx": "~0.8.0",

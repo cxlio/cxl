@@ -15,6 +15,7 @@ export interface TestRunner {
 	baselinePath?: string;
 	browserUrl?: string;
 	amd: boolean;
+	mjs: boolean;
 	node: boolean;
 	firefox: boolean;
 	log: Logger;
@@ -30,6 +31,7 @@ const parameters = {
 	baselinePath: { type: 'string', help: 'Baseline Path' },
 	updateBaselines: { help: 'Update baselines' },
 	ignoreCoverage: { help: 'Disable coverage report.' },
+	mjs: { help: 'Enable ES modules mode' },
 	inspect: { help: 'Enable node debugger' },
 	browserUrl: { type: 'string', help: 'Browser runner initial URL' },
 	startServer: {
@@ -53,6 +55,7 @@ export default program({}, async ({ log }) => {
 		updateBaselines: false,
 		ignoreCoverage: false,
 		amd: false,
+		mjs: false,
 		node: false,
 		firefox: false,
 		log,
