@@ -27,5 +27,5 @@ Collection of Libraries and Tools
 | @cxl/source          | [0.0.2](https://npmjs.com/package/@cxl/source/v/0.0.2) | GPL-3.0    | Source file management library | [Docs](https://cxlio.github.io/cxl/source/0.0.2) |
 | @cxl/spec            | [0.3.1](https://npmjs.com/package/@cxl/spec/v/0.3.1) | Apache-2.0 | Testing Library | [Docs](https://cxlio.github.io/cxl/spec/0.3.1) |
 | @cxl/template        | 1.0.0 | GPL-3.0    | Reactive template library | [Docs](https://cxlio.github.io/cxl/template/1.0.0) |
-| @cxl/tester          | [0.1.1](https://npmjs.com/package/@cxl/tester/v/0.1.1) | GPL-3.0    | Test runner tool | [Docs](https://cxlio.github.io/cxl/tester/0.1.1) |
+| @cxl/tester          | [0.1.2](https://npmjs.com/package/@cxl/tester/v/0.1.2) | GPL-3.0    | Test runner tool | [Docs](https://cxlio.github.io/cxl/tester/0.1.2) |
 | @cxl/tsx             | [0.2.0](https://npmjs.com/package/@cxl/tsx/v/0.2.0) | GPL-3.0    | TSX library | [Docs](https://cxlio.github.io/cxl/tsx/0.3.0) |
