@@ -6,7 +6,7 @@ Collection of Libraries and Tools
 
 | Package Name   | Version | License | Description                          | Links                                          |
 | -------------- | ------- | ------- | ------------------------------------ | ---------------------------------------------- |
-| @cxl/amd             | 0.0.1 | UNLICENSED | AMD Implementation | [Docs](https://cxlio.github.io/cxl/amd/0.0.1) |
+| @cxl/amd             | [0.0.1](https://npmjs.com/package/@cxl/amd/v/0.0.1) | GPL-3.0    | AMD Implementation | [Docs](https://cxlio.github.io/cxl/amd/0.0.1) |
 | @cxl/blog            | 0.0.1 | Apache-2.0 | blog utilities | [Docs](https://cxlio.github.io/cxl/blog/0.0.1) |
 | @cxl/cli             | 0.0.1 | GPL-3.0    | Command Line Tools | [Docs](https://cxlio.github.io/cxl/cli/0.0.1) |
 | @cxl/component       | [0.1.0](https://npmjs.com/package/@cxl/component/v/0.1.0) | GPL-3.0    | Web Component Framework | [Docs](https://cxlio.github.io/cxl/component/0.2.0) |
