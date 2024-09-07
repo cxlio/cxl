@@ -4,7 +4,6 @@
 	"bugs": "https://github.com/cxlio/cxl/issues",
 	"homepage": "https://cxlio.github.io/cxl/amd",
 	"description": "AMD Implementation",
-	"browser": "amd/index.js",
 	"license": "GPL-3.0",
 	"scripts": {
 		"build": "node ../dist/build",
