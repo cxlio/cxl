@@ -5,7 +5,7 @@
 	"homepage": "https://cxlio.github.io/cxl/amd",
 	"description": "AMD Implementation",
 	"browser": "amd/index.js",
-	"license": "UNLICENSED",
+	"license": "GPL-3.0",
 	"scripts": {
 		"build": "node ../dist/build",
 		"test": "npm run build && cd ../dist/amd && node ../tester --baselinePath=../../amd/spec"
