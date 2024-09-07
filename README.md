@@ -8,6 +8,7 @@ Collection of Libraries and Tools
 | -------------- | ------- | ------- | ------------------------------------ | ---------------------------------------------- |
 | @cxl/amd             | [0.0.1](https://npmjs.com/package/@cxl/amd/v/0.0.1) | GPL-3.0    | AMD Implementation | [Docs](https://cxlio.github.io/cxl/amd/0.0.1) |
 | @cxl/blog            | 0.0.1 | Apache-2.0 | blog utilities | [Docs](https://cxlio.github.io/cxl/blog/0.0.1) |
+| @cxl/build           | [0.2.0](https://npmjs.com/package/@cxl/build/v/0.2.0) | GPL-3.0    | Build Tool | [Docs](https://cxlio.github.io/cxl/build/0.2.0) |
 | @cxl/cli             | 0.0.1 | GPL-3.0    | Command Line Tools | [Docs](https://cxlio.github.io/cxl/cli/0.0.1) |
 | @cxl/component       | [0.1.0](https://npmjs.com/package/@cxl/component/v/0.1.0) | GPL-3.0    | Web Component Framework | [Docs](https://cxlio.github.io/cxl/component/0.2.0) |
 | @cxl/css             | [0.0.1](https://npmjs.com/package/@cxl/css/v/0.0.1) | GPL-3.0    | Type Safe CSS | [Docs](https://cxlio.github.io/cxl/css/0.0.2) |
