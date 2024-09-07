@@ -1,0 +1,12 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"outDir": "../dist/tester/mjs"
+	},
+	"files": ["browser-runner.ts", "report.ts"],
+	"references": [
+		{ "path": "../spec/tsconfig.mjs.json" },
+		{ "path": "../source" }
+	]
+}
