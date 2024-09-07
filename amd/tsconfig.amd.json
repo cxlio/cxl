@@ -3,8 +3,10 @@
 		"target": "es2020",
 		"outFile": "../dist/amd/index.js",
 		"module": "amd",
-		"outDir": "../dist/amd"
+		"outDir": "../dist/amd/amd"
 	},
-	"files": ["index.ts"],
+	"files": [
+		"index.ts"
+	],
 	"extends": "./tsconfig.json"
 }

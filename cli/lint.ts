@@ -78,7 +78,7 @@ async function fixTsconfig({ projectPath, baseDir, dir }: LintData) {
 	const pkg = await readJson<Package>(pkgPath);
 	let tsconfig = await readJson<Tsconfig | false>(
 		`${projectPath}/tsconfig.json`,
-		false
+		false,
 	);
 	const oldPackage = JSON.stringify(pkg, null, '\t');
 	const depProp = pkg.browser ? 'devDependencies' : 'dependencies';
@@ -95,7 +95,7 @@ async function fixTsconfig({ projectPath, baseDir, dir }: LintData) {
 		};
 		await fs.writeFile(
 			`${projectPath}/tsconfig.json`,
-			JSON.stringify(tsconfig, null, '\t')
+			JSON.stringify(tsconfig, null, '\t'),
 		);
 	}
 
@@ -110,7 +110,7 @@ async function fixTsconfig({ projectPath, baseDir, dir }: LintData) {
 					const pkgVersion = (
 						await readJson<Package | null>(
 							`${baseDir}/${refName}/package.json`,
-							null
+							null,
 						)
 					)?.version;
 					if (pkgVersion && pkgDep) pkgDep[refPkg] = `~${pkgVersion}`;
@@ -141,21 +141,21 @@ async function fixTest({ projectPath, dir }: LintData) {
 	"files": ["test.ts"],
 	"references": [{ "path": "." }, { "path": "../spec" }]
 }
-`
+`,
 		);
 	}
 
 	const tsconfig =
 		(await readJson<Tsconfig | null>(
 			`${projectPath}/tsconfig.test.json`,
-			null
+			null,
 		)) || {};
 
 	if (!tsconfig.extends || tsconfig.extends !== './tsconfig.json') {
 		tsconfig.extends = './tsconfig.json';
 		await fs.writeFile(
 			`${projectPath}/tsconfig.test.json`,
-			JSON.stringify(tsconfig, null, '\t')
+			JSON.stringify(tsconfig, null, '\t'),
 		);
 	}
 
@@ -170,7 +170,7 @@ export default spec('${dir}', s => {
 		a.ok(get);
 	});
 });
-`
+`,
 		);
 	}
 }
@@ -193,7 +193,7 @@ async function fixPackage({ projectPath, dir, rootPkg }: LintData) {
 
 	const tsconfigBundle = await readJson(
 		`${projectPath}/tsconfig.bundle.json`,
-		false
+		false,
 	);
 	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.js';
 
@@ -229,7 +229,7 @@ async function fixPackage({ projectPath, dir, rootPkg }: LintData) {
 async function lintTsconfigBundle({ dir, projectPath, pkg }: LintData) {
 	const tsconfig = await readJson(
 		`${projectPath}/tsconfig.bundle.json`,
-		false
+		false,
 	);
 
 	if (!tsconfig)
@@ -245,7 +245,7 @@ async function lintTsconfigBundle({ dir, projectPath, pkg }: LintData) {
 		rules: [
 			rule(
 				!pkg.browser || pkg.browser === 'index.bundle.min.js',
-				`Package "browser" property should use minified bundle version`
+				`Package "browser" property should use minified bundle version`,
 			),
 		],
 	};
@@ -253,12 +253,12 @@ async function lintTsconfigBundle({ dir, projectPath, pkg }: LintData) {
 
 async function lintPackage({ projectPath, pkg, dir, rootPkg }: LintData) {
 	const rules = requiredPackageFields.map(field =>
-		rule(field in pkg, `Field "${field}" required in package.json`)
+		rule(field in pkg, `Field "${field}" required in package.json`),
 	);
 
 	const tsconfigBundle = await readJson(
 		`${projectPath}/tsconfig.bundle.json`,
-		false
+		false,
 	);
 	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.js';
 
@@ -268,13 +268,13 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }: LintData) {
 			...requiredPackageScripts.map(field =>
 				rule(
 					field in scripts,
-					`Script "${field}" required in package.json`
-				)
-			)
+					`Script "${field}" required in package.json`,
+				),
+			),
 		);
 	} else
 		rules.push(
-			rule('scripts' in pkg, `Field "scripts" required in package.json`)
+			rule('scripts' in pkg, `Field "scripts" required in package.json`),
 		);
 
 	const testScript = `npm run build && cd ../dist/${dir} && node ../tester ${
@@ -284,41 +284,41 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }: LintData) {
 	rules.push(
 		rule(
 			pkg.name === `${rootPkg.name}${dir}`,
-			`Package name should be valid.`
+			`Package name should be valid.`,
 		),
 		rule(
 			licenses.includes(pkg.license),
-			`"${pkg.license}" is not a valid license.`
+			`"${pkg.license}" is not a valid license.`,
 		),
 		rule(
 			!!pkg.browser || !pkg.devDependencies,
-			`Package should not have devDependencies.`
+			`Package should not have devDependencies.`,
 		),
 		rule(
 			!pkg.browser || !pkg.dependencies,
-			`Browser package should only have devDependencies.`
+			`Browser package should only have devDependencies.`,
 		),
 		rule(
 			!pkg.peerDependencies,
-			`Package should not have peerDependencies.`
+			`Package should not have peerDependencies.`,
 		),
 		rule(
 			!pkg.browser || pkg.browser === browser,
-			`Package "browser" property should use amd script`
+			`Package "browser" property should use amd script`,
 		),
 		rule(
 			pkg.bugs === rootPkg.bugs,
-			`Package "bugs" property must match root package`
+			`Package "bugs" property must match root package`,
 		),
 		rule(
 			pkg?.scripts?.test === testScript,
-			`Valid test script in package.json`
+			`Valid test script in package.json`,
 		),
 		rule(!!pkg.repository, 'Package "repository" field must be set'),
 		rule(
 			typeof pkg.repository !== 'string',
-			'"repository" must be an object'
-		)
+			'"repository" must be an object',
+		),
 	);
 
 	return {
@@ -331,7 +331,7 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }: LintData) {
 
 async function lintTest({ projectPath }: LintData) {
 	const tsconfig = await readJson<Tsconfig>(
-		`${projectPath}/tsconfig.test.json`
+		`${projectPath}/tsconfig.test.json`,
 	);
 
 	return {
@@ -341,18 +341,18 @@ async function lintTest({ projectPath }: LintData) {
 		rules: [
 			rule(
 				!!(await exists(`${projectPath}/tsconfig.test.json`)),
-				`Missing "tsconfig.test.json" file.`
+				`Missing "tsconfig.test.json" file.`,
 			),
 			rule(
 				tsconfig?.extends === './tsconfig.json',
-				'tsconfig.test.json extends should match base tsconfig.json'
+				'tsconfig.test.json extends should match base tsconfig.json',
 			),
 			rule(
 				!!(
 					(await exists(`${projectPath}/test.ts`)) ||
 					(await exists(`${projectPath}/test.tsx`))
 				),
-				`Missing "test.ts" file.`
+				`Missing "test.ts" file.`,
 			),
 		],
 	};
@@ -369,16 +369,16 @@ async function lintDependencies({ dir, rootPkg, pkg }: LintData) {
 		rules.push(
 			rule(
 				!!(name.startsWith(rootPkg.name) || rootValue),
-				`Dependency "${name}" must be included in root package.json`
+				`Dependency "${name}" must be included in root package.json`,
 			),
 			rule(
 				pkgValue !== '*',
-				`Dependency "${name}" must be a valid version. pkg:${pkgValue}`
+				`Dependency "${name}" must be a valid version. pkg:${pkgValue}`,
 			),
 			rule(
 				name.startsWith(rootPkg.name) || rootValue === pkgValue,
-				`Conflicting versions "${name}". root: ${rootValue}, dep: ${pkgValue}`
-			)
+				`Conflicting versions "${name}". root: ${rootValue}, dep: ${pkgValue}`,
+			),
 		);
 	}
 
@@ -393,17 +393,17 @@ async function lintDependencies({ dir, rootPkg, pkg }: LintData) {
 async function lintTsconfig({ projectPath, pkg, dir }: LintData) {
 	const tsconfig = await readJson<Tsconfig | null>(
 		`${projectPath}/tsconfig.json`,
-		null
+		null,
 	);
 	const rules = [
 		rule(!!tsconfig, 'tsconfig.json should be present'),
 		rule(
 			!!tsconfig?.compilerOptions,
-			'tsconfig.json should have compilerOptions'
+			'tsconfig.json should have compilerOptions',
 		),
 		rule(
 			tsconfig?.compilerOptions?.outDir === `../dist/${dir}`,
-			'tsconfig.json should have a valid outDir compiler option'
+			'tsconfig.json should have a valid outDir compiler option',
 		),
 	];
 	const references = tsconfig?.references;
@@ -418,8 +418,8 @@ async function lintTsconfig({ projectPath, pkg, dir }: LintData) {
 				rules.push(
 					rule(
 						!!pkg[depProp]?.[refPkg],
-						`reference ${refPkg} should be declared as ${depProp}`
-					)
+						`reference ${refPkg} should be declared as ${depProp}`,
+					),
 				);
 			}
 		}
@@ -436,12 +436,12 @@ async function fixTsconfigMjs({ projectPath, dir, pkg }: LintData) {
 	if (!pkg.browser) return;
 
 	const baseTsconfig = await readJson<Tsconfig>(
-		`${projectPath}/tsconfig.json`
+		`${projectPath}/tsconfig.json`,
 	);
 	const tsconfig =
 		(await readJson<Tsconfig | null>(
 			`${projectPath}/tsconfig.mjs.json`,
-			null
+			null,
 		)) || {};
 	const outDir = `../dist/${dir}/mjs`;
 
@@ -457,7 +457,7 @@ async function fixTsconfigMjs({ projectPath, dir, pkg }: LintData) {
 
 	await fs.writeFile(
 		`${projectPath}/tsconfig.mjs.json`,
-		JSON.stringify(tsconfig, null, '\t')
+		JSON.stringify(tsconfig, null, '\t'),
 	);
 }
 
@@ -465,12 +465,12 @@ async function fixTsconfigAmd({ projectPath, dir, pkg }: LintData) {
 	if (!pkg.browser) return;
 
 	const baseTsconfig = await readJson<Tsconfig>(
-		`${projectPath}/tsconfig.json`
+		`${projectPath}/tsconfig.json`,
 	);
 	const tsconfig =
 		(await readJson<Tsconfig | null>(
 			`${projectPath}/tsconfig.amd.json`,
-			null
+			null,
 		)) || {};
 	const outDir = `../dist/${dir}/amd`;
 
@@ -488,7 +488,7 @@ async function fixTsconfigAmd({ projectPath, dir, pkg }: LintData) {
 
 	await fs.writeFile(
 		`${projectPath}/tsconfig.amd.json`,
-		JSON.stringify(tsconfig, null, '\t')
+		JSON.stringify(tsconfig, null, '\t'),
 	);
 }
 
@@ -501,49 +501,49 @@ async function lintTsconfigEs6({ projectPath, pkg, dir }: LintData) {
 		};
 
 	const tsconfig = await readJson<Tsconfig>(
-		`${projectPath}/tsconfig.mjs.json`
+		`${projectPath}/tsconfig.mjs.json`,
 	);
 	const baseTsconfig = await readJson<Tsconfig>(
-		`${projectPath}/tsconfig.json`
+		`${projectPath}/tsconfig.json`,
 	);
 	const references = tsconfig?.references;
 	const expectedReferences = baseTsconfig.references?.map(
 		(ref: { path: string }) => {
 			const refName = /^\.\.\/[^/]+/.exec(ref.path)?.[0];
 			return { path: `${refName}/tsconfig.mjs.json` };
-		}
+		},
 	);
 	const rules = [
 		rule(!!tsconfig, 'tsconfig.mjs.json should be present'),
 		rule(
 			tsconfig?.extends === './tsconfig.json',
-			'tsconfig.mjs.json extends should match base tsconfig.json'
+			'tsconfig.mjs.json extends should match base tsconfig.json',
 		),
 		rule(
 			!!tsconfig?.compilerOptions,
-			'tsconfig.mjs.json should have compilerOptions'
+			'tsconfig.mjs.json should have compilerOptions',
 		),
 		rule(
 			tsconfig?.compilerOptions?.outDir === `../dist/${dir}/mjs`,
-			'tsconfig.mjs.json should have a valid outDir compiler option'
+			'tsconfig.mjs.json should have a valid outDir compiler option',
 		),
 		rule(
 			tsconfig?.compilerOptions?.module === 'ESNext',
-			'tsconfig.mjs.json should have a module set as ESNext'
+			'tsconfig.mjs.json should have a module set as ESNext',
 		),
 		rule(
 			tsconfig?.files?.join('|') === baseTsconfig.files?.join('|'),
-			'tsconfig.mjs.json files should match base tsconfig.json'
+			'tsconfig.mjs.json files should match base tsconfig.json',
 		),
 		rule(
 			!baseTsconfig.references || !!references,
-			'tsconfig.mjs.json should have references if base tsconfig.json has them'
+			'tsconfig.mjs.json should have references if base tsconfig.json has them',
 		),
 		rule(
 			!expectedReferences ||
 				JSON.stringify(references) ===
 					JSON.stringify(expectedReferences),
-			'tsconfig.mjs.json should match base tsconfig references'
+			'tsconfig.mjs.json should match base tsconfig references',
 		),
 	];
 
@@ -571,10 +571,10 @@ async function lintTsconfigAmd({ projectPath, pkg, dir }: LintData) {
 		};
 
 	const tsconfig = await readJson<Tsconfig>(
-		`${projectPath}/tsconfig.amd.json`
+		`${projectPath}/tsconfig.amd.json`,
 	);
 	const baseTsconfig = await readJson<Tsconfig>(
-		`${projectPath}/tsconfig.json`
+		`${projectPath}/tsconfig.json`,
 	);
 	const references = tsconfig?.references;
 	const expectedReferences = checkTsReferences(baseTsconfig, 'amd');
@@ -583,41 +583,41 @@ async function lintTsconfigAmd({ projectPath, pkg, dir }: LintData) {
 		rule(!!tsconfig, 'tsconfig.amd.json should be present'),
 		rule(
 			tsconfig?.extends === './tsconfig.json',
-			'tsconfig.amd.json extends should extends base tsconfig.json'
+			'tsconfig.amd.json extends should extends base tsconfig.json',
 		),
 		rule(
 			!!tsconfig?.compilerOptions,
-			'tsconfig.amd.json should have compilerOptions'
+			'tsconfig.amd.json should have compilerOptions',
 		),
 		rule(
 			tsconfig?.compilerOptions?.outDir === `../dist/${dir}/amd`,
-			'tsconfig.amd.json should have a valid outDir compiler option'
+			`tsconfig.amd.json should have a valid outDir compiler option ("../dist/${dir}/amd")`,
 		),
 		rule(
 			tsconfig?.compilerOptions?.module === 'amd',
-			'tsconfig.amd.json should have a module set as amd'
+			'tsconfig.amd.json should have a module set as amd',
 		),
 		rule(
 			tsconfig?.files?.join('|') === baseTsconfig.files?.join('|'),
-			'tsconfig.amd.json files should match base tsconfig.json'
+			'tsconfig.amd.json files should match base tsconfig.json',
 		),
 		rule(
 			tsconfig?.include?.join('|') === baseTsconfig.include?.join('|'),
-			'tsconfig.amd.json "include" should match base tsconfig.json'
+			'tsconfig.amd.json "include" should match base tsconfig.json',
 		),
 		rule(
 			tsconfig?.exclude?.join('|') === baseTsconfig.exclude?.join('|'),
-			'tsconfig.amd.json "exclude" should match base tsconfig.json'
+			'tsconfig.amd.json "exclude" should match base tsconfig.json',
 		),
 		rule(
 			!baseTsconfig.references || !!references,
-			'tsconfig.amd.json should have references if base tsconfig.json has them'
+			'tsconfig.amd.json should have references if base tsconfig.json has them',
 		),
 		rule(
 			!expectedReferences ||
 				JSON.stringify(references) ===
 					JSON.stringify(expectedReferences),
-			'tsconfig.amd.json should match base tsconfig references'
+			'tsconfig.amd.json should match base tsconfig references',
 		),
 	];
 
@@ -682,7 +682,7 @@ async function verifyProject(dir: string, rootPkg: Package) {
 
 	const pkg = await readJson<Package | false>(
 		`${projectPath}/package.json`,
-		false
+		false,
 	);
 	if (!pkg) return [];
 
@@ -731,7 +731,7 @@ export default program('verify', async ({ log }) => {
 		await fs
 			.readdir(baseDir)
 			.then(all =>
-				Promise.all(all.map(dir => verifyProject(dir, rootPkg)))
+				Promise.all(all.map(dir => verifyProject(dir, rootPkg))),
 			)
 	).flat();
 
