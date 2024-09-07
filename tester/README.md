@@ -6,7 +6,7 @@ Test runner tool
 
 ## Project Details
 
--   Branch Version: [0.1.1](https://npmjs.com/package/@cxl/tester/v/0.1.1)
+-   Branch Version: [0.1.2](https://npmjs.com/package/@cxl/tester/v/0.1.2)
 -   License: GPL-3.0
 -   Documentation: [Link](https://cxlio.github.io/cxl/tester)
 -   Report Issues: [Github](https://github.com/cxlio/cxl/issues)
