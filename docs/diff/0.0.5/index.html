@@ -13,18 +13,14 @@
 	<cxl-theme-toggle-icon title="Dark theme toggle" darktheme="@cxl/ui/theme-dark.js" persistkey="cxl.ui-demo.theme"></cxl-theme-toggle-icon>
 	</cxl-appbar><cxl-page center><link id="styles.css" rel="stylesheet" href="styles.css" /><script src="highlight.js"></script><cxl-router-outlet></cxl-router-outlet><cxl-router><template  data-title="index.ts" data-path="index--html"><cxl-t h3><span style="float:right"><cxl-chip size="small" color="primary">module</cxl-chip> </span>index.ts</cxl-t><div style="margin-top:32px"></div><cxl-t font="h6">Functions
 		</cxl-t><doc-grd><a href="#s35">diff</a><a href="#s38">patch</a></doc-grd><cxl-t font="h6">Type Alias
-		</cxl-t><doc-grd><a href="#s1">Diff</a></doc-grd><cxl-t h5>Functions</cxl-t><a name="s35"></a><doc-c src="index.ts#L444"><doc-ct>diff(A: string, B: string): <doc-a href="index--html#s1">Diff</doc-a></doc-ct><p><p>This function takes a source string <code>src</code>, and a destination
+		</cxl-t><doc-grd><a href="#s1">Diff</a></doc-grd><cxl-t h5>Functions</cxl-t><a name="s35"></a><doc-c src="index.ts#L444"><doc-ct>diff(A: string, B: string): <doc-a href="index--html#s1">Diff</doc-a></doc-ct><p>This function takes a source string <code>src</code>, and a destination
 string <code>dest</code>. It returns a patch object that can be later used
-by <code>ide.patch</code> to reconstruct the destination string.</p>
-<p>The <code>size</code> parameter determines the minimum length of a single
-patch string, the algorithm will optimize the result based on this number.</p>
-<p>A patch object consists of an array of triplets, where the first item is the
+by <code>ide.patch</code> to reconstruct the destination string.</p><p>The <code>size</code> parameter determines the minimum length of a single
+patch string, the algorithm will optimize the result based on this number.</p><p>A patch object consists of an array of triplets, where the first item is the
 string to be inserted, the second, the characters to be skipped from the
-original string and the third the characters removed after inserting.</p>
-</p><cxl-t font="subtitle2">Parameters</cxl-t><ul><li><code>A: string</code></li><li><code>B: string</code></li></ul></doc-c><a name="s38"></a><doc-c src="index.ts#L479"><doc-ct>patch(A: string, diff: <doc-a href="index--html#s1">Diff</doc-a>): string</doc-ct><p><p>This function takes the original source string <code>str</code> and the
+original string and the third the characters removed after inserting.</p><cxl-t font="subtitle2">Parameters</cxl-t><ul><li><code>A: string</code></li><li><code>B: string</code></li></ul></doc-c><a name="s38"></a><doc-c src="index.ts#L479"><doc-ct>patch(A: string, diff: <doc-a href="index--html#s1">Diff</doc-a>): string</doc-ct><p>This function takes the original source string <code>str</code> and the
 result of a previous diff <code>patch</code>. The result will be the
-destination string <code>dest</code>.</p>
-</p><cxl-t font="subtitle2">Parameters</cxl-t><ul><li><code>A: string</code></li><li><code>diff: <doc-a href="index--html#s1">Diff</doc-a></code></li></ul></doc-c><cxl-t h5>Type Alias</cxl-t><a name="s1"></a><doc-c src="index.ts#L1"><doc-ct>Diff = any[]</doc-ct></doc-c></template><template data-default="true" data-title="Home" data-path="index.html"><cxl-t h4>@cxl/diff</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fdiff"><img src="https://badge.fury.io/js/%40cxl%2Fdiff.svg" alt="npm version"></a></p>
+destination string <code>dest</code>.</p><cxl-t font="subtitle2">Parameters</cxl-t><ul><li><code>A: string</code></li><li><code>diff: <doc-a href="index--html#s1">Diff</doc-a></code></li></ul></doc-c><cxl-t h5>Type Alias</cxl-t><a name="s1"></a><doc-c src="index.ts#L1"><doc-ct>Diff = any[]</doc-ct></doc-c></template><template data-default="true" data-title="Home" data-path="index.html"><cxl-t h4>@cxl/diff</cxl-t><p><a href="https://badge.fury.io/js/%40cxl%2Fdiff"><img src="https://badge.fury.io/js/%40cxl%2Fdiff.svg" alt="npm version"></a></p>
 <p>String diff tool</p>
 <cxl-t h5>Project Details</cxl-t><ul>
 <li>Branch Version: <a href="https://npmjs.com/package/@cxl/diff/v/0.0.5">0.0.5</a></li>
