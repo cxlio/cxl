@@ -40,7 +40,7 @@ export function readPackage(base: string = BASEDIR): Package {
 }
 
 export function docs(dirName: string, devMode = false) {
-	const docgen = `cxl-docgen`; //join(__dirname, '../docgen');
+	const docgen = join(__dirname, '../docgen');
 	return new Observable<any>(subs => {
 		const cmd = `node ${docgen} --clean ${
 			devMode ? '--debug' : ''

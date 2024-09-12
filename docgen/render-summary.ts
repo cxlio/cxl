@@ -31,7 +31,6 @@ function sortByName(a: Summary, b: Summary) {
 }
 
 function renderType(node: Node): string | Summary {
-	if (node.name === 'VimPlugin') console.log(node);
 	if (node.kind === Kind.Reference && node.type) node = node.type;
 	if (
 		node.kind !== Kind.ObjectType &&
@@ -39,7 +38,6 @@ function renderType(node: Node): string | Summary {
 		node.kind !== Kind.Function &&
 		node.kind !== Kind.Method &&
 		node.kind !== Kind.TypeUnion
-		//node.kind !== Kind.TypeAlias
 	)
 		return removeHtml(Type(node));
 
