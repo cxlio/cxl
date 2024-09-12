@@ -244,11 +244,11 @@ async function generateCoverage(
 let figureReady: Promise<void>;
 let screenshotQueue = Promise.resolve();
 
-async function parsePNG(buffer: Buffer) {
+async function parsePNG(buffer: Uint8Array) {
 	const PNG = (await import('pngjs')).PNG;
 	return new Promise<PNG>((resolve, reject) => {
 		const png = new PNG();
-		png.parse(buffer, (e, self) => {
+		png.parse(Buffer.from(buffer), (e, self) => {
 			if (e) reject(e);
 			else resolve(self);
 		});
@@ -256,7 +256,7 @@ async function parsePNG(buffer: Buffer) {
 }
 
 function screenshot(page: Page, domId: string) {
-	return new Promise<Buffer>((resolve, reject) => {
+	return new Promise<Uint8Array>((resolve, reject) => {
 		const id = `#${domId}`;
 		screenshotQueue = screenshotQueue.then(() => {
 			return page
@@ -276,8 +276,8 @@ function screenshot(page: Page, domId: string) {
 				})
 				.then(
 					buffer => {
-						if (buffer && buffer instanceof Buffer) resolve(buffer);
-						else reject();
+						if (ArrayBuffer.isView(buffer)) resolve(buffer);
+						else reject(`Invalid value returned by screenshot()`);
 					},
 					e => reject(e),
 				);
@@ -310,7 +310,6 @@ async function handleFigureRequest(
 		readFile(baseline).catch(() => undefined),
 		screenshot(page, domId),
 	]);
-
 	if (buffer)
 		mkdir('spec')
 			.catch(() => false)
@@ -382,7 +381,7 @@ export default async function runPuppeteer(app: TestRunner) {
 			} catch (e) {
 				return {
 					success: false,
-					message: String(e),
+					message: String(e) || 'Unknown Error',
 				};
 			}
 		}

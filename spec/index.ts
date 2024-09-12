@@ -457,6 +457,7 @@ export class Test {
 			} else if (this.tests.length)
 				await Promise.all(this.tests.map(test => test.run()));
 		} catch (e) {
+			console.error(String(e));
 			this.pushError(e);
 		} finally {
 			if (this.domContainer && this.domContainer.parentNode)
