@@ -22,12 +22,17 @@ async function startTracing(page: Page) {
 	]);
 }
 
-function handleConsole(msg: puppeteer.ConsoleMessage, app: TestRunner) {
+async function handleConsole(msg: puppeteer.ConsoleMessage, app: TestRunner) {
 	const type = msg.type();
 	const { url, lineNumber } = msg.location();
 	const lineText = lineNumber !== undefined ? ` (${lineNumber})` : '';
 	app.log(`console ${type}: ${url}${lineText}`);
-	console.log(msg.text());
+	for (const arg of msg.args())
+		try {
+			console.log(await arg.jsonValue());
+		} catch (e) {
+			console.log(arg.toString());
+		}
 }
 
 async function openPage(browser: Browser) {
@@ -57,37 +62,27 @@ function resolveImport(path: string) {
 		.replace(
 			/^@j5g3\/(.+)/,
 			(str, p1) =>
-				`../../../j5g3/dist/${
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`,
+				`../../../j5g3/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
 		)
 		.replace(
 			/^@cxl\/workspace\.(.+)/,
 			(str, p1) =>
-				`../../../cxl.app/dist/${
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`,
+				`../../../cxl.app/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
 		)
 		.replace(
 			/^@cxl\/gbc\.(.*)/,
 			(str, p1) =>
-				`../../../gbc/dist/${
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`,
+				`../../../gbc/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
 		)
 		.replace(
 			/^@cxl\/(ui.*)/,
 			(str, p1) =>
-				`../../../ui/dist/${
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`,
+				`../../../ui/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
 		)
 		.replace(
 			/^@cxl\/(.+)/,
 			(str, p1) =>
-				`../../../cxl/dist/${
-					str.endsWith('.js') ? p1 : p1 + '/index.js'
-				}`,
+				`../../../cxl/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
 		);
 }
 
@@ -401,11 +396,13 @@ export default async function runPuppeteer(app: TestRunner) {
 	const source = await readFile(entryFile, 'utf8');
 	const sources = [{ path: entryFile, source }];
 
+	// Prevent unexpected focus behavior
+	await page.bringToFront();
 	const suite = app.amd
 		? await amdRunner(page, sources)
 		: app.mjs
-		? await mjsRunner(page, sources, app)
-		: await cjsRunner(page, sources, app);
+			? await mjsRunner(page, sources, app)
+			: await cjsRunner(page, sources, app);
 	if (!suite) throw new Error('Invalid suite');
 
 	const coverage = app.ignoreCoverage

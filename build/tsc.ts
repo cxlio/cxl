@@ -97,7 +97,7 @@ export function tsbuild(
 	function writeFile(name: string, source: string) {
 		name = relative(outDir || outputDir, name);
 		const refs = options.projectReferences?.[0];
-		if (refs?.path.endsWith('/cxl/amd/tsconfig.amd.json') && refs.prepend) {
+		if (refs?.path.endsWith('/cxl/amd/tsconfig.json') && refs.prepend) {
 			source = AMD + source;
 		}
 		subs.next({ path: name, source: Buffer.from(source) });
