@@ -287,36 +287,6 @@ export interface DocGen {
 	headHtml?: string;
 }
 
-/*export interface DocGen {
-	outputDir: string;
-	repository?: string;
-	repositoryLink?: string;
-	clean: boolean;
-	debug: boolean;
-	modulePackage: Package;
-	spa: boolean;
-	tsconfig: string;
-	sitemap?: string;
-	packageJson: string;
-	packageRoot: string;
-	packageName?: string;
-	summary: boolean;
-	extra?: Section[];
-	scripts?: string[];
-	demoScripts?: string[];
-	file?: string[];
-	exclude?: string[];
-	docsJson?: string;
-	markdown?: boolean;
-	baseHref?: string;
-	rootDir?: string;
-	customJsDocTags?: string[];
-	cxlExtensions?: boolean;
-	followReferences?: boolean;
-	exports?: string[];
-	headHtml?: string;
-}*/
-
 program({}, async ({ log }) => {
 	const args = {
 		outputDir: './docs',
