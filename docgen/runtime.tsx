@@ -1,9 +1,9 @@
 ///<amd-module name="@cxl/docgen/runtime"/>
 import { dom } from '@cxl/ui/tsx';
 import { Augment, Attribute, Component, Span, get } from '@cxl/ui/component';
-import { onChildrenMutation, onLoad, onValue, requestJson } from '@cxl/ui/dom';
+import { onChildrenMutation, onLoad, onValue } from '@cxl/ui/dom';
 import { padding } from '@cxl/ui/css';
-import { be } from '@cxl/ui/rx';
+import { be, from } from '@cxl/ui/rx';
 import { SelectBox } from '@cxl/ui/select.js';
 import { Option } from '@cxl/ui/option.js';
 import { each, render } from '@cxl/ui/template';
@@ -166,22 +166,28 @@ export class DocExample extends Component {}
 	$ => (
 		<$.Shadow>
 			{docgen.versions &&
-				render(requestJson<VersionJson>(docgen.versions), json =>
-					json.all.length > 1 ? (
-						<SelectBox
-							$={el =>
-								onValue(el).tap(val => $.onValue(String(val)))
-							}
-							value={docgen.activeVersion}
-							className="select"
-						>
-							{json.all.map(v => (
-								<Option value={v}>{v}</Option>
-							))}
-						</SelectBox>
-					) : (
-						<>{docgen.activeVersion}</>
+				render(
+					from(
+						fetch(docgen.versions).then<VersionJson>(r => r.json()),
 					),
+					json =>
+						json.all.length > 1 ? (
+							<SelectBox
+								$={el =>
+									onValue(el).tap(val =>
+										$.onValue(String(val)),
+									)
+								}
+								value={docgen.activeVersion}
+								className="select"
+							>
+								{json.all.map(v => (
+									<Option value={v}>{v}</Option>
+								))}
+							</SelectBox>
+						) : (
+							<>{docgen.activeVersion}</>
+						),
 				)}
 		</$.Shadow>
 	),

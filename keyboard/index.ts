@@ -43,9 +43,22 @@ export interface KeyboardOptions {
 	capture?: boolean;
 }
 
+/**
+ * The `KeyboardLayout` interface describes how a keyboard layout should be structured internally.
+ */
 export interface KeyboardLayout {
+	/** An array of characters that appear when a key is pressed with the 'Shift' key. */
 	shiftedKeys: string[];
+	/**
+	 * A mapping of non-shifted keys to their shifted counterparts, used to accurately
+	 * interpret which character a shifted key press represents.
+	 */
 	shiftMap: Record<string, string>;
+
+	/**
+	 * Indicates whether the 'meta' or 'ctrl' key is the primary modifier used for commands,
+	 * differing based on the operating system (e.g., 'metaKey' for macOS).
+	 */
 	modKey: 'metaKey' | 'ctrlKey';
 }
 
