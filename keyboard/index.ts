@@ -1,7 +1,5 @@
 ///<amd-module name="@cxl/keyboard"/>
-export type KeyNameMap = Record<number, string>;
-
-export interface Key {
+interface Key {
 	ctrlKey: boolean;
 	altKey: boolean;
 	shiftKey: boolean;
@@ -9,13 +7,39 @@ export interface Key {
 	key: string;
 }
 
+/**
+ * The `KeyboardOptions` interface defines the configuration needed to handle keyboard interactions with
+ * a specific HTML element.
+ */
 export interface KeyboardOptions {
+	/**
+	 * Specifies the HTML element on which keyboard events are captured.
+	 * This element will receive focus and listen for key events.
+	 */
 	element: HTMLElement;
+
+	/**
+	 * A callback function that processes key events. It receives the current key being pressed
+	 * and the sequence of keys accumulated so far. It returns `true` or `false` to indicate whether
+	 * the sequence was consumed.
+	 */
 	onKey: (key: string, sequence: string[]) => boolean;
-	/** @default 250 */
+	/**
+	 * The time in milliseconds to wait between key presses before resetting the sequence.
+	 * Defaults to 250ms if not provided, ensuring thoughtful key sequences rather than accidental key presses.
+	 */
 	delay?: number;
-	/** @default en-US */
+
+	/**
+	 * Optional parameter to specify a custom `KeyboardLayout`.
+	 * Defaults to 'en-US' if not provided. This affects how key combinations and modifier keys are interpreted.
+	 */
 	layout?: KeyboardLayout;
+
+	/**
+	 * Boolean indicating whether to capture key events in the capture phase.
+	 * This determines when the event listener reacts in the event propagation flow.
+	 */
 	capture?: boolean;
 }
 
@@ -24,8 +48,6 @@ export interface KeyboardLayout {
 	shiftMap: Record<string, string>;
 	modKey: 'metaKey' | 'ctrlKey';
 }
-
-export const Pass = {};
 
 const navigator =
 	typeof window !== 'undefined'
@@ -59,7 +81,7 @@ const SHIFT_MAP = {
 	'0': ')',
 };
 
-const KeyboardLayoutData: Record<string, KeyboardLayout> = {
+export const KeyboardLayoutData: Record<string, KeyboardLayout> = {
 	'en-US': {
 		shiftedKeys: Object.values(SHIFT_MAP),
 		shiftMap: SHIFT_MAP,
@@ -67,11 +89,7 @@ const KeyboardLayoutData: Record<string, KeyboardLayout> = {
 	},
 };
 
-export const TranslateKey: Record<string, string> = {
-	Shift: '',
-	Alt: '',
-	Meta: '',
-	Control: '',
+const TranslateKey: Record<string, string> = {
 	ArrowUp: 'up',
 	ArrowDown: 'down',
 	ArrowLeft: 'left',
@@ -80,9 +98,17 @@ export const TranslateKey: Record<string, string> = {
 	' ': 'space',
 };
 
+/**
+ * This function converts a `Key` event into a string representation, encoding modifier keys
+ * (ctrl, alt, shift, meta) and the key itself. It checks each modifier key flag in the `Key`
+ * object, constructing a result string with '+' separators. Non-modifier keys are lowercased
+ * and looked up in `TranslateKey` for a more readable name. If the key itself is a shifted
+ * character (not included in `shiftedKeys`), 'shift' is added to the modifiers. This string
+ * format is useful for handling complex keyboard shortcuts consistently across different layouts.
+ */
 function keyboardEventToString(
 	ev: Key,
-	{ shiftedKeys }: KeyboardLayout
+	{ shiftedKeys }: KeyboardLayout,
 ): string {
 	const key = ev.key;
 	if (
@@ -105,6 +131,24 @@ function keyboardEventToString(
 	return result ? result + '+' + ch : ch;
 }
 
+/**
+ * The `handleKeyboard` function sets up event listeners to handle keyboard events on a given HTML element.
+ * It accepts a  configuration object (`KeyboardOptions`) which includes the target HTML element, a callback
+ * `onKey` to handle keyboard sequences, a `delay` for typing sequence recognition, an optional keyboard
+ * layout, and an optional capture mode for events.
+ *
+ * - Defaults the delay to 250ms if not specified, using this delay to determine when to treat subsequent
+ *   key presses as part of the same sequence or a new one.
+ * - Determines the keyboard layout, either from the provided options or defaults, which affects how keys
+ *   (especially with modifiers) are interpreted.
+ * - Adds a `keydown` event listener to the provided element, allowing modification of event behavior such
+ *   as propagation and default handling based on the `onKey` callback result.
+ * - Builds a key sequence based on timing and calls the `onKey` handler with the assembled sequence,
+ *   stopping event propagation based on handler response.
+ * - The handler uses the sequence to manage shortcuts and performs preventative measures against default
+ *   browser actions.
+ * @return A cleanup function that removes the event listener.
+ */
 export function handleKeyboard({
 	element,
 	onKey,
@@ -146,7 +190,7 @@ export function handleKeyboard({
 	return () => element.removeEventListener('keydown', handler, { capture });
 }
 
-export function getDefaultLayout(): KeyboardLayout {
+function getDefaultLayout(): KeyboardLayout {
 	return (
 		KeyboardLayoutData[navigator?.language] || KeyboardLayoutData['en-US']
 	);
@@ -162,9 +206,18 @@ function newKey(): Key {
 	};
 }
 
+/**
+ * This function, `parseKey`, takes a key combination string and splits it into a sequence of `Key` objects.
+ * It uses regular  expressions to identify each part of the key combination, accounting for modifier keys
+ * like 'shift', 'ctrl', 'alt', 'meta', and 'mod', the latter being dependent on the `modKey` from the
+ * `KeyboardLayout` (either 'ctrlKey' or 'metaKey' depending on the platform). For non-modifier keys, it
+ * checks if the `shiftKey` is active and if the key should be shifted using the `shiftMap`. This logic
+ * ensures the function captures accurate key state details in preparation for further handling like matching
+ * key sequences in the `handleKeyboard` function.
+ */
 export function parseKey(
 	key: string,
-	{ modKey, shiftedKeys, shiftMap }: KeyboardLayout = getDefaultLayout()
+	{ modKey, shiftedKeys, shiftMap }: KeyboardLayout = getDefaultLayout(),
 ): Key[] {
 	const sequence: Key[] = [];
 	let match: RegExpExecArray | null;
@@ -185,7 +238,10 @@ export function parseKey(
 					event.shiftKey = false;
 				} else {
 					const shifted = shiftMap[ch];
-					if (shifted) event.key = shifted;
+					if (shifted) {
+						event.key = shifted;
+						event.shiftKey = false;
+					}
 				}
 			}
 		}
@@ -198,13 +254,16 @@ export function parseKey(
 	return sequence;
 }
 
+/**
+ * Converts a string representing a key combination into a normalized string format.
+ * This function takes a `key` string and an optional `layout` object (defaults to the user's layout).
+ * It uses `parseKey` to break the key combination into individual `Key` objects, each representing
+ * a parsed key press. It then converts each `Key` object back to a string using `keyboardEventToString`,
+ * considering the layout's details like `shiftedKeys` and `shiftMap`. The resulting
+ * strings are concatenated with spaces and returned as the normalized form. This is useful
+ * for ensuring consistent representation of key sequences across different keyboard layouts.
+ */
 export function normalize(key: string, layout = getDefaultLayout()): string {
 	const sequence = parseKey(key, layout);
-	let i = sequence.length;
-	while (i--)
-		(sequence as unknown as string[])[i] = keyboardEventToString(
-			sequence[i],
-			layout
-		);
-	return sequence.join(' ');
+	return sequence.map(key => keyboardEventToString(key, layout)).join(' ');
 }

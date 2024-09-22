@@ -16,7 +16,8 @@ type SuiteFn<T = TestFn> = (
 ) => void;
 
 type FunctionsOf<T> = {
-	[K in keyof T]: T[K] extends (...args: unknown[]) => unknown ? T[K] : never;
+	/* eslint @typescript-eslint/no-explicit-any:off */
+	[K in keyof T]: T[K] extends (...args: any[]) => any ? T[K] : never;
 };
 
 type ParametersOf<T, K extends keyof T> = Parameters<FunctionsOf<T>[K]>;
@@ -479,6 +480,31 @@ export class Test {
 			only: this.only.map(r => r.toJSON()),
 		};
 	}
+}
+
+export type MockFn<A extends unknown[], B> = {
+	(...args: A): B;
+	calls: number;
+	lastResult?: B;
+	lastArguments?: A;
+};
+
+export function stub() {
+	return mockFn<unknown[], unknown>(() => {});
+}
+
+export function mockFn<A extends unknown[], B>(
+	fn: (...args: A) => B,
+): MockFn<A, B> {
+	const result: MockFn<A, B> = (...args: A) => {
+		result.calls++;
+		const r = fn(...args);
+		result.lastResult = r;
+		result.lastArguments = args;
+		return r;
+	};
+	result.calls = 0;
+	return result;
 }
 
 function spyFn<T, K extends keyof FunctionsOf<T>>(object: T, method: K) {
