@@ -13,7 +13,7 @@ Collection of Libraries and Tools
 | @cxl/component       | [0.1.0](https://npmjs.com/package/@cxl/component/v/0.1.0) | GPL-3.0    | Web Component Framework | [Docs](https://cxlio.github.io/cxl/component/0.2.0) |
 | @cxl/css             | [0.0.1](https://npmjs.com/package/@cxl/css/v/0.0.1) | GPL-3.0    | Type Safe CSS | [Docs](https://cxlio.github.io/cxl/css/0.0.2) |
 | @cxl/diff            | [0.0.4](https://npmjs.com/package/@cxl/diff/v/0.0.4) | Apache-2.0 | String diff tool | [Docs](https://cxlio.github.io/cxl/diff/0.0.5) |
-| @cxl/docgen          | [0.1.0](https://npmjs.com/package/@cxl/docgen/v/0.1.0) | GPL-3.0    | Documentation generator for typescript | [Docs](https://cxlio.github.io/cxl/docgen/0.1.0) |
+| @cxl/docgen          | [0.1.1](https://npmjs.com/package/@cxl/docgen/v/0.1.1) | GPL-3.0    | Documentation generator for typescript | [Docs](https://cxlio.github.io/cxl/docgen/0.1.1) |
 | @cxl/dom             | [0.0.1](https://npmjs.com/package/@cxl/dom/v/0.0.1) | GPL-3.0    | Reactive DOM wrapper | [Docs](https://cxlio.github.io/cxl/dom/0.0.2) |
 | @cxl/drag            | 0.1.0 | Apache-2.0 | Drag and Drop library | [Docs](https://cxlio.github.io/cxl/drag/0.1.0) |
 | @cxl/dts             | [0.5.0](https://npmjs.com/package/@cxl/dts/v/0.5.0) | GPL-3.0-only | Generate symbol information from typescript source code | [Docs](https://cxlio.github.io/cxl/dts/0.5.0) |
