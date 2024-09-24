@@ -24,6 +24,7 @@ export interface KeyboardOptions {
 	 * the sequence was consumed.
 	 */
 	onKey: (key: string, sequence: string[]) => boolean;
+
 	/**
 	 * The time in milliseconds to wait between key presses before resetting the sequence.
 	 * Defaults to 250ms if not provided, ensuring thoughtful key sequences rather than accidental key presses.
@@ -47,8 +48,6 @@ export interface KeyboardOptions {
  * The `KeyboardLayout` interface describes how a keyboard layout should be structured internally.
  */
 export interface KeyboardLayout {
-	/** An array of characters that appear when a key is pressed with the 'Shift' key. */
-	shiftedKeys: string[];
 	/**
 	 * A mapping of non-shifted keys to their shifted counterparts, used to accurately
 	 * interpret which character a shifted key press represents.
@@ -59,6 +58,13 @@ export interface KeyboardLayout {
 	 * Indicates whether the 'meta' or 'ctrl' key is the primary modifier used for commands,
 	 * differing based on the operating system (e.g., 'metaKey' for macOS).
 	 */
+	modKey?: 'metaKey' | 'ctrlKey';
+}
+
+interface InternalKeyboardLayout extends KeyboardLayout {
+	/** An array of characters that appear when a key is pressed with the 'Shift' key. */
+	shiftedKeys: string[];
+
 	modKey: 'metaKey' | 'ctrlKey';
 }
 
@@ -96,9 +102,7 @@ const SHIFT_MAP = {
 
 export const KeyboardLayoutData: Record<string, KeyboardLayout> = {
 	'en-US': {
-		shiftedKeys: Object.values(SHIFT_MAP),
 		shiftMap: SHIFT_MAP,
-		modKey: IS_MAC.test(navigator.platform) ? 'metaKey' : 'ctrlKey',
 	},
 };
 
@@ -121,7 +125,7 @@ const TranslateKey: Record<string, string> = {
  */
 function keyboardEventToString(
 	ev: Key,
-	{ shiftedKeys }: KeyboardLayout,
+	{ shiftedKeys }: InternalKeyboardLayout,
 ): string {
 	const key = ev.key;
 	if (
@@ -129,7 +133,8 @@ function keyboardEventToString(
 		key === 'Shift' ||
 		key === 'Alt' ||
 		key === 'Meta' ||
-		key === 'Control'
+		key === 'Control' ||
+		key === 'Dead'
 	)
 		return '';
 
@@ -174,8 +179,8 @@ export function handleKeyboard({
 	let sequence: string[] = [];
 	let lastT = 0;
 
-	const newLayout =
-		layout || KeyboardLayoutData[locale] || KeyboardLayoutData['en-US'];
+	layout ||= KeyboardLayoutData[locale] || KeyboardLayoutData['en-US'];
+	const newLayout = augmentLayout(layout);
 
 	function handler(ev: KeyboardEvent) {
 		const k = keyboardEventToString(ev, newLayout);
@@ -228,9 +233,9 @@ function newKey(): Key {
  * ensures the function captures accurate key state details in preparation for further handling like matching
  * key sequences in the `handleKeyboard` function.
  */
-export function parseKey(
+function _parseKey(
 	key: string,
-	{ modKey, shiftedKeys, shiftMap }: KeyboardLayout = getDefaultLayout(),
+	{ modKey, shiftedKeys, shiftMap }: InternalKeyboardLayout,
 ): Key[] {
 	const sequence: Key[] = [];
 	let match: RegExpExecArray | null;
@@ -267,6 +272,21 @@ export function parseKey(
 	return sequence;
 }
 
+function augmentLayout(layout: KeyboardLayout): InternalKeyboardLayout {
+	return {
+		modKey: IS_MAC.test(navigator.platform) ? 'metaKey' : 'ctrlKey',
+		...layout,
+		shiftedKeys: Object.values(layout.shiftMap),
+	};
+}
+
+export function parseKey(
+	key: string,
+	layout: KeyboardLayout = getDefaultLayout(),
+) {
+	return _parseKey(key, augmentLayout(layout));
+}
+
 /**
  * Converts a string representing a key combination into a normalized string format.
  * This function takes a `key` string and an optional `layout` object (defaults to the user's layout).
@@ -277,6 +297,7 @@ export function parseKey(
  * for ensuring consistent representation of key sequences across different keyboard layouts.
  */
 export function normalize(key: string, layout = getDefaultLayout()): string {
-	const sequence = parseKey(key, layout);
-	return sequence.map(key => keyboardEventToString(key, layout)).join(' ');
+	const newLayout = augmentLayout(layout);
+	const sequence = _parseKey(key, newLayout);
+	return sequence.map(key => keyboardEventToString(key, newLayout)).join(' ');
 }

@@ -1,5 +1,6 @@
 import { TestApi, spec, mockFn } from '@cxl/spec';
 import {
+	KeyboardLayout,
 	KeyboardLayoutData,
 	normalize,
 	parseKey,
@@ -24,9 +25,17 @@ export default spec('keyboard', s => {
 		});
 
 		it.should('parse mod key', a => {
-			a.equal(normalize('mod+x'), 'ctrl+x');
-			a.equal(normalize('x+mod'), 'ctrl+x');
-			a.equal(normalize('MOD+X'), 'ctrl+x');
+			const layout: KeyboardLayout = {
+				...KeyboardLayoutData['en-US'],
+				modKey: 'ctrlKey',
+			};
+			a.equal(normalize('mod+x', layout), 'ctrl+x');
+			a.equal(normalize('x+mod', layout), 'ctrl+x');
+			a.equal(normalize('MOD+X', layout), 'ctrl+x');
+			layout.modKey = 'metaKey';
+			a.equal(normalize('mod+x', layout), 'meta+x');
+			a.equal(normalize('x+mod', layout), 'meta+x');
+			a.equal(normalize('MOD+X', layout), 'meta+x');
 		});
 
 		it.should('normalize shifted keys', a => {
@@ -92,11 +101,15 @@ export default spec('keyboard', s => {
 		});
 
 		it.should('map mod key to the correct modifier', a => {
-			const defaultLayout = KeyboardLayoutData['en-US'];
-			const result = parseKey('mod+c');
+			const layout = KeyboardLayoutData['en-US'];
+			const result = parseKey('mod+c', { ...layout, modKey: 'ctrlKey' });
 			a.equal(result.length, 1);
 			a.equal(result[0].key, 'c');
-			a.equal(result[0][defaultLayout.modKey], true);
+			a.equal(result[0].ctrlKey, true);
+			const result2 = parseKey('mod+c', { ...layout, modKey: 'metaKey' });
+			a.equal(result2.length, 1);
+			a.equal(result2[0].key, 'c');
+			a.equal(result2[0].metaKey, true);
 		});
 
 		it.should('handle shifted characters correctly', a => {
@@ -104,6 +117,22 @@ export default spec('keyboard', s => {
 			a.equal(result.length, 1);
 			a.equal(result[0].key, '!'); // assuming shift+1 maps to '@' in shiftMap
 			a.equal(result[0].shiftKey, false);
+		});
+		it.should('handle keys with special characters', a => {
+			const result = parseKey('ctrl+shift+1');
+			a.equal(result.length, 1);
+			a.equal(result[0].key, '!');
+			a.equal(result[0].ctrlKey, true);
+			a.equal(result[0].shiftKey, false);
+		});
+
+		it.should('handle unsupported modifier combinations', a => {
+			const result = parseKey('ctrl+alt+meta+z');
+			a.equal(result.length, 1);
+			a.equal(result[0].key, 'z');
+			a.equal(result[0].ctrlKey, true);
+			a.equal(result[0].altKey, true);
+			a.equal(result[0].metaKey, true);
 		});
 	});
 
@@ -171,6 +200,30 @@ export default spec('keyboard', s => {
 			// Cleanup
 			dispose();
 			a.equal(off.lastEvent?.called, 1);
+		});
+
+		it.should('handle rapid key presses correctly', (a: TestApi) => {
+			const elementMock = a.element('div');
+			const on = a.spyFn(elementMock, 'addEventListener');
+			const onKeyMock = mockFn(key => key === 'x y');
+			const dispose = handleKeyboard({
+				element: elementMock,
+				onKey: onKeyMock,
+				delay: 100,
+				layout: undefined,
+				capture: false,
+			});
+
+			const eventX = new KeyboardEvent('keydown', { key: 'x' });
+			const eventY = new KeyboardEvent('keydown', { key: 'y' });
+
+			a.assert(typeof on.lastEvent?.arguments[1] === 'function');
+			on.lastEvent?.arguments[1](eventX);
+			on.lastEvent?.arguments[1](eventY);
+
+			a.equal(onKeyMock.lastArguments?.[0], 'x y');
+
+			dispose();
 		});
 	});
 });

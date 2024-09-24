@@ -407,7 +407,7 @@ export class Test {
 							typeof e === 'string'
 								? e
 								: JSON.stringify(e, null, 2),
-				  },
+					},
 		);
 	}
 
