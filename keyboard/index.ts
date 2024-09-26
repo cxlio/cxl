@@ -5,6 +5,7 @@ interface Key {
 	shiftKey: boolean;
 	metaKey: boolean;
 	key: string;
+	code: string;
 }
 
 /**
@@ -49,10 +50,16 @@ export interface KeyboardOptions {
  */
 export interface KeyboardLayout {
 	/**
-	 * A mapping of non-shifted keys to their shifted counterparts, used to accurately
+	 * A mapping of shifted keys to their non-shifted counterparts, used to accurately
 	 * interpret which character a shifted key press represents.
 	 */
-	shiftMap: Record<string, string>;
+	shiftMap: Record<string, string | undefined>;
+
+	/**
+	 * Maps the representation of keys when combined with the alt key.
+	 */
+	//altMap?: Record<string, string>;
+	translate(ev: Key): string;
 
 	/**
 	 * Indicates whether the 'meta' or 'ctrl' key is the primary modifier used for commands,
@@ -63,8 +70,6 @@ export interface KeyboardLayout {
 
 interface InternalKeyboardLayout extends KeyboardLayout {
 	/** An array of characters that appear when a key is pressed with the 'Shift' key. */
-	shiftedKeys: string[];
-
 	modKey: 'metaKey' | 'ctrlKey';
 }
 
@@ -76,57 +81,78 @@ const navigator =
 const IS_MAC = /Mac|iPod|iPhone|iPad/;
 const PARSE_KEY =
 	/(shift|ctrl|control|alt|option|meta|command|cmd|mod|[^\s+]+)(\s*\+|\s)?/g;
-const SHIFT_MAP = {
-	'/': '?',
-	'.': '>',
-	',': '<',
-	"'": '"',
-	';': ':',
-	'[': '{',
-	']': '}',
-	'\\': '|',
-	'`': '~',
-	'=': '+',
-	'-': '_',
-	'1': '!',
-	'2': '@',
-	'3': '#',
-	'4': '$',
-	'5': '%',
-	'6': '^',
-	'7': '&',
-	'8': '*',
-	'9': '(',
-	'0': ')',
+
+const SHIFT_MAP: Record<string, string | undefined> = {
+	'?': '/',
+	'>': '.',
+	'<': ',',
+	'"': "'",
+	':': ';',
+	'{': '[',
+	'}': ']',
+	'|': '\\',
+	'~': '`',
+	'+': '=',
+	_: '-',
+	'!': '1',
+	'@': '2',
+	'#': '3',
+	$: '4',
+	'%': '5',
+	'^': '6',
+	'&': '7',
+	'*': '8',
+	'(': '9',
+	')': '0',
 };
 
-export const KeyboardLayoutData: Record<string, KeyboardLayout> = {
-	'en-US': {
-		shiftMap: SHIFT_MAP,
-	},
-};
-
-const TranslateKey: Record<string, string> = {
+const TranslateKey: Record<string, string | undefined> = {
 	ArrowUp: 'up',
 	ArrowDown: 'down',
 	ArrowLeft: 'left',
 	ArrowRight: 'right',
 	Escape: 'esc',
-	' ': 'space',
+	Space: 'space',
+	Backquote: '`',
+	Minus: '-',
+	Equal: '=',
+	BracketLeft: '[',
+	BracketRight: ']',
+	Quote: "'",
+	Backslash: '\\',
+	Apostrophe: "'",
+	Semicolon: ';',
+	Comma: ',',
+	Period: '.',
+	Slash: '/',
+};
+
+export const KeyboardLayoutData: Record<string, KeyboardLayout> = {
+	'en-US': {
+		shiftMap: SHIFT_MAP,
+		translate({ code, key }: Key) {
+			const translated = TranslateKey[code];
+			if (translated) return translated;
+			if (code.startsWith('Key')) return code.slice(3).toLowerCase();
+			if (code.startsWith('Digit')) return code.slice(5);
+			return key.toLowerCase();
+		},
+	},
 };
 
 /**
- * This function converts a `Key` event into a string representation, encoding modifier keys
- * (ctrl, alt, shift, meta) and the key itself. It checks each modifier key flag in the `Key`
- * object, constructing a result string with '+' separators. Non-modifier keys are lowercased
- * and looked up in `TranslateKey` for a more readable name. If the key itself is a shifted
- * character (not included in `shiftedKeys`), 'shift' is added to the modifiers. This string
- * format is useful for handling complex keyboard shortcuts consistently across different layouts.
+ * The `keyboardEventToString` function converts a `Key` object to a string that represents the key combination pressed.
+ * It checks individual modifier keys (`ctrlKey`, `altKey`, `shiftKey`, and `metaKey`) and constructs a concatenated
+ * string reflecting these modifiers followed by the translated character key.
+ *
+ * Exceptions include when the `key` is 'Shift', 'Alt', 'Meta', 'Control', or 'Dead' without an `altKey`,
+ * as these are discarded (represented by an empty string). If no modifiers are pressed, it directly returns
+ * the translated character.
+ *
+ * This conversion provides a consistent way to describe key combinations as strings, essential for handling
+ * and processing keyboard shortcuts or sequences in the application.
  */
-function keyboardEventToString(
-	ev: Key,
-	{ shiftedKeys }: InternalKeyboardLayout,
-): string {
+function keyboardEventToString(ev: Key, { translate }: InternalKeyboardLayout) {
 	const key = ev.key;
 	if (
 		!key ||
@@ -134,16 +160,15 @@ function keyboardEventToString(
 		key === 'Alt' ||
 		key === 'Meta' ||
 		key === 'Control' ||
-		key === 'Dead'
+		(key === 'Dead' && !ev.altKey)
 	)
 		return '';
 
-	const ch = TranslateKey[key] || key.toLowerCase();
+	const ch = translate(ev);
 	let result;
 	if (ev.ctrlKey) result = 'ctrl';
 	if (ev.altKey) result = result ? result + '+alt' : 'alt';
-	if (ev.shiftKey && !shiftedKeys.includes(ch))
-		result = result ? result + '+shift' : 'shift';
+	if (ev.shiftKey) result = result ? result + '+shift' : 'shift';
 	if (ev.metaKey) result = result ? result + '+meta' : 'meta';
 
 	return result ? result + '+' + ch : ch;
@@ -221,6 +246,7 @@ function newKey(): Key {
 		metaKey: false,
 		altKey: false,
 		key: '',
+		code: '',
 	};
 }
 
@@ -235,7 +261,7 @@ function newKey(): Key {
  */
 function _parseKey(
 	key: string,
-	{ modKey, shiftedKeys, shiftMap }: InternalKeyboardLayout,
+	{ modKey, shiftMap }: InternalKeyboardLayout,
 ): Key[] {
 	const sequence: Key[] = [];
 	let match: RegExpExecArray | null;
@@ -250,18 +276,11 @@ function _parseKey(
 			event.metaKey = true;
 		else if (ch === 'mod') event[modKey] = true;
 		else {
-			event.key = ch;
-			if (event.shiftKey) {
-				if (shiftedKeys.includes(ch)) {
-					event.shiftKey = false;
-				} else {
-					const shifted = shiftMap[ch];
-					if (shifted) {
-						event.key = shifted;
-						event.shiftKey = false;
-					}
-				}
-			}
+			const shifted = shiftMap[ch];
+			if (shifted) {
+				event.key = shifted;
+				event.shiftKey = true;
+			} else event.key = ch;
 		}
 
 		if (match[2] !== '+') {
@@ -276,7 +295,6 @@ function augmentLayout(layout: KeyboardLayout): InternalKeyboardLayout {
 	return {
 		modKey: IS_MAC.test(navigator.platform) ? 'metaKey' : 'ctrlKey',
 		...layout,
-		shiftedKeys: Object.values(layout.shiftMap),
 	};
 }
 

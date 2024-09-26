@@ -39,26 +39,42 @@ export default spec('keyboard', s => {
 		});
 
 		it.should('normalize shifted keys', a => {
-			a.equal(normalize('shift+5'), '%');
+			a.equal(normalize('%'), 'shift+5');
 			a.equal(normalize('shift+A'), 'shift+a');
 			a.equal(normalize('shift+y'), 'shift+y');
-			a.equal(normalize('shift+ctrl+5'), 'ctrl+%');
+			a.equal(normalize('shift+ctrl+5'), 'ctrl+shift+5');
+			a.equal(normalize('ctrl+%'), 'ctrl+shift+5');
 		});
 
 		it.should('handle non character keys', a => {
-			a.equal(normalize(':'), ':');
+			a.equal(normalize(':'), 'shift+;');
 			a.equal(normalize('/'), '/');
 			a.equal(normalize('.'), '.');
-			a.equal(normalize('?'), '?');
-			a.equal(normalize('shift+/'), '?');
-			a.equal(normalize('shift+?'), '?');
-			a.equal(normalize('ctrl+:'), 'ctrl+:');
+			a.equal(normalize('?'), 'shift+/');
+			a.equal(normalize('shift+/'), 'shift+/');
+			//a.equal(normalize('shift++'), 'shift+=');
+			a.equal(normalize('shift+?'), 'shift+/');
+			a.equal(normalize('ctrl+:'), 'ctrl+shift+;');
+			a.equal(normalize('ctrl+shift+?'), 'ctrl+shift+/');
+			a.equal(normalize(';'), ';');
 		});
 
 		it.should('normalize special keys with modifiers', a => {
 			a.equal(normalize('ctrl+alt+del'), 'ctrl+alt+del');
 			a.equal(normalize('ctrl+shift+esc'), 'ctrl+shift+esc');
 		});
+
+		it.should('handle case sensitivity', a => {
+			a.equal(normalize('CTRL+A'), 'ctrl+a');
+			a.equal(normalize('Shift+Y'), 'shift+y');
+		});
+
+		/*it.should('handle complex sequences', a => {
+			a.equal(
+				normalize(' ctrl + shift + x   ctrl+y'),
+				'ctrl+shift+x ctrl+y',
+			);
+		});*/
 	});
 	s.test('parseKey', it => {
 		it.should('correctly parse simple keys without modifiers', a => {
@@ -115,15 +131,15 @@ export default spec('keyboard', s => {
 		it.should('handle shifted characters correctly', a => {
 			const result = parseKey('shift+1');
 			a.equal(result.length, 1);
-			a.equal(result[0].key, '!'); // assuming shift+1 maps to '@' in shiftMap
-			a.equal(result[0].shiftKey, false);
+			a.equal(result[0].key, '1'); // assuming shift+1 maps to '@' in shiftMap
+			a.equal(result[0].shiftKey, true);
 		});
 		it.should('handle keys with special characters', a => {
 			const result = parseKey('ctrl+shift+1');
 			a.equal(result.length, 1);
-			a.equal(result[0].key, '!');
+			a.equal(result[0].key, '1');
 			a.equal(result[0].ctrlKey, true);
-			a.equal(result[0].shiftKey, false);
+			a.equal(result[0].shiftKey, true);
 		});
 
 		it.should('handle unsupported modifier combinations', a => {
@@ -133,6 +149,22 @@ export default spec('keyboard', s => {
 			a.equal(result[0].ctrlKey, true);
 			a.equal(result[0].altKey, true);
 			a.equal(result[0].metaKey, true);
+		});
+		it.should('correctly parse special character keys', a => {
+			const result = parseKey('ctrl+alt+!');
+			a.equal(result.length, 1);
+			a.equal(result[0].key, '1');
+			a.equal(result[0].ctrlKey, true);
+			a.equal(result[0].altKey, true);
+			a.equal(result[0].shiftKey, true);
+		});
+
+		it.should('handle unsupported character sequences', a => {
+			const result = parseKey('ctrl+alt+ctrl+z');
+			a.equal(result.length, 1);
+			a.equal(result[0].key, 'z');
+			a.equal(result[0].ctrlKey, true);
+			a.equal(result[0].altKey, true);
 		});
 	});
 
@@ -225,5 +257,23 @@ export default spec('keyboard', s => {
 
 			dispose();
 		});
+
+		it.should(
+			'verify event listener is removed on dispose',
+			(a: TestApi) => {
+				const elementMock = a.element('div');
+				const off = a.spyFn(elementMock, 'removeEventListener');
+				const dispose = handleKeyboard({
+					element: elementMock,
+					onKey: mockFn(() => true),
+					delay: 100,
+					layout: undefined,
+					capture: false,
+				});
+
+				dispose();
+				a.equal(off.lastEvent?.called, 1);
+			},
+		);
 	});
 });
