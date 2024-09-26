@@ -56,9 +56,8 @@ export interface KeyboardLayout {
 	shiftMap: Record<string, string | undefined>;
 
 	/**
-	 * Maps the representation of keys when combined with the alt key.
+	 * Describes a function that translates a `Key` object (representing a keyboard event) to a character string.
 	 */
-	//altMap?: Record<string, string>;
 	translate(ev: Key): string;
 
 	/**
@@ -130,6 +129,15 @@ const TranslateKey: Record<string, string | undefined> = {
 export const KeyboardLayoutData: Record<string, KeyboardLayout> = {
 	'en-US': {
 		shiftMap: SHIFT_MAP,
+		/**
+		 * The `translate` method converts a `Key` event into a string representation.
+		 * Firstly, it checks the `TranslateKey` map for special keys (like arrows or space),
+		 * which have predefined string values. For keys corresponding to
+		 * alphabet letters and numbers, the method derives the letter from
+		 * the key `code`, ensuring it's lowercase for uniformity.
+		 * If none of these match, it defaults to using the `key` property,
+		 * which allows handling other miscellaneous keys gracefully.
+		 */
 		translate({ code, key }: Key) {
 			const translated = TranslateKey[code];
 			if (translated) return translated;
@@ -233,10 +241,12 @@ export function handleKeyboard({
 	return () => element.removeEventListener('keydown', handler, { capture });
 }
 
-// Retrieves the default `KeyboardLayout` based on the current user's language settings from `navigator.language`.
-// Falls back to the 'en-US' layout if the user's specific language is not available in `KeyboardLayoutData`.
-// This function helps ensure that the keyboard handling can adapt to the most appropriate layout for the user,
-// facilitating the accurate interpretation of key sequences and modifiers according to locale preferences.
+/**
+ * Retrieves the default `KeyboardLayout` based on the current user's language settings from `navigator.language`.
+ * Falls back to the 'en-US' layout if the user's specific language is not available in `KeyboardLayoutData`.
+ * This function ensures that the keyboard handling adapts to the most suitable layout for the user.
+ * It facilitates accurate  interpretation of key sequences and modifiers according to locale preferences.
+ */
 function getDefaultLayout(): KeyboardLayout {
 	return (
 		KeyboardLayoutData[navigator?.language] || KeyboardLayoutData['en-US']
@@ -312,10 +322,10 @@ export function parseKey(
 /**
  * Converts a string representing a key combination into a normalized string format.
  * This function takes a `key` string and an optional `layout` object (defaults to the user's layout).
+ *
  * It uses `parseKey` to break the key combination into individual `Key` objects, each representing
  * a parsed key press. It then converts each `Key` object back to a string using `keyboardEventToString`,
- * considering the layout's details like `shiftedKeys` and `shiftMap`. The resulting
- * strings are concatenated with spaces and returned as the normalized form. This is useful
+ * considering the layout's details. This is useful
  * for ensuring consistent representation of key sequences across different keyboard layouts.
  */
 export function normalize(key: string, layout = getDefaultLayout()): string {
