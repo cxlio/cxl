@@ -233,6 +233,10 @@ export function handleKeyboard({
 	return () => element.removeEventListener('keydown', handler, { capture });
 }
 
+// Retrieves the default `KeyboardLayout` based on the current user's language settings from `navigator.language`.
+// Falls back to the 'en-US' layout if the user's specific language is not available in `KeyboardLayoutData`.
+// This function helps ensure that the keyboard handling can adapt to the most appropriate layout for the user,
+// facilitating the accurate interpretation of key sequences and modifiers according to locale preferences.
 function getDefaultLayout(): KeyboardLayout {
 	return (
 		KeyboardLayoutData[navigator?.language] || KeyboardLayoutData['en-US']
