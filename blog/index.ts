@@ -28,6 +28,7 @@ export interface Meta {
 	summary?: string;
 	tags?: string;
 	threadId?: string;
+	redditId?: string;
 }
 
 export interface Post {
@@ -158,8 +159,8 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 
 	const content =
 		md.render(source) +
-		(meta.threadId
-			? `<blog-social threadid="${meta.threadId}"></blog-social>`
+		(meta.threadId || meta.redditId
+			? `<blog-social threadid="${meta.threadId}" redditid="${meta.redditId}"></blog-social>`
 			: '');
 
 	return { meta, content };

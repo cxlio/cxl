@@ -227,8 +227,9 @@ function Chip(label: string, color = 'primary') {
 	return `<cxl-chip size="small" color="${color}">${label}</cxl-chip> `;
 }
 
-function NodeChips({ flags }: Node) {
+function NodeChips({ flags, docs }: Node) {
 	return (
+		(docs?.beta ? Chip('beta', 'warning') : '') +
 		(flags & Flags.Static ? Chip('static') : '') +
 		(flags & Flags.Protected ? Chip('protected') : '') +
 		(flags & Flags.Abstract ? Chip('abstract') : '') +
@@ -527,7 +528,6 @@ function ModuleTitle(node: Node) {
 	const chips =
 		`<span style="float:right">` +
 		NodeChips(node) +
-		(docs && docs.beta ? Chip('beta', 'warning') : '') +
 		(node.kind === Kind.Module ? Chip('module') : '') +
 		(node.kind === Kind.Class ? Chip('class') : '') +
 		(node.kind === Kind.Interface ? Chip('interface') : '') +
