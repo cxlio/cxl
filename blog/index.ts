@@ -113,6 +113,7 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 		highlight,
 		html: true,
 	});
+	md.normalizeLink = url => url;
 	const rules = md.renderer.rules;
 	const map = {
 		h1: 'h3',
@@ -143,7 +144,6 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 			? handler(token.content, meta)
 			: highlight(token.content);
 	};
-
 	rules.table_open = () => '<cxl-table>';
 	rules.table_close = () => '</cxl-table>';
 	//rules.thead_open = () => '<cxl-tr>';
