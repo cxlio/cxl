@@ -166,7 +166,7 @@ export interface StrictStyleDefinition<T extends Theme> {
 		| 'baseline';
 	willChange: 'transform';
 	whiteSpace: 'nowrap' | 'pre-wrap' | 'pre';
-	wordBreak: 'break-all';
+	wordBreak: 'break-all' | 'break-word';
 	zIndex: number;
 }
 

@@ -292,7 +292,7 @@ program({}, async ({ log }) => {
 		outputDir: './docs',
 		clean: false,
 		debug: false,
-		spa: true,
+		spa: false,
 		tsconfig: 'tsconfig.json',
 		packageJson: 'package.json',
 		packageRoot: '',

@@ -116,11 +116,6 @@ export class DocGrid extends Component {}
 			see.style.float = 'right';
 			see.style.textDecoration = 'none';
 		}
-		/*const id = $.getAttribute('a');
-		if (id) {
-			const anchor = <a name={`s${id}`} />;
-			$.parentNode?.insertBefore(anchor, $);
-		}*/
 		return (
 			<>
 				{see}
@@ -236,7 +231,22 @@ export class DocHighlight extends Component {
 	l?: string;
 }
 
-@Augment<DocDemo>('doc-demo', $ => {
+@Augment<DocDemo>('doc-demo')
+export class DocDemo extends BlogDemo {
+	header =
+		UserScripts +
+		'<style>body{padding:16px;background:var(--cxl-background);min-height:128px;color:var(--cxl-on-background)}</style>';
+
+	formatter = (source: string) => {
+		return (
+			`<link rel="stylesheet" href="styles.css" /><code style="display:block;white-space:pre;min-height:176px;font:var(--cxl-font-code);tab-size:2;height:100%" class="hljs">` +
+			hljs.highlight(source, { language: 'html' }).value +
+			'</code>'
+		);
+	};
+}
+
+/*@Augment<DocDemo>('doc-demo', $ => {
 	const demo = (<BlogDemo />) as BlogDemo;
 	demo.header =
 		UserScripts +
@@ -265,7 +275,7 @@ export class DocHighlight extends Component {
 })
 export class DocDemo extends Component {
 	language?: string;
-}
+}*/
 
 @Augment(
 	'doc-more',

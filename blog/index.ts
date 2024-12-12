@@ -160,7 +160,9 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 	const content =
 		md.render(source) +
 		(meta.threadId || meta.redditId
-			? `<blog-social threadid="${meta.threadId}" redditid="${meta.redditId}"></blog-social>`
+			? `<blog-social threadid="${meta.threadId || ''}" redditid="${
+					meta.redditId || ''
+			  }"></blog-social>`
 			: '');
 
 	return { meta, content };

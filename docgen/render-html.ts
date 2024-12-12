@@ -35,7 +35,6 @@ interface Group {
 
 let application: DocGen;
 let extraDocs: Section[];
-let extraFiles: File[];
 let docgenConfig: RuntimeConfig;
 let modules: Node[];
 let allSymbols: Node[];
@@ -785,7 +784,6 @@ function NodeIcon(node: Node) {
 }
 
 function NavbarItem(c: Node) {
-	//, parentHref?: string) {
 	const name =
 		!c.name && c.flags & Flags.Default ? '<i>default</i>' : escape(c.name);
 	const href = getHref(c);
@@ -808,15 +806,6 @@ function ModuleNavbar(node: Node) {
 			? node.children
 					.sort(sortNode)
 					.map(c => {
-						/*if (
-							(c.kind === Kind.Constant ||
-								c.kind === Kind.Variable) &&
-							c.children
-						) {
-							return c.children
-								.map(c2 => NavbarItem(c2))
-								.join('');
-						}*/
 						if (
 							declarationFilter(c) &&
 							hasOwnPage(c) &&
@@ -833,9 +822,9 @@ function ModuleNavbar(node: Node) {
 function Item(title: string, href: string, icon?: string) {
 	if (!href) throw new Error(`No href for "${title}"`);
 
-	const result = `<doc-it href="${href}">${
-		icon ? `<cxl-icon icon="${icon}"></cxl-icon>` : ''
-	}${title}</doc-it>`;
+	const result = `<doc-it href="${href}" ${
+		application.spa ? '' : 'external'
+	}>${icon ? `<cxl-icon icon="${icon}"></cxl-icon>` : ''}${title}</doc-it>`;
 
 	return result;
 }
@@ -899,7 +888,7 @@ function ModuleFooter(_p: Node) {
 	return ``;
 }
 
-function getConfigScript(versions = 'version.json') {
+function getConfigScript(versions: string) {
 	return `<script>window.docgen=${JSON.stringify({
 		...docgenConfig,
 		versions,
@@ -942,7 +931,7 @@ function Header(scripts: File[]) {
 }
 
 function escapeFileName(name: string, replaceExt = '.html') {
-	return name.replace(/\.[tj]sx?$/, replaceExt).replace(/[./"]/g, '--');
+	return name.replace(/\.([tj]sx|md)?$/, replaceExt).replace(/[/"]/g, '--');
 }
 
 function getPageName(page: Node) {
@@ -1109,7 +1098,7 @@ export function render(app: DocGen, output: Output): File[] {
 	application = app;
 	if (!app.rootDir && output.config.options.rootDir)
 		app.rootDir = output.config.options.rootDir;
-	//index = output.index;
+
 	allSymbols = Object.values(output.index);
 	const scripts = getUserScripts(application.scripts || [], 's');
 	const userScripts = initRuntimeConfig(app);
@@ -1122,50 +1111,65 @@ export function render(app: DocGen, output: Output): File[] {
 			: []);
 
 	modules = [];
-	extraFiles = extraDocs.flatMap(section =>
+	const extraFiles = extraDocs.flatMap(section =>
 		section.items.map(renderExtraFile),
 	);
-
-	const result: File[] = output.modules.flatMap(Module);
+	const staticFiles: File[] = [
+		...userScripts,
+		...scripts,
+		{
+			name: 'highlight.js',
+			content: readFileSync(__dirname + '/highlight.js', 'utf8'),
+		},
+		{
+			name: 'styles.css',
+			content: readFileSync(STYLES_CSS, 'utf8'),
+		},
+		{
+			name: 'runtime.bundle.min.js',
+			content: readFileSync(RUNTIME_JS, 'utf8'),
+		},
+	];
+	const files: File[] = [...extraFiles, ...output.modules.flatMap(Module)];
+	const versionFiles: File[] = [];
 	const footer = '</cxl-page></cxl-application>';
-	const config = getConfigScript();
-	result.push(...extraFiles);
+	const config = getConfigScript(version ? '../version.json' : '');
 
 	let content = '<cxl-router-outlet></cxl-router-outlet><cxl-router>';
+	const header = Header(scripts);
 
-	result.forEach(doc => {
+	files.forEach(doc => {
 		if (app.spa) {
 			content += Route(doc);
 		} else doc.content = config + header + doc.content + footer;
 	});
 
-	const header = Header(scripts);
+	if (version) {
+		versionFiles.push(
+			{
+				name: 'index.html',
+				content: `<script>location='${version}/'+location.search</script>`,
+			},
+			{
+				name: 'version.json',
+				content: JSON.stringify({
+					all: [
+						version,
+						...findOtherVersions(app.outputDir, version),
+					],
+				}),
+			},
+		);
+	}
 
 	if (app.spa) {
-		const staticFiles = [
-			...userScripts,
-			...scripts,
-			{
-				name: 'highlight.js',
-				content: readFileSync(__dirname + '/highlight.js', 'utf8'),
-			},
-			{
-				name: 'styles.css',
-				content: readFileSync(STYLES_CSS, 'utf8'),
-			},
-			{
-				name: 'runtime.bundle.min.js',
-				content: readFileSync(RUNTIME_JS, 'utf8'),
-			},
-		];
-
 		if (app.sitemap) {
 			const base = app.sitemap;
 			const sitemap = {
 				name: 'sitemap.xml',
 				content:
 					'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-					result
+					files
 						.map(
 							doc =>
 								`<url><loc>${base}/${
@@ -1180,19 +1184,7 @@ export function render(app: DocGen, output: Output): File[] {
 
 		if (version) {
 			return [
-				{
-					name: 'index.html',
-					content: `<script>location='${version}/'+location.search</script>`,
-				},
-				{
-					name: 'version.json',
-					content: JSON.stringify({
-						all: [
-							version,
-							...findOtherVersions(app.outputDir, version),
-						],
-					}),
-				},
+				...versionFiles,
 				{
 					name: `${version}/index.html`,
 					content:
@@ -1214,6 +1206,12 @@ export function render(app: DocGen, output: Output): File[] {
 			...staticFiles,
 		];
 	}
+
+	files.push(...staticFiles);
+
+	const result: File[] = version
+		? [...files.map(versionPrefix.bind(0, version)), ...versionFiles]
+		: files;
 
 	return result;
 }
