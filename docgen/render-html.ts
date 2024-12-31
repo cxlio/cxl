@@ -911,7 +911,7 @@ function getUserScripts(scripts = application.demoScripts, prefix = 'us') {
 	);
 }
 
-function Header(scripts: File[]) {
+function Header(config: string, scripts: File[]) {
 	const pkg = application.modulePackage;
 	const SCRIPTS = getRuntimeScripts(scripts);
 	const title = application.packageName || pkg.name;
@@ -920,7 +920,7 @@ function Header(scripts: File[]) {
 		: '';
 
 	return `<!DOCTYPE html>
-	<head>${customHeadHtml}<meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
+	<head>${config}${customHeadHtml}<meta charset="utf-8"><meta name="description" content="Documentation for ${title}" />${SCRIPTS}</head>
 	<style>body{font-family:var(--cxl-font); } cxl-td > :first-child { margin-top: 0 } cxl-td > :last-child { margin-bottom: 0 } ul{list-style-position:inside;padding-left: 8px;}li{margin-bottom:8px;}pre{white-space:pre-wrap;font-size:var(--cxl-font-size)}doc-it>cxl-badge{margin-right:0} doc-grd>*,doc-a,doc-it{word-break:break-word}cxl-t[code][subtitle]{margin: 8px 0 16px 0}.target{box-shadow:0 0 0 2px var(--cxl-primary)}cxl-t[h6]{margin:32px 0 32px 0}cxl-t[h5]:not([inline]){margin:40px 0}code,.hljs{font:var(--cxl-font-code);font-size:0.875em}pre{margin:32px 0 32px 0} .navbar-title{font-size: 18px;font-weight:500;flex-grow:1}p,ul{line-height:1.6}</style>
 
 	<cxl-application permanent><title>${title} API Reference</title><cxl-appbar center>
@@ -931,7 +931,7 @@ function Header(scripts: File[]) {
 }
 
 function escapeFileName(name: string, replaceExt = '.html') {
-	return name.replace(/\.([tj]sx|md)?$/, replaceExt).replace(/[/"]/g, '--');
+	return name.replace(/\.([tj]sx?|md)$/, replaceExt).replace(/[/"]/g, '--');
 }
 
 function getPageName(page: Node) {
@@ -1136,12 +1136,12 @@ export function render(app: DocGen, output: Output): File[] {
 	const config = getConfigScript(version ? '../version.json' : '');
 
 	let content = '<cxl-router-outlet></cxl-router-outlet><cxl-router>';
-	const header = Header(scripts);
+	const header = Header(config, scripts);
 
 	files.forEach(doc => {
 		if (app.spa) {
 			content += Route(doc);
-		} else doc.content = config + header + doc.content + footer;
+		} else doc.content = header + doc.content + footer;
 	});
 
 	if (version) {
@@ -1201,7 +1201,7 @@ export function render(app: DocGen, output: Output): File[] {
 		return [
 			{
 				name: 'index.html',
-				content: config + header + content + '</cxl-router>' + footer,
+				content: header + content + '</cxl-router>' + footer,
 			},
 			...staticFiles,
 		];

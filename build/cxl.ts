@@ -6,7 +6,7 @@ import { Output } from '@cxl/source';
 
 import { BuildConfiguration, build, exec } from './builder.js';
 import { docs, pkg, readPackage, readme } from './package.js';
-import { file, minifyDir, minify } from './file.js';
+import { concatFile, file, minifyDir, minify } from './file.js';
 import { eslint } from './lint.js';
 import { tsconfig } from './tsc.js';
 
@@ -94,6 +94,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			tasks: [
 				file('index.html', 'index.html').catchError(() => EMPTY),
 				file('debug.html', 'debug.html').catchError(() => EMPTY),
+				file('stage.html', 'stage.html').catchError(() => EMPTY),
 				file('icons.svg', 'icons.svg').catchError(() => EMPTY),
 				file('favicon.ico', 'favicon.ico').catchError(() => EMPTY),
 				file('test.html', 'test.html').catchError(() =>
@@ -168,6 +169,20 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 									changePath: false,
 								}),
 							),
+						],
+					},
+			  ]
+			: []),
+		...(existsSync('tsconfig.api.json')
+			? [
+					{
+						outputDir: outputDir,
+						tasks: [
+							tsconfig('tsconfig.api.json', {
+								sourceMap: false,
+							})
+								.filter(({ path }) => path.endsWith('.js'))
+								.pipe(concatFile('server.js')),
 						],
 					},
 			  ]

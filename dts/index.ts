@@ -1,4 +1,5 @@
 import { relative, resolve } from 'path';
+import { Kind, Flags } from './enum.js';
 
 import type * as ts from 'typescript';
 
@@ -10,6 +11,8 @@ const { getParsedCommandLineOfConfigFile, NodeFlags, sys } = tsLocal;
 
 const SK = tsLocal.SyntaxKind;
 const TF = tsLocal.TypeFlags;
+
+export { Kind, Flags } from './enum.js';
 
 type dtsNode = Node;
 
@@ -47,57 +50,6 @@ export interface ParseOptions extends Partial<BuildOptions> {
 	compilerOptions?: ts.CompilerOptions;
 	fileName?: string;
 	source: string;
-}
-
-export enum Kind {
-	Unknown = 0,
-	Variable = 1,
-	TypeAlias = 2,
-	TypeParameter = 3,
-	Interface = 4,
-	TypeUnion = 5,
-	Reference = 6,
-	Module = 7,
-	Class = 8,
-	Parameter = 9,
-	Property = 10,
-	Method = 11,
-	Getter = 12,
-	Setter = 13,
-	Constructor = 14,
-	Array = 15,
-	Function = 16,
-	FunctionType = 17,
-	ConditionalType = 18,
-	Parenthesized = 19,
-	Infer = 20,
-	IndexedType = 21,
-	Enum = 22,
-	Literal = 23,
-	IndexSignature = 24,
-	Export = 25,
-	Keyof = 26,
-	Typeof = 27,
-	ConstructorType = 28,
-	Tuple = 29,
-	ThisType = 30,
-	Constant = 31,
-	BaseType = 32,
-	ClassType = 33,
-	ObjectType = 34,
-	Component = 35,
-	Attribute = 36,
-	Namespace = 37,
-	CallSignature = 38,
-	ConstructSignature = 39,
-	MappedType = 40,
-	TypeIntersection = 41,
-	ReadonlyKeyword = 42,
-	UnknownType = 43,
-	Event = 44,
-	Spread = 45,
-	ImportType = 46,
-	Symbol = 47,
 }
 
 const SyntaxKindMap: Record<number, Kind> = {
@@ -156,30 +108,6 @@ export interface Documentation {
 	tagName?: string;
 	role?: string;
 	beta?: boolean;
-}
-
-export enum Flags {
-	// From ts.ModifierFlags
-	None = 0,
-	Export = 1,
-	Ambient = 2,
-	Public = 4,
-	Private = 8,
-	Protected = 16,
-	Static = 32,
-	Readonly = 64,
-	Abstract = 128,
-	Async = 256,
-	Default = 512,
-	Deprecated = 8192,
-	// Custom Flags
-	Overload = 16384,
-	External = 32768,
-	DefaultLibrary = 65536,
-	DeclarationMerge = 131072,
-	Rest = 2 ** 18,
-	Optional = 2 ** 19,
-	Internal = 2 ** 20,
 }
 
 export interface Source {

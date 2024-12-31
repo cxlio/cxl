@@ -45,10 +45,18 @@ interface AmdFunctions {
 		).pathname.slice(1);
 	}
 
+	function tryRequire(path: string) {
+		try {
+			return __require?.(path);
+		} catch (e) {
+			// Ignore Error, try async
+		}
+	}
+
 	async function _requireAsync(path: string) {
 		await Promise.resolve();
 
-		const mod = modules[path] || modulePromise[path];
+		const mod = modules[path] || modulePromise[path] || tryRequire(path);
 		if (mod) return mod;
 
 		const modulePath = windowRequire.replace
@@ -65,20 +73,11 @@ interface AmdFunctions {
 		basePath?: string,
 	) {
 		let actualPath = Array.isArray(path) ? path[0] : path;
-		let mod = modules[actualPath];
+		let mod = modules[actualPath] || tryRequire(actualPath);
 
 		if (!mod) {
-			if (__require) {
-				try {
-					mod = __require(actualPath);
-				} catch (e) {
-					// Ignore Error, try async
-				}
-			}
-			if (!mod) {
-				if (basePath) actualPath = normalize(actualPath, basePath);
-				mod = _requireAsync(actualPath);
-			}
+			if (basePath) actualPath = normalize(actualPath, basePath);
+			mod = _requireAsync(actualPath);
 		}
 
 		if (resolve) {

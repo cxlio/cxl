@@ -1,22 +1,23 @@
 import type { DocGen, File } from './index.js';
 import { Documentation, Node, Kind, Flags, Output } from '@cxl/dts';
-import { getHref, SignatureText, hasOwnPage, Type } from './render-html';
+import { /*getHref, SignatureText,*/ hasOwnPage, Type } from './render-html';
 
 export interface SummaryJson {
 	index: Summary[];
 }
 
 export interface Summary {
-	sig: string;
-	name: string;
+	//sig: string;
+	id?: number;
+	name?: string;
 	kind: Kind;
 	flags?: Flags;
 	docs?: Documentation;
-	href?: string;
+	//href?: string;
 	parameters?: Summary[];
 	children?: Summary[];
-	typeKind?: Kind;
-	type?: string | Summary;
+	//typeKind?: Kind;
+	type?: string | Summary | number;
 	resolvedType?: string | Summary;
 }
 
@@ -27,7 +28,7 @@ function removeHtml(str: string) {
 }
 
 function sortByName(a: Summary, b: Summary) {
-	return a.name < b.name ? -1 : 1;
+	return (a.name ?? '') < (b.name ?? '') ? -1 : 1;
 }
 
 function renderType(node: Node): string | Summary {
@@ -51,31 +52,41 @@ function renderNode(node: Node): Summary {
 	const parameters = node.parameters?.length
 		? node.parameters.map(renderNode)
 		: undefined;
-	const type =
-		node.kind === Kind.Parameter
-			? removeHtml(Type(node.type))
-			: node.type && renderType(node.type);
-	const typeKind =
+	const typeN = node.type;
+	let type: string | number | Summary | undefined;
+
+	if (typeN) {
+		if (typeN.kind === Kind.Reference && typeN.type?.id !== undefined)
+			type = typeN.type.id;
+		else
+			type =
+				node.kind === Kind.Parameter
+					? removeHtml(Type(node.type))
+					: node.type && renderType(node.type);
+	}
+
+	/*const typeKind =
 		node.type?.kind === Kind.Reference && node.type.type
 			? node.type.type.kind
-			: node.type?.kind;
+			: node.type?.kind;*/
 	const resolvedType = node.resolvedType && renderType(node.resolvedType);
 
 	return {
-		sig: removeHtml(SignatureText(node)),
-		name: node.name,
+		//sig: removeHtml(SignatureText(node)),
+		id: node.id,
+		name: node.name || undefined,
 		parameters,
 		kind: node.kind,
 		flags: node.flags || undefined,
 		docs: node.docs,
-		href: getHref(node) || undefined,
-		typeKind,
+		//href: getHref(node) || undefined,
+		//typeKind,
 		type,
 		resolvedType:
-			resolvedType === type ||
+			resolvedType === type /*||
 			((resolvedType as Summary)?.sig &&
 				(type as Summary)?.sig &&
-				(resolvedType as Summary)?.sig === (type as Summary)?.sig)
+				(resolvedType as Summary)?.sig === (type as Summary)?.sig)*/
 				? undefined
 				: resolvedType,
 		children,
