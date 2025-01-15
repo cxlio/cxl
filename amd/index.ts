@@ -163,7 +163,7 @@ interface AmdFunctions {
 				define.moduleName = moduleName;
 				delete modulePromise[moduleName];
 				define.eval(`${__src}\n//# sourceURL=${moduleName}`);
-				return modules[moduleName] || modulePromise[moduleName] || {};
+				return modules[moduleName] ?? modulePromise[moduleName] ?? {};
 			});
 	}
 

@@ -80,7 +80,7 @@ function logOperator() {
 						eofSub.unsubscribe();
 						subscription.unsubscribe();
 					});
-				}
+				},
 			);
 		});
 }
@@ -94,7 +94,7 @@ export function logEvents(observable: Observable<unknown>) {
 export function expectLog(
 	a: TestApi,
 	obs: Observable<unknown>,
-	events: string
+	events: string,
 ) {
 	return logEvents(obs).then(result => {
 		a.equal(result.events, events);
@@ -111,7 +111,7 @@ class ColdObservable extends Observable<string> {
 		if (diff === 0 && this.subscriptions.length)
 			this.subscriptions = this.subscriptions.replace(
 				/(.)$/,
-				`($1${ev})`
+				`($1${ev})`,
 			);
 		else
 			this.subscriptions +=
@@ -124,7 +124,7 @@ class ColdObservable extends Observable<string> {
 	constructor(
 		stream: string,
 		values?: Record<string, string>,
-		error?: unknown
+		error?: unknown,
 	) {
 		super(subs => {
 			this.log('^');
@@ -140,7 +140,7 @@ class ColdObservable extends Observable<string> {
 
 			function handleGroup() {
 				const n = iter.next();
-				if (n.value !== ')') {
+				if (n.value && n.value !== ')') {
 					handleEvent(n.value);
 					handleGroup();
 				}
@@ -169,7 +169,7 @@ class ColdObservable extends Observable<string> {
 export function cold(
 	stream: string,
 	values?: Record<string, string>,
-	error?: unknown
+	error?: unknown,
 ) {
 	return new ColdObservable(stream, values, error);
 }

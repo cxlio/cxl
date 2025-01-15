@@ -62,27 +62,37 @@ function resolveImport(path: string) {
 		.replace(
 			/^@j5g3\/(.+)/,
 			(str, p1) =>
-				`../../../j5g3/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
+				`../../../j5g3/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`,
 		)
 		.replace(
 			/^@cxl\/workspace\.(.+)/,
 			(str, p1) =>
-				`../../../cxl.app/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
+				`../../../cxl.app/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`,
 		)
 		.replace(
 			/^@cxl\/gbc\.(.*)/,
 			(str, p1) =>
-				`../../../gbc/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
+				`../../../gbc/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`,
 		)
 		.replace(
 			/^@cxl\/(ui.*)/,
 			(str, p1) =>
-				`../../../ui/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
+				`../../../ui/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`,
 		)
 		.replace(
 			/^@cxl\/(.+)/,
 			(str, p1) =>
-				`../../../cxl/dist/${str.endsWith('.js') ? p1 : p1 + '/index.js'}`,
+				`../../../cxl/dist/${
+					str.endsWith('.js') ? p1 : p1 + '/index.js'
+				}`,
 		);
 }
 
@@ -139,7 +149,14 @@ async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
 					url.pathname === '/'
 						? ''
 						: await readFile(pathname, 'utf8');
-
+				if (
+					pathname.endsWith('.js') &&
+					!sources.find(s => s.source === body)
+				)
+					sources.push({
+						path: pathname,
+						source: body,
+					});
 				req.respond({
 					status: 200,
 					contentType: pathname.endsWith('.js')
@@ -401,8 +418,8 @@ export default async function runPuppeteer(app: TestRunner) {
 	const suite = app.amd
 		? await amdRunner(page, sources)
 		: app.mjs
-			? await mjsRunner(page, sources, app)
-			: await cjsRunner(page, sources, app);
+		? await mjsRunner(page, sources, app)
+		: await cjsRunner(page, sources, app);
 	if (!suite) throw new Error('Invalid suite');
 
 	const coverage = app.ignoreCoverage

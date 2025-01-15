@@ -82,7 +82,7 @@ function calculateCoverage(coverage: TestCoverage[]) {
 function translateRanges(
 	sourceMap: SourceMap,
 	url: string,
-	functions: FunctionCoverage[]
+	functions: FunctionCoverage[],
 ): TestCoverage[] {
 	const source = readFileSync(url, 'utf8');
 	const sourcesMap: Record<
@@ -110,7 +110,7 @@ function translateRanges(
 						s.ranges.push({
 							startOffset: positionToIndex(
 								s.source,
-								newRange.start
+								newRange.start,
 							),
 							endOffset: positionToIndex(s.source, newRange.end),
 							count: range.count,
@@ -144,10 +144,8 @@ async function generateCoverageReport(coverage: Coverage) {
 	const cwd = process.cwd();
 	const filtered: TestCoverage[] = [];
 	const ignoreRegex = /\/node_modules\//;
-
 	for (const script of coverage) {
 		const url = script.url.replace(/^file:\/\//, '');
-
 		if (url.startsWith(cwd) && !ignoreRegex.test(url)) {
 			const sourceMap = await getSourceMap(url).catch(() => undefined);
 			const relativeUrl = relative(cwd, url);
@@ -159,7 +157,7 @@ async function generateCoverageReport(coverage: Coverage) {
 
 			if (sourceMap)
 				filtered.push(
-					...translateRanges(sourceMap, url, script.functions)
+					...translateRanges(sourceMap, url, script.functions),
 				);
 		}
 	}
@@ -202,7 +200,7 @@ function renderTestReport(test: JsonResult): TestReport {
 
 export async function generateReport(
 	suite: JsonResult,
-	v8Coverage?: Coverage
+	v8Coverage?: Coverage,
 ): Promise<Report> {
 	const testReport = renderTestReport(suite);
 	const coverage = v8Coverage && (await generateCoverageReport(v8Coverage));

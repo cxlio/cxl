@@ -883,11 +883,11 @@ export function share<T>(): Operator<T, T> {
 		let sourceSubscription: Subscription | undefined;
 
 		return observable<T>(subs => {
-			if (!sourceSubscription) {
-				subscriptionCount++;
-				sourceSubscription = source.subscribe(subject);
-			}
+			subscriptionCount++;
 			const subscription = subject.subscribe(subs);
+			if (!sourceSubscription)
+				sourceSubscription = source.subscribe(subject);
+
 			return () => {
 				subscription.unsubscribe();
 				if (--subscriptionCount === 0 && sourceSubscription) {

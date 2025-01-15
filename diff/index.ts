@@ -37,7 +37,6 @@ function diff_main(text1: string, text2: string): Diff {
 	if (commonprefix) diffs.unshift(DIFF_EQUAL, commonprefix);
 	if (commonsuffix) diffs.push(DIFF_EQUAL, commonsuffix);
 
-	//diff_cleanupMerge(diffs);
 	return diffs;
 }
 
@@ -306,7 +305,7 @@ function diff_commonSuffix(text1: string, text2: string) {
 		if (
 			text1.slice(
 				text1.length - pointermid,
-				text1.length - pointerend
+				text1.length - pointerend,
 			) ===
 			text2.slice(text2.length - pointermid, text2.length - pointerend)
 		) {
@@ -362,11 +361,11 @@ function diff_halfMatch_(text1: string, text2: string) {
 		while ((j = shorttext.indexOf(seed, j + 1)) !== -1) {
 			const prefixLength = diff_commonPrefix(
 				longtext.slice(i),
-				shorttext.slice(j)
+				shorttext.slice(j),
 			);
 			const suffixLength = diff_commonSuffix(
 				longtext.slice(0, i),
-				shorttext.slice(0, j)
+				shorttext.slice(0, j),
 			);
 			if (best_common.length < suffixLength + prefixLength) {
 				best_common =
@@ -395,13 +394,13 @@ function diff_halfMatch_(text1: string, text2: string) {
 	const hm1 = diff_halfMatchI_(
 		longtext,
 		shorttext,
-		Math.ceil(longtext.length / 4)
+		Math.ceil(longtext.length / 4),
 	);
 	// Check again based on the third quarter.
 	const hm2 = diff_halfMatchI_(
 		longtext,
 		shorttext,
-		Math.ceil(longtext.length / 2)
+		Math.ceil(longtext.length / 2),
 	);
 	let hm;
 	if (!hm1 && !hm2) {
@@ -444,11 +443,11 @@ function push(result: Diff, ch: string, a: string, b: number, c: number) {
 }
 
 /**
-	This function takes a source string <code>src</code>, and a destination
-	string <code>dest</code>. It returns a patch object that can be later used
-	by <code>ide.patch</code> to reconstruct the destination string.
+	This function takes a source string `src`, and a destination
+	string `dest`. It returns a patch object that can be later used
+	by `ide.patch` to reconstruct the destination string.
 
-	The <code>size</code> parameter determines the minimum length of a single
+	The `size` parameter determines the minimum length of a single
 	patch string, the algorithm will optimize the result based on this number.
 
 	A patch object consists of an array of triplets, where the first item is the
