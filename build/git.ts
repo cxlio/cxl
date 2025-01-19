@@ -14,7 +14,7 @@ export async function checkBranchClean(branch: string) {
 
 export async function checkBranchUpToDate(branch = 'master') {
 	try {
-		await sh(`git diff origin ${branch} --quiet`);
+		await sh(`git diff origin/${branch} ${branch} --quiet`);
 	} catch (e) {
 		throw new Error('Branch has not been merged with origin');
 	}

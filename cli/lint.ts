@@ -187,10 +187,14 @@ async function fixPackage({ projectPath, dir, rootPkg }: LintData) {
 	const pkgPath = `${projectPath}/package.json`;
 	const pkg = await readJson<Package>(pkgPath);
 	const oldPackage = JSON.stringify(pkg, null, '\t');
-	const testScript = `npm run build && cd ../dist/${dir} && node ../tester ${
-		pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'
-	}`;
 
+	const isMjs = pkg.type === 'module';
+	const tester = rootPkg.devDependencies?.['@cxl/tester']
+		? 'cxl-tester'
+		: 'node ../tester';
+	const testScript = `npm run build && cd ../dist/${dir} && ${tester} ${
+		isMjs ? '--mjs ' : ''
+	}${pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'}`;
 	const tsconfigBundle = await readJson(
 		`${projectPath}/tsconfig.bundle.json`,
 		false,
@@ -277,9 +281,13 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }: LintData) {
 			rule('scripts' in pkg, `Field "scripts" required in package.json`),
 		);
 
-	const testScript = `npm run build && cd ../dist/${dir} && node ../tester ${
-		pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'
-	}`;
+	const isMjs = pkg.type === 'module';
+	const tester = rootPkg.devDependencies?.['@cxl/tester']
+		? 'cxl-tester'
+		: 'node ../tester';
+	const testScript = `npm run build && cd ../dist/${dir} && ${tester} ${
+		isMjs ? '--mjs ' : ''
+	}${pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'}`;
 
 	rules.push(
 		rule(
@@ -500,9 +508,16 @@ async function lintTsconfigEs6({ projectPath, pkg, dir }: LintData) {
 			rules: [],
 		};
 
-	const tsconfig = await readJson<Tsconfig>(
+	const tsconfig = await readJson<Tsconfig | null>(
 		`${projectPath}/tsconfig.mjs.json`,
+		null,
 	);
+	if (!tsconfig)
+		return {
+			id: 'tsconfig.es6',
+			project: dir,
+			rules: [],
+		};
 	const baseTsconfig = await readJson<Tsconfig>(
 		`${projectPath}/tsconfig.json`,
 	);

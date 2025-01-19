@@ -47,6 +47,8 @@ export default program('cli', async ({ log }) => {
 
 	async function publishProject(mod: string, dry: boolean, force: boolean) {
 		const pkg = readPackage(mod);
+
+		log(`Package ${pkg.name} ${pkg.version}`);
 		const lintResults = await lint([mod], rootPkg);
 		if (lintResults.errors.length) {
 			console.log(lintResults.errors);
@@ -55,7 +57,7 @@ export default program('cli', async ({ log }) => {
 		}
 
 		if (!dry) {
-			log(`Building ${pkg.name} ${pkg.version}`);
+			log(`Building...`);
 			await sh(`npm run build package docs --prefix ${mod}`);
 			if (!force) await checkBranchClean('publish');
 		}
@@ -98,7 +100,7 @@ export default program('cli', async ({ log }) => {
 				commit = commit || (await sh(`git rev-parse master`)).trim();
 				const history = (
 					await sh(
-						`git log --oneline ${branch || ''} ${commit}..HEAD`
+						`git log --oneline ${branch || ''} ${commit}..HEAD`,
 					)
 				)
 					.trim()
@@ -125,13 +127,13 @@ export default program('cli', async ({ log }) => {
 				if (dryrun) return console.log(entry);
 
 				const changelog = JSON.parse(
-					await readFile('changelog.json', 'utf8').catch(() => '{}')
+					await readFile('changelog.json', 'utf8').catch(() => '{}'),
 				) as Changelog;
 				changelog[commit] = entry;
 
 				log(`Writing changelog.json`);
 				await writeFile('changelog.json', JSON.stringify(changelog));
-			}
+			},
 		),
 		lint: parametersParser(
 			{
@@ -154,7 +156,7 @@ export default program('cli', async ({ log }) => {
 					}
 					throw 'Lint errors found';
 				} else log('[lint] No errors found');
-			}
+			},
 		),
 		test: parametersParser({}, async args => {
 			for (const mod of args.$) {
@@ -177,23 +179,26 @@ export default program('cli', async ({ log }) => {
 
 				if (!project || args.$.length > 1)
 					throw 'Only one project can be published at a time';
-				if (!dry && branch !== 'master')
+				if (!dry && branch !== 'master' && branch !== 'main')
 					throw 'Active branch is not master';
 
-				if (!force) await checkBranchUpToDate();
+				if (!force) {
+					await checkBranchClean(branch);
+					await checkBranchUpToDate(branch);
+				}
 
 				try {
 					if (!dry) await sh('git checkout -b publish');
 					const pkg = await publishProject(project, !!dry, !!force);
 					if (!dry) {
-						await sh(`node scripts/build-readme.js`);
+						/*await sh(`node scripts/build-readme.js`);
 						await sh(`git commit -m "chore: update readme" -a`);
 						await sh(
-							'git checkout master && git merge --squash publish'
+							`git checkout ${branch} && git merge --squash publish`,
 						);
 						await sh(
-							`git commit --no-edit -n && git push origin master`
-						);
+							`git commit --no-edit -n && git push origin ${branch}`,
+						);*/
 						// Create Release Tag
 						const tag = `${project}/${pkg.version}`;
 						await sh(`git tag ${tag} && git push origin ${tag}`);
@@ -202,10 +207,12 @@ export default program('cli', async ({ log }) => {
 					console.error(e);
 					log(`Publish failed. Aborting.`);
 				} finally {
-					if (!dry)
-						await sh(`git checkout master; git branch -D publish`);
+					/*if (!dry)
+						await sh(
+							`git checkout ${branch}; git branch -D publish`,
+						);*/
 				}
-			}
+			},
 		),
 
 		'create-project': parametersParser(
@@ -214,7 +221,7 @@ export default program('cli', async ({ log }) => {
 			},
 			async config => {
 				return createFileSystem(await projectFiles(config), log);
-			}
+			},
 		),
 
 		'check-all': parametersParser({}, async () => {
