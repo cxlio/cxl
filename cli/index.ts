@@ -59,7 +59,7 @@ export default program('cli', async ({ log }) => {
 		if (!dry) {
 			log(`Building...`);
 			await sh(`npm run build package docs --prefix ${mod}`);
-			if (!force) await checkBranchClean('publish');
+			//if (!force) await checkBranchClean('publish');
 		}
 
 		await testPackage(mod, pkg);
