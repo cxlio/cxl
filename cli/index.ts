@@ -188,7 +188,7 @@ export default program('cli', async ({ log }) => {
 				}
 
 				try {
-					if (!dry) await sh('git checkout -b publish');
+					//if (!dry) await sh('git checkout -b publish');
 					const pkg = await publishProject(project, !!dry, !!force);
 					if (!dry) {
 						/*await sh(`node scripts/build-readme.js`);
