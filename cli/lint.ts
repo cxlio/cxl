@@ -189,6 +189,9 @@ async function fixPackage({ projectPath, dir, rootPkg }: LintData) {
 	const oldPackage = JSON.stringify(pkg, null, '\t');
 
 	const isMjs = pkg.type === 'module';
+	const builder = rootPkg.devDependencies?.['@cxl/build']
+		? 'cxl-build'
+		: 'node ../dist/build';
 	const tester = rootPkg.devDependencies?.['@cxl/tester']
 		? 'cxl-tester'
 		: 'node ../tester';
@@ -205,11 +208,12 @@ async function fixPackage({ projectPath, dir, rootPkg }: LintData) {
 		pkg.name = `${rootPkg.name}${dir}`;
 	if (!pkg.scripts) pkg.scripts = {};
 	if (!pkg.scripts.test) pkg.scripts.test = testScript;
-	if (!pkg.scripts.build) pkg.scripts.build = `node ../dist/build`;
+	if (!pkg.scripts.build) pkg.scripts.build = builder;
 	if (!pkg.homepage) pkg.homepage = `${rootPkg.homepage}/${dir}`;
 
 	if (!pkg.license) pkg.license = 'GPL-3.0';
-	if (!pkg.bugs) pkg.bugs = rootPkg.bugs || BugsUrl;
+	if (!pkg.bugs || pkg.bugs !== rootPkg.bugs)
+		pkg.bugs = rootPkg.bugs || BugsUrl;
 	if (!pkg.browser && pkg.devDependencies) delete pkg.devDependencies;
 	if (pkg.browser && pkg.dependencies) delete pkg.dependencies;
 	if (pkg.peerDependencies) delete pkg.peerDependencies;

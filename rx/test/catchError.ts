@@ -61,18 +61,18 @@ export default spec('catchError', it => {
 				defer(() => {
 					sideEffects.push(3);
 					return of(3);
-				})
+				}),
 			);
 
 			merge(of(10), throwError(new Error('Some error')))
 				.pipe(
 					catchError(() => synchronousObservable),
-					takeWhile(x => x != 2) // unsubscribe at the second side-effect
+					takeWhile(x => x != 2), // unsubscribe at the second side-effect
 				)
 				.subscribe();
 
 			a.equalValues(sideEffects, [1, 2]);
-		}
+		},
 	);
 
 	it.should(
@@ -98,7 +98,7 @@ export default spec('catchError', it => {
 					done();
 				},
 			});
-		}
+		},
 	);
 
 	it.should(
@@ -122,12 +122,12 @@ export default spec('catchError', it => {
 						throw 'done';
 					}
 					return caught;
-				})
+				}),
 			);
 
 			expectLog(a, result, expected);
 			a.equal(e1.subscriptions, subs);
-		}
+		},
 	);
 
 	it.should('catch and replace a Observable.throw() as the source', a => {
@@ -177,11 +177,11 @@ export default spec('catchError', it => {
 					done();
 				},
 			});
-		}
+		},
 	);
 
 	it.should(
-		'should stop listening to a synchronous observable when unsubscribed',
+		'stop listening to a synchronous observable when unsubscribed',
 		a => {
 			const sideEffects: number[] = [];
 			const synchronousObservable = observable(subscriber => {
@@ -201,7 +201,7 @@ export default spec('catchError', it => {
 				});
 
 			a.equalValues(sideEffects, [0, 1, 2]);
-		}
+		},
 	);
 
 	it.should('complete if you return Observable.empty()', a => {
@@ -234,21 +234,21 @@ export default spec('catchError', it => {
 			synchronousObservable
 				.pipe(
 					catchError(() => EMPTY),
-					take(3)
+					take(3),
 				)
 				.subscribe(() => {
 					/* noop */
 				});
 
 			a.equalValues(sideEffects, [0, 1, 2]);
-		}
+		},
 	);
 
 	it.should('unsubscribe from all observables', a => {
 		const done = a.async();
 		const obs = merge(
 			concat(of(0).debounceTime(0), throwError('Error')),
-			of(2).debounceTime(10)
+			of(2).debounceTime(10),
 		).catchError(e => {
 			a.equal(e, 'Error');
 			return be(1);

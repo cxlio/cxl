@@ -41,11 +41,11 @@ export default program('cli', async ({ log }) => {
 		try {
 			await sh(`npm test`, { cwd: dir });
 		} finally {
-			await sh(`rm -rf ${cwd}/node_modules package-lock.json`);
+			await sh(`rm -rf ${cwd}/node_modules ${cwd}/package-lock.json`);
 		}
 	}
 
-	async function publishProject(mod: string, dry: boolean, force: boolean) {
+	async function publishProject(mod: string, dry: boolean, _force: boolean) {
 		const pkg = readPackage(mod);
 
 		log(`Package ${pkg.name} ${pkg.version}`);
@@ -56,11 +56,8 @@ export default program('cli', async ({ log }) => {
 			throw 'Lint errors found';
 		}
 
-		if (!dry) {
-			log(`Building...`);
-			await sh(`npm run build package docs --prefix ${mod}`);
-			//if (!force) await checkBranchClean('publish');
-		}
+		log(`Building...`);
+		await sh(`npm run build package docs --prefix ${mod}`);
 
 		await testPackage(mod, pkg);
 
@@ -190,6 +187,7 @@ export default program('cli', async ({ log }) => {
 				try {
 					//if (!dry) await sh('git checkout -b publish');
 					const pkg = await publishProject(project, !!dry, !!force);
+					const tag = `${project}/${pkg.version}`;
 					if (!dry) {
 						/*await sh(`node scripts/build-readme.js`);
 						await sh(`git commit -m "chore: update readme" -a`);
@@ -200,9 +198,8 @@ export default program('cli', async ({ log }) => {
 							`git commit --no-edit -n && git push origin ${branch}`,
 						);*/
 						// Create Release Tag
-						const tag = `${project}/${pkg.version}`;
 						await sh(`git tag ${tag} && git push origin ${tag}`);
-					}
+					} else log(`Release tag to be created: ${tag}`);
 				} catch (e) {
 					console.error(e);
 					log(`Publish failed. Aborting.`);
