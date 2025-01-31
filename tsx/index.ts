@@ -44,7 +44,7 @@ export type NativeType<T> = {
 	children?: NativeChildren;
 };
 
-export type Disallowed = Observable<unknown> | Function; //((...args: unknown[]) => unknown);
+export type Disallowed = Observable<unknown> | Function;
 
 export type AttributeType<T> = {
 	[K in keyof Omit<T, 'children' | '$'>]?: T[K] extends Disallowed

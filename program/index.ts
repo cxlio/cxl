@@ -341,6 +341,7 @@ export function program(
 			});
 		} catch (e) {
 			console.error(e);
+			process.exitCode = 1;
 		}
 	};
 }

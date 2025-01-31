@@ -93,13 +93,9 @@ export function tsbuild(
 		defaultOptions,
 	);
 	let program: InvalidatedProject<any> | undefined;
-
 	function writeFile(name: string, source: string) {
 		name = relative(outDir || outputDir, name);
-		const refs = options.projectReferences?.[0];
-		if (refs?.path.endsWith('/cxl/amd/tsconfig.json') && refs.prepend) {
-			source = AMD + source;
-		}
+		if (options.raw.cxl?.amd) source = AMD + source;
 		subs.next({ path: name, source: Buffer.from(source) });
 	}
 
