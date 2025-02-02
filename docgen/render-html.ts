@@ -1207,6 +1207,22 @@ export function render(app: DocGen, output: Output): File[] {
 		];
 	}
 
+	if (version) {
+		files.push({
+			name: `index.html`,
+			content:
+				getConfigScript('../version.json') +
+				header +
+				content +
+				'</cxl-router>' +
+				footer,
+		});
+	} else
+		files.push({
+			name: 'index.html',
+			content: header + content + '</cxl-router>' + footer,
+		});
+
 	files.push(...staticFiles);
 
 	const result: File[] = version

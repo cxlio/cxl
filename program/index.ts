@@ -255,20 +255,18 @@ export async function operation<T>(
 	fn: OperationFunction<T>,
 ): Promise<OperationResult<T>> {
 	let start = hrtime();
-	const result = typeof fn === 'function' ? fn() : fn;
+	const item = await (typeof fn === 'function' ? fn() : fn);
 	let tasks = 0;
 
-	return result.then(item => {
-		const end = hrtime();
-		const result = {
-			start,
-			tasks: ++tasks,
-			time: end - start,
-			result: item,
-		};
-		start = end;
-		return result;
-	});
+	const end = hrtime();
+	const result = {
+		start,
+		tasks: ++tasks,
+		time: end - start,
+		result: item,
+	};
+	start = end;
+	return result;
 }
 
 export function parseArgv<T extends Record<string, Parameter>>(parameters: T) {
@@ -334,7 +332,7 @@ export function program(
 		const logPrefix = colors[color](name);
 
 		try {
-			return startFn({
+			return await startFn({
 				pkg,
 				name,
 				log: log.bind(log, () => logPrefix),
