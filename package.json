@@ -9,17 +9,16 @@
 		"@types/markdown-it": "^14.1.2",
 		"@types/node": "^20.14.9",
 		"@types/pngjs": "^3.4.2",
-		"@typescript-eslint/eslint-plugin": "^6.19.0",
-		"@typescript-eslint/parser": "^6.19.0",
 		"codemirror": "^5.65.16",
-		"eslint": "^8.56.0",
+		"eslint": "^9.19.0",
 		"highlight.js": "^11.9.0",
 		"markdown-it": "^14.1.0",
 		"pngjs": "^6.0.0",
 		"puppeteer": "^23.3.0",
 		"source-map": "^0.7.3",
 		"terser": "^5.16.1",
-		"typescript": "^5.5.3"
+		"typescript": "^5.5.3",
+		"typescript-eslint": "^8.23.0"
 	},
 	"scripts": {
 		"build": "node scripts/build-all.js && node scripts/build-readme",
