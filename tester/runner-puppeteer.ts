@@ -29,7 +29,16 @@ async function handleConsole(msg: puppeteer.ConsoleMessage, app: TestRunner) {
 	app.log(`console ${type}: ${url}${lineText}`);
 	for (const arg of msg.args())
 		try {
-			console.log(await arg.jsonValue());
+			console.log(
+				await arg.evaluate(v => {
+					if (v instanceof Error) {
+						return { message: v.message, stack: v.stack };
+					}
+
+					return JSON.stringify(v, null, 2);
+				}),
+			);
+			//console.log(await arg.jsonValue());
 		} catch (e) {
 			console.log(arg.toString());
 		}
@@ -96,9 +105,52 @@ function resolveImport(path: string) {
 		);
 }
 
+function virtualFileServer(app: TestRunner, page: Page) {
+	const root = resolve(app.vfsRoot ?? process.cwd());
+	app.log(`Starting virtual file server on "${root}"`);
+
+	async function handle(req: HTTPRequest, url: URL) {
+		let body: string | Buffer = '';
+		let status = 200;
+		try {
+			body =
+				url.pathname === '/'
+					? ''
+					: await readFile(join(root, url.pathname));
+		} catch (e) {
+			if (
+				e &&
+				typeof e === 'object' &&
+				'code' in e &&
+				e.code === 'ENOENT'
+			)
+				status = 404;
+		}
+		app.log(`[vfs] ${url.pathname} ${status}`);
+
+		req.respond({
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+			},
+			status,
+			contentType: url.pathname.endsWith('.js')
+				? 'application/javascript'
+				: 'text/plain',
+			body,
+		});
+	}
+
+	page.on('request', req => {
+		const url = new URL(req.url());
+		if (url.origin !== 'http://localhost:9999') return;
+		return handle(req, url);
+	});
+}
+
 async function handleRequest(sources: Output[], req: HTTPRequest) {
-	if (req.method() !== 'POST') return req.continue();
 	const url = new URL(req.url());
+
+	if (req.method() !== 'POST') return req.continue();
 	if (url.hostname !== 'cxl-tester') return req.continue();
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
@@ -191,16 +243,19 @@ async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
 async function cjsRunner(page: Page, sources: Output[], app: TestRunner) {
 	const entry = sources[0].path;
 	app.log(`Running in commonjs mode`);
-	await page.addScriptTag({ path: __dirname + '/require.js' });
+
 	await page.setRequestInterception(true);
 
 	page.on('request', (req: HTTPRequest) => {
+		if (req.isInterceptResolutionHandled()) return;
 		try {
 			handleRequest(sources, req);
 		} catch (e) {
 			app.log(`Error handling request ${req.method()} ${req.url()}`);
 		}
 	});
+
+	await page.addScriptTag({ path: __dirname + '/require.js' });
 
 	return page.evaluate(async entry => {
 		const r = require(entry).default as Test;
@@ -366,25 +421,27 @@ async function handleFigureRequest(
 
 export default async function runPuppeteer(app: TestRunner) {
 	const entryFile = app.entryFile;
+	const args = [
+		'--no-sandbox',
+		'--disable-setuid-sandbox',
+		'--disable-gpu',
+		'--font-render-hinting=none',
+		'--disable-font-subpixel-positioning',
+		'--animation-duration-scale=0',
+	];
+	if (app.disableSecurity) args.push('--disable-web-security');
+
 	const browser = await puppeteer.launch({
 		// product: app.firefox ? 'firefox' : 'chrome',
 		headless: true,
-		args: [
-			'--no-sandbox',
-			'--disable-setuid-sandbox',
-			'--disable-gpu',
-			'--font-render-hinting=none',
-			'--disable-font-subpixel-positioning',
-			'--animation-duration-scale=0',
-		],
+		args,
 		timeout: 5000,
 	});
 	app.log(`Puppeteer ${await browser.version()}`);
 
 	const page = await openPage(browser);
 
-	//if (app.startServer) await page.waitForTimeout(500);
-	if (app.browserUrl) await page.goto(app.browserUrl);
+	//if (app.startServer) await new Promise(resolve => setTimeout(resolve, 500));
 
 	function cxlRunner(cmd: FigureData): Promise<Result> | Result {
 		if (cmd.type === 'figure') {
@@ -412,6 +469,16 @@ export default async function runPuppeteer(app: TestRunner) {
 	app.log(`Entry file: ${entryFile}`);
 	const source = await readFile(entryFile, 'utf8');
 	const sources = [{ path: entryFile, source }];
+
+	if (app.vfsRoot) {
+		await page.setRequestInterception(true);
+		virtualFileServer(app, page);
+	}
+
+	if (app.browserUrl) {
+		app.log(`Navigating to ${app.browserUrl}`);
+		await page.goto(app.browserUrl);
+	}
 
 	// Prevent unexpected focus behavior
 	await page.bringToFront();

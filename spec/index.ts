@@ -72,6 +72,9 @@ interface TestConfig {
 
 let lastTestId = 1;
 
+const setTimeout = self.setTimeout;
+const clearTimeout = self.clearTimeout;
+
 function inspect(val: unknown) {
 	if (typeof val === 'string') return '"' + val + '"';
 	if (typeof Element !== 'undefined' && val instanceof Element)
@@ -322,6 +325,10 @@ export class TestApi {
 		for (const r of results) this.$test.push(r);
 	}
 
+	async sleep(n: number) {
+		await new Promise(resolve => setTimeout(resolve, n));
+	}
+
 	figure(name: string, html: Node | string, init?: (node: Node) => void) {
 		if (typeof __cxlRunner !== 'undefined')
 			this.test(name, async a => {
@@ -358,6 +365,62 @@ export class TestApi {
 
 	setTimeout(val: number) {
 		this.$test.timeout = val;
+	}
+
+	mockSetInterval() {
+		let id = 0;
+		let lastCalled = 0;
+		const intervals: Record<number, { cb: Function; delay: number }> = {};
+
+		this.mock(
+			self,
+			'setInterval',
+			(cb: string | Function, delay = 0): number => {
+				if (typeof cb === 'string') cb = new Function(cb);
+				intervals[++id] = { cb, delay };
+				return id;
+			},
+		);
+		this.mock(self, 'clearInterval', id => {
+			if (id !== undefined) delete intervals[id];
+		});
+
+		return {
+			advance(ms: number) {
+				const elapsedTime = ms - lastCalled;
+				for (const { cb, delay } of Object.values(intervals)) {
+					const timesToFire = Math.floor(elapsedTime / delay);
+					for (let i = 0; i < timesToFire; i++) cb();
+					lastCalled = Math.floor(ms / delay) * delay;
+				}
+			},
+		};
+	}
+
+	mockSetTimeout() {
+		let id = 0;
+		const timeouts: Record<number, { cb: Function; time: number }> = {};
+
+		this.mock(self, 'setTimeout', (cb, time = 0) => {
+			if (typeof cb === 'string') cb = new Function(cb);
+			timeouts[++id] = { cb, time };
+			return id;
+		});
+		this.mock(self, 'clearTimeout', (id: number | undefined) => {
+			if (id !== undefined) delete timeouts[id];
+		});
+		return {
+			advance(ms: number) {
+				for (const [key, { cb, time }] of Object.entries(timeouts)) {
+					if (time <= ms) {
+						cb();
+						delete timeouts[+key];
+					} else {
+						timeouts[+key].time -= ms;
+					}
+				}
+			},
+		};
 	}
 }
 
@@ -407,7 +470,7 @@ export class Test {
 							typeof e === 'string'
 								? e
 								: JSON.stringify(e, null, 2),
-					},
+				  },
 		);
 	}
 

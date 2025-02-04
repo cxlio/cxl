@@ -21,6 +21,8 @@ export interface TestRunner {
 	log: Logger;
 	inspect?: boolean;
 	startServer?: string;
+	disableSecurity?: boolean;
+	vfsRoot?: string;
 }
 
 const parameters = {
@@ -33,7 +35,9 @@ const parameters = {
 	ignoreCoverage: { help: 'Disable coverage report.' },
 	mjs: { help: 'Enable ES modules mode' },
 	inspect: { help: 'Enable node debugger' },
+	disableSecurity: { help: 'Disable Browser Security' },
 	browserUrl: { type: 'string', help: 'Browser runner initial URL' },
+	vfsRoot: { type: 'string', help: 'Start a Virtual File Server' },
 	startServer: {
 		type: 'string',
 		help: 'Start a server application while the tests are running',
