@@ -84,14 +84,10 @@ function inspect(val: unknown) {
 }
 
 export class TestApi {
-	get id() {
-		return this.$test.id;
-	}
-
 	constructor(private $test: Test) {}
 
-	log(object: unknown) {
-		console.log(object);
+	get id() {
+		return this.$test.id;
 	}
 
 	/**
@@ -103,6 +99,10 @@ export class TestApi {
 			document.body.appendChild((this.$test.domContainer = el));
 
 		return el as HTMLElement;
+	}
+
+	log(object: unknown) {
+		console.log(object);
 	}
 
 	afterAll(fn: () => Promise<unknown> | void) {
@@ -367,6 +367,7 @@ export class TestApi {
 	}
 
 	mockSetInterval() {
+		/*eslint @typescript-eslint/no-unsafe-function-type:off */
 		let id = 0;
 		let lastCalled = 0;
 		const intervals: Record<number, { cb: Function; delay: number }> = {};
