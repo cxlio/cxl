@@ -72,8 +72,8 @@ interface TestConfig {
 
 let lastTestId = 1;
 
-const setTimeout = self.setTimeout;
-const clearTimeout = self.clearTimeout;
+const setTimeout = globalThis.setTimeout;
+const clearTimeout = globalThis.clearTimeout;
 
 function inspect(val: unknown) {
 	if (typeof val === 'string') return '"' + val + '"';
@@ -373,7 +373,7 @@ export class TestApi {
 		const intervals: Record<number, { cb: Function; delay: number }> = {};
 
 		this.mock(
-			self,
+			globalThis,
 			'setInterval',
 			(cb: string | Function, delay = 0): number => {
 				if (typeof cb === 'string') cb = new Function(cb);
@@ -381,7 +381,7 @@ export class TestApi {
 				return id;
 			},
 		);
-		this.mock(self, 'clearInterval', id => {
+		this.mock(globalThis, 'clearInterval', id => {
 			if (id !== undefined) delete intervals[id];
 		});
 
@@ -401,12 +401,12 @@ export class TestApi {
 		let id = 0;
 		const timeouts: Record<number, { cb: Function; time: number }> = {};
 
-		this.mock(self, 'setTimeout', (cb, time = 0) => {
+		this.mock(globalThis, 'setTimeout', (cb, time = 0) => {
 			if (typeof cb === 'string') cb = new Function(cb);
 			timeouts[++id] = { cb, time };
 			return id;
 		});
-		this.mock(self, 'clearTimeout', (id: number | undefined) => {
+		this.mock(globalThis, 'clearTimeout', (id: number | undefined) => {
 			if (id !== undefined) delete timeouts[id];
 		});
 		return {
