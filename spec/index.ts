@@ -91,7 +91,6 @@ export class TestApi {
 	constructor(private $test: Test) {}
 
 	log(object: unknown) {
-		//console.log(JSON.stringify(object, null, 2));
 		console.log(object);
 	}
 
