@@ -509,6 +509,7 @@ export class Test {
 		try {
 			this.completed = false;
 			this.promise = undefined;
+			this.events = subject<TestEvent>();
 			const testApi = new TestApi(this);
 			const result = this.testFn(testApi);
 			const promise = result ? this.doTimeout(result) : this.promise;

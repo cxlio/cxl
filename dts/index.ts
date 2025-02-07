@@ -6,6 +6,7 @@ import type * as ts from 'typescript';
 const tsPath = require.resolve('typescript', {
 	paths: ['.', __dirname],
 });
+/*eslint @typescript-eslint/no-require-imports:off */
 const tsLocal = require(tsPath) as typeof import('typescript');
 const { getParsedCommandLineOfConfigFile, NodeFlags, sys } = tsLocal;
 

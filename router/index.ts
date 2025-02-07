@@ -64,7 +64,7 @@ function routeToRegExp(route: string): [RegExp, string[]] {
 						return optional ? match : '([^/?]*)';
 					})
 					.replace(splatParam, '([^?]*?)') +
-				'(?:/$|\\?|$)'
+				'(?:/$|\\?|$)',
 		);
 
 	return [result, names];
@@ -78,7 +78,7 @@ export function normalize(path: string) {
 
 export function replaceParameters(
 	path: string,
-	params?: Record<string, string>
+	params?: Record<string, string>,
 ) {
 	if (!params) return path;
 	return path.replace(PARAM_REGEX, (_match, key) => params[key] || '');
@@ -203,7 +203,7 @@ export class RouteManager {
 const URL_REGEX = /([^#]*)(?:#(.+))?/;
 
 export function getElementRoute<T extends RouteElement>(
-	el: T
+	el: T,
 ): Route<T> | undefined {
 	return el[routeSymbol] as Route<T>;
 }
@@ -294,62 +294,6 @@ export class Router {
 
 	constructor(private callbackFn?: (state: RouterState) => void) {}
 
-	private findRoute<T extends RouteElement>(id: string, args: Partial<T>) {
-		const route = this.instances[id] as T;
-		let i: string;
-
-		if (route)
-			for (i in args) {
-				const arg = args[i as keyof T] as T[keyof T];
-				if (arg !== undefined) route[i as keyof T] = arg;
-			}
-
-		return route;
-	}
-
-	private executeRoute<T extends RouteElement>(
-		route: Route<T>,
-		args: Partial<T>, //RouteArguments,
-		instances: RouteInstances
-	) {
-		const parentId = route.parent,
-			Parent = parentId && this.routes.get(parentId),
-			id = route.id,
-			parent = Parent && this.executeRoute(Parent, args, instances),
-			instance = this.findRoute(id, args) || route.create(args);
-
-		if (!parent) this.root = instance;
-		else if (instance && instance.parentNode !== parent)
-			parent.appendChild(instance);
-
-		instances[id] = instance;
-
-		return instance;
-	}
-
-	private discardOldRoutes(newInstances: RouteInstances) {
-		const oldInstances = this.instances;
-
-		for (const i in oldInstances) {
-			const old = oldInstances[i];
-			if (newInstances[i] !== old) {
-				old.parentNode?.removeChild(old);
-				delete oldInstances[i];
-			}
-		}
-	}
-
-	private execute<T extends RouteElement>(
-		Route: Route<T>,
-		args?: Partial<T>
-	) {
-		const instances = {};
-		const result = this.executeRoute(Route, args || {}, instances);
-		this.discardOldRoutes(instances);
-		this.instances = instances;
-		return result;
-	}
-
 	/**
 	 * Register a new route
 	 */
@@ -428,5 +372,60 @@ export class Router {
 			}
 			return false;
 		});
+	}
+	private findRoute<T extends RouteElement>(id: string, args: Partial<T>) {
+		const route = this.instances[id] as T;
+		let i: string;
+
+		if (route)
+			for (i in args) {
+				const arg = args[i as keyof T] as T[keyof T];
+				if (arg !== undefined) route[i as keyof T] = arg;
+			}
+
+		return route;
+	}
+
+	private executeRoute<T extends RouteElement>(
+		route: Route<T>,
+		args: Partial<T>, //RouteArguments,
+		instances: RouteInstances,
+	) {
+		const parentId = route.parent,
+			Parent = parentId && this.routes.get(parentId),
+			id = route.id,
+			parent = Parent && this.executeRoute(Parent, args, instances),
+			instance = this.findRoute(id, args) || route.create(args);
+
+		if (!parent) this.root = instance;
+		else if (instance && instance.parentNode !== parent)
+			parent.appendChild(instance);
+
+		instances[id] = instance;
+
+		return instance;
+	}
+
+	private discardOldRoutes(newInstances: RouteInstances) {
+		const oldInstances = this.instances;
+
+		for (const i in oldInstances) {
+			const old = oldInstances[i];
+			if (newInstances[i] !== old) {
+				old.parentNode?.removeChild(old);
+				delete oldInstances[i];
+			}
+		}
+	}
+
+	private execute<T extends RouteElement>(
+		Route: Route<T>,
+		args?: Partial<T>,
+	) {
+		const instances = {};
+		const result = this.executeRoute(Route, args || {}, instances);
+		this.discardOldRoutes(instances);
+		this.instances = instances;
+		return result;
 	}
 }
