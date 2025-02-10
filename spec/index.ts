@@ -318,8 +318,8 @@ export class TestApi {
 	}
 
 	async a11y(node: Element = this.dom) {
-		const mod = await import('./a11y');
-		await new Promise(resolve => setTimeout(resolve, 100));
+		const mod = await import('./a11y.js');
+		//await new Promise(resolve => setTimeout(resolve, 100));
 		const results = mod.testAccessibility(node);
 		for (const r of results) this.$test.push(r);
 	}

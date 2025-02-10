@@ -602,6 +602,10 @@ function getNodeDocs(node: ts.Node, result: Node) {
 		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
 		if (tag === 'see' && doc.comment === '*') value = name;
 		if (tag === 'beta') docs.beta = true;
+		if (currentOptions.cxlExtensions) {
+			if (tag === 'attribute') result.kind = Kind.Attribute;
+			else if (tag === 'event') result.kind = Kind.Event;
+		}
 
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
 			content.push({
@@ -940,8 +944,11 @@ function getCxlClassMeta(
 	const augment = getCxlDecorator(node, 'Augment');
 	const args = (augment?.expression as ts.CallExpression)?.arguments;
 	const docs: Documentation = result.docs || {};
+	const extendName = node.heritageClauses?.find(h =>
+		h.types.find(t => t.expression.getText().trim() === 'Component'),
+	);
 
-	if (augment) result.kind = Kind.Component;
+	if (augment || extendName) result.kind = Kind.Component;
 	else return false;
 
 	if (result.children) {

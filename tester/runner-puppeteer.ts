@@ -185,6 +185,14 @@ async function amdRunner(page: Page, sources: Output[]) {
 	`) as Promise<Test>);
 }
 
+function getCxlPath(pathname: string) {
+	const [, , lib, file] = pathname.split('/');
+	const actualFile = file
+		? `${file}${file.endsWith('js') ? '' : '.js'}`
+		: 'index.js';
+	return `../../node_modules/@cxl/${lib}/mjs/${actualFile}`;
+}
+
 async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
 	const entry = sources[0].path;
 	app.log(`Running in mjs mode`);
@@ -194,9 +202,8 @@ async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
 			const url = new URL(req.url());
 			if (req.method() === 'GET' && url.hostname === 'cxl-tester') {
 				const pathname = url.pathname.startsWith('/@cxl/')
-					? `../../node_modules/${url.pathname.slice(1)}/mjs/index.js`
+					? getCxlPath(url.pathname)
 					: join(process.cwd(), url.pathname);
-
 				const body =
 					url.pathname === '/'
 						? ''
@@ -216,7 +223,7 @@ async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
 						: 'text/plain',
 					body,
 				});
-			}
+			} else req.continue();
 		} catch (e) {
 			app.log(`Error handling request ${req.method()} ${req.url()}`);
 		}
@@ -366,7 +373,7 @@ async function handleFigureRequest(
 	await page.waitForFunction(() => document.fonts?.ready);
 	await (figureReady ||
 		(figureReady = page
-			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 250 })
+			.waitForNavigation({ waitUntil: 'networkidle0', timeout: 5000 })
 			.then(
 				() => void 0,
 				() => void 0,
