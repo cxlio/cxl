@@ -273,8 +273,12 @@ export class TestApi {
 		tagName: K,
 	): HTMLElementTagNameMap[K];
 	element(tagName: string): HTMLElement;
-	element(tagName: string) {
-		const el = document.createElement(tagName);
+	element<T>(tagName: { new (): T }): T;
+	element(tagName: string | { new (): HTMLElement }) {
+		const el =
+			typeof tagName === 'string'
+				? document.createElement(tagName)
+				: new tagName();
 		this.dom.appendChild(el);
 		return el;
 	}
@@ -330,31 +334,34 @@ export class TestApi {
 
 	figure(name: string, html: Node | string, init?: (node: Node) => void) {
 		if (typeof __cxlRunner !== 'undefined')
-			this.test(name, async a => {
-				const domId = (a.dom.id = `dom${a.id}`);
-				const style = a.dom.style;
-				style.position = 'absolute';
-				style.overflowX = 'hidden';
-				style.top = style.left = '0';
-				style.width = '320px';
-				style.backgroundColor = 'white';
+			return new Promise<void>(resolve => {
+				this.test(name, async a => {
+					const domId = (a.dom.id = `dom${a.id}`);
+					const style = a.dom.style;
+					style.position = 'absolute';
+					style.overflowX = 'hidden';
+					style.top = style.left = '0';
+					style.width = '320px';
+					style.backgroundColor = 'white';
 
-				if (typeof html === 'string') a.dom.innerHTML = html;
-				else {
-					a.dom.appendChild(html);
-					html = a.dom.innerHTML;
-				}
+					if (typeof html === 'string') a.dom.innerHTML = html;
+					else {
+						a.dom.appendChild(html);
+						html = a.dom.innerHTML;
+					}
 
-				if (init) init(a.dom);
-				const data: FigureData = {
-					type: 'figure',
-					name,
-					domId,
-					html,
-				};
-				const match = await __cxlRunner(data);
-				a.$test.push(match);
-				await a.a11y();
+					if (init) init(a.dom);
+					const data: FigureData = {
+						type: 'figure',
+						name,
+						domId,
+						html,
+					};
+					const match = await __cxlRunner(data);
+					a.$test.push(match);
+					await a.a11y();
+					resolve();
+				});
 			});
 		else {
 			console.warn('figure method not supported');

@@ -7,6 +7,9 @@ interface Options {
 	matchBase?: boolean;
 }
 
+/**
+ * The globToRegexString function converts a glob pattern into a regular expression string.
+ */
 function globToRegexString(glob: string, { matchBase }: Options = {}): string {
 	const len = glob.length;
 	let reStr = '';
@@ -283,6 +286,11 @@ function globToRegexString(glob: string, { matchBase }: Options = {}): string {
 	return `${matchBase ? '' : '^'}${reStr}/?$`;
 }
 
+/**
+ * This export provides an interface for converting glob patterns,
+ * or arrays of glob patterns, into regular expressions.
+ * Throws an error for invalid glob patterns.
+ */
 export function globToRegex(
 	glob: string | readonly string[],
 	options?: Options,

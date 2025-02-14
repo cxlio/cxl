@@ -585,6 +585,14 @@ function getNodeDocs(node: ts.Node, result: Node) {
 				? undefined
 				: (doc.tagName.escapedText as string);
 
+		const name = (doc as ts.JSDocSeeTag).name?.getText();
+		let value = doc.comment ? parseJsDocComment(doc.comment) : name;
+
+		if (currentOptions.cxlExtensions && tag === 'tagName') {
+			docs.tagName = String(value);
+			return;
+		}
+
 		// Invalid tag, append to previous content
 		if (
 			doc.comment &&
@@ -596,8 +604,6 @@ function getNodeDocs(node: ts.Node, result: Node) {
 			mergeJsDocComment(content, doc);
 			return;
 		}
-		const name = (doc as ts.JSDocSeeTag).name?.getText();
-		let value = doc.comment ? parseJsDocComment(doc.comment) : name;
 
 		if (tag === 'deprecated') result.flags |= Flags.Deprecated;
 		if (tag === 'see' && doc.comment === '*') value = name;
