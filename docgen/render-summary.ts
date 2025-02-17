@@ -33,6 +33,23 @@ function sortByName(a: Summary, b: Summary) {
 
 function renderType(node: Node): string | Summary {
 	if (node.kind === Kind.Reference && node.type) node = node.type;
+
+	if (node.kind === Kind.ClassType) {
+		const children: Summary[] = [];
+		node.children?.forEach(child => {
+			if (child.kind !== Kind.Reference) return;
+			children.push({
+				kind: Kind.Reference,
+				type: child.type?.id,
+			});
+		});
+		return {
+			kind: node.kind,
+			children,
+			type: node.type?.id,
+		};
+	}
+
 	if (
 		node.kind !== Kind.ObjectType &&
 		node.kind !== Kind.FunctionType &&

@@ -943,18 +943,39 @@ function getCxlRole(node: ts.CallExpression): string {
 	return tsLocal.isStringLiteral(id) ? id.text : '';
 }
 
+function findBaseComponent(node: ts.ClassDeclaration) {
+	let type: ts.Type | undefined = typeChecker.getTypeAtLocation(node);
+
+	while (type) {
+		const decl: ts.Declaration | undefined = type.symbol.valueDeclaration;
+		if (!decl || !tsLocal.isClassDeclaration(decl)) return false;
+
+		const extend: ts.LeftHandSideExpression | undefined =
+			decl.heritageClauses?.find(
+				n => n.token === tsLocal.SyntaxKind.ExtendsKeyword,
+			)?.types?.[0]?.expression;
+
+		const newType: ts.Type | undefined =
+			extend && typeChecker.getTypeAtLocation(extend);
+		if (!newType || type === newType) break;
+
+		const name = newType.symbol?.name;
+		if (name === 'Component') return true;
+
+		type = newType;
+	}
+}
+
 function getCxlClassMeta(
-	node: ts.ClassDeclaration | ts.InterfaceDeclaration,
+	node: ts.ClassDeclaration,
+	symbol: ts.Symbol | undefined,
 	result: Node,
 ): boolean {
 	const augment = getCxlDecorator(node, 'Augment');
 	const args = (augment?.expression as ts.CallExpression)?.arguments;
 	const docs: Documentation = result.docs || {};
-	const extendName = node.heritageClauses?.find(h =>
-		h.types.find(t => t.expression.getText().trim() === 'Component'),
-	);
-
-	if (augment || extendName) result.kind = Kind.Component;
+	if (augment || (symbol && findBaseComponent(node)))
+		result.kind = Kind.Component;
 	else return false;
 
 	if (result.children) {
@@ -1133,8 +1154,8 @@ function serializeClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
 			}
 		}
 	}
-
-	if (currentOptions.cxlExtensions) getCxlClassMeta(node, result);
+	if (tsLocal.isClassDeclaration(node) && currentOptions.cxlExtensions)
+		getCxlClassMeta(node, symbol, result);
 
 	if (node.heritageClauses?.length) {
 		const type: Node = (result.type = {

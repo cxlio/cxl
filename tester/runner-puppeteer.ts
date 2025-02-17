@@ -150,8 +150,16 @@ function virtualFileServer(app: TestRunner, page: Page) {
 async function handleRequest(sources: Output[], req: HTTPRequest) {
 	const url = new URL(req.url());
 
-	if (req.method() !== 'POST') return req.continue();
 	if (url.hostname !== 'cxl-tester') return req.continue();
+
+	if (req.method() === 'GET' && url.pathname === '/')
+		return req.respond({
+			status: 200,
+			contentType: 'text/html',
+			body: '',
+		});
+
+	if (req.method() !== 'POST') return req.continue();
 
 	const { base, scriptPath } = JSON.parse(req.postData() || '');
 	const paths = [resolve(base)];
@@ -193,6 +201,11 @@ function getCxlPath(pathname: string) {
 	return `../../node_modules/@cxl/${lib}/mjs/${actualFile}`;
 }
 
+function goto(app: TestRunner, page: Page, url: string) {
+	app.log(`Navigating to ${url}`);
+	return page.goto(url);
+}
+
 async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
 	const entry = sources[0].path;
 	app.log(`Running in mjs mode`);
@@ -228,7 +241,7 @@ async function mjsRunner(page: Page, sources: Output[], app: TestRunner) {
 			app.log(`Error handling request ${req.method()} ${req.url()}`);
 		}
 	});
-	await page.goto('https://cxl-tester');
+	await goto(app, page, 'https://cxl-tester');
 	await page.addScriptTag({
 		type: 'importmap',
 		content: `{
@@ -261,6 +274,8 @@ async function cjsRunner(page: Page, sources: Output[], app: TestRunner) {
 			app.log(`Error handling request ${req.method()} ${req.url()}`);
 		}
 	});
+
+	if (!app.browserUrl) await goto(app, page, 'https://cxl-tester');
 
 	await page.addScriptTag({ path: __dirname + '/require.js' });
 
@@ -448,8 +463,6 @@ export default async function runPuppeteer(app: TestRunner) {
 
 	const page = await openPage(browser);
 
-	//if (app.startServer) await new Promise(resolve => setTimeout(resolve, 500));
-
 	function cxlRunner(cmd: FigureData): Promise<Result> | Result {
 		if (cmd.type === 'figure') {
 			try {
@@ -482,10 +495,7 @@ export default async function runPuppeteer(app: TestRunner) {
 		virtualFileServer(app, page);
 	}
 
-	if (app.browserUrl) {
-		app.log(`Navigating to ${app.browserUrl}`);
-		await page.goto(app.browserUrl);
-	}
+	if (app.browserUrl) await goto(app, page, app.browserUrl);
 
 	// Prevent unexpected focus behavior
 	await page.bringToFront();

@@ -11,19 +11,19 @@
 	function require(path) {
 		const mods = require.modules;
 		const xhr = new XMLHttpRequest();
-		xhr.open('POST', 'http://cxl-tester', false);
+		xhr.open('POST', 'https://cxl-tester', false);
 		xhr.send(
 			JSON.stringify({
 				base: require.base,
 				scriptPath: require.replace ? require.replace(path) : path,
-			})
+			}),
 		);
 
 		const response = JSON.parse(xhr.responseText);
 		const url = response.url;
 		if (mods[url]) return mods[url];
 		if (path.endsWith('.json')) {
-			return (mods[url] =JSON.parse(response.content));
+			return (mods[url] = JSON.parse(response.content));
 		} else {
 			const oldBase = require.base;
 			require.base = response.base;
