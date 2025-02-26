@@ -7,16 +7,13 @@ export interface SummaryJson {
 }
 
 export interface Summary {
-	//sig: string;
 	id?: number;
 	name?: string;
 	kind: Kind;
 	flags?: Flags;
 	docs?: Documentation;
-	//href?: string;
 	parameters?: Summary[];
 	children?: Summary[];
-	//typeKind?: Kind;
 	type?: string | Summary | number;
 	resolvedType?: string | Summary;
 }
@@ -82,30 +79,17 @@ function renderNode(node: Node): Summary {
 					: node.type && renderType(node.type);
 	}
 
-	/*const typeKind =
-		node.type?.kind === Kind.Reference && node.type.type
-			? node.type.type.kind
-			: node.type?.kind;*/
 	const resolvedType = node.resolvedType && renderType(node.resolvedType);
 
 	return {
-		//sig: removeHtml(SignatureText(node)),
 		id: node.id,
 		name: node.name || undefined,
 		parameters,
 		kind: node.kind,
 		flags: node.flags || undefined,
 		docs: node.docs,
-		//href: getHref(node) || undefined,
-		//typeKind,
 		type,
-		resolvedType:
-			resolvedType === type /*||
-			((resolvedType as Summary)?.sig &&
-				(type as Summary)?.sig &&
-				(resolvedType as Summary)?.sig === (type as Summary)?.sig)*/
-				? undefined
-				: resolvedType,
+		resolvedType: resolvedType === type ? undefined : resolvedType,
 		children,
 	};
 }

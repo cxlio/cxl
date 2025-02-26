@@ -395,10 +395,6 @@ function createNode(node: ts.Node, extra?: Partial<Node>): Node {
 	return (node[dtsNode] = result as Node);
 }
 
-//function isOwnFile(sourceFile: ts.SourceFile) {
-//	return sourceFile && sourceFiles.includes(sourceFile);
-//}
-
 function getNodeFromDeclaration(symbol: ts.Symbol, node: ts.Node): Node {
 	const result = node[dtsNode];
 	if (!result) {
@@ -1193,6 +1189,7 @@ function getTypeDeclaration(type: ts.Type, symbol: ts.Symbol) {
 	const decl = kind
 		? symbol.declarations?.find(d => d.kind === kind)
 		: symbol.declarations?.[0] || symbol.valueDeclaration;
+
 	return decl;
 }
 
@@ -1203,7 +1200,11 @@ function serializeReference(node: ts.TypeReferenceType) {
 	if (!symbol && tsLocal.isTypeReferenceNode(node))
 		symbol = typeChecker.getSymbolAtLocation(node.typeName);
 
+	if (symbol && symbol.flags & tsLocal.SymbolFlags.Alias)
+		symbol = typeChecker.getAliasedSymbol(symbol) ?? symbol;
+
 	const decl = symbol && getTypeDeclaration(typeObj, symbol);
+
 	const type =
 		decl && symbol
 			? getNodeFromDeclaration(symbol, decl)

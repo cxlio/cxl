@@ -195,14 +195,30 @@ async function fixPackage({ projectPath, dir, rootPkg }: LintData) {
 	const tester = rootPkg.devDependencies?.['@cxl/tester']
 		? 'cxl-tester'
 		: 'node ../tester';
+	const specDir = pkg.browser && (await exists(`${projectPath}/spec`));
 	const testScript = `npm run build && cd ../dist/${dir} && ${tester} ${
-		isMjs ? '--mjs ' : ''
-	}${pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'}`;
+		isMjs ? '--mjs' : ''
+	}${
+		pkg.browser
+			? specDir
+				? ` --baselinePath=../../${dir}/spec`
+				: ''
+			: ' --node'
+	}`;
+
 	const tsconfigBundle = await readJson(
 		`${projectPath}/tsconfig.bundle.json`,
 		false,
 	);
-	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.js';
+	const tsconfigAmd = await readJson(
+		`${projectPath}/tsconfig.amd.json`,
+		false,
+	);
+	const browser = tsconfigBundle
+		? 'index.bundle.min.js'
+		: tsconfigAmd
+		? 'amd/index.js'
+		: 'index.js';
 
 	if (!(pkg.name === `${rootPkg.name}${dir}`))
 		pkg.name = `${rootPkg.name}${dir}`;
@@ -268,7 +284,15 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }: LintData) {
 		`${projectPath}/tsconfig.bundle.json`,
 		false,
 	);
-	const browser = tsconfigBundle ? 'index.bundle.min.js' : 'amd/index.js';
+	const tsconfigAmd = await readJson(
+		`${projectPath}/tsconfig.amd.json`,
+		false,
+	);
+	const browser = tsconfigBundle
+		? 'index.bundle.min.js'
+		: tsconfigAmd
+		? 'amd/index.js'
+		: 'index.js';
 
 	if (pkg.scripts) {
 		const scripts = pkg.scripts;
@@ -289,9 +313,16 @@ async function lintPackage({ projectPath, pkg, dir, rootPkg }: LintData) {
 	const tester = rootPkg.devDependencies?.['@cxl/tester']
 		? 'cxl-tester'
 		: 'node ../tester';
+	const specDir = pkg.browser && (await exists(`${projectPath}/spec`));
 	const testScript = `npm run build && cd ../dist/${dir} && ${tester} ${
-		isMjs ? '--mjs ' : ''
-	}${pkg.browser ? `--baselinePath=../../${dir}/spec` : '--node'}`;
+		isMjs ? '--mjs' : ''
+	}${
+		pkg.browser
+			? specDir
+				? ` --baselinePath=../../${dir}/spec`
+				: ''
+			: ' --node'
+	}`;
 
 	rules.push(
 		rule(
@@ -589,9 +620,16 @@ async function lintTsconfigAmd({ projectPath, pkg, dir }: LintData) {
 			rules: [],
 		};
 
-	const tsconfig = await readJson<Tsconfig>(
+	const tsconfig = await readJson<Tsconfig | null>(
 		`${projectPath}/tsconfig.amd.json`,
+		null,
 	);
+	if (!tsconfig)
+		return {
+			id: 'tsconfig.amd',
+			project: dir,
+			rules: [],
+		};
 	const baseTsconfig = await readJson<Tsconfig>(
 		`${projectPath}/tsconfig.json`,
 	);
