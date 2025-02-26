@@ -409,9 +409,9 @@ export const REQUIRE_REPLACE = `
 			(str, p1) =>
 				\`/cxl.app/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
 		).replace(
-			/^@cxl\\/(ui.*)/,
+			/^@cxl\\/ui(.*)/,
 			(str, p1) =>
-				\`/ui/dist/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
+				\`/ui/dist/ui5/\${str.endsWith('.js') ? p1 : p1 + '/index.js'}\`
 		).replace(
 			/^@cxl\\/(.+)/,
 			(str, p1) =>
@@ -422,13 +422,16 @@ export const REQUIRE_REPLACE = `
 
 const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
 const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
-<script src="/cxl/dist/tester/require-browser.js"></script>
-<script>
+<script type="importmap">
+{
+	"imports": {
+		"@cxl/dts/": "/cxl/dist/dts/mjs/"
+	}
+}
+</script>
+<script type="module">
 	window.CXL_DEBUG = true;
-	${REQUIRE_REPLACE}
-	require('@cxl/ui');
-	require('@cxl/ui-router');
-	require('@cxl/router/debug.js');
+	import './index.js';
 </script>
 `;
 
