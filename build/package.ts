@@ -420,7 +420,7 @@ export const REQUIRE_REPLACE = `
 	};
 `;
 
-const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script>`;
+const INDEX_HEAD = `<!DOCTYPE html><meta charset="utf-8"><script src="index.bundle.min.js"></script><script>require('./index.js')</script>`;
 const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 <script type="importmap">
 {
@@ -429,10 +429,8 @@ const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 	}
 }
 </script>
-<script type="module">
-	window.CXL_DEBUG = true;
-	import './index.js';
-</script>
+<script>window.CXL_DEBUG = true;</script>
+<script type="module" src="index.js"></script>
 `;
 
 interface TemplateConfig {
