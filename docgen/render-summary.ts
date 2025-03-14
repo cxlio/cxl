@@ -15,11 +15,11 @@ export interface Summary {
 	parameters?: Summary[];
 	children?: Summary[];
 	type?: string | Summary | number;
+	typeP?: Summary[];
 	resolvedType?: string | Summary;
 }
 
 const REMOVE = /<\/?[^>]+>/g;
-
 function removeHtml(str: string) {
 	return str.replace(REMOVE, '').replace(/&gt;/g, '>').replace(/&lt;/g, '<');
 }
@@ -66,6 +66,9 @@ function renderNode(node: Node): Summary {
 	const parameters = node.parameters?.length
 		? node.parameters.map(renderNode)
 		: undefined;
+	const typeP = node.typeParameters?.length
+		? node.typeParameters.map(renderNode)
+		: undefined;
 	const typeN = node.type;
 	let type: string | number | Summary | undefined;
 
@@ -89,6 +92,7 @@ function renderNode(node: Node): Summary {
 		flags: node.flags || undefined,
 		docs: node.docs,
 		type,
+		typeP,
 		resolvedType: resolvedType === type ? undefined : resolvedType,
 		children,
 	};
