@@ -283,7 +283,7 @@ export class TestApi {
 		return el;
 	}
 
-	waitForEvent(el: Element, name: string, trigger: () => void) {
+	waitForEvent(el: EventTarget, name: string, trigger: () => void) {
 		return new Promise<void>(resolve => {
 			function handler() {
 				el.removeEventListener(name, handler);

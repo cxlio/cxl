@@ -425,7 +425,8 @@ const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 <script type="importmap">
 {
 	"imports": {
-		"@cxl/dts/": "/cxl/dist/dts/mjs/"
+		"@cxl/dts/": "/cxl/dist/dts/mjs/",
+		"@cxl/ui": "../../node_modules/@cxl/ui/index.js"
 	}
 }
 </script>
