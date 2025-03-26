@@ -294,6 +294,24 @@ export class TestApi {
 		});
 	}
 
+	waitForElement(el: Element | ShadowRoot, selector: string) {
+		return new Promise<Element>(resolve => {
+			const observer = new MutationObserver(() => {
+				const found = el.querySelector(selector);
+				if (found) {
+					observer.disconnect();
+					resolve(found);
+				}
+			});
+			observer.observe(el, { childList: true, subtree: true });
+			this.$test.events.subscribe({
+				complete() {
+					observer.disconnect();
+				},
+			});
+		});
+	}
+
 	testEvent<T extends HTMLElement>({
 		element,
 		eventName,

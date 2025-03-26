@@ -611,7 +611,7 @@ function getNodeDocs(node: ts.Node, result: Node) {
 
 		if (value && !(tag === 'param' && node.kind !== SK.Parameter))
 			content.push({
-				tag,
+				tag: tag === 'desc' || tag === 'description' ? undefined : tag,
 				value,
 			});
 	});
