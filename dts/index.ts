@@ -356,6 +356,8 @@ function getNodeName(node: ts.Node): string {
 	if ((node as ts.Identifier).escapedText !== undefined)
 		return (node as ts.Identifier).escapedText as string;
 
+	if (node.pos !== -1 && tsLocal.isStringLiteral(node)) return node.getText();
+
 	if (
 		tsLocal.isTemplateLiteralTypeNode(node) ||
 		tsLocal.isLiteralTypeNode(node) ||
