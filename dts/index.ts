@@ -25,6 +25,7 @@ declare module 'typescript' {
 	}
 
 	interface Symbol {
+		[dtsNode]?: dtsNode;
 		$$moduleResult?: dtsNode;
 		$$fqn?: string;
 	}
@@ -1104,22 +1105,28 @@ function serializeClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
 		(node.name && typeChecker.getSymbolAtLocation(node.name));
 
 	let result: Node | undefined;
+	//let first: Node | undefined;
 
 	if (
 		node.kind === SK.InterfaceDeclaration &&
 		symbol &&
 		!(symbol.flags & tsLocal.SymbolFlags.Class)
 	) {
-		result = findExport(symbol);
+		result = symbol[dtsNode];
 
 		if (!result && symbol.declarations) {
 			const decl = symbol.declarations.find(decl => decl[dtsNode]);
 			// Ensure interface node is initialized
 			if (decl) result = serializeDeclaration(decl);
 		}
+
+		//first = result;
+		result ??= findExport(symbol);
+
+		if (symbol) symbol[dtsNode] ??= result;
 	}
 
-	if (!result) result = serializeDeclaration(node);
+	result ??= serializeDeclaration(node);
 
 	if (
 		node.members &&
