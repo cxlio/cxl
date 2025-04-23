@@ -1,4 +1,4 @@
-import type { Result, Test } from '@cxl/spec';
+import type { Result, RunnerCommand, Test } from '@cxl/spec';
 import type { TestResult } from './report';
 
 let output = `<style>.thumb{vertical-align:middle;display:inline-block;overflow:hidden;width:320px;position:relative;vertical-align:top}
@@ -131,15 +131,20 @@ async function onClick(suite: Test[], ev: Event) {
 
 declare global {
 	interface Window {
-		__cxlRunner: (data: unknown) => void;
+		__cxlRunner: (data: RunnerCommand) => void;
 	}
 }
 
 window.__cxlRunner = data => {
+	if (data.type === 'figure')
+		return {
+			success: true,
+			message: 'Screenshot should match baseline',
+			data,
+		};
 	return {
-		success: true,
-		message: 'Screenshot should match baseline',
-		data,
+		success: false,
+		message: `${data.type} not supported.`,
 	};
 };
 

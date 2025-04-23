@@ -2,7 +2,7 @@ import { Browser, CoverageEntry, Page, HTTPRequest } from 'puppeteer';
 import * as puppeteer from 'puppeteer';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { dirname, resolve, join } from 'path';
-import type { FigureData, Test, Result } from '@cxl/spec';
+import type { FigureData, RunnerCommand, Test, Result } from '@cxl/spec';
 import type { TestRunner } from './index.js';
 import type { PNG } from 'pngjs';
 
@@ -463,8 +463,9 @@ export default async function runPuppeteer(app: TestRunner) {
 
 	const page = await openPage(browser);
 
-	function cxlRunner(cmd: FigureData): Promise<Result> | Result {
-		if (cmd.type === 'figure') {
+	function cxlRunner(cmd: RunnerCommand): Promise<Result> | Result {
+		const type = cmd.type;
+		if (type === 'figure') {
 			try {
 				return handleFigureRequest(page, cmd, app);
 			} catch (e) {
@@ -473,10 +474,29 @@ export default async function runPuppeteer(app: TestRunner) {
 					message: String(e) || 'Unknown Error',
 				};
 			}
+		} else if (type === 'hover' || type === 'tap') {
+			return page
+				.$(cmd.element)
+				.then(el => {
+					if (!el)
+						throw new Error(
+							`Element for selector "${cmd.element}" not found.`,
+						);
+					return el[type]();
+				})
+				.then(() => {
+					return {
+						success: true,
+						message: 'Element',
+					};
+				});
+		} else if (type === 'testElement') {
+			return { success: true, message: 'testElement supported' };
 		}
+
 		return {
 			success: false,
-			message: `Feature not supported: ${cmd.type}`,
+			message: `Feature not supported: ${type}`,
 		};
 	}
 

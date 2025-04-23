@@ -8,7 +8,7 @@ export type License =
 	| 'GPL-3.0-only'
 	| 'Apache-2.0'
 	| 'UNLICENSED'
-	| 'SEE LICENSE IN LICENSE.txt';
+	| 'SEE LICENSE IN LICENSE.md';
 
 export type Dependencies = Record<string, string>;
 

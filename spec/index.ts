@@ -1,6 +1,6 @@
 import { subject, toPromise } from '@cxl/rx';
 
-declare function __cxlRunner(msg: unknown): Result;
+declare function __cxlRunner(msg: RunnerCommand): Promise<Result>;
 
 export type Measurements = Record<
 	string,
@@ -50,6 +50,16 @@ interface SpyProp<T> {
 	value: T;
 }
 
+export type RunnerCommand =
+	| FigureData
+	| {
+			type: 'hover' | 'tap';
+			element: string;
+	  }
+	| {
+			type: 'testElement';
+	  };
+
 export interface FigureData {
 	type: 'figure';
 	name: string;
@@ -71,6 +81,8 @@ interface TestConfig {
 }
 
 let lastTestId = 1;
+let testQueue: Promise<unknown> = Promise.resolve();
+let actionId = 0;
 
 const setTimeout = globalThis.setTimeout;
 const clearTimeout = globalThis.clearTimeout;
@@ -241,6 +253,23 @@ export class TestApi {
 		this.$test.addTest(new Test(name, testFn, this.$test));
 	}
 
+	testElement(name: string, testFn: TestFn) {
+		return this.test(name, async a => {
+			if (
+				typeof __cxlRunner === 'undefined' ||
+				!(await __cxlRunner({ type: 'testElement' })).success
+			) {
+				console.warn('testElement method not supported');
+				a.ok(true, 'testElement method not supported');
+			} else {
+				testQueue = testQueue.then(() => {
+					return testFn(a);
+				});
+				await testQueue;
+			}
+		});
+	}
+
 	mock<T, K extends keyof FunctionsOf<T>>(object: T, method: K, fn: T[K]) {
 		const old = object[method];
 		object[method] = fn;
@@ -314,12 +343,14 @@ export class TestApi {
 
 	testEvent<T extends HTMLElement>({
 		element,
+		target,
 		eventName,
 		trigger,
 		unsubscribe,
 		testName,
 	}: {
 		element: T;
+		target?: EventTarget;
 		eventName: string;
 		trigger: (el: T) => void;
 		unsubscribe?: boolean;
@@ -329,7 +360,7 @@ export class TestApi {
 			const resolve = a.async();
 			function handler(ev: Event) {
 				a.equal(ev.type, eventName, `"${eventName}" event fired`);
-				a.equal(ev.target, element);
+				a.equal(ev.target, target ?? element);
 				if (unsubscribe)
 					element.removeEventListener(eventName, handler);
 				resolve();
@@ -397,18 +428,17 @@ export class TestApi {
 		let lastCalled = 0;
 		const intervals: Record<number, { cb: Function; delay: number }> = {};
 
-		this.mock(
-			globalThis,
-			'setInterval',
-			(cb: string | Function, delay = 0): number => {
-				if (typeof cb === 'string') cb = new Function(cb);
-				intervals[++id] = { cb, delay };
-				return id;
-			},
-		);
-		this.mock(globalThis, 'clearInterval', id => {
-			if (id !== undefined) delete intervals[id];
-		});
+		this.mock(globalThis, 'setInterval', ((
+			cb: string | Function,
+			delay = 0,
+		): number => {
+			if (typeof cb === 'string') cb = new Function(cb);
+			intervals[++id] = { cb, delay };
+			return id;
+		}) as typeof globalThis.setInterval);
+		this.mock(globalThis, 'clearInterval', (id => {
+			if (id !== undefined) delete intervals[id as number];
+		}) as typeof globalThis.clearInterval);
 
 		return {
 			advance(ms: number) {
@@ -426,14 +456,14 @@ export class TestApi {
 		let id = 0;
 		const timeouts: Record<number, { cb: Function; time: number }> = {};
 
-		this.mock(globalThis, 'setTimeout', (cb, time = 0) => {
+		this.mock(globalThis, 'setTimeout', ((cb: TimerHandler, time = 0) => {
 			if (typeof cb === 'string') cb = new Function(cb);
 			timeouts[++id] = { cb, time };
 			return id;
-		});
-		this.mock(globalThis, 'clearTimeout', (id: number | undefined) => {
+		}) as typeof globalThis.setTimeout);
+		this.mock(globalThis, 'clearTimeout', ((id: number | undefined) => {
 			if (id !== undefined) delete timeouts[id];
-		});
+		}) as typeof globalThis.clearTimeout);
 		return {
 			advance(ms: number) {
 				for (const [key, { cb, time }] of Object.entries(timeouts)) {
@@ -446,6 +476,26 @@ export class TestApi {
 				}
 			},
 		};
+	}
+
+	action(type: 'hover' | 'tap', selector?: string | Element) {
+		const element =
+			selector instanceof Element
+				? `#${(selector.id = `dom${this.id}-${actionId++}`)}`
+				: `#${(this.dom.id = `dom${this.id}`)} ${selector}`;
+
+		return __cxlRunner({
+			type: type,
+			element,
+		});
+	}
+
+	hover(selector?: string | Element) {
+		return this.action('hover', selector);
+	}
+
+	tap(selector?: string | Element) {
+		return this.action('tap', selector);
 	}
 }
 

@@ -19,7 +19,7 @@ const LICENSE_MAP: Record<License, string> = {
 	'GPL-3.0': 'license-GPL-3.0.txt',
 	'GPL-3.0-only': 'license-GPL-3.0.txt',
 	'Apache-2.0': 'license-Apache-2.0.txt',
-	'SEE LICENSE IN LICENSE.txt': '',
+	'SEE LICENSE IN LICENSE.md': '',
 	UNLICENSED: '',
 };
 
@@ -207,7 +207,7 @@ function packageJson(p: any) {
 						'amd/*.d.ts',
 						'mjs/*.js',
 						'mjs/*.d.ts',
-						'LICENSE',
+						'LICENSE.md',
 						'*.md',
 					],
 					main: p.main || 'index.js',
@@ -230,8 +230,7 @@ function packageJson(p: any) {
 }
 
 function license(id: License) {
-	if (id === 'UNLICENSED' || id === 'SEE LICENSE IN LICENSE.txt')
-		return EMPTY;
+	if (id === 'UNLICENSED' || id === 'SEE LICENSE IN LICENSE.md') return EMPTY;
 	const licenseFile = LICENSE_MAP[id];
 	if (!licenseFile) throw new Error(`Invalid license: "${id}"`);
 

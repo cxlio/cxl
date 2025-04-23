@@ -97,6 +97,7 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 				file('stage.html', 'stage.html').catchError(() => EMPTY),
 				file('icons.svg', 'icons.svg').catchError(() => EMPTY),
 				file('favicon.ico', 'favicon.ico').catchError(() => EMPTY),
+				file('LICENSE.md', 'LICENSE.md').catchError(() => EMPTY),
 				file('test.html', 'test.html').catchError(() =>
 					of({
 						path: 'test.html',
