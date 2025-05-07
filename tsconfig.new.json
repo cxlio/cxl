@@ -1,0 +1,14 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"lib": ["dom", "ES2023", "dom.iterable"],
+		"target": "es2023",
+		"module": "es2022",
+		"allowJs": true,
+		"jsx": "react",
+		"jsxFactory": "tsx",
+		"jsxFragmentFactory": "tsx",
+		"types": []
+	},
+	"files": []
+}
