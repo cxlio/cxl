@@ -116,6 +116,10 @@ const Parameters = {
 		help: 'Path to a file containing custom HTML to be added to the `<head>` element of the generated page.',
 		type: 'string',
 	},
+	noHtml: {
+		help: 'Do not generate HTML',
+		type: 'boolean',
+	},
 } as const;
 
 /**
@@ -285,6 +289,8 @@ export interface DocGen {
 	 * @cli `--headHtml`
 	 */
 	headHtml?: string;
+
+	noHtml?: boolean;
 }
 
 program({}, async ({ log }) => {
@@ -357,7 +363,6 @@ program({}, async ({ log }) => {
 		  )
 		: build(args.tsconfig, dtsOptions);
 	log(`Typescript ${json.env.typescript}`);
-	const theme = await import('./render-html');
 
 	const docgenConfig: DocGen = {
 		...args,
@@ -371,9 +376,12 @@ program({}, async ({ log }) => {
 	}
 
 	try {
-		await Promise.all(
-			theme.render(docgenConfig, json).map(f => writeFile(f)),
-		);
+		if (!args.noHtml) {
+			const theme = await import('./render-html');
+			await Promise.all(
+				theme.render(docgenConfig, json).map(f => writeFile(f)),
+			);
+		}
 	} catch (e) {
 		console.error(e);
 		process.exitCode = 1;

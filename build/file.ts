@@ -21,6 +21,10 @@ interface MinifyConfig extends Terser.MinifyOptions {
 	changePath?: boolean;
 }
 
+/**
+ * Provides an Observable that emits the absolute paths of all entries in a given
+ * directory. Useful for streaming file paths for further processing.
+ */
 export function ls(dir: string) {
 	return new Observable<string>(async subs => {
 		const files = await fs.readdir(dir);
@@ -48,14 +52,14 @@ export function file(source: string, out?: string) {
 			read(source).then(res => ({
 				path: out || resolve(source),
 				source: res.source,
-			}))
-		)
+			})),
+		),
 	);
 }
 
 export function basename(replace?: string) {
 	return tap<Output>(
-		out => (out.path = (replace || '') + pathBasename(out.path))
+		out => (out.path = (replace || '') + pathBasename(out.path)),
 	);
 }
 
@@ -67,9 +71,9 @@ export function concatFile(outName: string, separator = '\n') {
 	return pipe(
 		reduce<Output, string>(
 			(out, src) => `${out}${separator}${src.source}`,
-			''
+			'',
 		),
-		map(source => ({ path: outName, source: Buffer.from(source) }))
+		map(source => ({ path: outName, source: Buffer.from(source) })),
 	);
 }
 
@@ -83,7 +87,7 @@ export function files(sources: string[]) {
 				out.forEach(o => subs.next(o));
 				subs.complete();
 			},
-			e => subs.error(e)
+			e => subs.error(e),
 		);
 	});
 }
@@ -92,7 +96,7 @@ export function matchStat(fromPath: string, toPath: string) {
 	return Promise.all([fs.stat(fromPath), fs.stat(toPath)]).then(
 		([fromStat, toStat]) =>
 			fromStat.mtime.getTime() === toStat.mtime.getTime(),
-		() => true
+		() => true,
 	);
 }
 
@@ -101,7 +105,7 @@ export function matchStat(fromPath: string, toPath: string) {
  */
 export function copyDir(fromPath: string, toPath: string, glob = '*') {
 	return exec(
-		`mkdir -p ${toPath} && rsync -au -i --delete ${fromPath}/${glob} ${toPath}`
+		`mkdir -p ${toPath} && rsync -au -i --delete ${fromPath}/${glob} ${toPath}`,
 	);
 }
 
@@ -141,7 +145,7 @@ export function minify(op?: MinifyConfig) {
 			try {
 				const { code, map } = await Terser.minify(
 					{ [out.path]: source },
-					config
+					config,
 				);
 				if (!code) throw new Error('No code generated');
 				subscriber.next({

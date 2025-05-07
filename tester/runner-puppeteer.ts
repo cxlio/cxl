@@ -38,7 +38,6 @@ async function handleConsole(msg: puppeteer.ConsoleMessage, app: TestRunner) {
 					return JSON.stringify(v, null, 2);
 				}),
 			);
-			//console.log(await arg.jsonValue());
 		} catch (e) {
 			console.log(arg.toString());
 		}

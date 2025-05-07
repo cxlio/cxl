@@ -255,6 +255,7 @@ export class TestApi {
 
 	testElement(name: string, testFn: TestFn) {
 		return this.test(name, async a => {
+			a.setTimeout(30000);
 			if (
 				typeof __cxlRunner === 'undefined' ||
 				!(await __cxlRunner({ type: 'testElement' })).success
@@ -372,7 +373,6 @@ export class TestApi {
 
 	async a11y(node: Element = this.dom) {
 		const mod = await import('./a11y.js');
-		//await new Promise(resolve => setTimeout(resolve, 100));
 		const results = mod.testAccessibility(node);
 		for (const r of results) this.$test.push(r);
 	}
@@ -552,9 +552,7 @@ export class Test {
 	doTimeout(promise: Promise<unknown>, time = this.timeout) {
 		return new Promise<void>((resolve, reject) => {
 			const timeoutId = setTimeout(() => {
-				reject(
-					new Error(`Async test timed out after ${this.timeout}ms`),
-				);
+				reject(new Error(`Async test timed out after ${time}ms`));
 			}, time);
 
 			promise.then(() => {

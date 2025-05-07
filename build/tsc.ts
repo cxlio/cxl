@@ -132,7 +132,11 @@ function parseTsConfig(tsconfig: string) {
 		throw new Error(msg);
 	}
 
-	if (!parsed) throw new Error(`Could not parse config file "${tsconfig}"`);
+	if (!parsed) {
+		console.log(process.cwd());
+		throw new Error(`Could not parse config file "${tsconfig}"`);
+	}
+
 	return parsed;
 }
 

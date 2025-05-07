@@ -1,7 +1,8 @@
 import type { Stats } from 'fs';
-import { readdir, readFile, stat } from 'fs/promises';
+import { readdir, readFile, writeFile, stat } from 'fs/promises';
 import { observable } from '@cxl/rx';
 import { Output, Task } from '@cxl/build';
+import { basename } from 'path';
 
 import * as MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
@@ -11,10 +12,16 @@ export interface BlogConfig {
 	headerTemplate?: string;
 	highlight?: boolean;
 	includeContent?: boolean;
+	hrefPrefix?: string;
+	processIndex?: string[];
+	postTemplate?: string;
+	baseUrl?: string;
+	indexUrl?: string;
+	canonicalUrl?: string;
 }
 
-export interface BlogPosts {
-	posts: Post[];
+export interface PostsJson {
+	posts: PostData[];
 	tags: Record<string, string[]>;
 }
 
@@ -24,7 +31,6 @@ export interface Meta {
 	author: string;
 	version?: string;
 	type?: string;
-	href?: string;
 	summary?: string;
 	tags?: string;
 	threadId?: string;
@@ -45,6 +51,10 @@ export interface Post {
 	content: string;
 	summary: string;
 }
+
+export type PostData = {
+	content: undefined | string;
+} & Post;
 
 const POST_REGEX = /\.(html|md)$/,
 	TITLE_REGEX = /<blog-title>(.+)<\/blog-title>/,
@@ -96,7 +106,7 @@ const FenceHandler: Record<
 			meta[m[1] as keyof Meta] = getMetaValue(m[1] as keyof Meta, m[2]);
 		}
 
-		return meta.tags ? `<cxl-blog-tags>${meta.tags}</cxl-blog-tags>` : '';
+		return meta.tags ? `<blog-tags>${meta.tags}</blog-tags>` : '';
 	},
 };
 
@@ -125,10 +135,21 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 
 	rules.heading_open = (tokens, idx) => {
 		const tag = tokens[idx].tag as keyof typeof map;
-		return tag === 'h1' ? `<blog-title>` : `<${tag}>`;
+		if (tag === 'h1') return '<blog-title>';
+		if (tag === 'h2') {
+			const content = tokens[idx + 1]?.content ?? '';
+			const id = `h2_${content
+				.toLowerCase()
+				.replace(/[^\w]+/g, '-')
+				.replace(/^-|-$/g, '')}`;
+			return `<a class="h2-anchor" id="${id}" href="#${id}"><h2>`;
+		}
+		return `<${tag}>`;
 	};
 	rules.heading_close = (tokens, idx) => {
 		const tag = tokens[idx].tag;
+
+		if (tag === 'h2') return `</h2></a>`;
 		return tag === 'h1' ? `</blog-title>` : `</${tag}>`;
 	};
 	rules.code_block = (tokens, idx) => highlight(tokens[idx].content);
@@ -144,18 +165,18 @@ export function renderMarkdown(source: string, config?: BlogConfig) {
 			? handler(token.content, meta)
 			: highlight(token.content);
 	};
-	rules.table_open = () => '<cxl-table>';
-	rules.table_close = () => '</cxl-table>';
-	//rules.thead_open = () => '<cxl-tr>';
-	//rules.thead_close = () => '</cxl-tr>';
-	rules.tr_open = () => '<cxl-tr>';
-	rules.tr_close = () => '</cxl-tr>';
-	rules.th_open = () => '<cxl-th>';
-	rules.th_close = () => '</cxl-th>';
-	rules.td_open = () => '<cxl-td>';
-	rules.td_close = () => '</cxl-td>';
-	rules.tbody_open = () => '<cxl-tbody>';
-	rules.tbody_close = () => '</cxl-tbody>';
+	rules.table_open = () => '<c-table>';
+	rules.table_close = () => '</c-table>';
+	//rules.thead_open = () => '<c-tr>';
+	//rules.thead_close = () => '</c-tr>';
+	rules.tr_open = () => '<c-tr>';
+	rules.tr_close = () => '</c-tr>';
+	rules.th_open = () => '<c-th>';
+	rules.th_close = () => '</c-th>';
+	rules.td_open = () => '<c-td>';
+	rules.td_close = () => '</c-td>';
+	rules.tbody_open = () => '<c-tbody>';
+	rules.tbody_close = () => '</c-tbody>';
 
 	const content =
 		md.render(source) +
@@ -227,7 +248,7 @@ async function buildPosts(config: BlogConfig, posts: Post[]) {
 		return p.uuid
 			? [
 					{
-						path: `${p.id}.html`,
+						path: `${p.uuid}-${p.id}/index.html`,
 						source,
 					},
 					{
@@ -242,14 +263,22 @@ async function buildPosts(config: BlogConfig, posts: Post[]) {
 	});
 }
 
-const uuids: string[] = [];
-
 async function build(config: BlogConfig): Promise<Output[]> {
+	const uuids: string[] = [];
+	const postTemplate = config.postTemplate
+		? await readFile(config.postTemplate, 'utf8')
+		: undefined;
+
 	function Markdown(url: string, source: string, stats: Stats) {
 		const { meta, content } = renderMarkdown(source, config);
 		const title =
-			source.match(/^#\s+(.+)/)?.[1].trim() || url.replace(/\.md$/, '');
-		const summary = meta.summary || content.match(SUMMARY_REGEX)?.[1] || '';
+			source.match(/^#\s+(.+)/)?.[1].trim() ||
+			basename(url).replace(/\.md$/, '');
+		const summary = (
+			meta.summary ||
+			content.match(SUMMARY_REGEX)?.[1] ||
+			''
+		).replace(/"/g, '&quot;');
 		const uuid = meta.uuid;
 
 		if (meta.type === 'post') {
@@ -257,9 +286,11 @@ async function build(config: BlogConfig): Promise<Output[]> {
 			if (uuids.includes(uuid)) throw `UUID Collision: ${title}`;
 			uuids.push(uuid);
 		}
+		const id = getPostId(title);
+		const href = `${config.hrefPrefix}${uuid}-${id}`;
 
 		return {
-			id: getPostId(title),
+			id,
 			title,
 			summary,
 			date: meta.date || stats.mtime.toISOString(),
@@ -269,8 +300,19 @@ async function build(config: BlogConfig): Promise<Output[]> {
 			author: meta.author || '',
 			type: meta.type || (meta.date ? 'post' : 'draft'),
 			tags: meta.tags || '',
-			href: meta.href,
-			content,
+			href,
+			content: postTemplate
+				? postTemplate
+						.replace(/__BLOG_CONTENT__/, content)
+						.replace(/__BLOG_BASEURL__/g, config.baseUrl ?? '')
+						.replace(/__BLOG_SUMMARY__/g, summary)
+						.replace(/__BLOG_INDEXURL__/g, config.indexUrl ?? '')
+						.replace(
+							/__BLOG_CANONICAL__/g,
+							`${config.canonicalUrl}${href}`,
+						)
+						.replace(/__BLOG_TITLE__/g, title)
+				: content,
 		};
 	}
 
@@ -320,7 +362,9 @@ async function build(config: BlogConfig): Promise<Output[]> {
 			: posts.map(p => ({ ...p, content: undefined })),
 		tags,
 		types: Array.from(types),
-	};
+	} as PostsJson;
+
+	if (config.processIndex) await processIndex(config.processIndex, postsJson);
 
 	return [
 		{
@@ -339,11 +383,63 @@ async function build(config: BlogConfig): Promise<Output[]> {
 	];
 }
 
+export function dateYMD(date: string): string {
+	const d = new Date(date);
+	const pad = (n: number) => n.toString().padStart(2, '0');
+	return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+export function dateShort(date: Date | string): string {
+	return new Date(date).toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+	});
+}
+
+function processIndex(files: string[], { posts, tags }: PostsJson) {
+	const index = posts
+		.map(
+			p => `
+	<article data-tags="${
+		p.tags
+	}" itemscope itemtype="https://schema.org/BlogPosting">
+  <header>
+    <h2 itemprop="headline">
+      <a href="${p.href}" itemprop="url">${p.title}</a>
+    </h2>
+    <p>
+      <time datetime="${dateYMD(p.date)}" itemprop="datePublished">${dateShort(
+			p.date,
+		)}</time>
+    </p>
+  </header>
+  <p itemprop="description">${p.summary}</p>
+</article>`,
+		)
+		.join('');
+	const tagsHtml =
+		tags.post
+			?.sort()
+			.map(t => `<c-chip size="-1">${t}</c-chip>`)
+			.join('') ?? '';
+
+	return Promise.all(
+		files.map(async filePath => {
+			const source = await readFile(filePath, 'utf8');
+			const newSource = source
+				.replace(/__BLOG_TITLE__/, 'Home')
+				.replace(/__BLOG_INDEX__/, index)
+				.replace(/__BLOG_TAGS__/, tagsHtml);
+			await writeFile(filePath, newSource);
+		}),
+	);
+}
+
 export function buildBlog(config: BlogConfig): Task {
-	return observable(subs => {
-		build(config).then(out => {
-			out.forEach(o => subs.next(o));
-			subs.complete();
-		});
+	return observable(async subs => {
+		const out = await build(config);
+		out.forEach(o => subs.next(o));
+		subs.complete();
 	});
 }

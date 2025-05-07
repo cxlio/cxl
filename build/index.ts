@@ -16,12 +16,10 @@ export { mkdirp, sh, readJson } from '@cxl/program';
 export { Output } from '@cxl/source';
 export {
 	AMD,
-	REQUIRE_REPLACE,
 	pkg,
 	readme,
 	bundle,
 	bundleAmd,
-	template,
 	docgen,
 	docgenTask,
 } from './package.js';

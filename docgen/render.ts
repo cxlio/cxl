@@ -35,7 +35,7 @@ const ENTITIES_MAP = {
 export function escape(str: string) {
 	return str.replace(
 		ENTITIES_REGEX,
-		e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP]
+		e => ENTITIES_MAP[e as keyof typeof ENTITIES_MAP],
 	);
 }
 

@@ -159,7 +159,7 @@ export function renderType(type: Node): string {
 		case Kind.ObjectType:
 			return ObjectType(type);
 		case Kind.Literal:
-			return escape(type.name);
+			return type.name;
 		case Kind.TypeAlias:
 		case Kind.BaseType:
 			return type.name;

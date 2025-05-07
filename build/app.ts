@@ -1,14 +1,14 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { execSync } from 'child_process';
 import { join } from 'path';
 
-import { concat, fromAsync, EMPTY } from '@cxl/rx';
+import { concat, fromAsync, EMPTY, merge } from '@cxl/rx';
 import { Output } from '@cxl/source';
 import { sh } from '@cxl/program';
 
 import { checkBranchClean, checkBranchUpToDate, getBranch } from './git.js';
-import { build, exec } from './builder.js';
-import { basename, copyDir, file, files, minifyDir } from './file.js';
+import { BuildConfiguration, build, exec } from './builder.js';
+import { basename, copyDir, file, minifyDir } from './file.js';
 import { tsconfig } from './tsc.js';
 import { eslint } from './lint.js';
 
@@ -27,7 +27,7 @@ export interface AppBuildConfig extends PluginBuildConfig {
 	extraApps?: { appId: string; deployDir: string }[];
 }
 
-const HASH = execSync('git rev-parse --short master').toString().trim();
+export const HASH = execSync('git rev-parse --short master').toString().trim();
 const staticMaxAge = 31536000;
 
 export function publishTasks(
@@ -70,12 +70,21 @@ export function publishTasks(
 	];
 }
 
-function insertHash(out: Output) {
-	out.source = Buffer.from(
-		out.source
-			.toString()
-			.replace('<head>', `<head><base href="./${HASH}/" />`),
-	);
+export function replaceHash(src: string, prefix = './') {
+	const match = /<base href=".+?" \/>/.exec(src);
+	const base = `<base href="${prefix}${HASH}/" />`;
+	if (match)
+		return (
+			src.slice(0, match.index) +
+			base +
+			src.slice(match.index + match[0].length)
+		);
+
+	return src.replace('<head>', `<head>${base}`);
+}
+
+export function insertHash(out: Output, prefix = './') {
+	out.source = Buffer.from(replaceHash(out.source.toString(), prefix));
 }
 
 export function serviceWorkerTasks({
@@ -153,6 +162,11 @@ export function appTasks(config: AppBuildConfig) {
 		"* --exclude=test.js --exclude=test-* --exclude=package.json --include='*.js' --include='*.wasm' --include='*.json' --exclude='*' ";
 	const dirName = basename(outputDir);
 	const tester = join(__dirname, '../tester');
+	const body = existsSync('body.html') && readFileSync('body.html');
+
+	function appendBody(out: Output) {
+		if (body) out.source = Buffer.concat([out.source, body]);
+	}
 
 	libraries ||= {};
 	thirdParty ||= {};
@@ -161,13 +175,11 @@ export function appTasks(config: AppBuildConfig) {
 		{
 			outputDir,
 			tasks: [
-				files([
-					'index.html',
-					'debug.html',
-					'stage.html',
-					'favicon.ico',
-					'test.html',
-				]),
+				file('debug.html', 'index.html').tap(appendBody),
+				file('favicon.ico', 'favicon.ico'),
+				existsSync('text.html')
+					? file('test.html', 'test.html')
+					: EMPTY,
 				tsconfig('tsconfig.test.json'),
 				publicDir ? copyDir(publicDir, `${outputDir}/public`) : EMPTY,
 			],
@@ -192,7 +204,7 @@ export function appTasks(config: AppBuildConfig) {
 			tasks: [exec(`npm run build package --prefix ../../${key}`)],
 		})),
 		{
-			target: 'deploy',
+			target: 'publish',
 			outputDir: deployDir,
 			tasks: [
 				fromAsync(async () => {
@@ -212,8 +224,12 @@ export function appTasks(config: AppBuildConfig) {
 							`${deployDir}/${HASH}/public`,
 					  )
 					: EMPTY,
-				file(`index.html`, 'index.html').tap(insertHash),
-				file(`stage.html`, 'stage.html').tap(insertHash),
+				merge(
+					file('index.html', 'index.html'),
+					file('stage.html', 'stage.html'),
+				)
+					.tap(appendBody)
+					.tap(insertHash),
 			],
 		},
 		{
@@ -265,6 +281,9 @@ export function appTasks(config: AppBuildConfig) {
 	];
 }
 
-export function buildApp(config: AppBuildConfig) {
-	return build(...appTasks(config));
+export function buildApp(
+	config: AppBuildConfig,
+	...extra: BuildConfiguration[]
+) {
+	return build(...appTasks(config), ...extra);
 }
