@@ -42,7 +42,7 @@ const DEBUG_HEAD = `<!DOCTYPE html><meta charset="utf-8">
 `;
 */
 const DefaultTemplateConfig = {
-	header: `<!DOCTYPE html><meta charset="utf-8"><script type="module" src="index.js"></script>`,
+	header: `<!DOCTYPE html><meta charset="utf-8">`,
 };
 
 const HTML_COMMENT_REGEX = /<!--[^]+?-->/gm;
