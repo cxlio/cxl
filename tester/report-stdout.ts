@@ -20,8 +20,18 @@ function printTest(test: TestReport) {
 		out += result.success ? colors.green('.') : colors.red('X');
 		return result.success === false;
 	});
+	const timeColor =
+		test.runTime > test.timeout
+			? 'red'
+			: test.runTime > test.timeout / 2
+			? 'yellow'
+			: 'gray';
 
-	console.group(`${test.name} ${out}`);
+	console.group(
+		`${test.name} ${colors[timeColor](
+			`(${test.runTime.toFixed(2)} ms)`,
+		)} ${out}`,
+	);
 	failures.forEach(fail => printError(test.name, fail));
 	test.tests.forEach(printTest);
 	console.groupEnd();
@@ -34,7 +44,7 @@ function printCoverage(coverage: TestCoverageReport[]) {
 	for (const cov of coverage) {
 		const pct = ((cov.blockCovered / cov.blockTotal) * 100).toFixed(2);
 		console.log(
-			`${cov.url}: ${pct}% (${cov.blockTotal}/${cov.blockCovered})`
+			`${cov.url}: ${pct}% (${cov.blockTotal}/${cov.blockCovered})`,
 		);
 	}
 }

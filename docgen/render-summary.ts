@@ -46,13 +46,16 @@ function renderType(node: Node): string | Summary {
 			type: node.type?.id,
 		};
 	}
-
+	if (node.kind === Kind.BaseType) return node.name;
 	if (
-		node.kind !== Kind.ObjectType &&
-		node.kind !== Kind.FunctionType &&
-		node.kind !== Kind.Function &&
-		node.kind !== Kind.Method &&
-		node.kind !== Kind.TypeUnion
+		node.flags & Flags.External ||
+		node.flags & Flags.DefaultLibrary ||
+		(node.kind !== Kind.ObjectType &&
+			node.kind !== Kind.FunctionType &&
+			node.kind !== Kind.Function &&
+			node.kind !== Kind.Method &&
+			node.kind !== Kind.TypeUnion &&
+			node.kind !== Kind.Interface)
 	)
 		return removeHtml(Type(node));
 
@@ -77,12 +80,16 @@ function renderNode(node: Node): Summary {
 			type = typeN.type.id;
 		else
 			type =
-				node.kind === Kind.Parameter
-					? removeHtml(Type(node.type))
-					: node.type && renderType(node.type);
+				/*node.kind === Kind.Parameter
+					? Type(node.type)
+					:*/ node.type && renderType(node.type);
 	}
 
-	const resolvedType = node.resolvedType && renderType(node.resolvedType);
+	const resolvedType = node.resolvedType
+		? node.resolvedType?.type?.type === node
+			? node.resolvedType.name
+			: renderType(node.resolvedType)
+		: undefined;
 
 	return {
 		id: node.id,

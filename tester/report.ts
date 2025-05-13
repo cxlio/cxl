@@ -22,6 +22,8 @@ export interface TestReport {
 	failureCount: number;
 	results: TestResult[];
 	tests: TestReport[];
+	runTime: number;
+	timeout: number;
 }
 
 export interface FunctionCoverage {
@@ -195,6 +197,8 @@ function renderTestReport(test: JsonResult): TestReport {
 		failureCount,
 		results,
 		tests,
+		runTime: test.runTime,
+		timeout: test.timeout,
 	};
 }
 

@@ -7,7 +7,12 @@ export type Measurements = Record<
 	Record<string, Partial<CSSStyleDeclaration>>
 >;
 
-type EventType = 'afterAll' | 'afterEach' | 'beforeAll' | 'beforeEach';
+type EventType =
+	| 'afterAll'
+	| 'afterEach'
+	| 'beforeAll'
+	| 'beforeEach'
+	| 'syncComplete';
 type TestEvent = { type: EventType; promises: Promise<unknown>[] };
 
 type TestFn<T = TestApi> = (test: T) => void | Promise<unknown>;
@@ -27,6 +32,8 @@ export interface JsonResult {
 	results: Result[];
 	tests: JsonResult[];
 	only: JsonResult[];
+	runTime: number;
+	timeout: number;
 }
 interface Spy<EventT> {
 	lastEvent?: EventT;
@@ -274,10 +281,8 @@ export class TestApi {
 	mock<T, K extends keyof FunctionsOf<T>>(object: T, method: K, fn: T[K]) {
 		const old = object[method];
 		object[method] = fn;
-		this.$test.events.subscribe({
-			complete() {
-				object[method] = old;
-			},
+		this.$test.events.subscribe(ev => {
+			if (ev.type === 'syncComplete') object[method] = old;
 		});
 		return fn;
 	}
@@ -424,6 +429,8 @@ export class TestApi {
 
 	mockSetInterval() {
 		/*eslint @typescript-eslint/no-unsafe-function-type:off */
+		this.mockTimeCheck();
+
 		let id = 0;
 		let lastCalled = 0;
 		const intervals: Record<number, { cb: Function; delay: number }> = {};
@@ -453,6 +460,8 @@ export class TestApi {
 	}
 
 	mockSetTimeout() {
+		this.mockTimeCheck();
+
 		let id = 0;
 		const timeouts: Record<number, { cb: Function; time: number }> = {};
 
@@ -478,6 +487,35 @@ export class TestApi {
 		};
 	}
 
+	mockRequestAnimationFrame() {
+		this.mockTimeCheck();
+
+		let id = 0;
+		const rafs: Record<number, FrameRequestCallback> = {};
+
+		this.mock(globalThis, 'requestAnimationFrame', ((
+			cb: FrameRequestCallback,
+		) => {
+			id++;
+			rafs[id] = cb;
+			return id;
+		}) as typeof globalThis.requestAnimationFrame);
+
+		this.mock(globalThis, 'cancelAnimationFrame', ((rafId: number) => {
+			delete rafs[rafId];
+		}) as typeof globalThis.cancelAnimationFrame);
+
+		return {
+			advance() {
+				for (const key in rafs) {
+					const cb = rafs[key];
+					delete rafs[key];
+					cb(performance.now());
+				}
+			},
+		};
+	}
+
 	action(type: 'hover' | 'tap', selector?: string | Element) {
 		const element =
 			selector instanceof Element
@@ -497,6 +535,16 @@ export class TestApi {
 	tap(selector?: string | Element) {
 		return this.action('tap', selector);
 	}
+
+	protected mockTimeCheck() {
+		if (
+			this.$test.promise ||
+			this.$test.testFn.constructor.name === 'AsyncFunction'
+		)
+			throw new Error(
+				`mockSetTimeout should not be used in async tests. Test: "${this.$test.name}"`,
+			);
+	}
 }
 
 export class Test {
@@ -509,6 +557,7 @@ export class Test {
 	domContainer?: Element;
 	events = subject<TestEvent>();
 	completed = false;
+	runTime = 0;
 
 	readonly id = lastTestId++;
 
@@ -552,7 +601,11 @@ export class Test {
 	doTimeout(promise: Promise<unknown>, time = this.timeout) {
 		return new Promise<void>((resolve, reject) => {
 			const timeoutId = setTimeout(() => {
-				reject(new Error(`Async test timed out after ${time}ms`));
+				reject(
+					new Error(
+						`Async test "${this.name}" timed out after ${time}ms`,
+					),
+				);
 			}, time);
 
 			promise.then(() => {
@@ -572,13 +625,9 @@ export class Test {
 		test.timeout = this.timeout;
 	}
 
-	async emit(type: EventType) {
-		const ev: TestEvent = { type, promises: [] };
-		this.events.next(ev);
-		if (ev.promises) await Promise.all(ev.promises);
-	}
-
 	async run(): Promise<Result[]> {
+		const start = performance.now();
+
 		try {
 			this.completed = false;
 			this.promise = undefined;
@@ -586,6 +635,7 @@ export class Test {
 			const testApi = new TestApi(this);
 			const result = this.testFn(testApi);
 			const promise = result ? this.doTimeout(result) : this.promise;
+			if (!promise) this.emit('syncComplete');
 			await promise;
 			if (promise && this.completed === false)
 				throw new Error('Never completed');
@@ -603,6 +653,7 @@ export class Test {
 
 			this.domContainer = undefined;
 			await this.emit('afterAll');
+			this.runTime = performance.now() - start;
 		}
 
 		this.events.complete();
@@ -615,7 +666,15 @@ export class Test {
 			results: this.results,
 			tests: this.tests.map(r => r.toJSON()),
 			only: this.only.map(r => r.toJSON()),
+			runTime: this.runTime,
+			timeout: this.timeout,
 		};
+	}
+
+	protected async emit(type: EventType) {
+		const ev: TestEvent = { type, promises: [] };
+		this.events.next(ev);
+		if (ev.promises) await Promise.all(ev.promises);
 	}
 }
 

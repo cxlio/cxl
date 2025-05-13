@@ -1105,7 +1105,6 @@ function serializeClass(node: ts.ClassDeclaration | ts.InterfaceDeclaration) {
 		(node.name && typeChecker.getSymbolAtLocation(node.name));
 
 	let result: Node | undefined;
-	//let first: Node | undefined;
 
 	if (
 		node.kind === SK.InterfaceDeclaration &&
