@@ -57,10 +57,26 @@ interface SpyProp<T> {
 	value: T;
 }
 
+export type RunnerAction =
+	| {
+			type: 'hover' | 'tap';
+			element?: string | Element;
+	  }
+	| {
+			type: 'type' | 'press';
+			value: string;
+			element?: string | Element;
+	  };
+
 export type RunnerCommand =
 	| FigureData
 	| {
 			type: 'hover' | 'tap';
+			element: string;
+	  }
+	| {
+			type: 'type' | 'press';
+			value: string;
 			element: string;
 	  }
 	| {
@@ -347,32 +363,75 @@ export class TestApi {
 		});
 	}
 
-	testEvent<T extends HTMLElement>({
+	waitForDisconnect(el: Element) {
+		return new Promise<void>(resolve => {
+			const parent = el.parentNode;
+			if (!parent) return resolve();
+
+			const observer = new MutationObserver(() => {
+				if (!el.parentNode) resolve();
+			});
+			observer.observe(parent, { childList: true });
+			this.$test.events.subscribe({
+				complete() {
+					observer.disconnect();
+				},
+			});
+		});
+	}
+
+	expectEvent<T extends HTMLElement>({
 		element,
-		target,
+		listener,
 		eventName,
 		trigger,
-		unsubscribe,
-		testName,
+		message,
+		count,
 	}: {
 		element: T;
-		target?: EventTarget;
+		listener?: Element;
 		eventName: string;
 		trigger: (el: T) => void;
-		unsubscribe?: boolean;
+		message?: string;
+		count?: number;
+	}) {
+		return new Promise<void>((resolve, error) => {
+			try {
+				listener ??= element;
+				const handler = (ev: Event) => {
+					this.equal(
+						ev.type,
+						eventName,
+						message ?? `"${eventName}" event fired`,
+					);
+					this.equal(ev.target, element);
+
+					if (count === undefined || --count === 0) {
+						listener?.removeEventListener(eventName, handler);
+						resolve();
+					}
+				};
+				listener.addEventListener(eventName, handler);
+				trigger(element);
+			} catch (e) {
+				error(e);
+			}
+		});
+	}
+
+	/**
+	 * @deprecated Use expectEvent instead
+	 */
+	testEvent<T extends HTMLElement>(options: {
+		element: T;
+		listener?: Element;
+		eventName: string;
+		trigger: (el: T) => void;
+		//unsubscribe?: boolean;
 		testName?: string;
 	}) {
-		this.test(testName || `on${eventName}`, a => {
-			const resolve = a.async();
-			function handler(ev: Event) {
-				a.equal(ev.type, eventName, `"${eventName}" event fired`);
-				a.equal(ev.target, target ?? element);
-				if (unsubscribe)
-					element.removeEventListener(eventName, handler);
-				resolve();
-			}
-			element.addEventListener(eventName, handler);
-			trigger(element);
+		this.test(options.testName || `on${options.eventName}`, async a => {
+			await a.expectEvent(options);
 		});
 	}
 
@@ -516,24 +575,21 @@ export class TestApi {
 		};
 	}
 
-	action(type: 'hover' | 'tap', selector?: string | Element) {
+	action(action: RunnerAction) {
+		const selector = action.element;
 		const element =
 			selector instanceof Element
-				? `#${(selector.id = `dom${this.id}-${actionId++}`)}`
-				: `#${(this.dom.id = `dom${this.id}`)} ${selector}`;
-
-		return __cxlRunner({
-			type: type,
-			element,
-		});
+				? `#${(selector.id ||= `dom${this.id}-${actionId++}`)}`
+				: `#${(this.dom.id ||= `dom${this.id}`)} ${selector ?? ''}`;
+		return __cxlRunner({ ...action, element });
 	}
 
-	hover(selector?: string | Element) {
-		return this.action('hover', selector);
+	hover(element?: string | Element) {
+		return this.action({ type: 'hover', element });
 	}
 
-	tap(selector?: string | Element) {
-		return this.action('tap', selector);
+	tap(element?: string | Element) {
+		return this.action({ type: 'tap', element });
 	}
 
 	protected mockTimeCheck() {

@@ -27,7 +27,11 @@ export interface AppBuildConfig extends PluginBuildConfig {
 	extraApps?: { appId: string; deployDir: string }[];
 }
 
-export const HASH = execSync('git rev-parse --short master').toString().trim();
+export const HASH = execSync(
+	'git rev-parse --short "$(git symbolic-ref HEAD | sed \'s@^refs/remotes/origin/@@\')"',
+)
+	.toString()
+	.trim();
 const staticMaxAge = 31536000;
 
 export function publishTasks(

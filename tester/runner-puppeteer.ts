@@ -489,6 +489,22 @@ export default async function runPuppeteer(app: TestRunner) {
 						message: 'Element',
 					};
 				});
+		} else if (type === 'type' || type === 'press') {
+			return page
+				.$(cmd.element)
+				.then(el => {
+					if (!el)
+						throw new Error(
+							`Element for selector "${cmd.element}" not found.`,
+						);
+					return el[type](cmd.value as puppeteer.KeyInput);
+				})
+				.then(() => {
+					return {
+						success: true,
+						message: 'Element',
+					};
+				});
 		} else if (type === 'testElement') {
 			return { success: true, message: 'testElement supported' };
 		}
