@@ -178,6 +178,85 @@ export class TestApi {
 	}
 
 	equalValues<T>(a: T, b: T, desc?: string) {
+		if (a instanceof ArrayBuffer && b instanceof ArrayBuffer) {
+			return this.equalBuffer(a, b, desc);
+		}
+
+		if (Array.isArray(a) && Array.isArray(b)) {
+			// Compare array length with description.
+			this.equal(
+				a.length,
+				b.length,
+				`${desc ? desc + ': ' : ''}Expected array of length ${
+					b.length
+				}, got ${a.length}`,
+			);
+			for (let i = 0; i < Math.max(a.length, b.length); i++) {
+				this.equal(
+					a[i],
+					b[i],
+					`${
+						desc ? desc + ': ' : ''
+					}Array element at [${i}] differs: ${inspect(
+						a[i],
+					)} !== ${inspect(b[i])}`,
+				);
+			}
+		} else if (
+			a === null ||
+			a === undefined ||
+			b === null ||
+			b === undefined
+		) {
+			// One or both are null/undefined.
+			this.equal(
+				a,
+				b,
+				`${desc ? desc + ': ' : ''}Expected ${inspect(
+					b,
+				)}, got ${inspect(a)}`,
+			);
+		} else if (
+			typeof a === 'string' ||
+			typeof b === 'string' ||
+			typeof a === 'number' ||
+			typeof b === 'number' ||
+			typeof a === 'boolean' ||
+			typeof b === 'boolean'
+		) {
+			// Primitive value mismatch
+			this.equal(a, b, desc);
+		} else if (typeof a === 'object' && typeof b === 'object') {
+			// Compare all keys in 'b'
+			for (const key in b) {
+				this.equalValues(
+					(a as Record<string, unknown>)[key],
+					(b as Record<string, unknown>)[key],
+					`${desc ? desc + ': ' : ''}Property "${key}"`,
+				);
+			}
+			// Optionally check for extra keys in "a" that are not in "b"
+			for (const key in a) {
+				if (!(key in (b as Record<string, unknown>))) {
+					this.ok(
+						false,
+						`${
+							desc ? desc + ': ' : ''
+						}Unexpected extra property "${key}" found in actual value`,
+					);
+				}
+			}
+		} else {
+			// Fallback for unknown types
+			this.equal(
+				a,
+				b,
+				`${desc ? desc + ': ' : ''}Expected ${inspect(
+					b,
+				)}, got ${inspect(a)}`,
+			);
+		}
+		/*
 		if (a instanceof ArrayBuffer && b instanceof ArrayBuffer)
 			return this.equalBuffer(a, b, desc);
 		if (Array.isArray(a) && Array.isArray(b)) {
@@ -192,6 +271,7 @@ export class TestApi {
 		else if (typeof a === 'string' || typeof b === 'number') {
 			this.equal(a, b, desc);
 		} else for (const i in b) this.equalValues(a[i], b[i], desc);
+		*/
 	}
 
 	addSpec(test: Test) {
@@ -683,15 +763,17 @@ export class Test {
 
 	async run(): Promise<Result[]> {
 		const start = performance.now();
+		let syncCompleteNeeded = true;
+		this.completed = false;
+		this.promise = undefined;
+		this.events = subject<TestEvent>();
+		const testApi = new TestApi(this);
 
 		try {
-			this.completed = false;
-			this.promise = undefined;
-			this.events = subject<TestEvent>();
-			const testApi = new TestApi(this);
 			const result = this.testFn(testApi);
 			const promise = result ? this.doTimeout(result) : this.promise;
 			if (!promise) this.emit('syncComplete');
+			syncCompleteNeeded = false;
 			await promise;
 			if (promise && this.completed === false)
 				throw new Error('Never completed');
@@ -704,6 +786,7 @@ export class Test {
 			console.error(String(e));
 			this.pushError(e);
 		} finally {
+			if (syncCompleteNeeded) this.emit('syncComplete');
 			if (this.domContainer && this.domContainer.parentNode)
 				this.domContainer.parentNode.removeChild(this.domContainer);
 
