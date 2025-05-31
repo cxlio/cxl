@@ -8,7 +8,7 @@ import { BuildConfiguration, build, exec } from './builder.js';
 import { docs, pkg, readPackage, readme } from './package.js';
 import { concatFile, file, minifyDir, minify } from './file.js';
 import { eslint } from './lint.js';
-import { tsconfig } from './tsc.js';
+import { tsconfig, bundle } from './tsc.js';
 
 export function minifyIf(filename: string) {
 	return mergeMap((out: Output) =>
@@ -98,6 +98,9 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 				file('icons.svg', 'icons.svg').catchError(() => EMPTY),
 				file('favicon.ico', 'favicon.ico').catchError(() => EMPTY),
 				file('LICENSE.md', 'LICENSE.md').catchError(() => EMPTY),
+				file('test-screenshot.html', 'test-screenshot.html').catchError(
+					() => EMPTY,
+				),
 				file('test.html', 'test.html').catchError(() =>
 					of({
 						path: 'test.html',
@@ -135,7 +138,11 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 			tasks: [
 				eslint(),
 				packageJson.browser
-					? file(`${outputDir}/index.js`).pipe(minify())
+					? // file(`${outputDir}/index.js`).pipe(minify())
+					  minifyDir(outputDir, {
+							sourceMap: false,
+							changePath: false,
+					  })
 					: EMPTY,
 				pkg(),
 			],
@@ -222,6 +229,21 @@ export function buildCxl(...extra: BuildConfiguration[]) {
 									minify({ changePath: false }),
 								),
 							),
+						],
+					},
+			  ]
+			: []),
+		...(existsSync('tsconfig.package.json')
+			? [
+					{
+						target: 'package',
+						outputDir: outputDir + '/amd',
+						tasks: [
+							bundle(
+								'tsconfig.package.json',
+								'index.bundle.js',
+								true,
+							).pipe(minify({ changePath: false })),
 						],
 					},
 			  ]
